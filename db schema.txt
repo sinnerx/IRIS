@@ -1,0 +1,83 @@
+// Isn't completed yet. Just a first draft.
+
+user
+- userID
+- userIC
+- userPassword
+- userEmail
+- userLevel
+
+user_profile
+- userProfileID
+- userProfileFirstName
+- userProfileLastName
+
+event
+- eventID
+- siteID
+- eventName				
+- eventType				//1 = kursus/latihan, 2 = lawatan
+- eventRefID			//if eventType == 1, refer to course, if eventType == 2, will refer to no table.
+- eventStartDate
+- eventEndDate
+- eventCreatedUser
+- eventCreatedDate
+
+	event_date
+	- eventDateID
+	- eventDateValue
+	
+	course
+	- courseID
+	- courseName
+
+site
+- siteID
+- siteName
+- siteSlug
+- siteCreatedUser
+- siteCreatedDate
+
+	// by default, will create about me page.
+
+	page
+	- pageID
+	- siteID
+	- pageName
+	- pageSlug	//url shortname.
+	- pageText
+	- pageType	//1 = default, 2 = manual adding page.
+	- pageCreatedUser
+	- pageCreatedDate
+
+article
+- articleID
+- siteID
+- articlePublishedStatus	//0 = unpublished, 1 = published.
+- articleApprovedStatus		//0 = unapproved, 1 = approved, 2 = disapproved
+- articleSlug
+- articleName
+- articleTagID
+- articleCreatedUser
+- articleCreatedDate
+
+news
+- newsID
+- siteID
+- newsApprovedStatus		//0 = unapproved, 1 = approved, 2 = disapproved.
+- newsName
+- newsText
+- newsCreatedDate
+- newsCreatedUser
+
+site_editor
+- siteEditorID
+- userID
+- siteID
+- siteEditorCreatedUser
+- siteEditorCreatedDate
+
+site_manager
+- siteManagerID
+- userID
+- siteID

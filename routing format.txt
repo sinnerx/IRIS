@@ -1,6 +1,8 @@
+// This routing and plan still in draft. isn't completed yet. any comment and suggestion regarding this is encouraged.
+
 Basic URI Plan/Format Suggestion.
-Notes  : [slug] mainly mean, the shortname for microsite. like pi1m.my/bukit-tangga, 'bukit-tangga' is slug.
-Notes 2: domain name (pi1m.my) is just an example.
+Notes  : [slug] mainly mean, the shortname for microsite. like pi1m.my/bukit-tangga, bukit-tangga is slug.
+Notes 2: domain name is just an example.
 
 1. Public landing page.
 pi1m.my
@@ -80,12 +82,7 @@ pi1m.my
 	pi1m.my[slug]/gallery/[slug-album]/[photo-id]
 	controller : gallery/photo
 
-///////////////////////////////////////////////////////////////////////////
-Below is unsure yet. Need suggestion whether to combine public with logged user as one application or separate.
-This is to make development more modular and easier.
-///////////////////////////////////////////////////////////////////////////
-
-2. Logged user.
+2. Logged user (not sure yet, whether to use different sub-domain or what. i think better just use the public one.)
 my.pi1m.my/[slug]
 
 	2.1 default controller format.
@@ -95,34 +92,29 @@ my.pi1m.my/[slug]
 	2.2 Modules plan
 	- account/index
 	- account/info
-	- event/index
-	- event/joined
 
-### manager and admin probably share the same application.
-3. manager
-manager.pi1m.my/[slug]
+## manager, content_editor and root admin share the same application.
+## only differentiate by access list.
+3. backend
+- dashboard.pi1m.my/[controller]/[action]
 
-	3.1 default controller format.
-	manager.pi1m.my/[slug]/[controller]/[action]/...
-	controller : controller/action
+3.1 modules ([controller]/[action])
+- news/index					all
+- news/add						all
+- news/detail					all
+- event/index					all
+- event/add						all
+- event/detail					all
+- blog/index					all
+- blog/add						all
+- blog/detail					all
+- site/index					root admin
+- site/add						root admin
+- management/role_assignment	root admin
+	+ to assign which content_editor to which site.
 
-	3.2 Modules Plan
-	- news/index
-	- news/add
-	- event/index
-	- event/add
-	- blog/index
-	- blog/add
+3.2 for news, event, and blog, manager can only see his assigned site (one only, will be stored in session)
+3.3 for news, event, and blog also, content_editor can only see his assigned blog (will query list of his). he can approve, disapprove those three.
+3.4 root admin can view all site.
 
-4. admin (root)
-admin.pi1m.my/[slug]
-	
-	4.1 default controller action format.
-	admin.pi1m.my/[slug]/[controller]/[action]/...
-	controller : controller/action
 
-	4.2 Modules plan
-	- site/index
-	- site/add
-	- event/index
-	- news/index
