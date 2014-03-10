@@ -1,0 +1,128 @@
+Basic URI Plan/Format Suggestion.
+Notes  : [slug] mainly mean, the shortname for microsite. like pi1m.my/bukit-tangga, 'bukit-tangga' is slug.
+Notes 2: domain name (pi1m.my) is just an example.
+
+1. Public landing page.
+pi1m.my
+
+	1.1 Microsite landing page.
+	pi1m.my/[slug]
+	controller : public/index
+
+	===== NEWS =====
+	1.2 News landing page
+	pi1m.my/[slug]/news/[id]
+	controller : news/index
+
+		1.3 News detail
+		pi1m.my/[slug]/news/[slug-news]
+		controller : news/detail
+
+	===== ABOUT US =====
+	1.4 About us (tentang kami)
+	pi1m.my/[slug]/about-us
+	controller : public/about-us
+
+	===== REGISTRATION AND LOGIN =====
+	1.5 Registration
+	pi1m.my/[slug]/register
+	controller : public/register
+
+	1.6 Login
+	pi1m.my/[slug]/login
+	controller : public/login
+
+	===== BLOG =====
+	1.7 Blog landing page (show like 10 blog per page)
+	pi1m.my/[slug]/blog/[?page-no]
+	controller : blog/index
+
+		1.8 article/blog post.
+		pi1m.my/[slug]/blog/post/[id]
+		controller : blog/post
+
+	===== ACTIVITIES (event) =====
+	1.9 activities (list all kind of activities)
+	pi1m.my/[slug]/activities
+	controller : event/index
+
+		1.10 activities by type (show by type)
+		pi1m.my/[slug]/activities/type/[type]
+		controller : event/type
+
+		1.11 activities post
+		pi1m.my/[slug]/activities/[slug-event]
+		controller : event/detail
+
+	===== MEMBERS =====
+	1.12 list of members
+	pi1m.my/[slug]/members
+	controller : members/index
+
+	1.13 members profile
+	pi1m.my/[slug]/members/[id]
+	controller : members/index
+
+	1.14 members activities
+	pi1m.my/[slug]/members/activities
+	controller : members/activity
+
+	===== GALLERY =====
+	1.15 gallery foto (list all album)
+	pi1m.my/[slug]/gallery
+	controller : gallery/index
+
+	1.16. album (per album)
+	pi1m.my/[slug]/gallery/[slug-album]
+	controller : gallery/album
+
+	1.17 photo (per photo)
+	pi1m.my[slug]/gallery/[slug-album]/[photo-id]
+	controller : gallery/photo
+
+///////////////////////////////////////////////////////////////////////////
+Below is unsure yet. Need suggestion whether to combine public with logged user as one application or separate.
+This is to make development more modular and easier.
+///////////////////////////////////////////////////////////////////////////
+
+2. Logged user.
+my.pi1m.my/[slug]
+
+	2.1 default controller format.
+	my.pi1m.my/[slug]/[controller]/[action]/...
+	controller : controller/action
+
+	2.2 Modules plan
+	- account/index
+	- account/info
+	- event/index
+	- event/joined
+
+### manager and admin probably share the same application.
+3. manager
+manager.pi1m.my/[slug]
+
+	3.1 default controller format.
+	manager.pi1m.my/[slug]/[controller]/[action]/...
+	controller : controller/action
+
+	3.2 Modules Plan
+	- news/index
+	- news/add
+	- event/index
+	- event/add
+	- blog/index
+	- blog/add
+
+4. admin (root)
+admin.pi1m.my/[slug]
+	
+	4.1 default controller action format.
+	admin.pi1m.my/[slug]/[controller]/[action]/...
+	controller : controller/action
+
+	4.2 Modules plan
+	- site/index
+	- site/add
+	- event/index
+	- news/index
