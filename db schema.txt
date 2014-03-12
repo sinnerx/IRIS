@@ -9,15 +9,19 @@ user
 
 user_profile
 - userProfileID
-- userProfileFirstName
-- userProfileLastName
+- userID
+- userProfileFullName
+- userProfilePhoneNo
 
 event
 - eventID
 - siteID
 - eventName				
 - eventType				//1 = kursus/latihan, 2 = lawatan
-- eventRefID			//if eventType == 1, refer to course, if eventType == 2, will refer to no table.
+- eventRefID			//if eventType == 1, refer to course table, if eventType == 2, will refer to no table.
+- eventAddress
+- eventParticipation	//1 = open for all, 2 = closed to member
+- eventFee				
 - eventStartDate
 - eventEndDate
 - eventCreatedUser
@@ -25,11 +29,32 @@ event
 
 	event_date
 	- eventDateID
+	- eventID
 	- eventDateValue
 	
+	event_time
+	- eventTimeID
+	- eventDateID
+	- eventTimeStart
+	- eventTimeEnd
+
 	course
 	- courseID
 	- courseName
+
+	event_user
+	- eventUserID
+	- userID
+	- eventUserValue	//1 = join, 2 = no.
+	- eventUserCreatedDate
+
+event_comment
+- eventCommentID
+- eventID
+- userID
+- eventCommentValue
+- eventCommentCreatedDate
+- eventCommentCreatedUser
 
 site
 - siteID
@@ -37,6 +62,11 @@ site
 - siteSlug
 - siteCreatedUser
 - siteCreatedDate
+
+	site_info
+	- siteInfoID
+	- siteInfoPhone
+	- siteInfoAddress
 
 	// by default, will create about me page.
 
@@ -53,11 +83,12 @@ site
 article
 - articleID
 - siteID
-- articlePublishedStatus	//0 = unpublished, 1 = published.
 - articleApprovedStatus		//0 = unapproved, 1 = approved, 2 = disapproved
 - articleSlug
 - articleName
 - articleTagID
+- articlePublishedDate		//will only published after this date.
+- articleStatus				//0 = draft, 1 = saved.
 - articleCreatedUser
 - articleCreatedDate
 
@@ -67,6 +98,8 @@ news
 - newsApprovedStatus		//0 = unapproved, 1 = approved, 2 = disapproved.
 - newsName
 - newsText
+- newsPublishedDate			//will only published after this date.
+- newsStatus				//0 = draft, 1 = saved.
 - newsCreatedDate
 - newsCreatedUser
 
@@ -81,3 +114,18 @@ site_manager
 - siteManagerID
 - userID
 - siteID
+
+album
+- albumID
+- siteID
+- albumName
+- albumCreatedDate
+- albumCreatedUser
+ 
+ photo
+ - photoID
+ - siteID
+ - albumID
+ - photoName
+ - photoCreatedDate
+ - photoCreatedUser
