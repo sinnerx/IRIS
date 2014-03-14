@@ -1,0 +1,137 @@
+###### 1. APPLICATION PLAN #######
+
+frontend
+- default application
+- application for all, from public, manager, cluster lead, operation manager, and root admin.
+- might implement role based access here.
+
+backend
+- application for root admin, operation manager, cluster lead.
+
+##################################
+###### 2. USER LEVEL PLAN ########
+
+[P] public
+- can access main site, blog, read news
+
+[M] members:unpaid
+- can access site, forum, members page, activity
+- can comment
+
+[M] members:paid
+- can do all unpaid member can
+- can join activity, like training, 
+- can post in forum
+
+[SM] manager
+- login using email
+- add/edit pages, edit site_info
+
+[CL] cluster lead
+- editor/approver to site updates.
+- can see site updates based on his given site
+
+[OM] operation manager
+- one-to-one with cluster lead. he basically a root admin to clusterlead.
+- can see site updates based on 
+
+[R] root admin
+- super power admin
+- super view report
+- super view site 
+- super create site
+
+#################################
+###### 3. URI PLAN ORDER ########
+
+### Backend
+domain.my/dashboard/[:controller]/[:action]			= backend:{controller}/{method} backend application
+
+### Frontend
+domain.my/my-site									= main/index	landing page
+domain.my/my-site/activity/[:type]					= activity/show
+domain.my/my-site/activity/event/					= event/index
+domain.my/my-site/activity/event/[:title-slug]		= event/detail
+domain.my/my-site/activity/training/				= training/index
+domain.my/my-site/activity/training/[title-slug]	= training/detail
+## domain.my/my-site/blog/[:title-slug?]			= blog/index
+domain.my/my-site/[**:trail]						= page/index (trailing page)
+domain.my/my-site/tester/[:type]					= tester/index
+
+#################################
+###### 4. MODULE PLAN ###########
+
+### Frontend
+main landing-page			main/index								domain.my									
+microsite landing-page		main/site								domain.my/[site-slug]						
+registration				main/registration						domain.my/[site-slug]/registration			
+login						main/login								domain.my/[site-slug]/login
+page						page/index								domain.my/[site-slug]/[**:trailing-page]
+
+### Backend					domain.my/dasboard/[:controller]/[**:method]
+## [R]	Admin :					
+- Home						home/index
+- Add new site				site/add
+
+## [SM]	Site Manager
+Home						home/index
+Pages						page/index			## list of default, and normal pages (click some button to edit.)
+Edit pages					page/edit/{id}		## 
+Slider						slider/index		## list of slider (can remove or change position here)
+Add/edit slider				slider/add			## add page
+
+##################################
+##### 5. MODEL PLAN ##############
+slug
+- checkSlug($type,$name,$site = null)	## 
+	- if $site = null, will get from request::named('site-slug'). 
+	- type is like 'blog','page','activity','site'
+	- check from DB
+	- check from reserved word
+	- return true/false;
+- getSiteID($slug = null)	## if null, get from request::named('site-slug')
+- getEventID($slug)
+- getTrainingID($slug)
+
+page
+- createPage($data)		$data key : pageName, pageSlug, pageText, pageType, pageParentID (optional)
+	- default column :
+		- pageApprovedStatus = 0
+		- pageCreatedUser = session::get('userID')
+		- pageCreatedDate = now()
+
+- editPage($data)		$data key : pageName, pageSlug, pageText, pageParentID
+	- update table with column limited to those 4 kind.
+	- every page update will set pageApprovedStatus to 0 (unapproved.)
+	- every page update will update column pageUpdatedUser, and pageUpdatedDate
+
+site
+- createSite($data)		
+	- $data key for table 'site' : siteName, siteSlug
+	- $data key for table 'site_info' : siteLatitude, siteLongitude, siteInfoPhone, siteInfoPhoneAddress, siteInfoDescription, siteInfoFax
+	- default column : 
+		- siteCreatedUser = session::get('userID')
+		- siteCreatedDate = now()
+
+##### 6. DEVELOPMENT STEP PLAN ######
+before development
+- design routing plan for local env and live.
+- will use one routing list only.
+
+Flow
+- every development update will go through github first.
+- then, will got to test server.
+- if had meet the phase requirement, then push to live.
+
+Backend
+- create dummy data for root admin
+- create simple template, 
+	- got top menu
+- design based on 4. MODULE PLAN
+
+Frontend
+- create default template for frontend, from existing designed layout.
+	- create component like header, sidebar.
+- design based on 4. MODULE PLAN
+
+#########################################
