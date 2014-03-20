@@ -10,7 +10,7 @@ Dummy site : http://p1m.gaia.my/kampung-meru
 
 Database Schema : http://p1m.gaia.my/monitor/schema
 
-Sample user login:
+Sample user login ( htp://p1m.gaia.my/dashboard/login )
 
 Root : root@gmail.com / 12345
 
