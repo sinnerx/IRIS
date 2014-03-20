@@ -32,7 +32,7 @@ Production server info
 Other project info
 =====
 
-Landing page prototype layout : http://inspireartmedia.com/celcom/public/
+Landing page prototype layout : http://p1m.gaia.my/assets/_landing/
 
 Frontend Prototype / Mockup : https://projects.invisionapp.com/share/9HJRWRAK
 
