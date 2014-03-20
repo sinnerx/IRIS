@@ -31,6 +31,9 @@ Production server info
 
 Other project info
 =====
+
+Landing page prototype layout : http://inspireartmedia.com/celcom/public/
+
 Frontend Prototype / Mockup : https://projects.invisionapp.com/share/9HJRWRAK
 
 Admin Prototype Layout : http://p1m.gaia.my/assets/_scale/
