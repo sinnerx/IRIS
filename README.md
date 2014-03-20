@@ -5,11 +5,15 @@ p1m development code (codename : iris)
 Development server info
 =============
 Main site : http://p1m.gaia.my/
+
 Dummy site : http://p1m.gaia.my/kampung-meru
+
 Database Schema : http://p1m.gaia.my/monitor/schema
 
 Sample user login:
+
 Root : root@gmail.com / 12345
+
 Site Manager : sitemanager@gmail.com / 12345
 
 FTP
