@@ -40,7 +40,7 @@ Admin Prototype Layout : http://p1m.gaia.my/assets/_scale/
 
 Framework Documentation : http://exedra.rosengate.com/docs/mvc/router
 
-Project Timeline : https://trello.com/b/FrTUqFRU/pim-project
+Project Timeline : https://trello.com/b/6fNaclFS/pi1m-sprints
 
 
 
