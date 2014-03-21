@@ -48,15 +48,17 @@ backend
 domain.my/dashboard/[:controller]/[:action]			= backend:{controller}/{method} backend application
 
 ### Frontend
-domain.my/my-site									= main/index	landing page
-domain.my/my-site/activity/[:type]					= activity/show
-domain.my/my-site/activity/event/					= event/index
-domain.my/my-site/activity/event/[:title-slug]		= event/detail
-domain.my/my-site/activity/training/				= training/index
-domain.my/my-site/activity/training/[title-slug]	= training/detail
-## domain.my/my-site/blog/[:title-slug?]			= blog/index
-domain.my/my-site/[**:trail]						= page/index (trailing page)
-domain.my/my-site/tester/[:type]					= tester/index
+domain.my/[site-slug]/test/[:controller]/[**:method]	= {controller}/{method}
+domain.my/[site-slug]									= main/index	landing page
+domain.my/[site-slug]/registration						= main/registration
+domain.my/[site-slug]/login								= main/login
+domain.my/[site-slug]/activity/[:type]					= activity/show
+domain.my/[site-slug]/activity/event/					= event/index
+domain.my/[site-slug]/activity/event/[:title-slug]		= event/detail
+domain.my/[site-slug]/activity/training/				= training/index
+domain.my/[site-slug]/activity/training/[title-slug]	= training/detail
+## domain.my/[slug-site]/blog/[:title-slug?]			= blog/index
+domain.my/[site-slug]/[**:trail]						= page/index (trailing page)
 
 #################################
 ###### 4. MODULE PLAN ###########
@@ -112,6 +114,9 @@ site
 	- default column : 
 		- siteCreatedUser = session::get('userID')
 		- siteCreatedDate = now()
+
+- checkSlug($slugname)
+- getSiteIDBySlug($slugname)
 
 ##### 6. DEVELOPMENT STEP PLAN ######
 before development

@@ -1,56 +1,68 @@
-// Isn't completed yet. Just a first draft.
-1. fees activity, format is general, or specifik to event or training.
-2. trainingMaxPax (adakah perlu)
-3. eventMaxPax (juga adakah perlu)
-4. eventType (can specified more? or doesnt really needed.)
-
 user
 - userID
 - userIC
 - userPassword
 - userEmail
-- userLevel				//1 = members, 2 = site manager, 3 = site editor, 99 = root admin
+- userLevel				## 1 = members (M), 2 = site manager (SM), 3 = cluster lead (CL), 4 = operation manager (OM), 99 = root admin (R)
+- userStatus			## 0 = inactive, 1 = active
+- userPremiumStatus		## 0 = normal, 1 = premium user.
 - userCreatedDate
 - userCreatedUser
+	
+	user_premium
+	- userPremiumID
+	- userID
+	- userPremiumPayment		## default 5
+	- userPremiumCreatedDate
+	- userPremiumCreatedUser
 
 user_profile
 - userProfileID
 - userID
+- userProfileTitle		## 1 = mr, 2 = mrs
 - userProfileFullName
 - userProfilePhoneNo
-- userProfileOccupation
-- userProfileVillage
-- userProfileTwitter
-- userProfileWeb
-- userProfileEcommerce
-- userProfileAbout
+- userProfileGender
+- userProfilePOB
+- userProfileMarital			## 1 = single, 2 = married, 3 = widow
+- userProfileDOB
+- userProfilePhoneNo
+- userProfileMobileNo
+- userProfileMailingAddress
+- userProfileOccupation			## 1 = student, 2 = housewife, 3 = retired, 4 = entrepreneur, 5 = employee, 6 = unemployed.
+- userProfileEducationLevel		## 1 = SPM, 2 = STPM, 3 = Certificate, 4 = Diploma, 5 = Degree, 6 = Master, 7 = PHD.
+- userProfilePhotoUrl
 
 	user_activity
 	- userActivityID
 	- userID
-	- userActivityTypeCode			//1XX = komen, 2XX = forum, 3XX = activity, 4XX = fail, 5XX = keahlian, 6XX = kemaskini
+	- userActivityTypeCode			## 1XX = komen, 2XX = forum, 3XX = activity, 4XX = fail, 5XX = keahlian, 6XX = kemaskini
 	- userActivityParameter
-	- userActivityRefID				//1 reference table.
+	- userActivityRefID				## 1 reference table.
 	- userActivityCreatedDate
 
 		user_activity_type
 		- userActivityTypeID
 		- userActivityTypeCode
-		- userActivityTypeMessage	//format example : {param1} akan hadir ke {param2}
-		- userActivityTypeCategory	//1 = komen, forum, activity, fail, keahlian, kemaskini
+		- userActivityTypeMessage	## format example : {param1} akan hadir ke {param2}
+		- userActivityTypeCategory	## 1 = komen, forum, activity, fail, keahlian, kemaskini
 
 activity
 - activityID
 - siteID
-- activityType		//1 = event, 2 = training
+- activityType		## 1 = event, 2 = training
 - activityName
 - activityAddress
-- activityParticipation		//1 = open for all, 2 = closed to member
-//- activityFee		(need further comment about fees.)
+- activityParticipation		## 1 = open for all, 2 = closed to member
 - activityStartDate
 - activityEndDate
+- activityPublished
 - activityCreatedUser
 - activityCreatedDate
+
+	activity_budget		## incomplete.
+	- activityBudgedID
+	- activityID
 
 	activity_date
 	- activityDateID
@@ -66,7 +78,7 @@ activity
 	activity_user
 	- activityUserID
 	- userID
-	- activityUserValue	//1 = join, 2 = no.
+	- activityUserValue	## 1 = join, 2 = no.
 	- activityUserCreatedDate
 
 	activity_article
@@ -86,8 +98,8 @@ event
 - eventID
 - activityID
 - eventName
-- eventType				//1 = lawatan
-- eventRefID			//if eventType == 1, refer to course table, if eventType == 2, will refer to no table.
+- eventType				## 1 = lawatan
+- eventRefID			## if eventType == 1
 - eventStartDate
 - eventEndDate
 - eventCreatedUser
@@ -105,14 +117,9 @@ state
 - stateName
 - stateCode
 
-	region		//root buat.
-	- regionID
-	- stateID
-	- regionName
-
 site
 - siteID
-- regionID
+- stateID
 - siteName
 - siteSlug
 - siteCreatedUser
@@ -132,28 +139,27 @@ site
 
 	menu
 	- menuID
-	- menuType		//1 = top
+	- menuType		## 1 = top
 	- componentID
 	- menuName
 	- menuNo
 
 	component
 	- componentID
-	- componentType		//1 = page, 2 = main (/), 3 = route(route:/activity) activity, 4 = members (route:/members), 5 = contact us (route:/contact-us).
+	- componentType		## 1 = page, 2 = main (/), 3 = route(route:/activity) activity, 4 = members (route:/members), 5 = contact us (route:/contact-us).
 	- componentName
-	- componentRefID	//depends on type, if type != page, refID 0. will refer url instead.
-	- componentRoute	//controller/action or route.
+	- componentRefID	## depends on type, if type != page, refID 0. will refer url instead.
+	- componentRoute	## controller/action or route.
 
-	// by default, will create about me page.
-	page
+	page ## by default, will create about me page.
 	- pageID
 	- siteID
 	- pageParentID
-	- pageApprovedStatus	//0 = unapproved, 1 = approve, 2 = unapproved.
+	- pageApprovedStatus	## 0 = unapproved, 1 = approve, 2 = unapproved.
 	- pageName
-	- pageSlug	//url shortname.
+	- pageSlug	## page slug
 	- pageText
-	- pageType	//1 = default, 2 = manual
+	- pageType	## 1 = default, 2 = manual
 	- pageCreatedUser
 	- pageCreatedDate
 	- pageUpdatedUser
@@ -163,19 +169,19 @@ site
 article
 - articleID
 - siteID
-- articleApprovedStatus		//0 = unapproved, 1 = approved, 2 = disapproved
+- articleApprovedStatus		## 0 = unapproved, 1 = approved, 2 = disapproved
 - articleSlug
 - articleName
 - articleText
 - articleTagID
-- articlePublishedDate		//will only published after this date.
-- articleStatus				//0 = draft, 1 = saved.
+- articlePublishedDate		## will only published after this date.
+- articleStatus				## 0 = draft, 1 = saved.
 - articleCreatedUser
 - articleCreatedDate
 
 	article_tag
 	- articleTagID
-	- articleTagType	//1 = default, like news, 2 = generic and create-able.
+	- articleTagType	## 1 = default, like news, 2 = generic and create-able.
 	- articleTagName
 
 announcement
@@ -185,14 +191,14 @@ announcement
 - announcementCreatedUser
 - announcementCreatedDate
 
-site_editor					//created by root
+site_editor					## created by root
 - siteEditorID
 - userID
 - siteID
 - siteEditorCreatedUser
 - siteEditorCreatedDate
 
-site_manager				//created by root
+site_manager				## created by root
 - siteManagerID
 - userID
 - siteID

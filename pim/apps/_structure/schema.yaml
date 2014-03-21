@@ -1,0 +1,237 @@
+user:
+	userID [int]
+	userIC [varchar]
+	userPassword [varchar]
+	userEmail [varchar]
+	userLevel [varchar]			## 1 = members (M), 2 = site manager (SM), 3 = cluster lead (CL), 4 = operation manager (OM), 99 = root admin (R)
+	userStatus [int]			## 0 = inactive, 1 = active
+	userPremiumStatus [int]		## 0 = normal, 1 = premium user.
+	userCreatedDate [datetime]
+	userCreatedUser [int]
+
+user_premium:
+	userPremiumID [int]
+	userID [int]
+	userPremiumPayment [float]		## default 5
+	userPremiumCreatedDate [datetime]
+	userPremiumCreatedUser [int]
+
+user_profile:
+	userProfileID [int]
+	userID [int]
+	userProfileTitle [int]		## 1 = mr, 2 = mrs
+	userProfileFullName [varchar]
+	userProfilePhoneNo [varchar]
+	userProfileGender [int]		## 1 = male, 2 = female
+	userProfilePOB [varchar]
+	userProfileMarital [int]	## 1 = single, 2 = married, 3 = widow
+	userProfileDOB [date]
+	userProfileMobileNo [varchar]
+	userProfileMailingAddress [text]
+
+user_activity:
+	userActivityID [int]
+	userID [int]
+	userActivityTypeCode [varchar(5)]			## 1XX = komen, 2XX = forum, 3XX = activity, 4XX = fail, 5XX = keahlian, 6XX = kemaskini
+	userActivityParameter [varchar]
+	userActivityRefID [int]						## 1 reference table.
+	userActivityCreatedDate [datetime]
+
+user_activity_type:
+	userActivityTypeID [int]
+	userActivityTypeCode [varchar(5)]
+	userActivityTypeMessage [varchar(255)]		## format example
+	userActivityTypeCategory [int]				## 1 = komen,  2 = forum, 3 = activity, 4 = fail, 5 = keahlian, 6 = kemaskini
+
+activity:
+	activityID [int]
+	siteID [int]
+	activityType [int]				## 1 = event, 2 = training
+	activityName [varchar]
+	activityAddress [text]
+	activityParticipation [int]		## 1 = open for all, 2 = closed to member
+	activityStartDate [date]
+	activityEndDate [date]
+	activityApprovedStatus [int]	## 0 = unapproved, 1 = approved, 2 = disapproved.
+	activityCreatedUser [int]
+	activityCreatedDate [datetime]
+
+activity_budget:			## incomplete.
+	activityBudgedID [int]
+	activityID [int]
+
+activity_date:
+	activityDateID [int]
+	activityID [int]
+	activityDateValue [date]
+
+activity_time:
+	activityTimeID [int]
+	activityDateID [int]
+	activityTimeStart [time]
+	activityTimeEnd [time]
+
+activity_user:
+	activityUserID [int]
+	userID [int]
+	activityUserValue [int]			## 1 = join, 2 = no.
+	activityUserCreatedDate [datetime]
+
+activity_article:
+	activityArticleID [int]
+	articleID [int]
+	activityID [int]
+
+activity_comment:
+	activityCommentID [int]
+	activityID [int]
+	userID [int]
+	activityCommentValue [varchar]
+	activityCreatedDate [datetime]
+	activityCreatedUser [int]
+
+event:
+	eventID [int]
+	activityID [int]
+	eventName [varchar]
+	eventType [int]				## 1 = lawatan
+	eventRefID [int]				## if eventType == 1
+	eventCreatedUser [int]
+	eventCreatedDate [datetime]
+
+training:
+	trainingID [int]
+	activityID [int]
+	trainingName [varchar]
+	trainingType [int]			## 0 is default
+	trainingMaxPax [int]
+
+state:
+	stateID [int]
+	stateName [varchar]
+	stateCode [varchar(10)]
+
+site:
+	siteID [int]
+	stateID [int]
+	siteName [varchar]
+	siteSlug [varchar]
+	siteCreatedUser [int]
+	siteCreatedDate [datetime]
+	siteUpdatedUser [int]
+	siteUpdatedDate [datetime]
+
+site_info:
+	siteInfoID [int]
+	siteID [int]
+	siteInfoLatitude [varchar]
+	siteInfoLongitude [varchar]
+	siteInfoPhone [varchar]
+	siteInfoAddress [text]
+	siteInfoDescription [text]
+	siteInfoFax [varchar]
+
+menu:
+	menuID [int]
+	siteID [int]
+	menuType [int]		## 1 = top
+	componentNo [int]
+	menuName [varchar]
+	menuRefID [int]		## if componentID = 1 (page), refer to page id.
+	menuRoute [varchar] ## if componentNo = 99, custom. else, empty.
+	menuNo [int]		## to sort by listing.
+
+component:	## static record, 6 currently.
+	componentNo [int]				## 1 = page, 2 = main (/), 3 =  activity, 4 = members, 5 = contact us, 99 = custom.
+	componentName [varchar]
+	componentRoute [varchar]		## controller/action or route.
+	componentStatus [int]			## 0 = inactive (wont show menu), 1 = activated.
+
+page: 		## by default, will create about me page.
+	pageID [int]
+	siteID [int]
+	pageApprovedStatus [int]	## 0 = unapproved, 1 = approve, 2 = unapproved.
+	pageName [varchar]
+	pageSlug [varchar]			## page slug
+	pageText [text]
+	pageType [int]			## 1 = default, 2 = manual, 3 = general page
+	pageDefaultType [int]	## if pageType is 0, this column is 0. 1 = about-us, 2 = about-pengurus, 3 = about-kampung.
+	pageCreatedUser [int]
+	pageCreatedDate [datetime]
+	pageUpdatedUser [int]
+	pageUpdatedDate [datetime]
+
+page_reference:
+	pageReferenceID [int]
+	pageParentID [int]
+	pageID [int]
+
+page_default:
+	pageDefaultID [int]
+	pageDefaultType [varchar]	## 1 = about-us, 2 = about-pengurus, 3 = about-kampung.
+	pageDefaultName [varchar]
+	pageDefaultSlug [varchar]
+
+## site editor can see article with articleStatus = 1 (saved).
+article:
+	articleID [int]
+	siteID [int]
+	articleApprovedStatus [int]		## 0 = unapproved, 1 = approved, 2 = disapproved
+	articleSlug [varchar]
+	articleName [varchar]
+	articleText [text]
+	articleTagID [int]
+	articlePublishedDate [datetime]		## will only published after this date.
+	articleStatus [int]						## 0 = draft, 1 = saved.
+	articleCreatedUser [int]
+	articleCreatedDate [datetime]
+
+article_photo:
+	photoArticleID [int]
+	photoID [int]
+	articleID [int]
+
+article_tag:
+	articleTagID [int]
+	articleTagType [int]	## 1 = default, like news, 2 = generic and create-able.
+	articleTagName [varchar]
+
+announcement:
+	announcementID [int]
+	siteID [int]
+	announcementText [text]
+	announcementCreatedUser [int]
+	announcementCreatedDate [datetime]
+
+site_editor:		## created by root
+	siteEditorID [int]
+	userID [int]
+	siteID [int]
+	siteEditorCreatedUser [int]
+	siteEditorCreatedDate [int]
+
+site_manager:
+	siteManagerID [int]
+	userID [int]
+	siteID [int]
+	siteManagerStatus [int]		## 1 = active, 0 = deactived.
+	siteManagerCreatedDate [datetime]
+	siteManagerCreatedUser [int]
+	siteManagerUpdatedDate [datetime]
+	siteManagerUpdatedUser [int]
+
+album:
+	albumID [int]
+	siteID [int]
+	articleID [int]
+	albumName [varchar]
+	albumCreatedDate [datetime]
+	albumCreatedUser [int]
+
+photo:
+	photoID [int]
+	siteID [int]
+	albumID [int]
+	photoName [varchar]
+	photoCreatedDate [datetime]
+	photoCreatedUser [int]
