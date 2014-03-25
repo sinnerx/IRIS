@@ -20,6 +20,7 @@ FTP
 
 
 CPANEL
+p1mgaia / gaiacelcom12345%
 
 
 SSH
