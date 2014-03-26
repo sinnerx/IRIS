@@ -66,12 +66,44 @@ class Model_Page
 		return db::get()->row();
 	}
 
-	public function getPageBySlug($slug)
+	## get page ID.
+	public function getPageByID($pageID,$withDefault = false)
+	{
+		db::from("page");
+		db::where("pageID",$pageID);
+
+		if($withDefault)
+		{
+			db::join("page_default","page.pageDefaultType = page_default.pageDefaultType");
+		}
+
+		return db::get()->row();
+	}
+
+	public function getPageBySlug($slug,$item)
 	{
 		db::from("page");
 		db::where("pageSlug",$slug);
 
+		if($item)
+		{
+			return db::get()->row($item);
+		}
+
 		return db::get()->row();
+	}
+
+	public function getPageByParent($id,$where = null,$col = null)
+	{
+		db::from("page");
+		db::where("pageID IN (SELECT pageID FROM page_reference WHERE pageParentID = '$id')");
+		if($where)
+		{
+			db::where($where);
+			return db::get()->row($col);
+		}
+
+		return db::get()->result();
 	}
 
 	## used by header.
@@ -83,6 +115,29 @@ class Model_Page
 		db::join("page","page.pageID = page_reference.pageID");
 
 		return db::get()->result();
+	}
+
+
+	## update page.
+	public function updatePage($pageID,$data)
+	{
+		## check type.
+		$type	= db::where("pageID",$pageID)->get("page")->row('pageType');
+
+		if($type == 1)
+		{
+			## unset pageName, if type of page to be updated is 1.
+			if(isset($data['pageName']))
+			{
+				unset($data['pageName']);
+			}
+		}
+
+		$data['pageUpdatedDate']	= now();
+		$data['pageUpdatedUser']	= session::get("userID");
+
+		db::where("pageID",$pageID);
+		db::update("page",$data);
 	}
 }
 

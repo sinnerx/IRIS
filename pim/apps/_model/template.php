@@ -31,7 +31,7 @@ class Model_Template
 
 	public function getTemplate($key = null)
 	{
-		$template['input-error']	= "<div  class='label label-danger'>{content}</div >";
+		$template['input-error']	= "<div class='label label-danger'>{content}</div >";
 
 		return !$key?$template:(isset($template[$key])?$template[$key]:false);
 	}

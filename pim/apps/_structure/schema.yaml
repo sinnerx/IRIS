@@ -131,6 +131,18 @@ site_info:
 	siteInfoDescription [text]
 	siteInfoFax [varchar]
 
+site_slider:
+	siteSliderID [int]
+	siteID [int]
+	siteSliderType [int]		## 1 = site specific, 2 = general
+	siteSliderName [varchar]
+	siteSliderImage [varchar]
+	siteSliderLink [varchar]	## link for which and which.
+	siteSliderTarget [int]		## 1 = normal, 2 = new tab.
+	siteSliderStatus [int]		## 0 = inactive, 1 = active
+	siteSliderCreatedDate [datetime]
+	siteSliderCreatedUser [int]
+
 menu:
 	menuID [int]
 	siteID [int]

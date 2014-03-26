@@ -11,14 +11,6 @@ Class Controller_Page
 		view::render("page/index",$data);
 	}
 
-	## return json of row
-	public function ajaxPageDetail($slug)
-	{
-		$row_page	= model::load("page")->getPageBySlug($slug);
-
-		return response::json($row_page);
-	}
-
 	public function test()
 	{
 		$this->template	= false;

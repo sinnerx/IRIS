@@ -38,18 +38,18 @@ class Model_Access
 		return $levelR[$id];
 	}
 
+	### backend menu.
 	public function menu($level = null)
 	{
 		$level	= !$level?$this->accessLevel(session::get("userLevel")):$level;
 
 		$menu['sm']	= Array(
 					"Overview"=>"home/index",
-					"Site Information"=>Array(
-									"Basic Info."=>"site/info",
-									"Edit site"=>"site/edit",
+					"Site Management"=>Array(
+									"Basic Info."=>Array("site/info","site/edit"),
+									"Slider"=>Array("site/slider","site/slider_add"),
 											),
 					"Pages"=>"page/index",
-					"Menu"=>"menu/index",
 					"Activities"=>Array(
 									"Events"=>"event/index",
 									"Training"=>"training/index"

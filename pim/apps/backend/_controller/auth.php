@@ -31,7 +31,7 @@ Class Controller_Auth
 			## got validation error.
 			if($error)
 			{
-				flash::set($error);
+				flash::set(model::load("template")->wrap("input-error",$error));
 				input::repopulate();
 				redirect::to("");
 			}

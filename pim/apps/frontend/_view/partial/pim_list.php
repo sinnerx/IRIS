@@ -3,7 +3,7 @@ if(count($siteListR) > 0):
 foreach($siteListR as $siteID=>$row)
 {
 	$slug	= $row['siteSlug'];
-	$name	= $row['siteName'];
+	$name	= ucfirst($row['siteName']);
 	$state	= $row['stateID'];
 	$href	= url::base("$slug");
 	echo "<li><a href='$href'>$name</a></li>";

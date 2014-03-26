@@ -12,6 +12,9 @@
   <link rel="stylesheet" href="<?php echo url::asset("_scale/css/font.css");?>" type="text/css" />
   <link rel="stylesheet" href="<?php echo url::asset("_scale/css/app.css");?>" type="text/css" />
   <script src="<?php echo url::asset("_scale/js/jquery.min.js");?>"></script>
+  <script type="text/javascript">
+
+  </script>
     <!--[if lt IE 9]>
     <script src="js/ie/html5shiv.js"></script>
     <script src="js/ie/respond.min.js"></script>
@@ -36,12 +39,12 @@
         <a class="btn btn-link visible-xs" data-toggle="class:nav-off-screen" data-target="#nav">
           <i class="fa fa-bars"></i>
         </a>
-        <a href="index.html" class="navbar-brand"><img src="<?php echo url::asset("_scale/images/logo.png");?>">P1M DASHBOARD</a>
+        <a href="index.html" class="navbar-brand"><img src="<?php echo url::asset("_scale/images/logo.png");?>"><?php echo $dashboardTitle;?></a>
         <a class="btn btn-link visible-xs" data-toggle="dropdown" data-target=".user">
           <i class="fa fa-cog"></i>
         </a>
       </div>      <ul class="nav navbar-nav hidden-xs">
-        <li class="dropdown">
+        <li class="dropdown" style='display:none;'>
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
             <i class="i i-grid"></i>
           </a>
@@ -159,9 +162,9 @@
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
             <span class="thumb-sm avatar pull-left">
-              <img src="images/a0.png">
+              <img src="<?php echo url::asset("_scale/images/a0.png");?>">
             </span>
-            John.Smith <b class="caret"></b>
+            <?php echo $userFullName;?> <b class="caret"></b>
           </a>
           <ul class="dropdown-menu animated fadeInRight">
             <span class="arrow top"></span>
@@ -196,43 +199,43 @@
                         <section class="w-f scrollable">
               <div class=slim-scroll data-height=auto data-disable-fade-out=true data-distance=0 data-size=10px data-railOpacity=0.2>
                 <div class="clearfix wrapper dk nav-user hidden-xs">
-        <div class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-            <span class="thumb avatar pull-left m-r">                        
-              <img src="images/a0.png" class="dker">
-              <i class="on md b-black"></i>
-            </span>
-            <span class="hidden-nav-xs clear">
-              <span class="block m-t-xs">
-                <strong class="font-bold text-lt">John.Smith</strong> 
-                <b class="caret"></b>
-              </span>
-              <span class="text-muted text-xs block">Art Director</span>
-            </span>
-          </a>
-          <ul class="dropdown-menu animated fadeInRight m-t-xs">
-            <span class="arrow top hidden-nav-xs"></span>
-            <li>
-              <a href="#">Settings</a>
-            </li>
-            <li>
-              <a href="profile.html">Profile</a>
-            </li>
-            <li>
-              <a href="#">
-                <span class="badge bg-danger pull-right">3</span>
-                Notifications
-              </a>
-            </li>
-            <li>
-              <a href="docs.html">Help</a>
-            </li>
-            <li class="divider"></li>
-            <li>
-              <a href="modal.lockme.html" data-toggle="ajaxModal" >Logout</a>
-            </li>
-          </ul>
-        </div>
+      <div class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+    <span class="thumb avatar pull-left m-r">                        
+      <img src="<?php echo url::asset("_scale/images/a0.png");?>" class="dker">
+      <i class="on md b-black"></i>
+    </span>
+    <span class="hidden-nav-xs clear">
+      <span class="block m-t-xs">
+        <strong class="font-bold text-lt"><?php echo $userFullName;?></strong> 
+        <b class="caret"></b>
+      </span>
+      <span class="text-muted text-xs block"><?php echo $userLevel;?></span>
+    </span>
+  </a>
+  <ul class="dropdown-menu animated fadeInRight m-t-xs">
+    <span class="arrow top hidden-nav-xs"></span>
+    <li>
+      <a href="#">Settings</a>
+    </li>
+    <li>
+      <a href="profile.html">Profile</a>
+    </li>
+    <li>
+      <a href="#">
+        <span class="badge bg-danger pull-right">3</span>
+        Notifications
+      </a>
+    </li>
+    <li>
+      <a href="#">Help</a>
+    </li>
+    <li class="divider"></li>
+    <li>
+      <a href="<?php echo url::base("auth/logout");?>" >Logout</a>
+    </li>
+  </ul>
+</div>
       </div>
         <nav class="nav-primary hidden-xs">
           <ul class="nav nav-main" data-ride="collapse">                
@@ -262,7 +265,15 @@
                 {
                   $active  = in_array($controller."/".$method,$module)?"class='active'":"";
 
-                  echo '<li '.$active.'><a href="#" class="auto">
+                  foreach($module as $submod)
+                  {
+                    if(is_array($submod))
+                    {
+                      $active = in_array($controller."/".$method, $submod)?"class='active'":$active;
+                    }
+                  }
+
+                  echo '<li '.$active.'><a href="javascript:void(0);" class="auto">
                         <span class="pull-right text-muted">
                           <i class="i i-circle-sm-o text"></i>
                           <i class="i i-circle-sm text-active"></i>
@@ -276,9 +287,19 @@
                   echo "<ul class='nav dk'>";
                   foreach($module as $sub_menuname=>$submod)
                   {
+                    if(is_array($submod))
+                    {
+                      $sub_active   = in_array($controller."/".$method, $submod)?"class='active'":"";
+                      $submod = $submod[0];
+                    }
+                    else
+                    {
+                      list($menu_con,$menu_meth)  = explode("/",$submod);
+                      $sub_active   = $controller == $menu_con && $method == $menu_meth?"class='active'":"";
+                    }
+
                     $url  = url::base($submod);
-                    list($menu_con,$menu_meth)  = explode("/",$submod);
-                    $sub_active   = $controller == $menu_con && $method == $menu_meth?"class='active'":"";
+                    
                     echo '<li '.$sub_active.'>
                           <a href="'.$url.'" class="auto">                                                        
                             <i class="i i-dot"></i>

@@ -38,7 +38,10 @@ class Controller_Partial
 
 	private function top_slideshow()
 	{
-		view::render("partial/top_slideshow");
+		$site				= model::load("site");
+		$data['res_slider']	= $site->getSlider($site->getSiteIDBySlug(),false);
+
+		view::render("partial/top_slideshow",$data);
 	}
 
 	private function bottom_down()

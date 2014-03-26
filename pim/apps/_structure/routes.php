@@ -20,13 +20,26 @@ $routes[]	= Array(function()
 	{
 		controller::load("auth","index");
 	});
+
+	### Hook pre_template with partial index.
+	controller::hook("backend:pre_template",function()
+	{
+		return controller::load("template","index");
+	});
 });
 
 #### Backend Route ####
+## backend ajax
+$routes[]	= Array("dashboard/ajax/[:controller]/[**:method]","controller=backend:ajax/{controller}@{method}");
+
+## route to direct model usage.
+$routes[]	= Array("model/[:model]/[**:method]","controller=model:{model}@{method}");
+
 ## backend login.
 $routes[]	= Array("dashboard/login","controller=backend:auth@login");
 $routes[]	= Array("dashboard","controller=backend:home@index");
 $routes[]	= Array("dashboard/[:controller]/[**:method]","controller=backend:{controller}@{method}");
+
 #######################
 
 ### Frontend Route ####

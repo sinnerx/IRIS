@@ -140,3 +140,6 @@ Frontend
 - design based on 4. MODULE PLAN
 
 #########################################
+##### 7. MODULE #####
+1. Page
+- 

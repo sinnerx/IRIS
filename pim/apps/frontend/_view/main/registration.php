@@ -25,7 +25,7 @@
      <?php echo $siteName;?>
      </div>
      <div class="front-content">
-     Lorem ipsum dolor sit amet, maiores ornare ac fermentum, imperdiet ut vivamus a, nam lectus at nunc. Quam euismod sem, semper ut potenti pellentesque quisque. In eget sapien sed, sit duis vestibulum ultricies, placerat morbi amet vel, nullam in in lorem vel. 
+     <?php echo $siteInfoDescription;?>
      </div>
      <div class="front-guide">
      Hadapi Masalah? <a href="#"> Rujuk Panduan </a>

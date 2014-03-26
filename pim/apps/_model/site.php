@@ -23,6 +23,7 @@ Class Model_Site
 		db::from("site");
 		db::where("site.siteID",$siteID);
 		db::join("site_info","site.siteID = site_info.siteID");
+		db::join("user_profile","user_profile.userID IN (SELECT userID FROM site_manager WHERE site.siteID = site_manager.siteID)");
 
 		return db::get()->row();
 	}
@@ -50,8 +51,6 @@ Class Model_Site
 
 		return $siteID?$siteID:false;
 	}
-
-	
 
 	## return along with state
 	public function getSiteName($slug = null)
@@ -110,6 +109,22 @@ Class Model_Site
 		##
 		$row	= db::get()->row($column);
 		return $row;
+	}
+
+	## update table site_info only.
+	public function updateSiteInfo($id,$data)
+	{
+		$data	= Array(
+				"siteInfoLatitude"=>$data['siteInfoLatitude'],
+				"siteInfoLongitude"=>$data['siteInfoLongitude'],
+				"siteInfoPhone"=>$data['siteInfoPhone'],
+				"siteInfoAddress"=>$data['siteInfoAddress'],
+				"siteInfoDescription"=>$data['siteInfoDescription'],
+				"siteInfoFax"=>$data['siteInfoFax']
+						);
+
+		db::where("siteID",$id);
+		db::update("site_info",$data);
 	}
 
 	## get manager info. return array of columns.
@@ -234,6 +249,52 @@ Class Model_Site
 							);
 		$menu->create($siteID,5,$data_menu);
 
+	}
+
+	public function getSlider($siteID,$all = true)
+	{
+		db::from("site_slider");
+
+		if(!$all)
+		{
+			db::where("siteSliderStatus",1);
+		}
+
+		db::where("siteID",$siteID);
+		return db::get()->result();
+	}
+
+	public function addSlider($siteID,$data)
+	{
+		$data	= Array(
+				"siteID"=>$siteID,
+				"siteSliderType"=>1,
+				"siteSliderTarget"=>1,
+				"siteSliderStatus"=>1,
+				"siteSliderName"=>$data['siteSliderName'],
+				"siteSliderImage"=>$data['siteSliderImage'],
+				"siteSliderLink"=>$data['siteSliderLink'],
+				"siteSliderCreatedDate"=>now(),
+				"siteSliderCreatedUser"=>session::get("userID")
+						);
+
+		db::insert("site_slider",$data);
+	}
+
+	public function removeSlider($id)
+	{
+		db::where("siteSliderID",$id);
+		db::update("site_slider",Array("siteSliderStatus"=>0));
+		#db::delete("site_slider",Array("siteSliderID"=>$id));
+	}
+
+	public function toggleSlider($id)
+	{
+		$current	= db::select("siteSliderStatus")->where("siteSliderID",$id)->get("site_slider")->row("siteSliderStatus");
+		$status		= $current == 1?0:1;
+
+		db::where("siteSliderID",$id);
+		db::update("site_slider",Array("siteSliderStatus"=>$status));
 	}
 }
 
