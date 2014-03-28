@@ -130,6 +130,9 @@ site_info:
 	siteInfoAddress [text]
 	siteInfoDescription [text]
 	siteInfoFax [varchar]
+	siteInfoTwitterUrl [varchar]
+	siteInfoFacebookUrl [varchar]
+	siteInfoEmail [varchar]
 
 site_slider:
 	siteSliderID [int]
@@ -172,6 +175,11 @@ page: 		## by default, will create about me page.
 	pageCreatedDate [datetime]
 	pageUpdatedUser [int]
 	pageUpdatedDate [datetime]
+
+page_photo:
+	pagePhotoID [int]
+	pageID [int]
+	photoID [int]
 
 page_reference:
 	pageReferenceID [int]

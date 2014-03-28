@@ -1,3 +1,26 @@
+<style type="text/css">
+	
+.social-network .fa
+{
+	color:inherit;
+}
+
+.social-network .fa.fa-facebook:hover
+{
+	color: #728cc2;
+}
+
+.social-network .fa.fa-twitter:hover
+{
+	color: #55acee;
+}
+
+.social-network .fa.fa-envelope:hover
+{
+	color: white;
+}
+
+</style>
 <!-- Top Header start -->
 <div class="top-header">
 	<div class="wrap clearfix">
@@ -10,9 +33,16 @@
 		</div>
 	<div class="social-network clearfix">
 		<ul>
-			<li><i class="fa fa-facebook"></i></li>
-			<li><i class="fa fa-twitter"></i></li>
-			<li><i class="fa fa-envelope"></i></li>
+			<?php 
+			if($links['siteInfoFacebookUrl']):?>
+			<li><a href='//<?php echo $links['siteInfoFacebookUrl'];?>' class="fa fa-facebook"></a></li>
+			<?php endif;
+			if($links['siteInfoTwitterUrl']):?>
+			<li><a href='//<?php echo $links['siteInfoTwitterUrl'];?>' class="fa fa-twitter"></a></li>
+			<?php endif;
+			if($links['siteInfoEmail']):?>
+			<li><a href='mailto:<?php echo $links['siteInfoEmail'];?>' class="fa fa-envelope"></a></li>
+			<?php endif;?>
 		</ul>
 	</div>
 	<div class="user-setting">

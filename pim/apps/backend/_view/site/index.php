@@ -102,7 +102,7 @@ Preview list of site along with their information.
 <footer class='panel-footer'>
 <div class='row'>
 	<div class='col-sm-12'>
-		Total Record : <?php echo pagination::get("totalRow");?><?php echo pagination::link();?>
+		<?php echo pagination::link();?>
 	</div>
 </div>
 </footer>

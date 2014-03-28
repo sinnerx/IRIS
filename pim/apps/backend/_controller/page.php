@@ -11,6 +11,28 @@ Class Controller_Page
 		view::render("page/index",$data);
 	}
 
+	public function uploadImage($pageID)
+	{
+		$file	= input::file("pageImage");
+
+		if($file)
+		{
+			$path	= path::asset("frontend/images/photo");
+			$filename	= $pageID.time().".".$file->get("ext");
+
+			if($file->move($path,$filename))
+			{
+				## upload into db.
+				model::load("page")->addPhoto($pageID,$filename);
+
+				$data['uploadedUrl']	= url::asset("frontend/images/photo/$filename");
+
+				$this->template	= false;
+				view::render("page/_imageUpload",$data);
+			}
+		}
+	}
+
 	public function test()
 	{
 		$this->template	= false;

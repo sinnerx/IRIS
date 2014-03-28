@@ -12,9 +12,39 @@ Edit your site information, and make it awesome to read!
 <?php echo flash::data();?>
 <form method='post' id='siteAddForm'>
 <div class='row'>
+	<div class='col-sm-6'>
+	<section class="panel panel-default">
+		<div class="panel-body">
+			<div class="form-group">
+			<label>1. P1m Name</label>
+			<div class='row'>
+				<div class='col-sm-9'>
+				<?php echo form::text("siteName","size='40' disabled class='form-control'",$row['siteName']);?>
+				</div>
+				<div class='col-sm-3'>
+				<?php echo form::select("stateID",Array(9=>"Selangor"),"disabled class='form-control'",$row['stateID'],"[Select State]");?>
+				</div>
+			</div>
+			</div>
+			
+		</div>
+	</section>
+	</div>
+	<div class='col-sm-6'>
+	<section class='panel panel-default'>
+		<div class="panel-body">
+			<div class="form-group">
+			<label>2. P1m Slug</label>
+			<?php echo form::text("siteSlug","class='form-control' disabled placeholder=\"A url represents the p1m, make sure it's as clear as possible.\"",$row['siteSlug']);?>
+			</div>
+		</div>
+	</section>
+	</div>
+</div>
+<div class='row'>
 	<div class='col-sm-3'>
 		<section class='panel panel-default'>
-		<div class='panel-body' style='height:218px;'>
+		<div class='panel-body'>
 		<div class='form-group'>
 			<label>4. Phone No.</label>
 			<?php echo form::text("siteInfoPhone","class='form-control'",$row['siteInfoPhone']);?>
@@ -23,6 +53,10 @@ Edit your site information, and make it awesome to read!
 			<label>5. Fax No.</label>
 			<?php echo form::text("siteInfoFax","class='form-control'",$row['siteInfoFax']);?>
 		</div>
+		<div class='form-group'>
+			<label>6. Site Email.</label>
+			<?php echo form::text("siteInfoEmail","class='form-control'",$row['siteInfoEmail']);?>
+		</div>
 		</div>
 		</section>
 	</div>
@@ -30,13 +64,29 @@ Edit your site information, and make it awesome to read!
 		<section class='panel panel-default'>
 		<div class='panel-body'>
 		<div class='form-group'>
-			<label>6. Coordinates</label>
 			<div class='row'>
-				<div class='col-md-3'>
-					Latitude : <?php echo form::text("siteInfoLatitude","class='form-control'",$row['siteInfoLatitude']);?>
+				<div class='col-md-6'>
+				<label>6. Links</label>
+				<div class='row'>
+					<div class='col-md-6'>
+						Twitter : <?php echo form::text("siteInfoTwitterUrl","class='form-control'",$row['siteInfoTwitterUrl']);?>
+					</div>
+					<div class='col-md-6'>
+						Facebook : <?php echo form::text("siteInfoFacebookUrl","class='form-control'",$row['siteInfoFacebookUrl']);?>
+					</div>
 				</div>
-				<div class='col-md-3'>
-					Longitude : <?php echo form::text("siteInfoLongitude","class='form-control'",$row['siteInfoLongitude']);?>
+				</div>
+
+				<div class='col-md-6'>
+				<label>6. Coordinates</label>
+				<div class='row'>
+					<div class='col-md-6'>
+						Latitude : <?php echo form::text("siteInfoLatitude","class='form-control'",$row['siteInfoLatitude']);?>
+					</div>
+					<div class='col-md-6'>
+						Longitude : <?php echo form::text("siteInfoLongitude","class='form-control'",$row['siteInfoLongitude']);?>
+					</div>
+				</div>
 				</div>
 			</div>
 		</div>

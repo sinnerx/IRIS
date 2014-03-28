@@ -19,6 +19,10 @@ class Controller_Page
 		$row['pageTitle']		= $type == 1?$row_page['pageDefaultName']:$row_page['pageName'];
 		$row['pageLabel']		= "Written at , ".date("d-F-Y g:i A",strtotime($row_page['pageCreatedDate']));
 		$row['pageContent']		= $row_page['pageText'];
+
+		## get page photo.
+		$row['pageImageUrl']	= model::load("page")->getPagePhotoUrl($pageID);
+		$row['pageImageUrl']	= !$row['pageImageUrl']?null:url::asset("frontend/images/photo/".$row['pageImageUrl']);
 		
 
 		return response::json($row);

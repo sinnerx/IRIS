@@ -120,7 +120,10 @@ Class Model_Site
 				"siteInfoPhone"=>$data['siteInfoPhone'],
 				"siteInfoAddress"=>$data['siteInfoAddress'],
 				"siteInfoDescription"=>$data['siteInfoDescription'],
-				"siteInfoFax"=>$data['siteInfoFax']
+				"siteInfoFax"=>$data['siteInfoFax'],
+				"siteInfoTwitterUrl"=>$data['siteInfoTwitterUrl'],
+				"siteInfoFacebookUrl"=>$data['siteInfoFacebookUrl'],
+				"siteInfoEmail"=>$data['siteInfoEmail']
 						);
 
 		db::where("siteID",$id);
@@ -288,6 +291,7 @@ Class Model_Site
 		#db::delete("site_slider",Array("siteSliderID"=>$id));
 	}
 
+	//update slider status..
 	public function toggleSlider($id)
 	{
 		$current	= db::select("siteSliderStatus")->where("siteSliderID",$id)->get("site_slider")->row("siteSliderStatus");
@@ -295,6 +299,14 @@ Class Model_Site
 
 		db::where("siteSliderID",$id);
 		db::update("site_slider",Array("siteSliderStatus"=>$status));
+	}
+
+	//get links like twitter, facebook and email.
+	public function getLinks($siteID)
+	{
+		db::select("siteInfoTwitterUrl,siteInfoFacebookUrl,siteInfoEmail");
+		db::where("siteID",$siteID);
+		return db::get("site_info")->row();
 	}
 }
 

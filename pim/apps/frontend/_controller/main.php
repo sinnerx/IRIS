@@ -4,7 +4,22 @@ Class Controller_Main
 	## main landing page. example : pim.my
 	public function landing()
 	{
+		$this->template	= false;
 		view::render("main/landing");
+	}
+
+	## main landing page:about. example : p1m.my/about
+	public function landing_about()
+	{
+		$this->template	= false;
+		view::render("main/landing_about");
+	}
+
+	## main landing page:contact. example : p1m.my/contact
+	public function landing_contact()
+	{
+		$this->template	= false;
+		view::render("main/landing_contact");
 	}
 
 	## site landing page. example : pim.my/[site-slug]
@@ -24,7 +39,10 @@ Class Controller_Main
 					"pageDefaultType"=>1
 						));
 		$data['pageName']	= $defaultR[1]['pageDefaultName'];
-		$data['pageText']	= db::get()->row("pageText");
+		$data['pageSlug']	= url::base("{site-slug}/".$defaultR[1]['pageDefaultSlug']);
+		$row				= db::get()->row();
+		$data['pageText']	= $row['pageText'];
+		$data['photoName']	= model::load("page")->getPagePhotoUrl($row['pageID']);
 
 		view::render("main/index",$data);
 	}
@@ -47,7 +65,6 @@ Class Controller_Main
 		$data['row']			= $site->getSite();
 		$row_manager			= $site->getManagerInfo(null,'userEmail');
 		$data['managerEmail']	= $row_manager['userEmail'];
-
 
 		view::render("main/contact_us",$data);
 	}

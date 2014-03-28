@@ -2,4 +2,5 @@ pi1m
 pi1m-fuel
 pim/core/libraries
 pim/assets/_scale
+!pim/assets/_scale/apps.css
 *.swp

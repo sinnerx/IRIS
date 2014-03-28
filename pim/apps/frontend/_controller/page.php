@@ -40,6 +40,7 @@ Class Controller_Page
 
 		$defaultR	= $page->getDefault();
 		$data['row_page']	= $row_page;
+		$data['pageImageUrl']	= url::asset("frontend/images/photo/".$page->getPagePhotoUrl($row_page['pageID']));
 
 		$data['title']		= $row_page['pageType'] == 1?$defaultR[$row_page['pageDefaultType']]['pageDefaultName']:$row_page['pageName'];
 

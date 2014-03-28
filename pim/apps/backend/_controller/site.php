@@ -87,7 +87,9 @@ Class Controller_Site
 			redirect::to("","New site has been added!.");
 		}
 
-		view::render("site/add");
+		$data['stateR']	= model::load("helper")->state();
+
+		view::render("site/add",$data);
 	}
 
 	public function info()

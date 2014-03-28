@@ -66,11 +66,22 @@ class Model_Page
 		return db::get()->row();
 	}
 
+	## get page photo. used by ajax/page/photo.
+	public function getPagePhotoUrl($pageID)
+	{
+		db::from("page_photo");
+		db::where("pageID",$pageID);
+		db::join("photo","photo.photoID = page_photo.photoID");
+
+		return db::get()->row('photoName');
+	}
+
 	## get page ID.
 	public function getPageByID($pageID,$withDefault = false)
 	{
 		db::from("page");
-		db::where("pageID",$pageID);
+
+		db::where("page.pageID",$pageID);
 
 		if($withDefault)
 		{
@@ -138,6 +149,31 @@ class Model_Page
 
 		db::where("pageID",$pageID);
 		db::update("page",$data);
+	}
+
+	public function addPhoto($pageID,$filename)
+	{
+		## get siteID.
+		$siteID		= db::select("siteID")->where("pageID",$pageID)->get("page")->row("siteID");
+
+		## clear all existing photo first.
+		db::delete("page_photo",Array("pageID"=>$pageID));
+
+		## reinsert new photo.
+		$data_photo	= Array(
+					"siteID"=>$siteID,
+					"albumID"=>0,	## anonymous album.
+					"photoCreatedDate"=>now(),
+					"photoCreatedUser"=>session::get("userID"),
+					"photoName"=>$filename,
+							);
+
+		db::insert("photo",$data_photo);
+
+		$photoID	= db::getLastID("photo","photoID");
+
+		## insert page_photo
+		db::insert("page_photo",Array("photoID"=>$photoID,"pageID"=>$pageID)); 
 	}
 }
 

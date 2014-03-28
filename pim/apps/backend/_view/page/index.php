@@ -33,6 +33,8 @@ var page	= function()
 		$("#pageLabel").html(row['pageLabel']);
 		$("#pageContent").html(row['pageContent'] == ""?"Empty":row['pageContent']);
 
+		$("#pageImageUrl").html(!row['pageImageUrl']?"No photo uploaded yet.":"<b>"+row['pageImageUrl']+"</b>");
+
 		$("#button_edit").attr("href","#"+pageID+"/"+"edit");
 
 		$("#pagelist"+pageID).addClass("activ");
@@ -96,12 +98,35 @@ var page	= function()
 		var data	= {pageName:$("#pageName").val(),pageText:$("#editor").html()};
 		var pageID	= $("#pageID").val();
 
+		
+
 		$.ajax({type:"POST",url:base_url+"ajax/page/pageUpdate/"+pageID,data:data}).done(function(txt)
 		{
 			console.log(txt);
 			page.getPage(pageID);
 			page.updateMenu(pageID,data['pageText']);
+
+			//upload image
+			page.pageUploadImage();
+
+
 		});
+	}
+
+	this.pageUploadImage	= function()
+	{
+		var pageID	= $("#pageID").val();
+
+		$("#upload-form")[0].action	+= pageID;
+		$("#upload-form")[0].submit();
+
+		//should be uploaded by now.
+	}
+
+	//update image link.
+	this.updateImage	= function(imgUrl)
+	{
+		$("#pageImageUrl").html(imgUrl);
 	}
 
 	this.cancelUpdate	= function()
@@ -215,6 +240,12 @@ function showFilter()
 	font-size:0.9em;
 	min-height:200px;
 }
+	
+
+.wrapper
+{
+	position: relative;
+}
 
  </style>
  <section class='hbox stretch'>
@@ -325,6 +356,9 @@ function showFilter()
             </div>
             <!-- /page header -->
             <div class="wrapper">
+<div class='imagebox'>
+Photo : <span id='pageImageUrl'></span>
+</div>
 <div id='pageContent'>
 
 </div>
@@ -385,7 +419,8 @@ function showFilter()
 	<div class='btn-group'>
 	<a class="btn btn-default btn-sm" title="Upload Photo" onclick='$(".upload-button").slideToggle();'><i class="fa fa-picture-o"></i></a>
 	<div class='upload-button' style='position:relative;top:5px;left:5px;display:none;'>
-		<?php echo form::file("pageImage");?>
+		<form method='post' id='upload-form' target='upload-iframe' action='<?php echo url::base("page/uploadImage/");?>' enctype="multipart/form-data"><?php echo form::file("pageImage");?>
+		<iframe style='display:none;' name='upload-iframe'></iframe></form>
 	</div>
 	</div>
 </div>

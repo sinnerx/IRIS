@@ -59,7 +59,7 @@ A site can only have one manager. Before adding a new site, make sure the site m
 		</div>
 		<div class='form-group'>
 			<label>4. P1m State</label>
-			<?php echo form::select("stateID",Array(9=>"Selangor"),"class='form-control'","","[Select State]");?>
+			<?php echo form::select("stateID",$stateR,"class='form-control'","","[Select State]");?>
 		</div>
 		</div>
 		</section>

@@ -43,28 +43,30 @@ class Model_Access
 	{
 		$level	= !$level?$this->accessLevel(session::get("userLevel")):$level;
 
+		## site manager.
 		$menu['sm']	= Array(
-					"Overview"=>"home/index",
+					/*"Overview"=>"home/index",*/
 					"Site Management"=>Array(
-									"Basic Info."=>Array("site/info","site/edit"),
+									"Information"=>Array("site/edit"),
 									"Slider"=>Array("site/slider","site/slider_add"),
 											),
 					"Pages"=>"page/index",
-					"Activities"=>Array(
+					/*"Activities"=>Array(
 									"Events"=>"event/index",
 									"Training"=>"training/index"
-										),
+										),*/
 							);
 
+		## root.
 		$menu['r']	= Array(
-					"Overview"=>"home/index",
+					/*"Overview"=>"home/index",*/
 					"Sites"=>Array(
 							"Preview"=>"site/index",
 							"Add new site"=>"site/add",
 							"Manager"=>"manager/add",
 									),
-					"Activities"=>"activity/index",
-					"Reports"=>"reports/index"
+					/*"Activities"=>"activity/index",
+					"Reports"=>"reports/index"*/
 							);
 
 		return $menu[$level];

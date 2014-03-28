@@ -45,6 +45,8 @@ $routes[]	= Array("dashboard/[:controller]/[**:method]","controller=backend:{con
 ### Frontend Route ####
 ## root. will direct to main.
 $routes[]	= Array("","controller=main@landing");
+$routes[]	= Array("about","controller=main@landing_about");
+$routes[]	= Array("contact","controller=main@landing_contact");
 
 ## site test uri
 $routes[]	= Array("[:site-slug]/test/[:controller]/[**:method]","controller={controller}@{@method}");
@@ -66,6 +68,9 @@ $routes[]	= Array("[:site-slug]/contact-us","controller=main@contact");
 
 ## site members
 $routes[]	= Array("[:site-slug]/members","controller=member/index");
+
+## ajax request.
+$routes[]	= Array("[:site-slug]/ajax/[:controller]/[**:method]","controller=ajax/{controller}@{method}");
 
 ## site page.
 $routes[]	= Array("[:site-slug]/[**:trail]","controller=page@index");
