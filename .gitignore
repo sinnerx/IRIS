@@ -1,7 +1,5 @@
-!pim/core/libraries
 apps_copy
 *.swp
-apps
 trash
 pim/assets/frontend/images
 pim/assets/frontend/siteImage

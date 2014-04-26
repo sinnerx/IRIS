@@ -1,0 +1,86 @@
+<style type="text/css">
+	
+.site-information label
+{
+	display: block;
+	padding-left:5px;
+	font-weight: bold;
+}
+
+.site-information .row .col-sm-12 div
+{
+	padding-left:5px;
+	padding-bottom: 5px;
+	border-bottom: 1px dashed #bcc5c0;
+}
+
+</style>
+<section class='panel panel-default'>
+	<div class='panel-heading'>
+		<div class='row'>
+		<div class='col-sm-9'>
+		<h4 style="line-height:5px;">Site Information - <?php echo $row['siteName'];?></h4>
+		<small style='opacity:0.5;'>http://p1m.gaia.my/<?php echo strtolower($row['siteSlug']);?></small>
+		</div>
+		<div class='col-sm-3'>
+			<a href='<?php echo url::base("../".$row['siteSlug']);?>' class='btn btn-primary pull-right' target='_blank'>Site Preview</a>
+		</div>
+		</div>
+	</div>
+	<div class='panel-body'>
+		<div class='row'>
+			<div class='col-sm-4 site-information' style="border-right:1px dashed #dddddd;">
+				<div class='row'>
+				<div class='col-sm-12'>
+					<label>Manager</label>
+					<div>1. <?php echo ucfirst($manager1);?></div>
+					<div>2. <?php echo ucfirst($manager2);?></div>
+				</div>
+				</div>
+
+				<div class='row'>
+				<div class='col-sm-12'>
+					<label>Site Email</label>
+					<div><?php echo $row['siteInfoEmail']?:"none";?></div>
+				</div>
+				</div>
+
+				<div class='row'>
+				<div class='col-sm-12'>
+					<label>Phone No.</label>
+					<div><?php echo $row['siteInfoPhone']?:"none";?></div>
+				</div>
+				</div>
+
+				<div class='row'>
+				<div class='col-sm-12'>
+					<label>Fax No.</label>
+					<div><?php echo $row['siteInfoFax']?:"none";?></div>
+				</div>
+				</div>
+
+				<div class='row'>
+				<div class='col-sm-12'>
+					<label>Address.</label>
+					<div><?php echo $row['siteInfoAddress']?:"none";?></div>
+				</div>
+				</div>
+			</div>
+			<div class='col-sm-8' >
+			<div class='row'>
+				<div class='col-sm-12'>
+					<div style='padding:5px;'>
+					<div style='font-weight:bold;'>Description</div>
+					<?php echo $row['siteInfoDescription'];?>
+					</div>
+				</div>
+			</div>
+			</div>
+		</div>
+		<div class='row'>
+			<div class='col-sm-4 site-information'>
+				
+			</div>
+		</div>
+	</div>
+</section>
