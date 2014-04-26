@@ -9,6 +9,15 @@
 		<?php
 		if($menuR)
 		{
+			## prepare component controller mapping first.
+			$componentControllerR	= Array(
+									1=>"page/index",
+									2=>"main/index",
+									3=>"activity/index",
+									4=>"member/index",
+									5=>"main/contact"
+											);
+
 			foreach($menuR as $row)
 			{
 				## if component status deactivated, skip.
@@ -25,7 +34,7 @@
 				## pages
 				if($component == 1)
 				{
-					$page	= model::load("page");
+					$page	= model::load("page/page");
 
 					## get default.. (like name or slug, can be used if tyoe = 1[default])
 					$defaultR	= $page->getDefault();
@@ -63,7 +72,13 @@
 				
 				## end page component.
 
-				echo "<li><a href='$main_url' class=''>$menuName</a>";
+				## echo the menu.
+				$controller	= controller::getCurrentController();
+				$method		= controller::getCurrentMethod();
+
+				$cssActive	= $controller."/".$method == $componentControllerR[$component]?"active":"";
+
+				echo "<li><a href='$main_url' class='$cssActive'>$menuName</a>";
 
 				if($component == 1)
 				{
@@ -92,6 +107,7 @@
 		</ul>
 		</div>
 
+		<?php /*
 		<div class="navigation" style="display:none;">
 			<ul class="nav">
 				<li><a href="#" class="active">Utama</a></li>
@@ -149,6 +165,6 @@
 			    </li>
 				<li><a href="#">Hubungi Kami</a></li>
 			</ul>
-		</div>
+		</div> */?>
 	</div>
 </div>

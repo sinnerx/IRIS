@@ -10,7 +10,7 @@ class Controller_Auth
 		if(isset($slug))
 		{
 			### site-slug authorization.
-			$flag	= model::load("site")->checkSiteSlug($slug);
+			$flag	= model::load("site/services")->checkSiteSlug($slug);
 
 			if(!$flag)
 			{

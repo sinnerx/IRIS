@@ -5,8 +5,8 @@ Class Controller_Page
 	public function index()
 	{
 		$trail	= request::named("trail");
-		$page	= model::load("page");
-		$siteID	= model::load("site")->getSiteIDBySlug();
+		$page	= model::load("page/page");
+		$siteID	= model::load("site/site")->getSiteIDBySlug();
 
 		$lastPageID	= null;
 		$no			= 1;
@@ -40,7 +40,9 @@ Class Controller_Page
 
 		$defaultR	= $page->getDefault();
 		$data['row_page']	= $row_page;
-		$data['pageImageUrl']	= url::asset("frontend/images/photo/".$page->getPagePhotoUrl($row_page['pageID']));
+		$photoName				= $page->getPagePhotoUrl($row_page['pageID']);
+		
+		$data['pageImageUrl']	= $photoName?url::asset("frontend/images/photo/$photoName"):false;
 
 		$data['title']		= $row_page['pageType'] == 1?$defaultR[$row_page['pageDefaultType']]['pageDefaultName']:$row_page['pageName'];
 

@@ -1,0 +1,9 @@
+notification:
+	notificationID [int]
+	notificationType [int]
+	notificationCreatedDate [datetime]
+	notificationCreatedUser [int]
+
+notification_type:
+	notificationTypeID [int]
+	notificationTypeName [varchar]

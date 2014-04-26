@@ -29,4 +29,5 @@
 	<div id='num'>404</div>
 	<div id='text'>Unable to execute the page request.</div>
 	<?php echo flash::data();flash::clear();?>
+	<div id='text'><a href='<?php echo url::base();?>'>Go back</div>
 </div>

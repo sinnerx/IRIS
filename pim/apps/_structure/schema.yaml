@@ -133,11 +133,17 @@ site_info:
 	siteInfoTwitterUrl [varchar]
 	siteInfoFacebookUrl [varchar]
 	siteInfoEmail [varchar]
+	siteInfoImage [varchar]
+
+site_member:
+	siteMemberID [int]
+	siteID [int]
+	userID [int]
 
 site_slider:
 	siteSliderID [int]
 	siteID [int]
-	siteSliderType [int]		## 1 = site specific, 2 = general
+	siteSliderType [int]		## 1 = site specific, 2 = general (added by admin.)
 	siteSliderName [varchar]
 	siteSliderImage [varchar]
 	siteSliderLink [varchar]	## link for which and which.
@@ -145,6 +151,28 @@ site_slider:
 	siteSliderStatus [int]		## 0 = inactive, 1 = active
 	siteSliderCreatedDate [datetime]
 	siteSliderCreatedUser [int]
+
+site_message:	## a message from public
+	siteMessageID [int]
+	messageID [int]
+	siteID [int]
+	contactID [int]
+	siteMessageType [int]		## 1 = public
+	siteMessageReadStatus [int]
+	siteMessageReadUser [int]
+
+contact:
+	contactID [int]
+	contactName [varchar]
+	contactEmail [varchar]
+	contactPhoneNo [varchar]
+
+message:
+	messageID [int]
+	messageSubject [varchar]
+	messageContent [text]
+	messageCreatedDate [datetime]
+	messageCreatedUser [int]
 
 menu:
 	menuID [int]
@@ -223,13 +251,6 @@ announcement:
 	announcementCreatedUser [int]
 	announcementCreatedDate [datetime]
 
-site_editor:		## created by root
-	siteEditorID [int]
-	userID [int]
-	siteID [int]
-	siteEditorCreatedUser [int]
-	siteEditorCreatedDate [int]
-
 site_manager:
 	siteManagerID [int]
 	userID [int]
@@ -239,6 +260,25 @@ site_manager:
 	siteManagerCreatedUser [int]
 	siteManagerUpdatedDate [datetime]
 	siteManagerUpdatedUser [int]
+
+cluster:
+	clusterID [int]
+	clusterName [varchar]
+	clusterCreatedDate [datetime]
+	clusterCreatedUser [int]
+
+cluster_site: # many site to one cluster.
+	clusterSiteID [int]
+	siteID [int]
+	clusterID [int]
+
+cluster_lead:
+	clusterLeadID [int]
+	clusterID [int]
+	userID [int]
+	clusterLeadStatus [int] ## 1 = active, 0 = inactive.
+	clusterLeadCreatedDate [datetime]
+	clusterLeadCreatedUser [int]
 
 album:
 	albumID [int]
@@ -255,3 +295,15 @@ photo:
 	photoName [varchar]
 	photoCreatedDate [datetime]
 	photoCreatedUser [int]
+
+site_request: ## table to store update request or anything regarding site, have, status.
+	siteRequestID [int]
+	siteRequestType [int]					## 1 = new pages, 2 = page edit, 3 = site edit
+	siteID [int]
+	siteRequestRefID [int]					## reference-id
+	siteRequestData [text]
+	siteRequestStatus [int]					## 0 = unapproved, 1 = approved, 2 = disapproved
+	siteRequestCreatedDate [datetime]
+	siteRequestCreatedUser [int]
+	siteRequestUpdatedDate [datetime]
+	siteRequestUpdatedUser [int]

@@ -13,7 +13,37 @@
   <link rel="stylesheet" href="<?php echo url::asset("_scale/css/app.css");?>" type="text/css" />
   <script src="<?php echo url::asset("_scale/js/jquery.min.js");?>"></script>
   <script type="text/javascript">
+  var p1mloader = new function()
+  {
+    this.id = false;
 
+    // add listener on every ajax complete.
+    $(document).ajaxComplete(function(){
+      p1mloader.stop();
+    });
+    this.start  = function(id)
+    {
+      if(id)
+      {
+        this.id = id;
+      }
+      var id  = !id?"#main-content-wrapper":id;
+      $(id).addClass("animated fadeOut");
+    }
+
+    this.stop = function(id)
+    {
+      var id  = !id?(this.id?this.id:"#main-content-wrapper"):id;
+      $(id).removeClass("fadeOut").addClass("fadeIn flipInX");
+      setTimeout(function()
+      {
+        //remove class after 500ms
+        $(id).removeClass("fadeIn flipInX");
+      },500);
+      
+      this.id = false;
+    }
+  }
   </script>
     <!--[if lt IE 9]>
     <script src="js/ie/html5shiv.js"></script>
@@ -30,6 +60,18 @@
   padding:5px;
   margin-bottom: 20px;
 }
+
+#view-site-link
+{
+  border-left:1px dashed #cecece;
+  color: #8b8b8b;
+  letter-spacing: 1px;
+}
+
+#view-site-link span:last-child
+{
+  display:inline;
+}
   
 </style>
 <body class="">
@@ -39,11 +81,20 @@
         <a class="btn btn-link visible-xs" data-toggle="class:nav-off-screen" data-target="#nav">
           <i class="fa fa-bars"></i>
         </a>
-        <a href="index.html" class="navbar-brand"><img src="<?php echo url::asset("_scale/images/logo.png");?>"><?php echo $dashboardTitle;?></a>
+        <a href="" class="navbar-brand"><img src="<?php echo url::asset("_scale/images/logo.png");?>"><span <?php echo $siteHref;?> ><?php echo $dashboardTitle;?> </span></a>
         <a class="btn btn-link visible-xs" data-toggle="dropdown" data-target=".user">
           <i class="fa fa-cog"></i>
         </a>
-      </div>      <ul class="nav navbar-nav hidden-xs">
+      </div>
+      <?php if(session::get("userLevel") == 2):?>
+      <ul class="nav navbar-nav hidden-xs">
+        <li>
+          <a href="<?php echo $siteHref;?>" target="_blank" id='view-site-link'><span class='btn btn-primary'>Site Preview</span></a>
+        </li>
+      </ul>
+    <?php endif;?>
+    <?php /*
+      <ul class="nav navbar-nav hidden-xs">
         <li class="dropdown" style='display:none;'>
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
             <i class="i i-grid"></i>
@@ -113,19 +164,21 @@
             </div>
           </section>
         </li>
-      </ul>
+      </ul>*/?>
+      <!-- Search box -->
       <form class="navbar-form navbar-left input-s-lg m-t m-l-n-xs hidden-xs" role="search">
         <div class="form-group">
           <div class="input-group">
             <span class="input-group-btn">
               <button type="submit" class="btn btn-sm bg-white b-white btn-icon"><i class="fa fa-search"></i></button>
             </span>
-            <input type="text" class="form-control input-sm no-border" placeholder="Search apps, projects...">            
+            <input type="text" class="form-control input-sm no-border" placeholder="Search something...">            
           </div>
         </div>
       </form>
       <ul class="nav navbar-nav navbar-right m-n hidden-xs nav-user user">
-        <li class="hidden-xs">
+        <?php ## Notification
+        /*<li class="hidden-xs">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
             <i class="i i-chat3"></i>
             <span class="badge badge-sm up bg-danger count">2</span>
@@ -158,7 +211,7 @@
               </footer>
             </section>
           </section>
-        </li>
+        </li>*/?>
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
             <span class="thumb-sm avatar pull-left">
@@ -168,11 +221,11 @@
           </a>
           <ul class="dropdown-menu animated fadeInRight">
             <span class="arrow top"></span>
-            <li>
+            <?php /*<li>
               <a href="#">Settings</a>
             </li>
             <li>
-              <a href="profile.html">Profile</a>
+              <a href="<?php echo url::base("user/profile");?>">Profile</a>
             </li>
             <li>
               <a href="#">
@@ -183,9 +236,16 @@
             <li>
               <a href="docs.html">Help</a>
             </li>
+            <li class="divider"></li>*/?>
+            <li>
+              <a href="<?php echo url::base("user/profile");?>">My Profile</a>
+            </li>
+            <li>
+              <a href="<?php echo url::base("user/changePassword");?>">Change Password</a>
+            </li>
             <li class="divider"></li>
             <li>
-              <a href="<?php echo url::base("auth/logout");?>"  >Logout</a>
+              <a href="<?php echo url::base("logout");?>"  >Logout</a>
             </li>
           </ul>
         </li>
@@ -214,12 +274,13 @@
     </span>
   </a>
   <ul class="dropdown-menu animated fadeInRight m-t-xs">
-    <span class="arrow top hidden-nav-xs"></span>
+    <?php
+    /*<span class="arrow top hidden-nav-xs"></span>
     <li>
       <a href="#">Settings</a>
     </li>
     <li>
-      <a href="profile.html">Profile</a>
+      <a href="<?php echo url::base("user/profile");?>">Profile</a>
     </li>
     <li>
       <a href="#">
@@ -229,10 +290,16 @@
     </li>
     <li>
       <a href="#">Help</a>
+    </li>*/?>
+    <li>
+      <a href="<?php echo url::base("user/profile");?>">My Profile</a>
+    </li>
+    <li>
+      <a href="<?php echo url::base("user/changePassword");?>">Change Password</a>
     </li>
     <li class="divider"></li>
     <li>
-      <a href="<?php echo url::base("auth/logout");?>" >Logout</a>
+      <a href="<?php echo url::base("logout");?>" >Logout</a>
     </li>
   </ul>
 </div>
@@ -240,8 +307,8 @@
         <nav class="nav-primary hidden-xs">
           <ul class="nav nav-main" data-ride="collapse">                
             <?php
-              $menu = model::load("access")->menu();
-              $controller = controller::getCurrentController();
+              $controller = controller::getCurrentController(); 
+              $controller = array_pop(explode("/",$controller));## pop last name from it.
               $method   = controller::getCurrentMethod();
 
               foreach($menu as $menu_name=>$module)
@@ -278,7 +345,7 @@
                           <i class="i i-circle-sm-o text"></i>
                           <i class="i i-circle-sm text-active"></i>
                         </span>
-                        <b class="badge bg-danger pull-right">'.count($module).'</b>
+                        <b class="badge bg-primary pull-right">'.count($module).'</b>
                         <i class="i i-stack icon">
                         </i>
                         <span class="font-bold">'.$menu_name.'</span>
@@ -318,9 +385,9 @@
             </section>
             
             <footer class="footer hidden-xs no-padder text-center-nav-xs">
-              <a href="modal.lockme.html" data-toggle="ajaxModal" class="btn btn-icon icon-muted btn-inactive pull-right m-l-xs m-r-xs hidden-nav-xs">
+              <!-- <a href="modal.lockme.html" data-toggle="ajaxModal" class="btn btn-icon icon-muted btn-inactive pull-right m-l-xs m-r-xs hidden-nav-xs">
                 <i class="i i-logout"></i>
-              </a>
+              </a> -->
               <a href="#nav" data-toggle="class:nav-xs" class="btn btn-icon icon-muted btn-inactive m-l-xs m-r-xs">
                 <i class="i i-circleleft text"></i>
                 <i class="i i-circleright text-active"></i>
@@ -331,7 +398,7 @@
         <!-- /.aside -->
         <section id="content">
           <section class="vbox">          
-            <section class="scrollable padder">
+            <section class="scrollable padder" id='main-content-wrapper'>
               <!-- CONTENT START AFTER HERE -->
               <?php template::showContent();?>
               <!-- CONTENT END HERE -->

@@ -7,12 +7,14 @@ class Controller_Partial
 		$currController	= controller::getCurrentController();
 		$currMethod		= controller::getCurrentMethod();
 
+		## get row of current site.
+		$this->row_site	= model::load("site/site")->getSiteBySlug(request::named("site-slug"));
 		return;
 	}
 
 	private function pim_list()
 	{
-		$data['siteListR']	= model::load("site")->lists();
+		$data['siteListR']	= model::load("site/site")->lists();
 		$data['stateR']		= model::load("helper")->state();
 
 		view::render("partial/pim_list",$data);
@@ -25,7 +27,7 @@ class Controller_Partial
 
 	private function top()
 	{
-		$site			= model::load("site");
+		$site			= model::load("site/site");
 		$data['links']	= $site->getLinks($site->getSiteIDBySlug());
 
 		view::render("partial/top",$data);
@@ -33,24 +35,25 @@ class Controller_Partial
 
 	private function header()
 	{
-		$data['siteName']	= model::load("site")->getSiteName();
-		$data['menuR']		= model::load("menu")->getTopMenu();
-		$data['componentR']	= model::load("menu")->getComponent();
+		$data['siteName']	= model::load("site/site")->getSiteName();
+		$data['menuR']		= model::load("site/menu")->getTopMenu();
+		$data['componentR']	= model::load("site/menu")->getComponent();
 
 		view::render("partial/header",$data);
 	}
 
 	private function top_slideshow()
 	{
-		$site				= model::load("site");
-		$data['res_slider']	= $site->getSlider($site->getSiteIDBySlug(),false);
+		$data['res_slider']		= model::load("site/slider")->getSlider(model::load("site/site")->getSiteIDBySlug(),false);
 
 		view::render("partial/top_slideshow",$data);
 	}
 
 	private function bottom_down()
 	{
-		view::render("partial/bottom_down");
+		$data['row_site']	= $this->row_site;
+
+		view::render("partial/bottom_down",$data);
 	}
 
 	private function landing_menu()
@@ -65,10 +68,10 @@ class Controller_Partial
 		{
 			$stateID			= $row['stateID'];
 
-			$stateR[$stateID]['total']	= !isset($stateR[$stateID][$total])?1:$stateR[$stateID][$total]+1;
+			$stateR[$stateID]['total']	= !isset($stateR[$stateID]['total'])?1:$stateR[$stateID]['total']+1;
 			$stateR[$stateID]['records'][]	= $row;
 		}
-
+		
 		$data['stateR']	= $stateR;
 
 		view::render("partial/landing_menu",$data);

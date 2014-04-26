@@ -1,4 +1,6 @@
 {
 	"require":{
+		"phpmailer/phpmailer": "dev-master",
+		"spekkionu/htmlpurifier": "dev-master"
 	}
 }

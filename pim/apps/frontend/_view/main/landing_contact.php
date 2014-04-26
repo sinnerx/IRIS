@@ -100,9 +100,13 @@
     <div class="label-ann">Kemaskini Terkini:</div>
     <div id="example">
   <ul>
-    <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor</li>
-    <li>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut</li>
-    <li>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore</li>
+  <?php
+  $annList = model::load("announcement")->getAnnouncement();
+  foreach($annList as $row)
+  {
+    echo "<li>".$row['announcementText']."</li>";
+  }
+  ?>
   </ul>
 </div>
 

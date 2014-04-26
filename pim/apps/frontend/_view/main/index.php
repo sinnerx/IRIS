@@ -10,6 +10,9 @@
 	  Diantara program yang diadakan selama dua hari itu termasuklah gotong-royong, sukan bola jaring, aktiviti bersama GPW dan ditamatkan dengan pemberian bantuan berupa makanan kepada penduduk Felda Pasir Besar yang  kurang berkemampuan... 
 	</div>
 </div> -->
+<?php
+$photoName	= !$photoName?"noimage.png":$photoName;
+?>
 <h3 class="block-heading"><?php echo $pageName;?>, <span>di <?php echo $siteName;?></span></h3>
 <div class="block-content clearfix">
 	<div class="block-image">

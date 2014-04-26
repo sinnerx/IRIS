@@ -1,13 +1,17 @@
 <div id="pull" style="display: none;"><a href="#"><i class="icon-reorder"></i> Menu  <span> +</span> </a></div>
 <ul class="navigation">
 	<li><a href="<?php echo url::base();?>">Utama</a></li>
-    <li><a href="about">Mengenai Kami</a></li>
+    <li><a href="mengenai-kami">Mengenai Kami</a></li>
 	<li><a href="#"  class="ert">Senarai Pusat <span class="main_links_span">+</span></a>
 	<!------------DROPDOWN_MENU_START_LEVEL_1------------>
 		<ul>
 			<?php
 			foreach($state as $stateID => $stateName)
 			{
+				if(!isset($stateR[$stateID]))
+				{
+					continue;
+				}
 				$totalSite	= isset($stateR[$stateID]['total'])?$stateR[$stateID]['total']:0;
 				$stateLabel	= $stateName." ($totalSite)";
 
@@ -22,11 +26,13 @@
 
 					$no	= 1;
 					## prepare list per 5
+					$opened	= false;
 					foreach($stateR[$stateID]['records'] as $row)
 					{
 						## open wrapper every five records.
 						if($no == 1)
 						{
+							$opened	= true;
 							echo "<div class='colmn_3_fullwidth'><ol class='some_links'>";
 						}
 
@@ -40,11 +46,13 @@
 						## close ol and div wrapper
 						if($no == 6)
 						{
+							$opened = false;
+							$no	= 1;
 							echo "</ol></div>";
 						}
 					}
 
-					if(count($stateR[$stateID]['records']) % 5 != 0)
+					if($opened)
 					{
 						## close ol and div wrapper.
 						echo "</ol></div>";
@@ -105,5 +113,5 @@
 		</ul>
 		<!------------DROPDOWN_MENU_END_LEVEL_1------------>
 	</li>
-	<li><a href="contact">Hubungi Kami</a></li>
+	<li><a href="hubungi-kami">Hubungi Kami</a></li>
 </ul>

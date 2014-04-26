@@ -46,11 +46,11 @@
 		</ul>
 	</div>
 	<div class="user-setting">
-	<form>
-		<input type="text" class="username" placeholder='Username'>
-		<input type="password" class="password" placeholder='Password'> 
+	<form method='post' action='<?php echo url::base("dashboard/login");?>'>
+		<a style='opacity:0;cursor:default;' href="<?php echo "#"; #url::base("{site-slug}/registration#horizontalTab2");?>" class="rgstr-button">Register</a>
+		<input type="text" name='userEmail' class="username" placeholder='Username'>
+		<input type="password" name='userPassword' class="password" placeholder='Password'> 
 		<input type="submit" class="submit" value="Login">
-		<a href="<?php echo url::base("{site-slug}/registration#horizontalTab2");?>" class="rgstr-button">Register</a>
 	</form>
 	</div>
 	</div>

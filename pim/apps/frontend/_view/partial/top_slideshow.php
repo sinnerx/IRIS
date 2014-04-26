@@ -12,8 +12,9 @@
     	<?php
     	foreach($res_slider as $row):
     		$url	= url::asset("frontend/images/slider/".$row['siteSliderImage']);
+            $href   = $row['siteSliderLink'];
     		?>
-    	<div><img src='<?php echo $url;?>' data-thumb='<?php echo $url;?>' alt='' title='<?php echo $row['siteSliderName'];?>' /></div>
+    	<a href='<?php echo $href;?>' target='_blank'><img src='<?php echo $url;?>' data-thumb='<?php echo $url;?>' alt='' title='<?php echo $row['siteSliderName'];?>' /></a>
     	<?php endforeach;
     	?>
 		<!-- <div><img src="<?php echo url::asset("frontend/images/slideshow.jpg");?>" data-thumb="<?php echo url::asset("frontend/images/slideshow.jpg");?>" alt="" title="Program Pusat Internet 1 Malaysia

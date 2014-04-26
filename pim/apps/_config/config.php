@@ -2,6 +2,7 @@
 $config	= Array();
 $config['current_env']	= "dev";
 $config['default_apps']	= "frontend";
+$config['model_namespace']	= true;
 
 ### domain based configuration :
 $config['domain']['localhost'][]	= Array(

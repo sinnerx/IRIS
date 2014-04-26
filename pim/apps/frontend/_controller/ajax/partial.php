@@ -6,7 +6,7 @@ Class Controller_Partial
 	public function calendarGetDateList($month,$year)
 	{
 		## get current date list, based on month and year.
-		$siteID	= model::load("site")->getSiteIDBySlug();
+		$siteID	= model::load("site/site")->getSiteIDBySlug();
 
 		## total date of current month/year.
 		$total	= date("t",strtotime("$year-$month-1"));

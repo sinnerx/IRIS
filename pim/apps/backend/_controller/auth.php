@@ -1,5 +1,5 @@
 <?php
-
+## only used as a hook, unless login, and logout.
 Class Controller_Auth
 {
 	## hooked in routes.
@@ -7,20 +7,50 @@ Class Controller_Auth
 	{
 		if(!session::has("userLevel") && controller::getCurrentMethod() != "login")
 		{
-			redirect::to("../404","Because you're not logged in.","error");
+			redirect::to("login","Please log in.","error");
 		}
-		else 
+
+		## has logged in, but access dashboard/login.
+		if(controller::getCurrentMethod() == "login" && session::has("userLevel"))
 		{
-			if(controller::getCurrentMethod() == "login" && session::has("userLevel"))
-			{
-				redirect::to("home/index");
-			}
+			$locR	= Array(
+					2=>"site/edit",
+					3=>"cluster/overview",
+					99=>"site/index"
+							);
+
+			redirect::to($locR[session::get("userLevel")]);
 		}
+
+		## site access authorization.
+		$accessServices	= model::load("access/services");
+		$level	= $accessServices->accessLevelCode(session::get("userLevel"));
+
+		## get the user row.
+		$row_user	= model::load("user/user")->get(session::get("userID"));
+
+		## check default password.
+		$userPass		= $row_user['userPassword'];
+		$defaultPass	= model::load("user/services")->getDefaultPassword();
+
+		if($userPass == model::load("helper")->hashPassword($defaultPass) && !in_array(controller::getCurrentMethod(),Array("changePassword","logout","login")))
+		{
+			redirect::to("user/changePassword","Hello there, since this is your first time logged in here, we need you to change the password, before you can start navigating your dashboard.","error");
+		}
+
+		if(!$accessServices->accessListCheck($level) && controller::getCurrentMethod() != "login")
+		{
+			redirect::to("../404","You have no access to these page.");
+		}
+
+		## return user record in construct to initiation construct.
+		return $row_user;
 	}
 
 	## accessed by : dashboard/login.
 	public function login()
 	{
+		#echo model::load("helper")->hashPassword("OG63QKKLGM");die();
 		$this->template	= false;
 
 		if(form::submitted())
@@ -31,7 +61,7 @@ Class Controller_Auth
 			## got validation error.
 			if($error)
 			{
-				flash::set(model::load("template")->wrap("input-error",$error));
+				flash::set(model::load("template/services")->wrap("input-error",$error));
 				input::repopulate();
 				redirect::to("");
 			}
@@ -39,14 +69,14 @@ Class Controller_Auth
 			else
 			{
 				## use auth model.
-				$auth	= model::load("auth");
-				$site	= model::load("site");
+				$accessAuth	= model::load("access/auth");
+				$site		= model::load("site/site");
 
-				$email	= input::get("userEmail");
-				$pass	= input::get("userPassword");
+				$email		= input::get("userEmail");
+				$pass		= input::get("userPassword");
 
 				## login check
-				$backendLoginCheck	= $auth->backendLoginCheck($email,$pass);
+				$backendLoginCheck	= $accessAuth->backendLoginCheck($email,$pass);
 
 				## login failed.
 				if(!$backendLoginCheck)
@@ -74,11 +104,11 @@ Class Controller_Auth
 				session::set("userID",$backendLoginCheck['userID']);
 
 				## go to home/index
-				redirect::to("home/index");
+				redirect::to("");
 			}
 		}
 
-		view::render("auth/login");
+		view::render("shared/auth/login");
 	}
 
 	## dashboard/auth/logout

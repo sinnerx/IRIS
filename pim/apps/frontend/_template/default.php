@@ -25,14 +25,14 @@
 				<div class="label-anncmnt">Pengumuman</div>
 				<div class="cntnt-anncmnt">
 					<ul id="js-news" class="js-hidden">
-						<li class="news-item"><a href="#">Pertandingan Wau Di Felda Bukit Tangga.</a> </li>
-						<li class="news-item"><a href="#">GMBO - Get Malaysian Bussiness Online.</a></li>
-						<li class="news-item"><a href="#">MBFM Felda Bukit Tangga Menerima Anugerah Persatuan Belia Terbaik 2013.</a></li>
-						<li class="news-item"><a href="#">SAMBUTAN MAULIDUR RASUL 2014.</a> </li>
-						<li class="news-item"><a href="#">Tentera akur wakil rakyat mampu selesai isu negara.</a></li>
-						<li class="news-item"><a href="#">Syor had tayang filem seram di TV.</a> </li>
-						<li class="news-item"><a href="#">Bunuh haiwan diet baru pengasas Facebook.</a></li>
-					</ul>
+				  <?php
+				  $annList = model::load("announcement")->getAnnouncement();
+				  foreach($annList as $row)
+				  {
+				    echo "<li class='news-item'><a href='#'>".$row['announcementText']."</a></li>";
+				  }
+				  ?>
+				  </ul>
 				</div>
 				<?php endif;## end main/index check. ?>
 				</div>

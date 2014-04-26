@@ -128,11 +128,11 @@ a{
 }
 
 .footer{
-	height:118px;
+	height:100px;
 	background:#000;
 	border-bottom:5px solid #009bff;
 	border-top:5px solid #009bff;
-	margin-top:70px;
+	margin-top:25px;
 	
 }
 
@@ -247,6 +247,7 @@ margin-left:2px;
     cursor: pointer;
     outline: none;
 	padding-left:0px;
+	color:#009BFF;
 }
 
 .wrapper-dropdown-2:after {
@@ -259,7 +260,7 @@ margin-left:2px;
     margin-top: -3px;
     border-width: 6px 6px 0 6px;
     border-style: solid;
-    border-color: #FFF transparent;
+    border-color: #009BFF transparent;
 }
 
 .wrapper-dropdown-2 .dropdown {
@@ -283,7 +284,12 @@ margin-left:2px;
     opacity: 0;
 	display:none;
     pointer-events: none;
+	height:580px;
+	overflow:scroll;
+	
 }
+
+
 
 .wrapper-dropdown-2 .dropdown li a {
     display: block;
@@ -814,7 +820,7 @@ margin-bottom:3px !important;
 	color:#666666;
 	font-size:12px;
 	font-family:Arial;
-	margin-top:47px;
+	margin-top:36px;
 	float:left;
 	
 	
@@ -1062,7 +1068,7 @@ color:#009bff;
 
 .logo-bottom{
 	float:right;
-	margin-top:35px;
+	margin-top:25px;
 	
 }
 
@@ -2737,7 +2743,7 @@ border-bottom-right-radius: 3px;
 
 
 .content-page{
-	font-size:12px;
+	font-size:14px;
 	font-family:Arial;
 	color:#666666;
 	line-height:16px;
@@ -2749,7 +2755,8 @@ border-bottom-right-radius: 3px;
 	border:2px solid #c7c7c7;
 	float:left;
 	margin-right:10px;
-	
+	margin-bottom: 15px;
+  	box-shadow: 0px 0px 10px #bfbfbf
 }
 
 .lft{
@@ -3043,4 +3050,144 @@ span.info-contact{
 	height:auto !important;
 
 	
+}
+
+/** Contact Form **/
+.contact-form{
+	margin-top:50px;
+	
+}
+
+.contact-caption{
+	color:#666;
+	margin-bottom:30px;
+}
+#contact-form input[type="text"],
+#contact-form input[type="email"],
+#contact-form input[type="tel"],
+#contact-form input[type="url"],
+#contact-form textarea,
+#contact-form button[type="submit"] {
+
+}
+#contact-form {
+	
+}
+#contact-form h3 {
+	color:#991D57;
+	display:block;
+	font-size:28px;
+}
+#contact-form h4 {
+	margin:5px 0 15px;
+	display:block;
+	font-size:13px;
+}
+#contact-form label span {
+	cursor:pointer;
+	color:#009BFF;
+	text-transform:uppercase;
+	margin:10px 0;
+	display:block;
+	font-weight:bold;
+}
+#contact-form input[type="text"],
+#contact-form input[type="email"],
+#contact-form input[type="tel"],
+#contact-form input[type="url"],
+#contact-form textarea {
+	width:92%;
+	box-shadow:inset 0 1px 2px #DDD, 0 1px 0 none;
+	-webkit-box-shadow:inset 0 1px 2px #DDD, 0 1px 0 none;
+	-moz-box-shadow:inset 0 1px 2px #DDD, 0 1px 0 none;
+	border:1px solid #CCC;
+	background:#FFF;
+	margin:0 0 5px;
+	padding:10px;
+	border-radius:5px;
+}
+#contact-form input[type="text"]:hover,
+#contact-form input[type="email"]:hover,
+#contact-form input[type="tel"]:hover,
+#contact-form input[type="url"]:hover,
+#contact-form textarea:hover {
+	-webkit-transition:border-color 0.3s ease-in-out;
+	-moz-transition:border-color 0.3s ease-in-out;
+	transition:border-color 0.3s ease-in-out;
+	border:1px solid #AAA;
+}
+#contact-form textarea {
+	height:100px;
+	max-width:100%;
+	font-family:Arial;
+	font-size:13px;
+}
+#contact-form button[type="submit"] {
+	cursor:pointer;
+	border:none;
+	background:#009BFF;
+
+	color:#FFF;
+	margin:0 0 5px;
+	padding:10px;
+	border-radius:5px;
+}
+#contact-form button[type="submit"]:hover {
+	
+	background:#0062A1;
+	-webkit-transition:background 0.3s ease-in-out;
+	-moz-transition:background 0.3s ease-in-out;
+	transition:background-color 0.3s ease-in-out;
+}
+#contact-form button[type="submit"]:active {
+	box-shadow:inset 0 1px 3px rgba(0,0,0,0.5);
+}
+#contact-form input:focus,
+#contact-form textarea:focus {
+	outline:0;
+	border:1px solid #999;
+}
+::-webkit-input-placeholder {
+    color:#888;
+}
+:-moz-placeholder {
+    color:#888;
+}
+::-moz-placeholder {
+    color:#888;
+}
+:-ms-input-placeholder {
+    color:#888;
+}
+
+
+div#scroll_block {
+	width: 500px;
+    height: 500px;
+    overflow:hidden; /* hide the scroll bar*/
+	margin: 20px auto 0 auto;
+	background:#E4E7F0;
+	position:relative;
+}
+div#scroll_content {
+    height: 500px;
+    width: 485px;
+	position:relative;
+}
+div#scrollbar_holder {
+   	background: #ced0d3;
+	border-radius:8px;
+	float: right;
+    width: 15px;
+	position:absolute;
+	right:0;
+}
+div#content {
+	padding: 0 14px;
+}
+div.scrollbar {
+	background: #7c7d7f;
+	border-radius:8px;
+	width: 15px;
+	top:0;
 }

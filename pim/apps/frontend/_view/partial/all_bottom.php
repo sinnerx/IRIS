@@ -1,19 +1,18 @@
 <div class="footer">
 	<div class="wrap clearfix">
 		<div class="copyright">
-		Hakcipta Terpelihara © 2013 <a href="#">Pusat Internet 1 Malaysia</a>. All Rights Reserved
+		Hakcipta Terpelihara © <?php echo date("Y");?> <a href="#">Pusat Internet 1 Malaysia</a>. All Rights Reserved
 		<ul class="clearfix">
-			<li><a href="#">Utama</a></li>
-			<li><a href="#">Mengenai Kami</a></li>
-			<li><a href="#">Aktiviti</a></li>
-			<li><a href="#">Ruangan Ahli</a></li>
-			<li><a href="#">Hubungi Kami</a></li>
+			<li><a href="<?php echo url::base("{site-slug}");?>">Utama</a></li>
+			<li><a href="<?php echo url::base("{site-slug}/mengenai-kami");?>">Mengenai Kami</a></li>
+			<li><a href="<?php echo url::base("{site-slug}/hubungi-kami");?>">Hubungi Kami</a></li>
 		</ul>
 		</div>
 	<div class="logo-bottom">
 		<ul class="clearfix">
-			<li><img src="<?php echo url::asset("frontend/images/celcom_bottom.jpg");?>" width="87" height="46"  alt=""/></li>
-			<li><img src="<?php echo url::asset("frontend/images/pi1m_bottom.jpg");?>" width="241" height="46"  alt=""/></li>
+			<li><a target="_blank" href='http://www.skmm.gov.my'><img src="<?php echo url::asset("frontend/images/skmm_logo.jpg");?>" width="72" height="46"  alt=""/></a></li>
+			<li><a target="_blank" href='http://www.celcom.com.my'><img src="<?php echo url::asset("frontend/images/celcom_bottom.jpg");?>" width="87" height="46"  alt=""/></a></li>
+			<li><a href='<?php echo url::base("{site-slug}");?>'><img src="<?php echo url::asset("frontend/images/pi1m_bottom.jpg");?>" width="241" height="46"  alt=""/></a></li>
 		</ul>
 	</div>
 	</div>

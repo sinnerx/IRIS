@@ -1,3 +1,105 @@
 [
-
+    {
+        "name": "phpmailer/phpmailer",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/PHPMailer/PHPMailer.git",
+            "reference": "e3800e30467c703313eb5baee51ea4d6cccd234e"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/PHPMailer/PHPMailer/zipball/e3800e30467c703313eb5baee51ea4d6cccd234e",
+            "reference": "e3800e30467c703313eb5baee51ea4d6cccd234e",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.0.0"
+        },
+        "require-dev": {
+            "phpdocumentor/phpdocumentor": "*",
+            "phpunit/phpunit": "4.0.*"
+        },
+        "time": "2014-04-24 12:43:14",
+        "type": "library",
+        "installation-source": "source",
+        "autoload": {
+            "classmap": [
+                "class.phpmailer.php",
+                "class.pop3.php",
+                "class.smtp.php"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "LGPL-2.1"
+        ],
+        "authors": [
+            {
+                "name": "Jim Jagielski",
+                "email": "jimjag@gmail.com"
+            },
+            {
+                "name": "Marcus Bointon",
+                "email": "phpmailer@synchromedia.co.uk"
+            },
+            {
+                "name": "Andy Prevost",
+                "email": "codeworxtech@users.sourceforge.net"
+            },
+            {
+                "name": "Brent R. Matzelle"
+            }
+        ],
+        "description": "PHPMailer is a full-featured email creation and transfer class for PHP"
+    },
+    {
+        "name": "spekkionu/htmlpurifier",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/spekkionu/htmlpurifier.git",
+            "reference": "4dd8c930cf8c30eb5f9b7af4ddc8316202904fba"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/spekkionu/htmlpurifier/zipball/4dd8c930cf8c30eb5f9b7af4ddc8316202904fba",
+            "reference": "4dd8c930cf8c30eb5f9b7af4ddc8316202904fba",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.2.4"
+        },
+        "time": "2013-12-01 20:16:14",
+        "type": "library",
+        "installation-source": "source",
+        "autoload": {
+            "psr-0": {
+                "HTMLPurifier": "",
+                "HTMLPurifier_": "HTMLPurifier/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "LGPL-2.0"
+        ],
+        "authors": [
+            {
+                "name": "Edward Z. Yang (Ambush Commander)",
+                "email": "admin@htmlpurifier.org",
+                "homepage": "http://htmlpurifier.org",
+                "role": "Developer"
+            },
+            {
+                "name": "Jonathan Bernardi (spekkionu)",
+                "email": "spekkionu@spekkionu.com",
+                "homepage": "http://www.thedevfiles.com",
+                "role": "Contributor"
+            }
+        ],
+        "description": "HTML Purifier is a standards-compliant HTML filter library written in PHP.",
+        "homepage": "http://htmlpurifier.org"
+    }
 ]

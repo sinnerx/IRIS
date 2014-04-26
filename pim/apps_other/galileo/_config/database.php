@@ -1,7 +1,18 @@
 <?php
-$config['db_host']	= "localhost";
-$config['db_user']	= "root";
-$config['db_pass']	= "";
-$config['db_name']	= "digitalgaia_iris";
+$config['domain']['localhost'][]	= Array(
+	"db_host"=>"localhost",
+	"db_user"=>"root",
+	"db_pass"=>"",
+	"db_name"=>"digitalgaia_iris"
+	);
+
+$config['domain']['p1m.gaia.my'][]	= Array(
+	"db_host"=>"localhost",
+	"db_name"=>"p1mgaia_iris",
+	"db_user"=>"p1mgaia_iris",
+	"db_pass"=>"gaiacelcom12345%"
+	);
+
+return $config;
 
 ?>
