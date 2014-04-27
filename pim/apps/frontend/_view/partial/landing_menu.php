@@ -21,6 +21,7 @@
 				if(isset($stateR[$stateID]['records']))
 				{
 					echo '<div class="colmn_wrap">';
+					echo '<div id="content_7" class="content">';
 					echo "<div class='typography_3_colm'>";
 					echo "<div class='colm_3_container'>";
 
@@ -59,7 +60,7 @@
 					}
 
 					## close main list wrapper.
-					echo "</div></div></div>";
+					echo "</div></div></div></div>";
 				}
 
 				echo "</li>";
