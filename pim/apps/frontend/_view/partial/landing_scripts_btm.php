@@ -1,4 +1,24 @@
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script> <!-- jQuery Core -->
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script> <!-- jQuery Core -->
+	<!-- custom scrollbars plugin -->
+	<script src="<?php echo url::asset("_landing/js/jquery.mCustomScrollbar.concat.min.js");?>"></script>
+	<script>
+var $jj = jQuery.noConflict();
+	
+		(function($jj){
+			$jj(window).load(function(){
+			
+				$jj("#content_7").mCustomScrollbar({
+					scrollButtons:{
+						enable:true
+					},
+					theme:"light-thin"
+				});
+			
+			});
+		})(jQuery);
+	</script>
+
+
 <script src="<?php echo url::asset("_landing/js/bootstrap.min.js");?>"></script> <!-- Bootstrap -->
 <script src="<?php echo url::asset("_landing/js/supersized.3.2.7.min.js");?>"></script> <!-- Slider -->
 <script src="<?php echo url::asset("_landing/js/waypoints.js");?>"></script> <!-- WayPoints -->

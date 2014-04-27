@@ -23,6 +23,7 @@
 
 <link href="<?php echo url::asset("_landing/css/style.css");?>" rel="stylesheet" type="text/css" />
 <link href="<?php echo url::asset("_landing/css/responsive_menu.css");?>" rel="stylesheet" type="text/css" />
+<link href="<?php echo url::asset("_landing/css/jquery.mCustomScrollbar.css");?>" rel="stylesheet" type="text/css" />
 
 <script src="<?php echo url::asset("_landing/js/jquery.js");?>"></script>
 <script src="<?php echo url::asset("_landing/js/cust.js");?>"></script>
@@ -30,6 +31,8 @@
 <script src="<?php echo url::asset("_landing/js/jquery-1.7.2.min.js");?>"></script>
 <script src="<?php echo url::asset("_landing/js/modernizr.js");?>"></script>
 <script src="<?php echo url::asset("_landing/js/jquery.vticker.js");?>"></script>
+
+
 
 <script>
 var $j = jQuery.noConflict();

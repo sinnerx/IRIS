@@ -588,8 +588,9 @@ position: absolute;
 
 	width: 33.3%;
 	float: left;
-
 	margin-bottom: 20px;
+        width: 33.3%;
+	display:inline-table;
 
 
 }
@@ -727,3 +728,53 @@ b {
 	margin-left: 23px;
 }
 /*******************END_IMAGE_STYLE********************/
+/*for scrollbar */
+.links{margin:10px;}
+		.links a{display:inline-block; padding:3px 15px; margin:7px 10px; background:#444; text-decoration:none; -webkit-border-radius:15px; -moz-border-radius:15px; border-radius:15px;}
+		.links a:hover{background:#eb3755; color:#fff;}
+		.content{width:490px; height:400px;overflow:auto; }
+		.content p:nth-child(even){}
+
+		#content_7{}
+		#content_7 p:nth-child(even){color:#ccc;}
+		
+		
+		
+		
+		#block_navigation ul li ul li a.mCSB_buttonUp  {
+background-image: url("../images/mCSB_buttons.png") !important;
+    background-repeat: no-repeat !important;
+    opacity: 1 !important;
+	cursor: pointer !important;
+    display: block !important;
+    height: 20px !important;
+    margin: 0 auto !important;
+    overflow: hidden !important;
+    position: relative !important;
+	background-position:0 0 !important;
+	padding:0px !important;
+	margin:0px !important;
+	text-decoration:none !important;
+	border-bottom: none !important;
+	margin-top:15px !important;
+}
+
+#block_navigation ul li ul li a.mCSB_buttonDown{
+	
+	background-image: url("../images/mCSB_buttons.png") !important;
+    background-repeat: no-repeat !important;
+    opacity: 1 !important;
+	cursor: pointer !important;
+    display: block !important;
+    height: 20px !important;
+    margin: 0 auto !important;
+    overflow: hidden !important;
+    position: relative !important;
+	background-position:0 -20px !important;
+	padding:0px !important;
+	margin:0px !important;
+	text-decoration:none !important;
+	border-bottom: none !important;
+	margin-top:-70px !important;
+}
+
