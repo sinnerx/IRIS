@@ -80,6 +80,8 @@
 
 				echo "<li><a href='$main_url' class='$cssActive'>$menuName</a>";
 
+				## for first appearance in childmenu. github #10
+				$firstmenu	= "<li><a href='".$main_url."'>$menuName</a></li>";
 				if($component == 1)
 				{
 					if(isset($childPageR[$pageID]))
@@ -88,9 +90,15 @@
 						echo '<div class="nav-column"><div class="menu-block">';
 						echo "<ul class='clearfix'>";
 						echo "<h3>$menuName</h3>";
+						$no	= 1;
 						foreach($childPageR[$pageID] as $row)
 						{
+							if($no == 1)
+							{
+								echo $firstmenu;
+							}
 							echo "<li><a href='".$row[0]."'>$row[1]</a></li>";
+							$no++;
 						}
 
 						echo "</ul>";

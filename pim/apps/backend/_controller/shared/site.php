@@ -109,7 +109,8 @@ Class Controller_Site
 
 			$site->updateSiteInfo($data['row']['siteID'],$data_site);
 
-			redirect::to("","Site has been updated.");
+			$additionalMessage	= model::load("access/services")->roleCheck("siteEditRoot")?"":" And the content is waiting for approval.";
+			redirect::to("","Site has been updated. ".$additionalMessage);
 		}
 
 		## param for non-root..
