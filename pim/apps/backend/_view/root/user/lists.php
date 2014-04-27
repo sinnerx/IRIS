@@ -1,8 +1,8 @@
 <h3 class="m-b-xs text-black">
-<a href='info'>List Of User</a>
+<a href='info'>List of Users</a>
 </h3>
 <div class='well well-sm'>
-List of users registered for backed, excluding root admin.
+List of all registered users, site managers and cluster leads.
 </div>
 <?php echo flash::data();?>
 <div class='row'>

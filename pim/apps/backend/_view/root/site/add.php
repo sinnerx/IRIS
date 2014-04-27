@@ -25,10 +25,10 @@ function prepareSlug()
 
 </style>
 <h3 class='m-b-xs text-black'>
-Add a new site
+Add new site
 </h3>
 <div class='well well-sm'>
-A site can only have one manager. Before adding a new site, make sure the site manager have already registered in the system.
+At least one manager is required for each site. Please make sure the site manager is registered first before adding the site.
 </div>
 <?php echo flash::data();?>
 <form method='post' id='siteAddForm'>

@@ -360,7 +360,7 @@ function showFilter()
           <div>
           	<!-- page header -->
             <div class="block clearfix wrapper b-b">
-              <a href='#' class='fa fa-trash-o pull-right' style='font-size:18px;'></a>
+              <!-- <a href='#' class='fa fa-trash-o pull-right' style='font-size:18px;'></a> REMOVED FOR NOW-->
               <a href='#' id='button_edit' onclick='page.getEditPage();' class='fa fa-edit pull-right' style='font-size:18px;'></a>
               <label id='pageLabel'></label>
               <div id='pageStatus'></div>

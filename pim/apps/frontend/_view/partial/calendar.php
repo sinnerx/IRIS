@@ -81,7 +81,7 @@ var Calendar	= function(id,dateListID)
 		var monthR =	{
 				1:"JANUARI",
 				2:"FEBRUARI",
-				3:"MARCH",
+				3:"MAC",
 				4:"APRIL",
 				5:"MEI",
 				6:"JUN",

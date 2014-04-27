@@ -4,7 +4,7 @@
 <a href='info'>Edit User</a>
 </h3>
 <div class='well well-sm'>
-Edit the selected user.
+Edit existing user information.
 </div>
 <?php echo flash::data();?>
 <form method='post'>

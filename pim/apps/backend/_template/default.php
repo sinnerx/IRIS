@@ -345,7 +345,6 @@
                           <i class="i i-circle-sm-o text"></i>
                           <i class="i i-circle-sm text-active"></i>
                         </span>
-                        <b class="badge bg-primary pull-right">'.count($module).'</b>
                         <i class="i i-stack icon">
                         </i>
                         <span class="font-bold">'.$menu_name.'</span>

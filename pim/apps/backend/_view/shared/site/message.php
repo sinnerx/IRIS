@@ -1,8 +1,8 @@
 <h3 class="m-b-xs text-black">
-Public messages
+Submitted Contact Form Messages
 </h3>
 <div class='well well-sm'>
-Listing public message.
+List of all messages sent through the contact form on all Pi1Ms
 </div>
 <div class='row'>
 <div class='col-sm-12'>

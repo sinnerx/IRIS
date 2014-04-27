@@ -69,9 +69,46 @@ class Helper
 		return md5($salt.$val);
 	}
 
-	public function purifyHTML($html,$wordsCount = null)
+	## temporary fix.
+	public function purifyHTML($text,$count = null)
 	{
-		$total	= Array();
+		## replace all block closing tags with line break.
+		$blocktags	= Array("p","div");
+
+		foreach($blocktags as $tagname)
+		{
+			$opentags[]	= "<$tagname";
+			$opentags_replace[]	= "|<br><$tagname";
+
+			$closetags[]	= "</$tagname>";
+			$closetags_replace = "<br>|";
+		}
+
+		## replace
+		$text	= str_replace($opentags, $opentags_replace, $text);
+		$text	= str_replace($closetags, $closetags_replace, $text);
+
+		## replace any combined block.
+		$text	= str_replace("<br>||<br>","<br>",$text);
+
+		## replace any lonely opening with normal tags. so that later it will be stripped.
+		$text	= str_replace("|<br>", " <br> ", $text);
+		$text	= str_replace("<br>|"," <br> ",$text);
+
+		## strip all tags except <br>
+		$text	= strip_tags($text,"<br>");
+		$text	= implode(" ",array_slice(explode(" ",$text),0,90))."...";
+		$text	= trim($text);
+
+		## replace first <br> with null, perhaps text started with <br> .
+		$text	= strpos(trim($text), "<br>") === 0?substr($text,4):$text;
+
+		## final replace any combined <br> to one.
+		$text	= str_replace("<br><br>", "<br>", $text);
+
+		return nl2br($text);
+
+		/*$total	= Array();
 		$iwant	= $wordsCount;
 		$sum	= Array();
 
@@ -157,7 +194,7 @@ class Helper
 		define("HTMLPURIFIER_PREFIX","vendor/spekkionu/htmlpurifier");
 		$purifier = new HTMLPurifier(HTMLPurifier_Config::createDefault());
 
-		return $purifier->purify(implode("<",$sum).($wordsCount?"...":""));
+		return $purifier->purify(implode("<",$sum).($wordsCount?"...":""));*/
 	}
 }
 ?>

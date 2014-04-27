@@ -83,10 +83,10 @@ var cluster	= new function()
 
 </script>
 <h3 class="m-b-xs text-black">
-<a href='info'>List of Site Clusters</a>
+<a href='info'>List of Clusters</a>
 </h3>
 <div class='well well-sm'>
-Basically a groups of site grouped under a name, to provide a good control over a number of site. Cluster can then assigned to a cluster lead.
+Listing the groups of Pi1M sites for administration purpose. Every cluster must be assigned to a user with 'Cluster-lead' role.
 </div>
 <?php echo flash::data();?>
 <div class='row'>

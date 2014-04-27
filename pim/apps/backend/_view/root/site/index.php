@@ -86,10 +86,10 @@ var site	= new function()
 
 </style>
 <h3 class="m-b-xs text-black">
-<a href='info'>Preview</a>
+<a href='info'>All Sites</a>
 </h3>
 <div class='well well-sm'>
-Preview list of site along with their information.
+List of all Pi1M sites and related information
 </div>
 <?php echo flash::data();?>
 <div class='row'>
