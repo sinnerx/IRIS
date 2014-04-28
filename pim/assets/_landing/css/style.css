@@ -416,7 +416,7 @@
 	line-height: 23px;
 	color: #fff;
 	
-		background: rgba(0, 0, 0, 0.8);
+	/*	background: rgba(0, 0, 0, 0.8);*/
 		width: 490px;
 		display:inline-block;
 	
@@ -426,25 +426,29 @@
 
 
 .colmn_wrap{
-	z-index: 1;
-	opacity:0;
-	visibility: hidden;
-	width: 490px;
-	min-height:400px;
+       z-index: 1;
+       opacity:0;
+       visibility: hidden;
+       width: 490px;
+       height:400px;
+       padding-right:10px;
 
 position: absolute;
 
-	left: 95%;
-	
-	
-	
-	-webkit-transition: opacity 0.2s ease;
-	-moz-transition: opacity 0.2s ease;
-	-ms-transition: opacity 0.2s ease;
-	-o-transition: opacity 0.2s ease;
-	transition: opacity 0.2s ease;
-	
+       left: 95%;
+       overflow:scroll;
+       background:rgba(0, 0, 0, 0.8);
+       
+       
+       
+       -webkit-transition: opacity 0.2s ease;
+       -moz-transition: opacity 0.2s ease;
+       -ms-transition: opacity 0.2s ease;
+       -o-transition: opacity 0.2s ease;
+       transition: opacity 0.2s ease;
+       
 }
+
 
 #block_navigation ul li:hover  > .colmn_wrap  {
 	opacity:1;
@@ -586,9 +590,6 @@ position: absolute;
 
 .colmn_3_fullwidth {
 
-	width: 33.3%;
-	float: left;
-	margin-bottom: 20px;
         width: 33.3%;
 	display:inline-table;
 

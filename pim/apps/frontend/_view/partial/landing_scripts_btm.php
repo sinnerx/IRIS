@@ -7,7 +7,7 @@ var $jj = jQuery.noConflict();
 		(function($jj){
 			$jj(window).load(function(){
 			
-				$jj("#content_7").mCustomScrollbar({
+				$jj(".content").mCustomScrollbar({
 					scrollButtons:{
 						enable:true
 					},
