@@ -27,8 +27,30 @@
 		<div class="other-location">
 			<div class="wrapper-dropdown-2" tabindex="1">Ke PI1M Lain
 				<ul class="dropdown">
-					<?php controller::load("partial","pim_list");?>
+					<div id="content_7" class="content">
+						<?php controller::load("partial","pim_list");?>
+					</div>
 				</ul>
+<!-- script for mCustomScrollbar -->
+<script type='text/javascript'>
+(function($){
+		$(window).load(function(){
+		
+			$("#content_7").mCustomScrollbar({
+				scrollButtons:{
+					enable:true
+				},
+				 advanced:{  
+    updateOnBrowserResize:true,   
+    updateOnContentResize:true   
+  },
+				theme:"light-thin"
+				
+			});
+		
+		});
+	})(jQuery);
+</script>				
 			</div>
 		</div>
 	<div class="social-network clearfix">

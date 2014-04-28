@@ -1,7 +1,7 @@
 apps_copy
 *.swp
 trash
-pim/assets/frontend/images
-pim/assets/frontend/siteImage
-pim/assets/frontend/slider
+pim/assets/frontend/images/siteImage*
+pim/assets/frontend/images/slider/*
+pim/assets/frontend/images/photo/*
 pim/vendor
