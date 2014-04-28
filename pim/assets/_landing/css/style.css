@@ -432,14 +432,10 @@
        width: 490px;
        height:400px;
        padding-right:10px;
-
-position: absolute;
-
+       position: absolute;
        left: 95%;
-       overflow:scroll;
+       /*overflow:scroll;*/
        background:rgba(0, 0, 0, 0.8);
-       
-       
        
        -webkit-transition: opacity 0.2s ease;
        -moz-transition: opacity 0.2s ease;
