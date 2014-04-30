@@ -12,7 +12,7 @@
 		<ul class="clearfix">
 			<li><a target="_blank" href='http://www.skmm.gov.my'><img src="<?php echo url::asset("frontend/images/skmm_logo.jpg");?>" width="72" height="46"  alt=""/></a></li>
 			<li><a target="_blank" href='http://www.celcom.com.my'><img src="<?php echo url::asset("frontend/images/celcom_bottom.jpg");?>" width="87" height="46"  alt=""/></a></li>
-			<li><a href='<?php echo url::base("{site-slug}");?>'><img src="<?php echo url::asset("frontend/images/pi1m_bottom.jpg");?>" width="241" height="46"  alt=""/></a></li>
+			<li><a href='<?php echo url::base();?>'><img src="<?php echo url::asset("frontend/images/pi1m_bottom.jpg");?>" width="241" height="46"  alt=""/></a></li>
 		</ul>
 	</div>
 	</div>

@@ -155,14 +155,14 @@ Class Controller_Main
 		if(form::submitted())
 		{
 			$rules	= Array(
-					"contactName,contactPhoneNo,contactEmail,messageSubject,messageContent"=>"required:Ruangan ini adalah diperlukan"
+					"contactName,contactPhoneNo,contactEmail,messageSubject,messageContent"=>"required:Sila isikan ruangan ini."
 							);
 
 			## if got error.
 			if($error = input::validate($rules))
 			{
 				input::repopulate();
-				redirect::withFlash($error);
+				redirect::withFlash(model::load("template/services")->wrap("input-error",$error));
 				redirect::to("","<span class='msgbox error'>Terdapat sedikit masalah pada form anda.</span>","error");
 			}
 

@@ -164,7 +164,7 @@
             </div>
           </section>
         </li>
-      </ul>*/?>
+      </ul>
       <!-- Search box -->
       <form class="navbar-form navbar-left input-s-lg m-t m-l-n-xs hidden-xs" role="search">
         <div class="form-group">
@@ -176,6 +176,7 @@
           </div>
         </div>
       </form>
+      */?>
       <ul class="nav navbar-nav navbar-right m-n hidden-xs nav-user user">
         <?php ## Notification
         /*<li class="hidden-xs">

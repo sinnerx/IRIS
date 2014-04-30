@@ -17,6 +17,11 @@ $config['domain']['p1m.gaia.my'][]	= Array(
 						"asset_url"=>"p1m.gaia.my/assets"
 										);
 
+$config['domain']['celcom1cbc.com'][]	= Array(
+						"base_url:backend"=>"celcom1cbc.com/sta/dashboard",
+						"base_url:frontend"=>"celcom1cbc.com/sta",
+						"asset_url"=>"celcom1cbc.com/sta/assets"
+												);
 
 return $config;
 ?>

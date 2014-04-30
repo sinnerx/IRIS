@@ -1,8 +1,33 @@
+<!-- Temporary overlay css -->
+<style type="text/css">
+.bttm-1,
+.bttm-2,
+.bttm-3 
+{
+	position: relative;
+}
+
+.akan-datang
+{
+	background-color: rgba(255, 255, 255, 0.85);
+	background: rgba(255, 255, 255, 0.85) url("<?php echo url::asset('frontend/images/akan_datang.png');?>") no-repeat center center;
+	color: rgba(255, 255, 255, 0.85);
+	width:100%;
+	height:100%;
+	position:absolute;
+	top:0px;
+	z-index:999;
+}
+</style>
+<!-- temporary overly css ends -->
 <div class="bttm-down clearfix">
 	<div class="bttm-1">
 		<div class="maps-bottom">
 			<div class="maps-container">
-			<?php if(is_numeric($row_site['siteInfoLatitude']) && is_numeric($row_site['siteInfoLongitude'])):?>
+			<?php
+			$row_site['siteInfoLatitude']	= !is_numeric($row_site['siteInfoLatitude'])?3.0714381964016:$row_site['siteInfoLatitude'];
+			$row_site['siteInfoLongitude']	= !is_numeric($row_site['siteInfoLongitude'])?101.39110565186:$row_site['siteInfoLongitude'];
+			?>
 			<style type="text/css">
 
 			#mymap
@@ -37,27 +62,14 @@
 			<div id='mymap'>
 			</div>
 			<!-- <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1982.6780417481739!2d99.76039763995057!3d6.347917847778613!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x304c78508590bd0f%3A0xa081e5cf738400d2!2sKampung+Bukit+Tangga!5e0!3m2!1sen!2s!4v1394689646969?center=" width="390" height="200" frameborder="0" style="border:0"></iframe> -->
-		<?php endif;?>
+	
 			</div>
 		<div class="maps-label"></div>
 		</div>
 	</div>
-	<style type="text/css">
-
-	.news-overlay
-	{
-		 position:absolute;
-		 top:100px;
-		 font-weight:bold;
-		 left:50px;
-		 color: #444444;
-		 font-size:18px;
-		 letter-spacing: 3px;
-	}
-	</style>
-	<div class="bttm-2" style='position:relative;'> 
-		<div class='news-overlay'>AKAN DATANG</div>
-		<div class="news-bottom" style="opacity:0.2;">
+	<div class="bttm-2"> 
+		<div class="akan-datang"></div>
+		<div class="news-bottom">
 			<h3 class="bottom-heading">Berita Terkini</h3>
 			<div class="bottom-content">
 				<ul>
@@ -91,12 +103,12 @@
 			</div>
 		</div>
 	</div>
-	<div class="bttm-3 foto-wrapper" style='position:relative;'>
-	<div class='news-overlay'>AKAN DATANG</div>
-	<div style='opacity:0.2'>
-	<h3 class="bottom-heading">Foto Terkini</h3>
+	<div class="bttm-3 foto-wrapper">
+		<div class="akan-datang"></div>
+		<h3 class="bottom-heading">Foto Terkini</h3>
 		<div class="bottom-content foto-bottom">
-			<ul>
+			<img src="<?php echo url::asset("frontend/images/gallery1.gif");?>" width="270" height="208"  alt=""/>
+			<?php /*<ul>
 				<li><img src="<?php echo url::asset("frontend/images/1.jpg");?>" width="64" height="63"  alt=""/></li>
 				<li><img src="<?php echo url::asset("frontend/images/2.jpg");?>" width="64" height="63"  alt=""/></li>
 				<li><img src="<?php echo url::asset("frontend/images/3.jpg");?>" width="64" height="63"  alt=""/></li>
@@ -109,8 +121,8 @@
 				<li><img src="<?php echo url::asset("frontend/images/1.jpg");?>" width="64" height="63"  alt=""/></li>
 				<li><img src="<?php echo url::asset("frontend/images/2.jpg");?>" width="64" height="63"  alt=""/></li>
 				<li><img src="<?php echo url::asset("frontend/images/3.jpg");?>" width="64" height="63"  alt=""/></li>
-			</ul>
+			</ul>*/
+			?>
 		</div>
-	</div>
 	</div>
 </div> 

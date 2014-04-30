@@ -13,15 +13,16 @@ class Services
 		$this->mailer->isSMTP();
 		$this->mailer->Host			= "smtp.gmail.com";
 		$this->mailer->SMTPAuth		= true;
-		$this->mailer->Username		= "rahimie@digitalgaia.com";
-		$this->mailer->Password		= "noway";
+		$this->mailer->Username		= "pi1m@digitalgaia.com";
+		$this->mailer->Password		= "12345%12345";
 		$this->mailer->SMTPSecure	= "tls";
 		$this->mailer->Port			= 587;
 		$this->mailer->isHTML(true);
-		$this->mailer->SMTPDebug	= 1;
+		#$this->mailer->SMTPDebug	= 1;
 
 		## the from email, it should be like 
 		$this->mailer->From			= "";
+		$this->mailer->FromName 	= 'Pi1M Website';
 
 		## some static email address.
 		$this->From_Admin	= "admin@p1m.gaia.my";

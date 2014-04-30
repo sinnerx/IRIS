@@ -30,6 +30,12 @@ class Controller_Partial
 		$site			= model::load("site/site");
 		$data['links']	= $site->getLinks($site->getSiteIDBySlug());
 
+		## if logged backend user is logged in.
+		if(session::has("userID"))
+		{
+			$data['username']	= model::load("user/user")->get(session::get("userID"),"userProfileFullName");
+		}
+
 		view::render("partial/top",$data);
 	}
 

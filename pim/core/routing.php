@@ -10,7 +10,7 @@ apps::run(function($router)
 		db::connect(apps::config('db_host'),apps::config('db_user'),apps::config('db_pass'),apps::config("db_name"));
 
 		## if current domain is localhost and exedra.
-		if(in_array($param['domain_name'], Array("localhost","p1m.gaia.my")))
+		if(in_array($param['domain_name'], Array("localhost","p1m.gaia.my","celcom1cbc.com")))
 		{
 			## require exedra docs application only in localhost.
 			if($param['domain_name'] == "localhost")

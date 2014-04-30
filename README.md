@@ -25,6 +25,7 @@ p1mgaia / gaiacelcom12345%
 
 SSH
 
+DEFAULT PASS FOR ALL ACCOUNTS : OG63QKKLGM
 
 Production server info
 ================

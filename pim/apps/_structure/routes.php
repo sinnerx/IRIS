@@ -53,6 +53,10 @@ $routes[]	= Array("dashboard/ajax/[:controller]/[**:method]",function()
 #$routes[]	= Array("model/[:model]/[**:method]","controller=model:{model}@{method}");
 
 ## backend login.
+/*$routes[]	= Array("dashboard/login",function()
+{
+	echo 'tst';
+});*/
 $routes[]	= Array("dashboard/login","controller=backend:auth@login");		## login
 $routes[]	= Array("dashboard/logout","controller=backend:auth@logout");	## logout
 $routes[]	= Array("dashboard","controller=backend:auth@login");			## 

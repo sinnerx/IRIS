@@ -79,7 +79,7 @@ var page	= function()
 			var pageName	= row['pageTitle'];
 
 			//insert <input/>
-			$("#pageTitle").html("<input type'text' id='pageName' value='"+pageName+"' />");
+			$("#pageTitle").html("<input type'text' disabled id='pageName' value='"+pageName+"' />");
 
 			//show pageeditor
 			$("#pageEditor").show();
@@ -337,14 +337,14 @@ function showFilter()
 	</section>
 	<!-- /Page list -->
 	<footer class="footer dk clearfix">
-	  <form class="m-t-sm">
+	  <!-- <form class="m-t-sm">
 	    <div class="input-group">
 	      <input type="text" class="input-sm form-control input-s-sm" placeholder="Search">
 	      <div class="input-group-btn">
 	        <button class="btn btn-sm btn-default"><i class="fa fa-search"></i></button>
 	      </div>
 	    </div>
-	  </form>
+	  </form> -->
 	</footer>
 	</section>
 	</aside>

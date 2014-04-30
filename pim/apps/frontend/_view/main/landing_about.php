@@ -25,7 +25,7 @@
 
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
       <script src="js/jquery.mousewheel.js"></script>
-      <script src="js/perfect-scrollbar.js"></script>
+      <script src="<?php echo url::asset("_landing/js/perfect-scrollbar.js");?>"></script>
       
     <script>
       jQuery(document).ready(function ($) {

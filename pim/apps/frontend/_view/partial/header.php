@@ -78,7 +78,8 @@
 
 				$cssActive	= $controller."/".$method == $componentControllerR[$component]?"active":"";
 
-				echo "<li><a href='$main_url' class='$cssActive'>$menuName</a>";
+				$dropdownIcon	= isset($childPageR[$pageID])?'<span><i class="fa fa-sort-asc"></i></span>':"";
+				echo "<li><a href='$main_url' class='$cssActive'>$menuName $dropdownIcon</a>";
 
 				## for first appearance in childmenu. github #10
 				$firstmenu	= "<li><a href='".$main_url."'>$menuName</a></li>";

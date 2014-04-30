@@ -13,6 +13,13 @@ $config['domain']['p1m.gaia.my'][]	= Array(
 	"db_pass"=>"gaiacelcom12345%"
 	);
 
+$config['domain']['celcom1cbc.com'][]	= Array(
+	"db_host"=>"localhost",
+	"db_name"=>"celcomcb_web2",
+	"db_user"=>"celcomcb_fulkrum",
+	"db_pass"=>"fulkrum@123"
+						);
+
 return $config;
 
 ?>

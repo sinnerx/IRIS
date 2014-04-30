@@ -13,8 +13,21 @@
 }
 .msgbox.error
 {
-    background: #ab3a3a;
+    background: #c91d1d;
     border:1px solid #712626;
+    box-shadow: 0px 0px 10px #731111;
+}
+
+.label.label-danger
+{
+    background: #ec4848;
+    color:white;
+    display: inline-block;
+    padding:4px;
+    float:right;
+    margin-right:30px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px #731111;
 }
 
 </style>
@@ -54,32 +67,37 @@
                 <div>
                     <label>
                     <span>Nama: *</span>
-                    <?php echo form::text("contactName","placeholder='Sila masukkan nama anda' tabindex='1' required");?>
+                    <?php echo form::text("contactName","placeholder='Sila masukkan nama anda' tabindex='1'");?>
+                    <?php echo flash::data("contactName");?>
                     </label>
                 </div>
                 <div>
                     <label>
                     <span>Email: *</span>
-                    <?php echo form::text("contactEmail","placeholder='Sila masukkan alamat email' tabindex='2' required");?>
+                    <?php echo form::text("contactEmail","placeholder='Sila masukkan alamat email' tabindex='2'");?>
+                    <?php echo flash::data("contactEmail");?>
                     </label>
                 </div>
                 <div>
                     <label>
                     <span>Telefon: *</span>
-                    <?php echo form::text("contactPhoneNo","placeholder='Sila masukkan nombor telefon anda' tabindex='3' required");?>
+                    <?php echo form::text("contactPhoneNo","placeholder='Sila masukkan nombor telefon anda' tabindex='3'");?>
+                    <?php echo flash::data("contactPhoneNo");?>
                     </label>
                 </div>
                 <div>
                     <label>
                         <span>Tajuk :</span>
-                        <?php echo form::text("messageSubject","placeholder='Sila masukkan tajuk ' tabindex='4' required");?>
+                        <?php echo form::text("messageSubject","placeholder='Sila masukkan tajuk ' tabindex='4'");?>
+                        <?php echo flash::data("messageSubject");?>
                         <!-- <input placeholder="Message Subject" type="tel" tabindex="3" required> -->
                     </label>
                 </div>
                 <div>
                     <label>
                     <span>Mesej: *</span>
-                    <?php echo form::textarea("messageContent","placeholder='Taip mesej anda di sini' tabindex='5' required");?>
+                    <?php echo form::textarea("messageContent","placeholder='Taip mesej anda di sini' tabindex='5'");?>
+                    <?php echo flash::data("messageContent");?>
                     </label>
                 </div>
                 <div>

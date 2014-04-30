@@ -78,12 +78,12 @@ List of universal Front-Page Slide on all Pi1M sites. Only root admin can manage
 <section class="panel panel-default">
 <div class="row wrapper" style='border-bottom:1px solid #f2f4f8;'>
 	<div class="col-sm-3 pull-right">
-	<div class="input-group">
+	<!-- <div class="input-group">
 	  <input type="text" class="input-sm form-control" placeholder="Search">
 	  <span class="input-group-btn">
 	    <button class="btn btn-sm btn-default" type="button">Go!</button>
 	  </span>
-	</div>
+	</div> -->
 	</div>
 	<div class='col-sm-3 pull-left'>
 	<button type='button' class='class="btn btn-sm btn-bg btn-default pull-left' onclick='add();'><a href='javascript:void(0);'>Add +</a></button>

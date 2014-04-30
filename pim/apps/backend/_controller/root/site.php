@@ -247,6 +247,7 @@ class Controller_Site
 				$data['userID']		= Array();
 				$data['siteName']	= $row[1];
 				$data['stateID']	= $filenameR[$name][2];
+				$data['siteSlug']	= $row[6];
 
 				$user[1]['userPassword']		= model::load("user/services")->getDefaultPassword();
 				$user[2]['userPassword']		= model::load("user/services")->getDefaultPassword();

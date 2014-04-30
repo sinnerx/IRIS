@@ -9,6 +9,10 @@ $config['domain']['p1m.gaia.my'][]	= Array(
 					"asset_url"=>"p1m.gaia.my/assets"
 								);
 
+$config['domain']['celcom1cbc.com'][]	= Array(
+					"asset_url"=>"celcom1cbc.com/sta/assets"
+								);
+
 return $config;
 
 ?>

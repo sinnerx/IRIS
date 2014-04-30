@@ -15,8 +15,8 @@ class Cluster
 	{
 		$data	= Array(
 				"clusterName"=>$data['clusterName'],
-				"clusterCreatedDate"=>$data['clusterCreatedDate'],
-				"clusterCreatedUser"=>$data['clusterCreatedUser']
+				"clusterCreatedDate"=>now(),
+				"clusterCreatedUser"=>session::get("userID")
 						);
 
 		db::insert("cluster",$data);
