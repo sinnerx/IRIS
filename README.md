@@ -30,7 +30,9 @@ DEFAULT PASS FOR ALL ACCOUNTS : OG63QKKLGM
 Production server info
 ================
 http://celcom1cbc.com/sta/pasir-gebu 
+
 Site Manager : team2@fulkrum.net / 12345
+
 Cluster Lead : team@fulkrum.net / 12345
 
 http://celcom1cbc.com/sta/penaga
@@ -39,13 +41,17 @@ root : root@gmail.com / 12345
 
 FTP
 	Host: celcom1cbc.com
+	
 	Username: fulkrum@celcom1cbc.com
+	
 	password: fulkrum@123
 
 
 DB
 		database: clecomcb_web2
+		
 		user: celcomcb_fulkrum
+		
 		password: fulkrum@123
 
 
