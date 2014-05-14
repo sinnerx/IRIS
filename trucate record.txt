@@ -16,6 +16,8 @@ TRUNCATE `cluster_lead`;
 TRUNCATE `contact`;
 TRUNCATE `photo`;
 TRUNCATE `message`;
+TRUNCATE `token`;
+TRUNCATE `token_resetpass`;
 
 INSERT INTO `digitalgaia_iris`.`user` (`userID`, `userIC`, `userPassword`, `userEmail`, `userLevel`, `userStatus`, `userPremiumStatus`, `userCreatedDate`, `userCreatedUser`) VALUES (NULL, '890910105117', 'daa57b48840eb2156dca97c43c985371', 'root@gmail.com', '99', '1', '1', NULL, NULL);
 INSERT INTO `digitalgaia_iris`.`user_profile` (`userID`) SELECT userID FROM user ORDER BY userID DESC;

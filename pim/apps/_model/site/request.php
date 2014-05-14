@@ -99,7 +99,8 @@ class Request
 		$typeR	= Array(
 				1=>"New Page",
 				2=>"Page Updates",
-				3=>"Site Information Updates"
+				3=>"Site Information Updates",
+				4=>"New site announcement"
 						);
 
 		return !$id?$typeR:$typeR[$id];
@@ -116,7 +117,7 @@ class Request
 		return !$status?$statusR:$statusR[$status];
 	}
 
-	## used by clusterlead/ajax/request/lists
+	## used by clusterlead/ajax_request@lists
 	public function getRequestBySite($siteID)
 	{
 		db::from("site_request");

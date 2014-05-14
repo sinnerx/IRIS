@@ -82,6 +82,13 @@ activity_article:
 	articleID [int]
 	activityID [int]
 
+actvity_album:
+	activityAlbumID [int]
+	activityID [int]
+	albumID [int]
+	activityAlbumCreatedDate [datetime]
+	activityAlbumCreatedUser [int]
+
 activity_comment:
 	activityCommentID [int]
 	activityID [int]
@@ -232,7 +239,7 @@ article:
 	articleText [text]
 	articleTagID [int]
 	articlePublishedDate [datetime]		## will only published after this date.
-	articleStatus [int]						## 0 = draft, 1 = saved.
+	articleStatus [int]					## 0 = draft, 1 = saved.
 	articleCreatedUser [int]
 	articleCreatedDate [datetime]
 
@@ -240,6 +247,8 @@ article_photo:
 	photoArticleID [int]
 	photoID [int]
 	articleID [int]
+	articlePhotoCreatedDate [datetime]
+	articlePhotoCreatedUser [int]
 
 article_tag:
 	articleTagID [int]
@@ -285,7 +294,6 @@ cluster_lead:
 album:
 	albumID [int]
 	siteID [int]
-	articleID [int]
 	albumType [int]			## 1 = event-specific
 	albumName [varchar]
 	albumDescription [text]
@@ -302,7 +310,7 @@ photo:
 
 site_request: ## table to store update request or anything regarding site, have, status.
 	siteRequestID [int]
-	siteRequestType [int]					## 1 = new pages, 2 = page edit, 3 = site edit
+	siteRequestType [int]					## 1 = new pages, 2 = page edit, 3 = site edit, 4 = new site announcement
 	siteID [int]
 	siteRequestRefID [int]					## reference-id
 	siteRequestData [text]
