@@ -112,7 +112,7 @@ class Controller_User
 			}
 
 			$rules	= Array(
-					"userProfileFullName,userLevel,userIC,userEmail"=>"required:This field is required.",
+					"userProfileFullName,userIC,userEmail"=>"required:This field is required.",
 					"userEmail"=>Array(
 								"email:Please input a corrent email format.",
 								"callback"=>Array(!$emailCheck,"Email already exists.")

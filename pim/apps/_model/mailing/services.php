@@ -11,14 +11,16 @@ class Services
 
 		## configuration
 		$this->mailer->isSMTP();
-		$this->mailer->Host			= "smtp.gmail.com";
+		#$this->mailer->Host			= "smtp.gmail.com";			-- old
+		$this->mailer->Host			= "power1.mschosting.com";
 		$this->mailer->SMTPAuth		= true;
-		$this->mailer->Username		= "pi1m@digitalgaia.com";
-		$this->mailer->Password		= "12345%12345";
+		#$this->mailer->Username		= "pi1m@digitalgaia.com"; 	-- old
+		#$this->mailer->Password		= "12345%12345";			-- old
+		$this->mailer->Username		= "pi1m@nusuara.com";
+		$this->mailer->Password		= "fulkrum@123";
 		$this->mailer->SMTPSecure	= "tls";
-		$this->mailer->Port			= 587;
+		$this->mailer->Port			= 456;
 		$this->mailer->isHTML(true);
-		#$this->mailer->SMTPDebug	= 1;
 
 		## the from email, it should be like 
 		$this->mailer->From			= "";
@@ -33,10 +35,36 @@ class Services
 	{
 		## set the required field.
 		$this->mailer->From		= !$from?$this->From_Admin:$from;
-		$this->mailer->addAddress($to);
+		
+		$to		= is_array($to)?$to:Array($to);
+
+		## loop the 'to' address.
+		foreach($to as $key=>$addr)
+		{
+			if(in_array($key,Array("cc","bcc")))
+			{
+				switch($key)
+				{
+					case "cc":
+					$this->mailer->addCC($addr);
+					break;
+					case "bcc":
+					$this->mailer->addBCC($addr);
+					break;
+				}
+			}
+			## if not a cc, or bcc kind of address.
+			else
+			{
+				$this->mailer->addAddress($addr);
+			}
+		}
+
+		## set subject and body.
 		$this->mailer->Subject	= $subject;
 		$this->mailer->Body		= $message;
 
+		## if mail send return false.
 		if(!$this->mailer->send())
 		{
 			return false;

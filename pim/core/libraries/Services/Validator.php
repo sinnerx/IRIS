@@ -59,7 +59,7 @@ class Validator
 		foreach($rules as $filter=>$rule)
 		{
 			## filter item based on rule. 1. except, 2. selection, and 3. all.
-			$filteredItemR	= filter_array($item,$filter);
+			$filteredItemR	= filter_array($item,$filter,null,true);
 
 			$ruleR	= !is_array($rule)?explode("|",$rule):$rule;
 

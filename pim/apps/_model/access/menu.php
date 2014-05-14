@@ -12,6 +12,7 @@ class Menu extends Data
 		## site manager.
 		$menu['sm']	= Array(
 					/*"Overview"=>"home/index",*/
+					"Overview"=>"site/overview",
 					"Site Management"=>Array(
 									"Information"=>Array("site/edit"),
 									"Slider"=>Array("site/slider","site/slider_add","site/slider_edit"),

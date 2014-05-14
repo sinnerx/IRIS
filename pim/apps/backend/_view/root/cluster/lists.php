@@ -79,6 +79,11 @@ var cluster	= new function()
 			}
 		});
 	}
+
+	this.checkDelete = function()
+	{
+		return confirm("Are you sure?");
+	}
 };
 
 </script>
@@ -136,10 +141,24 @@ Listing the groups of Pi1M sites for administration purpose. Every cluster must 
 		foreach($res_cluster as $row):
 			$name	= $row['clusterName'];
 			$clusterID = $row['clusterID'];
-			$unassignUrl	= url::base("cluster/unassign?clusterID=".$row['clusterID']."&userID=".$row['userID']);
-			$userEmail	= (!$row['userEmail']?"<span style='opacity:0.5;'>Null</span>":$row['userEmail']." <a href='$unassignUrl' class='i i-cross2'></a>");
+			
+			
+			$clusterLeadR	= $clusterLeadByClusterR[$clusterID];
+
+			$userEmail	= Array();
+			if(count($clusterLeadR) > 0)
+			{
+				foreach($clusterLeadR as $row)
+				{
+					$userID			= $row['userID'];
+					$unassignUrl	= url::base("cluster/unassign?clusterID=".$row['clusterID']."&userID=".$row['userID']);
+					$userEmail[]	= "<a href='".url::base("user/edit/$row[userID]")."'>$row[userEmail] <a onclick='return cluster.checkDelete();' href='$unassignUrl' class='i i-cross2'></a></a>";
+				}
+			}
+			$userEmail	= count($userEmail) == 0?"Null":implode(" ",$userEmail);
+
 			$assignUrl	= url::base("cluster/assign?clusterID=$clusterID");
-			$assignIcon	= !$row['userEmail']?"<a href='$assignUrl' class='fa fa-user'></a>":"";
+			$assignIcon	= "<a href='$assignUrl' class='fa fa-user'></a>";
 
 			echo "<tr><td>$no.</td><td>$name</td><td>$userEmail</td><td>$assignIcon <a href='#' onclick='cluster.show($clusterID);' class='fa fa-list' title='List of monitored site'></a></td></tr>";
 			$no++;

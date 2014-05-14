@@ -327,6 +327,16 @@ class Site
 		## else create.
 		db::insert("site_manager",$data);
 	}
+
+	public function getSiteByState($stateID = null)
+	{
+		if($stateID)
+		{
+			db::where("stateID",$stateID);
+		}
+
+		return db::get("site")->result("stateID",true);
+	}
 }
 
 ?>

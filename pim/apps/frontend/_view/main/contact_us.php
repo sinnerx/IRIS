@@ -31,6 +31,29 @@
 }
 
 </style>
+<script type="text/javascript">
+jQuery(document).ready(function()
+{
+    setTimeout(function()
+    {
+        if(!jQuery("#mailmessage")[0])
+        {
+            return;
+        }
+        var container = jQuery(document.body);
+        var scrollTo = jQuery('#mailmessage'); //if no element is not found, it won't scroll. it's ok it will give error.
+
+        //scroll top first.
+        container.scrollTop(0);
+
+        //scroll to designated
+        container.animate({scrollTop:scrollTo.offset().top - container.offset().top + container.scrollTop()});
+
+    },500);
+    
+});
+
+</script>
 <script type="text/javascript" src='<?php echo url::asset("_templates/js/contact-form.js");?>'></script>
 <h3 class="block-heading">HUBUNGI KAMI</h3>
 <div class="block-content clearfix">
@@ -40,7 +63,6 @@
         <div class="content-page clearfix"> 
         <div class="left-contact-info">
         <div class="heading-contact-page">Maklumat kami untuk dihubungi </div>
-        <?php echo flash::data();?>
         <span class="heading-contact">Emel Laman</span>
         <span class="info-contact"><?php echo $row['siteInfoEmail']?strtoupper($row['siteInfoEmail']):"-";?></span>
         <span class="heading-contact">No. Telefon</span>
@@ -60,10 +82,18 @@
         </div>
         <div class="clr"></div>
         <div class="contact-form">
+        <?php echo flash::data();?>
             <div class="contact-caption">
             Jika anda mempunyai sebarang aduan atau pertanyaan, sila hubungi kami menerusi borang online di bawah ini. Kami mengalu-alukan sebarang maklum balas daripada anda 
             </div>
             <form id="contact-form" action="" method="post">
+                <div>
+                    <label>
+                    <span id='errorscroll'>Kategori: *</span>
+                    <?php echo form::radio("siteMessageCategory",$categoryNameR,null,null,"<div style='display:inline;'> {content} </div>");?>
+                    <?php echo flash::data("siteMessageCategory");?>
+                    </label>
+                </div>
                 <div>
                     <label>
                     <span>Nama: *</span>
@@ -81,7 +111,7 @@
                 <div>
                     <label>
                     <span>Telefon: *</span>
-                    <?php echo form::text("contactPhoneNo","placeholder='Sila masukkan nombor telefon anda' tabindex='3'");?>
+                    <?php echo form::text("contactPhoneNo","placeholder='Sila masukkan nombor telefon anda. Contohnya : 0126966111.' tabindex='3'");?>
                     <?php echo flash::data("contactPhoneNo");?>
                     </label>
                 </div>
@@ -101,7 +131,7 @@
                     </label>
                 </div>
                 <div>
-                    <button onclick='document.getElementById("theForm").submit();   ' name="submit" type="submit" id="contact-submit">Send Email</button>
+                    <button onclick='document.getElementById("theForm").submit();   ' name="submit" type="submit" id="contact-submit">Hantar</button>
                 </div>
             </form>
         </div>

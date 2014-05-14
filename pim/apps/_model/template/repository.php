@@ -25,26 +25,23 @@ class Repository
 						<b>Email</b> : {contactEmail}<br><br>
 
 						<b><u>Date</u></b> : {messageDate}<br>
+						<b><u>Category</b> : {siteMessageCategory}<br>
 						<b><u>Subject</u></b>: <br>
 						{messageSubject}<br>
 						<b><u>Content</u></b> : <br>
-						{messageContent}<br><br>
-
-						Or you can follow the link below to read the message in your site inbox later :<br>
-						{messageLink}",
+						{messageContent}<br><br>",
 
 				## reset password notification
 				"resetpass-subject"=>"P1M Password Reset",
 				"resetpass-content"=>
-						"Selamat petang {userProfileFullName},<br><br>
+						"Hi, Mr {userProfileFullName},<br><br>
 
-						Untuk makluman anda, kata laluan anda telah berjaya di reset ke '{userPassword}'.
+						You or someone has requested for a password reset for the Pi1M site. If you want to proceed to reset the password, please click this link :<br>
+						{resetLink}
 						"
 						);
 			break;
 		}
-
-
 
 		return isset($templateList[$templateName])?$templateList[$templateName]:false;
 	}

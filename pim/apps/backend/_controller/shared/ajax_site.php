@@ -1,5 +1,5 @@
 <?php
-class Controller_Site
+class Controller_Ajax_Site
 {
 	var $template = false;
 	### get site detail. used by site/index
@@ -10,7 +10,7 @@ class Controller_Site
 
 		## get manager.
 		$dataManager	= model::load("site/manager")->getManagersBySite($siteID);
-		$data['manager1']	= $dataManager[0]['userProfileFullName']?:"null";
+		$data['manager1']	= $dataManager[0]['userProfileFullName']?:"<span style='opacity:0.5;'>null</span>";
 		$data['manager2']	= $dataManager[1]['userProfileFullName']?:"<span style='opacity:0.5;'>none</span>";
 
 		view::render("shared/site/ajax/detail",$data);

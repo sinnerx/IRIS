@@ -49,7 +49,8 @@ List of all registered users, site managers and cluster leads.
 
 				$detailIcon	= "<a class='fa fa-user' href='".url::base("user/detail/$userID")."'></a>";
 				$editIcon	= "<a class='fa fa-edit' href='".url::base("user/edit/$userID")."'></a>";
-				$resetIcon	= "<a onclick='return confirm(\"Are you sure you want to reset this user password.?\");' class='fa fa-key'  href='".url::base("user/resetPassword/$userID")."'></a>";
+				#$resetIcon	= "<a onclick='return confirm(\"Are you sure you want to reset this user password.?\");' class='fa fa-key'  href='".url::base("user/resetPassword/$userID")."'></a>";
+				$resetIcon	= "";
 
 				echo "<tr><td>$no.</td><td>$name</td><td>$ic</td><td>$email</td><td>$level</td><td>$resetIcon $editIcon</td></tr>";
 				$no++;

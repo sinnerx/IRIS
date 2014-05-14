@@ -96,7 +96,7 @@ class Db_instance
 		return $this;
 	}
 
-	public function where($key,$val = Null)
+	public function where($key,$val = "_noinput")
 	{
 		$this->clearResult();
 
@@ -105,7 +105,7 @@ class Db_instance
 		return $this;
 	}
 
-	public function or_where($key,$val = Null)
+	public function or_where($key,$val = "_noinput")
 	{
 		$this->clearResult();
 
@@ -114,7 +114,7 @@ class Db_instance
 		return $this;
 	}
 
-	private function _where($key,$val = Null ,$type = "AND")
+	private function _where($key,$val = "_noinput" ,$type = "AND")
 	{
 		$this->clearResult();
 
@@ -162,7 +162,7 @@ class Db_instance
 			$cond	= implode(" $type ",$cond);
 		}
 		## plain cond
-		else if($val === null)
+		else if($val === "_noinput")
 		{
 			$cond	= trim($key);
 		}
@@ -188,8 +188,14 @@ class Db_instance
 				$operator	= $operator == ""?$operator:$operator;
 			}
 
+			## check NOT IN
+			if($operator == "NOT" && isset($keyR[2]) && $keyR[2] == "IN")
+			{
+				$operator = "NOT IN";
+			}
+
 			## parameterize
-			if($operator != "IN")
+			if($operator != "IN" && $operator != "NOT IN")
 			{
 				$this->param[]	= $val;
 				$val			= "?";
@@ -498,6 +504,11 @@ class Db_instance
 
 	public function row($col = Null)
 	{
+		if(!$this->result)
+		{
+			return false;
+		}
+
 		$result	= $this->result->fetchAll(PDO::FETCH_ASSOC);
 		$result	= $result[0];	
 		return !$col?$result:$result[$col];

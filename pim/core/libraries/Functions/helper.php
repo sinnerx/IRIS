@@ -1,7 +1,7 @@
 <?php
 
 ### return result with based on : _all, except:, and list,of,item
-function filter_array($listR,$param,$isAssoc = null)
+function filter_array($listR,$param,$isAssoc = null,$createnonexistcolumn = false)
 {
 	$isAssoc	= $isAssoc === true?true:($isAssoc === false?false:(array_values($listR) === $listR?false:true));
 
@@ -14,6 +14,19 @@ function filter_array($listR,$param,$isAssoc = null)
 	$param	= $exception?substr($param, 7,strlen($param)):$param;
 	$paramR	= explode(",",$param);
 	$result	= Array();
+
+	## usable in validator. if selected param, didn't exists in listR, create one.
+	if($createnonexistcolumn && !$exception)
+	{
+		foreach($paramR as $key)
+		{
+			if(!isset($listR[$key]))
+			{
+				$listR[$key]	= null;
+			}
+		}
+	}
+
 	foreach($listR as $key=>$val)
 	{
 		if(($isAssoc && !in_array($key,$paramR) && $exception) || ($isAssoc && in_array($key,$paramR) && !$exception))
@@ -27,6 +40,59 @@ function filter_array($listR,$param,$isAssoc = null)
 	}
 
 	return $result;
+}
+
+function zeronating($val,$total)
+{
+	$zeros	= $total-strlen($val);
+	return str_repeat("0", $zeros).$val;
+}
+
+function encryptNo($id,$type = "encrypt",$additionalNo = 26,$multiplier = 9999)
+{
+	$letterR	= Array("A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z");
+	$zeroLevel		= strlen($multiplier);
+
+	switch($type)
+	{
+		case "encrypt":
+			$id		+= $additionalNo;
+			$no 	= $id;
+			
+
+			$letter = "";
+
+
+			//get current letter
+			for($i=0;$i<26;$i++)
+			{
+				if($i < ($id/$multiplier))
+				{
+					$letter	= $letterR[$i];
+					$deducter	= $i*$multiplier;
+				}
+			}
+			return $letter.zeronating(($no-$deducter),$zeroLevel);
+		break;
+		case "decrypt":
+			$currentLetter	= substr($id,0,1);
+
+			## die because length not same.
+			if($zeroLevel+1 != strlen($id))
+			{
+				return false;
+			}
+
+			$currKey		= array_search($currentLetter,$letterR);
+
+			$realBalance		= $currKey*$multiplier;
+
+			//get currentNo
+			$currNo			= substr($id,1,$zeroLevel);
+
+			return $currNo+$realBalance-$additionalNo;
+		break;
+	}
 }
 
 ### get now date in Y-m-d H:i:s format.

@@ -46,7 +46,6 @@ Class Controller_Main
 		## repair page text to 90 words.
 		$data['pageText'] = model::load("helper")->purifyHTML(stripslashes($row['pageText']),90);
 
-
 		view::render("main/index",$data);
 	}
 
@@ -150,12 +149,18 @@ Class Controller_Main
 		$data['row']			= $site->getSite();
 		$row_manager			= $site->getManagerInfo(null,'userEmail');
 		$data['managerEmail']	= $row_manager['userEmail'];
-
+		$data['categoryNameR']	= model::load("site/message")->getCategoryName();
+		
 		## a message has been submitted.
 		if(form::submitted())
 		{
 			$rules	= Array(
-					"contactName,contactPhoneNo,contactEmail,messageSubject,messageContent"=>"required:Sila isikan ruangan ini."
+					"siteMessageCategory"=>"required:Sila pilih kategori.",
+					"contactName,contactPhoneNo,contactEmail,messageSubject,messageContent"=>"required:Sila isikan ruangan ini.",
+					"contactEmail"=>"email:Sila masukkan format alamat emel yang betul.",
+					"contactPhoneNo"=>Array(
+								"callback"=>Array(is_numeric(str_replace("-","",input::get("contactPhoneNo"))),"Sila masukkan nombor telefon yang betul.")
+										)
 							);
 
 			## if got error.
@@ -163,13 +168,13 @@ Class Controller_Main
 			{
 				input::repopulate();
 				redirect::withFlash(model::load("template/services")->wrap("input-error",$error));
-				redirect::to("","<span class='msgbox error'>Terdapat sedikit masalah pada form anda.</span>","error");
+				redirect::to("","<span id='mailmessage' class='msgbox error'>Maklumat tidak lengkap</span>","error");
 			}
 
 			## else, createPublicMessage.
-			model::load("site/message")->createPublicMessage($data['row']['siteID'],input::get());
+			$referenceNo	= model::load("site/message")->createPublicMessage($data['row']['siteID'],input::get());
 
-			redirect::to("","<span class='msgbox success'>Message anda telahpun berjaya dihantar.</span>");
+			redirect::to("","<span id='mailmessage' class='msgbox success'>Mesej anda telah berjaya dihantar. No. Rujukan : $referenceNo</span>");
 		}
 
 		view::render("main/contact_us",$data);

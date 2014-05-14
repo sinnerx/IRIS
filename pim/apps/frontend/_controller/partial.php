@@ -14,8 +14,9 @@ class Controller_Partial
 
 	private function pim_list()
 	{
-		$data['siteListR']	= model::load("site/site")->lists();
+		#$data['siteListR']	= model::load("site/site")->lists();
 		$data['stateR']		= model::load("helper")->state();
+		$data['res_site']	= model::load("site/site")->getSiteByState();
 
 		view::render("partial/pim_list",$data);
 	}
@@ -65,6 +66,9 @@ class Controller_Partial
 	private function landing_menu()
 	{
 		$data['state']	= model::load("helper")->state();
+
+		## get site by state.
+		$res_site	= model::load("site/site")->getSiteByState();
 
 		## fetch site.
 		$res_site	= db::select("stateID,siteName,siteSlug")->get("site")->result();

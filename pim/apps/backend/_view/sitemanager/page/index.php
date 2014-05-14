@@ -194,6 +194,10 @@ function showFilter()
 
  </script>
  <style type="text/css">
+#editor a, #pageContent a
+{
+	text-decoration: underline;
+}
 
 #filterpage
 {
@@ -240,7 +244,6 @@ function showFilter()
 	top:-5px;
 	left:-5px;
 }
-
 
 #pageEditor
 {

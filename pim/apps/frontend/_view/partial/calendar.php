@@ -232,63 +232,15 @@ $(document).ready(function()
 	</div>
 	<div class='cal-day'>
 		<ul>
-			<li><div>Sun</div></li>
-			<li><div>Mon</div></li>
-			<li><div>Tue</div></li>
-			<li><div>Wed</div></li>
-			<li><div>Thu</div></li>
-			<li><div>Fri</div></li>
-			<li><div>Sat</div></li>
+			<li><div>AHA</div></li>
+			<li><div>ISN</div></li>
+			<li><div>SEL</div></li>
+			<li><div>RAB</div></li>
+			<li><div>KHA</div></li>
+			<li><div>JUM</div></li>
+			<li><div>SAB</div></li>
 		</ul>
 	</div>
 	<div class="cal-date clearfix">	
-	<?php /*
-	<ul>
-		<li class="disable">29</li>
-		<li class="disable">30</li>
-		<li class="disable">31</li>
-		<li>1</li>
-		<li class="today">2</li>
-		<li>3</li>
-		<li>4</li>
-	</ul>
-	<ul>
-		<li>5</li>
-		<li>6</li>
-		<li>7</li>
-		<li>8</li>
-		<li>9</li>
-		<li>10</li>
-		<li>11</li>
-	</ul>
-
-	<ul>
-		<li>12</li>
-		<li>13</li>
-		<li>14</li>
-		<li>15</li>
-		<li>16</li>
-		<li>17</li>
-		<li>18</li>
-	</ul>
-	<ul>
-		<li>19</li>
-		<li>20</li>
-		<li>21</li>
-		<li>22</li>
-		<li>23</li>
-		<li>24</li>
-		<li>25</li>
-	</ul>
-	<ul>
-		<li>26</li>
-		<li>27</li>
-		<li>28</li>
-		<li>29</li>
-		<li>30</li>
-		<li>31</li>
-		<li class="disable">1</li>
-	</ul>
-	*/?>
 	</div>
 </div>

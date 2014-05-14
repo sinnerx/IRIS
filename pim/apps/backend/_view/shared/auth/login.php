@@ -1,6 +1,7 @@
 <!doctype html>
 <html>
 <head>
+<script type="text/javascript" src='<?php echo url::asset("scripts/jquery-min.js");?>'></script>
 <meta charset="UTF-8">
 
 <title>Login</title>
@@ -63,7 +64,7 @@ table#login-table{
 }
 
 
-table#login-table input{
+table#login-table input, .box-forgotpass input{
 	
 display: block;
   width: 100%;
@@ -134,36 +135,113 @@ table#login-table input:focus {
 {
 	color:#dab8b8;
 }
+
+.forgot-pass
+{
+	color:#dab8b8;
+	cursor: pointer;
+}
+
+/*nusuara logo in login */
+.nusuara-logo{
+
+	width:190px;
+	height:47px;
+	margin:0px auto;
+	display:block;
+		margin-top:30px;
+	
+}
+
 </style>
 
 
 </head>
+<script type="text/javascript">
+	
+$(document).ready(function()
+{
+	$(".forgot-pass").click(function()
+	{
+		$(".box-login").slideUp();
 
+		$(".box-forgotpass").slideDown();
+	});
+
+	//check if got #checkPassword in uri.
+	var param	= window.location.href.split("#")[1];
+
+	if(param == "changePassword")
+	{
+		$(".box-login").slideUp();
+		$(".box-changepass").slideDown();
+	}
+});
+
+function resetPassword()
+{
+	var email	= $("#userEmail").val();
+	window.location.href	= "<?php echo url::base('resetPassword');?>?email="+email;
+}
+
+</script>
 <body><div id="login-box">
 	<div id="left-panel">
 		<div>
 			<div class="heading-block">Dashboard<br>log-in panel</div>
 			<div class="left-panel-text">For site manager, cluster lead, operational manager and root admin.</div>
 		</div>
+		<div class="nusuara-logo"><a href="http://nusuara.com/"><img src="<?php echo url::asset("backend/images/nusuara_logo.jpg");?>" width="190" height="47"  alt=""/></a></div>
 	</div>
 	<div id="right-panel">
 		<div>
-		<form method="post">
+		
         <div class="logo-right"><img src="<?php echo url::asset("backend/images/login_logo.png");?>"></div>
-		<div class="right-panel-text">Fill in your authentication details.</div>
-		<?php echo flash::data();?>
-				<table id="login-table">
-			<tbody><tr>
-				<td>Email</td><td> <?php echo form::text("userEmail");?><?php echo flash::data("userEmail");?></td><td></td>
-			</tr>
-			<tr>
-				<td>Password</td><td> <?php echo form::password("userPassword");?><?php echo flash::data("userPassword");?></td><td></td>
-			</tr>
-			<tr>
-				<td colspan="2"><input type="submit" value="Log-In" class="login-submit"></td>
-			</tr>
-		</tbody></table>
+        <form method="post" id='theForm'>
+	        <div class='box-login'>
+			<div class="right-panel-text">Fill in your authentication details.</div>
+			<?php echo flash::data();?>
+			<table id="login-table">
+				<tbody><tr>
+					<td>Email</td><td> <?php echo form::text("userEmail");?><?php echo flash::data("userEmail");?></td><td></td>
+				</tr>
+				<tr>
+					<td>Password</td><td> <?php echo form::password("userPassword");?><?php echo flash::data("userPassword");?></td><td></td>
+				</tr>
+				<tr>
+					<td colspan="2"><?php echo flash::data("forgot_pass");?><input type="submit" value="Log-In" class="login-submit"></td>
+				</tr>
+			</tbody>
+			</table>
+			</div>
 		</form>
+		<div class='box-forgotpass' style='display:none;'>
+		<div class="right-panel-text">Reset password.</div>
+		Forgot your password? You can reset, and new password will be sent to your email.
+		<input type="submit" value="Ok, Reset Password" onclick='resetPassword();return false;' class="login-submit">
+		</div>
+		<?php if(request::get("token")):?>
+		<div class='box-changepass' style='display:none'>
+		<div class="right-panel-text">Change to new password</div>
+		Please change your password to a new one. .
+		<?php echo flash::data();?>
+		<form method='post' action='<?php echo url::base("login?changePassword=1");?>'>
+		<input type='hidden' name='token' value='<?php echo request::get("token");?>' />
+			<table id="login-table">
+				<tbody><tr>
+					<td>New Password</td><td> <?php echo form::password("userPassword");?><?php echo flash::data("userPassword");?></td><td></td>
+				</tr>
+				<tr>
+					<td>Confirm Password</td><td> <?php echo form::password("userPasswordConfirm");?><?php echo flash::data("userPasswordConfirm");?></td><td></td>
+				</tr>
+				<tr>
+					<td colspan="2"><?php echo flash::data("forgot_pass");?><input type="submit" value="Change" class="login-submit"></td>
+				</tr>
+			</tbody>
+			</table>
+		</form>
+		</div>
+		<?php endif;?>
 		</div>
   </div>
 </div>

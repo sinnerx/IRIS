@@ -21,40 +21,6 @@
 }
 
 </style>
-<script type="text/javascript">
-var $j	= jQuery;
-var dropdownfix	= new function()
-{
-	this.dropdownfocus	= true;
-	this.removeFocus	= function()
-	{
-		this.dropdownfocus	= this.dropdownfocus?false:true;
-		if(this.dropdownfocus)
-		{
-			$j(".wrapper-dropdown-2").blur();
-		}
-		else
-		{
-			$j(".mCSB_scrollTools").click(function(event)
-			{
-				event.stopPropagation();
-			});
-		}
-	}
-	context	= this;
-	$j(document).ready(function()
-	{
-		$j(".wrapper-dropdown-2").blur(function()
-		{
-			context.dropdownfocus	= true;
-		});
-
-		
-	});
-	
-	
-}
-</script>
 <!-- Top Header start -->
 <div class="top-header">
 	<div class="wrap clearfix">
@@ -62,39 +28,19 @@ var dropdownfix	= new function()
 			<div class="wrapper-dropdown-2" tabindex="1" onclick='dropdownfix.removeFocus();'>Ke PI1M Lain
 				<ul class="dropdown">
 					<div id="content_7" class="content">
-						<?php controller::load("partial","pim_list");?>
+						<?php # controller::load("partial","pim_list");?>
 					</div>
-				</ul>
-<!-- script for mCustomScrollbar -->
-<script type='text/javascript'>
-(function($){
-		$(window).load(function(){
-		
-			$("#content_7").mCustomScrollbar({
-				scrollButtons:{
-					enable:true
-				},
-				 advanced:{  
-    updateOnBrowserResize:true,   
-    updateOnContentResize:true   
-  },
-				theme:"light-thin"
-				
-			});
-		
-		});
-	})(jQuery);
-</script>				
+				</ul>			
 			</div>
 		</div>
 	<div class="social-network clearfix">
 		<ul>
 			<?php 
 			if($links['siteInfoFacebookUrl']):?>
-			<li><a href='//<?php echo $links['siteInfoFacebookUrl'];?>' class="fa fa-facebook"></a></li>
+			<li><a target='_blank' href='//<?php echo str_replace(Array("http://","https://"), "", $links['siteInfoFacebookUrl']);?>' class="fa fa-facebook"></a></li>
 			<?php endif;
 			if($links['siteInfoTwitterUrl']):?>
-			<li><a href='//<?php echo $links['siteInfoTwitterUrl'];?>' class="fa fa-twitter"></a></li>
+			<li><a target='_blank' href='//<?php echo str_replace(Array("http://","https://"), "", $links['siteInfoTwitterUrl']);?>' class="fa fa-twitter"></a></li>
 			<?php endif;
 			if($links['siteInfoEmail']):?>
 			<li><a href='mailto:<?php echo $links['siteInfoEmail'];?>' class="fa fa-envelope"></a></li>

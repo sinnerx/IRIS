@@ -5,10 +5,21 @@ class Cluster
 {
 	public function lists()
 	{
-		db::select("cluster.*, user.*");
-		db::join("cluster_lead","cluster.clusterID = cluster_lead.clusterID AND clusterLeadStatus = '1'");
-		db::join("user","cluster_lead.userID = user.userID");
+		db::select("cluster.*");
+		#db::join("cluster_lead","cluster.clusterID = cluster_lead.clusterID AND clusterLeadStatus = '1'");
+		#db::join("user","cluster_lead.userID = user.userID");
 		return db::get('cluster')->result();
+	}
+
+	public function getClusterLeadByCluster($cluster = null,$selects = null)
+	{
+		db::from("cluster_lead");
+		db::where("clusterLeadStatus",1); ## only active onle
+		db::join("user","user.userID = cluster_lead.userID");
+		db::join("user_profile","user_profile.userID = cluster_lead.userID");
+
+		## return result truely grouped by cluster id
+		return db::get()->result("clusterID",true);
 	}
 
 	public function add($data)
@@ -64,18 +75,19 @@ class Cluster
 
 	}
 
-	public function getAvailableClusterLead()
+	public function getAvailableClusterLead($clusterID)
 	{
 		db::from("user");
 		db::where("userLevel",3);	## cluster lead 
-		db::where("user.userID NOT IN (SELECT userID FROM cluster_lead WHERE clusterLeadStatus = '1')"); ## not assigned yet.
+		db::where("user.userID NOT IN (SELECT userID FROM cluster_lead WHERE clusterLeadStatus = '1' AND clusterID = '$clusterID')");
+		#db::where("user.userID NOT IN (SELECT userID FROM cluster_lead WHERE clusterLeadStatus = '1')"); ## not assigned yet.
 		db::join("user_profile","user_profile.userID = user.userID");
 
 		return db::get()->result();
 	}
 
-	public function assignLead($clusterID,$userID,$override = false)
-	{
+	public function assignLead($clusterID,$userID)
+	{/*
 		## check if the cluster already had a cluster.
 		db::where(Array("clusterID"=>$clusterID,"clusterLeadStatus"=>1));
 		db::join("user","user.userID = cluster_lead.userID");
@@ -85,11 +97,11 @@ class Cluster
 		if($row && !$override)
 		{
 			return Array(false,$row);
-		}
+		}*/
 
-		## else, update last lead (for the selected cluster) to 0, if got.
+		/*## else, update last lead (for the selected cluster) to 0, if got.
 		db::where(Array("clusterLeadStatus"=>1,"clusterID"=>$clusterID))
-		->update("cluster_lead",Array("clusterLeadStatus"=>0));
+		->update("cluster_lead",Array("clusterLeadStatus"=>0));*/
 
 		## and insert new cluster lead.
 		$data_lead	= Array(

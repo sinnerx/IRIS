@@ -263,6 +263,10 @@ class Controller_Site
 				## get userID, create if not exists.
 				foreach($user as $no=>$row)
 				{
+					if($row['userEmail'] == "")
+					{
+						continue;
+					}
 					$userID	= db::where("userEmail",trim($row['userEmail']))->get("user")->row("userID");
 
 					if(!$userID)

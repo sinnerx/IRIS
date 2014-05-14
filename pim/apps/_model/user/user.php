@@ -188,6 +188,16 @@ class User
 
 		return $result;
 	}
+
+	## get user by email.
+	public function getUserByEmail($email,$column = null)
+	{
+		db::from("user")
+		->where("userEmail",$email)
+		->join("user_profile","user.userID = user_profile.userID");
+
+		return db::get()->row($column);
+	}
 }
 
 ?>

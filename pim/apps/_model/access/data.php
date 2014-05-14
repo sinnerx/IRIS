@@ -36,6 +36,17 @@ class Data
 		return false;
 	}
 
+	public function publicBackend()
+	{
+		$list	= Array(
+					"auth/login",
+					"auth/resetPassword",
+					"auth/authenticateToken"
+						);
+
+		return $list;
+	}
+
 	public function accessController($id)
 	{
 		$levelR	= Array(

@@ -1,5 +1,5 @@
 <?php
-class Controller_Cluster
+class Controller_Ajax_Cluster
 {
 	var $template	= false;
 	public function siteList($clusterID)
@@ -43,5 +43,7 @@ class Controller_Cluster
 		}
 	}
 }
+
+
 
 ?>

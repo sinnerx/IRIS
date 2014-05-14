@@ -73,6 +73,25 @@ class Form
 		return "<input type='file' name='$name' id='$name' $attr />";
 	}
 
+	public function radio($name,$array = Array(),$attr = null,$value = null,$wrapper = null)
+	{
+		$array		= is_array($array)?$array:Array();
+		$value		= flash::data("_post.$name",$value);
+
+		$attr		= self::buildAttr($attr);
+		$result		= "";
+
+
+		foreach($array as $key=>$val)
+		{
+			$sel	=  $value?($key == $value?"checked":""):"";
+			$radio	= "<label><input type='radio' value='$key'  $sel $attr name='$name' />$val</label>";
+			$result	.= $wrapper?str_replace("{content}",$radio, $wrapper):$radio;
+		}
+
+		return $result;
+	}
+
 	public function submitted($param = null)
 	{
 

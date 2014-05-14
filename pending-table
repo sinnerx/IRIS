@@ -1,9 +1,22 @@
 notification:
 	notificationID [int]
-	notificationType [int]
+	siteID [int]
+	notificationTypeID [int]				## 1 = site_request
 	notificationCreatedDate [datetime]
 	notificationCreatedUser [int]
 
+notification_paramvalue:
+	notificationParamValueID [int]
+	notificationID [int]
+	notificationParamValue [int]
+
 notification_type:
 	notificationTypeID [int]
-	notificationTypeName [varchar]
+	notificationTypeMessageFormat [text]	## {userID} has commented in activies {trainingID}
+	notificationTypeDescription [text]
+
+notification_type_param:
+	notificationTypeParamID [int]
+	notificationTypeParamName [varchar]
+	notificationTypeParamTable [varchar]
+	notificationTypeParamColumn [varchar]

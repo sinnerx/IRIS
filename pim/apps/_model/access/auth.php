@@ -1,6 +1,6 @@
 <?php
 namespace model\access;
-use db, model;
+use db, model, session;
 Class Auth
 {
 	public function backendLoginCheck($email,$password)
@@ -33,6 +33,13 @@ Class Auth
 		db::from("user");
 
 		return db::get()->row()?true:false;
+	}
+
+	public function login($userID,$userLevel)
+	{
+		## set session : userLevel and userID
+		session::set("userLevel",$userLevel);
+		session::set("userID",$userID);
 	}
 }
 

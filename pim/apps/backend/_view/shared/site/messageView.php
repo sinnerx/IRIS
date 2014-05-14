@@ -1,15 +1,15 @@
 <h3 class="m-b-xs text-black">
-Public message : <?php echo $row['messageSubject'];?>
+Public message : <?php echo $referenceNo;?>
 </h3>
 <div class='well well-sm'>
-What to read?
+Message detail
 </div>
 <div class='row'>
 
 <div class='col-sm-7'>
 	<section class='panel panel-default'>
 		<div class='panel-heading'>
-		Subject : <?php echo $row['messageSubject'];?>
+		Subject : <?php echo $row['messageSubject'];?><div class='pull-right badge badge-primary'><?php echo $category;?></div>
 		</div>
 		<div class='panel-body' style='min-height:135px;'>
 		<?php echo $row['messageContent'];?>

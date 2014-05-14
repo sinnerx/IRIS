@@ -57,6 +57,12 @@ Class Controller_Site
 		{
 			$data_site	= input::get();
 
+			## rules for site email.
+			if(input::get("siteInfoEmail") != "")
+			{
+				$rules['siteInfoEmail']	= "email:Please input a correct email address.";
+			}
+
 			## do role for root.
 			if(model::load("access/services")->roleCheck("siteEditRoot"))
 			{
@@ -69,20 +75,15 @@ Class Controller_Site
 							"min_length(5):length must be longer than {length}",
 							"callback"=>Array($siteSlugCheck[0],$siteSlugCheck[1])
 									)
-								);
+								);	
+			}
 
-				if(input::get("siteInfoEmail") != "")
-				{
-					$rules['siteInfoEmail']	= "email:Please input a correct email address.";
-				}
-
-				## error.
-				if($error = input::validate($rules))
-				{
-					input::repopulate();
-					redirect::withFlash(model::load("template/services")->wrap("input-error",$error));
-					redirect::to("","Got some error with the form.","error");
-				}
+			## error.
+			if($error = input::validate($rules))
+			{
+				input::repopulate();
+				redirect::withFlash(model::load("template/services")->wrap("input-error",$error));
+				redirect::to("","Got some error with the form.","error");
 			}
 
 			## if got file upload.
@@ -257,6 +258,10 @@ Class Controller_Site
 	## public message.
 	public function message($page = 1)
 	{
+		## get categoryname
+		$data['siteMessage']		= model::load("site/message");
+		$data['categoryNameR']		= $data['siteMessage']->getCategoryName();
+
 		db::from("site_message");
 		db::select("site_message.*, message.*, contact.*, siteName, site.siteID");
 
@@ -267,8 +272,13 @@ Class Controller_Site
 						"currentPage"=>$page
 									));
 
+		if(request::get("category"))
+		{
+			db::where("siteMessageCategory",request::get("category"));
+		}
+
 		db::join("message","site_message.messageID = message.messageID");
-		db::join("contact","contact.contactID = site_message.contactID");
+		db::join("contact","contact.contactID = site_message.siteMessageCreatedUser");
 		db::join("site","site_message.siteID = site.siteID");
 
 		db::order_by("messageCreatedDate","DESC");
@@ -278,9 +288,22 @@ Class Controller_Site
 		view::render("shared/site/message",$data);
 	}
 
-	public function messageView($siteMessageID)
+	public function messageView($refNo)
 	{
-		$data['row']	= model::load("site/message")->readPublicMessage($siteMessageID);
+		$refNo	= strtoupper($refNo);
+		$siteMessage	= model::load("site/message");
+		$siteMessageID	= $siteMessage->encryptID($refNo,"decrypt");
+
+		$data['row']			= $siteMessage->readPublicMessage($siteMessageID);
+
+		if(!$data['row'])
+		{
+			flash::set("_post.search",$refNo);
+			redirect::to("site/message","[Reference No : $refNo] Message didn't exists.","error");
+		}
+
+		$data['referenceNo']	= $refNo;
+		$data['category']		= $siteMessage->getCategoryName($data['row']['siteMessageCategory']);
 
 		view::render("shared/site/messageView",$data);
 	}

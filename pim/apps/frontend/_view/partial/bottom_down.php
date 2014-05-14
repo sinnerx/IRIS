@@ -9,7 +9,6 @@
 
 .akan-datang
 {
-	background-color: rgba(255, 255, 255, 0.85);
 	background: rgba(255, 255, 255, 0.85) url("<?php echo url::asset('frontend/images/akan_datang.png');?>") no-repeat center center;
 	color: rgba(255, 255, 255, 0.85);
 	width:100%;

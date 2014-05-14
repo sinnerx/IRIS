@@ -139,6 +139,7 @@ site_member:
 	siteMemberID [int]
 	siteID [int]
 	userID [int]
+	siteMemberPremiumStatus [int]	## 0 = inactive, 1 = premium status
 
 site_slider:
 	siteSliderID [int]
@@ -156,10 +157,12 @@ site_message:	## a message from public
 	siteMessageID [int]
 	messageID [int]
 	siteID [int]
-	contactID [int]
-	siteMessageType [int]		## 1 = public
+	siteMessageType [int]		## 1 = public, 2 = members.
+	siteMessageCategory [int]	## 1 = aduan, 2 = pertanyaan, 3 = cadangan
 	siteMessageReadStatus [int]
 	siteMessageReadUser [int]
+	siteMessageStatus [int]		## 1 = active, 2 = closed.
+	siteMessageCreatedUser [int]		## if public (1), will use table contact. if members, will use table member.
 
 contact:
 	contactID [int]
@@ -172,7 +175,6 @@ message:
 	messageSubject [varchar]
 	messageContent [text]
 	messageCreatedDate [datetime]
-	messageCreatedUser [int]
 
 menu:
 	menuID [int]
@@ -284,7 +286,9 @@ album:
 	albumID [int]
 	siteID [int]
 	articleID [int]
+	albumType [int]			## 1 = event-specific
 	albumName [varchar]
+	albumDescription [text]
 	albumCreatedDate [datetime]
 	albumCreatedUser [int]
 
@@ -303,7 +307,22 @@ site_request: ## table to store update request or anything regarding site, have,
 	siteRequestRefID [int]					## reference-id
 	siteRequestData [text]
 	siteRequestStatus [int]					## 0 = unapproved, 1 = approved, 2 = disapproved
+	siteRequestApprovalRead [int]
 	siteRequestCreatedDate [datetime]
 	siteRequestCreatedUser [int]
 	siteRequestUpdatedDate [datetime]
 	siteRequestUpdatedUser [int]
+
+token:
+	tokenID [int]
+	tokenType [int]		## 1 = reset password.
+	tokenName [varchar]
+	tokenStatus [int]	## status 1 = active, 2 = expired.
+	tokenCreatedDate [datetime]
+	tokenUpdatedDate [datetime]
+
+token_resetpass:
+	tokenResetpassID [int]
+	tokenID [int]
+	userID [int]
+	tokenResetpassStatus [int] ## 0 = in-active, 1 = active (after user has accessed the link), 2 = reset success. 

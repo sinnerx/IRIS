@@ -1,6 +1,6 @@
 <?php
 
-class Controller_Page
+class Controller_Ajax_Page
 {
 	var $template	= false;
 	## return json of row

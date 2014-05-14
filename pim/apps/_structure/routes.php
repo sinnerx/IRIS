@@ -38,7 +38,7 @@ $routes[]	= Array(function()
 $routes[]	= Array("model/[**:model_param?]","controller=tests:model@tests","{model_param}");
 
 ## backed ajax : shared
-$routes[]	= Array("dashboard/ajax/shared/[:controller]/[**:method]","controller=backend:shared/ajax/{controller}@{method}");
+$routes[]	= Array("dashboard/ajax/shared/[:controller]/[**:method]","controller=backend:shared/ajax_{controller}@{method}");
 
 ## backend ajax : role specific.
 $routes[]	= Array("dashboard/ajax/[:controller]/[**:method]",function()
@@ -46,8 +46,11 @@ $routes[]	= Array("dashboard/ajax/[:controller]/[**:method]",function()
 	## get subcontroller name.
 	$levelController	= model::load("access/data")->accessController(session::get("userLevel"));
 
-	return controller::init("backend:$levelController/ajax/{controller}","{method}");
+	return controller::init("backend:$levelController/ajax_{controller}","{method}");
 });
+
+## token authentication
+$routes[]	= Array('dashboard/authenticateToken/[:token]',"controller=backend:auth@authenticateToken","{token}");
 
 ## route to direct model usage.
 #$routes[]	= Array("model/[:model]/[**:method]","controller=model:{model}@{method}");
@@ -57,6 +60,7 @@ $routes[]	= Array("dashboard/ajax/[:controller]/[**:method]",function()
 {
 	echo 'tst';
 });*/
+$routes[]	= Array("dashboard/resetPassword","controller=backend:auth@resetPassword");
 $routes[]	= Array("dashboard/login","controller=backend:auth@login");		## login
 $routes[]	= Array("dashboard/logout","controller=backend:auth@logout");	## logout
 $routes[]	= Array("dashboard","controller=backend:auth@login");			## 

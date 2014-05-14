@@ -1,6 +1,6 @@
 <?php
 namespace model\site;
-use db, session;
+use db, session, pagination;
 class Request
 {
 	//used by model site:updateSiteInfo, page:updatePage
@@ -22,7 +22,8 @@ class Request
 				"siteRequestData"=>$newSiteRequestData,
 				"siteRequestStatus"=>0,
 				"siteRequestCreatedDate"=>now(),
-				"siteRequestCreatedUser"=>session::get("userID")
+				"siteRequestCreatedUser"=>session::get("userID"),
+				"siteRequestApprovalRead"=>0
 						);
 
 		## check if still got same unapproved request, for the selected refID and type.;
@@ -35,7 +36,8 @@ class Request
 			db::update("site_request",Array(
 								"siteRequestData"=>$newSiteRequestData,
 								"siteRequestCreatedDate"=>now(),
-								"siteRequestCreatedUser"=>session::get("userID")
+								"siteRequestCreatedUser"=>session::get("userID"),
+								"siteRequestApprovalRead"=>0
 											));
 		}
 		else
@@ -103,6 +105,17 @@ class Request
 		return !$id?$typeR:$typeR[$id];
 	}
 
+	public function statusName($status = null)
+	{
+		$statusR = Array(
+				0=>"Pending",
+				1=>"Approved",
+				2=>"Rejected"
+						);
+
+		return !$status?$statusR:$statusR[$status];
+	}
+
 	## used by clusterlead/ajax/request/lists
 	public function getRequestBySite($siteID)
 	{
@@ -142,8 +155,8 @@ class Request
 
 	public function approve($id)
 	{
-		## approve request.
-		db::where("siteRequestID",$id)->update("site_request",Array("siteRequestStatus"=>1));
+		## approve request, and set approvalRead to 0
+		db::where("siteRequestID",$id)->update("site_request",Array("siteRequestStatus"=>1,"siteRequestApprovalRead"=>0));
 
 		## and append content.
 		$row	= $this->getRequest($id);
@@ -173,7 +186,8 @@ class Request
 
 	public function disapprove($id)
 	{
-		db::where("siteRequestID",$id)->update("site_request",Array("siteRequestStatus"=>2));
+		## disprove request, and set approvalRead to 0
+		db::where("siteRequestID",$id)->update("site_request",Array("siteRequestStatus"=>2,"siteRequestApprovalRead"=>0));
 	}
 
 	## used by clusterlead/ajax/request
@@ -223,6 +237,37 @@ class Request
 		}
 
 		return Array($type,$changesR,$requestID);
+	}
+
+	public function getPaginatedUnreadRequest($siteID,$urlFormat,$currentPage = 1)
+	{
+		db::from("site_request")
+		->where("siteID",$siteID)
+		->where('siteRequestApprovalRead',0);
+
+		pagination::initiate(Array(
+						"totalRow"=>db::num_rows(),
+						"limit"=>5,
+						"currentPage"=>$currentPage,
+						"urlFormat"=>$urlFormat
+									));
+
+		db::order_by("siteRequestID","desc")->limit(5,pagination::recordNo()-1);
+
+		return db::get()->result();
+	}
+
+	## used by sitemanager/ajax/request. basically it read request. in the other name, clear.
+	public function clearRequest($siteID,$id = null)
+	{
+		## if only id is selected. else, just clear all.
+		if($id)
+		{
+			db::where("siteRequestID",$id);
+		}
+
+		db::where(Array("siteRequestApprovalRead"=>0,"siteID"=>$siteID,"siteRequestStatus !="=>0));
+		db::update("site_request",Array("siteRequestApprovalRead"=>1));
 	}
 }
 ?>

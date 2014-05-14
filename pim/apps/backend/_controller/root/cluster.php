@@ -5,6 +5,8 @@ class Controller_Cluster
 	{
 		$cluster				= model::load("site/cluster");
 		$data['res_cluster']	= $cluster->lists();
+		## get a grouped cluster lead, by cluster, that they may live under the same cluster.
+		$data['clusterLeadByClusterR']	= $cluster->getClusterLeadByCluster(); 
 
 		## new cluster submitted.
 		if(form::submitted())
@@ -49,29 +51,13 @@ class Controller_Cluster
 				redirect::to("","Got some error in your form eh.?","error");
 			}
 
-			## assign.
-			if(request::get("override"))
-			{
-				$cluster->assignLead($clusterID,$userID,true);
-			}
-			else
-			{
-				$result	= $cluster->assignLead($clusterID,$userID);
-
-				## if 
-				if(!$result[0])
-				{
-					$row_user	= $result[1];
-					input::repopulate();
-					redirect::to("","Already got a person in managing the selected cluster, do you want to overwrite? <input type='button' value='Overwrite' class='btn btn-danger cluster-override' />","error");
-				}
-			}
+			$result	= $cluster->assignLead($clusterID,$userID);
 
 			redirect::to("cluster/lists","New cluster lead has been assigned.");
 		}
 
 		## get user and cluster.
-		$res_user			= $cluster->getAvailableClusterLead();
+		$res_user			= $cluster->getAvailableClusterLead($data['clusterID']);
 		$res_cluster		= $cluster->lists();
 
 		## prepare list of clusterID=>clusterName.

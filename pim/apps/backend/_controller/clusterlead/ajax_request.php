@@ -1,5 +1,5 @@
 <?php
-class Controller_Request
+class Controller_Ajax_Request
 {
 	var $template	= false;
 	public function lists($siteID)

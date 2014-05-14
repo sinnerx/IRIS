@@ -1,6 +1,6 @@
 <?php
 namespace model\access;
-use request, controller, session;
+use request, controller, session, db;
 class Services extends Data
 {
 	## role check.
@@ -48,6 +48,24 @@ class Services extends Data
 		}
 
 		return true;
+	}
+
+	public function checkPublicBackend()
+	{
+		$publicList	= $this->publicBackend();
+		$CM	= controller::getCurrentController()."/".controller::getCurrentMethod();
+		return in_array($CM,$publicList)?true:false;
+	}
+
+	public function getFirstLoginLocation($level)
+	{
+		$locR	= Array(
+					2=>"site/overview",
+					3=>"cluster/overview",
+					99=>"site/index"
+							);
+
+		return $locR[$level];
 	}
 }
 

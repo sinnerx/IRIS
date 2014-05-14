@@ -10,4 +10,5 @@
 	<script src="<?php echo url::asset("_landing/js/jquery.mCustomScrollbar.concat.min.js");?>"></script> <!-- used by partial/top -->
 </head>
 <body>
+<?php controller::load("partial","pim_list");?>
 <div class="main-wrap">
