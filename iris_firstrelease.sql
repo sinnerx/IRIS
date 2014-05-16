@@ -17,10 +17,10 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8 */;
 
 --
--- Database: `digitalgaia_iris`
+-- Database: `pim_iris`
 --
-CREATE DATABASE IF NOT EXISTS `digitalgaia_iris` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
-USE `digitalgaia_iris`;
+CREATE DATABASE IF NOT EXISTS `pim_iris` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
+USE `pim_iris`;
 
 -- --------------------------------------------------------
 
