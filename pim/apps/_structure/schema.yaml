@@ -293,8 +293,7 @@ cluster_lead:
 
 album:
 	albumID [int]
-	siteID [int]
-	albumType [int]			## 1 = event-specific
+	albumType [int]
 	albumName [varchar]
 	albumDescription [text]
 	albumCreatedDate [datetime]
@@ -302,7 +301,6 @@ album:
 
 photo:
 	photoID [int]
-	siteID [int]
 	albumID [int]
 	photoName [varchar]
 	photoCreatedDate [datetime]
