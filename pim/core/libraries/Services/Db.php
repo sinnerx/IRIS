@@ -46,6 +46,8 @@ class Db_instance
 	private $sql		= Null;
 	private $param		= Array();
 	private $paramVal	= null;
+	private $freeze		= false;
+	private $frozensql	= Array();
 
 	public function connect($host,$user,$pass,$db)
 	{
@@ -385,9 +387,13 @@ class Db_instance
 			$statement->bindParam(':'.$col,$val);
 		}
 
-		if(!$statement->execute())
+		## execute only in non frozen mode.
+		if(!$this->_checkFreeze())
 		{
-			error::set("PDO Error",Array($statement->errorInfo(),$this->sql));
+			if(!$statement->execute())
+			{
+				error::set("PDO Error",Array($statement->errorInfo(),$this->sql));
+			}
 		}
 
 		$this->clear();
@@ -416,10 +422,15 @@ class Db_instance
 
 			$no++;
 		}
-		if(!$statement->execute())
+
+		## execute only in non frozen mode.
+		if(!$this->_checkFreeze())
 		{
-			error::set("PDO Error",Array($statement->errorInfo(),$this->sql));
-			return false;
+			if(!$statement->execute())
+			{
+				error::set("PDO Error",Array($statement->errorInfo(),$this->sql));
+				return false;
+			}
 		}
 
 		$this->param	= Array();
@@ -450,10 +461,14 @@ class Db_instance
 			}
 		}
 
-		if(!$statement->execute())
+		## execute only in non frozen mode.
+		if(!$this->_checkFreeze())
 		{
-			error::set("PDO Error",Array($statement->errorInfo(),$this->sql));
-			return false;
+			if(!$statement->execute())
+			{
+				error::set("PDO Error",Array($statement->errorInfo(),$this->sql));
+				return false;
+			}
 		}
 		$this->clear();
 
@@ -610,6 +625,39 @@ class Db_instance
 	public function clearResult()
 	{
 		$this->result	= null;
+	}
+
+	## DB Freeze! freeze sql from using any insert(), update(), and delete(). custom query not included.
+	public function freeze()
+	{
+		$this->frozensql	= Array();	## reset
+		$this->freeze		= true;		## and freeze.
+	}
+
+	public function unfreeze()
+	{
+		$this->freeze	= false;
+	}
+
+	public function isFreezing()
+	{
+		return $this->freeze;
+	}
+
+	private function _checkFreeze()
+	{
+		if($this->freeze)
+		{
+			$this->frozensql[]	= $this->sql;
+			return true;
+		}
+
+		return false;
+	}
+
+	public function getFrozenSql()
+	{
+		return $this->frozensql;
 	}
 }
 
