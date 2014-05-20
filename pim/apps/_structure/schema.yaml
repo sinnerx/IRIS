@@ -257,10 +257,12 @@ article_tag:
 
 announcement:
 	announcementID [int]
-	siteID [int]
+	siteID [int]					## 0 = all sites, !0 = specific site
+	announcementStatus [int]		## 0 = not appeared, 1 = appeared
 	announcementText [text]
 	announcementCreatedUser [int]
 	announcementCreatedDate [datetime]
+	announcementExpiredDate [datetime]
 
 site_manager:
 	siteManagerID [int]

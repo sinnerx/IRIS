@@ -307,6 +307,51 @@ Class Controller_Site
 
 		view::render("shared/site/messageView",$data);
 	}
+
+	public function announcement() #announcement list, add
+	{
+		$site		= model::load("site/site");
+		$siteAnnounce	= model::load("site/announcement");
+
+		## manager.
+		if(session::get("userLevel") == 2)
+		{
+			$siteID	= $site->getSiteByManager(session::get("userID"),"siteID");
+		}
+		else ## must be root admin.
+		{
+			$siteID	= 0;
+		}
+		
+
+		## add form submitted.	
+		if(form::submitted())
+		{
+			$error	= input::validate(Array(
+								"announcementText"=>"required:This field is required."
+											));
+
+			## if got error.
+			if($error)
+			{
+				flash::set(model::load("template/services")->wrap("input-error",$error));
+				input::repopulate();
+				redirect::to("","Looks like there's some error in your form..","error");
+			}
+
+			## equate with _POST
+			$data	= input::get();
+			$data['announcementExpiredDate'] = date('Y-m-d',strtotime($data['announcementExpiredDate']));
+
+			## execute addAnnouncement()
+			$siteAnnounce->addAnnouncement($siteID,$data);
+
+			redirect::to("site/announcement#","Successfully added an announcement.");
+		}
+
+		$data['announcement']	= $siteAnnounce->getAnnouncement($siteID);
+		view::render("shared/site/announcement", $data);
+	}
 }
 
 
