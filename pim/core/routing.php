@@ -27,6 +27,16 @@ apps::run(function($router)
 			## add kepler
 			$router->add("apps_other:galileo")->dispatch("monitor");
 
+			## for p1m.gaia.my git pull request script.
+			if($param['domain_name'] == "p1m.gaia.my")
+			{
+				$router->add("gitpull",function()
+				{
+					# outside public_html
+					require_once "../../php_scripts/gitpull.php";
+				});
+			}
+
 			## require main routes;
 			$router->add("apps/_structure/routes.php");
 
