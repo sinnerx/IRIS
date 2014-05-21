@@ -71,14 +71,21 @@ class Db_instance
 	}
 
 	### 1. SQL SELECT BUILDER ###
-	public function select($cols)
+	public function select()
 	{
 		$this->clearResult();
 
-		$colR	= !is_array($cols)?explode(",",$cols):$cols;
-		foreach($colR as $col)
+		$args	= func_get_args();
+
+		## get all args.
+		foreach($args as $colR)
 		{
-			$this->columnR[]	= $col;
+			$colR	= !is_array($colR)?explode(",",$colR):$colR;
+
+			foreach($colR as $col)
+			{
+				$this->columnR[]	= $col;
+			}
 		}
 
 		return $this;
@@ -172,13 +179,21 @@ class Db_instance
 		{
 			#$cond	= str_replace("?",$val,$key);
 			$cond	= $key;
+
 			## Parameterize
 			foreach($val as $value)
 			{
 				$this->param[]	= $value;
 			}
+
+			## if key got one. obviously got not prepared first value. so we set as 'IN' operator.
+			if(count(explode(" ",$cond)) == 1)
+			{
+				## create new condition with question mark for parameterized query.
+				$cond	= "$cond IN (".implode(",",array_fill(0,count($val),"?")).")";
+			}
 		}
-		else ## is a single value.
+		else ## is a single value and value isn't array.
 		{
 			## find operator on key
 			$keyR	= explode(" ",trim($key));

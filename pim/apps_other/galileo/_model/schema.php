@@ -33,10 +33,15 @@ Class Model_Schema
 				$name				= str_replace(":", "", $name);
 				$tableR[$name]['columns'][]	= $column;
 				$tableR[$name]['type'][$column]	= $type;
+
+				if($comment)
+				{
+					$commentR[$name][$column]	= $comment;
+				}
 			}
 		}
 
-		return $tableR;
+		return Array($tableR,$commentR);
 	}
 
 	public function getDBTables()

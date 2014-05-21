@@ -110,6 +110,19 @@ foreach($db_table as $table=>$colR)
 	background: #d34b4b;
 }
 
+.table_column_hascomment
+{
+	cursor: help;
+	position: relative;
+}
+.table_column_hascomment:after
+{
+	position: absolute;
+	right:0px;
+	top:0px;
+	content:"#";
+}
+
 .table_column_extra
 {
 	color: #818181;
@@ -163,7 +176,7 @@ $(document).ready(function()
 <div style='position:absolute;right:10px;top:5px;background:white;'>Current Database Schema at <u>apps/_structure/schema.yaml</u></div>
 <div>
 <table class='table-summary'>
-<tr><th colspan="3" style='padding:5px;letter-spacing:2;'>Syncronizing summary</th></tr>
+<tr><th colspan="3" style='padding:5px;letter-spacing:2;'>Syncronizing summary <input type='button' value='Update DB' onclick='window.location.href = "update?db_update"' /></th></tr>
 <?php
 if(!isset($db_colunexists) && !isset($db_extracolumn) && !isset($db_tableunexists) && !isset($db_extratable))
 {
@@ -223,6 +236,15 @@ foreach($schema as $table=>$colR)
 		foreach($colR['columns'] as $colname)
 		{
 			$extraclass	= Array();
+
+			$comment	= $commentR[$table][$colname];
+			$commentattr	= "";
+			if($comment)
+			{
+				$extraclass[]	= "table_column_hascomment";
+				$commentattr	= "title='$comment'";
+			}
+
 			$type	= trim($colR['type'][$colname],"[]");
 
 			if(isset($db_colunexists[$table]) && in_array($colname,$db_colunexists[$table]))
@@ -230,7 +252,7 @@ foreach($schema as $table=>$colR)
 				$extraclass[]	= "table_column_indbnotexists";
 			}
 
-			echo "<div class='table_column ".implode(" ",$extraclass)."'>$colname [$type]</div>";
+			echo "<div class='table_column ".implode(" ",$extraclass)."' $commentattr>$colname [$type]</div>";
 		}
 
 		if(isset($db_extracolumn[$table]))

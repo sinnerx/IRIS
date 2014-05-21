@@ -100,7 +100,8 @@ class Request
 				1=>"New Page",
 				2=>"Page Updates",
 				3=>"Site Information Updates",
-				4=>"New site announcement"
+				4=>"New site announcement",
+				5=>"Edit announcement"
 						);
 
 		return !$id?$typeR:$typeR[$id];
@@ -183,8 +184,11 @@ class Request
 			## update with data.
 			db::where("siteID",$siteID)->update("site_info",$data);
 			break;
-			case 4: # new site annoucement. 
+			case 4: # new site announcement. 
 			db::where("announcementID",$row['announcementID'])->update("announcement",Array("announcementStatus"=>1)); # approved.
+			break;
+			case 5: # edit announcement
+			db::where("announcementID",$row['isteRequestRefID'])->update("announcement",$data);
 			break;
 		}
 	}

@@ -233,13 +233,12 @@ page_default:
 article:
 	articleID [int]
 	siteID [int]
-	articleApprovedStatus [int]		## 0 = unapproved, 1 = approved, 2 = disapproved
+	articleStatus [int]		## 0 = unapproved, 1 = approved, 2 = disapproved, 3 = draft
 	articleSlug [varchar]
 	articleName [varchar]
 	articleText [text]
 	articleTagID [int]
 	articlePublishedDate [datetime]		## will only published after this date.
-	articleStatus [int]					## 0 = draft, 1 = saved.
 	articleCreatedUser [int]
 	articleCreatedDate [datetime]
 
@@ -262,6 +261,8 @@ announcement:
 	announcementText [text]
 	announcementCreatedUser [int]
 	announcementCreatedDate [datetime]
+	announcementUpdatedUser [int]
+	announcementUpdatedDate [datetime]
 	announcementExpiredDate [datetime]
 
 site_manager:
@@ -295,16 +296,29 @@ cluster_lead:
 
 album:
 	albumID [int]
-	albumType [int]
+	albumType [int]			## 1 = user-album, 2 = site-album
 	albumName [varchar]
 	albumDescription [text]
 	albumCreatedDate [datetime]
 	albumCreatedUser [int]
 
+site_album:
+	siteAlbumID [int]
+	albumID [int]
+	siteID [int]
+	siteAlbumType [int] ## 1 = activity-album.
+
+user_album:
+	userAlbumID [int]
+	albumID [int]
+	userID [int]
+
 photo:
 	photoID [int]
-	albumID [int]
+	albumID [int]			## 0 is no album, else album based.
+	photoType [int]			## 1 = user-photo, 2 = site-photo, 0 = unrelated.
 	photoName [varchar]
+	photoDescription [text]
 	photoCreatedDate [datetime]
 	photoCreatedUser [int]
 

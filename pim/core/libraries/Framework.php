@@ -640,8 +640,10 @@ class Controller
 class Model
 {
 	static $loadedModel	= Array();
-	public function load($model,$new = false)
+	public function load($model)
 	{
+		$args	= func_get_args();
+
 		## if already got the model just reuse it.
 		if(isset(self::$loadedModel[$model]))
 		{
@@ -669,7 +671,8 @@ class Model
 			$classname	= "Model_".$classname;
 		}
 
-		if(!$new)
+		## got more than 1.
+		if(count($args) == 1)
 		{
 			if(!isset(self::$loadedModel[$model]))
 			{
@@ -683,7 +686,14 @@ class Model
 		}
 		else
 		{
-			$theModel	= new $classname();
+			## remove first param.
+			array_shift($args);
+
+			## create reflection obj.
+			$reflection	= new ReflectionClass($classname);
+
+			## instantiate model, with parameter. (through reflection.)
+			$theModel	= $reflection->newInstanceArgs($args);
 		}
 
 		return $theModel;
