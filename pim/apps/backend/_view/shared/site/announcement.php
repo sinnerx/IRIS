@@ -129,7 +129,7 @@ Listing all your request Announcement here.
 			?>
 		<tr <?php echo $opacity;?>>
 			<td><?php echo $no;?>.</td>
-			<td width='80%'>
+			<td width='40%'>
 			<?php if($row['siteID'] == 0 && session::get("userLevel") != 99):?>
 			<span class='general-label'>General announcement</span>
 			<?php endif;?>
@@ -138,9 +138,11 @@ Listing all your request Announcement here.
 			<td><?php echo date("d-m-Y g:i A",strtotime($row['announcementCreatedDate']));?></td>
 			<td><?php echo date("d-m-Y",strtotime($row['announcementExpiredDate']));?></td>
 			<td>
-				<?php if($row['siteID'] != 0 || session::get("userLevel") == 99):?>
-				<a href='<?php echo url::base("site/announcement_edit/".$row['announcementID']);?>' class='fa fa-edit'></a>
-				<a href="<?php echo $href;?>" class="<?php echo $active;?>" ><i class="fa fa-check text-success text-active"></i><i class="fa fa-times text-danger text"></i></a>
+			<?php if($row['siteID'] != 0 || session::get("userLevel") == 99):?>
+				<a href='<?php echo url::base("site/editAnnouncement/".$row['announcementID']);?>' class='fa fa-edit'></a>
+				<?php if(session::get("userLevel") == 99):?>
+					<a href="<?php echo $href;?>" class="<?php echo $active;?>" ><i class="fa fa-check text-success text-active"></i><i class="fa fa-times text-danger text"></i></a>
+				<?php endif; ?>
 			<?php endif;?>
 			</td>
 		</tr>
@@ -148,7 +150,7 @@ Listing all your request Announcement here.
 		endforeach;
 		else:?>
 			<tr>
-				<td align="center" colspan='4'>No slider was added yet.</td>
+				<td align="center" colspan='4'>No announcement was added yet.</td>
 			</tr>
 		<?php endif;?>
 	</tbody>

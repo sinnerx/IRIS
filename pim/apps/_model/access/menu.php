@@ -16,7 +16,7 @@ class Menu extends Data
 					"Site Management"=>Array(
 									"Information"=>Array("site/edit"),
 									"Slider"=>Array("site/slider","site/slider_add","site/slider_edit"),
-									"Announcement"=>Array("site/announcement","site/announcement_add")
+									"Announcement"=>Array("site/announcement","site/announcement_add","site/editAnnouncement")
 											),
 					"Pages"=>"page/index",
 					/*"Activities"=>Array(
@@ -35,6 +35,7 @@ class Menu extends Data
 		$menu['r']	= Array(
 					/*"Overview"=>"home/index",*/
 					"Sites"=>Array(
+							"Announcement"=>Array("site/announcement","site/announcement_add","site/editAnnouncement"),
 							"Preview"=>Array("site/index","site/edit","site/assignManager"),
 							"Add new site"=>"site/add",
 							#"Manager"=>Array("manager/lists","manager/add","manager/edit"),

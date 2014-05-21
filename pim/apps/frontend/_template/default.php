@@ -26,7 +26,7 @@
 				<div class="cntnt-anncmnt">
 					<ul id="js-news" class="js-hidden">
 				  <?php
-				  $annList = model::load("announcement")->getAnnouncement();
+				  $annList = model::load("site/announcement")->getAnnouncement($row_site['siteID'],true);
 				  foreach($annList as $row)
 				  {
 				    echo "<li class='news-item'><a href='#'>".$row['announcementText']."</a></li>";

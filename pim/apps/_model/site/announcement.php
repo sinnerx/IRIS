@@ -26,15 +26,10 @@ class Announcement
 		}
 	}
 
-	public function getAnnouncement($siteID,$all = true)
+	# return an array of announcementS
+	public function getAnnouncement($siteID,$frontend = false)
 	{
 		db::from("announcement");
-
-		## if only status == 1
-		if(!$all)
-		{
-			db::where("announcementStatus",1);
-		}
 
 		# get by siteID.
 		if($siteID === 0)
@@ -43,12 +38,39 @@ class Announcement
 		}
 		else
 		{
-			db::where("siteID = '$siteID' OR siteID = '0'");
+			if($frontend == false){
+				db::where("siteID = '$siteID' OR siteID = '0'");
+			}else{
+				db::where("announcementStatus = '1' AND siteID = '$siteID' OR siteID = '0'");
+			}
 		}
 
 		db::order_by("siteID DESC, announcementID DESC");
 
 		return db::get()->result();
+	}
+
+	# return only an announcement
+	public function getOneAnnouncement($announceID)
+	{
+		db::from("announcement");
+		db::where("announcementID",$announceID);
+
+		return db::get()->row();
+	}
+
+	#updating announcement
+	public function updateAnnouncement($announceID,$data)
+	{
+		if(session::get('userLevel') == 99){
+			db::where("announcementID",$announceID);
+			db::update("announcement",$data);
+		}else{
+			$data['announcementUpdatedDate'] = now();
+			$data['announcementUpdatedUser'] = session::get('userID');
+			$req  = new request();
+			$req->create(5, $data['siteID'], $announceID, $data);
+		}
 	}
 }
 

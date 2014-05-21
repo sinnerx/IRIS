@@ -352,6 +352,42 @@ Class Controller_Site
 		$data['announcement']	= $siteAnnounce->getAnnouncement($siteID);
 		view::render("shared/site/announcement", $data);
 	}
+
+	public function editAnnouncement($announceID)
+	{
+		$data['row']	= model::load("site/announcement")->getOneAnnouncement($announceID);
+
+		if(form::submitted())
+		{
+			$rules	= Array(
+					"_all"=>"required:This field is required."
+							);
+
+			## got validation error.
+			if($error = input::validate($rules))
+			{
+				input::repopulate();
+				redirect::withFlash(model::load("template/services")->wrap("input-error",$error));
+				redirect::to("","Got some error in your form.","error");
+			}
+
+			## populate into data.
+			$data = input::get();
+			$data['announcementExpiredDate'] = date('Y-m-d',strtotime($data['announcementExpiredDate']));
+
+			## update db.
+			model::load("site/announcement")->updateAnnouncement($announceID,$data);
+
+			if(session::get('userLevel') == 99){
+				redirect::to("site/announcement","Announcement has been updated.");
+			}else{
+				redirect::to("site/announcement","Your edited announcement has been requested.");
+			}
+
+		}
+
+		view::render("shared/site/editAnnouncement",$data);
+	}
 }
 
 

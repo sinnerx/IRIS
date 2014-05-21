@@ -45,6 +45,7 @@ Class Controller_Main
 
 		## repair page text to 90 words.
 		$data['pageText'] = model::load("helper")->purifyHTML(stripslashes($row['pageText']),90);
+		$data['siteID'] = $siteID;
 
 		view::render("main/index",$data);
 	}

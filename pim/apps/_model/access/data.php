@@ -21,6 +21,7 @@ class Data
 					"site/slider_edit"=>Array("sm","r"),
 					"site/announcement"=>Array("sm","r"),
 					"site/announcement_add"=>Array("sm","r"),
+					"site/editAnnouncement"=>Array("sm","r"),
 					"manager/edit"=>Array("r","sm"),
 					"user/profile"=>Array("r","sm","cl"),
 					"user/changePassword"=>Array("r","sm","cl"),
