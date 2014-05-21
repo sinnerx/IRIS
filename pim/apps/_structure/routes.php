@@ -32,6 +32,12 @@ $routes[]	= Array(function()
 	{
 		return controller::load("template","index");
 	});
+
+	### Hook pre_template (frontend) with index
+	controller::hook("frontend:pre_template",function()
+	{
+		return controller::load("partial","index");
+	});
 });
 
 #### Backend Route ####

@@ -12,6 +12,15 @@ class Controller_Partial
 		return;
 	}
 
+	### hooked through pre_template. to pass initial data.
+	public function index()
+	{
+		$data['row_site']	= $this->row_site;
+
+		## pass row_site to default template.
+		return $data;
+	}
+
 	private function pim_list()
 	{
 		#$data['siteListR']	= model::load("site/site")->lists();
