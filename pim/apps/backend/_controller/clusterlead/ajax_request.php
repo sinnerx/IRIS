@@ -28,6 +28,7 @@ class Controller_Ajax_Request
 		## return only changed item. ## [type,[changesR]];
 		$data['comparedR']	= model::load("site/request")->getComparedChange($requestID);
 		$data['typeName']	= model::load("site/request")->type($data['comparedR'][0]);
+		$data['row_request']= $data['comparedR'][3];
 
 
 		## sanitize column name for page.

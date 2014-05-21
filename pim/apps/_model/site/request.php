@@ -133,8 +133,9 @@ class Request
 	{
 		db::from("site_request");
 		db::where("siteRequestID",$requestID);
-		db::join("page","siteRequestType IN (1,2) AND pageID = siteRequestRefID"); ## page edit.
-		db::join("site_info","siteRequestType = '3' AND site_info.siteID = site_request.siteID"); ## site_info edit.
+		db::join("page","siteRequestType IN (1,2) AND pageID = siteRequestRefID"); 							# page edit. (2)
+		db::join("site_info","siteRequestType = '3' AND site_info.siteID = site_request.siteID"); 			## site_info edit. (3)
+		db::join("announcement","siteRequestType = '4' AND siteRequestRefID = announcement.announcementID");## annoucement (4)
 
 		return db::get()->row();
 	}
@@ -182,6 +183,9 @@ class Request
 			## update with data.
 			db::where("siteID",$siteID)->update("site_info",$data);
 			break;
+			case 4: # new site annoucement. 
+			db::where("announcementID",$row['announcementID'])->update("announcement",Array("announcementStatus"=>1)); # approved.
+			break;
 		}
 	}
 
@@ -189,6 +193,16 @@ class Request
 	{
 		## disprove request, and set approvalRead to 0
 		db::where("siteRequestID",$id)->update("site_request",Array("siteRequestStatus"=>2,"siteRequestApprovalRead"=>0));
+		
+		$row	= $this->getRequest($id);
+
+		## set any specific action based on type of request.
+		switch($row['siteRequestType'])
+		{
+			case 4: ## set announcementStatus to 2.
+			db::where("announcementID",$row['announcementID'])->update("announcement",Array("announcementStatus"=>2));
+			break;
+		}
 	}
 
 	## used by clusterlead/ajax/request
@@ -202,6 +216,7 @@ class Request
 		$updatedData	= unserialize($row_req['siteRequestData']);
 
 		$changesR		= Array();
+		$row_ori		= Array();
 		switch($type)
 		{
 			case 1: ## new pages.
@@ -237,7 +252,7 @@ class Request
 			}
 		}
 
-		return Array($type,$changesR,$requestID);
+		return Array($type,$changesR,$requestID,$row_req);
 	}
 
 	public function getPaginatedUnreadRequest($siteID,$urlFormat,$currentPage = 1)
