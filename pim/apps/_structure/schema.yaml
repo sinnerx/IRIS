@@ -298,6 +298,7 @@ album:
 	albumID [int]
 	albumType [int]			## 1 = user-album, 2 = site-album
 	albumName [varchar]
+	albumCoverImageName [varchar] ## relative url for photo.
 	albumDescription [text]
 	albumCreatedDate [datetime]
 	albumCreatedUser [int]
@@ -317,7 +318,8 @@ photo:
 	photoID [int]
 	albumID [int]			## 0 is no album, else album based.
 	photoType [int]			## 1 = user-photo, 2 = site-photo, 0 = unrelated.
-	photoName [varchar]
+	photoName [varchar]			## photo full saved name, (path included)
+	photoOriginalName [varchar]	## original photo name.
 	photoDescription [text]
 	photoCreatedDate [datetime]
 	photoCreatedUser [int]
