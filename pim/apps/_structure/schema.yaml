@@ -237,7 +237,6 @@ article:
 	articleSlug [varchar]
 	articleName [varchar]
 	articleText [text]
-	articleTags [text]
 	articlePublishedDate [datetime]		## will only published after this date.
 	articleCreatedUser [int]
 	articleCreatedDate [datetime]
@@ -251,7 +250,7 @@ article_photo:
 
 article_tag:
 	articleTagID [int]
-	articleTagType [int]	## 1 = default, like news, 2 = generic and create-able.
+	articleID [int]	## article ID
 	articleTagName [varchar]
 
 announcement:
