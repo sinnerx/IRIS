@@ -16,9 +16,10 @@ class Menu extends Data
 					"Site Management"=>Array(
 									"Information"=>Array("site/edit"),
 									"Slider"=>Array("site/slider","site/slider_add","site/slider_edit"),
-									"Announcement"=>Array("site/announcement","site/announcement_add","site/editAnnouncement")
+									"Announcement"=>Array("site/announcement","site/editAnnouncement")
 											),
 					"Pages"=>"page/index",
+					"Blog" =>Array("List of Articles"=>"site/article","Add Article"=>"site/addArticle")
 					/*"Activities"=>Array(
 									"Events"=>"event/index",
 									"Training"=>"training/index"
