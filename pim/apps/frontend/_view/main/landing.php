@@ -67,7 +67,7 @@
     <div id="example">
   <ul>
   <?php
-  $annList = model::load("announcement")->getAnnouncement();
+  $annList = model::load("site/announcement")->getAnnouncement();
   foreach($annList as $row)
   {
     echo "<li>".$row['announcementText']."</li>";

@@ -27,7 +27,7 @@ class Announcement
 	}
 
 	# return an array of announcementS
-	public function getAnnouncement($siteID,$frontend = false)
+	public function getAnnouncement($siteID = 0,$frontend = false)
 	{
 		db::from("announcement");
 
@@ -42,6 +42,7 @@ class Announcement
 				db::where("siteID = '$siteID' OR siteID = '0'");
 			}else{
 				db::where("announcementStatus = '1' AND siteID = '$siteID' OR siteID = '0'");
+				db::where("date(announcementExpiredDate) >",date('Y-m-d', strtotime(now(). ' - 1 days')));
 			}
 		}
 
