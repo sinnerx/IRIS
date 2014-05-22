@@ -353,6 +353,7 @@ Class Controller_Site
 		view::render("shared/site/announcement", $data);
 	}
 
+	# edit announcement
 	public function editAnnouncement($announceID)
 	{
 		$data['row']	= model::load("site/announcement")->getOneAnnouncement($announceID);
@@ -372,11 +373,12 @@ Class Controller_Site
 			}
 
 			## populate into data.
-			$data = input::get();
-			$data['announcementExpiredDate'] = date('Y-m-d',strtotime($data['announcementExpiredDate']));
+			$postdata = input::get();
+			$postdata['announcementExpiredDate'] = date('Y-m-d',strtotime($postdata['announcementExpiredDate']));
+			$postdata['siteID'] = $data['row']['siteID'];
 
 			## update db.
-			model::load("site/announcement")->updateAnnouncement($announceID,$data);
+			model::load("site/announcement")->updateAnnouncement($announceID,$postdata);
 
 			if(session::get('userLevel') == 99){
 				redirect::to("site/announcement","Announcement has been updated.");
@@ -387,6 +389,73 @@ Class Controller_Site
 		}
 
 		view::render("shared/site/editAnnouncement",$data);
+	}
+
+	# view/add article
+	public function article()
+	{
+		$site		= model::load("site/site");
+		$siteArticle	= model::load("blog/article");
+
+		## manager.
+		if(session::get("userLevel") == 2)
+		{
+			$siteID	= $site->getSiteByManager(session::get("userID"),"siteID");
+		}
+		else ## must be root admin.
+		{
+			$siteID	= 0;
+		}
+
+		$data['article']	= $siteArticle->getArticle($siteID);
+		view::render("shared/site/article", $data);
+	}
+
+	# view/add article
+	public function addArticle()
+	{
+		## add form submitted.	
+		if(form::submitted())
+		{
+			$site		= model::load("site/site");
+			$siteAnnounce	= model::load("blog/article");
+
+			## manager.
+			if(session::get("userLevel") == 2)
+			{
+				$siteID	= $site->getSiteByManager(session::get("userID"),"siteID");
+			}
+			else ## must be root admin.
+			{
+				$siteID	= 0;
+			}
+
+			$error	= input::validate(Array(
+								"articleName"=>"required:This field is required.",
+								"articleText"=>"required:This field is required.",
+								"articleTags"=>"required:This field is required."
+											));
+
+			## if got error.
+			if($error)
+			{
+				flash::set(model::load("template/services")->wrap("input-error",$error));
+				input::repopulate();
+				redirect::to("","Looks like there's some error in your form..","error");
+			}
+
+			## equate with _POST
+			$data	= input::get();
+			$data['articlePublishedDate'] = date('Y-m-d',strtotime($data['articlePublishedDate']));
+
+			## execute model/addArticle()
+			$siteAnnounce->addArticle($siteID,$data);
+
+			redirect::to("site/article#","Successfully added a blog post.");
+			//echo '<input type="text" value="';print_r(input::get());echo '" />';die;
+		}
+
+		view::render("shared/site/addArticle");
 	}
 }
 
