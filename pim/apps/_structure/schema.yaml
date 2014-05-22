@@ -237,7 +237,7 @@ article:
 	articleSlug [varchar]
 	articleName [varchar]
 	articleText [text]
-	articleTagID [int]
+	articleTags [text]
 	articlePublishedDate [datetime]		## will only published after this date.
 	articleCreatedUser [int]
 	articleCreatedDate [datetime]
