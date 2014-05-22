@@ -22,7 +22,7 @@ class Announcement
 
 		if( session::get('userLevel') == 2)	{
 			$req  = new request();
-			$req->create(4, $siteID, db::getLastID('announcement', 'announcementID'), Array());
+			$req->create('announcement.add', $siteID, db::getLastID('announcement', 'announcementID'), Array());
 		}
 	}
 
@@ -70,7 +70,17 @@ class Announcement
 			$data['announcementUpdatedDate'] = now();
 			$data['announcementUpdatedUser'] = session::get('userID');
 			$req  = new request();
-			$req->create(5, $data['siteID'], $announceID, $data);
+
+			## only if no add request pending.
+			if(!$req->checkRequest("announcement.add",$data['siteID'],$announceID))
+			{
+				$req->create('announcement.update', $data['siteID'], $announceID, $data);
+			}
+			## if exists, just update announcement tabel.
+			else
+			{
+				db::where("announcementID",$announceID)->update("announcement",$data);
+			}
 		}
 	}
 }

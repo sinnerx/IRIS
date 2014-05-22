@@ -151,7 +151,7 @@ class Page
 		$data['pageText']			= $data['pageText'];
 
 		## make a site_request.
-		model::load("site/request")->create(2,$row['siteID'],$pageID,$data);		
+		model::load("site/request")->create('page.update',$row['siteID'],$pageID,$data);		
 
 		/*db::where("pageID",$pageID);
 		db::update("page",$data);*/

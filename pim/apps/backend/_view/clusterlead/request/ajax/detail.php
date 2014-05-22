@@ -26,7 +26,7 @@
 	<?php if($comparedR):
 	$type		= $comparedR[0];
 	$requestID	= $comparedR[2];
-	$typeR		= Array(1=>"page",2=>"page",3=>"site");
+	$typeR		= Array('page.add'=>"page",'page.update'=>"page",'site.update'=>"site");
 
 	$approveIcon	= "<a href='javascript:cluster.overview.updateApproval($requestID,1);' class='btn-approval text-success pull-right fa fa-check-square-o'></a>";
 	$disapproveIcon	= "<a href='javascript:cluster.overview.updateApproval($requestID,2);' class='btn-approval text-danger pull-right i i-cross2'></a>";
@@ -34,12 +34,12 @@
 	echo "<div>$disapproveIcon $approveIcon</div>";
 	$fieldNameR	= $colNameR[$typeR[$type]];
 	## new page.
-	if($type == 1)
+	if($type == 'page.add')
 	{
 
 	}
 	## new site announcement
-	else if($type == 4)
+	else if($type == 'announcement.add')
 	{?>
 	<div class='request-info'>
 	<?php echo $typeName;?>

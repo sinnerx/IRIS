@@ -3,6 +3,11 @@ namespace model\site;
 use db, session, pagination;
 class Request
 {
+	public function checkRequest($type,$siteID,$refID)
+	{
+		return db::from("site_request")->where(Array("siteRequestRefID"=>$refID,"siteID"=>$siteID,"siteRequestType"=>$type,"siteRequestStatus"=>0))->get()->row();
+	}
+
 	//used by model site:updateSiteInfo, page:updatePage
 	public function create($type,$siteID,$refID,$siteRequestData)
 	{
@@ -14,6 +19,9 @@ class Request
 
 		## then serialize.
 		$newSiteRequestData	= serialize($siteRequestData);
+
+		## Temporary function. in-case got numeric type haven't changed this will do the conversion.
+		$type	= $this->numericTypeConverter($type);
 
 		$data	= Array(
 				"siteID"=>$siteID,
@@ -27,7 +35,7 @@ class Request
 						);
 
 		## check if still got same unapproved request, for the selected refID and type.;
-		$check	= db::from("site_request")->where(Array("siteRequestRefID"=>$refID,"siteID"=>$siteID,"siteRequestType"=>$type,"siteRequestStatus"=>0))->get()->row();
+		$check	= $this->checkRequest($type,$siteID,$refID);
 		if($check)
 		{
 			$requestID	= $check['siteRequestID'];
@@ -55,6 +63,8 @@ class Request
 		## if got both param.
 		if($param2)
 		{
+			$param1	= $this->numericTypeConverter($param1);
+
 			db::where(Array(
 					"siteRequestStatus"=>0,
 					"siteRequestType"=>$param1,
@@ -94,6 +104,21 @@ class Request
 		return db::get();
 	}
 
+	## return converted type
+	private function numericTypeConverter($num)
+	{
+		$map	= Array(
+				1=>"page.add",
+				2=>"page.update",
+				3=>"site.update",
+				4=>"announcement.add",
+				5=>"announcement.update"
+						);
+
+		return is_numeric($num)?$map[$num]:$num;
+	}
+
+	## list of type.
 	public function type($id = null)
 	{
 		$typeR	= Array(
@@ -101,8 +126,20 @@ class Request
 				2=>"Page Updates",
 				3=>"Site Information Updates",
 				4=>"New site announcement",
-				5=>"Edit announcement"
+				5=>"Edit announcement",
+
 						);
+
+		$typeR	= Array(
+				"page.add"=>"New page",
+				"page.update"=>"Page updates",
+				"site.update"=>"Site information update",
+				"announcement.add"=>"New site announcement",
+				"announcement.update"=>"Announcment Update",
+				"article.add"=>"New Article",
+				"article.update"=>"Article Update"
+						);
+
 
 		return !$id?$typeR:$typeR[$id];
 	}
@@ -134,9 +171,9 @@ class Request
 	{
 		db::from("site_request");
 		db::where("siteRequestID",$requestID);
-		db::join("page","siteRequestType IN (1,2) AND pageID = siteRequestRefID"); 							# page edit. (2)
-		db::join("site_info","siteRequestType = '3' AND site_info.siteID = site_request.siteID"); 			## site_info edit. (3)
-		db::join("announcement","siteRequestType = '4' AND siteRequestRefID = announcement.announcementID");## annoucement (4)
+		db::join("page","siteRequestType LIKE '%page' AND pageID = siteRequestRefID"); 							# page edit. (2)
+		db::join("site_info","siteRequestType LIKE '%site' AND site_info.siteID = site_request.siteID"); 			## site_info edit. (3)
+		db::join("announcement","siteRequestType LIKE '%announcement' AND siteRequestRefID = announcement.announcementID");## annoucement (4)
 
 		return db::get()->row();
 	}
@@ -170,24 +207,24 @@ class Request
 
 		switch($type)
 		{
-			case 1: # new page
+			case "page.add":
 
 			break;
-			case 2: # edit page
+			case "page.update":
 			$pageID	= $row['pageID'];
 
 			db::where("pageID",$pageID)->update("page",$data);
 			break;
-			case 3: # site info
+			case "site.update": # site info
 			$siteID	= $row['siteID'];
 
 			## update with data.
 			db::where("siteID",$siteID)->update("site_info",$data);
 			break;
-			case 4: # new site announcement. 
+			case "announcement.add": # new site announcement. 
 			db::where("announcementID",$row['announcementID'])->update("announcement",Array("announcementStatus"=>1)); # approved.
 			break;
-			case 5: # edit announcement
+			case "announcement.update": 
 			db::where("announcementID",$row['isteRequestRefID'])->update("announcement",$data);
 			break;
 		}
@@ -203,7 +240,7 @@ class Request
 		## set any specific action based on type of request.
 		switch($row['siteRequestType'])
 		{
-			case 4: ## set announcementStatus to 2.
+			case "announcement.add": ## set announcementStatus to 2.
 			db::where("announcementID",$row['announcementID'])->update("announcement",Array("announcementStatus"=>2));
 			break;
 		}
@@ -223,7 +260,7 @@ class Request
 		$row_ori		= Array();
 		switch($type)
 		{
-			case 1: ## new pages.
+			case 'page.add': ## new pages.
 				$row_page	= db::from("page")->where("pageID",$refID)->get()->row();
 
 				foreach($row_page as $key=>$val)
@@ -234,12 +271,12 @@ class Request
 				## return earlier for new page.
 				return Array($type,$changesR);
 			break; 
-			case 2: ## edit page
+			case 'page.update': ## edit page
 				$row_ori	= db::from("page")->where("pageID",$refID)->get()->row();
 				unset($row_ori['pageUpdatedDate']);
 				unset($row_ori['pageUpdatedUser']);
 			break;
-			case 3: ## site_info edit.
+			case 'site.update': ## site_info edit.
 				$row_ori	= db::from("site_info")->where("siteID",$refID)->get()->row();
 			break;
 		}

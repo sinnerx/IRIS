@@ -10,7 +10,7 @@ class Site
 		if(session::get("userLevel") != 99)
 		{
 			## approval part. make site request.
-			model::load("site/request")->create(3,$id,$id,$data);
+			model::load("site/request")->create('site.update',$id,$id,$data);
 		}
 		## else, directly update.
 		else

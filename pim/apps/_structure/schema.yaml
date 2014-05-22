@@ -325,7 +325,7 @@ photo:
 
 site_request: ## table to store update request or anything regarding site, have, status.
 	siteRequestID [int]
-	siteRequestType [int]					## 1 = new pages, 2 = page edit, 3 = site edit, 4 = new site announcement
+	siteRequestType [varchar]					## 1 = new pages, 2 = page edit, 3 = site edit, 4 = new site announcement
 	siteID [int]
 	siteRequestRefID [int]					## reference-id
 	siteRequestData [text]
