@@ -1,4 +1,3 @@
-<?php echo $what;?>
 <style type="text/css">
 	
 body
