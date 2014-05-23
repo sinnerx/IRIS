@@ -1,6 +1,5 @@
 <?php
 require_once "libraries/Framework.php";
-require_once "libraries/Router.php";
 
 apps::run(function($router)
 {

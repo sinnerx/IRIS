@@ -81,7 +81,8 @@ class Apps
 			$lastDirChar	= $dir[strlen($dir)-1];
 
 			$class	= ucfirst($class);
-			$dir	= trim($dir,"/").($lastDirChar == "_"?"":"/");
+			#$dir	= trim($dir,"/").($lastDirChar == "_"?"":"/"); # i find this to be trimming '/' from path, whichis not good for linux.
+			$dir	= rtrim($dir,"/").($lastDirChar == "_"?"":"/");
 			$path	= $dir.$class.".php";
 
 			## only for folder with _, in easy word, with model one.
