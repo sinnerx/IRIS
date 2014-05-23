@@ -364,11 +364,7 @@ class Db_instance
 
 		}
 
-		$execution = $statement->execute();
-
-		## clear param
-		$this->param	= Array();
-
+		$execution 		= $statement->execute();
 		$result			= $statement;
 
 		## old way of executing.
@@ -376,9 +372,12 @@ class Db_instance
 
 		if(!$execution)
 		{
-			error::set("PDO Error",Array($statement->errorInfo(),$this->sql));
+			error::set("PDO Error",Array($statement->errorInfo(),$this->sql,$this->param));
 			return;
 		}
+
+		## clear param
+		$this->param	= Array();
 
 		$this->result	= $result;
 	}
@@ -407,7 +406,7 @@ class Db_instance
 		{
 			if(!$statement->execute())
 			{
-				error::set("PDO Error",Array($statement->errorInfo(),$this->sql));
+				error::set("PDO Error",Array($statement->errorInfo(),$this->sql,$data));
 			}
 		}
 
@@ -443,7 +442,7 @@ class Db_instance
 		{
 			if(!$statement->execute())
 			{
-				error::set("PDO Error",Array($statement->errorInfo(),$this->sql));
+				error::set("PDO Error",Array($statement->errorInfo(),$this->sql,$this->param));
 				return false;
 			}
 		}
