@@ -3,6 +3,14 @@ namespace model;
 use HTMLPurifier,HTMLPurifier_Config;
 class Helper
 {
+	public function slugify($item)
+	{
+		$item	= str_replace(" ", "-",$item);	# replace space with -
+		$item	= strtolower($item);			# lowercase.
+
+		return $item;
+	}
+
 	public function state($no = null)
 	{
 		$state	= Array(

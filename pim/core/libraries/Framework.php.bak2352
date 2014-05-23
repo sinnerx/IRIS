@@ -5,12 +5,46 @@
 ===============================
 AUTHOR 		: Eimihar El-Meruiy
 GITHUB 		: https://github.com/eimihar
+DESCRIPTION :
+- So basically this is all one file framework that contain 6 core classes, in order
+- to run the framework. Namely :
+- Apps, Controller, Model, View, Template, and Error.
+For [Apps] Class, there's a methods like :
+	- setGlobal
+	- getGlobal
+	- hasGlobal
+	- config
+	- saveConfig
+	- setCurrent
+	- setDefault
+	- getCurrent
+	- getDefault
+	- loadCoreLibrary
 
+For [Controller] Class, there's methods like :
+	- init
+	- load
+	- getCurrentController
+	- getCurrentMethod
+
+For [Model] Class :
+	- load
+
+For [View] Class :
+	- render
+
+For [Template] Class :
+	- showContent
+	- load
+
+For [Error] Class :
+	- set
+	- show()
+
+COMMENTS :
+- Yes it's very small and simple but enough to let you do everything, who cares about all those bunch of files tho. ;)
+- And I haven't diverge into awesome router part yet.
 */
-
-## require router as application routing dependency.
-require_once "Router.php";
-
 class Console
 {
 	public function execute($consoleArgs)
@@ -775,8 +809,7 @@ class View
 class Template
 {
 	## a flag whether a template has been loaded or not.
-	static $loaded 		= false;
-	static $template	= null;
+	static $loaded = false;
 
 	## Used in main template.
 	public function showContent()
@@ -798,19 +831,13 @@ class Template
 
 	}
 
-	public function set($flag)
-	{
-		self::$template	= $flag;
-	}
-
 	## to be use in View
 	public function load()
 	{
 		$apps		= apps::getCurrent();
 		$template	= controller::$instance[controller::getCurrentController()]->template;
-		#$template	= self::$template === false?false:(isset($template)?$template:"default");
-		$template	= self::$template === false?(isset($template)?$template:false):(isset($template)?$template:"default");
-		
+		$template	= isset($template)?$template:"default";
+
 		## set this flag to true. mean, can't run this function again.
 		self::$loaded	= true;
 

@@ -99,16 +99,14 @@ class Uploaded_File
 	{
 		## get original path.
 		$original_file	= $this->get('tmp_name');
-		$name		= !$name?$this->get("name"):$name;
+		#$name		= !$name?$this->get("name"):$name;
 
 		## build file path.
-		$file_path	= trim($destination_path,"/")."/".$name;
+		$file_path	= !$name?$destination_path:(trim($destination_path,"/")."/".$name);
 
 		## move_upload.
 		return move_uploaded_file($original_file, $file_path);
 	}
-
-
 }
 
 ?>

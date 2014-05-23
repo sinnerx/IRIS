@@ -19,11 +19,13 @@ class Menu extends Data
 									"Announcement"=>Array("site/announcement","site/editAnnouncement")
 											),
 					"Pages"=>"page/index",
-					"Blog" =>Array("List of Articles"=>"site/article","Add Article"=>"site/addArticle")
+					"Blog" =>Array("List of Articles"=>"site/article","Add Article"=>"site/addArticle"),
+					"Albums"=>Array("Overview"=>Array("image/album","image/albumPhotos"))
 					/*"Activities"=>Array(
 									"Events"=>"event/index",
 									"Training"=>"training/index"
 										),*/
+
 							);
 
 		$menu['cl']	= Array(

@@ -73,7 +73,7 @@ apps::run(function($router)
 		## main dispatch.
 		$router->dispatch();
 	});
-});
+},$argv);
 
 
 ?>
