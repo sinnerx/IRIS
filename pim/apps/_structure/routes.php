@@ -44,11 +44,17 @@ $routes[]	= Array(function()
 $routes[]	= Array("model/[**:model_param?]","controller=tests:model@tests","{model_param}");
 
 ## backed ajax : shared
-$routes[]	= Array("dashboard/ajax/shared/[:controller]/[**:method]","controller=backend:shared/ajax_{controller}@{method}");
+$routes[]	= Array("dashboard/ajax/shared/[:controller]/[**:method]",function()
+{
+	template::set(false);
+	return controller::init("backend:shared/ajax_{controller}","{method}");
+});
 
 ## backend ajax : role specific.
 $routes[]	= Array("dashboard/ajax/[:controller]/[**:method]",function()
 {
+	template::set(false);
+
 	## get subcontroller name.
 	$levelController	= model::load("access/data")->accessController(session::get("userLevel"));
 
