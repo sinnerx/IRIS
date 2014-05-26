@@ -1,6 +1,6 @@
 <?php
 namespace model\site;
-use db, session;
+use db, session, pagination, url;
 
 class Announcement
 {
@@ -13,6 +13,7 @@ class Announcement
 				"siteID"=>$siteID,
 				"announcementStatus"=>$status,
 				"announcementText"=>$data['announcementText'],
+				"announcementLink"=>$data['announcementLink'],
 				"announcementExpiredDate"=>$data['announcementExpiredDate'],
 				"announcementCreatedDate"=>now(),
 				"announcementCreatedUser"=>session::get("userID")
@@ -27,7 +28,7 @@ class Announcement
 	}
 
 	# return an array of announcementS
-	public function getAnnouncement($siteID = 0,$frontend = false)
+	public function getAnnouncement($siteID = 0,$frontend = false,$page = 1)
 	{
 		db::from("announcement");
 
@@ -40,6 +41,16 @@ class Announcement
 		{
 			if($frontend == false){
 				db::where("siteID = '$siteID' OR siteID = '0'");
+				## paginate based on current query built.
+				pagination::initiate(Array(
+								"totalRow"=>db::num_rows(), 
+								"limit"=>6,				
+								"urlFormat"=>url::base("site/announcement/{page}"),
+								"currentPage"=>$page
+										));
+
+				## limit, and offset.
+				db::limit(pagination::get("limit"),pagination::recordNo()-1); 
 			}else{
 				db::where("announcementStatus = '1' AND siteID = '$siteID' OR siteID = '0'");
 				db::where("date(announcementExpiredDate) >",date('Y-m-d', strtotime(now(). ' - 1 days')));

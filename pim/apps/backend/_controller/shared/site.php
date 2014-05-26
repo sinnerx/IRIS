@@ -308,7 +308,7 @@ Class Controller_Site
 		view::render("shared/site/messageView",$data);
 	}
 
-	public function announcement() #announcement list, add
+	public function announcement($page=1) #announcement list, add
 	{
 		$site		= model::load("site/site");
 		$siteAnnounce	= model::load("site/announcement");
@@ -328,7 +328,8 @@ Class Controller_Site
 		if(form::submitted())
 		{
 			$error	= input::validate(Array(
-								"announcementText"=>"required:This field is required."
+								"announcementText"=>"required:This field is required.",
+								"announcementExpiredDate"=>"required:This field is required."
 											));
 
 			## if got error.
@@ -349,7 +350,10 @@ Class Controller_Site
 			redirect::to("site/announcement#","Successfully added an announcement.");
 		}
 
-		$data['announcement']	= $siteAnnounce->getAnnouncement($siteID);
+		$data['announcement']	= $siteAnnounce->getAnnouncement($siteID,false,$page);
+
+		## echo the pagination link
+		$data['paginate'] = pagination::link();
 		view::render("shared/site/announcement", $data);
 	}
 
@@ -361,7 +365,8 @@ Class Controller_Site
 		if(form::submitted())
 		{
 			$rules	= Array(
-					"_all"=>"required:This field is required."
+						"announcementText"=>"required:This field is required.",
+						"announcementExpiredDate"=>"required:This field is required."
 							);
 
 			## got validation error.
@@ -392,7 +397,7 @@ Class Controller_Site
 	}
 
 	# view/add article
-	public function article()
+	public function article($page = 1)
 	{
 		$site		= model::load("site/site");
 		$siteArticle	= model::load("blog/article");
@@ -407,7 +412,18 @@ Class Controller_Site
 			$siteID	= 0;
 		}
 
-		$data['article']	= $siteArticle->getArticle($siteID);
+		$data['article']	= $siteArticle->getArticle($siteID, false, $page);
+
+		for($i=0;$i<count($data['article']);$i++){
+			$tag = $siteArticle->getArticleTag($data['article'][$i]['articleID']);
+
+			for($j=0;$j<count($tag);$j++){
+				$data['article'][$i]['articleTags'] = $tag;
+			}
+		}
+
+		## echo the pagination link
+		$data['paginate'] = pagination::link();
 		view::render("shared/site/article", $data);
 	}
 
@@ -431,9 +447,7 @@ Class Controller_Site
 			}
 
 			$error	= input::validate(Array(
-								"articleName"=>"required:This field is required.",
-								"articleText"=>"required:This field is required.",
-								"articleTags"=>"required:This field is required."
+								"_all"=>"required:This field is required."
 											));
 
 			## if got error.
@@ -447,12 +461,12 @@ Class Controller_Site
 			## equate with _POST
 			$data	= input::get();
 			$data['articlePublishedDate'] = date('Y-m-d',strtotime($data['articlePublishedDate']));
+			//echo '<input type="text" value="';print_r($data);echo '" />';die;
 
 			## execute model/addArticle()
 			$siteAnnounce->addArticle($siteID,$data);
 
-			redirect::to("site/article#","Successfully added a blog post.");
-			//echo '<input type="text" value="';print_r(input::get());echo '" />';die;
+			redirect::to("site/article","Successfully added a blog post.");
 		}
 
 		view::render("shared/site/addArticle");
