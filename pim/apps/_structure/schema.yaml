@@ -258,6 +258,7 @@ announcement:
 	siteID [int]					## 0 = all sites, !0 = specific site
 	announcementStatus [int]		## 0 = not appeared, 1 = appeared
 	announcementText [text]
+	announcementLink [text]
 	announcementCreatedUser [int]
 	announcementCreatedDate [datetime]
 	announcementUpdatedUser [int]
