@@ -4,6 +4,6 @@ trash
 pim/assets/frontend/images/siteImage/*
 pim/assets/frontend/images/slider/*
 pim/assets/frontend/images/photo/*
-pim/vendor
+pim/vendor/*
 pim_sta
 pim/logs/access.txt
