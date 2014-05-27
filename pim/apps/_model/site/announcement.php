@@ -40,7 +40,7 @@ class Announcement
 		else
 		{
 			if($frontend == false){
-				db::where("siteID = '$siteID' OR siteID = '0'");
+				db::where("siteID = '$siteID'");
 				## paginate based on current query built.
 				pagination::initiate(Array(
 								"totalRow"=>db::num_rows(), 

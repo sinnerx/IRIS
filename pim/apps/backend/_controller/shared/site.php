@@ -354,6 +354,9 @@ Class Controller_Site
 
 		## echo the pagination link
 		$data['paginate'] = pagination::link();
+
+		$data['number'] = $page;
+
 		view::render("shared/site/announcement", $data);
 	}
 

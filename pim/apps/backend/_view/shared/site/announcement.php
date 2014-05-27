@@ -125,22 +125,20 @@ Listing all your request Announcement here.
 	</thead>
 	<tbody>
 		<?php if($announcement):
-		$no	= 0;
+		$no	= ($number-1) * 6;
 		foreach($announcement as $row):
 		$no++;
 
 		$active		= $row['announcementStatus'] == 1?"active":"";
-		$opacity	= $row['announcementStatus'] == 0?"style='opacity:0.5;'":"";
 		$href		= ($row['announcementStatus'] == 1?"deactivate":"activate")."?".$row['announcementID'];
 		$href		= "?toggle=".$row['announcementID'];
 			?>
-		<tr <?php echo $opacity;?>>
+		<tr>
 			<td><?php echo $no;?>.</td>
 			<td width='40%'>
-			<?php if($row['siteID'] == 0 && session::get("userLevel") != 99):?>
-			<span class='general-label'>General announcement</span>
-			<?php endif;?>
-			<div class='announcementText'><?php echo $row['announcementText'];?></div>
+			<div class='announcementText'>
+				<?php echo $row['announcementText'];?>
+			</div>
 			</td>
 			<td><?php echo date("d-m-Y g:i A",strtotime($row['announcementCreatedDate']));?></td>
 			<td><?php echo date("d-m-Y",strtotime($row['announcementExpiredDate']));?></td>
@@ -149,6 +147,8 @@ Listing all your request Announcement here.
 				<a href='<?php echo url::base("site/editAnnouncement/".$row['announcementID']);?>' class='fa fa-edit'></a>
 				<?php if(session::get("userLevel") == 99):?>
 					<a href="<?php echo $href;?>" class="<?php echo $active;?>" ><i class="fa fa-check text-success text-active"></i><i class="fa fa-times text-danger text"></i></a>
+				<?php else: ?>
+					<a class="<?php echo $active;?>" ><i class="i i-circle text-success text-active" style="font-size: 0.8em;"></i><i class="i i-circle text-danger text" style="font-size: 0.8em;color: grey;"></i></a>
 				<?php endif; ?>
 			<?php endif;?>
 			</td>
