@@ -101,10 +101,14 @@
     <div id="example">
   <ul>
   <?php
-  $annList = model::load("announcement")->getAnnouncement();
+  $annList = model::load("site/announcement")->getAnnouncement();
   foreach($annList as $row)
   {
-    echo "<li>".$row['announcementText']."</li>";
+    $target = '';
+    if(strchr($row['announcementLink'],'localhost') == null || strchr($row['announcementLink'],'p1m') != null){
+        $target = "target='_blank'";
+    }
+    echo "<li><a ".$target." href='".$row['announcementLink']."'>".$row['announcementText']."</a></li>";
   }
   ?>
   </ul>

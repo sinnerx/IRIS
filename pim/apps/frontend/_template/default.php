@@ -29,7 +29,11 @@
 				  $annList = model::load("site/announcement")->getAnnouncement($row_site['siteID'],true);
 				  foreach($annList as $row)
 				  {
-				    echo "<li class='news-item'><a href='#'>".$row['announcementText']."</a></li>";
+   					 $target = '';
+ 					 if(strchr($row['announcementLink'],'localhost') == null || strchr($row['announcementLink'],'p1m') != null){
+       					$target = "target='_blank'";
+    				 }
+    				 echo "<li><a ".$target." href='".$row['announcementLink']."'>".$row['announcementText']."</a></li>";
 				  }
 				  ?>
 				  </ul>

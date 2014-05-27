@@ -85,7 +85,7 @@ Listing all your request Announcement here.
 </div>
 <div class='row wrapper' id='form_add'>
 	<form method='post'>
-	<div class='col-sm-6'>
+	<div class='col-sm-5'>
 		<div class='form-group'>
 			<label>1. Announcement Text</label>
 			<?php echo form::textarea("announcementText","class='form-control' placeholder='Type an announcement'");?>
@@ -100,6 +100,13 @@ Listing all your request Announcement here.
 		</div>
 	</div>
 	<div class='col-sm-3'>
+		<div class='form-group'>
+			<label>3. Links</label>
+			<?php echo form::text("announcementLink","class='form-control' placeholder='Place a link here'");?>
+			<?php echo flash::data("announcementLink");?>
+		</div>
+	</div>
+	<div class='col-sm-1'>
 	<input type='submit' value='Add' class='btn btn-primary pull-left' style='position:relative;top:25px;' />
 	</div>
 	</form>
@@ -155,5 +162,36 @@ Listing all your request Announcement here.
 		<?php endif;?>
 	</tbody>
 	</table>
+		<?php 
+		if($paginate){
+		?>
+        <div class="text-center">
+            <ul class="pagination pagination">
+		<?php
+			$paginate =  substr_replace($paginate,'',0,5);$paginate = substr_replace($paginate,'',-6);
+
+			## echo the pagination link
+			while($paginate!=''){
+		?>
+                <li>
+                <?php
+                	if(strpos(substr($paginate,0,strpos($paginate,"</a>")+4), 'Previous') !== false){
+                		echo substr_replace(substr($paginate,0,strpos($paginate,"</a>")+4),'<i class="fa fa-chevron-left"></i>', strpos(substr($paginate,0,strpos($paginate,"</a>")+4), 'Previous'), 8);
+                	}else if(strpos(substr($paginate,0,strpos($paginate,"</a>")+4), 'Next') !== false){
+                		echo substr_replace(substr($paginate,0,strpos($paginate,"</a>")+4),'<i class="fa fa-chevron-right"></i>', strpos(substr($paginate,0,strpos($paginate,"</a>")+4), 'Next'), 8);
+                	}else{
+                		echo substr($paginate,0,strpos($paginate,"</a>")+4);
+                	}
+                	$paginate = substr($paginate,strpos(substr($paginate,0,strpos($paginate,"</a>")+4),'</a>')+4);
+                ?>
+                </li>
+		<?php
+			}
+		?>
+          	</ul>
+        </div>
+       	<?php
+        }
+        ?>
 </div>
 </section>
