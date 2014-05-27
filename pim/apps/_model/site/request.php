@@ -171,9 +171,9 @@ class Request
 	{
 		db::from("site_request");
 		db::where("siteRequestID",$requestID);
-		db::join("page","siteRequestType LIKE '%page' AND pageID = siteRequestRefID"); 							# page edit. (2)
-		db::join("site_info","siteRequestType LIKE '%site' AND site_info.siteID = site_request.siteID"); 			## site_info edit. (3)
-		db::join("announcement","siteRequestType LIKE '%announcement' AND siteRequestRefID = announcement.announcementID");## annoucement (4)
+		db::join("page","siteRequestType LIKE 'page.%' AND pageID = siteRequestRefID"); 							# page edit. (2)
+		db::join("site_info","siteRequestType LIKE 'site.%' AND site_info.siteID = site_request.siteID"); 			## site_info edit. (3)
+		db::join("announcement","siteRequestType LIKE 'announcement.%' AND siteRequestRefID = announcement.announcementID");## annoucement (4)
 
 		return db::get()->row();
 	}
