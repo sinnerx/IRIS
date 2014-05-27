@@ -240,6 +240,8 @@ article:
 	articlePublishedDate [datetime]		## will only published after this date.
 	articleCreatedUser [int]
 	articleCreatedDate [datetime]
+	articleUpdatedUser [int]
+	articleUpdatedDate [datetime]
 
 article_photo:
 	photoArticleID [int]
