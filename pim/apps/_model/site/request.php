@@ -67,9 +67,10 @@ class Request
 
 			db::where(Array(
 					"siteRequestStatus"=>0,
-					"siteRequestType"=>$param1,
-					"siteRequestRefID"=>$param2
+					"siteRequestType"=>$param1
 							));
+
+			db::where("siteRequestRefID",$param2);
 		}
 		## else, param1 is a siteRequestID
 		else
@@ -77,31 +78,65 @@ class Request
 			db::where(Array("siteRequestID"=>$param1));
 		}
 
-		$data	= db::get()->row("siteRequestData");
-		if(!$data)
+		db::get();
+
+		## if the refID is a list of refID.
+		if(is_array($param2))
 		{
-			return false;
+			$res	= db::result();
+			$data	= Array();
+			
+			if($res)
+			{
+				foreach($res as $row)
+				{
+					$data[$row['siteRequestRefID']]	= unserialize($row['siteRequestData']);
+				}
+
+				return $data;
+			}
+			else
+			{
+				return $data;
+			}
 		}
-
-		$data	= unserialize($data);
-
-		## and strip slashes.
-		foreach($data as $key=>$val)
+		## else only one refID.
+		else
 		{
-			$strippedData[$key]	= stripslashes($val);
-		}
+			$data	= db::row();
 
-		return $strippedData;
+			if(!$data)
+			{
+				return false;
+			}
+
+			$data	= unserialize($data);
+
+			## and strip slashes.
+			foreach($data as $key=>$val)
+			{
+				$strippedData[$key]	= stripslashes($val);
+			}
+
+			return $strippedData;
+		}
 	}
 
-	public function replaceWithRequestData($type,$refID,&$originalData)
+	public function replaceWithRequestData($type,$refID,&$originalData = null)
 	{
 		$requestData	= $this->getUnapprovedRequestData($type,$refID);
 
 		if($requestData)
 		{
-			$originalData	= $this->replaceData($originalData,$requestData);
-			return true;
+			if(is_array($refID))
+			{
+				return $requestData;
+			}
+			else
+			{
+				$originalData	= $this->replaceData($originalData,$requestData);
+				return true;
+			}
 		}
 
 		return false;
@@ -165,7 +200,8 @@ class Request
 				"announcement.add"=>"New site announcement",
 				"announcement.update"=>"Announcment Update",
 				"article.add"=>"New Article",
-				"article.update"=>"Article Update"
+				"article.update"=>"Article Update",
+				"activity.add"=>"New Activity"
 						);
 
 
@@ -220,6 +256,9 @@ class Request
 			case "article":
 				db::join("article","siteRequestRefID = article.articleID");
 			break;
+			case "activity":
+				db::join("activity","activity.activityID = siteRequestRefID");
+			break;
 		}
 
 		return db::get()->row();
@@ -259,6 +298,10 @@ class Request
 			case "announcement.update": 
 			db::where("announcementID",$row['siteRequestRefID'])->update("announcement",$data);
 			break;
+
+			case "activity.add":
+			db::where("activityID",$row['siteRequestRefID'])->update("activity",Array('activityApprovalStatus'=>1));
+			break;
 		}
 	}
 
@@ -277,6 +320,9 @@ class Request
 			break;
 			case "article.add":
 			db::where("articleID",$row['articleID'])->update("article",Array("articleStatus"=>2));
+			break;
+			case "activity.add":
+			db::where("activityID",$row['activityID'])->update("activity",Array("activityApprovalStatus"=>2));
 			break;
 		}
 	}
