@@ -125,15 +125,18 @@ Listing all your request Announcement here.
 	</thead>
 	<tbody>
 		<?php if($announcement):
+		$requestdata = model::load('site/request')->replaceWithRequestData('announcement.update', array_keys($announcement));
 		$no	= ($number-1) * 6;
 		foreach($announcement as $row):
 		$no++;
-
+		$row = isset($requestdata[$row['announcementID']])?array_merge($row,$requestdata[$row['announcementID']]):$row;
 		$active		= $row['announcementStatus'] == 1?"active":"";
+		$inactive	= $row['announcementStatus'] == 2?"active":"";
+		$opacity	= $row['announcementStatus'] == 0?"style='opacity:0.5;'":"";
 		$href		= ($row['announcementStatus'] == 1?"deactivate":"activate")."?".$row['announcementID'];
 		$href		= "?toggle=".$row['announcementID'];
 			?>
-		<tr>
+		<tr <?php echo $opacity;?>>
 			<td><?php echo $no;?>.</td>
 			<td width='40%'>
 			<div class='announcementText'>
@@ -144,11 +147,13 @@ Listing all your request Announcement here.
 			<td><?php echo date("d-m-Y",strtotime($row['announcementExpiredDate']));?></td>
 			<td>
 			<?php if($row['siteID'] != 0 || session::get("userLevel") == 99):?>
+				<?php if($row['announcementStatus'] != 2):?>
 				<a href='<?php echo url::base("site/editAnnouncement/".$row['announcementID']);?>' class='fa fa-edit'></a>
+				<?php endif; ?>
 				<?php if(session::get("userLevel") == 99):?>
 					<a href="<?php echo $href;?>" class="<?php echo $active;?>" ><i class="fa fa-check text-success text-active"></i><i class="fa fa-times text-danger text"></i></a>
 				<?php else: ?>
-					<a class="<?php echo $active;?>" ><i class="i i-circle text-success text-active" style="font-size: 0.8em;"></i><i class="i i-circle text-danger text" style="font-size: 0.8em;color: grey;"></i></a>
+					<a class="<?php echo $active;?><?php echo $inactive;?>" ><i class="i i-circle text-success text-active" style="font-size: 0.8em;<?php if($inactive){echo 'color:red;';} ?>"></i><i class="i i-circle text-danger text" style="font-size: 0.8em;color: grey;"></i></a>
 				<?php endif; ?>
 			<?php endif;?>
 			</td>
@@ -172,8 +177,15 @@ Listing all your request Announcement here.
 
 			## echo the pagination link
 			while($paginate!=''){
+				$active = "";
+				$start = strpos($paginate,">")+1;
+				$length = strpos($paginate,"</a>") - $start;
+
+				if(substr($paginate, $start, $length) == $number){
+					$active = "class='active'";
+                }	
 		?>
-                <li>
+                <li <?php echo $active; ?>>
                 <?php
                 	if(strpos(substr($paginate,0,strpos($paginate,"</a>")+4), 'Previous') !== false){
                 		echo substr_replace(substr($paginate,0,strpos($paginate,"</a>")+4),'<i class="fa fa-chevron-left"></i>', strpos(substr($paginate,0,strpos($paginate,"</a>")+4), 'Previous'), 8);

@@ -36,6 +36,10 @@ class Announcement
 		if($siteID === 0)
 		{
 			db::where("siteID",0);
+
+			if($frontend == true){
+				db::where("date(announcementExpiredDate) >",date('Y-m-d', strtotime(now(). ' - 1 days')));
+			}
 		}
 		else
 		{
@@ -59,7 +63,7 @@ class Announcement
 
 		db::order_by("siteID DESC, announcementID DESC");
 
-		return db::get()->result();
+		return db::get()->result("announcementID");
 	}
 
 	# return only an announcement

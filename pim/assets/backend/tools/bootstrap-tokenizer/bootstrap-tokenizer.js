@@ -59,7 +59,7 @@
                 .on('click', $.proxy(this.handleClick, this))
                 .on('focusin', $.proxy(this.handleFocus, this))
                 .on('focusout', $.proxy(this.handleBlur, this))
-                .width(this.$formInput.width())
+                .width('100%')
                 .insertAfter(this.$formInput);
             this.parseFormInput();
             this.channel.subscribe('add', $.proxy(this.handleAdd, this));

@@ -13,7 +13,7 @@ Edit selected announcement
 			<form class="form-horizontal" method='post' enctype="multipart/form-data">
 			<div class="form-group">
 			<label class="col-sm-3">1. Announcement Text</label>
-			<div class="col-sm-9"><?php echo form::textarea("announcementText","size='40' class='form-control'",$row['announcementText']);?><?php echo flash::data('announcementText');?></div>
+			<div class="col-sm-9"><?php echo form::textarea("announcementText","size='40' style='height: 100px;' class='form-control'",$row['announcementText']);?><?php echo flash::data('announcementText');?></div>
 			</div>
 			<div class="form-group">
 			<label class="col-sm-3">2. Expire Date</label>
