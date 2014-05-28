@@ -94,6 +94,34 @@ class Request
 		return $strippedData;
 	}
 
+	public function replaceWithRequestData($type,$refID,&$originalData)
+	{
+		$requestData	= $this->getUnapprovedRequestData($type,$refID);
+
+		if($requestData)
+		{
+			$originalData	= $this->replaceData($originalData,$requestData);
+			return true;
+		}
+
+		return false;
+	}
+
+	## just replace whatever column got in new data.
+	public function replaceData($originalData,$newData)
+	{
+		$replacedData	= Array();
+		foreach($originalData as $key=>$value)
+		{
+			if(isset($newData[$key]))
+			{
+				$originalData[$key]	= $newData[$key];
+			}
+		}
+
+		return $originalData;
+	}
+
 	## used by cluster/overview
 	public function getRequestByCluster($clusterID)
 	{
@@ -169,28 +197,32 @@ class Request
 
 	public function getRequest($requestID)
 	{
+		## get type first.
+		db::from("site_request");
+		db::select("siteRequestType");
+		db::where("siteRequestID",$requestID);
+		list($type,$method)	= explode(".",db::get()->row("siteRequestType"));
+
+		## select and join based on type. i think this way is clearer.
 		db::from("site_request");
 		db::where("siteRequestID",$requestID);
-		db::join("page","siteRequestType LIKE 'page.%' AND pageID = siteRequestRefID"); 							# page edit. (2)
-		db::join("site_info","siteRequestType LIKE 'site.%' AND site_info.siteID = site_request.siteID"); 			## site_info edit. (3)
-		db::join("announcement","siteRequestType LIKE 'announcement.%' AND siteRequestRefID = announcement.announcementID");## annoucement (4)
-
-		return db::get()->row();
-	}
-
-	## just replace whatever column got in new data.
-	public function replaceData($originalData,$newData)
-	{
-		$replacedData	= Array();
-		foreach($originalData as $key=>$value)
+		switch($type)
 		{
-			if(isset($newData[$key]))
-			{
-				$originalData[$key]	= $newData[$key];
-			}
+			case "site":
+				db::join("site_info","site_info.siteID = site_request.siteID"); 			## site_info edit. (3)
+			break;
+			case "page":
+				db::join("page","pageID = siteRequestRefID"); 							# page edit. (2)
+			break;
+			case "announcement":
+				db::join("announcement","siteRequestRefID = announcement.announcementID");## annoucement (4)
+			break;
+			case "article":
+				db::join("article","siteRequestRefID = article.articleID");
+			break;
 		}
 
-		return $originalData;
+		return db::get()->row();
 	}
 
 	public function approve($id)
@@ -225,7 +257,7 @@ class Request
 			db::where("announcementID",$row['announcementID'])->update("announcement",Array("announcementStatus"=>1)); # approved.
 			break;
 			case "announcement.update": 
-			db::where("announcementID",$row['isteRequestRefID'])->update("announcement",$data);
+			db::where("announcementID",$row['siteRequestRefID'])->update("announcement",$data);
 			break;
 		}
 	}
@@ -242,6 +274,9 @@ class Request
 		{
 			case "announcement.add": ## set announcementStatus to 2.
 			db::where("announcementID",$row['announcementID'])->update("announcement",Array("announcementStatus"=>2));
+			break;
+			case "article.add":
+			db::where("articleID",$row['articleID'])->update("article",Array("articleStatus"=>2));
 			break;
 		}
 	}
