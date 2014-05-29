@@ -304,7 +304,22 @@ class Request
 			db::where("articleID",$row['articleID'])->update("article",Array("articleStatus"=>1)); # approved.
 			break;
 			case "article.update": 
-			db::where("articleID",$row['siteRequestRefID'])->update("article",$data);
+				db::delete("article_tag","articleID = ".$row['siteRequestRefID']);
+
+				$data['articleTags'] = strtok($data['articleTags'],',');
+
+				while ($data['articleTags'] != false)
+    			{
+					$dataToken = Array(
+						"articleID"=>$row['siteRequestRefID'],
+						"articleTagName"=>$data['articleTags']
+					);
+
+					db::insert("article_tag",$dataToken);
+
+    				$data['articleTags'] = strtok(",");
+				}
+				db::where("articleID",$row['siteRequestRefID'])->update("article",$data);
 			break;
 
 			case "activity.add":
