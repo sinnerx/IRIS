@@ -27,8 +27,8 @@ class Announcement
 		}
 	}
 
-	# return an array of announcementS
-	public function getAnnouncement($siteID = 0,$frontend = false,$page = 1)
+	# return an array of announcement list
+	public function getAnnouncementList($siteID = 0,$frontend = false,$page = 1)
 	{
 		db::from("announcement");
 
@@ -79,7 +79,7 @@ class Announcement
 	}
 
 	# return only an announcement
-	public function getOneAnnouncement($announceID)
+	public function getAnnouncement($announceID)
 	{
 		db::from("announcement");
 		db::where("announcementID",$announceID);
