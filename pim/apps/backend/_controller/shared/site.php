@@ -350,12 +350,7 @@ Class Controller_Site
 			redirect::to("site/announcement#","Successfully added an announcement.");
 		}
 
-		$data['announcement']	= $siteAnnounce->getAnnouncement($siteID,false,$page);
-
-		## echo the pagination link
-		$data['paginate'] = pagination::link();
-
-		$data['number'] = $page;
+		$data['announcement']	= $siteAnnounce->getAnnouncementList($siteID,false,$page);
 
 		view::render("shared/site/announcement", $data);
 	}
@@ -363,7 +358,8 @@ Class Controller_Site
 	# edit announcement
 	public function editAnnouncement($announceID)
 	{
-		$data['row']	= model::load("site/announcement")->getOneAnnouncement($announceID);
+		$data['row']	= model::load("site/announcement")->getAnnouncement($announceID);
+		$siterequest = model::load('site/request')->replaceWithRequestData('announcement.update', $announceID, $data['row']);
 
 		if(form::submitted())
 		{
@@ -415,18 +411,12 @@ Class Controller_Site
 			$siteID	= 0;
 		}
 
-		$data['article']	= $siteArticle->getArticle($siteID, false, $page);
+		$data['article']	= $siteArticle->getArticleList($siteID, false, $page);
 
-		for($i=0;$i<count($data['article']);$i++){
-			$tag = $siteArticle->getArticleTag($data['article'][$i]['articleID']);
-
-			for($j=0;$j<count($tag);$j++){
-				$data['article'][$i]['articleTags'] = $tag;
-			}
+		foreach($data['article'] as $tags => $t){
+			$data['article'][$tags]['articleTags'] = $siteArticle->getArticleTag($data['article'][$tags]['articleID']);
 		}
 
-		## echo the pagination link
-		$data['paginate'] = pagination::link();
 		view::render("shared/site/article", $data);
 	}
 
@@ -450,7 +440,9 @@ Class Controller_Site
 			}
 
 			$error	= input::validate(Array(
-								"_all"=>"required:This field is required."
+								"articleName"=>"required:This field is required.",
+								"articleText"=>"required:This field is required.",
+								"articlePublishedDate"=>"required:This field is required."
 											));
 
 			## if got error.
@@ -473,6 +465,55 @@ Class Controller_Site
 		}
 
 		view::render("shared/site/addArticle");
+	}
+
+	# edit article
+	public function editArticle($articleID)
+	{
+		$data['row']	= model::load("blog/article")->getArticle($articleID);
+		$data['row']['articleTags'] = model::load("blog/article")->getArticleTag($data['row']['articleID']);
+		$siterequest = model::load('site/request')->replaceWithRequestData('article.update', $articleID, $data['row']);
+		
+		if($siterequest == true){
+			$articleTags = array();
+			$data['row']['articleTags'] = strtok($data['row']['articleTags'],',');
+
+			while ($data['row']['articleTags'] != false)
+	    	{
+				array_push($articleTags,array('articleTagName'=>$data['row']['articleTags']));
+				$data['row']['articleTags'] = strtok(",");
+			}
+			$data['row']['articleTags'] = $articleTags;
+		}
+
+		if(form::submitted())
+		{
+			$rules	= Array(
+						"articleName"=>"required:This field is required.",
+						"articleText"=>"required:This field is required.",
+						"articlePublishedDate"=>"required:This field is required."
+							);
+
+			## got validation error.
+			if($error = input::validate($rules))
+			{
+				input::repopulate();
+				redirect::withFlash(model::load("template/services")->wrap("input-error",$error));
+				redirect::to("","Got some error in your form.","error");
+			}
+
+			## populate into data.
+			$postdata = input::get();
+			$postdata['articlePublishedDate'] = date('Y-m-d',strtotime($postdata['articlePublishedDate']));
+			$postdata['siteID'] = $data['row']['siteID'];
+
+			## update db.
+			model::load("blog/article")->updateArticle($articleID,$postdata);
+			
+			redirect::to("site/article","Your edited article has been requested.");
+		}
+
+		view::render("shared/site/editArticle",$data);
 	}
 }
 
