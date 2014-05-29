@@ -19,15 +19,16 @@ class Services
 		$this->mailer->Username		= "pi1m@nusuara.com";
 		$this->mailer->Password		= "fulkrum@123";
 		$this->mailer->SMTPSecure	= "tls";
-		$this->mailer->Port			= 456;
+		$this->mailer->Port			= 587;
 		$this->mailer->isHTML(true);
+		#$this->mailer->SMTPDebug	= true;
 
 		## the from email, it should be like 
 		$this->mailer->From			= "";
 		$this->mailer->FromName 	= 'Pi1M Website';
 
 		## some static email address.
-		$this->From_Admin	= "admin@p1m.gaia.my";
+		$this->From_Admin	= "pi1m@nusuara.com";
 	}
 
 	## normal mail, content is passed.
@@ -39,25 +40,20 @@ class Services
 		$to		= is_array($to)?$to:Array($to);
 
 		## loop the 'to' address.
+		$no	= 1;
 		foreach($to as $key=>$addr)
 		{
-			if(in_array($key,Array("cc","bcc")))
-			{
-				switch($key)
-				{
-					case "cc":
-					$this->mailer->addCC($addr);
-					break;
-					case "bcc":
-					$this->mailer->addBCC($addr);
-					break;
-				}
-			}
-			## if not a cc, or bcc kind of address.
-			else
+			## first email use, to, else will CC.
+			if($no == 1)
 			{
 				$this->mailer->addAddress($addr);
 			}
+			else
+			{
+				$this->mailer->addCC($addr);
+			}
+
+			$no++;
 		}
 
 		## set subject and body.
