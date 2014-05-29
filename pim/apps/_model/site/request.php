@@ -110,7 +110,7 @@ class Request
 				return false;
 			}
 
-			$data	= unserialize($data);
+			$data	= unserialize($data['siteRequestData']);
 
 			## and strip slashes.
 			foreach($data as $key=>$val)
