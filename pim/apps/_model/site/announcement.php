@@ -1,6 +1,6 @@
 <?php
 namespace model\site;
-use db, session, pagination, url;
+use db, session, pagination, url, model;
 
 class Announcement
 {
@@ -36,6 +36,17 @@ class Announcement
 		if($siteID === 0)
 		{
 			db::where("siteID",0);
+			## paginate based on current query built.
+			pagination::setFormat(model::load('template/cssbootstrap')->paginationLink());
+			pagination::initiate(Array(
+							"totalRow"=>db::num_rows(), 
+							"limit"=>6,				
+							"urlFormat"=>url::base("site/announcement/{page}"),
+							"currentPage"=>$page
+									));
+
+			## limit, and offset.
+			db::limit(pagination::get("limit"),pagination::recordNo()-1); 
 
 			if($frontend == true){
 				db::where("date(announcementExpiredDate) >",date('Y-m-d', strtotime(now(). ' - 1 days')));
@@ -46,6 +57,7 @@ class Announcement
 			if($frontend == false){
 				db::where("siteID = '$siteID'");
 				## paginate based on current query built.
+				pagination::setFormat(model::load('template/cssbootstrap')->paginationLink());
 				pagination::initiate(Array(
 								"totalRow"=>db::num_rows(), 
 								"limit"=>6,				

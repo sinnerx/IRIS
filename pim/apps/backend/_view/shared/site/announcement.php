@@ -72,12 +72,6 @@ Listing all your request Announcement here.
 <section class="panel panel-default">
 <div class="row wrapper" style='border-bottom:1px solid #f2f4f8;'>
 	<div class="col-sm-3 pull-right">
-	<!-- <div class="input-group">
-	  <input type="text" class="input-sm form-control" placeholder="Search">
-	  <span class="input-group-btn">
-	    <button class="btn btn-sm btn-default" type="button">Go!</button>
-	  </span>
-	</div> -->
 	</div>
 	<div class='col-sm-3 pull-left'>
 	<button type='button' class='class="btn btn-sm btn-bg btn-default pull-left' onclick='add();'><a href='javascript:void(0);'>Add +</a></button>
@@ -126,9 +120,8 @@ Listing all your request Announcement here.
 	<tbody>
 		<?php if($announcement):
 		$requestdata = model::load('site/request')->replaceWithRequestData('announcement.update', array_keys($announcement));
-		$no	= ($number-1) * 6;
+		$no	= pagination::recordNo();
 		foreach($announcement as $row):
-		$no++;
 		$row = isset($requestdata[$row['announcementID']])?array_merge($row,$requestdata[$row['announcementID']]):$row;
 		$active		= $row['announcementStatus'] == 1?"active":"";
 		$inactive	= $row['announcementStatus'] == 2?"active":"";
@@ -137,7 +130,7 @@ Listing all your request Announcement here.
 		$href		= "?toggle=".$row['announcementID'];
 			?>
 		<tr <?php echo $opacity;?>>
-			<td><?php echo $no;?>.</td>
+			<td><?php echo $no++;?>.</td>
 			<td width='40%'>
 			<div class='announcementText'>
 				<?php echo $row['announcementText'];?>
@@ -167,43 +160,12 @@ Listing all your request Announcement here.
 		<?php endif;?>
 	</tbody>
 	</table>
-		<?php 
-		if($paginate){
-		?>
-        <div class="text-center">
-            <ul class="pagination pagination">
-		<?php
-			$paginate =  substr_replace($paginate,'',0,5);$paginate = substr_replace($paginate,'',-6);
-
-			## echo the pagination link
-			while($paginate!=''){
-				$active = "";
-				$start = strpos($paginate,">")+1;
-				$length = strpos($paginate,"</a>") - $start;
-
-				if(substr($paginate, $start, $length) == $number){
-					$active = "class='active'";
-                }	
-		?>
-                <li <?php echo $active; ?>>
-                <?php
-                	if(strpos(substr($paginate,0,strpos($paginate,"</a>")+4), 'Previous') !== false){
-                		echo substr_replace(substr($paginate,0,strpos($paginate,"</a>")+4),'<i class="fa fa-chevron-left"></i>', strpos(substr($paginate,0,strpos($paginate,"</a>")+4), 'Previous'), 8);
-                	}else if(strpos(substr($paginate,0,strpos($paginate,"</a>")+4), 'Next') !== false){
-                		echo substr_replace(substr($paginate,0,strpos($paginate,"</a>")+4),'<i class="fa fa-chevron-right"></i>', strpos(substr($paginate,0,strpos($paginate,"</a>")+4), 'Next'), 8);
-                	}else{
-                		echo substr($paginate,0,strpos($paginate,"</a>")+4);
-                	}
-                	$paginate = substr($paginate,strpos(substr($paginate,0,strpos($paginate,"</a>")+4),'</a>')+4);
-                ?>
-                </li>
-		<?php
-			}
-		?>
-          	</ul>
-        </div>
-       	<?php
-        }
-        ?>
 </div>
+<footer class='panel-footer'>
+	<div class="row">
+		<div class="col-sm-12">
+			<?php echo pagination::link();?>
+		</div>
+	</div>
+</footer>
 </section>
