@@ -16,6 +16,8 @@ Root : root@gmail.com / 12345
 
 Site Manager : sitemanager@gmail.com / 12345
 
+Cluster Lead : shamsul@nusuara.com / 12345
+
 FTP
 
 
