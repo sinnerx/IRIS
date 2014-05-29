@@ -124,8 +124,7 @@ Listing all your request Announcement here.
 		foreach($announcement as $row):
 		$row = isset($requestdata[$row['announcementID']])?array_merge($row,$requestdata[$row['announcementID']]):$row;
 		$active		= $row['announcementStatus'] == 1?"active":"";
-		$inactive	= $row['announcementStatus'] == 2?"active":"";
-		$opacity	= $row['announcementStatus'] == 0?"style='opacity:0.5;'":"";
+		$opacity	= $row['announcementStatus'] == 0 || isset($requestdata[$row['announcementID']])?"style='opacity:0.5;'":"";
 		$href		= ($row['announcementStatus'] == 1?"deactivate":"activate")."?".$row['announcementID'];
 		$href		= "?toggle=".$row['announcementID'];
 			?>
@@ -146,7 +145,7 @@ Listing all your request Announcement here.
 				<?php if(session::get("userLevel") == 99):?>
 					<a href="<?php echo $href;?>" class="<?php echo $active;?>" ><i class="fa fa-check text-success text-active"></i><i class="fa fa-times text-danger text"></i></a>
 				<?php else: ?>
-					<a class="<?php echo $active;?><?php echo $inactive;?>" ><i class="i i-circle text-success text-active" style="font-size: 0.8em;<?php if($inactive){echo 'color:red;';} ?>"></i><i class="i i-circle text-danger text" style="font-size: 0.8em;color: grey;"></i></a>
+					<a><?php echo model::load('template/icon')->status($row['announcementStatus']); ?></a>
 				<?php endif; ?>
 			<?php endif;?>
 			</td>
