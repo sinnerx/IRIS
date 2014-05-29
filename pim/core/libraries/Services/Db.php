@@ -76,6 +76,7 @@ class Db_instance
 		$this->clearResult();
 
 		$args	= func_get_args();
+		$args	= count($args) == 1 && $args[0] == null?Array("*"):$args;
 
 		## get all args.
 		foreach($args as $colR)
@@ -484,6 +485,8 @@ class Db_instance
 				return false;
 			}
 		}
+
+		$this->param	= Array();
 		$this->clear();
 
 		return $this;

@@ -69,6 +69,28 @@ class Helper
 		return $arrR;
 	}
 
+	## convert date range [startD,endD] to label (d/m/Y - d/m/Y)
+	public function dateRangeLabel($dateR,$invert = false)
+	{
+		if(!$invert)
+		{
+			return date("d/m/Y",strtotime($dateR[0]))." - ".date("d/m/Y",strtotime($dateR[1]));
+		}
+		else
+		{
+			$dateR	= explode(" - ",$dateR);
+
+			$newD	= Array();
+			foreach($dateR as $d)
+			{
+				list($d,$m,$y)	= explode("/",$d);
+				$newD[]	= "$y-$m-$d";
+			}
+
+			return $newD;
+		}
+	}
+
 	## 
 	public function hashPassword($val,$salt = null)
 	{

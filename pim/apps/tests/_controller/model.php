@@ -70,7 +70,8 @@ class Controller_Model
 								"albumName"=>"My album",
 								"albumDescription"=>"Just description"
 										)
-												)
+												),
+				"activity/activity@addActivity"=>Array(62,1,Array("test"=>123))
 						);
 
 		## return empty array if not exists.

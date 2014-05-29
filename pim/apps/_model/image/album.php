@@ -64,6 +64,14 @@ class album
 		return db::get("site_album")->result();
 	}
 
+	public function getActivityAlbum($activityID)
+	{
+		db::where("activityID",$activityID);
+		db::join("album","album.albumID = activity_album.albumID");
+
+		return db::get("activity_album")->result();
+	}
+
 	## album type.
 	public function type()
 	{

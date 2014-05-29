@@ -48,7 +48,7 @@ class Photo extends Services
 
 		## create path if not exists.
 		if(!is_dir($this->getPhotoPath($path)))
-			mkdir($this->getPhotoPath($path),777,true);
+			mkdir($this->getPhotoPath($path),0755,true);
 
 		$finalname	= $path."/".$filename;
 

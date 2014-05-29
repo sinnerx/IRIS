@@ -1,7 +1,7 @@
 <style type="text/css">
   
 </style>
-<title>Ini Test</title>
+<title><?php echo $title;?></title>
 <h3 class='block-heading'><?php echo $title;?></h3>
   <div class="block-content clearfix">
   <div class="page-content">

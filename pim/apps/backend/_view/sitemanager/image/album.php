@@ -106,7 +106,7 @@ Overview of your site albums. You can <a href='javascript:album.addForm.show();'
 		<div class='col-sm-12'>
 			<form method="post" action='<?php echo url::base("image/addAlbum");?>'>
 				<div class='form-group'>
-					<label>Album Name</label>
+					<label>Album Name <?php echo $activityName?"($activityName)":"";?></label>
 					<?php echo form::text("albumName","class='form-control'");?>
 					<?php echo flash::data("albumName");?>
 				</div>

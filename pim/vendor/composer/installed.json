@@ -6,12 +6,12 @@
         "source": {
             "type": "git",
             "url": "https://github.com/PHPMailer/PHPMailer.git",
-            "reference": "e3800e30467c703313eb5baee51ea4d6cccd234e"
+            "reference": "245381c747ca34b11b2cc953e6005e4bb95c8365"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/PHPMailer/PHPMailer/zipball/e3800e30467c703313eb5baee51ea4d6cccd234e",
-            "reference": "e3800e30467c703313eb5baee51ea4d6cccd234e",
+            "url": "https://api.github.com/repos/PHPMailer/PHPMailer/zipball/245381c747ca34b11b2cc953e6005e4bb95c8365",
+            "reference": "245381c747ca34b11b2cc953e6005e4bb95c8365",
             "shasum": ""
         },
         "require": {
@@ -21,7 +21,7 @@
             "phpdocumentor/phpdocumentor": "*",
             "phpunit/phpunit": "4.0.*"
         },
-        "time": "2014-04-24 12:43:14",
+        "time": "2014-05-14 15:23:17",
         "type": "library",
         "installation-source": "source",
         "autoload": {
@@ -55,51 +55,93 @@
         "description": "PHPMailer is a full-featured email creation and transfer class for PHP"
     },
     {
-        "name": "spekkionu/htmlpurifier",
-        "version": "dev-master",
-        "version_normalized": "9999999-dev",
+        "name": "gregwar/cache",
+        "version": "v1.0.7",
+        "version_normalized": "1.0.7.0",
+        "target-dir": "Gregwar/Cache",
         "source": {
             "type": "git",
-            "url": "https://github.com/spekkionu/htmlpurifier.git",
-            "reference": "4dd8c930cf8c30eb5f9b7af4ddc8316202904fba"
+            "url": "https://github.com/Gregwar/Cache.git",
+            "reference": "b2d0197c07cc1ccf7436e1ae7bf64f9948e02052"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/spekkionu/htmlpurifier/zipball/4dd8c930cf8c30eb5f9b7af4ddc8316202904fba",
-            "reference": "4dd8c930cf8c30eb5f9b7af4ddc8316202904fba",
+            "url": "https://api.github.com/repos/Gregwar/Cache/zipball/b2d0197c07cc1ccf7436e1ae7bf64f9948e02052",
+            "reference": "b2d0197c07cc1ccf7436e1ae7bf64f9948e02052",
             "shasum": ""
         },
-        "require": {
-            "php": ">=5.2.4"
-        },
-        "time": "2013-12-01 20:16:14",
+        "time": "2014-02-20 20:04:58",
         "type": "library",
-        "installation-source": "source",
+        "installation-source": "dist",
         "autoload": {
             "psr-0": {
-                "HTMLPurifier": "",
-                "HTMLPurifier_": "HTMLPurifier/"
+                "Gregwar\\Cache": ""
             }
         },
         "notification-url": "https://packagist.org/downloads/",
         "license": [
-            "LGPL-2.0"
+            "MIT"
         ],
         "authors": [
             {
-                "name": "Edward Z. Yang (Ambush Commander)",
-                "email": "admin@htmlpurifier.org",
-                "homepage": "http://htmlpurifier.org",
-                "role": "Developer"
-            },
-            {
-                "name": "Jonathan Bernardi (spekkionu)",
-                "email": "spekkionu@spekkionu.com",
-                "homepage": "http://www.thedevfiles.com",
-                "role": "Contributor"
+                "name": "Gregwar",
+                "email": "g.passault@gmail.com",
+                "homepage": "http://www.gregwar.com/"
             }
         ],
-        "description": "HTML Purifier is a standards-compliant HTML filter library written in PHP.",
-        "homepage": "http://htmlpurifier.org"
+        "description": "A lightweight file-system cache system",
+        "keywords": [
+            "cache",
+            "caching",
+            "file-system",
+            "system"
+        ]
+    },
+    {
+        "name": "gregwar/image",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "target-dir": "Gregwar/Image",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/Gregwar/Image.git",
+            "reference": "08e69cc34822ce4fa4096f41835ab7a36830a8b7"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/Gregwar/Image/zipball/08e69cc34822ce4fa4096f41835ab7a36830a8b7",
+            "reference": "08e69cc34822ce4fa4096f41835ab7a36830a8b7",
+            "shasum": ""
+        },
+        "require": {
+            "ext-gd": "*",
+            "gregwar/cache": "v1.0.7",
+            "php": ">=5.3.0"
+        },
+        "time": "2014-03-19 21:04:37",
+        "type": "library",
+        "installation-source": "source",
+        "autoload": {
+            "psr-0": {
+                "Gregwar\\Image": ""
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Grégoire Passault",
+                "email": "g.passault@gmail.com",
+                "homepage": "http://www.gregwar.com/"
+            }
+        ],
+        "description": "Image handling",
+        "homepage": "https://github.com/Gregwar/Image",
+        "keywords": [
+            "gd",
+            "image"
+        ]
     }
 ]

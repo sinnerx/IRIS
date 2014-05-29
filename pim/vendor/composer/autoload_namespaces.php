@@ -6,6 +6,6 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    'HTMLPurifier_' => array($vendorDir . '/spekkionu/htmlpurifier/HTMLPurifier'),
-    'HTMLPurifier' => array($vendorDir . '/spekkionu/htmlpurifier'),
+    'Gregwar\\Image' => array($vendorDir . '/gregwar/image'),
+    'Gregwar\\Cache' => array($vendorDir . '/gregwar/cache'),
 );

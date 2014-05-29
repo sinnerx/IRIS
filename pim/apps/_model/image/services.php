@@ -1,6 +1,6 @@
 <?php
 namespace model\image;
-use path, url;
+use path, url, Gregwar\Image\Image as GregwarImage;
 
 class Services
 {
@@ -18,6 +18,12 @@ class Services
 		$filename	= !$filename?$this->photo_no_image:"photo/$filename";
 
 		return url::asset("frontend/images/".$filename);
+	}
+
+	## return 
+	public function createThumbnail($imagePath = null)
+	{
+		
 	}
 }
 

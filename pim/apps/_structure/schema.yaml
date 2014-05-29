@@ -48,13 +48,17 @@ activity:
 	siteID [int]
 	activityType [int]				## 1 = event, 2 = training
 	activityName [varchar]
+	activityAddressFlag [int]		## 0 = use field activityAddress, 1 = use site info address.
 	activityAddress [text]
+	activityDescription [text]
 	activityParticipation [int]		## 1 = open for all, 2 = closed to member
 	activityStartDate [date]
 	activityEndDate [date]
-	activityApprovedStatus [int]	## 0 = unapproved, 1 = approved, 2 = disapproved.
+	activityApprovalStatus [int]			## 0 = unapproved, 1 = approved, 2 = disapproved.
 	activityCreatedUser [int]
 	activityCreatedDate [datetime]
+	activityUpdatedUser [int]
+	activityUpdatedDate [datetime]
 
 activity_budget:			## incomplete.
 	activityBudgedID [int]
@@ -82,7 +86,7 @@ activity_article:
 	articleID [int]
 	activityID [int]
 
-actvity_album:
+activity_album:
 	activityAlbumID [int]
 	activityID [int]
 	albumID [int]
@@ -258,7 +262,7 @@ article_tag:
 announcement:
 	announcementID [int]
 	siteID [int]					## 0 = all sites, !0 = specific site
-	announcementStatus [int]		## 0 = not appeared, 1 = appeared
+	announcementStatus [int]		## 0 = not appeared, 1 = appeared, 2 = unapproved.
 	announcementText [text]
 	announcementLink [text]
 	announcementCreatedUser [int]

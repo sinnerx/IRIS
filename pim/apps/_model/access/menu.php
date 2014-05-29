@@ -20,11 +20,12 @@ class Menu extends Data
 											),
 					"Pages"=>"page/index",
 					"Blog" =>Array("List of Articles"=>"site/article","Add Article"=>"site/addArticle"),
-					"Albums"=>Array("Overview"=>Array("image/album","image/albumPhotos"))
-					/*"Activities"=>Array(
-									"Events"=>"event/index",
-									"Training"=>"training/index"
-										),*/
+					"Albums"=>Array("Overview"=>Array("image/album","image/albumPhotos")),
+					"Activities"=>Array(
+									"Overview"=>Array("activity/overview","activity/add","activity/view"),
+									"Events"=>"activity/event",
+									"Training"=>"activity/training"
+										),
 
 							);
 

@@ -9,6 +9,13 @@ class Controller_Image
 
 		$data['res_album']	= model::load("image/album")->getSiteAlbums($siteID);
 
+		if($activityID = request::get("activity"))
+		{
+			$data['activityName']	= model::load("activity/activity")->getActivity($activityID,"activityName");
+
+			#$data['activityName']	= $row['activityName'];
+		}
+
 		view::render("sitemanager/image/album",$data);
 	}
 
