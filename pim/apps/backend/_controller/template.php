@@ -5,8 +5,11 @@ Class Controller_Template
 	## hooked at pre_template.
 	public function index()
 	{
+		## get authenticated data.
+		$data	= model::load("access/auth")->getAuthData();
+
 		$user			= model::load("user/user");
-		$row_user		= $user->get(session::get("userID"));
+		$row_user		= $data['user'];
 
 		$data['userFullName']	= ucfirst($row_user['userProfileFullName']);
 		$data['userLevel']		= ucfirst($user->levelLabel($row_user['userLevel']));
@@ -15,7 +18,8 @@ Class Controller_Template
 		$data['dashboardTitle']	= "P1M Dashboard";
 		if(session::get("userLevel") == 2)
 		{
-			$row_site	= model::load("site/site")->getSiteByManager(session::get('userID'));
+			#$row_site	= model::load("site/site")->getSiteByManager(session::get('userID'));
+			$row_site	= $data['site'];
 			$siteSlug	= $row_site['siteSlug'];
 
 			$data['siteHref']		= url::base("../$siteSlug");
