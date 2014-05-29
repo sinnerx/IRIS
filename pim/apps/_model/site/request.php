@@ -299,6 +299,14 @@ class Request
 			db::where("announcementID",$row['siteRequestRefID'])->update("announcement",$data);
 			break;
 
+			# new site article.
+			case "article.add":  
+			db::where("articleID",$row['articleID'])->update("article",Array("articleStatus"=>1)); # approved.
+			break;
+			case "article.update": 
+			db::where("articleID",$row['siteRequestRefID'])->update("article",$data);
+			break;
+
 			case "activity.add":
 			db::where("activityID",$row['siteRequestRefID'])->update("activity",Array('activityApprovalStatus'=>1));
 			break;
