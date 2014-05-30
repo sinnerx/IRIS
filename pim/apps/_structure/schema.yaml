@@ -48,6 +48,8 @@ activity:
 	siteID [int]
 	activityType [int]				## 1 = event, 2 = training
 	activityName [varchar]
+	activitySlug [varchar]
+	activitySlugOriginal [varchar]
 	activityAddressFlag [int]		## 0 = use field activityAddress, 1 = use site info address.
 	activityAddress [text]
 	activityDescription [text]
@@ -239,6 +241,7 @@ article:
 	siteID [int]
 	articleStatus [int]		## 0 = unapproved, 1 = approved, 2 = disapproved, 3 = draft
 	articleSlug [varchar]
+	articleOriginalSlug [varchar]
 	articleName [varchar]
 	articleText [text]
 	articlePublishedDate [datetime]		## will only published after this date.
