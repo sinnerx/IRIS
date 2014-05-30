@@ -18,6 +18,8 @@ class Activity
 		db::where("activity.activityID",$activityID);
 
 		db::select($col);
+
+		## if got siteID, must be based on siteID check
 		if($siteID = model::load("access/auth")->getAuthData("site","siteID"))
 		{
 			db::where("siteID",$siteID);
@@ -42,8 +44,40 @@ class Activity
 		db::get("activity")->result();
 	}
 
+	## if got activityID, use the date of that activityID instead.
+	public function refineActivitySlug($slug,$date,$activityID = null)
+	{
+		$year	= date("Y",strtotime($date));
+		$month	= date("n",strtotime($date));
+
+		## check original slug.
+		## if already exists.
+
+		db::select("activityID");
+		db::where("year(activityStartDate)",$year);
+		db::where("month(activityStartDate)",$month);
+		db::where("activitySlugOriginal",$slug);
+
+		if($activityID)
+		{
+			db::where("activityID !=",$activityID);
+		}
+
+		db::get("activity");
+		$res_slug	= db::result();
+
+		if(!$res_slug)
+			return $slug;
+
+		return $slug."-".(count($res_slug)+1);
+	}
+
 	public function addActivity($siteID,$type,$data)
 	{
+		## create slug by activity name.
+		$originalSlug	= model::load("helper")->slugify($data['activityName']);
+		$activitySlug	= $this->refineActivitySlug($originalSlug,$data['activityStartDate']);
+
 		$data_activity	= Array(
 					"activityType"=>$type,
 					"siteID"=>$siteID,
@@ -56,7 +90,9 @@ class Activity
 					"activityEndDate"=>$data['activityEndDate'],
 					"activityApprovalStatus"=>0,
 					"activityCreatedUser"=>session::get("userID"),
-					"activityCreatedDate"=>now()
+					"activityCreatedDate"=>now(),
+					"activitySlug"=>$activitySlug,
+					"activitySlugOriginal"=>$originalSlug,
 								);
 
 		db::insert("activity",$data_activity);
@@ -123,6 +159,7 @@ class Activity
 			break;
 		}
 
+		db::order_by("activityCreatedDate","desc");
 		db::limit(10,pagination::recordNo()-1);
 
 		return db::get()->result();

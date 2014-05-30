@@ -12,6 +12,7 @@ class Controller_Image
 		if($activityID = request::get("activity"))
 		{
 			$data['activityName']	= model::load("activity/activity")->getActivity($activityID,"activityName");
+			$data['activityID']		= $activityID;
 
 			#$data['activityName']	= $row['activityName'];
 		}
@@ -37,8 +38,11 @@ class Controller_Image
 				redirect::to("image/album#add","Error in your form.","error");
 			}
 
-			## Add.
-			model::load("image/album")->addSiteAlbum($siteID,0,input::get());
+			## if got activityID
+			if(input::get("activityID"))
+				model::load("image/album")->addActivityAlbum(input::get("activityID"),input::get());
+			else ## normal add.
+				model::load("image/album")->addSiteAlbum($siteID,0,input::get());
 
 			## win
 			redirect::to("image/album","Album has successfully been added.");

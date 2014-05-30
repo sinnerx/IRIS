@@ -23,7 +23,7 @@ List of training activities of your site. <a href='<?php echo url::base("activit
 			if($res_training):
 			$no	= pagination::recordNo();
 			foreach($res_training as $row):
-
+			$id			= $row['activityID'];
 			$status		= $row['activityApprovalStatus'];
 			$startDate	= $row['activityStartDate'];
 			$endDate	= $row['activityEndDate'];
@@ -46,7 +46,7 @@ List of training activities of your site. <a href='<?php echo url::base("activit
 					<?php endif;?>
 				<td>
 					<?php echo $statusIcon;?>
-					 <a href='#' class='fa fa-search'></a>
+					 <a href='<?php echo url::base("activity/view/training/$id");?>' class='fa fa-search'></a>
 				</td>
 			</tr>
 			<?php 

@@ -75,39 +75,63 @@ Overview of your site albums. You can <a href='javascript:album.addForm.show();'
 	<div class='col-sm-6'>
 		<div class='row-wrapper' id='album-wrapper'>
 		<?php
-		if($res_album):
-		foreach($res_album as $row)
+		if($res_album)
 		{
-			$coverimageUrl	= model::load("image/services")->getPhotoUrl($row['albumCoverImageName']);
+			$opened	= false;
+			$no		= 1;
+			foreach($res_album as $row)
+			{
+				$coverimageUrl	= model::load("image/services")->getPhotoUrl($row['albumCoverImageName']);
 
-			?>
-			<div class='col-sm-4 album-list' onclick='album.showDetail(<?php echo $row['albumID'];?>);'>
-				<section class='panel panel-default'>
-					<div class='panel-heading'>
-					<?php echo $row['albumName'];?>
-					</div>
-					<div>
-					<img src='<?php echo $coverimageUrl;?>' width='100%' />
-					</div>
-				</section>
-			</div>
-			<?php
+				if($no == 1)
+				{
+					echo "<div class='row'>";
+				}
+				?>
+				<div class='col-sm-4 album-list' onclick='album.showDetail(<?php echo $row['albumID'];?>);'>
+					<section class='panel panel-default'>
+						<div class='panel-heading'>
+						<?php echo $row['albumName'];?>
+						</div>
+						<div>
+						<img src='<?php echo $coverimageUrl;?>' width='100%' />
+						</div>
+					</section>
+				</div>
+				<?php
+				if($no == 3)
+				{
+					echo "</div>";
+					$opened	= false;
+				}
+				$no++;
+			}
+
+			if($opened)
+			{
+				echo "</div>";
+			}
 		}
-		else:?>
+		else
+		{
+			?>
 
 		<div class='col-sm-12'>
 		No album was added yet. For this site. <a href='#add' onclick='album.addForm.show()'>Add?</a>.
 		</div>
 		<?php
-		endif;
+		}
 		?>
 		</div>
 		<div class='row' id='add-form' style='display:none;'>
 		<div class='col-sm-12'>
 			<form method="post" action='<?php echo url::base("image/addAlbum");?>'>
+			<?php if($activityID):?>
+			<input type='hidden' name='activityID' value='<?php echo $activityID;?>' />
+			<?php endif;?>
 				<div class='form-group'>
 					<label>Album Name <?php echo $activityName?"($activityName)":"";?></label>
-					<?php echo form::text("albumName","class='form-control'");?>
+					<?php echo form::text("albumName","class='form-control'",$activityName);?>
 					<?php echo flash::data("albumName");?>
 				</div>
 				<div class='form-group'>

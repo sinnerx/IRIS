@@ -9,6 +9,21 @@ var sitealbum	= new function()
 }
 
 </script>
+<style type="text/css">
+
+.album-list
+{
+	margin-bottom: 5px;
+}
+.album-list.col-sm-4
+{
+	position: relative;
+}
+.album-name
+{
+}
+
+</style>
 <h3>
 	<?php echo ucwords($typeName);?> : <?php echo $row['activityName'];?>
 </h3>
@@ -17,27 +32,6 @@ var sitealbum	= new function()
 </div>
 <div class='row'>
 	<div class='col-sm-6'>
-		<!-- <div class='row'>
-			<div class='col-sm-6'>
-				<div class='form-group'>
-				<label>Date</label>
-					<div>
-					<?php echo model::load("helper")->dateRangeLabel(Array($row['activityStartDate'],$row['activityEndDate']));?>
-					</div>
-				</div>
-			</div>
-			<div class='col-sm-6'>
-
-			</div>
-		</div>
-		<div class='row'>
-			<div class='col-sm-6'>
-
-			</div>
-			<div class='col-sm-6'>
-
-			</div>
-		</div> -->
 		<div class='table-responsive'>
 			<table class='table'>
 				<tr>
@@ -75,20 +69,53 @@ var sitealbum	= new function()
 					<div class='table-responsive'>
 						<table class='table'>
 							<tr>
-								<td>Type</td><td>: <?php echo model::load("activity/event")->type($row['activityType']);?></td>
+								<td>Type</td><td>: <?php echo model::load("activity/event")->type($row['eventType']);?></td>
 							</tr>
 						</table>
 					</div>
 					<?php elseif($row['activityType'] == 2):?>
-
+					<div class="table-responsive">
+						<table class='table'>
+							<tr>
+								<td>Type</td><td>: <?php echo model::load("activity/training")->type($row['trainingType']);?></td>
+							</tr>
+							<tr>
+								<td width="100px">Max Pax</td><td>: <?php echo $row['trainingMaxPax'];?></td>
+							</tr>
+						</table>
+					</div>
 					<?php endif;?>
 					</div>
 					<div class='tab-pane' id='album'>
 					<?php if(!$res_album):?>
 					This activity has no album yet. Do you want to <a href='<?php echo url::base("image/album?activity=$activityID#add");?>'>add</a>?
 					<?php else:?>
-
-					<?php endif;?>
+					<p>List of related album added for this <?php echo $typeName;?>. <a href='<?php echo url::base("image/album?activity=$activityID#add");?>'>Do you want to add more?</a></p>
+					<?php
+					foreach($res_album as $row):?>
+					<div class='row album-list'>
+						<div class='col-sm-4'>
+							<a href='<?php echo url::base("image/albumPhotos/".$row['albumID']);?>'>
+							<img style='width:100%;' src="<?php echo $imageServices->getPhotoUrl($row['albumCoverImageName']);?>" />
+							</a>
+						</div>
+						<div class='col-sm-8'>
+							<div class='table-responsive'>
+								<table class='table'>
+									<tr>
+										<td colspan="2"><?php echo $row['albumName'];?></td>
+										<td colspan='2' style="text-align:right;"><?php echo dateRangeViewer($row['albumCreatedDate']);?></td>
+									</tr>
+									<tr>
+										<td colspan="4" style='text-align:right;'>By <?php echo $row['userProfileFullName'];?></td>
+									</tr>
+								</table>
+							</div>
+						</div>
+					</div>
+					<?php 
+					endforeach;
+					endif;?>
 					</div>
 					<div class='tab-pane' id='blog'>
 					<?php if(!$res_article):?>

@@ -67,11 +67,12 @@ class Controller_Activity
 
 		$data['typeName']	= $typeName;
 
-		##
+		## 
 		$data['activityID']	= $activityID;
 
 		## get album.
-		$data['res_album']	= model::load("image/album")->getActivityAlbum($activityID);
+		$data['imageServices']	= model::load("image/services");
+		$data['res_album']		= model::load("image/album")->getActivityAlbum($activityID);
 
 		view::render("sitemanager/activity/view",$data);
 	}

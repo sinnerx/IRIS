@@ -133,4 +133,39 @@ function replace_param($name)
 	return $name;
 }
 
+function dateRangeViewer($date,$type = 1)
+{
+	$currT	= strtotime(date("Y-m-d H:i:s"));
+	$theT	= strtotime($date);
+
+	switch($type)
+	{
+		case 1:
+			//get day.
+			$day	= ($currT-$theT)/86400;
+			
+			$hour	= round((($currT-$theT)%86400)/3600);
+			
+			$mins	= round((($currT-$theT)%1440)/60);
+
+			if($day < 1)
+			{
+				if($hour >= 1)
+				{
+				return "$hour hours ago";
+				}
+				else
+				{
+				return "$mins minutes ago";
+				}
+			}
+			else
+			{
+				$sanityDay	= floor($day);
+				return "$sanityDay days, $hour hours, $mins minutes ago";
+			}
+		break;
+	}
+}
+
 ?>

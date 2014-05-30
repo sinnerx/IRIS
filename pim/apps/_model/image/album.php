@@ -30,14 +30,33 @@ class album
 
 		db::insert("album",$data);
 
+		$albumID	= db::getLastID("album","albumID");
+
 		## insert site_album
 		$data_sitealbum	= Array(
 				"siteID"=>$siteID,
 				"siteAlbumType"=>$siteAlbumType,
-				"albumID"=>db::getLastID("album","albumID")
+				"albumID"=>$albumID
 								);
 
 		db::insert("site_album",$data_sitealbum);
+
+		return $albumID;
+	}
+
+	## add activity album.
+	public function addActivityAlbum($activityID,$data)
+	{
+		## create album.
+		$albumID	= $this->addSiteAlbum($siteID,1,$data);
+
+		## and relate.
+		db::insert("activity_album",Array(
+							"activityID"=>$activityID,
+							"albumID"=>$albumID,
+							"activityAlbumCreatedDate"=>now(),
+							"activityAlbumCreatedUser"=>session::get("userID")
+										));
 	}
 
 	## list all sites allbum.
@@ -66,8 +85,11 @@ class album
 
 	public function getActivityAlbum($activityID)
 	{
+		db::select("album.*,user_profile.userProfileFullName");
 		db::where("activityID",$activityID);
 		db::join("album","album.albumID = activity_album.albumID");
+		db::join("user_profile","user_profile.userID = albumCreatedUser");
+		db::order_by("activityID","desc");
 
 		return db::get("activity_album")->result();
 	}
