@@ -61,7 +61,7 @@ Listing all your request blogs here.
 		$requestdata = model::load('site/request')->replaceWithRequestData('article.update', array_keys($article));
 		$no	= pagination::recordNo();
 		foreach($article as $row):
-		if(isset($requestdata[$row['articleID']])){
+		/*if(isset($requestdata[$row['articleID']])){
 			$row = array_merge($row,$requestdata[$row['articleID']]);
 
 			$ats = array();
@@ -73,7 +73,7 @@ Listing all your request blogs here.
 				$row['articleTags'] = strtok(",");
 			}
 			$articleTags[$row['articleID']] = $ats;
-		}
+		}*/
 
 		$active		= $row['articleStatus'] == 1?"active":"";
 		$opacity	= $row['articleStatus'] == 0 || isset($requestdata[$row['articleID']])?"style='opacity:0.5;'":"";
