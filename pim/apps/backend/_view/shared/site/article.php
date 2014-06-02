@@ -56,22 +56,25 @@ Listing all your request blogs here.
 		</tr>
 	</thead>
 	<tbody>
-		<?php if($article):
+		<?php
+	 if($article):
 		$requestdata = model::load('site/request')->replaceWithRequestData('article.update', array_keys($article));
 		$no	= pagination::recordNo();
 		foreach($article as $row):
 		if(isset($requestdata[$row['articleID']])){
 			$row = array_merge($row,$requestdata[$row['articleID']]);
-			$articleTags = array();
+
+			$ats = array();
 			$row['articleTags'] = strtok($row['articleTags'],',');
 
 			while ($row['articleTags'] != false)
     		{
-				array_push($articleTags,array('articleTagName'=>$row['articleTags']));
+				array_push($ats,array('articleTagName'=>$row['articleTags']));
 				$row['articleTags'] = strtok(",");
 			}
-			$row['articleTags'] = $articleTags;
+			$articleTags[$row['articleID']] = $ats;
 		}
+
 		$active		= $row['articleStatus'] == 1?"active":"";
 		$opacity	= $row['articleStatus'] == 0 || isset($requestdata[$row['articleID']])?"style='opacity:0.5;'":"";
 		$href		= ($row['articleStatus'] == 1?"deactivate":"activate")."?".$row['articleID'];
@@ -87,7 +90,7 @@ Listing all your request blogs here.
 					<div>
 						<ul class="token">
 							<?php
-								foreach($row['articleTags'] as $tag):
+								foreach($articleTags[$row['articleID']] as $tag):
 							?>
 							<li><span class="label"><?php echo $tag['articleTagName']; ?><i class="icon-remove icon-white"></i></span></li>
 							<?php

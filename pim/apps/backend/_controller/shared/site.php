@@ -402,20 +402,10 @@ Class Controller_Site
 		$siteArticle	= model::load("blog/article");
 
 		## manager.
-		if(session::get("userLevel") == 2)
-		{
-			$siteID	= $site->getSiteByManager(session::get("userID"),"siteID");
-		}
-		else ## must be root admin.
-		{
-			$siteID	= 0;
-		}
-
+		$siteID = model::load("access/auth")->getAuthData("site", "siteID");
 		$data['article']	= $siteArticle->getArticleList($siteID, false, $page);
 
-		foreach($data['article'] as $tags => $t){
-			$data['article'][$tags]['articleTags'] = $siteArticle->getArticleTag($data['article'][$tags]['articleID']);
-		}
+		$data['articleTags'] = $siteArticle->getArticleTag(array_keys($data['article']));
 
 		view::render("shared/site/article", $data);
 	}
@@ -472,6 +462,7 @@ Class Controller_Site
 	{
 		$data['row']	= model::load("blog/article")->getArticle($articleID);
 		$data['row']['articleTags'] = model::load("blog/article")->getArticleTag($data['row']['articleID']);
+		#echo '<pre>';print_r($data['row']);die;
 		$siterequest = model::load('site/request')->replaceWithRequestData('article.update', $articleID, $data['row']);
 		
 		if($siterequest == true){

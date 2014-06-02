@@ -40,10 +40,31 @@ class Article
 		return db::get()->result("articleID");
 	}
 
+	public function slugChecker($slug,$date,$articleID=null)
+	{
+		db::from("article");
+		db::where("articleOriginalSlug = '".$slug."' AND YEAR(articleCreatedDate) = '".date('Y', strtotime($date))."' AND MONTH(articleCreatedDate) = '".date('n', strtotime($date))."'");
+		
+		if($articleID)
+		{
+			db::where("articleID !=".$articleID);
+		}
+
+		if($result=db::get()->result())
+		{
+			$slug = $slug.'-'.(count($result)+1);
+		}
+
+		return $slug;
+	}
+
 	# add an article on a blog
 	public function addArticle($siteID,$data)
 	{
 		$status = session::get('userLevel') == 99?1:0;
+
+		$originalSlug = model::load('helper')->slugify($data['articleName']);
+		$articleSlug = $this->slugChecker($originalSlug,$data['articlePublishedDate']);
 
 		$dataArticle	= Array(
 				"siteID"=>$siteID,
@@ -88,7 +109,12 @@ class Article
 
 		db::order_by("articleTagID ASC");
 
-		return db::get()->result();
+		if(is_array($articleID)){
+			return db::get()->result("articleID", true);
+		}else{
+			return db::get()->result();
+		}
+
 	}
 
 	# return only an article
@@ -110,6 +136,9 @@ class Article
 		if(!model::load("site/request")->checkRequest("article.add",$data['siteID'],$articleID))
 		{
 			model::load("site/request")->create('article.update', $data['siteID'], $articleID, $data);
+			$status = Array("articleStatus"=>4);
+
+			db::where("articleID",$articleID)->update("article",$status);
 		}
 		## if exists, just update announcement tabel.
 		else

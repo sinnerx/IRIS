@@ -5,6 +5,7 @@ class Helper
 {
 	public function slugify($item)
 	{
+		$item 	= preg_replace('/[^\p{L}\p{N}\s]/u', '', $item);
 		$item	= str_replace(" ", "-",$item);	# replace space with -
 		$item	= strtolower($item);			# lowercase.
 
