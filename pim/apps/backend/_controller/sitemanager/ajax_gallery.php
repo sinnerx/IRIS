@@ -30,7 +30,7 @@ class Controller_Ajax_Gallery
 			$upload	= $file->move(model::load("image/services")->getPhotoPath($path));
 			$imgUrl	= model::load("image/services")->getPhotoUrl($path);
 
-			echo "<script type='text/javascript'>parent.pimgallery.setNewPhotoUrl('$imgUrl','$path')</script>";
+			echo "<script type='text/javascript'>parent.pimgallery.photopicker.setNewPhotoUrl('$imgUrl','$path')</script>";
 		}
 	}
 
