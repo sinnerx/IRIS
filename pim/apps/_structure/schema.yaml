@@ -16,6 +16,21 @@ user_premium:
 	userPremiumCreatedDate [datetime]
 	userPremiumCreatedUser [int]
 
+# account:
+# 	accountID [int]
+# 	userID [int]
+# 	accountTotal [int]
+
+# account_transaction:
+# 	accountTransactionID [int]
+# 	accountID [int]
+# 	accountTransactionType [int]		## 1 = credit, 2 = debit
+# 	accountTransactionCode [varchar]	## code is based on model/user/account@code
+# 	accountTransactionValue [float]
+# 	accountTransactionRemark [text]
+# 	accountTransactionCreatedDate [int]
+# 	accountTransactionCreatedUser [int]
+
 user_profile:
 	userProfileID [int]
 	userID [int]
@@ -61,6 +76,7 @@ activity:
 	activityCreatedDate [datetime]
 	activityUpdatedUser [int]
 	activityUpdatedDate [datetime]
+
 
 activity_budget:			## incomplete.
 	activityBudgedID [int]
@@ -262,6 +278,22 @@ article_tag:
 	articleTagID [int]
 	articleID [int]	## article ID
 	articleTagName [varchar]
+
+article_category:
+	articleCategoryID [int]
+	articleID [int]
+	categoryID [int]
+
+category:
+	categoryID [int]
+	categoryName [varchar]
+	categoryParentID [int]
+	categoryCreatedDate [datetime]
+	categoryCreatedUser [int]
+
+article_listed:
+	articleListedID [int]
+	articleID [int]
 
 announcement:
 	announcementID [int]
