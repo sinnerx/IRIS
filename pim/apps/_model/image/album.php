@@ -1,36 +1,48 @@
 <?php
 namespace model\image;
-use db, session;
+use db, session, model, pagination;
 class album
 {
 	## get list of photo by album id
-	public function getPhotos($albumID)
+	public function getSitePhotos($siteID,$siteAlbumID,$paginationConf = null)
 	{
-		db::where("albumID",$albumID);
-		return db::get("photo")->result();
+		db::from("site_photo");
+		db::where("siteID",$siteID);
+		db::where("siteAlbumID",$siteAlbumID);
+
+		## if got pagination..
+		if($paginationConf)
+		{
+			pagination::setFormat(model::load("template/cssbootstrap")->paginationLink());
+			## pass page and siteAlbumID (said) through html_number
+			pagination::setFormat(Array("html_number"=>"<li><a href='{href}' data-page='{number}' data-said='$siteAlbumID'>{number}</a></li>"));
+			pagination::initiate(Array(
+							"totalRow"=>db::num_rows(),
+							"urlFormat"=>$paginationConf['urlFormat'],
+							"limit"=>$paginationConf['limit'],
+							"currentPage"=>$paginationConf['currentPage']
+									));
+
+			db::limit($paginationConf['limit'],pagination::recordNo()-1);
+		}
+
+		db::order_by("sitePhotoID","desc");
+		db::join("photo","photo.photoID = site_photo.photoID");
+		return db::get()->result();
 	}
 
 	## get just album row.
-	public function getAlbum($albumID)
+	public function getSiteAlbum($siteAlbumID)
 	{
-		db::where("albumID",$albumID);
-		return db::get("album")->row();
+		db::where("siteAlbumID",$siteAlbumID);
+		db::join("album","album.albumID = site_album.albumID");
+		return db::get("site_album")->row();
 	}
 
 	## add album.
 	public function addSiteAlbum($siteID,$siteAlbumType,$data)
 	{
-		$data	= Array(
-				"albumType"=>2,
-				"albumName"=>$data['albumName'],
-				"albumDescription"=>$data['albumDescription'],
-				"albumCreatedDate"=>now(),
-				"albumCreatedUser"=>session::get("userID")
-						);
-
-		db::insert("album",$data);
-
-		$albumID	= db::getLastID("album","albumID");
+		$albumID	= $this->_addAlbum($data);
 
 		## insert site_album
 		$data_sitealbum	= Array(
@@ -40,30 +52,44 @@ class album
 								);
 
 		db::insert("site_album",$data_sitealbum);
+		$siteAlbumID	= db::getLastID("site_album","siteAlbumID");
+		return $siteAlbumID;
+	}
 
-		return $albumID;
+	private function _addAlbum($data)
+	{
+		$data 	= Array(
+				"albumName"=>$data['albumName'],
+				"albumDescription"=>$data['albumDescription'],
+				"albumCreatedDate"=>now(),
+				"albumCreatedUser"=>session::get("userID")
+						);
+
+		db::insert("album",$data);
+
+		return db::getLastID("album","albumID");
 	}
 
 	## add activity album.
 	public function addActivityAlbum($activityID,$data)
 	{
 		## create album.
-		$albumID	= $this->addSiteAlbum($siteID,1,$data);
+		$siteAlbumID	= $this->addSiteAlbum($siteID,1,$data);
 
 		## and relate.
 		db::insert("activity_album",Array(
 							"activityID"=>$activityID,
-							"albumID"=>$albumID,
+							"siteAlbumID"=>$siteAlbumID,
 							"activityAlbumCreatedDate"=>now(),
 							"activityAlbumCreatedUser"=>session::get("userID")
 										));
+
+		return $siteAlbumID;
 	}
 
 	## list all sites allbum.
 	public function getSiteAlbums($siteID,$year = null,$month = null)
 	{
-		db::where("albumType",2);
-
 		## if year.
 		if($year)
 		{
@@ -87,7 +113,8 @@ class album
 	{
 		db::select("album.*,user_profile.userProfileFullName");
 		db::where("activityID",$activityID);
-		db::join("album","album.albumID = activity_album.albumID");
+		db::join("site_album","site_album.siteAlbumID = activity_album.siteAlbumID");
+		db::join("album","album.albumID = site_album.albumID");
 		db::join("user_profile","user_profile.userID = albumCreatedUser");
 		db::order_by("activityID","desc");
 

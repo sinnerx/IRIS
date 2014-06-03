@@ -9,24 +9,33 @@ class Photo extends Services
 		return $this->_add(1,$albumID,$name,$desc);
 	}
 
-	## main method to save photo into db.and return full path of photo.
-	public function addSitePhoto($albumID,$name,$desc = null)
-	{		
-		return $this->_add(2,$albumID,$name,$desc);
+	## main method to save photo into db.and return photo name.
+	public function addSitePhoto($siteAlbumID,$name,$desc = null)
+	{
+		$siteID		= model::load("access/auth")->getAuthData("site","siteID");
+
+		## add photo.
+		$addPhoto	= $this->_addPhoto($name,$desc);
+
+		$data	= Array(
+			"photoID"=>$addPhoto[1],
+			"siteID"=>$siteID,
+			"siteAlbumID"=>$siteAlbumID
+				);
+
+		db::insert("site_photo",$data);
+
+		// return $this->_add(2,$albumID,$name,$desc);
+		return $addPhoto[0]; ## return name.
 	}
 
-	private function _add($type,$albumID,$originalname,$desc)
+	private function _addPhoto($originalname,$desc)
 	{
-		$siteID		= model::load("site/site")->getSiteByManager(session::get("userID"),"siteID");
+		$photoNameR	= $this->_createPhotoFullname($originalname);
 
-		## create photo name.
-		$photonameR	= $this->_createPhotoFullname($originalname);
 		$data	= Array(
-				"siteID"=>$siteID,
-				"photoType"=>$type,
-				"albumID"=>$albumID,
-				"photoName"=>$photonameR[0],
-				"photoOriginalName"=>$photonameR[1],
+				"photoName"=>$photoNameR[0],
+				"photoOriginalName"=>$photoNameR[1],
 				"photoDescription"=>$desc,
 				"photoCreatedUser"=>session::get("userID"),
 				"photoCreatedDate"=>now()
@@ -34,15 +43,21 @@ class Photo extends Services
 
 		db::insert("photo",$data);
 
-		## return photo name along with it's full path.
-		return $this->getPhotoPath($photonameR[0]);
+		return Array($photoNameR[0],db::getLastID("photo","photoID"));
 	}
 
 	## create and format by date. example  year/month/day
 	private function _createPhotoFullname($originalname)
 	{
 		# slugify.
-		$filename	= model::load("helper")->slugify($originalname);
+		$originalname	= explode(".",$originalname);
+			$ext		= array_pop($originalname);
+
+		$filename	= model::load("helper")->slugify(implode(".",$originalname));
+
+		## re-add ext.
+		$originalname	.= ".".$ext;
+		$filename		.= ".".$ext;
 
 		$path	= date("Y/m/d");
 
