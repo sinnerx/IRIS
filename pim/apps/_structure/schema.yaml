@@ -79,6 +79,7 @@ activity_time:
 
 activity_user:
 	activityUserID [int]
+	activityID [int]
 	userID [int]
 	activityUserValue [int]			## 1 = join, 2 = no.
 	activityUserCreatedDate [datetime]
@@ -91,7 +92,7 @@ activity_article:
 activity_album:
 	activityAlbumID [int]
 	activityID [int]
-	albumID [int]
+	siteAlbumID [int]
 	activityAlbumCreatedDate [datetime]
 	activityAlbumCreatedUser [int]
 
@@ -305,7 +306,6 @@ cluster_lead:
 
 album:
 	albumID [int]
-	albumType [int]			## 1 = user-album, 2 = site-album
 	albumName [varchar]
 	albumCoverImageName [varchar] ## relative url for photo.
 	albumDescription [text]
@@ -318,15 +318,24 @@ site_album:
 	siteID [int]
 	siteAlbumType [int] ## 1 = activity-album.
 
+site_photo:
+	sitePhotoID [int]
+	photoID [int]
+	siteID [int]
+	siteAlbumID [int]
+
 user_album:
 	userAlbumID [int]
 	albumID [int]
 	userID [int]
 
+user_photo:
+	userPhotoID [int]
+	photoID [int]
+	userAlbumID [int]
+
 photo:
 	photoID [int]
-	albumID [int]			## 0 is no album, else album based.
-	photoType [int]			## 1 = user-photo, 2 = site-photo, 0 = unrelated.
 	photoName [varchar]			## photo full saved name, (path included)
 	photoOriginalName [varchar]	## original photo name.
 	photoDescription [text]
