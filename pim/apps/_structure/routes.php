@@ -126,8 +126,11 @@ $routes[]	= Array("[:site-slug]/activity","controller=activity@index");
 ## site contact-us
 $routes[]	= Array("[:site-slug]/hubungi-kami","controller=main@contact");
 
-## site blog
+## site blog [articleList]
 $routes[]	= Array("[:site-slug]/blog","controller=blog@article");
+
+## site view an article
+$routes[]	= Array("[:site-slug]/blog/[:year]/[:month]/[:article-slug]","controller=blog@view");
 
 ## site members
 $routes[]	= Array("[:site-slug]/members","controller=member/index");
