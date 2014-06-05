@@ -61,16 +61,16 @@ class Article
 	# add an article on a blog
 	public function addArticle($siteID,$data)
 	{
-		$status = session::get('userLevel') == 99?1:0;
-
 		$originalSlug = model::load('helper')->slugify($data['articleName']);
 		$articleSlug = $this->slugChecker($originalSlug,$data['articlePublishedDate']);
 
 		$dataArticle	= Array(
 				"siteID"=>$siteID,
-				"articleStatus"=>$status,
+				"articleStatus"=>$data['articleStatus'],
 				"articleName"=>$data['articleName'],
 				"articleText"=>$data['articleText'],
+				"articleOriginalSlug"=>$originalSlug,
+				"articleSlug"=>$articleSlug,
 				"articlePublishedDate"=>$data['articlePublishedDate'],
 				"articleCreatedUser"=>session::get("userID"),
 				"articleCreatedDate"=>now()
@@ -93,8 +93,17 @@ class Article
 
     		$data['articleTags'] = strtok(",");
 		}
+			
+		foreach($data['category'] as $category){
+			$dataToken = Array(
+				"articleID"=>$id,
+				"categoryID"=>$category
+			);
+
+			db::insert("article_category",$dataToken);
+		}
 		
-		if( session::get('userLevel') == 2)	{
+		if(session::get('userLevel') == 2 && $data['articleStatus'] == 0)	{
 			model::load("site/request")->create('article.add', $siteID, $id, Array());
 		}
 	}
@@ -102,17 +111,21 @@ class Article
 	# return an array of articleS
 	public function getArticleTag($articleID)
 	{
-		db::from("article_tag");
+		if($articleID){
+			db::from("article_tag");
 
-		# get by articleID
-		db::where("articleID", $articleID);
+			# get by articleID
+			db::where("articleID", $articleID);
 
-		db::order_by("articleTagID ASC");
+			db::order_by("articleTagID ASC");
 
-		if(is_array($articleID)){
-			return db::get()->result("articleID", true);
+			if(is_array($articleID)){
+				return db::get()->result("articleID", true);
+			}else{
+				return db::get()->result();
+			}
 		}else{
-			return db::get()->result();
+			return null;
 		}
 
 	}
@@ -123,7 +136,33 @@ class Article
 		db::from("article");
 		db::where("articleID",$articleID);
 
-		return db::get()->row();
+		$article = db::get()->row();
+
+		db::from('user_profile');
+
+		if($article['articleCreatedUser']){
+			db::where("userID",$article['articleCreatedUser']);
+		}else{
+			db::where("userID",$article['articleUpdatedUser']);
+		}
+
+		$user_profile = db::get()->row();
+
+		$article['articleEditedUser'] = $user_profile['userProfileFullName'];
+
+		return $article;
+	}
+
+	public function getArticleIDBySlug($slug = null, $year = null, $month = null)
+	{
+		$slug	= !$slug?reqs::named("site-slug"):$slug;
+
+		$slug	= trim($slug);
+		db::from("article");
+		db::where("articleSlug = '".$slug."' AND YEAR(articlePublishedDate) = '".$year."' AND MONTH(articlePublishedDate) = '".$month."'");
+		$articleID	= db::get()->row('articleID');
+
+		return $articleID?$articleID:false;
 	}
 
 	#updating an article
@@ -131,19 +170,62 @@ class Article
 	{
 		$data['articleUpdatedDate'] = now();
 		$data['articleUpdatedUser'] = session::get('userID');
+			
+		if($data['articleTags']){
+			db::delete('article_tag', 'articleID='.$articleID);
+
+			$data['articleTags'] = strtok($data['articleTags'],',');
+
+			while ($data['articleTags'] != false)
+		    {
+				$dataToken = Array(
+					"articleID"=>$articleID,
+					"articleTagName"=>$data['articleTags']
+				);
+
+				db::insert("article_tag",$dataToken);
+
+		    	$data['articleTags'] = strtok(",");
+			}
+			unset($data['articleTags']);
+		}
+		
+		if($data['category']){		
+			db::delete('article_category', 'articleID='.$articleID);
+			foreach($data['category'] as $category){
+				$dataToken = Array(
+					"articleID"=>$articleID,
+					"categoryID"=>$category
+				);
+
+				db::insert("article_category",$dataToken);
+			}
+			unset($data['category']);
+		}
 
 		## only if no add request pending.
-		if(!model::load("site/request")->checkRequest("article.add",$data['siteID'],$articleID))
+		if(!model::load("site/request")->checkRequest("article.add",$data['siteID'],$articleID) && $data['articleStatus'] == 0 || $data['articleStatus'] == 4)
 		{
-			model::load("site/request")->create('article.update', $data['siteID'], $articleID, $data);
-			$status = Array("articleStatus"=>4);
+			$article = $data;
+			$article['articleStatus'] = 1;
+			model::load("site/request")->create('article.update', $data['siteID'], $articleID, $article);
+			
+			if($data['articleStatus'] == 0){
+				$status = Array("articleStatus"=>0);
+			}else{
+				$status = Array("articleStatus"=>4);
+			}
 
 			db::where("articleID",$articleID)->update("article",$status);
 		}
-		## if exists, just update announcement tabel.
+		## if exists, just update article table.
 		else
 		{
 			db::where("articleID",$articleID)->update("article",$data);
+
+			if($data['articleStatus'] == 0){
+				model::load("site/request")->create('article.add', $siteID, $id, Array());
+			}
 		}
 	}
 }
