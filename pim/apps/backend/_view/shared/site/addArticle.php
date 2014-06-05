@@ -4,8 +4,69 @@
 <link rel="stylesheet" href="<?php echo url::asset("backend/tools/bootstrap-tokenizer/tokenizer.css"); ?>" type="text/css" />
 <link rel="stylesheet" href="<?php echo url::asset("backend/tools/bootstrap-tokenizer/bootstrap-tokenizer.css"); ?>" type="text/css" />
 <script src="<?php echo url::asset("backend/tools/bootstrap-tokenizer/bootstrap-tokenizer.js"); ?>"></script>
+<script src="<?php echo url::asset("backend/js/pimgallery.js"); ?>"></script>
 <script>
-        tinymce.init({selector:'textarea.mce',menubar: false});
+		function confirmation(){
+			var r = confirm("Are you sure?");
+    		if (r == true) {
+        		return true;
+    		} else {
+        		return false;
+    		}
+		}
+
+		var selection = null;
+
+        tinymce.init({
+        	selector:'textarea.mce',
+        	menubar: false,
+    		toolbar: ["undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | mybutton"],
+        	relative_urls: false,
+        	remove_script_host: false,
+        	setup : function(ed) {
+        		// Add a custom button
+		        ed.addButton('mybutton', {
+				title : 'Insert/edit Photo',
+				image : '<?php echo url::asset("backend/tools/tinymce/js/tinymce/24_upload.png"); ?>',
+				onclick : function() {
+					// Add you own code to execute something on click
+					ed.focus();
+					selection = ed.selection;
+			        }
+		        });
+		    }
+        });
+
+		function setUrl(res)
+		{
+			selection.setContent("<img style='max-width:100%;' src='"+res.photoUrl+"' />");
+		}
+
+		$(document).ready(function()
+		{
+			setTimeout(function()
+			{
+				$("#mce_14").attr("data-toggle","ajaxModal").attr("onclick","pimgallery.start(this,setUrl);");
+			},500);
+
+			<?php 
+			foreach($category as $cat): 
+				if($cat['child']):
+			?>
+			$('#parent<?php echo $cat['categoryID']; ?>').click(function(){
+				if($(this).is(':checked')){
+					$('#child<?php echo $cat['categoryID']; ?>').slideDown();
+				}else{
+					$('#child<?php echo $cat['categoryID']; ?>').find('input').attr("checked", false);
+					$('#child<?php echo $cat['categoryID']; ?>').slideUp();
+				}
+			});
+			<?php 
+				endif;
+			endforeach; 
+			?>
+
+		})
 </script>
 <h3 class="m-b-xs text-black">
 <a href='info'>Add Article</a>
@@ -13,36 +74,79 @@
 <div class='well well-sm'>
 Add an article
 </div>
-<form method='post' enctype="multipart/form-data">
+<form method='post'>
 <?php echo flash::data();?>
 <div class='row'>
-	<div class='col-sm-12'>
+	<div class='col-sm-8'>
 	<section class="panel panel-default">
+		<header class="panel-heading">Editor</header>
 		<div class="panel-body">
-			<div class="form-group" style="margin-left: -30px;">
-				<div class="col-sm-7" style="left: 0px;">
-					<label class="col-sm-4 control-label">1. Published Date</label>
-					<?php echo form::text("articlePublishedDate","class='input-sm input-s datepicker-input form-control' date-date-format='dd-mm-yyyy'",date('d-m-Y', strtotime(now(). ' + 5 days')));?>
-					<?php echo flash::data("articlePublishedDate");?>
-				</div>
-				<div class="col-sm-5">
-					<label class="col-sm-3 control-label">2. Title</label>
-					<?php echo form::text("articleName","size='40' class='form-control input-s'");?>
-					<?php echo flash::data('articleName');?>
-				</div>
+			<div class="form-group form-inline">
+				<?php echo form::text("articleName","style='width: 75.5%;' size='40' class='form-control input-s' placeholder='Insert title'");?>
+				<?php echo form::text("articlePublishedDate","class='input-sm input-s datepicker-input form-control' date-date-format='dd-mm-yyyy'",date('d-m-Y', strtotime(now(). ' + 5 days')));?>
+				<?php echo flash::data('articleName');?>
+				<?php echo flash::data("articlePublishedDate");?>
 			</div>
 			<div class="form-group">
-				<label>3. Text</label>
-				<?php echo form::textarea("articleText","size='40' style='height: 300px;' class='mce' style='height:200px;'");?>
+				<?php echo form::textarea("articleText","size='40' style='height: 300px;' class='mce'");?>
 				<?php echo flash::data('articleText');?>
 			</div>
+		</div>
+	</section>
+	</div>
+	<div class='col-sm-4'>
+	<section class="panel panel-default">
+		<header class="panel-heading">Publish</header>
+		<div class="panel-body">
 			<div class="form-group">
-				<label>4. Tag</label>
-				<input name='articleTags' id='articleTags' size='40' class="form-control span4" data-provide="tokenizer" value="">
-				<?php echo flash::data('articleTags');?>
+				<?php echo form::submit("Save as draft","name='articleStatus' class='btn btn-xs btn-default pull-left'");?>
+				<?php echo form::submit("Publish blog","name='articleStatus' onclick='return confirmation();' class='btn btn-xs btn-primary pull-right'");?>
 			</div>
+		</div>
+	</section>
+	<section class="panel panel-default">
+		<header class="panel-heading">Categories</header>
+		<div class="panel-body">
+	        <header class="panel-heading bg-light">
+	            <ul class="nav nav-tabs nav-justified">
+	                <li class="active"><a href="#all" data-toggle="tab">All categories</a></li>
+                    <li><a href="#most" data-toggle="tab">Most used</a></li>
+	            </ul>
+	        </header>
+	        <div class="panel-body" style="border-style:solid;border-width:1px;border-color:#eaeef1 !important;">
+	            <div class="tab-content">
+	                <div class="tab-pane active" id="all"><!--  style="overflow: auto;height:100px;"> -->
+	                	<?php
+	                		foreach($category as $cat):
+	                	?>	
+	                	<input type="checkbox" id="parent<?php echo $cat['categoryID']; ?>" name="category[]" value="<?php echo $cat['categoryID']; ?>" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $cat['categoryName']; ?><br/>
+	                	<div style="display: none;" id="child<?php echo $cat['categoryID']; ?>">
+	                	<?php
+	                			if($cat['child']):
+	                				foreach($cat['child'] as $c):
+	                	?>
+	                	<span style="padding-left: 15px;"><input type="checkbox" name="category[]" value="<?php echo $c['categoryID']; ?>" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $c['categoryName']; ?></span><br/>
+	                	<?php
+	                				endforeach;
+	                			endif;
+	                	?>
+	                	</div>
+	                	<?php
+	                		endforeach;
+	                	?>	
+	                </div>
+                    <div class="tab-pane" id="most"><!--  style="overflow: auto;height:100px;"> -->
+	                	<input type="checkbox">
+	                </div>
+	            </div>
+	        </div>
+        </div>
+    </section>
+	<section class="panel panel-default">
+		<header class="panel-heading">Post Tags</header>
+		<div class="panel-body">
 			<div class="form-group">
-				<?php echo form::submit("Update blog","class='btn btn-primary pull-right'");?>
+				<input name='articleTags' id='articleTags' size='40' class="form-control span4" data-provide="tokenizer" value="">
 			</div>
 		</div>
 	</section>

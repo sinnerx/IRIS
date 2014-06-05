@@ -90,11 +90,13 @@ Listing all your request blogs here.
 					<div>
 						<ul class="token">
 							<?php
+								if($articleTags[$row['articleID']]):
 								foreach($articleTags[$row['articleID']] as $tag):
 							?>
 							<li><span class="label"><?php echo $tag['articleTagName']; ?><i class="icon-remove icon-white"></i></span></li>
 							<?php
 								endforeach;
+								endif;
 							?>
 							<li><span class="input" contenteditable="false"></span></li>
 						</ul>

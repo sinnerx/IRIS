@@ -404,7 +404,6 @@ Class Controller_Site
 		## manager.
 		$siteID = model::load("access/auth")->getAuthData("site", "siteID");
 		$data['article']	= $siteArticle->getArticleList($siteID, false, $page);
-
 		$data['articleTags'] = $siteArticle->getArticleTag(array_keys($data['article']));
 
 		view::render("shared/site/article", $data);
@@ -445,6 +444,7 @@ Class Controller_Site
 
 			## equate with _POST
 			$data	= input::get();
+			$data['articleStatus'] = $data['articleStatus'] == 'Save as draft'? 3:0;
 			$data['articlePublishedDate'] = date('Y-m-d',strtotime($data['articlePublishedDate']));
 			//echo '<input type="text" value="';print_r($data);echo '" />';die;
 
@@ -454,7 +454,10 @@ Class Controller_Site
 			redirect::to("site/article","Successfully added a blog post.");
 		}
 
-		view::render("shared/site/addArticle");
+		$category	= model::load("blog/category")->getCategoryList();
+		
+		$data['category'] = $category;
+		view::render("shared/site/addArticle", $data);
 	}
 
 	# edit article
@@ -462,20 +465,6 @@ Class Controller_Site
 	{
 		$data['row']	= model::load("blog/article")->getArticle($articleID);
 		$data['row']['articleTags'] = model::load("blog/article")->getArticleTag($data['row']['articleID']);
-		#echo '<pre>';print_r($data['row']);die;
-		$siterequest = model::load('site/request')->replaceWithRequestData('article.update', $articleID, $data['row']);
-		
-		if($siterequest == true){
-			$articleTags = array();
-			$data['row']['articleTags'] = strtok($data['row']['articleTags'],',');
-
-			while ($data['row']['articleTags'] != false)
-	    	{
-				array_push($articleTags,array('articleTagName'=>$data['row']['articleTags']));
-				$data['row']['articleTags'] = strtok(",");
-			}
-			$data['row']['articleTags'] = $articleTags;
-		}
 
 		if(form::submitted())
 		{
@@ -495,8 +484,11 @@ Class Controller_Site
 
 			## populate into data.
 			$postdata = input::get();
+			$postdata['articleStatus'] = $postdata['articleStatus'] == 'Save as draft'? 3:0;
+			$postdata['articleStatus'] = $data['row']['articleStatus'] == 1? 4:$postdata['articleStatus']; 
 			$postdata['articlePublishedDate'] = date('Y-m-d',strtotime($postdata['articlePublishedDate']));
 			$postdata['siteID'] = $data['row']['siteID'];
+			# echo '<pre>';print_r($postdata);die;
 
 			## update db.
 			model::load("blog/article")->updateArticle($articleID,$postdata);
@@ -504,6 +496,8 @@ Class Controller_Site
 			redirect::to("site/article","Your edited article has been requested.");
 		}
 
+		$data['category'] = model::load("blog/category")->getArticleCategoryList($data['row']['articleID']);
+		# echo '<pre>';print_r($data);die;
 		view::render("shared/site/editArticle",$data);
 	}
 }
