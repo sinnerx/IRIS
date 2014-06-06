@@ -101,7 +101,7 @@
     <div id="example">
   <ul>
   <?php
-  $annList = model::load("site/announcement")->getAnnouncement(0, true);
+  $annList = model::load("site/announcement")->getAnnouncementList(0, true);
   foreach($annList as $row)
   {
       if(strpos($row['announcementLink'], 'localhost') !== false || strpos($row['announcementLink'], 'p1m') !== false){

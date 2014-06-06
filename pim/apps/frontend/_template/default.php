@@ -26,7 +26,7 @@
 				<div class="cntnt-anncmnt">
 					<ul id="js-news" class="js-hidden">
 				  <?php
-				  $annList = model::load("site/announcement")->getAnnouncement($row_site['siteID'],true);
+				  $annList = model::load("site/announcement")->getAnnouncementList($row_site['siteID'],true);
 				  foreach($annList as $row)
 				  {
     					if(strpos($row['announcementLink'], 'localhost') !== false || strpos($row['announcementLink'], 'p1m') !== false){
