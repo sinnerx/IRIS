@@ -51,6 +51,39 @@ var pim = function(conf)
 		});
 	}
 
+	this.ajax	= new function()
+	{
+		this.urlify	= function(selector,container,attrName)
+		{
+			// if set, will use this attribute, as url storer.
+			var attrName	= attrName?attrName:"href";
+			$(selector).click(function()
+			{
+				var href	= $(this).attr(attrName);
+
+				if(href)
+				{
+					$.ajax({url:href,type:"GET"}).done(function(txt)
+					{
+						$(container).html(txt);
+					});
+				}
+
+				return false;
+			});
+		}
+
+		this.getModal = function(url)
+		{
+			$('#ajaxModal').remove();
+			var modal = $('<div class="modal fade" id="ajaxModal"><div class="modal-body"></div></div>');
+			$("body").append(modal);
+			modal.modal();
+			modal.load(url);
+		}
+	}
+	
+
 	this.func	= new function()
 	{
 		this.switchShow	= function(first,second)
