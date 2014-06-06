@@ -176,9 +176,11 @@ class Activity
 	}
 
 	public function createLinkWithArticle($activityID,$articleID)
-	{/*
+	{
 		## check if already linked.
-		$check	= db::where("articleID",$articleID)->where("activityID"=>$activityID)->get("activity_article")->row();
+		$check	= db::where("articleID",$articleID)
+		->where("activityID",$activityID)
+		->get("activity_article")->row();
 
 		if($check)
 			return false;
@@ -189,7 +191,7 @@ class Activity
 								"articleID"=>$articleID,
 								"activityArticleCreatedDate"=>now(),
 								"activityArticleCreatedUser"=>session::get("userID")
-											));*/
+											));
 	}
 
 	## return list of incoming and previous activity
