@@ -199,31 +199,68 @@ class Activity
 	{
 		$currDate	= date("Y-m-d H:i:s");
 
+		$where	= Array();
 		db::from("activity");
-		db::where("siteID",$siteID);
+		db::where("siteID",62);
 
-		## 1. select by month, and year.
-		db::where("year(activityStartDate)",$year);
-		db::where("month(activityEndDate)",$month);
+		##### 1.1. select by month, and year.
+		#db::where("year(activityStartDate)",$year);
+		#db::where('year(activityEndDate)')
 
-		## 2. previous activity
+		## 1.2. previous activity
+		## where.
 		if($flag == "previous")
 		{
 			db::where("activityEndDate <",$currDate);
 		}
 
-		## 3. incoming activity
+		## 1.3. incoming activity
 		if($flag == "incoming")
 		{
 			db::where("activityStartDate >",$currDate);
 		}
 
-		## 4. no report about this activity yet.
-		db::where("activityID NOT IN (SELECT activityID FROM activity_article WHERE activityArticleType != 1)");
+		## 1.4. no report about this activity yet, or not linked yet.
+		db::where("activityID NOT IN (SELECT activityID FROM activity_article WHERE activityArticleType != 1 OR activityID != activity.activityID)");
 
+		##+execute+##
 		$res	= db::get()->result("activityID");
 
-		return $res;
+		//rebuild.
+		$newRes		= Array();
+		$next		= false;
+		$previous 	= false;
+
+		foreach($res as $row)
+		{
+			$rYear	= date("Y",strtotime($row['activityStartDate']));
+			$rMonth	= date("n",strtotime($row['activityStartDate']));
+
+			## current month result.
+			if($rYear == $year && $rMonth  == $month)
+			{
+				$newRes[]	= $row;
+			}
+			else
+			{
+				if(($rYear == $year && $rMonth > $month) || ($rYear > $year))
+				{
+					$next = true;
+				}
+
+				if(($rYear == $year && $rMonth < $month) || ($rYear < $year))
+				{
+					$previous = true;
+				}
+			}
+		}
+
+		return Array("result"=>$newRes,"previous"=>$previous,"next"=>$next);
+	}
+
+	## return previous month, and next month.
+	public function checkByMonth($siteID,$year,$month)
+	{
 	}
 }
 
