@@ -12,7 +12,8 @@ class Controller_Auth
 			### site-slug authorization.
 			$flag	= model::load("site/services")->checkSiteSlug($slug);
 
-			if(!$flag)
+			## if not exists, 404. else, save it in authData.
+			if(!model::load("access/auth")->authSite($slug))
 			{
 				redirect::to("404","Couldn't find site : <b>".$slug."</b>","error");
 			}

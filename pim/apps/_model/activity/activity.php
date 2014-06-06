@@ -164,6 +164,65 @@ class Activity
 
 		return db::get()->result();
 	}
+
+	public function getParticipant($activityID)
+	{
+		db::select("userIC,userProfileFullName");
+		db::where("activityID",$activityID);
+		db::join("user","user.userID = activity_user.userID");
+		db::join("user_profile","user_profile.userID = activity_user.userID");
+
+		return db::get("activity_user")->result();
+	}
+
+	public function createLinkWithArticle($activityID,$articleID)
+	{/*
+		## check if already linked.
+		$check	= db::where("articleID",$articleID)->where("activityID"=>$activityID)->get("activity_article")->row();
+
+		if($check)
+			return false;
+
+		## create links.
+		db::insert("activity_article",Array(
+								"activityID"=>$activityID,
+								"articleID"=>$articleID,
+								"activityArticleCreatedDate"=>now(),
+								"activityArticleCreatedUser"=>session::get("userID")
+											));*/
+	}
+
+	## return list of incoming and previous activity
+	public function getUnlinkedActivity($siteID,$year,$month,$flag = "both")
+	{
+		$currDate	= date("Y-m-d H:i:s");
+
+		db::from("activity");
+		db::where("siteID",$siteID);
+
+		## 1. select by month, and year.
+		db::where("year(activityStartDate)",$year);
+		db::where("month(activityEndDate)",$month);
+
+		## 2. previous activity
+		if($flag == "previous")
+		{
+			db::where("activityEndDate <",$currDate);
+		}
+
+		## 3. incoming activity
+		if($flag == "incoming")
+		{
+			db::where("activityStartDate >",$currDate);
+		}
+
+		## 4. no report about this activity yet.
+		db::where("activityID NOT IN (SELECT activityID FROM activity_article WHERE activityArticleType != 1)");
+
+		$res	= db::get()->result("activityID");
+
+		return $res;
+	}
 }
 
 

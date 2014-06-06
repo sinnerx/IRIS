@@ -100,7 +100,7 @@ class User
 		## insert user.
 		$data_user	= Array(
 					"userIC"=>$userIC,
-					"userPremiumStatus"=>0,
+					// "userPremiumStatus"=>0,
 					"userLevel"=>1,
 					"userStatus"=>1,
 					"userPassword"=>model::load("helper")->hashPassword($data['userPassword'])
@@ -116,6 +116,8 @@ class User
 					"userProfileDOB"=>$data['userProfileDOB']
 								);
 		db::insert("user_profile",$data_profile);
+
+		return $userID;
 	}
 
 	## add user,

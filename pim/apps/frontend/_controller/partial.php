@@ -8,7 +8,9 @@ class Controller_Partial
 		$currMethod		= controller::getCurrentMethod();
 
 		## get row of current site.
-		$this->row_site	= model::load("site/site")->getSiteBySlug(request::named("site-slug"));
+		##$this->row_site	= model::load("site/site")->getSiteBySlug(request::named("site-slug"));
+		$this->row_site	= model::load("access/auth")->getAuthData("current_site");
+
 		return;
 	}
 
@@ -51,16 +53,17 @@ class Controller_Partial
 
 	private function header()
 	{
-		$data['siteName']	= model::load("site/site")->getSiteName();
-		$data['menuR']		= model::load("site/menu")->getTopMenu();
-		$data['componentR']	= model::load("site/menu")->getComponent();
+		#$data['siteName']	= model::load("site/site")->getSiteName();
+		$data['siteName']	= $this->row_site['siteName'];
+		$data['menuR']		= model::load("site/menu")->getTopMenu($this->row_site['siteID']);
+		$data['componentR']	= model::load("site/menu")->getComponent($this->row_site['siteID']);
 
 		view::render("partial/header",$data);
 	}
 
 	private function top_slideshow()
 	{
-		$data['res_slider']		= model::load("site/slider")->getSlider(model::load("site/site")->getSiteIDBySlug(),false);
+		$data['res_slider']		= model::load("site/slider")->getSlider($this->row_site['siteID'],false);
 
 		view::render("partial/top_slideshow",$data);
 	}

@@ -5,7 +5,7 @@ class Controller_Image
 	public function album()
 	{
 		## get siteID.
-		$siteID	= model::load("site/site")->getSiteByManager(session::get("userID"),"siteID");
+		$siteID	= model::load("access/auth")->getAuthData("site","siteID");
 
 		$data['res_album']	= model::load("image/album")->getSiteAlbums($siteID);
 
@@ -25,7 +25,7 @@ class Controller_Image
 		if(form::submitted())
 		{
 			## get siteID.
-			$siteID	= model::load("site/site")->getSiteByManager(session::get("userID"),"siteID");
+			$siteID	= model::load("access/auth")->getAuthData("site","siteID");
 
 			$rules	= Array(
 					"albumName,albumDescription"=>"required:This field is required."
@@ -40,20 +40,20 @@ class Controller_Image
 
 			## if got activityID
 			if(input::get("activityID"))
-				model::load("image/album")->addActivityAlbum(input::get("activityID"),input::get());
+				$albumID	= model::load("image/album")->addActivityAlbum(input::get("activityID"),input::get());
 			else ## normal add.
-				model::load("image/album")->addSiteAlbum($siteID,0,input::get());
+				$albumID	= model::load("image/album")->addSiteAlbum($siteID,0,input::get());
 
 			## win
-			redirect::to("image/album","Album has successfully been added.");
+			redirect::to("image/albumPhotos/$albumID","Album has successfully been added.");
 		}
 	}
 
-	public function albumPhotos($id)
+	public function albumPhotos($siteAlbumID)
 	{
-		$data['albumID']	= $id;
-		$data['row']		= model::load("image/album")->getAlbum($id);
-		$data['res_photo']	= model::load("image/album")->getPhotos($id);
+		$siteID				= model::load("access/auth")->getAuthData("site","siteID");
+		$data['row']		= model::load("image/album")->getSiteAlbum($siteAlbumID);
+		$data['res_photo']	= model::load("image/album")->getSitePhotos($siteID,$siteAlbumID);
 
 		if(form::submitted())
 		{
@@ -75,25 +75,71 @@ class Controller_Image
 			$imagePhoto	= model::load("image/photo");
 
 			## add photo to db.
-			$fpath	= $imagePhoto->addSitePhoto($id,$file->get("name"),input::get("photoDescription"));
+			$path	= $imagePhoto->addSitePhoto($siteAlbumID,$file->get("name"),input::get("photoDescription"));
 
 			## move uploaded file.
-			$upload	= $file->move($fpath);
+			$upload	= $file->move(model::load("image/services")->getPhotoPath($path));
 
 			if(!$upload)
 			{
 				var_dump($upload);die();
 			}
 
-			redirect::to("image/albumPhotos/$id#");
+			redirect::to("image/albumPhotos/$siteAlbumID#");
 		}
 
 		view::render("sitemanager/image/albumPhotos",$data);
 	}
 
-	public function albumAddPhoto($id)
+	/*public function albumAddPhoto($id)
 	{
 		view::render("sitemanager/image/albumaddPhoto",$data);
+	}*/
+
+	public function galleryPicker()
+	{
+		view::render("sitemanager/image/galleryPicker");
+	}
+
+	public function galleryPicker_upload($siteAlbumID = 0)
+	{
+		if(form::submitted())
+		{
+			$file	= input::file("photoName");
+
+			## checking-checkinggg
+			$photoUpload	= !$file?"Please choose a photo":false;
+			$photoUpload	= !$photoUpload?(!$file->isExt("jpg,jpeg,png")?"Please choose the right photo":false):$photoUpload;
+
+			## no photo uploaded.
+			if($photoUpload)
+			{
+				echo "<script type='text/javascript'>alert('$photoUpload')</script>";
+				return;
+			}
+
+			$path	= model::load("image/photo")->addSitePhoto(0,$file->get("name"),input::get("photoDescription"));
+
+			$upload	= $file->move(model::load("image/services")->getPhotoPath($path));
+			$imgUrl	= model::load("image/services")->getPhotoUrl($path);
+
+			echo "<script type='text/javascript'>parent.ajxgal.setNewPhotoUrl('$imgUrl')</script>";
+		}
+	}
+
+	public function ajaxGallery()
+	{
+		$this->template	= false;
+		$siteID				= model::load("access/auth")->getAuthData("site","siteID");
+		$data['res_album']	= model::load("image/album")->getSiteAlbums($siteID);
+		$data['res_photos']	= model::load("image/album")->getSitePhotos($siteID,0); ## get photo with no album.
+
+		view::render("sitemanager/image/ajax/gallery",$data);
+	}
+
+	public function ajaxPhotos($siteAlbumID,$page = 1)
+	{
+		
 	}
 }
 

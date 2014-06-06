@@ -44,7 +44,7 @@ Class Auth
 		session::set("userID",$userID);
 	}
 
-	## used in auth controller, and save data for later use.
+	## used in backend : auth controller, and save data for later use.
 	public function authCheck($userID)
 	{
 		$row_user	= model::load("user/user")->get($userID);
@@ -70,6 +70,19 @@ Class Auth
 		$this->authData	= $data;
 
 		return $data;
+	}
+
+	## used in frontend : auth controller, authenticate site and save it for later use as 'current_site' in authData.
+	public function authSite($slug)
+	{
+		$row_site	= model::load("site/site")->getSiteBySlug($slug);
+
+		if(!$row_site)
+			return false;
+
+		$this->authData['current_site']	= $row_site;
+
+		return $row_site;
 	}
 
 	## used in every authentication

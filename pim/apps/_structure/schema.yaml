@@ -1,3 +1,9 @@
+config:
+	configID [int]
+	configMemberFee [float]
+	configResetPassFee [float]
+	configAllSiteMenu [int]		## 1 = use site menu, 2 = use default menu.
+
 user:
 	userID [int]
 	userIC [varchar]
@@ -5,31 +11,30 @@ user:
 	userEmail [varchar]
 	userLevel [varchar]			## 1 = members (M), 2 = site manager (SM), 3 = cluster lead (CL), 4 = operation manager (OM), 99 = root admin (R)
 	userStatus [int]			## 0 = inactive, 1 = active
-	userPremiumStatus [int]		## 0 = normal, 1 = premium user.
 	userCreatedDate [datetime]
 	userCreatedUser [int]
 
-user_premium:
-	userPremiumID [int]
-	userID [int]
-	userPremiumPayment [float]		## default 5
-	userPremiumCreatedDate [datetime]
-	userPremiumCreatedUser [int]
+account:
+	accountID [int]
+	accountType [int]			## 1 = user account, 2 = site account
+	accountRefID [int]			## if type 1, user.userID, else site.siteID.
+	accountBalance [int]		## constantly updated on every transaction, for easy querying record.
+	accountCreatedDate [datetime]
+	accountCreatedUser [int]
+	accountUpdatedDate [datetime]
+	accountUpdatedUser [int]
 
-# account:
-# 	accountID [int]
-# 	userID [int]
-# 	accountTotal [int]
-
-# account_transaction:
-# 	accountTransactionID [int]
-# 	accountID [int]
-# 	accountTransactionType [int]		## 1 = credit, 2 = debit
-# 	accountTransactionCode [varchar]	## code is based on model/user/account@code
-# 	accountTransactionValue [float]
-# 	accountTransactionRemark [text]
-# 	accountTransactionCreatedDate [int]
-# 	accountTransactionCreatedUser [int]
+account_transaction:
+	accountTransactionID [int]
+	accountTransactionType [varchar]		## like, registration, cybercafe-topup.
+	accountTransactionRefID [int]			## if later got referenced from somewhere can use this.
+	accountTransactionDestination [int]		## accountID.
+	accountTransactionSource [int]			## accountID
+	accountTransactionValue [float]			## value of this transaction.
+	accountTransactionRemark [text]
+	accountTransactionStatus [int]			## 0 = pending , 1 = success, 2 = cancelled.
+	accountTransactionCreatedDate [int]
+	accountTransactionCreatedUser [int]
 
 user_profile:
 	userProfileID [int]
@@ -102,8 +107,11 @@ activity_user:
 
 activity_article:
 	activityArticleID [int]
+	activityArticleType [int]		## 1 = report, 2 = reference
 	articleID [int]
 	activityID [int]
+	activityArticleCreatedDate [datetime]
+	activityArticleCreatedUser [int]
 
 activity_album:
 	activityAlbumID [int]
@@ -169,7 +177,7 @@ site_member:
 	siteMemberID [int]
 	siteID [int]
 	userID [int]
-	siteMemberPremiumStatus [int]	## 0 = inactive, 1 = premium status
+	siteMemberStatus [int]			## 0 = in-active, 1 = active.	// activation require payment.
 
 site_slider:
 	siteSliderID [int]

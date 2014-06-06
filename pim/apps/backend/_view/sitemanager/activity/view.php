@@ -84,6 +84,29 @@ var sitealbum	= new function()
 							</tr>
 						</table>
 					</div>
+					<div class='row'>
+					<div class='col-sm-12'>
+						<h5>Participants :</h5>
+						<div class='table-responsive'>
+							<?php if($res_participant):?>
+							<table class='table'>
+								<tr>
+									<th>Name</th><th>I.C.</th>
+								</tr>
+								<?php foreach($res_participant as $row)
+								{?>
+								<tr>
+									<td><?php echo $row['userProfileFullName'];?></td>
+									<td><?php echo $row['userIC'];?></td>
+								</tr>
+								<?php }?>
+							</table>
+							<?php else:?>
+							No participants yet.
+							<?php endif;?>
+						</div>
+					</div>
+					</div>
 					<?php endif;?>
 					</div>
 					<div class='tab-pane' id='album'>

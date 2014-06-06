@@ -74,6 +74,9 @@ class Controller_Activity
 		$data['imageServices']	= model::load("image/services");
 		$data['res_album']		= model::load("image/album")->getActivityAlbum($activityID);
 
+		## get participants.
+		$data['res_participant']	= model::load("activity/activity")->getParticipant($activityID);
+
 		view::render("sitemanager/activity/view",$data);
 	}
 

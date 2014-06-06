@@ -16,7 +16,9 @@ class Menu extends Data
 					"Site Management"=>Array(
 									"Information"=>Array("site/edit"),
 									"Slider"=>Array("site/slider","site/slider_add","site/slider_edit"),
-									"Announcement"=>Array("site/announcement","site/editAnnouncement")
+									"Announcement"=>Array("site/announcement","site/editAnnouncement"),
+									"Site Menu"=>"menu/index",
+									"Transaction"=>"account/transaction"
 											),
 					"Pages"=>"page/index",
 					"Blog" =>Array("List of Articles"=>"site/article","Add Article"=>"site/addArticle"),
@@ -26,7 +28,9 @@ class Menu extends Data
 									"Events"=>"activity/event",
 									"Training"=>"activity/training"
 										),
-
+					"Member's Management"=>Array(
+									"List of Member"=>Array("user/lists")
+												)
 							);
 
 		$menu['cl']	= Array(
@@ -53,7 +57,10 @@ class Menu extends Data
 									),*/
 					"Management"=>Array(
 							"User"=>Array("user/lists","user/add","user/edit")
-										)
+										),
+					"Configuration"=>Array(
+								"Article Category"=>Array("article/category")
+											)
 					/*"Activities"=>"activity/index",
 					"Reports"=>"reports/index"*/
 							);

@@ -85,10 +85,11 @@ Overview of your site albums. You can <a href='javascript:album.addForm.show();'
 
 				if($no == 1)
 				{
+					$opened	= true;
 					echo "<div class='row'>";
 				}
 				?>
-				<div class='col-sm-4 album-list' onclick='album.showDetail(<?php echo $row['albumID'];?>);'>
+				<div class='col-sm-4 album-list' onclick='album.showDetail(<?php echo $row['siteAlbumID'];?>);'>
 					<section class='panel panel-default'>
 						<div class='panel-heading'>
 						<?php echo $row['albumName'];?>
@@ -103,6 +104,7 @@ Overview of your site albums. You can <a href='javascript:album.addForm.show();'
 				{
 					echo "</div>";
 					$opened	= false;
+					$no = 0;
 				}
 				$no++;
 			}

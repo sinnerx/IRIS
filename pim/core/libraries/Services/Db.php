@@ -48,6 +48,7 @@ class Db_instance
 	private $paramVal	= null;
 	private $freeze		= false;
 	private $frozensql	= Array();
+	private $cached		= Array();
 
 	public function connect($host,$user,$pass,$db)
 	{
@@ -351,6 +352,7 @@ class Db_instance
 		}
 		
 		## Execute SQL and store result using PDO fetchALL (ASSOC)
+
 		$statement		= $this->db->prepare($this->sql);
 
 		## if got a pending prepared statement
@@ -362,7 +364,6 @@ class Db_instance
 				$statement->bindParam($no,$value);
 				$no++;
 			}
-
 		}
 
 		$execution 		= $statement->execute();
@@ -418,8 +419,19 @@ class Db_instance
 	{
 		foreach($data as $col=>$val)
 		{
-			$dataR[]	= "$col = ?";
-			$valR[]		= $val;
+			if(is_array($val))
+			{
+				$dataR[]	= $col;
+				foreach($val as $v)
+				{
+					$valR[]	= $v;
+				}
+			}
+			else
+			{
+				$dataR[]	= "$col = ?";
+				$valR[]		= $val;
+			}
 		}
 
 		$this->sql	= "UPDATE $table SET ".implode(",",$dataR)." WHERE ".implode("",$this->whereR);
@@ -452,6 +464,35 @@ class Db_instance
 		$this->clear();
 		return $this;
 	}
+
+	## cache functions. pending.
+	/*private function cacheKey()
+	{
+		return md5(serialize(Array($this->sql,$this->param)));
+	}
+
+	private function checkCache()
+	{
+		return isset($this->cached[$this->cacheKey()]);
+	}
+
+	private function getCache()
+	{
+		return $this->cached[$this->cacheKey()];
+	}
+
+	private function setCache($val)
+	{
+		$this->cached[$this->cacheKey()]	= $val;
+	}
+
+	## clear all cached query, every insert, update and delete transactions.
+	private function clearCache()
+	{
+		$this->cached	= Array();
+	}*/
+
+	## cache functions end.
 
 	## Execute delete
 	public function delete($table,$where = Null)
@@ -540,9 +581,11 @@ class Db_instance
 		{
 			return false;
 		}
-
+		
 		$result	= $this->result->fetchAll(PDO::FETCH_ASSOC);
-		$result	= $result[0];	
+
+		$result	= $result[0];
+
 		return !$col?$result:$result[$col];
 	}
 
