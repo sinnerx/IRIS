@@ -201,7 +201,7 @@ class Activity
 
 		$where	= Array();
 		db::from("activity");
-		db::where("siteID",62);
+		db::where("siteID",$siteID);
 
 		##### 1.1. select by month, and year.
 		#db::where("year(activityStartDate)",$year);
