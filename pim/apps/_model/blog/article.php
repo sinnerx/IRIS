@@ -102,6 +102,17 @@ class Article
 
 			db::insert("article_category",$dataToken);
 		}
+
+		if($data['activityID']){
+			$dataActivity = Array(
+					"articleID" => $id,
+					"activityID" => $data['activityID'],
+					"activityArticleType" => $data['activityArticleType'],
+					"activityArticleCreatedDate" => now(),
+					"activityArticleCreatedUser" => session::get("userID")
+				);
+			db::insert("activity_article", $dataActivity);
+		}
 		
 		if(session::get('userLevel') == 2 && $data['articleStatus'] == 0)	{
 			model::load("site/request")->create('article.add', $siteID, $id, Array());
@@ -128,6 +139,17 @@ class Article
 			return null;
 		}
 
+	}
+
+	# return a single of activity_article
+	public function getActivityArticle($articleID)
+	{
+		db::from("activity_article");
+
+		# get by articleID
+		db::where("articleID", $articleID);
+
+		return db::get()->result();
 	}
 
 	# return only an article
@@ -201,6 +223,30 @@ class Article
 				db::insert("article_category",$dataToken);
 			}
 			unset($data['category']);
+		}
+
+		if($data['activityID']){
+			db::from('activity_article');
+			db::where('articleID',$articleID);
+
+			if(db::get()->row()){
+				$dataActivity = Array(
+						"activityID" => $data['activityID'],
+						"activityArticleType" => $data['activityArticleType']
+				);
+				db::where("articleID",$articleID)->update("activity_article",$dataActivity);
+			}else{
+				$dataActivity = Array(
+					"articleID" => $id,
+					"activityID" => $data['activityID'],
+					"activityArticleType" => $data['activityArticleType'],
+					"activityArticleCreatedDate" => now(),
+					"activityArticleCreatedUser" => session::get("userID")
+				);
+				db::insert("activity_article", $dataActivity);
+			}
+			unset($data['activityID']);
+			unset($data['activityArticleType']);
 		}
 
 		## only if no add request pending.

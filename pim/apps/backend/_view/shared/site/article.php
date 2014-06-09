@@ -86,14 +86,14 @@ Listing all your request blogs here.
 			<div class='articleName'><?php echo $row['articleName'];?></div>
 			</td>
 			<td>
-				<div class="tokenizer" style="width: 274px;">
+				<div class="tokenizer" style="width: 274px;border: 0px;background-color: transparent;">
 					<div>
 						<ul class="token">
 							<?php
 								if($articleTags[$row['articleID']]):
 								foreach($articleTags[$row['articleID']] as $tag):
 							?>
-							<li><span class="label"><?php echo $tag['articleTagName']; ?><i class="icon-remove icon-white"></i></span></li>
+							<li><span class="label"><?php echo $tag['articleTagName']; ?></span></li>
 							<?php
 								endforeach;
 								endif;

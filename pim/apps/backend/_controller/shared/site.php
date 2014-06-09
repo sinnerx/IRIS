@@ -497,6 +497,9 @@ Class Controller_Site
 		}
 
 		$data['category'] = model::load("blog/category")->getArticleCategoryList($data['row']['articleID']);
+		$data['activity'] = model::load("blog/article")->getActivityArticle($data['row']['articleID']);
+		$data['activity'][0]['data'] = model::load("activity/activity")->getActivity($data['activity'][0]['activityID']);
+
 		# echo '<pre>';print_r($data);die;
 		view::render("shared/site/editArticle",$data);
 	}

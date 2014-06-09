@@ -6,6 +6,13 @@
 <script src="<?php echo url::asset("backend/tools/bootstrap-tokenizer/bootstrap-tokenizer.js"); ?>"></script>
 <script src="<?php echo url::asset("backend/js/pimgallery.js"); ?>"></script>
 <script>
+		function removeActivity()
+		{
+			document.getElementById('activity').innerHTML = 'Activity Link&nbsp;&nbsp;&nbsp;<span class="caret"></span>';
+			document.getElementById('activityID').value = '';
+			document.getElementById('activityArticleType').value = '';
+		}
+
 		function confirmation(){
 			var r = confirm("Are you sure?");
     		if (r == true) {
@@ -79,13 +86,40 @@ Edit article
 <div class='row'>
 	<div class='col-sm-8'>
 	<section class="panel panel-default">
-		<header class="panel-heading">Editor</header>
 		<div class="panel-body">
 			<div class="form-group form-inline">
 				<?php echo form::text("articleName","style='width: 75.5%;' size='40' class='form-control input-s' placeholder='Insert title'", $row['articleName']);?>
 				<?php echo form::text("articlePublishedDate","class='input-sm input-s datepicker-input form-control' date-date-format='dd-mm-yyyy'",date('d-m-Y', strtotime($row['articlePublishedDate'])));?>
 				<?php echo flash::data('articleName');?>
 				<?php echo flash::data("articlePublishedDate");?>
+			</div>
+			<div class="form-group">	
+				<div class="btn-group m-r">
+                    <button data-toggle="dropdown" class="btn btn-sm btn-default dropdown-toggle">
+                        <span class="dropdown-label">
+							<div id="activity">
+								<?php
+									if($activity[0]['activityID']):
+								?>
+								<i class="fa fa-link"></i> 
+								<?php echo $activity[0]['data']["activityName"]; ?> &nbsp;&nbsp;&nbsp;
+								<a>
+									<i style="cursor: pointer;" onclick="removeActivity();" class="fa fa-times text-danger text"></i>
+								</a>
+								<?php
+									endif;
+								?>&nbsp;&nbsp;&nbsp;
+                        		<span class="caret"></span>
+							</div>
+						</span> 
+                    </button>
+                    <ul class="dropdown-menu dropdown-select">
+                        <li><a href="<?php echo url::base('ajax/activity/previous'); ?>" data-toggle="ajaxModal">As a report</a></li>
+	                    <li><a href="<?php echo url::base('ajax/activity/incoming'); ?>" data-toggle="ajaxModal">As a reference</a></li>
+	                </ul>
+                </div>
+				<input type="hidden" name="activityID" id="activityID" <?php if($activity[0]['activityID']){ echo 'value="'.$activity[0]['activityID'].'"'; } ?> />
+				<input type="hidden" name="activityArticleType" id="activityArticleType" <?php if($activity[0]['activityID']){ echo 'value="'.$activity[0]['activityArticleType'].'"'; } ?> />
 			</div>
 			<div class="form-group">
 				<?php echo form::textarea("articleText","size='40' style='height: 300px;' class='mce'", $row['articleText']);?>
