@@ -34,7 +34,7 @@ Class Controller_Auth
 		$level	= $accessServices->accessLevelCode(session::get("userLevel"));
 
 		## get authenticated data.
-		$data			= model::load("access/auth")->authCheck(session::get("userID"));
+		$data			= model::load("access/auth")->authUser(session::get("userID"));
 		$row_user		= $data['user'];
 
 		## check default password.

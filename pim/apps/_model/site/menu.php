@@ -26,9 +26,8 @@ class Menu
 
 		## get menu from db.
 		db::from("menu")->where("siteID",$siteID)->where("menuType",1);
-		#db::join("component","menu.componentNo = component.componentNo");
 		db::order_by("menuNo","asc");
-		$menuR	= db::get()->result();
+		$menuR	= db::get()->result("menuID");
 
 		## join component.
 		$newMenuR	= Array();
@@ -45,16 +44,86 @@ class Menu
 		return $newMenuR;
 	}
 
-	## check component in menu.
-	public function getTopMenu2()
+	## get full menu.
+	private function findMenuRow($id,$menuR)
 	{
-		
+		return $menuR[$id];
+	}
+
+	public function parentChildSort_r($idField, $parentField, $els, $parentID = 0, &$result = array(), &$depth = 0){
+    foreach ($els as $key => $value):
+        if ($value[$parentField] == $parentID){
+            $value['depth'] = $depth;
+            array_push($result, $value);
+            unset($els[$key]);
+            $oldParent = $parentID; 
+            $parentID = $value[$idField];
+            $depth++;
+            $this->parentChildSort_r($idField,$parentField, $els, $parentID, $result, $depth);
+            $parentID = $oldParent;
+            $depth--;
+        }
+    endforeach;
+    return $result;
+}
+
+	public function getTopMenu3($siteID)
+	{
+		db::from("menu")->where("siteID",$siteID)->where("menuType",1);
+		db::order_by("menuNo","asc");
+		$menuR	= db::get()->result();
+
+		$res	= $this->parentChildSort_r("menuID","menuParentID",$menuR);
+
+	}
+
+
+
+	public function getTopMenu2($siteID)
+	{
+		db::from("menu")->where("siteID",$siteID)->where("menuType",1);
+		db::order_by("menuNo","asc");
+		$menuR	= db::get()->result();
+
+		## Cannot brain this anymore.
+		## this logic credited to : 
+		## http://blog.ideashower.com/post/15147134343/create-a-parent-child-array-structure-in-one-pass
+		$refs = array();
+		$list = array();
+
+		foreach($menuR as $row)
+		{
+			$thisref = &$refs[$row['menuID']];
+
+			$thisref['menuParentID'] = $row['menuParentID'];
+			$thisref['row'] = $row;
+
+			if ($row['menuParentID'] == 0) {
+			$list[ $row['menuID'] ] = &$thisref;
+			} else {
+			$refs[ $row['menuParentID'] ]['child'][$row['menuID']] = &$thisref;
+			}
+		}
+
+		return $list;
 	}
 
 	## get unused component.
 	public function getUnusedComponent()
 	{
-		
+
+	}
+
+	public function updateTopMenu($siteID,$dataR)
+	{
+		## 1. delete existing.
+		db::delete("menu",Array("siteID"=>$siteID));
+
+		## 2. re-create menu back.
+		foreach($dataR as $data)
+		{
+			$this->create($siteID,$data['componentNo'],$data);
+		}
 	}
 
 	## used in partial@header ## now we use array instead of db for storing this data. @ 2/june.
@@ -76,7 +145,7 @@ class Menu
 				3=>Array(
 					"componentNo"=>3,
 					"componentName"=>"Aktiviti",
-					"componentRoute"=>"aktiviti",
+					"componentRoute"=>"activity",
 					"componentStatus"=>1
 					),
 				4=>Array(

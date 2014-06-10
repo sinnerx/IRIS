@@ -2,8 +2,12 @@
 var base_url	= "<?php echo url::base('{site-slug}');?>/";
 var Calendar	= function(id,dateListID)
 {
+	this.record	= {};
+	this.dateClicked	= false;
+
 	this.getDate	= function(year,month,date)
 	{
+		this.hideDayActivity();
 		//no year was set, get by currentDate.
 		if(!year)
 		{
@@ -107,6 +111,7 @@ var Calendar	= function(id,dateListID)
 		}
 	}
 
+	//dateList is passed by server on every month change request.
 	this.prepareDate	= function(dateList)
 	{
 		var month	= currentDate['month']-1;
@@ -133,8 +138,17 @@ var Calendar	= function(id,dateListID)
 			var date	= theDate.getDate();
 			var disable	= theDate.getMonth() != month?"disable":"";
 			var data	= "data-date='"+(theDate.getMonth()+1)+"-"+date+"'";
+			var exists	= theDate.getMonth() == month && dateList[date]?"exists":"";
+			var total	= exists != ""?"title='"+dateList[date].length+" aktiviti'":"";
 
-			result	+= "<li "+data+" class='"+disable+"'>"+date+"</li>";
+			//save record for later use.
+			if(dateList)
+			{
+				var ymd	= year+'-'+(month)+'-'+date;
+				this.record[ymd]	= dateList[date];
+			}
+
+			result	+= "<li "+total+" "+data+" class='"+disable+" "+exists+"'>"+date+"</li>";
 
 			//increment col and date.
 			col++;
@@ -156,6 +170,32 @@ var Calendar	= function(id,dateListID)
 
 		//append result to dateListID.
 		$("#"+id+" ."+dateListID).html(result);
+
+		//re-set view activity click in every ajax load.
+		$(".cal-date .exists").mouseover(function()
+		{
+			if(!context.dateClicked)
+			{
+				context.showDayActivity($(this).html(),month,year);
+			}
+		}).mouseout(function()
+		{
+			if(!context.dateClicked)
+			{
+				context.hideDayActivity();
+			}
+		}).click(function()
+		{
+			$(".exists.clicked").removeClass("clicked");
+			if(context.dateClicked == $(this).data("date"))
+			{
+				return context.hideDayActivity();
+			}
+
+			context.dateClicked = $(this).data("date");
+			context.showDayActivity($(this).html(),month,year,true);
+			$(this).addClass("clicked");
+		});
 	}
 
 	//return eg. Array(year:2013,month:3,date:28) [2013/mac/28th]
@@ -163,6 +203,40 @@ var Calendar	= function(id,dateListID)
 	{
 		var date	= new Date();
 		return {year:date.getFullYear(),month:(date.getMonth()+1),date:date.getDate()};
+	}
+
+	this.hideDayActivity = function()
+	{
+		context.dateClicked = false;
+		$(".cal-date-detail").css("opacity","0.6").hide();
+	}
+
+	this.showDayActivity = function(d,m,Y,full)
+	{
+		var ymd	= Y+"-"+m+"-"+d;
+
+		$(".cal-date-detail ul").html(""); // clear
+
+		// and append each record.
+		for(i in this.record[ymd])
+		{
+			var row	= this.record[ymd][i];
+
+			var li	= $("<li></li>");
+			var url	= row.activityUrl;
+			var dateLabel	= row.activityStartDate != row.activityEndDate?row.activityStartDate+" hingga "+row.activityEndDate:row.activityStartDate+" haribulan";
+			li.append("<div><a href='"+url+"'>"+row.activityName+"</a></div>");
+			li.append("<div>"+dateLabel+"</div>");
+			$(".cal-date-detail ul").append(li);
+		}
+
+		// full show.
+		if(full)
+		{
+			$(".cal-date-detail").css("opacity",1);
+		}
+
+		$(".cal-date-detail").show();
 	}
 
 	//construct this variable on calendar object creation.
@@ -210,6 +284,7 @@ $(document).ready(function()
 	padding:3px;
 }
 
+
 #calendar-rght .month
 {
 	background:#0062a1;
@@ -219,6 +294,82 @@ $(document).ready(function()
 .cal-date
 {
 	background: #009bff;
+}
+
+.cal-date ul li
+{
+	cursor: default;
+}
+
+.cal-date .exists
+{
+	cursor: pointer;
+	font-weight: bold;
+	color: #0062a1;
+	position: relative;
+	/*background: #bee693;
+	color: #3a7931;
+	box-shadow: 0px 0px 5px #557238;*/
+}
+.cal-date .exists:before
+{
+	content: " ";
+	display: block;
+	background: red;
+	position: absolute;
+	top:3px;
+	right:3px;
+}
+.cal-date .exists.clicked
+{
+	background: #0062a1;
+	color: white;
+}
+.cal-date-detail
+{
+	background:#f2f2f2;
+	position:absolute;
+	right:100%;
+	top:20px;
+	padding-right:0px;
+	width:100%;
+	display:none;
+	opacity:0.6;
+}
+
+.cal-date-detail ul
+{
+	background:#f2f2f2;
+	list-style: none;
+	padding:0px;
+	margin: 0px;
+	padding:5px;
+	box-shadow: -2px 0px 5px #c9c9c9;
+	border-top-right-radius: 5px;
+	border-bottom-right-radius: 5px;
+}
+.cal-date-detail a
+{
+	color:inherit;
+}
+.cal-date-detail li
+{
+	border-bottom:1px solid #dddddd;
+	padding:5px;
+}
+.cal-date-detail li:last-child
+{
+	border-bottom: 0px;
+}
+.cal-date-detail li > div:first-child
+{
+	color: #606060;
+	font-weight: bold;
+}
+.cal-date-detail li > div:last-child
+{
+	opacity: 0.7;
+	font-size:0.8em;
 }
 
 </style>
@@ -241,6 +392,12 @@ $(document).ready(function()
 			<li><div>SAB</div></li>
 		</ul>
 	</div>
-	<div class="cal-date clearfix">	
+	<div class='cal-date-container' style="position:relative;z-index:-1;">
+		<div class='cal-date-detail'>
+			<ul>
+			</ul>
+		</div>
+		<div class="cal-date clearfix">	
+		</div>
 	</div>
 </div>

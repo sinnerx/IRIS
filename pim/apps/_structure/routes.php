@@ -121,7 +121,9 @@ $routes[]	= Array("[:site-slug]/registration","controller=main@registration");
 $routes[]	= Array("[:site-slug]/login","controller=main@login");
 
 ## site activity
-$routes[]	= Array("[:site-slug]/activity","controller=activity@index");
+#$routes[]	= Array("[:site-slug]/activity","controller=activity@index");
+$routes[]	= Array("[:site-slug]/activity/[:year?]/[:month?]","controller=activity@index");
+$routes[]	= Array("[:site-slug]/activity/[:year]/[:month]/[:activity-slug]","controller=activity@view/{activity-slug}");
 
 ## site contact-us
 $routes[]	= Array("[:site-slug]/hubungi-kami","controller=main@contact");

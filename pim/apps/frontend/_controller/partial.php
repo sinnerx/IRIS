@@ -4,8 +4,8 @@ class Controller_Partial
 {
 	public function __construct()
 	{
-		$currController	= controller::getCurrentController();
-		$currMethod		= controller::getCurrentMethod();
+		$this->currController	= controller::getCurrentController();
+		$this->currMethod		= controller::getCurrentMethod();
 
 		## get row of current site.
 		##$this->row_site	= model::load("site/site")->getSiteBySlug(request::named("site-slug"));
@@ -34,6 +34,12 @@ class Controller_Partial
 
 	private function calendar()
 	{
+		$nonCalendarlist	= Array('activity/index');
+		if(in_array($this->currController."/".$this->currMethod,$nonCalendarlist))
+		{
+			if(request::named("month"))
+				return false;
+		}
 		view::render("partial/calendar");
 	}
 

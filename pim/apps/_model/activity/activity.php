@@ -6,11 +6,95 @@ class Activity
 	public function type($no = null)
 	{
 		$arr	= Array(
-				1=>"Event",
-				2=>"Training"
+				1=>"Peristiwa",
+				2=>"Latihan"
 						);
 
 		return $no?$arr[$no]:$arr;
+	}
+
+	public function getActivityByDate($siteID,$date)
+	{
+		db::where("siteID",$siteID);
+		#db::where("activityApprovalStatus",1);
+		db::where("date(activityStartDate)",$date);
+
+		db::join("event","activityType = '1' AND activity.activityID = event.activityID");
+		db::join("training","activityType = '2' AND activity.activityID = training.activityID");
+
+		return db::get("activity")->result();
+	}
+
+	public function getActivityList($siteID,$year = null,$month = null,$type = null,$groupBy = null)
+	{
+		db::where("siteID",$siteID);
+		db::where("activityApprovalStatus",1); # approved.
+
+		## if got type parameter.
+		if($type)
+		{
+			db::where("activityType",$type);
+		}
+
+		if($year)
+		{
+			//select month for later grouping..
+			db::select("*,activity.*,month(activityStartDate) as month, day(activityStartDate) as day");
+			db::where("year(activityStartDate)",$year);
+		}
+
+		if($groupBy === null)
+		{
+			if($month)
+			{
+				$groupBy	= "activityType";
+				$secondGroupBy = true;
+			}
+			else
+			{
+				$groupBy		= "month";
+				$secondGroupBy	= true;
+			}
+		}
+		else if($groupBy === false)
+		{
+			$groupBy		= "activityID";
+			$secondGroupBy	= null;
+		}
+		else
+		{
+			## set.
+			$secondGroupBy = true;
+		}
+
+		if($month)
+		{
+			db::where("month(activityStartDate)",$month);
+		}
+		
+
+		db::order_by("activityStartDate","desc");
+		db::join("event","activityType = '1' AND activity.activityID = event.activityID");
+		db::join("training","activityType = '2' AND activity.activityID = training.activityID");
+
+		## return and grouped type key.
+		return db::get("activity")->result($groupBy,$secondGroupBy);
+	}
+
+	## get activity.
+	public function getActivityBySlug($siteID,$activitySlug,$year,$month)
+	{
+		db::where(Array(
+				"siteID"=>$siteID,
+				"year(activityStartDate)"=>$year,
+				"month(activityStartDate)"=>$month,
+				"activitySlug"=>$activitySlug
+						));
+
+		db::join("event","activityType = '1' AND activity.activityID = event.activityID");
+		db::join("training","activityType = '2' AND activity.activityID = training.activityID");
+
+		return db::get("activity")->row();
 	}
 
 	public function getActivity($activityID,$col = null)
@@ -18,7 +102,6 @@ class Activity
 		db::where("activity.activityID",$activityID);
 
 		db::select($col);
-
 		## if got siteID, must be based on siteID check
 		if($siteID = model::load("access/auth")->getAuthData("site","siteID"))
 		{
@@ -261,6 +344,27 @@ class Activity
 	## return previous month, and next month.
 	public function checkByMonth($siteID,$year,$month)
 	{
+	}
+
+	public function getParticipantList($activityID)
+	{
+		if(!is_array($activityID))
+		{
+			db::select("user.*");
+			db::where("activityID",$activityID);
+			db::join("user","activity_user.userID = user.userID");
+
+			return db::get("activity_user")->result();
+		}
+		else ## if it's list of activity.
+		{
+			db::select("userID");
+			db::where("activityID",$activityID);
+			
+			## return while grouped with activityID.
+			return db::get("activity_user")->result("activityID",true);
+		}
+
 	}
 }
 

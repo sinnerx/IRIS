@@ -87,7 +87,7 @@ Class Controller_Main
 	public function registration()
 	{
 		$this->template	= "template_registration";
-		$row_site		= model::load("site/site")->getSite();
+		$row_site		= 	model::load("access/auth")->getAuthData("current_site");#model::load("site/site")->getSite();
 		$data['siteName']	= $row_site['siteName'];
 		$data['siteInfoDescription']	= $row_site['siteInfoDescription'];
 		$data['monthR']					= model::load("helper")->monthYear("month");
@@ -96,7 +96,8 @@ Class Controller_Main
 		if(form::submitted())
 		{
 			## prepare IC.
-			$ic	= str_replace("-","",input::get("userIC"));## remove '-' if got.
+			$ic			= str_replace("-","",input::get("userIC"));## remove '-' if got.
+			$password	= input::get("userPassword");
 
 			$rules	= Array(
 					"except:checkPenduduk,checkTerm"=>"required:Lapangan ini diperlukan.",
@@ -129,12 +130,11 @@ Class Controller_Main
 			## register.
 			## prepare
 			$data	= Array(
-					"userPassword"=>input::get("userPassword"),
 					"userProfileDOB"=>input::get("birthday_year")."-".input::get("birthday_month")."-".input::get("birthday_day")
 							);
 
 			## register.
-			model::load("user/user")->registerMember($ic,$data);
+			model::load("site/member")->register($row_site['siteID'],$ic,$password,$data);
 
 			## success and redirect.
 			redirect::to("{site-slug}/registration#horizontalTab1","<br>Anda telah berjaya di daftarkan.");

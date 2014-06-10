@@ -121,6 +121,12 @@ class album
 		return db::get("activity_album")->result();
 	}
 
+	public function updateCoverPhoto($albumID,$photoName)
+	{
+		db::where("albumID",$albumID);
+		db::update("album",Array("albumCoverImageName"=>$photoName));
+	}
+
 	## album type.
 	public function type()
 	{

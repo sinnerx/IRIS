@@ -77,6 +77,13 @@ class Controller_Image
 			## add photo to db.
 			$path	= $imagePhoto->addSitePhoto($siteAlbumID,$file->get("name"),input::get("photoDescription"));
 
+			## update cover photo if they aint exists yet.
+			if(!$data['row']['albumCoverImageName'])
+			{
+				## update cover photo.
+				model::load("image/album")->updateCoverPhoto($data['row']['albumID'],$path);
+			}
+
 			## move uploaded file.
 			$upload	= $file->move(model::load("image/services")->getPhotoPath($path));
 

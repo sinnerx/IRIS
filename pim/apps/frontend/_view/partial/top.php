@@ -49,13 +49,16 @@
 	</div>
 	<div class="user-setting">
 	<?php if($username):?>
-		<span style='vertical-align:top;color:#009BFF;position:relative;left:-5px;font-weight:lighter;'><span style='color:#888888;'>Selamat datang,</span> <?php echo $username;?></span> <input type="submit" class="submit" onclick='window.location.href = "<?php echo url::base("dashboard");?>"' value="Admin">
+		<span style='vertical-align:top;color:#009BFF;position:relative;left:-5px;font-weight:lighter;'>
+		<span style='color:#888888;'>Selamat datang,</span> <?php echo $username;?></span>
+		<a href='<?php echo url::base("dashboard/logout");?>' class='fa fa-power-off' style='color:#eb1414;position:relative;top:1px;'></a>
+		<!-- <input type="submit" class="submit" onclick='window.location.href = "<?php echo url::base("dashboard");?>"' value="Logout"> -->
 	<?php else:?>
 	<form method='post' action='<?php echo url::base("dashboard/login");?>'>
-		<a style='opacity:0;cursor:default;' href="<?php echo "#"; #url::base("{site-slug}/registration#horizontalTab2");?>" class="rgstr-button">Register</a>
 		<input type="text" name='userEmail' class="username" placeholder='Username'>
 		<input type="password" name='userPassword' class="password" placeholder='Password'> 
 		<input type="submit" class="submit" value="Login">
+		<a href="<?php echo url::base("{site-slug}/registration#horizontalTab2");?>" class="rgstr-button">Register</a>
 	</form>
 <?php endif;?>
 	</div>

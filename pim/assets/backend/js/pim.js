@@ -1,5 +1,6 @@
 var pim = function(conf)
 {
+	var $ = jQuery; //dependant.
 	this.base_url	= conf['base_url']+"/";
 	this.redirect	= function(url)
 	{
@@ -90,6 +91,33 @@ var pim = function(conf)
 		{
 			$(first).slideDown();
 			$(second).slideUp();
+		}
+
+		this.inArray	= function(n,arr)
+		{
+			for(i in arr)
+			{
+				if(arr[i] == n)
+				{
+					return true;
+				}
+			}
+
+			return false;
+		}
+
+		this.arrayRemoveElement	= function(e,v)
+		{
+			var newr	= [];
+			for(i in e)
+			{
+				if(e[i] != v)
+				{
+					newr.push(e[i]);
+				}
+			}
+
+			return newr;
 		}
 	}
 }

@@ -138,94 +138,38 @@ class Helper
 		$text	= str_replace("<br><br>", "<br>", $text);
 
 		return nl2br($text);
+	}
 
-		/*$total	= Array();
-		$iwant	= $wordsCount;
-		$sum	= Array();
+	## extract date range into specific date, and assign data to each.
+	public function extractDateRange(&$data,$val,$range)
+	{
+		$start	= date("Y-m-d",strtotime($range[0]));
+		$end	= date("Y-m-d",strtotime($range[1]));
 
-		## explode by <
-		foreach(explode("<",$html) as $tagg)
+		$currT	= strtotime($start);
+
+		while($currT <= strtotime($end))
 		{
-			## reached total
-			if(count($total)+1 > $iwant)
+			if(!$data[date("j",$currT)])
 			{
-				break;
+				$data[date("j",$currT)] = Array();
 			}
-			
-			$tag	= trim($tagg);
-			## check closing existence.
-			if(strpos($tag, ">") !== false)
-			{
-				## if within the same atom itself got the closing tag, skip count.
-				if($tag[strlen($tag)-1] == ">")
-				{
-					$sum[]	= $tagg;
-					## skip not count as words.
-					continue;
-				}
 
-				$wordR	= explode(">",$tag);
+			## add val into array.
+			$data[date("j",$currT)][]	= $val;
 
-				## remove first '>'
-				$before	= array_shift($wordR);
-
-				## loops all probability because of having many '>'
-				$words	= str_replace(">"," ", $wordR[0]);
-
-				## explode by space and push the words.
-				$wordsR	= explode(" ",$words);
-				$first	= false;
-				$empty	= 0;
-				foreach($wordsR as $word)
-				{
-					if($word != "")
-					{
-						if($first == false)
-						{
-							$first	= $word;
-						}
-
-						## reached total
-						$total[]	= $word;
-					}
-					else
-					{
-						if($first == false)
-						{
-							$empty++;
-						}
-					}
-				}
-				if(count($total) > $iwant)
-				{
-					$sum[]	= $before.">".str_repeat(" ", $empty).$first;
-				}
-				else
-				{
-					$sum[]	= $tagg;
-				}
-			}
-			## not found closing at all.
-			else
-			{
-				$sum[]	= $tagg;
-				## push words.
-				foreach(explode(" ",$tag) as $word)
-				{
-					if($word != "")
-					{
-						## reached total
-						$total[]	= $word;
-					}
-				}
-			}
+			## increment.
+			$currT	= strtotime("+1 day",$currT);
 		}
+	}
 
-		## use library HTMLPurifier.
-		define("HTMLPURIFIER_PREFIX","vendor/spekkionu/htmlpurifier");
-		$purifier = new HTMLPurifier(HTMLPurifier_Config::createDefault());
+	## 
+	public function buildDateBasedUrl($slug,$date,$prefix = null)
+	{
+		$yearmonth	= date("Y/m",strtotime($date));
+		$uri	= $yearmonth."/".$slug;
 
-		return $purifier->purify(implode("<",$sum).($wordsCount?"...":""));*/
+		return $prefix?trim($prefix,"/")."/".$uri:$uri;
 	}
 }
 ?>

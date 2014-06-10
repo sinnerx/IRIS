@@ -17,6 +17,13 @@ class Controller_Auth
 			{
 				redirect::to("404","Couldn't find site : <b>".$slug."</b>","error");
 			}
+
+			## user auth.
+			if(session::has("userID"))
+			{
+				## authenticate user.
+				model::load("access/auth")->authUser(session::get("userID"));
+			}
 		}
 	}
 }

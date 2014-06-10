@@ -74,14 +74,13 @@ activity:
 	activityAddress [text]
 	activityDescription [text]
 	activityParticipation [int]		## 1 = open for all, 2 = closed to member
-	activityStartDate [date]
-	activityEndDate [date]
+	activityStartDate [datetime]
+	activityEndDate [datetime]
 	activityApprovalStatus [int]			## 0 = unapproved, 1 = approved, 2 = disapproved.
 	activityCreatedUser [int]
 	activityCreatedDate [datetime]
 	activityUpdatedUser [int]
 	activityUpdatedDate [datetime]
-
 
 activity_budget:			## incomplete.
 	activityBudgedID [int]
@@ -217,6 +216,7 @@ message:
 menu:
 	menuID [int]
 	siteID [int]
+	menuParentID [int]
 	menuType [int]		## 1 = top
 	componentNo [int]
 	menuName [varchar]

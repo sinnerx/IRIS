@@ -604,9 +604,15 @@ class Db_instance
 
 			foreach($result as $row)
 			{
-				if($group)
+
+				if($group === true)
 				{
 					$forgedResult[$row[$id]][]	= $row;
+				}
+				## second level group.
+				else if(is_string($group))
+				{
+					$forgedResult[$row[$id]][$group] = $row;
 				}
 				else
 				{

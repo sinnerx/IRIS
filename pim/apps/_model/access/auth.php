@@ -45,13 +45,15 @@ Class Auth
 	}
 
 	## used in backend : auth controller, and save data for later use.
-	public function authCheck($userID)
+	public function authUser($userID)
 	{
 		$row_user	= model::load("user/user")->get($userID);
-
 		## nope.
 		if(!$row_user)
 			return false;
+
+		## point.
+		$data		= &$this->authData;
 
 		$data['user']	= $row_user;
 
@@ -60,14 +62,21 @@ Class Auth
 
 		switch($row_user['userLevel'])
 		{
+			case 1: # site-member.
+			## prepare flag for member authentication.
+			# 1. isMember
+			$data['user']['isMember']	= true;
+
+			# 2. is active
+			$data['user']['isActive']	= true;
+
+
+			break;
 			case 2: # site-manager.
 				## get site info.
 			$data['site']	= model::load("site/site")->getSiteByManager($userID);
 			break;
 		}
-
-		## save authenticated data.
-		$this->authData	= $data;
 
 		return $data;
 	}
