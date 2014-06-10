@@ -1,6 +1,6 @@
 <link rel="stylesheet" href="<?php echo url::asset("frontend/css/blog.css"); ?>" type="text/css" />
 <div class="lft-container">
-	<h3 class="block-heading">BLOG</h3>
+	<a href="<?php echo url::base(request::named("site-slug")."/blog/"); ?>"><h3 class="block-heading">BLOG</h3></a>
 	<div class="block-content clearfix">
 		<div class="page-content">
 			<div class="page-sub-wrapper blog-page">

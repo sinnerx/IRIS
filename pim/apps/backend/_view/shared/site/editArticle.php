@@ -46,7 +46,7 @@
 
 		function setUrl(res)
 		{
-			selection.setContent("<img style='max-width:100%;' src='"+res.photoUrl+"' />");
+			selection.setContent("<img style='float:left;max-width:100%;' src='"+res.photoUrl+"' />");
 		}
 
 		$(document).ready(function()

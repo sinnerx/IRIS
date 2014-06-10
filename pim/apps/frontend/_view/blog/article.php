@@ -3,7 +3,7 @@
 
 	<div class="lft-container">
 
-		<h3 class="block-heading">BLOG</h3>
+		<a href="<?php echo url::base(request::named("site-slug")."/blog/"); ?>"><h3 class="block-heading">BLOG</h3></a>
 		<div class="block-content clearfix">
 
 			<div class="page-content">
@@ -31,7 +31,7 @@
 								</div>
 								<div class="right-blog">
 									<div class="top-heading">
-										<h3><a href="#"><?php echo $row['articleName']; ?></a></h3>
+										<h3><a href="<?php echo url::base(request::named("site-slug")."/blog/".date('Y',strtotime($row['articlePublishedDate']))."/".date('m',strtotime($row['articlePublishedDate']))."/".$row['articleSlug']);?>"><?php echo $row['articleName']; ?></a></h3>
 										<div class="story-info">
 											<span class="story-author">Ditulis Oleh <a href="#"><?php echo $row['articleCreatedUser']; ?> </a></span>
 											<span class="story-date">Pada <a href="#"><?php echo date("jS F Y",strtotime($row['articleCreatedDate'])); ?></a></span>
