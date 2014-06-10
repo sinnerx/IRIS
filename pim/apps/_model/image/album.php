@@ -7,7 +7,7 @@ class album
 	public function getSitePhotos($siteID,$siteAlbumID,$paginationConf = null)
 	{
 		db::from("site_photo");
-		db::where("siteID",$siteID);
+		db::where("site_photo.siteID",!$siteID?0:$siteID);
 		db::where("siteAlbumID",$siteAlbumID);
 
 		## if got pagination..
