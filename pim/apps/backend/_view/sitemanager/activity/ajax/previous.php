@@ -63,7 +63,7 @@
 										<td style="text-align:center;vertical-align:middle;"><?php echo $row['activityName']; ?></td>
 										<td style="text-align:center;vertical-align:middle;"><?php echo '<b>From</b>&nbsp;&nbsp;&nbsp;'.date('jS-M-Y',strtotime($row['activityStartDate'])); ?></td>
 										<td style="text-align:center;vertical-align:middle;"><?php echo '<b>To</b>&nbsp;&nbsp;&nbsp;'.date('jS-M-Y',strtotime($row['activityEndDate'])); ?></td>
-										<td style="text-align:center;vertical-align:middle;"><input type="radio" id="activityID<?php echo $row['activityID']; ?>" /></td>
+										<td style="text-align:center;vertical-align:middle;"><input type="radio" name="activity" id="activityID<?php echo $row['activityID']; ?>" /></td>
 									</tr>
 									<?php
 											$count++;
