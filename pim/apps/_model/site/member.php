@@ -44,6 +44,21 @@ class Member
 		## WIN.
 		db::insert("site_member",$data_sitemember);
 	}
+
+	## approve member. and also create a transaction.
+	public function approveMember($userID)
+	{
+		## get siteID from user.
+		$siteID	= db::select("siteID")->where("userID",$userID)->get("site_member")->row("siteID");
+
+		db::where("userID",$userID);
+		db::update("site_member",Array("siteMemberStatus"=>1));
+
+		## create transaction.
+		$value	= model::load("config")->get("configMemberFee")?:3;
+
+		model::load("account/transaction")->userToSite($userID,$siteID,$value,"registration");
+	}
 }
 
 ?>

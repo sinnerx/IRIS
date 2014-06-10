@@ -1,8 +1,9 @@
 <?php
 namespace model\account;
-
+use db, session;
 class Account
 {
+	## 1 = user, 2 = site.
 	private function createAccount($type,$refID)
 	{
 		db::insert("account",Array(

@@ -1,6 +1,6 @@
 <?php
 namespace model\account;
-
+use model, db, session;
 class Transaction extends Account
 {
 	private function checkType($type)
@@ -13,10 +13,8 @@ class Transaction extends Account
 	}
 
 	/* main function for transaction */
-	private function createTransaction($accSrc,$accDest,$value,$type,$data)
+	private function createTransaction($accSrc,$accDest,$value,$type,$data = null)
 	{
-		$type	= $data['accountTransactionType'];
-
 		if(!$this->checkType($type))
 			return false;
 
@@ -27,7 +25,7 @@ class Transaction extends Account
 				"accountTransactionSource"=>$accSrc,
 				"accountTransactionDestination"=>$accDest,
 				"accountTransactionStatus"=>!$data['accountTransactionStatus']?1:$data['accountTransactionStatus'],
-				"accountTransactionType"=>$data['accountTransactionType'],
+				"accountTransactionType"=>$type,
 				"accountTransactionRefID"=>$data['accountTransactionRemark'],
 				"accountTransactionValue"=>$value,
 				"accountTransactionCreatedDate"=>now(),
@@ -53,7 +51,7 @@ class Transaction extends Account
 		$accDest	= $this->getAccount(2,$siteID);
 
 		## create transaction.
-		return $this->createTransaction($accSrc,$accDest);
+		return $this->createTransaction($accSrc,$accDest,$value,$type,$data);
 	}
 
 	public function siteToUser($siteID,$userID,$value,$type,$data)
@@ -62,6 +60,6 @@ class Transaction extends Account
 		$accDest	= $this->getAccount(2,$userID);
 
 		## create transaction.
-		return $this->createTransaction($accSrc,$accDest,$value,$data);
+		return $this->createTransaction($accSrc,$accDest,$value,$type,$data);
 	}
 }

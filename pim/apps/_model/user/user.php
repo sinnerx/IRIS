@@ -154,6 +154,9 @@ class User
 		## insert into profile.
 		db::insert("user_profile",$data_profile);
 
+		## create user account.
+		model::load("account/account")->createAccount(1,$userID);
+
 		## return user record.
 		return $this->get($userID);
 	}
