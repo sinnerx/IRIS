@@ -37,7 +37,25 @@ class Article
 
 		db::order_by("articlePublishedDate DESC, articleID DESC");
 
-		return db::get()->result("articleID");
+		$data = db::get()->result("articleID");
+
+		if($frontend == true){
+			foreach ($data as $article => $row) {
+				db::from('user_profile');
+
+				if($article['articleCreatedUser']){
+					db::where("userID",$row['articleCreatedUser']);
+				}else{
+					db::where("userID",$row['articleUpdatedUser']);
+				}
+
+				$user_profile = db::get()->row();
+
+				$data[$article]['articleCreatedUser'] = $user_profile['userProfileFullName'];
+			}
+		}
+
+		return $data;
 	}
 
 	public function slugChecker($slug,$date,$articleID=null)
@@ -237,7 +255,7 @@ class Article
 				db::where("articleID",$articleID)->update("activity_article",$dataActivity);
 			}else{
 				$dataActivity = Array(
-					"articleID" => $id,
+					"articleID" => $articleID,
 					"activityID" => $data['activityID'],
 					"activityArticleType" => $data['activityArticleType'],
 					"activityArticleCreatedDate" => now(),
