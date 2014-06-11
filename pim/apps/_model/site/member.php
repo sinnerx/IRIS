@@ -24,6 +24,8 @@ class Member
 		db::join("user","user.userID = site_member.userID");
 		db::join("user_profile","user_profile.userID = site_member.userID");
 
+		db::order_by("siteMemberStatus ASC, siteMemberID DESC");
+
 		return db::get()->result("userID");
 	}
 
@@ -74,6 +76,20 @@ class Member
 		## 1. top user up first.
 		$transaction->topUpUser($userID,$fee); ## top up user
 		$transaction->transactUserToSite($userID,$siteID,$fee,"registration"); ## and do transaction from user to site.
+	}
+
+	## get user member detail
+	public function getUserMemberDetail($siteMemberID=null,$userID=null,$siteID=null){
+		//echo '<pre>';print_r($pgConf);die;
+		db::where("site_member.siteID",$siteID);
+		db::where("site_member.userID",$userID);
+		db::where("site_member.siteMemberID",$siteMemberID);
+		db::from("site_member");
+
+		db::join("user","user.userID = site_member.userID");
+		db::join("user_profile","user_profile.userID = site_member.userID");
+
+		return db::get()->row();
 	}
 }
 

@@ -2,6 +2,17 @@
 <div class='well well-sm'>
 List of member registered in for site.
 </div>
+<script type="text/javascript">
+		function confirmation(){
+			var r = confirm("Are you sure this member has been paid?");
+    		if (r == true) {
+        		return true;
+    		} else {
+        		return false;
+    		}
+		}
+</script>
+<?php echo flash::data();?>
 <section class='panel panel-default'>
 	<div class='panel-heading'>
 
@@ -12,7 +23,7 @@ List of member registered in for site.
 				<th width='15px'>No.</th>
 				<th>Name</th>
 				<th>I.C.</th>
-				<th></th>
+				<th width='65px'></th>
 			</tr>
 			<?php if(!$user):?>
 			<tr>
@@ -33,10 +44,15 @@ List of member registered in for site.
 				<td><?php echo $row['userProfileFullName'];?></td>
 				<td><?php echo $row['userIC'];?></td>
 				<td>
-					<a href="<?php echo $href;?>" class="<?php echo $active;?>" >
-						<i class="fa fa-check text-success text-active"></i>
-						<i class="fa fa-times text-danger text"></i>
+					<center>
+					<a <?php if(!$active): ?>onclick="return confirmation();" href="<?php echo $href;?>"<?php endif; ?> class="<?php echo $active;?>" >
+						<i class="fa fa-check-square text-success text-active"></i>
+						<i class="fa fa-square text"></i>
 					</a>
+	                <a href="<?php echo url::base('ajax/member/detail'); ?>?userID=<?php echo $row['userID']; ?>&siteMemberID=<?php echo $row['siteMemberID']; ?>" data-toggle="ajaxModal">
+						<i class="fa fa-external-link"></i>
+					</a>
+					</center>
 				</td>
 			</tr>
 			<?php

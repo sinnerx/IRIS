@@ -29,7 +29,7 @@ class Menu extends Data
 									"Training"=>"activity/training"
 										),
 					"Member's Management"=>Array(
-									"List of Member"=>Array("user/lists")
+									"List of Member"=>Array("member/lists")
 												)
 							);
 
