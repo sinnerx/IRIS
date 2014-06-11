@@ -12,20 +12,32 @@ List of member registered in for site.
 				<th width='15px'>No.</th>
 				<th>Name</th>
 				<th>I.C.</th>
+				<th></th>
 			</tr>
-			<?php if(!$res_member):?>
+			<?php if(!$user):?>
 			<tr>
 				<td style="text-align:center;" colspan="3">This site has no member yet.</td>
 			</tr>
 			<?php else:?>
 			<?php
 			$no	= pagination::recordNo();
-			foreach($res_member as $row)
-			{?>
-			<tr>
+			foreach($user as $row)
+			{
+				$active		= $row['siteMemberStatus'] == 1?"active":"";
+				$opacity	= $row['siteMemberStatus'] == 0?"style='opacity:0.5;'":"";
+				$href		= ($row['siteMemberStatus'] == 1?"deactivate":"activate")."?".$row['userID'];
+				$href		= "?toggle=".$row['userID'];
+			?>
+			<tr <?php echo $opacity;?>>
 				<td><?php echo $no++;?></td>
 				<td><?php echo $row['userProfileFullName'];?></td>
 				<td><?php echo $row['userIC'];?></td>
+				<td>
+					<a href="<?php echo $href;?>" class="<?php echo $active;?>" >
+						<i class="fa fa-check text-success text-active"></i>
+						<i class="fa fa-times text-danger text"></i>
+					</a>
+				</td>
 			</tr>
 			<?php
 			}

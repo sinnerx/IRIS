@@ -5,22 +5,26 @@ class Member
 {
 	public function getPaginatedList($siteID,$pgConf = null)
 	{
+		//echo '<pre>';print_r($pgConf);die;
 		db::where("siteID",$siteID);
-
+		db::from("site_member");
 		if($pgConf)
 		{
 			pagination::setFormat(model::load("template/cssbootstrap")->paginationLink());
 			pagination::initiate(Array(
-							"totalRow"=>db::row(),
+							"totalRow"=>db::num_rows(),
+							"limit"=>10,				
 							"urlFormat"=>$pgConf['urlFormat'],
 							"currentPage"=>$pgConf['currentPage']
 										));
+
+			db::limit(10,pagination::recordNo()-1);
 		}
 
 		db::join("user","user.userID = site_member.userID");
 		db::join("user_profile","user_profile.userID = site_member.userID");
 
-		return db::get("site_member")->result("userID");
+		return db::get()->result("userID");
 	}
 
 	public function register($siteID,$ic,$password,$birthDate,$fullname)

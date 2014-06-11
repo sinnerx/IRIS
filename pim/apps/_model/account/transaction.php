@@ -42,10 +42,10 @@ class Transaction extends Account
 	/* below is utility functions */
 	public function topUp($accID,$value,$data)
 	{
-		$this->createTransaction(0,$accDest,$value,"topUp",$data)
+		$this->createTransaction(0,$accDest,$value,"topUp",$data);
 	}
 
-	public function userToSite($userID,$siteID,$value,$type,$data)
+	public function userToSite($userID,$siteID,$value,$type,$data=array())
 	{
 		$accSrc		= $this->getAccount(1,$userID);
 		$accDest	= $this->getAccount(2,$siteID);
@@ -54,7 +54,7 @@ class Transaction extends Account
 		return $this->createTransaction($accSrc,$accDest,$value,$type,$data);
 	}
 
-	public function siteToUser($siteID,$userID,$value,$type,$data)
+	public function siteToUser($siteID,$userID,$value,$type,$data=array())
 	{
 		$accSrc		= $this->getAccount(1,$siteID);
 		$accDest	= $this->getAccount(2,$userID);
