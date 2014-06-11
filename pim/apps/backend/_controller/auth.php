@@ -41,6 +41,7 @@ Class Controller_Auth
 		$userPass		= $row_user['userPassword'];
 		$defaultPass	= model::load("user/services")->getDefaultPassword();
 
+
 		## 1. if password = default check.
 		if($userPass == model::load("helper")->hashPassword($defaultPass) && !in_array(controller::getCurrentMethod(),Array("changePassword","logout","login")))
 		{
@@ -62,6 +63,14 @@ Class Controller_Auth
 	{
 		#echo model::load("helper")->hashPassword("OG63QKKLGM");die();
 		$this->template	= false;
+
+		## if logged member tried to go to backed, redirect to his site.
+		if(session::get("userLevel") == 1)
+		{
+			$siteSlug	= model::load("site/site")->getSiteByMember(session::get("userID"),"siteSlug");
+
+			redirect::to("../$siteSlug");
+		}
 
 		## if is logged in.
 		if(session::has("userID"))

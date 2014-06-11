@@ -83,6 +83,19 @@ var pim = function(conf)
 			modal.load(url);
 		}
 	}
+
+	this.upload = new function()
+	{
+		this.upload	= 1;
+		this.execute	= function(fileID,action)
+		{
+			$("body").append("<iframe style='display:none;' name='pim_upload_frame"+this.upload+"'></iframe>");
+			$(fileID).wrap("<form method='post' id='pim_upload_form"+this.upload+"' action='"+action+"' target='pim_upload_frame"+this.upload+"' enctype='multipart/form-data'></form>");
+
+			$("#pim_upload_form"+this.upload).submit();
+			this.upload++;
+		}
+	}
 	
 
 	this.func	= new function()

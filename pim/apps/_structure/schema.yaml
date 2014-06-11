@@ -40,7 +40,8 @@ user_profile:
 	userProfileID [int]
 	userID [int]
 	userProfileTitle [int]		## 1 = mr, 2 = mrs
-	userProfileFullName [varchar]
+	userProfileFullName [varchar] ## an alias for userProfileFirstname
+	userProfileLastName [varchar]
 	userProfilePhoneNo [varchar]
 	userProfileGender [int]		## 1 = male, 2 = female
 	userProfilePOB [varchar]
@@ -48,6 +49,17 @@ user_profile:
 	userProfileDOB [date]
 	userProfileMobileNo [varchar]
 	userProfileMailingAddress [text]
+	userProfileAvatarPhoto [varchar]
+
+user_profile_additional: ## additional info for user.
+	userProfileAdditionalID [int]
+	userID [int]
+	userProfileOccupation [varchar]		##
+	userProfileFacebook [varchar]		##
+	userProfileTwitter [varchar]		##
+	userProfileWeb [varchar]			##
+	userProfileEcommerce [varchar]		##
+	userProfileIntroductional [text]	##
 
 user_activity:
 	userActivityID [int]
@@ -372,6 +384,7 @@ user_album:
 user_photo:
 	userPhotoID [int]
 	photoID [int]
+	userID [int]
 	userAlbumID [int]
 
 photo:

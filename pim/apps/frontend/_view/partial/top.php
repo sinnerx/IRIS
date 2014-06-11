@@ -48,15 +48,18 @@
 		</ul>
 	</div>
 	<div class="user-setting">
-	<?php if($username):?>
+	<?php 
+	## logged in
+	if($username):?>
 		<span style='vertical-align:top;color:#009BFF;position:relative;left:-5px;font-weight:lighter;'>
-		<span style='color:#888888;'>Selamat datang,</span> <?php echo $username;?></span>
-		<a href='<?php echo url::base("dashboard/logout");?>' class='fa fa-power-off' style='color:#eb1414;position:relative;top:1px;'></a>
-		<!-- <input type="submit" class="submit" onclick='window.location.href = "<?php echo url::base("dashboard");?>"' value="Logout"> -->
-	<?php else:?>
-	<form method='post' action='<?php echo url::base("dashboard/login");?>'>
-		<input type="text" name='userEmail' class="username" placeholder='Username'>
-		<input type="password" name='userPassword' class="password" placeholder='Password'> 
+		<span style='color:#888888;'>Selamat datang,</span> <a href='<?php echo url::base("{site-slug}/profile");?>' style='color:inherit;'><?php echo $username;?></a></span>
+		<a href='<?php echo url::base("{site-slug}/logout");?>' class='fa fa-power-off' style='color:#eb1414;position:relative;top:1px;'></a>
+	<?php
+	## not logged.
+	else:?>
+	<form method='post' action='<?php echo url::base("{site-slug}/login");?>'>
+		<input type="text" name='login_userIC' class="username" placeholder='Username'>
+		<input type="password" name='login_userPassword' class="password" placeholder='Password'> 
 		<input type="submit" class="submit" value="Login">
 		<a href="<?php echo url::base("{site-slug}/registration#horizontalTab2");?>" class="rgstr-button">Register</a>
 	</form>

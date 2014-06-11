@@ -29,12 +29,21 @@ Class Auth
 		## 
 		db::where(Array(
 				"userIC"=>$userIC,
-				"userPassword"=>model::load("helper")->hashPassword($userPassword)
+				"userPassword"=>model::load("helper")->hashPassword($userPassword),
+				"userLevel"=>1, # member.
 						));
 
 		db::from("user");
 
-		return db::get()->row()?true:false;
+		$row	= db::get()->row();
+		
+		## not found.
+		if(!$row)
+		{
+			return false;
+		}
+
+		return $row;
 	}
 
 	public function login($userID,$userLevel)
@@ -63,9 +72,10 @@ Class Auth
 		switch($row_user['userLevel'])
 		{
 			case 1: # site-member.
+			$data['site']	= model::load("site/site")->getSiteByMember($userID);
+
 			## prepare flag for member authentication.
 			# 1. isMember
-			$data['user']['isMember']	= true;
 
 			# 2. is active
 			$data['user']['isActive']	= true;
@@ -90,6 +100,13 @@ Class Auth
 			return false;
 
 		$this->authData['current_site']	= $row_site;
+
+		## save isMember flag.
+		$this->authData['current_site']['isMember']	= false;
+		if($this->authData['current_site']['siteID'] == $this->authData['site']['siteID'])
+		{
+			$this->authData['current_site']['isMember']	= true;
+		}
 
 		return $row_site;
 	}

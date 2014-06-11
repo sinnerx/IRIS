@@ -117,8 +117,9 @@ $routes[]	= Array("[:site-slug]","controller=main@index");
 ## site registration
 $routes[]	= Array("[:site-slug]/registration","controller=main@registration");
 
-## site login
+## site login and logout
 $routes[]	= Array("[:site-slug]/login","controller=main@login");
+$routes[]	= Array("[:site-slug]/logout","controller=main@logout");
 
 ## site activity
 #$routes[]	= Array("[:site-slug]/activity","controller=activity@index");
@@ -135,7 +136,12 @@ $routes[]	= Array("[:site-slug]/blog","controller=blog@article");
 $routes[]	= Array("[:site-slug]/blog/[:year]/[:month]/[:article-slug]","controller=blog@view");
 
 ## site members
-$routes[]	= Array("[:site-slug]/members","controller=member/index");
+$routes[]	= Array("[:site-slug]/members","controller=member@index");
+
+## +++ profile.
+$routes[]	= Array("[:site-slug]/profile","controller=member@profile");
+$routes[]	= Array("[:site-slug]/profile/edit","controller=member@profile_edit");
+$routes[]	= Array("[:site-slug]/profile/uploadAvatar","controller=member@profileUploadAvatar");
 
 ## ajax request.
 $routes[]	= Array("[:site-slug]/ajax/[:controller]/[**:method]","controller=ajax/{controller}@{method}");

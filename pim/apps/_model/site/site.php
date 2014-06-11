@@ -116,6 +116,16 @@ class Site
 		return $row;
 	}
 
+	public function getSiteByMember($userID,$column = null)
+	{
+		db::select($column);
+		db::from("site_member");
+		db::where("userID",$userID);
+		db::join("site","site_member.siteID = site.siteID");
+
+		return db::get()->row($column);
+	}
+
 	## create site. used by site/add
 	public function createSite($data)
 	{

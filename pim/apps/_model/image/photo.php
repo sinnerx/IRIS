@@ -4,9 +4,23 @@ use session, model, db;
 class Photo extends Services
 {
 	## main method to save photo into db.and return full path of photo.
-	public function addUserPhoto($albumID,$name,$desc = null)
+	public function addUserPhoto($userAlbumID,$name,$desc = null)
 	{
-		return $this->_add(1,$albumID,$name,$desc);
+		$userID	= model::load("access/auth")->getAuthData("user","userID");
+
+		#return $this->_add(1,$userAlbumID,$name,$desc);
+		$addPhoto	= $this->_addPhoto($name,$desc);
+
+		$data_userphoto	= Array(
+					"photoID"=>$addPhoto[1],
+					"userID"=>$userID,
+					"userAlbumID"=>$userAlbumID
+								);
+
+		db::insert("user_photo",$data_userphoto);
+
+		## return his photo.
+		return $addPhoto[0];
 	}
 
 	## main method to save photo into db.and return photo name.

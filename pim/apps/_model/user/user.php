@@ -94,16 +94,24 @@ class User
 		
 		$data_profile	= Array(
 					"userProfileFullName"=>$data['userProfileFullName'],
+					"userProfileLastName"=>$data['userProfileLastName'],
 					"userProfileTitle"=>$data['userProfileTitle'],
 					"userProfileGender"=>$data['userProfileGender'],
 					"userProfileDOB"=>$data['userProfileDOB'],
 					"userProfilePOB"=>$data['userProfilePOB'],
 					"userProfileMarital"=>$data['userProfileMarital'],
 					"userProfilePhoneNo"=>$data['userProfilePhoneNo'],
+					"userProfileMobileNo"=>$data['userProfileMobileNo'],
 					"userProfileMailingAddress"=>$data['userProfileMailingAddress']
 								);
 
 		db::where('userID',$userID)->update("user_profile",$data_profile);
+	}
+
+	public function updateAvatarPhoto($userID,$path)
+	{
+		db::where("userID",$userID);
+		db::update("user_profile",Array("userProfileAvatarPhoto"=>$path));
 	}
 
 	## member registration.

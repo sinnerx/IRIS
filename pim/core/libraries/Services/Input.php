@@ -10,9 +10,10 @@ class Input
 	}
 
 	### flash input. if name is null, flash all. else, selected. if got except: flash all, except the input..
-	public function repopulate($name = null)
+	public function repopulate($name = null,$baseData = null)
 	{
-		$post	= request::post();
+		## if got baseData, will base the repopulated data base on it, else use _POST.
+		$post	= !$baseData?request::post():$baseData;
 
 		$filteredPOST	= filter_array($post,!$name?"_all":$name);
 		

@@ -58,7 +58,7 @@ Class Controller_Main
 			$pass	= input::get("login_userPassword");
 
 			$rules	= Array(
-					"_all"=>"required:This field is required."
+					"_all"=>"required:Ruangan ini diperlukan."
 							);
 
 			## validate 
@@ -66,21 +66,34 @@ Class Controller_Main
 			{
 				input::repopulate();
 				redirect::withFlash(model::load("template/services")->wrap("span-error",$error));
-				redirect::to("{site-slug}/registration#horizontalTab1","<br>Got some error with your form.","error");
+				redirect::to("{site-slug}/registration#horizontalTab1","<br>Sila pastikan form anda lengkap.","error");
 			}
 
 			## check member login.
-			if(!model::load("access/auth")->checkMemberLogin($userIC,$pass))
+			$login	= model::load("access/auth")->checkMemberLogin($userIC,$pass);
+			if(!$login)
 			{
 				input::repopulate();
-				redirect::to("{site-slug}/registration#horizontalTab1","<br>Couldn't authorize your log detail.","error");
+				redirect::to("{site-slug}/registration#horizontalTab1","<br>Tidak dapat mengenal pasti login anda.","error");
 			}
+
+			## and log user in.
+			model::load("access/auth")->login($login['userID'],$login['userLevel']);
 
 			## success and redirect to main site.
 			redirect::to("{site-slug}");
 		}
 
 		redirect::to("{site-slug}/registration#horizontalTab1");
+	}
+
+	public function logout()
+	{
+		## destroy all session.
+		session::destroy();
+
+		## redirect to main.
+		redirect::to("{site-slug}");
 	}
 
 	## site registration. example : pim.my/[site-slug]/registration
