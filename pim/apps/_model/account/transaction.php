@@ -6,7 +6,8 @@ class Transaction extends Account
 	private function checkType($type)
 	{
 		$typeR	= Array(
-				"registration"
+				"registration",
+				"topUp"
 						);
 
 		return in_array($type,$typeR);
@@ -40,24 +41,34 @@ class Transaction extends Account
 	}
 
 	/* below is utility functions */
-	public function topUp($accID,$value,$data)
+	public function topUpUser($userID,$value,$data = null)
+	{
+		## use accountID.
+		$accID	= $this->getAccount(1,$userID,"accountID");
+
+		## top up.
+		$this->topUp($accID,$value,$data);
+	}
+
+	public function topUp($accDest,$value,$data = null)
 	{
 		$this->createTransaction(0,$accDest,$value,"topUp",$data);
 	}
 
-	public function userToSite($userID,$siteID,$value,$type,$data=array())
+	## this one uses userID and siteID.
+	public function transactUserToSite($userID,$siteID,$value,$type,$data=array())
 	{
-		$accSrc		= $this->getAccount(1,$userID);
-		$accDest	= $this->getAccount(2,$siteID);
+		$accSrc		= $this->getAccount(1,$userID,"accountID");
+		$accDest	= $this->getAccount(2,$siteID,"accountID");
 
 		## create transaction.
 		return $this->createTransaction($accSrc,$accDest,$value,$type,$data);
 	}
 
-	public function siteToUser($siteID,$userID,$value,$type,$data=array())
+	public function transactSiteToUser($siteID,$userID,$value,$type,$data=array())
 	{
-		$accSrc		= $this->getAccount(1,$siteID);
-		$accDest	= $this->getAccount(2,$userID);
+		$accDest	= $this->getAccount(1,$userID,"accountID");
+		$accSrc		= $this->getAccount(2,$siteID,"accountID");
 
 		## create transaction.
 		return $this->createTransaction($accSrc,$accDest,$value,$type,$data);

@@ -59,10 +59,21 @@ class Member
 		db::where("userID",$userID);
 		db::update("site_member",Array("siteMemberStatus"=>1));
 
-		## create transaction.
-		$value	= model::load("config")->get("configMemberFee")?:3;
+		## pay registration.
+		$this->payRegistration($userID,$siteID);
+	}
 
-		model::load("account/transaction")->userToSite($userID,$siteID,$value,"registration");
+	## method to pay registration.
+	public function payRegistration($userID,$siteID)
+	{
+		$transaction	= model::load("account/transaction");
+
+		## fees
+		$fee	= model::load("config")->get("configMemberFee")?:3;
+		
+		## 1. top user up first.
+		$transaction->topUpUser($userID,$fee); ## top up user
+		$transaction->transactUserToSite($userID,$siteID,$fee,"registration"); ## and do transaction from user to site.
 	}
 }
 

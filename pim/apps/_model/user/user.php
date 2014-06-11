@@ -23,6 +23,7 @@ class User
 		db::from("user");
 		db::where("user.userID",$userID);
 		db::join("user_profile","user.userID = user_profile.userID");
+		db::join("account","account.accountType = '1' AND account.accountRefID = user.userID");
 
 		if($cols)
 		{
@@ -36,8 +37,19 @@ class User
 			}
 		}
 
-		## save record in row_user.
-		return db::get()->row();
+		## and merge.
+		$row	= db::get()->row();
+
+		## if this record didn't exists. (due to the past design dont have table account related)
+		## now one may get accountID directly.
+		if(!$row['accountID'])
+		{
+			$row_account	= model::load("account/account")->createAccount(1,$userID);
+			## return merged one.
+			return array_merge($row_account,$row);
+		}
+
+		return $row;
 	}
 
 	public function levelLabel($no = null)

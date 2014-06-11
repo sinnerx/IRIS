@@ -18,15 +18,22 @@ class Account
 		return db::getLastID("account","accountID",true);
 	}
 
-	public function getAccount($type,$refID)
+	public function getAccount($type,$refID,$col = null)
 	{
+		db::select($col);
+		db::where("accountType",$type);
 		db::where("accountRefID",$refID);
-		$row	= db::get("account")->row();
+		$row	= db::get("account")->row($col);
 
 		## account no exists, create.
 		if(!$row)
 		{
 			$row	= $this->createAccount($type,$refID);
+
+			if($col && count(explode(",",$col)) == 1)
+			{
+				$row	= $row[$col];
+			}
 		}
 
 		return $row;
