@@ -78,6 +78,8 @@
                <div>
                <div class="register">
                <form method='post'>
+                 <label>NAMA PENUH <?php echo flash::data("userProfileFullName");?></label>
+                 <?php echo form::text("userProfileFullName","class='name username-login' placeholder='Nama Penuh'");?>
                  <label>KAD PENGENALAN <?php echo flash::data("userIC");?></label>
                  <?php echo form::text("userIC","class='name username-login' placeholder='Kad Pengenalan Anda'");?>
                  

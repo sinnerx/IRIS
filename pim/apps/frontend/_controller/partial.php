@@ -11,6 +11,9 @@ class Controller_Partial
 		##$this->row_site	= model::load("site/site")->getSiteBySlug(request::named("site-slug"));
 		$this->row_site	= model::load("access/auth")->getAuthData("current_site");
 
+		## authenticated user variable.
+		$this->user		= model::load("access/auth")->getAuthData("user");
+
 		return;
 	}
 
@@ -63,6 +66,7 @@ class Controller_Partial
 		$data['siteName']	= $this->row_site['siteName'];
 		$data['menuR']		= model::load("site/menu")->getTopMenu($this->row_site['siteID']);
 		$data['componentR']	= model::load("site/menu")->getComponent($this->row_site['siteID']);
+		$data['user']		= $this->user;
 
 		view::render("partial/header",$data);
 	}

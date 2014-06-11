@@ -31,6 +31,12 @@
 				$main_url	= url::base(request::named("site-slug")."/".$row['componentRoute']);
 				$pageID		= null;
 
+				## skip certain component for not user.
+				if(in_array($component,Array(4)) && !session::has("userID"))
+				{
+					continue;
+				}
+
 				## pages
 				if($component == 1)
 				{
@@ -112,6 +118,7 @@
 				echo "</li>";
 			}
 		}
+
 		?>
 		</ul>
 		</div>

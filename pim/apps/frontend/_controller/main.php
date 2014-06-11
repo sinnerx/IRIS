@@ -129,12 +129,11 @@ Class Controller_Main
 
 			## register.
 			## prepare
-			$data	= Array(
-					"userProfileDOB"=>input::get("birthday_year")."-".input::get("birthday_month")."-".input::get("birthday_day")
-							);
+			$birthdate	= input::get("birthday_year")."-".input::get("birthday_month")."-".input::get("birthday_day");
+			$fullname	= input::get("userProfileFullName");
 
 			## register.
-			model::load("site/member")->register($row_site['siteID'],$ic,$password,$data);
+			model::load("site/member")->register($row_site['siteID'],$ic,$password,$birthdate,$fullname);
 
 			## success and redirect.
 			redirect::to("{site-slug}/registration#horizontalTab1","<br>Anda telah berjaya di daftarkan.");
