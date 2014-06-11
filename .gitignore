@@ -8,5 +8,4 @@ pim/vendor/*
 !pim/vendor/composer
 pim_sta
 pim/logs/access.txt
-pim/assets/frontend/css/blog.css
 pim/php.ini
