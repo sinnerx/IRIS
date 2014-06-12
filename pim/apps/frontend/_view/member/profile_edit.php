@@ -65,6 +65,8 @@ select
 {
 	position: relative;
 	background-size:200px !important;
+	background-repeat: no-repeat !important;
+	background-color: red;
 }
 
 #avatar-upload-button
@@ -137,7 +139,7 @@ $(document).ready(function()
 			<?php $photoUrl	= model::load("image/services")->getPhotoUrl($userProfileAvatarPhoto);
 
 			?>
-				<div class="profile-avatar-upload" style="background-size:200px;background:url('<?php echo $photoUrl;?>');">
+				<div class="profile-avatar-upload" style="background-size:200px;background:url('<?php echo $photoUrl;?>');background-color:black;">
 					<a href='javascript:profile.upload.show();' id='avatar-upload-button'>
 						<div class='upload-button'>
 							<input type='file' id='avatarPhoto' name='avatarPhoto' onchange='profile.upload.go();' />

@@ -435,6 +435,7 @@ class router
 				$this->paramListR		= array_merge($this->paramListR,$paramListR);
 				$this->executeCallback($routeData[1],"store");
 				$this->dispatched		= true;
+				$this->executedRoute	= $route;
 			}
 		}
 

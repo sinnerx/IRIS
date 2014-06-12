@@ -161,6 +161,7 @@ class User
 		$data_profile	= Array(
 					"userID"=>$userID,
 					"userProfileFullName"=>$data['userProfileFullName'],
+					"userProfileLastName"=>$data['userProfileLastName'],
 					"userProfileTitle"=>$data['userProfileTitle'],
 					"userProfilePhoneNo"=>$data['userProfilePhoneNo'],
 					"userProfileGender"=>$data['userProfileGender'],

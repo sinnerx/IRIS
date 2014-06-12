@@ -40,7 +40,7 @@ var sitealbum	= new function()
 				</tr>
 				<tr>
 					<td colspan='2'><b>Description</b><br>
-					<?php echo $row['activityDescription'];?>
+					<?php echo nl2br($row['activityDescription']);?>
 
 					</td>
 					<td colspan="2">

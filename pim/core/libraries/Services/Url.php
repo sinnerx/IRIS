@@ -18,8 +18,35 @@ class Url
 		return apps::config("secure")?"https://":"http://";
 	}
 
+	## forge given route with existing named param
+	private function forgeRoute($route)
+	{
+		$route	= explode("/",$route);
+
+		$newP	= Array();
+		foreach($route as $r)
+		{
+			if($r[0] == "[" && $r[strlen($r-1)])
+			{
+				$newP[]	= "{".trim($r,"[**:]")."}";
+			}
+			else
+			{
+				$newP[]	= $r;
+			}
+		}
+
+		return implode("/",$newP);
+	}
+
 	public function base($path = Null,$withquery = null)
 	{
+		if(strpos($path, '{current-uri}') !== false)
+		{
+			$value	= self::forgeRoute(apps::getGlobal('router')->executedRoute);
+			$path	= str_replace('{current-uri}', $value, $path);
+		}
+
 		if($path)
 		{
 			if(strpos($path, "{") !== false)

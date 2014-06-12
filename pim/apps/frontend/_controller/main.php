@@ -113,6 +113,7 @@ Class Controller_Main
 			$password	= input::get("userPassword");
 
 			$rules	= Array(
+					"userProfileFullName,userProfileLastName"=>"required:Lapangan ini tidak lengkap",
 					"except:checkPenduduk,checkTerm"=>"required:Lapangan ini diperlukan.",
 					"userIC"=>Array(
 							 "callback"=>Array(!model::load("user/services")->checkIC($ic),"I.C. ini telah didaftarkan.")
@@ -144,9 +145,10 @@ Class Controller_Main
 			## prepare
 			$birthdate	= input::get("birthday_year")."-".input::get("birthday_month")."-".input::get("birthday_day");
 			$fullname	= input::get("userProfileFullName");
+			$lastname	= input::get("userProfileLastName");
 
 			## register.
-			model::load("site/member")->register($row_site['siteID'],$ic,$password,$birthdate,$fullname);
+			model::load("site/member")->register($row_site['siteID'],$ic,$password,$birthdate,$fullname,$lastname);
 
 			## success and redirect.
 			redirect::to("{site-slug}/registration#horizontalTab1","<br>Anda telah berjaya di daftarkan.");

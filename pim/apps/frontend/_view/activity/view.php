@@ -27,35 +27,43 @@
 						<ul>
 						<li><span class="label-info">Jenis <?php echo $activityTypeLabel; ?></span><span>: <?php echo $activityType;?></span></li>
 						<li><span class="label-info">Lokasi</span><span>: <?php echo $location;?></span></li>
-						<li><span class="label-info">Penyertaan</span><span>: <?php echo $activityParticipation;?></span></li>
+						<li><span class="label-info">Penyertaan</span><span>: <?php echo $activityParticipationLabel;?></span></li>
 						<li><span class="label-info">Yuran/Bulanan</span><span>: Percuma</span></li>
 						</ul>
 						</div>
 						<div class="event-short-desc">
 						<?php echo nl2br($activityDescription);?>
 						</div>
-						<?php if($userdata = model::load("access/auth")->getAuthData("user")):
-						if($userdata['isMember']):
+						<?php
+						if($participationFlag):
 						?>
 						<div class="members-guest">
-							<span>Adakah Anda Akan Hadir?</span> <a href="#">Ya </a><a href="#">Tidak</a>
+							<span>Adakah Anda Akan Hadir?</span> <a href="?attend=ya">Ya </a><a href="?attend=no">Tidak</a>
 						</div>
 						<?php else:?>
 						<div class='members-guest'>
-							<span>Anda bukan pengguna berdaftar di laman ini</span>
+							<span><?php echo $participationFlagMessage;?></span>
 						</div>
-						<?php endif;?>
 						<?php endif;?>
 					</div>
 				</div>
 			</div>
 		<div class="event-members-join">
-		<div class="calendar-label-name">Kehadiran</div>
-		<?php if(!$participantList):?>
+		<div class="calendar-label-name">Kehadiran (<?php echo count($participantList['attending']);?>)</div>
+		<?php if(!$participantList['attending']):?>
 			Tiada
 		<?php else:?>
 			<div class="members-attend-list">
-			
+			<ul>
+				<?php
+				foreach($participantList['attending'] as $row):
+				$imgUrl	= model::load("image/services")->getPhotoUrl($row['userProfileAvatarPhoto']);
+				?>
+				<li><img src="<?php echo $imgUrl;?>" style='height:63px;' alt=""/></li>
+				<?php
+				endforeach;
+				?>
+			</ul>
 				<!-- <ul>
 					<li><img src="images/1.jpg" width="64" height="63"  alt=""/></li>
 					<li><img src="images/2.jpg" width="64" height="63"  alt=""/></li>

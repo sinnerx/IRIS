@@ -84,6 +84,7 @@ class Activity
 	## get activity.
 	public function getActivityBySlug($siteID,$activitySlug,$year,$month)
 	{
+		db::select("*,activity.*");
 		db::where(Array(
 				"siteID"=>$siteID,
 				"year(activityStartDate)"=>$year,
@@ -211,8 +212,8 @@ class Activity
 	public function participationName($no = null)
 	{
 		$arr	= Array(
-				1=>"Open For All",
-				2=>"Only to members"
+				1=>"Terbuka kepada semua",
+				2=>"Hanya untuk ahli"
 						);
 
 		return $no?$arr[$no]:$arr;
@@ -350,21 +351,48 @@ class Activity
 	{
 		if(!is_array($activityID))
 		{
-			db::select("user.*");
+			db::select("user.*,userProfileAvatarPhoto,activityUserValue");
 			db::where("activityID",$activityID);
 			db::join("user","activity_user.userID = user.userID");
+			db::join("user_profile","user_profile.userID = activity_user.userID");
 
-			return db::get("activity_user")->result();
+			$res = db::get("activity_user")->result("userID");
+
+			## sort attending and nonattending
+			$newRes	= Array();
+			foreach($res as $uID=>$row)
+			{
+
+				if($row['activityUserValue'] == 1)
+					$newRes['attending'][$uID]		= $row;
+				else
+					$newRes['nonattending'][$uID]	= $row;
+			}
+
+			return $newRes;
 		}
 		else ## if it's list of activity.
 		{
-			db::select("userID");
+			db::select("userID,activityID");
 			db::where("activityID",$activityID);
+			db::where("activityUserValue",1); ## select only attending one.
 			
 			## return while grouped with activityID.
 			return db::get("activity_user")->result("activityID",true);
 		}
 
+	}
+
+	public function joinActivity($userID,$activityID,$join = true)
+	{
+		$data = Array(
+			"userID"=>$userID,
+			"activityID"=>$activityID,
+			"activityUserValue"=>$join?1:2,
+			"activityUserCreatedDate"=>now()
+					);
+
+		db::insert("activity_user",$data);
 	}
 }
 

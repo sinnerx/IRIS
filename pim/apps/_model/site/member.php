@@ -29,13 +29,14 @@ class Member
 		return db::get()->result("userID");
 	}
 
-	public function register($siteID,$ic,$password,$birthDate,$fullname)
+	public function register($siteID,$ic,$password,$birthDate,$fullname,$lastname)
 	{
 		$data_user	= Array(
 					"userIC"=>$ic,
 					"userPassword"=>$password,
 					"userProfileBirthDate"=>$birthDate,
-					"userProfileFullName"=>$fullname
+					"userProfileFullName"=>$fullname,
+					"userProfileLastName"=>$lastname
 							);
 
 		## register as level one (1) user..

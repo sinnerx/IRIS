@@ -2,14 +2,19 @@
 <script type="text/javascript" src='<?php echo url::asset("_templates/js/jquery.easydropdown.js");?>'></script>
 <style type="text/css">
 	
-.lft-container
-{
-	width: inherit;
-}
 .calendar-right-mini-cal
 {
 	position: relative;
 	z-index: 9999;
+}
+
+.calendar-activity-type-wrapper
+{
+	float:left;
+}
+.calendar-left-details
+{
+	width:inherit;
 }
 
 </style>
@@ -31,29 +36,34 @@
 				{
 					if(isset($res_activity[$type]))
 					{?>
+						<div class='calendar-activity-type-wrapper'>
 						<div class='calendar-label-name'><?php echo $typeName;?></div>
 						<div class='calendar-activity-list'>
 						<ul>
 					<?php
 						## activity loop.
 						foreach($res_activity[$type] as $row)
-						{?>
+						{
+							$total	= isset($participantList[$row['activityID']])?count($participantList[$row['activityID']]):0;
+							$url	= model::load("helper")->buildDateBasedUrl($row['activitySlug'],$row['activityStartDate'],url::base("{site-slug}/activity"));
+							?>
 						<li class="clearfix">
 							<div class="activity-details-left">
-								<div class="activity-name"><a href="#"><?php echo $row['activityName'];?></a></div>
+								<div class="activity-name"><a href="<?php echo $url;?>"><?php echo $row['activityName'];?></a></div>
 								<div class="activity-time-date">
 									<?php echo date("d F Y",strtotime($row['activityStartDate']));?> hingga
 									<?php echo date("d F Y",strtotime($row['activityEndDate']));?>
 								</div>
 							</div>
 							<div class="activity-join-count">
-								<i class="fa fa-user"></i> 9
+								<i class="fa fa-user"></i> <?php echo $total;?>
 							</div>
 						</li>
 						<?php
 						}?>
 						</ul>
 						</div>
+						</div> <!-- Wrapper ends -->
 					<?php
 					}/* /end of isset */
 				}
@@ -83,12 +93,12 @@
 				</ul>
 				</div> -->
 			</div>
-			<div style="float:right;" class="calendar-right-mini-cal">
+			<!-- <div style="float:right;" class="calendar-right-mini-cal">
 				<?php 
 				## load calendar controller.
 				controller::load("activity","calendar");
 				?>
-			</div>
+			</div> -->
 		</div>
 	</div><!-- /.page-content -->
 </div>

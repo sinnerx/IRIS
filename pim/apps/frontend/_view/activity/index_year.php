@@ -60,6 +60,9 @@ foreach($leftR as $m):?>
 			<?php
 			foreach($res_activity[$m] as $row)
 			{
+				## total.
+				$total	= isset($participantList[$row['activityID']])?count($participantList[$row['activityID']]):0;
+
 				## prepare perma url.
 				$url	= url::base("{site-slug}/activity/$year/").date("m",strtotime($row['activityStartDate']))."/".$row['activitySlug'];
 				?>
@@ -76,7 +79,7 @@ foreach($leftR as $m):?>
 					</div>
 				</div>
 				<div class="activity-join-count">
-					<i class="fa fa-user"></i> 9
+					<i class="fa fa-user"></i> <?php echo $total;?>
 				</div>
 			</li>
 			<?php
@@ -86,7 +89,6 @@ foreach($leftR as $m):?>
 	</div>
 <?php endforeach;?>
 </div>
-
 <div class='calendar-type-right'>
 <?php ## left month loop ## 
 foreach($rightR as $m):?>
@@ -96,6 +98,9 @@ foreach($rightR as $m):?>
 			<?php
 			foreach($res_activity[$m] as $row)
 			{
+				## total.
+				$total	= isset($participantList[$row['activityID']])?count($participantList[$row['activityID']]):0;
+				
 				## prepare perma url.
 				$url	= url::base("{site-slug}/activity/$year/").date("m",strtotime($row['activityStartDate']))."/".$row['activitySlug'];
 				?>
@@ -112,7 +117,7 @@ foreach($rightR as $m):?>
 					</div>
 				</div>
 				<div class="activity-join-count">
-					<i class="fa fa-user"></i> 9
+					<i class="fa fa-user"></i> <?php echo $total;?>
 				</div>
 			</li>
 			<?php

@@ -40,8 +40,8 @@ class Controller_Partial
 		$nonCalendarlist	= Array('activity/index');
 		if(in_array($this->currController."/".$this->currMethod,$nonCalendarlist))
 		{
-			if(request::named("month"))
-				return false;
+			/*if(request::named("month"))
+				return false;*/
 		}
 		view::render("partial/calendar");
 	}

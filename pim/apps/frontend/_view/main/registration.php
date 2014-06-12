@@ -21,6 +21,14 @@
     });
 </script>
 <style type="text/css">
+/*temporary*/
+input
+{
+    color:#727272 !important;
+}   
+
+</style>
+<style type="text/css">
     
 .span-error
 {
@@ -34,6 +42,10 @@
 .alert.alert-success
 {
     color:green;
+}
+.main-container
+{
+    min-height:800px;
 }
 
 </style>
@@ -78,8 +90,9 @@
                <div>
                <div class="register">
                <form method='post'>
-                 <label>NAMA PENUH <?php echo flash::data("userProfileFullName");?></label>
-                 <?php echo form::text("userProfileFullName","class='name username-login' placeholder='Nama Penuh'");?>
+                 <label>NAMA <?php echo flash::data("userProfileFullName");?></label>
+                 <?php echo form::text("userProfileFullName","style='width:40%;display:inline;' class='name username-login' placeholder='Nama'");?>
+                 <?php echo form::text("userProfileLastName","style='width:45%;display:inline;' class='name username-login' placeholder='Nama Ayah'");?>
                  <label>KAD PENGENALAN <?php echo flash::data("userIC");?></label>
                  <?php echo form::text("userIC","class='name username-login' placeholder='Kad Pengenalan Anda'");?>
                  

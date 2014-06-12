@@ -43,6 +43,18 @@ class Controller_Activity
 			$data['monthLabel']		= $monthR[(int)$this->month];
 			$data['activityType']	= $this->activityType;
 
+			## prepare list activity list to be used in a query for getting list of participant.
+			$actIDR	= Array();
+			foreach($this->res_activity as $type=>$rowR)
+			{
+				foreach($rowR as $row)
+				{
+					$actIDR[]	= $row['activityID'];
+				}
+			}
+
+			$data['participantList']	= model::load("activity/activity")->getParticipantList($actIDR);
+
 			view::render("activity/index_month",$data);
 		}
 
@@ -55,9 +67,16 @@ class Controller_Activity
 			$data['res_activity']	= $this->res_activity;
 
 			## get list of activityID.
-			foreach($this->res_activity as $y=>$rowR)
+			$actIDR	= Array();
+			foreach($this->res_activity as $m=>$rowR)
 			{
+				foreach($rowR as $row)
+				{
+					$actIDR[]	= $row['activityID'];
+				}
 			}
+
+			$data['participantList']	= model::load("activity/activity")->getParticipantList($actIDR);
 
 			view::render("activity/index_year",$data);
 		}
@@ -98,10 +117,64 @@ class Controller_Activity
 		## general data.
 		# 1. if use pusat internet.
 		$data['location']				= $row_act['activityAddressFlag'] == 1?"Pusat Internet":$row_act['activityAddress'];
-		$data['activityParticipation']	= $activity->participationName($row_act['activityParticipation']);
+		$data['activityParticipationLabel']	= $activity->participationName($row_act['activityParticipation']);
 
 		# 2. participation list.
 		$data['participantList']	= model::load("activity/activity")->getParticipantList($row_act['activityID']);
+
+		# 3. attending button show flag
+		$authData	= model::load("access/auth")->getAuthData();
+		$data['participationFlag']	= false;
+
+		if($authData['user'])
+		{
+			if(isset($data['participantList']['attending'][session::get("userID")]))
+			{
+				$data['participationFlagMessage']	= "Anda telah memilih untuk hadir ke aktiviti ini.";
+			}
+			else if(isset($data['participantList']['nonattending'][session::get("userID")]))
+			{
+				$data['participationFlagMessage']	= "Anda telah memlihih untuk tidak hadir.";
+			}
+			else
+			{
+				## user wasn't activated yet.
+				if(!$authData['user']['isActive'])
+				{
+					$data['participationFlagMessage']	= "Hanya pengguna yang telah diaktifkan sahaja boleh sertai.";
+				}
+				else if($data['activityParticipation'] == 1) # open for all.
+				{
+					$data['participationFlag']	= true;
+				}
+				## else is 2 (hanya untuk ahli.)
+				else if($authData['site']['siteID'] == $authData['current_site']['siteID'])
+				{
+					$data['participationFlag']	= true;
+				}
+				else ## non-member
+				{
+					$data['participationFlagMessage']	= "Hanya ahli untuk laman ini sahaja boleh menyertai";
+				}
+			}
+		}
+		else
+		{
+			$data['participationFlagMessage']	= "Hanya ahli berdaftar boleh menyertai aktiviti.";
+		}
+
+		## attend flag was sent
+		if(request::get("attend"))
+		{
+			## use the participationFlag for easier eligible check
+			if($data['participationFlag'])
+			{
+				$joinFlag	= request::get("attend") == "ya"?true:false;
+				model::load("activity/activity")->joinActivity($authData['user']['userID'],$row_act['activityID'],$joinFlag);
+
+				redirect::to(url::base("{current-uri}"));
+			}
+		}
 
 		view::render("activity/view",$data);
 	}

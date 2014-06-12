@@ -1,4 +1,12 @@
 <?php view::render("partial/all_top");?>
+<style type="text/css">
+/*temporary*/
+input
+{
+	color:#727272 !important;
+}	
+
+</style>
 <?php controller::load("partial","top");?>
 <?php controller::load("partial","header");?>
 <div class="main-container">
