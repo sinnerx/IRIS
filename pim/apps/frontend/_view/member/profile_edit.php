@@ -136,10 +136,10 @@ $(document).ready(function()
 		</div>
 		<div class="page-sub-wrapper profile-page clearfix">
 			<div class="profile-avatar">
-			<?php $photoUrl	= model::load("image/services")->getPhotoUrl($userProfileAvatarPhoto);
-
+			<?php $photoUrl	= $userProfileAvatarPhoto?model::load("image/services")->getPhotoUrl($userProfileAvatarPhoto):null;
+			$backgroundUrl	= $photoUrl?";background:url('$photoUrl')":"";
 			?>
-				<div class="profile-avatar-upload" style="background-size:200px;background:url('<?php echo $photoUrl;?>');background-color:black;">
+				<div class="profile-avatar-upload" style="background-size:200px<?php echo $backgroundUrl;?>;background-color:black;">
 					<a href='javascript:profile.upload.show();' id='avatar-upload-button'>
 						<div class='upload-button'>
 							<input type='file' id='avatarPhoto' name='avatarPhoto' onchange='profile.upload.go();' />
