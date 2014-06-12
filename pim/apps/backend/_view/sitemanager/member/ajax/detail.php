@@ -22,7 +22,7 @@
 					<div class='row'>
 								<div class="col-sm-2">
 				                    <header class="panel-heading font-bold">
-				                    	<img src="" width="125" height="150" />
+				                    	<img src="<?php echo model::load('image/services')->getPhotoUrl($user['userProfileAvatarPhoto']); ?>" width="125" height="150" />
 				                    </header>
 				                </div>
 								<div class="col-sm-5">
