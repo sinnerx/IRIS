@@ -75,7 +75,7 @@ Class Controller_Site
 							"min_length(5):length must be longer than {length}",
 							"callback"=>Array($siteSlugCheck[0],$siteSlugCheck[1])
 									)
-								);	
+								);
 			}
 
 			## error.
@@ -423,10 +423,6 @@ Class Controller_Site
 			{
 				$siteID	= $site->getSiteByManager(session::get("userID"),"siteID");
 			}
-			else ## must be root admin.
-			{
-				$siteID	= 0;
-			}
 
 			$error	= input::validate(Array(
 								"articleName"=>"required:This field is required.",
@@ -446,7 +442,7 @@ Class Controller_Site
 			$data	= input::get();
 			$data['articleStatus'] = $data['articleStatus'] == 'Save as draft'? 3:0;
 			$data['articlePublishedDate'] = date('Y-m-d',strtotime($data['articlePublishedDate']));
-			//echo '<input type="text" value="';print_r($data);echo '" />';die;
+			//echo '<pre>';print_r($data);die;
 
 			## execute model/addArticle()
 			$siteAnnounce->addArticle($siteID,$data);
@@ -464,6 +460,7 @@ Class Controller_Site
 	public function editArticle($articleID)
 	{
 		$data['row']	= model::load("blog/article")->getArticle($articleID);
+		$data['gotreqs'] =model::load('site/request')->replaceWithRequestData('article.update', $articleID,$data['row']);
 		$data['row']['articleTags'] = model::load("blog/article")->getArticleTag($data['row']['articleID']);
 
 		if(form::submitted())
@@ -484,14 +481,22 @@ Class Controller_Site
 
 			## populate into data.
 			$postdata = input::get();
-			$postdata['articleStatus'] = $postdata['articleStatus'] == 'Save as draft'? 3:0;
-			$postdata['articleStatus'] = $data['row']['articleStatus'] == 1? 4:$postdata['articleStatus']; 
 			$postdata['articlePublishedDate'] = date('Y-m-d',strtotime($postdata['articlePublishedDate']));
 			$postdata['siteID'] = $data['row']['siteID'];
+			if($postdata['articleStatus'] == 'Save as draft'){
+				$postdata['articleStatus']	= 3;
+				model::load('blog/article')->updateDraft($articleID,$postdata);
+			}else{
+				if($data['row']['articleStatus'] == 3){
+					$postdata['articleStatus'] = 0;
+					model::load('blog/article')->addDraftedArticle($articleID,$postdata);
+				}else{
+					$postdata['articleStatus'] = $data['row']['articleStatus'];
+					model::load('blog/article')->updateArticle($articleID,$postdata);
+				}
+			}
+			# $postdata['articleStatus'] = $data['row']['articleStatus'] == 1? 4:$postdata['articleStatus']; 
 			# echo '<pre>';print_r($postdata);die;
-
-			## update db.
-			model::load("blog/article")->updateArticle($articleID,$postdata);
 			
 			redirect::to("site/article","Your edited article has been requested.");
 		}

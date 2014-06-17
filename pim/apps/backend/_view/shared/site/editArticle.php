@@ -107,6 +107,10 @@ Edit article
 									<i style="cursor: pointer;" onclick="removeActivity();" class="fa fa-times text-danger text"></i>
 								</a>
 								<?php
+									else:
+								?>
+								Activity Link
+								<?php
 									endif;
 								?>&nbsp;&nbsp;&nbsp;
                         		<span class="caret"></span>
@@ -133,7 +137,7 @@ Edit article
 		<header class="panel-heading">Publish</header>
 		<div class="panel-body">
 			<div class="form-group">
-				<?php echo form::submit("Save as draft","name='articleStatus' class='btn btn-xs btn-default pull-left'");?>
+				<?php if($row['articleStatus'] == 3){echo form::submit("Save as draft","name='articleStatus' class='btn btn-xs btn-default pull-left'");} ?>
 				<?php echo form::submit("Publish blog","name='articleStatus' onclick='return confirmation();' class='btn btn-xs btn-primary pull-right'");?>
 			</div>
 		</div>

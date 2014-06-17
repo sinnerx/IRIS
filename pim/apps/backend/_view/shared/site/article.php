@@ -59,25 +59,20 @@ Listing all your request blogs here.
 		<?php
 	 if($article):
 		$requestdata = model::load('site/request')->replaceWithRequestData('article.update', array_keys($article));
+		/*if($data){
+			array_merge($article,$data);
+		}echo '<pre>';print_r($data);die;*/
 		$no	= pagination::recordNo();
 		foreach($article as $row):
-		/*if(isset($requestdata[$row['articleID']])){
+		
+		if(isset($requestdata[$row['articleID']])){
 			$row = array_merge($row,$requestdata[$row['articleID']]);
-
-			$ats = array();
-			$row['articleTags'] = strtok($row['articleTags'],',');
-
-			while ($row['articleTags'] != false)
-    		{
-				array_push($ats,array('articleTagName'=>$row['articleTags']));
-				$row['articleTags'] = strtok(",");
-			}
-			$articleTags[$row['articleID']] = $ats;
-		}*/
+		}
 
 		$active		= $row['articleStatus'] == 1?"active":"";
 		$opacity	= $row['articleStatus'] == 0 || isset($requestdata[$row['articleID']])?"style='opacity:0.5;'":"";
 		$href		= ($row['articleStatus'] == 1?"deactivate":"activate")."?".$row['articleID'];
+		$row['articleStatus'] = $row['articleStatus'] == 1 && $requestdata?4:$row['articleStatus'];
 		$href		= "?toggle=".$row['articleID'];
 			?>
 		<tr <?php echo $opacity;?>>
@@ -105,16 +100,10 @@ Listing all your request blogs here.
 			</td>
 			<td><?php echo date("d-m-Y",strtotime($row['articlePublishedDate']));?></td>
 			<td>
-			<?php if($row['siteID'] != 0 || session::get("userLevel") == 99):?>
-				<?php if($row['articleStatus'] != 2):?>
+			<?php if($row['articleStatus'] != 2):?>
 				<a href='<?php echo url::base("site/editArticle/".$row['articleID']);?>' class='fa fa-edit'></a>
-				<?php endif; ?>
-				<?php if(session::get("userLevel") == 99):?>
-					<a href="<?php echo $href;?>" class="<?php echo $active;?>" ><i class="fa fa-check text-success text-active"></i><i class="fa fa-times text-danger text"></i></a>
-				<?php else: ?>
-					<a><?php echo model::load('template/icon')->status($row['articleStatus']); ?></a>
-				<?php endif; ?>
-			<?php endif;?>
+			<?php endif; ?>
+			<a><?php echo model::load('template/icon')->status($row['articleStatus']); ?></a>
 			</td>
 		</tr>
 		<?php 

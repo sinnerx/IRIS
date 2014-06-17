@@ -5,7 +5,7 @@ namespace model\template;
 class Icon
 {
 	## 0 or 1 or 2
-	public function status($no = null,$title = null)
+	public function status($no = 0,$title = null)
 	{
 		$title	= $title?"title='$title'":"";
 		$arr[0]	= "<span {title} class='fa fa-circle' style='color:grey;'></span>";
@@ -14,7 +14,7 @@ class Icon
 		$arr[3] = "<span {title} class='fa fa-circle' style='color:yellow;'></span>";
 		$arr[4] = "<span {title} class='fa fa-circle' style='color:blue;'></span>";
 
-		return $no != null?str_replace('{title}',$title,$arr[$no]):$arr;
+		return str_replace('{title}',$title,$arr[$no]);
 	}
 }
 

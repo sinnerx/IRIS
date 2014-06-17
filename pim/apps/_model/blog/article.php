@@ -76,6 +76,106 @@ class Article
 		return $slug;
 	}
 
+	public function addDraftedArticle($articleID,$data = null){
+
+		//if data is passed, update curent drafted content.
+		if($data)
+		{
+			$this->_updateArticle($articleID,$data);
+		}
+
+		// change status to pending.
+		db::where("articleID",$articleID)->update('article',Array("articleStatus"=>0));
+
+		// create article.add request.
+		model::load("site/request")->create('article.add', $data['siteID'], $articleID, Array());
+	}
+
+	public function updateDraft($articleID,$data)
+	{
+		$this->_updateArticle($articleID,$data);
+	}
+
+	private function _updateArticle($articleID,$data,$withoutOthers = false){
+		$originalSlug = model::load('helper')->slugify($data['articleName']);
+		$articleSlug = $this->slugChecker($originalSlug,$data['articlePublishedDate']);
+
+		$dataArticle	= Array(
+				"articleStatus"=>$data['articleStatus'],
+				"articleName"=>$data['articleName'],
+				"articleText"=>$data['articleText'],
+				"articleOriginalSlug"=>$originalSlug,
+				"articleSlug"=>$articleSlug,
+				"articleUpdatedDate"=>now(),
+				"articleUpdatedUser"=>session::get("userID")
+				);
+
+		db::where('articleID',$articleID)->update('article',$dataArticle);
+
+		if($withoutOthers)
+		{
+			return;
+		}
+
+		if($data['articleTags']){
+			db::delete('article_tag', 'articleID='.$articleID);
+
+			$data['articleTags'] = strtok($data['articleTags'],',');
+
+			while ($data['articleTags'] != false)
+		    {
+				$dataToken = Array(
+					"articleID"=>$articleID,
+					"articleTagName"=>$data['articleTags']
+				);
+
+				db::insert("article_tag",$dataToken);
+
+		    	$data['articleTags'] = strtok(",");
+			}
+			unset($data['articleTags']);
+		}
+		
+		if($data['category']){		
+			db::delete('article_category', 'articleID='.$articleID);
+			foreach($data['category'] as $category){
+				$dataToken = Array(
+					"articleID"=>$articleID,
+					"categoryID"=>$category
+				);
+
+				db::insert("article_category",$dataToken);
+			}
+			unset($data['category']);
+		}else{
+			db::delete('article_category', 'articleID='.$articleID);
+		}
+
+		if(!is_null($data['activityID'])){
+			db::from('activity_article');
+			db::where('articleID',$articleID);
+
+			if(db::get()->row()){
+				$dataActivity = Array(
+						"activityID" => $data['activityID'],
+						"activityArticleType" => $data['activityArticleType']
+				);
+				db::where("articleID",$articleID)->update("activity_article",$dataActivity);
+			}else{
+				$dataActivity = Array(
+					"articleID" => $articleID,
+					"activityID" => $data['activityID'],
+					"activityArticleType" => $data['activityArticleType'],
+					"activityArticleCreatedDate" => now(),
+					"activityArticleCreatedUser" => session::get("userID")
+				);
+				db::insert("activity_article", $dataActivity);
+			}
+			unset($data['activityID']);
+			unset($data['activityArticleType']);
+		}
+	}
+
 	# add an article on a blog
 	public function addArticle($siteID,$data)
 	{
@@ -98,27 +198,31 @@ class Article
 
 		$id = db::getLastID('article', 'articleID');
 
-		$data['articleTags'] = strtok($data['articleTags'],',');
+		if($data['articleTags']){
+			$data['articleTags'] = strtok($data['articleTags'],',');
 
-		while ($data['articleTags'] != false)
-    	{
-			$dataToken = Array(
-				"articleID"=>$id,
-				"articleTagName"=>$data['articleTags']
-			);
+			while ($data['articleTags'] != false)
+	    	{
+				$dataToken = Array(
+					"articleID"=>$id,
+					"articleTagName"=>$data['articleTags']
+				);
 
-			db::insert("article_tag",$dataToken);
+				db::insert("article_tag",$dataToken);
 
-    		$data['articleTags'] = strtok(",");
+	    		$data['articleTags'] = strtok(",");
+			}
 		}
-			
-		foreach($data['category'] as $category){
-			$dataToken = Array(
-				"articleID"=>$id,
-				"categoryID"=>$category
-			);
+		
+		if($data['category']){	
+			foreach($data['category'] as $category){
+				$dataToken = Array(
+					"articleID"=>$id,
+					"categoryID"=>$category
+				);
 
-			db::insert("article_category",$dataToken);
+				db::insert("article_category",$dataToken);
+			}
 		}
 
 		if($data['activityID']){
@@ -208,9 +312,6 @@ class Article
 	#updating an article
 	public function updateArticle($articleID,$data)
 	{
-		$data['articleUpdatedDate'] = now();
-		$data['articleUpdatedUser'] = session::get('userID');
-			
 		if($data['articleTags']){
 			db::delete('article_tag', 'articleID='.$articleID);
 
@@ -230,7 +331,8 @@ class Article
 			unset($data['articleTags']);
 		}
 		
-		if($data['category']){		
+		if($data['category']){
+
 			db::delete('article_category', 'articleID='.$articleID);
 			foreach($data['category'] as $category){
 				$dataToken = Array(
@@ -241,9 +343,11 @@ class Article
 				db::insert("article_category",$dataToken);
 			}
 			unset($data['category']);
+		}else{
+			db::delete('article_category', 'articleID='.$articleID);
 		}
 
-		if($data['activityID']){
+		if(!is_null($data['activityID'])){
 			db::from('activity_article');
 			db::where('articleID',$articleID);
 
@@ -267,30 +371,61 @@ class Article
 			unset($data['activityArticleType']);
 		}
 
+		## if there're still got add request pending.
+		if(model::load("site/request")->checkRequest("article.add",$data['siteID'],$articleID)){
+			$this->_updateArticle($articleID,$data,true);
+		}else{
+			model::load("site/request")->create('article.update', $data['siteID'], $articleID, $data);
+		}
+
+		
+
 		## only if no add request pending.
-		if(!model::load("site/request")->checkRequest("article.add",$data['siteID'],$articleID) && $data['articleStatus'] == 0 || $data['articleStatus'] == 4)
-		{
-			$article = $data;
-			$article['articleStatus'] = 1;
-			model::load("site/request")->create('article.update', $data['siteID'], $articleID, $article);
+		// if(!model::load("site/request")->checkRequest("article.add",$data['siteID'],$articleID)/* && $data['articleStatus'] == 0 || $data['articleStatus'] == 4*/)
+		// {
+		// 	db::where("articleID",$articleID)->update("article",$data);
 			
-			if($data['articleStatus'] == 0){
-				$status = Array("articleStatus"=>0);
-			}else{
-				$status = Array("articleStatus"=>4);
-			}
+		// 	if($data['articleStatus'] == 0){
+		// 		model::load("site/request")->create('article.add', $data['siteID'], $articleID, Array());
+		// 	}
+		// 	$article = $data;
+		// 	$article['articleStatus'] = 1;
+		// 	model::load("site/request")->create('article.update', $data['siteID'], $articleID, $article);
+			
+		// 	if($data['articleStatus'] == 0){
+		// 		$status = Array("articleStatus"=>0);
+		// 	}else{
+		// 		$status = Array("articleStatus"=>4);
+		// 	}
 
-			db::where("articleID",$articleID)->update("article",$status);
-		}
-		## if exists, just update article table.
-		else
-		{
-			db::where("articleID",$articleID)->update("article",$data);
+		// 	db::where("articleID",$articleID)->update("article",$status);
+		// }
+		// ## if exists, just update article table.
+		// else
+		// {
+		// 	db::where("articleID",$articleID)->update("article",$data);
+		// 	/*}else if($data['articleStatus'] == 0){
+		// 		model::load("site/request")->create('article.update', $data['siteID'], $articleID, $article);
+		// 	}*/
+		// 	/*db::where("articleID",$articleID)->update("article",$data);
 
-			if($data['articleStatus'] == 0){
-				model::load("site/request")->create('article.add', $siteID, $id, Array());
-			}
-		}
+		// 	if($data['articleStatus'] == 0){
+		// 		model::load("site/request")->create('article.add', $siteID, $id, Array());
+		// 	}*/
+		// }
+	}
+
+	public function checkDraft($articleID)
+	{
+		if($row = db::where("articleID",$articleID)->get("article_draft")->row())
+			return $row;
+
+		return false;
+	}
+
+	public function cancelDraft($articleID)
+	{
+		db::delete("article_draft",Array("articleID"=>$articleID));
 	}
 }
 
