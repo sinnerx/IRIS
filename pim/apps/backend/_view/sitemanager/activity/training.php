@@ -17,13 +17,20 @@ List of training activities of your site. <a href='<?php echo url::base("activit
 				<th>Participation</th>
 				<th>Max Pax</th>
 				<th colspan="2" width="20%" style='text-align:center;'>Date</th>
-				<th width='58px'></th>
+				<th width='80px'></th>
 			</tr>
 			<?php 
 			if($res_training):
+			$requestData	= model::load("site/request")->replaceWithRequestData("activity.update",array_keys($res_training));
 			$no	= pagination::recordNo();
 			foreach($res_training as $row):
 			$id			= $row['activityID'];
+			if(isset($requestData[$id]))
+			{
+				$row 							= model::load("helper")->replaceArray($row,$requestData[$id]);
+				$row['activityApprovalStatus']	= 4; ## just a decoy.
+			}
+
 			$status		= $row['activityApprovalStatus'];
 			$startDate	= $row['activityStartDate'];
 			$endDate	= $row['activityEndDate'];
@@ -46,7 +53,10 @@ List of training activities of your site. <a href='<?php echo url::base("activit
 					<?php endif;?>
 				<td>
 					<?php echo $statusIcon;?>
-					 <a href='<?php echo url::base("activity/view/training/$id");?>' class='fa fa-search'></a>
+					<?php if($status != 2):?>
+					<a href='<?php echo url::base("activity/view/training/$id");?>' class='fa fa-search'></a>
+					<a href='<?php echo url::base("activity/edit/$id");?>' class='fa fa-edit'></a>
+					<?php endif;?>
 				</td>
 			</tr>
 			<?php 

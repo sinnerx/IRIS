@@ -115,6 +115,13 @@ class Activity
 		return db::get("activity")->row($col);
 	}
 
+	public function getDate($activityID)
+	{
+		db::where("activityID",$activityID);
+		db::order_by("activityDateValue","asc");
+		return db::get("activity_date")->result();
+	}
+
 	## get all activity by date.
 	public function getAllActivity($siteID = null,$year = null,$month = null)
 	{
@@ -154,6 +161,66 @@ class Activity
 			return $slug;
 
 		return $slug."-".(count($res_slug)+1);
+	}
+
+	public function updateActivity($activityID,$type,$data)
+	{
+		$siteID	= $this->getActivity($activityID,"siteID");
+
+		## check active activity.add request.
+		if(model::load("site/request")->checkRequest("activity.add",$siteID,$activityID))
+		{
+			## just update the current.
+			$this->_updateActivity($activityID,$type,$data);
+		}
+		else
+		{
+			## create request.## create request
+			model::load("site/request")->create("activity.update",$siteID,$activityID,$data);
+		}
+	}
+
+	private function _updateActivity($activityID,$type,$data)
+	{
+		$originalSlug	= model::load("helper")->slugify($data['activityName']);
+
+		## recreate slug, with exception to activityID.
+		$activitySlug	= $this->refineActivitySlug($originalSlug,$data['activityStartDate'],$activityID);
+
+		db::where("activityID",$activityID);
+		db::update("activity",Array(
+						"activityName"=>$data['activityName'],
+						"activityAddressFlag"=>$data['activityAddressFlag'],
+						"activityAddress"=>$data['activityAddress'],
+						"activityDescription"=>$data['activityDescription'],
+						"activityParticipation"=>$data['activityParticipation'],
+						"activityStartDate"=>$data['activityStartDate'],
+						"activityEndDate"=>$data['activityEndDate'],
+						"activityUpdatedDate"=>now(),
+						"activityCreatedUser"=>session::get("userID"),
+						"activitySlug"=>$activitySlug,
+						"activitySlugOriginal"=>$originalSlug
+									));
+
+		## update datetime.
+		$this->updateDateTime($activityID,$data['activityDateTime']);
+
+		switch($type)
+		{
+			case 1:
+			db::where('activityID',$activityID);
+			db::update("event",Array(
+						"eventType"=>$data['eventType']
+									));
+			break;
+			case 2:
+			db::where("activityID",$activityID);
+			db::update("training",Array(
+						"trainingType"=>$data['trainingType'],
+						"trainingMaxPax"=>$data['trainingMaxPax']
+									));
+			break;
+		}
 	}
 
 	public function addActivity($siteID,$type,$data)
@@ -205,8 +272,28 @@ class Activity
 			break;
 		}
 
+		## add datetime.
+		$this->updateDateTime($activityID,$data['activityDateTime']);
+
 		## create request
 		model::load("site/request")->create("activity.add",$siteID,$activityID,Array());
+	}
+
+	public function updateDateTime($activityID,$datetime)
+	{
+		//first delete the old.
+		db::delete("activity_date",Array("activityID"=>$activityID));
+
+		//then insert new.
+		foreach($datetime as $date=>$row)
+		{
+			db::insert("activity_date",Array(
+							"activityID"=>$activityID,
+							"activityDateValue"=>$date,
+							"activityDateStartTime"=>$row['start'],
+							"activityDateEndTime"=>$row['end']
+										));
+		}
 	}
 
 	public function participationName($no = null)
@@ -246,7 +333,7 @@ class Activity
 		db::order_by("activityCreatedDate","desc");
 		db::limit(10,pagination::recordNo()-1);
 
-		return db::get()->result();
+		return db::get()->result("activityID");
 	}
 
 	public function getParticipant($activityID)

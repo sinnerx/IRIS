@@ -16,14 +16,21 @@ List of event activities of your site. <a href='<?php echo url::base("activity/a
 				<th width="10%">Type</th>
 				<th>Participation</th>
 				<th colspan="2" width="20%" style='text-align:center;'>Date</th>
-				<th width='56px'></th>
+				<th width='80px'></th>
 			</tr>
 			<?php 
 			if($res_event):
+			$requestData	= model::load("site/request")->replaceWithRequestData("activity.update",array_keys($res_event));
 			$no	= pagination::recordNo();
 			foreach($res_event as $row):
 
 			$activityID	= $row['activityID'];
+			if(isset($requestData[$activityID]))
+			{
+				$row 							= model::load("helper")->replaceArray($row,$requestData[$activityID]);
+				$row['activityApprovalStatus']	= 4; ## just a decoy.
+			}
+
 			$status		= $row['activityApprovalStatus'];
 			$startDate	= $row['activityStartDate'];
 			$endDate	= $row['activityEndDate'];
@@ -43,7 +50,10 @@ List of event activities of your site. <a href='<?php echo url::base("activity/a
 					<td><b>To</b> <?php echo date("d/m/Y",strtotime($endDate));?></td>
 					<?php endif;?>
 				<td><?php echo $statusIcon;?>
+				<?php if($status != 2):?>
 					<a href='<?php echo url::base("activity/view/event/$activityID");?>' class='fa fa-search'></a>
+					<a href='<?php echo url::base("activity/edit/$activityID");?>' class='fa fa-edit'></a>
+				<?php endif;?>
 				</td>
 			</tr>
 			<?php 

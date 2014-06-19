@@ -171,5 +171,16 @@ class Helper
 
 		return $prefix?trim($prefix,"/")."/".$uri:$uri;
 	}
+
+	## return a replaced array based on data1
+	public function replaceArray($data1,$data2)
+	{
+		$newD	= Array();
+		foreach($data1 as $key=>$val)
+		{
+			$newD[$key]	= isset($data2[$key])?$data2[$key]:$data1[$key];
+		}
+		return $newD;
+	}
 }
 ?>

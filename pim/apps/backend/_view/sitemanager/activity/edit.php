@@ -471,6 +471,8 @@ $(document).ready(function()
 	{
 		activity.datePicker.initiateData();
 	}
+
+	activity.showTypeDetail(<?php echo $row['activityType'];?>);
 });
 
 pim.uriHash.addCallback({"event":function(){activity.showTypeDetail(1)},"training":function(){activity.showTypeDetail(2)}});
@@ -501,12 +503,18 @@ pim.uriHash.addCallback({"event":function(){activity.showTypeDetail(1)},"trainin
 
 </style>
 <h3 class='m-b-xs text-black'>
-Add Activity 
+Edit Activity
 </h3>
 <div class='well well-sm'>
-Add activities to your side. Every activity added will be pending for your cluster lead approval first.
+Edit activity
 </div>
 <?php echo flash::data();?>
+<?php
+if(!flash::data() && $requestFlag == true):?>
+<div class='alert alert-danger'>
+Content is waiting for approval
+</div>
+<?php endif;?>
 <form method='post' onsubmit="">
 <div class='row'>
 	<div class='col-sm-7'>
@@ -516,13 +524,13 @@ Add activities to your side. Every activity added will be pending for your clust
 					<label>
 						1. Activity Name <?php echo flash::data("activityName");?>
 					</label>
-					<?php echo form::text("activityName","class='form-control'");?>
+					<?php echo form::text("activityName","class='form-control'",$row['activityName']);?>
 				</div>
 			</div>
 			<div class='col-sm-3'>
 				<div class='form-group'>
 					<label>5. Participation <?php echo flash::data("activityParticipation");?></label>
-					<?php echo form::select("activityParticipation",Array(1=>"Open",2=>"Only for site member"),"class='form-control'");?>
+					<?php echo form::select("activityParticipation",Array(1=>"Open",2=>"Only for site member"),"class='form-control'",$row['activityParticipation']);?>
 				</div>
 			</div>
 			<div class='col-sm-3'>
@@ -531,7 +539,7 @@ Add activities to your side. Every activity added will be pending for your clust
 					<?php
 					$conv	= Array("event"=>1,"training"=>2);
 					?>
-					<?php echo form::select("activityType",Array(1=>"Event",2=>"Training"),"onchange='activity.showTypeDetail(this.value);' class='form-control'",$conv[request::get("type")]);?>
+					<?php echo form::select("activityType",Array(1=>"Event",2=>"Training"),"disabled onchange='activity.showTypeDetail(this.value);' class='form-control'",$row['activityType']);?>
 				</div>
 			</div>
 		</div>
@@ -539,7 +547,7 @@ Add activities to your side. Every activity added will be pending for your clust
 			<div class='col-sm-6'>
 				<div class='form-group'>
 				<label>3. Description</label>
-				<?php echo form::textarea("activityDescription","class='form-control'");?>
+				<?php echo form::textarea("activityDescription","class='form-control'",$row['activityDescription']);?>
 				</div>
 
 				<div class='form-group'>
@@ -556,7 +564,7 @@ Add activities to your side. Every activity added will be pending for your clust
 						<a href='<?php echo url::base("ajax/activity/datePicker");?>' data-toggle='ajaxModal' class='fa fa-calendar'></a>
 						<?php /*echo flash::data("activityDate");*/?>
 					</label>
-					<?php echo form::hidden("activityDateTime");?>
+					<?php echo form::hidden("activityDateTime",null,$datetime);?>
 					<?php echo flash::data("activityDateTime");?>
 					<div class='summary_title'>Configure the activity date.</div>
 					<div id='activityDateSummary' style="display:none;">
@@ -588,7 +596,7 @@ Add activities to your side. Every activity added will be pending for your clust
 					<div class='panel-body'>
 						<div class='form-group'>
 							<label>Type of event <?php echo flash::data("eventType");?></label>
-							<?php echo form::select("eventType",$eventTypeR,"class='form-control'");?>
+							<?php echo form::select("eventType",$eventTypeR,"class='form-control'",$row['eventType']);?>
 						</div>
 					</div>
 				</section>
@@ -601,11 +609,11 @@ Add activities to your side. Every activity added will be pending for your clust
 					<div class='panel-body'>
 						<div class='form-group'>
 							<label>Training Type <?php echo flash::data("trainingType");?></label>
-							<?php echo form::select("trainingType",$trainingTypeR,"class='form-control'",null);?>
+							<?php echo form::select("trainingType",$trainingTypeR,"class='form-control'",$row['trainingType']);?>
 						</div>
 						<div class='form-group'>
 							<label>Max Pax <span style='opacity:0.5;'>(0 for no-limit)</span></label>
-							<?php echo form::text("trainingMaxPax","class='form-control' style='width:70px;'");?>
+							<?php echo form::text("trainingMaxPax","class='form-control' style='width:70px;'",$row['trainingMaxPax']);?>
 						</div>
 					</div>
 				</section>
@@ -615,7 +623,7 @@ Add activities to your side. Every activity added will be pending for your clust
 </div>
 <div class='row'>
 	<div class='col-sm-12' style='text-align:center;'>
-		<input type='submit' value='Submit Activity' class='btn btn-primary' />
+		<input type='submit' value='Update Activity' class='btn btn-primary' />
 		<input type='button' value='Cancel' class='btn btn-default' />
 	</div>
 </div>

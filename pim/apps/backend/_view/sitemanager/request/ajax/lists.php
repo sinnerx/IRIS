@@ -1,3 +1,11 @@
+<style type="text/css">
+	
+.bg-warning
+{
+	background: orange;
+}
+
+</style>
 <section class='panel panel-default'>
 	<div class='panel-heading'>
 	Latest update request
@@ -12,10 +20,11 @@
 			if($res_request)
 			{
 				$no	= pagination::recordNo();
-				$statusColorR	= Array("primary","success","danger");
+				$statusColorR	= Array("primary","success","danger","warning");
 				foreach($res_request as $row)
 				{
 					$type	= $requestTypeNameR[$row['siteRequestType']];
+					$row['siteRequestStatus']	= $row['siteRequestCorrectionFlag'] == 1?3:$row['siteRequestStatus'];
 					$status	= $requestStatusNameR[$row['siteRequestStatus']];
 					$color	= $statusColorR[$row['siteRequestStatus']];
 					$clearHref = url::base("ajax/request/clear/".$row['siteRequestID']);

@@ -1,15 +1,22 @@
 <script type="text/javascript">
 	
-cluster.overview.updateApproval	= function(requestID,status)
+cluster.overview.updateApproval	= function(requestID,status,override)
 {
 	var statusR	= {1:"approve",2:"disapprove"};
 
 	if(status == 2)
 	{
-		//only ask him on disapproval, for confirmation.
-		if(!confirm("Are you you want to disapprove this request. All the change made on this request, won't be updated."))
+		if(override)
 		{
-			return false;
+			if(!confirm("Are you you want to disapprove this request. All the change made on this request, will be discarded."))
+			{
+				return false;
+			}
+		}
+		else
+		{
+			// show rejection form.
+			pim.ajax.getModal(pim.base_url+"ajax/request/rejectionForm/"+requestID);return;
 		}
 	}
 
@@ -36,6 +43,14 @@ cluster.overview.previewRequestDetail = function(requestID)
 }
 
 </script>
+<style type="text/css">
+	
+.request-info
+{
+	padding:5px;
+}
+
+</style>
 <section class='panel panel-default'>
 	<div class='panel-heading'>
 		<div class='row'>
@@ -54,6 +69,7 @@ cluster.overview.previewRequestDetail = function(requestID)
 				<th width='5%'>No.</th>
 				<th>Request Type</th>
 				<th>Date</th>
+				<th>By</th>
 				<th width='80px'></th>
 			</tr>
 			<?php
@@ -64,16 +80,22 @@ cluster.overview.previewRequestDetail = function(requestID)
 				$requestID	= $row['siteRequestID'];
 				$type	= $typeR[$row['siteRequestType']];
 				$date	= date("d F, g:i A",strtotime($row['siteRequestCreatedDate']));
+				$by		= $row['userProfileFullName'];
 
 				$previewIcon	= "<a href='javascript:cluster.overview.previewRequestDetail($requestID);'  data-toggle='tooltip' data-placement='bottom' data-original-title='Preview update detail' class='fa fa-search'></a>";
 				$approveIcon	= "<a href='javascript:cluster.overview.updateApproval($requestID,1);' class='fa fa-check-square-o'></a>";
 				$disapproveIcon	= "<a href='javascript:cluster.overview.updateApproval($requestID,2);' class='i i-cross2'></a>";
 
+				$exclamationIcon= "<a href='#' class='fa fa-exclamation-circle' style='color:red;' title='Waiting for correction'></a>&nbsp;&nbsp;";
+
+				$approvalIcon	= $row['siteRequestCorrectionFlag'] != 1?"$approveIcon $disapproveIcon":$exclamationIcon;
+
 				echo "<tr>";
 				echo "<td>$no.</td>";
 				echo "<td>$type</td>";
 				echo "<td>$date</td>";
-				echo "<td>$approveIcon $disapproveIcon $previewIcon</td>";
+				echo "<td>$by</td>";
+				echo "<td>$approvalIcon $previewIcon</td>";
 				echo "</tr>";
 
 				$no++;

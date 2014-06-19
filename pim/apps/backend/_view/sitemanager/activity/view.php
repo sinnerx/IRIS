@@ -22,6 +22,22 @@ var sitealbum	= new function()
 .album-name
 {
 }
+.activityDate
+{
+	width: 100%;
+}
+.activityDate th
+{
+	text-align: center;
+}
+.activityDate tr td:nth-child(2), .activityDate tr td:nth-child(3)
+{
+	text-align: center;
+}
+.activityDate tr td
+{
+	border-bottom: 1px solid #cdcdcd;
+}
 
 </style>
 <h3>
@@ -39,15 +55,39 @@ var sitealbum	= new function()
 					<th>Participation</th><td><?php echo model::load("activity/activity")->participationName($row['activityParticipation']);?></td>
 				</tr>
 				<tr>
-					<td colspan='2'><b>Description</b><br>
-					<?php echo nl2br($row['activityDescription']);?>
+					<td colspan='2' rowspan="2">
+						<?php
+						if($activityDate):
+						echo "<table class='activityDate'>";
+						echo "<tr><th rowspan='2' style='text-align:left;'>Date</th><th style='text-align:center;' colspan='2'>Time</th></tr>";
+						echo "<tr><th align='center'>Start</th><th>End</th></tr>";
+						foreach($activityDate as $row_date)
+						{
+							$date	= $row_date['activityDateValue'];
+							$start	= $row_date['activityDateStartTime'];
+							$end	= $row_date['activityDateEndTime'];
 
+							echo "<tr>";
+							echo "<td>".date("j F Y",strtotime($date))."</td>";
+							echo "<td>".date("g:i A",strtotime($start))."</td>";
+							echo "<td>".date("g:i A",strtotime($end))."</td>";
+							echo "</tr>";
+						}
+						echo "</table>";
+						endif;
+						?>
 					</td>
 					<td colspan="2">
 						<b>Location</b><br>
 						<?php 
 						$address	= $row['activityAddressFlag'] == 1?model::load("access/auth")->getAuthData("site","siteInfoAddress"):$row['activityAddress'];
 						echo $address;?>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2">
+						<b>Description</b><br>
+						<?php echo nl2br($row['activityDescription']);?>
 					</td>
 				</tr>
 			</table>
@@ -118,7 +158,7 @@ var sitealbum	= new function()
 					foreach($res_album as $row):?>
 					<div class='row album-list'>
 						<div class='col-sm-4'>
-							<a href='<?php echo url::base("image/albumPhotos/".$row['albumID']);?>'>
+							<a href='<?php echo url::base("image/albumPhotos/".$row['siteAlbumID']);?>'>
 							<img style='width:100%;' src="<?php echo $imageServices->getPhotoUrl($row['albumCoverImageName']);?>" />
 							</a>
 						</div>

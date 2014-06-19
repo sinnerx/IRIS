@@ -35,4 +35,9 @@ class Controller_Ajax_Request
 		## forward to lists.
 		$this->lists();
 	}
+
+	public function details()
+	{
+		return controller::load("clusterlead/ajax_request","detail");
+	}
 }

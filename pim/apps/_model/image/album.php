@@ -111,7 +111,7 @@ class album
 
 	public function getActivityAlbum($activityID)
 	{
-		db::select("album.*,user_profile.userProfileFullName");
+		db::select("album.*,site_album.*,user_profile.userProfileFullName");
 		db::where("activityID",$activityID);
 		db::join("site_album","site_album.siteAlbumID = activity_album.siteAlbumID");
 		db::join("album","album.albumID = site_album.albumID");

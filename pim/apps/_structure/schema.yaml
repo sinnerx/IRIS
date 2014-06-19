@@ -88,6 +88,7 @@ activity:
 	activityParticipation [int]		## 1 = open for all, 2 = closed to member
 	activityStartDate [datetime]
 	activityEndDate [datetime]
+	activityDateTimeType [int]		## 1 = multiple selection, 2 = single date. (not really important.)
 	activityApprovalStatus [int]			## 0 = unapproved, 1 = approved, 2 = disapproved.
 	activityCreatedUser [int]
 	activityCreatedDate [datetime]
@@ -101,13 +102,9 @@ activity_budget:			## incomplete.
 activity_date:
 	activityDateID [int]
 	activityID [int]
-	activityDateValue [date]
-
-activity_time:
-	activityTimeID [int]
-	activityDateID [int]
-	activityTimeStart [time]
-	activityTimeEnd [time]
+	activityDateValue [date]		## date of the activity.
+	activityDateStartTime [time]
+	activityDateEndTime [time]
 
 activity_user:
 	activityUserID [int]
@@ -142,7 +139,6 @@ activity_comment:
 event:
 	eventID [int]
 	activityID [int]
-	eventName [varchar]
 	eventType [int]				## 1 = lawatan
 	eventRefID [int]				## if eventType == 1
 	eventCreatedUser [int]
@@ -151,7 +147,6 @@ event:
 training:
 	trainingID [int]
 	activityID [int]
-	trainingName [varchar]
 	trainingType [int]			## 0 is default
 	trainingMaxPax [int]
 
@@ -402,11 +397,20 @@ site_request: ## table to store update request or anything regarding site, have,
 	siteRequestRefID [int]					## reference-id
 	siteRequestData [text]
 	siteRequestStatus [int]					## 0 = unapproved, 1 = approved, 2 = disapproved
+	siteRequestCorrectionFlag [int]			## 0 = stay this way, 1 = require correction.
 	siteRequestApprovalRead [int]
 	siteRequestCreatedDate [datetime]
 	siteRequestCreatedUser [int]
 	siteRequestUpdatedDate [datetime]
 	siteRequestUpdatedUser [int]
+
+site_request_correction:
+	siteRequestCorrectionID [int]
+	siteRequestID [int]
+	siteRequestCorrectionMessage [text]
+	siteRequestCorrectionCreatedDate [datetime]
+	siteRequestCorrectionCreatedUser [int]
+	siteRequestCorrectionStatus [int]		## 1 = active, 2 = updated.
 
 token:
 	tokenID [int]

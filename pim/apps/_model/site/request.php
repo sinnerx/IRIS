@@ -1,11 +1,34 @@
 <?php
 namespace model\site;
-use db, session, pagination;
+use db, session, pagination, model;
 class Request
 {
 	public function checkRequest($type,$siteID,$refID)
 	{
-		return db::from("site_request")->where(Array("siteRequestRefID"=>$refID,"siteID"=>$siteID,"siteRequestType"=>$type,"siteRequestStatus"=>0))->get()->row();
+		$row	= db::from("site_request")->where(Array("siteRequestRefID"=>$refID,"siteID"=>$siteID,"siteRequestType"=>$type,"siteRequestStatus"=>0))->get()->row();
+
+		if($row)
+		{
+			## if correctionFlag = true, 
+			if($row['siteRequestCorrectionFlag'] == 1)
+			{
+				$this->deactivateCorrection($row['siteRequestID']);
+			}
+			return $row;
+		}
+
+		return false;
+	}
+
+	private function deactivateCorrection($requestID)
+	{
+		## site_request_correction
+		db::where("siteRequestID",$requestID);
+		db::where("siteRequestCorrectionStatus",1);
+		db::update("site_request_correction",Array("siteRequestCorrectionStatus"=>2));// updated.
+
+		## set flag.
+		db::where("siteRequestID",$requestID)->update("site_request",Array("siteRequestCorrectionFlag"=>0));
 	}
 
 	//used by model site:updateSiteInfo, page:updatePage
@@ -14,7 +37,7 @@ class Request
 		## sanitize first.
 		foreach($siteRequestData as $key=>$val)
 		{
-			$newSiteRequestData[$key]	= addslashes($val);
+			# $newSiteRequestData[$key]	= addslashes($val);
 		}
 
 		## then serialize.
@@ -45,14 +68,55 @@ class Request
 								"siteRequestData"=>$newSiteRequestData,
 								"siteRequestCreatedDate"=>now(),
 								"siteRequestCreatedUser"=>session::get("userID"),
-								"siteRequestApprovalRead"=>0
+								"siteRequestApprovalRead"=>0,
+								"siteRequestCorrectionFlag"=>0 ## set correction to 0, everytime request updated.
 											));
+
+			## check if got correction.
+			if($this->getCorrection($requestID))
+			{
+				$this->deactivateCorrection($requestID);
+			}
 		}
 		else
 		{
 			## create a new request;
 			db::insert("site_request",$data);
 		}
+	}
+
+	public function getCorrection($siteRequestID)
+	{
+		db::where("siteRequestID",$siteRequestID);
+		db::where("siteRequestCorrectionStatus",1);
+		db::get("site_request_correction");
+
+		return is_array($siteRequestID)?db::result():db::row();
+	}
+
+	public function createCorrection($siteRequestID,$txt)
+	{
+		## no correction mode yet.
+		if($this->getCorrection($siteRequestID))
+		{
+			return;
+		}
+
+		## set correction flag to 1.
+		db::where("siteRequestID",$siteRequestID)->update("site_request",Array(
+												"siteRequestCorrectionFlag"=>1,
+												"siteRequestUpdatedDate"=>now(),
+												"siteRequestUpdatedUser"=>session::get("userID")
+												));
+
+		## create correction message.
+		db::insert("site_request_correction",Array(
+										"siteRequestCorrectionMessage"=>$txt,
+										"siteRequestID"=>$siteRequestID,
+										"siteRequestCorrectionStatus"=>1,
+										"siteRequestCorrectionCreatedDate"=>now(),
+										"siteRequestCorrectionCreatedUser"=>session::get("userID")
+													));
 	}
 
 	## use in manager/edit, and page/edit.
@@ -115,10 +179,12 @@ class Request
 			## and strip slashes.
 			foreach($data as $key=>$val)
 			{
-				$strippedData[$key]	= stripslashes($val);
+				# $strippedData[$key]	= stripslashes($val); No more strip.
+				$finalData[$key]	= $val;
 			}
 
-			return $strippedData;
+			return $finalData;
+			# return $strippedData; No more strip.
 		}
 	}
 
@@ -198,10 +264,11 @@ class Request
 				"page.update"=>"Page updates",
 				"site.update"=>"Site information update",
 				"announcement.add"=>"New site announcement",
-				"announcement.update"=>"Announcment Update",
+				"announcement.update"=>"Announcement Update",
 				"article.add"=>"New Article",
 				"article.update"=>"Article Update",
-				"activity.add"=>"New Activity"
+				"activity.add"=>"New Activity",
+				"activity.update"=>"Update Activity"
 						);
 
 
@@ -213,7 +280,8 @@ class Request
 		$statusR = Array(
 				0=>"Pending",
 				1=>"Approved",
-				2=>"Rejected"
+				2=>"Rejected",
+				3=>"Require Correction"
 						);
 
 		return !$status?$statusR:$statusR[$status];
@@ -223,10 +291,13 @@ class Request
 	public function getRequestBySite($siteID)
 	{
 		db::from("site_request");
+		db::select("site_request.*,userProfileFullName");
 		db::where(Array(
 				"siteID"=>$siteID,
 				"siteRequestStatus"=>0
 						));
+		db::join("user_profile","user_profile.userID = site_request.siteRequestCreatedUser");
+		db::order_by("siteRequestID","desc");
 
 		return db::get()->result();
 	}
@@ -368,6 +439,16 @@ class Request
 			case 'site.update': ## site_info edit.
 				$row_ori	= db::from("site_info")->where("siteID",$refID)->get()->row();
 			break;
+			case 'announcement.update':
+				$row_ori	= db::from("announcement")->where("announcementID",$refID)->get()->row();
+				$row_ori['announcementExpiredDate']	= date("Y-m-d",strtotime($row_ori['announcementExpiredDate']));
+				unset($row_ori['announcementUpdatedDate']);
+				unset($row_ori['announcementUpdatedUser']);
+			break;
+			case "activity.update":
+				$row_ori	= model::load("activity/activity")->getActivity($refID);
+				unset($row_ori['activityUpdatedDate'],$row_ori['activityUpdatedUser']);
+			break;
 		}
 
 		foreach($row_ori as $key=>$ori_value)
@@ -398,7 +479,7 @@ class Request
 						"urlFormat"=>$urlFormat
 									));
 
-		db::order_by("siteRequestID","desc")->limit(5,pagination::recordNo()-1);
+		db::order_by(Array("siteRequestID desc","siteRequestUpdatedDate desc"))->limit(5,pagination::recordNo()-1);
 
 		return db::get()->result();
 	}

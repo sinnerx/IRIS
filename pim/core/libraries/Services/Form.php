@@ -16,6 +16,14 @@ class Form
 		return $str;
 	}
 
+	public function hidden($name,$attr = Null,$value = Null)
+	{
+		$value		= flash::data("_post.$name",$value);
+		$message	= /*session::has("fdata.$name")?"data-message='".session::get("fdata.$name")."'":*/"";
+		$attr		= self::buildAttr($attr);
+		return "<input name='$name' id='$name' type='hidden' $message $attr value='$value' />";
+	}
+
 	public function text($name,$attr = Null,$value = Null)
 	{
 		$value		= flash::data("_post.$name",$value);
