@@ -5,16 +5,16 @@
 		<div class="page-content">
 			<div class="page-sub-wrapper blog-page">
   				<div class="blog-container">
-					<div class="single-featured-image">
+					<!-- <div class="single-featured-image">
 						<?php 
-							if(strpos($article['articleText'],'<img') !== false)
+							/*if(strpos($article['articleText'],'<img') !== false)
 							{
 								$length = (strpos($article['articleText'],'alt')-4)-(strpos($article['articleText'],'src')+2);
 								$start = (strpos($article['articleText'],'src=')+5);
-							}
+							}*/
 						?>
-						<img src="<?php if(strpos($article['articleText'],'<img') !== false){ echo substr($article['articleText'],$start,$length); } ?>" width="1600" height="1205"  alt=""/> 
-					</div>
+						<img src="<?php //if(strpos($article['articleText'],'<img') !== false){ echo substr($article['articleText'],$start,$length); } ?>" width="1600" height="1205"  alt=""/> 
+					</div> -->
 						<div class="single-blog-wrap">
 							<div class="top-heading">
 								<h3><a href="#"><?php echo $article['articleName']; ?></a></h3>
@@ -51,7 +51,7 @@
 									</span>
 								</div>
 							</div>
-							<div class="short-story">
+							<div class="short-story" style="clear: both;">
 								<?php 
 									if(strpos($article['articleText'],'<img') !== false)
 									{
@@ -59,13 +59,13 @@
 										$length = strpos(substr($article['articleText'],$start),'/>')+2;
 									}
 								?>
-								<?php echo str_replace(substr(substr($article['articleText'],$start),0,$length),'',$article['articleText']); ?>
+								<?php echo $article['articleText']; ?>
 							</div>
 							<div class="blog-additional-info">
 								<?php if($activity[0]['activityID']): ?>
 								<div class="events">
-									<a href="#">
-										<i class="fa fa-calendar"></i> <span class="event-heading">Kalendar Aktiviti:</span> <?php if($activity[0]['data']['activityAddress']): ?><span> <strong>Tempat Lokasi :</strong> <?php echo $activity[0]['data']['activityAddress']; ?></span><?php endif; ?> <span><strong>Tarikh:</strong> <?php echo date('jS F Y', strtotime($activity[0]['data']['activityStartDate'])); ?></span> <span> <strong>Masa:</strong> 10.00 Pagi</span>
+									<a href="<?php echo model::load('helper')->buildDateBasedUrl($activity[0]['data']['activitySlug'],$activity[0]['data']['activityStartDate'],url::base(request::named("site-slug").'/activity')); ?>">
+										<i class="fa fa-calendar"></i> <span class="event-heading"><?php echo $activity[0]['data']['activityName']; ?>:</span> <?php if($activity[0]['data']['activityAddress']): ?><span> <strong>Tempat Lokasi :</strong> <?php echo $activity[0]['data']['activityAddress']; ?></span><?php endif; ?> <span><strong>Tarikh:</strong> <?php echo date('jS F Y', strtotime($activity[0]['data']['activityStartDate'])); ?></span> <span> <strong>Masa:</strong> 10.00 Pagi</span>
 									</a>
 								</div>
 							<?php endif; ?>
@@ -81,7 +81,7 @@
 								</div>
 							</div>
 						</div>
-						<div class="forum-post-comment">
+						<!-- <div class="forum-post-comment">
 							<div class="forum-post-comment-count">KOMEN <span>(3)</span></div>
 							<div class="forum-post-comment-content">
 								<ul>
@@ -110,7 +110,7 @@ Lorem ipsum dolor sit amet, maiores ornare ac fermentum, imperdiet ut vivamus a,
 									</div>
 								</div>
 							</div>
-						</div>
+						</div> -->
 				</div>
 			</div>
 		</div>
