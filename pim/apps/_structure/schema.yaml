@@ -398,6 +398,7 @@ site_request: ## table to store update request or anything regarding site, have,
 	siteRequestData [text]
 	siteRequestStatus [int]					## 0 = unapproved, 1 = approved, 2 = disapproved
 	siteRequestCorrectionFlag [int]			## 0 = stay this way, 1 = require correction.
+	siteRequestRemark [text]
 	siteRequestApprovalRead [int]
 	siteRequestCreatedDate [datetime]
 	siteRequestCreatedUser [int]
@@ -408,8 +409,11 @@ site_request_correction:
 	siteRequestCorrectionID [int]
 	siteRequestID [int]
 	siteRequestCorrectionMessage [text]
+	siteRequestCorrectionLastData [text]
 	siteRequestCorrectionCreatedDate [datetime]
 	siteRequestCorrectionCreatedUser [int]
+	siteRequestCorrectionUpdatedDate [datetime]
+	siteRequestCorrectionUpdatedUser [int]
 	siteRequestCorrectionStatus [int]		## 1 = active, 2 = updated.
 
 token:

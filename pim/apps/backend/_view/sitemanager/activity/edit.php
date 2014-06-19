@@ -12,7 +12,7 @@ var activity	= function()
 		pim.uriHash.set(r[type]);
 	}
 
-	this.disableAddress	= function()
+	this.disableAddress	= function(edit)
 	{
 		if($("#activityAddressFlag")[0].checked)
 		{
@@ -22,7 +22,11 @@ var activity	= function()
 		else
 		{
 			$("#activityAddress").removeAttr("disabled");
-			$("#activityAddress").val("");
+
+			if(!edit)
+			{
+				$("#activityAddress").val("");
+			}
 		}
 	}
 
@@ -473,6 +477,7 @@ $(document).ready(function()
 	}
 
 	activity.showTypeDetail(<?php echo $row['activityType'];?>);
+	activity.disableAddress(true);
 });
 
 pim.uriHash.addCallback({"event":function(){activity.showTypeDetail(1)},"training":function(){activity.showTypeDetail(2)}});
@@ -551,10 +556,13 @@ Content is waiting for approval
 				</div>
 
 				<div class='form-group'>
+				<?php
+				$checked = flash::data("activityAddressFlag",$row['activityAddressFlag']) == 1?"checked":"";
+				?>
 				<label style='display:block;'>4. Where? (Address) 
-					<span class='pull-right'>Use site address <input onclick='activity.disableAddress();' type='checkbox' id='activityAddressFlag' name='activityAddressFlag' value='1' /></span>
+					<span class='pull-right'>Use site address <input <?php echo $checked;?> onclick='activity.disableAddress();' type='checkbox' id='activityAddressFlag' name='activityAddressFlag' value='1' /></span>
 				</label>
-				<?php echo form::textarea("activityAddress","class='form-control'");?>
+				<?php echo form::textarea("activityAddress","class='form-control'",$row['activityAddress']);?>
 				<div id='siteInfoAddress' style='display:none;'><?php echo $siteInfoAddress;?></div>
 				</div>
 			</div>

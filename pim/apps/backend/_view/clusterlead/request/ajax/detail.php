@@ -37,11 +37,15 @@
 
 	$approveIcon	= "<a href='javascript:cluster.overview.updateApproval($requestID,1);' class='btn-approval text-success pull-right fa fa-check-square-o'></a>";
 	$disapproveIcon	= "<a href='javascript:cluster.overview.updateApproval($requestID,2);' class='btn-approval text-danger pull-right i i-cross2'></a>";
-	$exclamationIcon= "<a href='#' title='Waiting for correction' class='btn-approval text-danger pull-right fa fa-exclamation-circle'></a>";
+	
+	$urlCorrection	= url::base("ajax/request/correctionDetail/$requestID");
+	$exclamationIcon= "<a data-toggle='ajaxModal' href='$urlCorrection' title='Waiting for correction' class='btn-approval text-danger pull-right fa fa-exclamation-circle'></a>";
 
 	$approvalIcon	= $row_request['siteRequestCorrectionFlag'] != 1?"$disapproveIcon $approveIcon":$exclamationIcon;
 
-	echo "<div class='btn-wrapper'>$approvalIcon</div>";
+	$totalCorrection	= $totalCorrection == 0?"":"<a href='#' title='Previously has done $totalCorrection correction' style='opacity:0.3;' class='btn-approval text-default pull-right fa fa-wrench'></a>";
+
+	echo "<div class='btn-wrapper'>$approvalIcon $totalCorrection</div>";
 	$fieldNameR	= $colNameR[$typeObject];
 	## new page.
 	if($type == 'page.add')

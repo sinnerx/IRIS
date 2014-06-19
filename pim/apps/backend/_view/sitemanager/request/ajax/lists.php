@@ -30,7 +30,10 @@
 					$clearHref = url::base("ajax/request/clear/".$row['siteRequestID']);
 					$clearrequestIcon = in_array($row['siteRequestStatus'],Array(1,2))?"<a href='$clearHref' class='clearRequest i i-cross2 pull-right'></a>":"";
 
-					echo "<tr><td>".$no++.".</td><td>$type <span class='badge bg-$color'>$status</span></td><td>$clearrequestIcon</td>";
+					## if got correction, show icon to see detail.
+					$correctionDetailIcon = $row['siteRequestCorrectionFlag'] == 1?"<a data-toggle='ajaxModal' href='".url::base("ajax/request/correctionDetail/".$row['siteRequestID'])."' class='fa fa-wrench pull-left'></a>":"";
+
+					echo "<tr><td>".$no++.".</td><td>$type <span class='badge bg-$color'>$status$correctionDetailIcon</span></td><td>$clearrequestIcon</td>";
 				}
 			}
 			else

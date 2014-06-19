@@ -74,6 +74,46 @@ var pim = function(conf)
 			});
 		}
 
+		//ajaxify form.
+		this.formify = function(form,container,callback)
+		{
+			$(form).submit(function(e)
+			{
+				// gather all name.
+				var data	= {};
+				var method	= $(this).attr("method")?$(this).attr("method"):"GET";
+				$(this).find("input, select").each(function(i,e)
+				{
+					if($(e).attr("name"))
+					{
+						data[$(e).attr('name')] = $(e).val();
+					}
+				});
+
+				// AJAX FABULOUSo.
+				var url	= $(this).attr("action");
+				var res = $.ajax({type:method,data:data,url:url});
+
+				if(container)
+				{
+					res.done(function(txt)
+					{
+						$(container).html(txt);
+					});
+				}
+
+				if(callback)
+				{
+					res.done(function(txt)
+					{
+						callback(txt);
+					});
+				}
+
+				return false;
+			});
+		}
+
 		this.getModal = function(url)
 		{
 			$('#ajaxModal').remove();

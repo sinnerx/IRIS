@@ -180,7 +180,8 @@ class Activity
 		}
 	}
 
-	private function _updateActivity($activityID,$type,$data)
+	## set to public so site/request can read this method for update.
+	public function _updateActivity($activityID,$type,$data)
 	{
 		$originalSlug	= model::load("helper")->slugify($data['activityName']);
 

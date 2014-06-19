@@ -8,6 +8,11 @@ class Controller_Ajax_Request
 		$data['res_requests']	= model::load("site/request")->getRequestBySite($siteID);
 		$data['typeR']			= model::load("site/request")->type();
 
+		if($data['res_requests'])
+		{
+			$data['totalCorrection']= model::load("site/request")->getTotalCorrection(array_keys($data['res_requests']));
+		}
+
 		view::render("clusterlead/request/ajax/lists",$data);
 	}
 
@@ -42,6 +47,10 @@ class Controller_Ajax_Request
 
 			break;
 		}
+
+		## total correction
+		$data['totalCorrection']	= model::load("site/request")->getTotalCorrection($requestID);
+
 		## sanitize column name for page.
 		$data['colNameR']['page']	= Array("pageTitle"=>"Page Name","pageText"=>"Page Content");
 
@@ -71,8 +80,16 @@ class Controller_Ajax_Request
 											"activityEndDate"=>"End Date",
 											"trainingType"=>"Type of Training",
 											"trainingMaxPax"=>"Max pax",
-											"eventType"=>"Type of Event"
+											"eventType"=>"Type of Event",
+											"activityAddressFlag"=>"Activity Address : On using site address"
 												);
+
+		$data['colNameR']['article']	= Array(
+											"articleName"=>"Article Name",
+											"articleText"=>"Article Content",
+											"articlePublishedDate"=>"Published after"
+												);
+
 		## date list column.
 		$data['dateTimeListColumn']	= Array(
 							"activityStartDate",
@@ -88,7 +105,15 @@ class Controller_Ajax_Request
 						"trainingType"=>function($no)
 						{
 							return model::load("activity/training")->type($no);
-						}
+						},
+						"trainingMaxPax"=>function($no)
+						{
+							return $no == 0?"No-limit":$no;
+						},
+						"activityAddressFlag"=>function($no) use($data)
+						{
+							return $no == 1?"Use site address":$data['row_request']['activityAddress'];
+						},
 								);
 
 		view::render("clusterlead/request/ajax/detail",$data);
@@ -103,6 +128,15 @@ class Controller_Ajax_Request
 	public function requestCorrection($requestID)
 	{
 		model::load("site/request")->createCorrection($requestID,input::get("text"));
+	}
+
+	public function correctionDetail($siteRequestID)
+	{
+		$data				= model::load("site/request")->getCorrection($siteRequestID);
+		$data['row_request']	= model::load("site/request")->getRequest($siteRequestID);
+		$data['typeName']		= model::load("site/request")->type($data['row_request']['siteRequestType']);
+
+		view::render("clusterlead/request/ajax/correctionDetail",$data);
 	}
 }
 ?>

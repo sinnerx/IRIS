@@ -49,6 +49,10 @@ cluster.overview.previewRequestDetail = function(requestID)
 {
 	padding:5px;
 }
+#request-list table tr td:last-child
+{
+	text-align: right;
+}
 
 </style>
 <section class='panel panel-default'>
@@ -70,7 +74,7 @@ cluster.overview.previewRequestDetail = function(requestID)
 				<th>Request Type</th>
 				<th>Date</th>
 				<th>By</th>
-				<th width='80px'></th>
+				<th width='100px'></th>
 			</tr>
 			<?php
 			if($res_requests):
@@ -86,16 +90,19 @@ cluster.overview.previewRequestDetail = function(requestID)
 				$approveIcon	= "<a href='javascript:cluster.overview.updateApproval($requestID,1);' class='fa fa-check-square-o'></a>";
 				$disapproveIcon	= "<a href='javascript:cluster.overview.updateApproval($requestID,2);' class='i i-cross2'></a>";
 
-				$exclamationIcon= "<a href='#' class='fa fa-exclamation-circle' style='color:red;' title='Waiting for correction'></a>&nbsp;&nbsp;";
+				$urlCorrection	= url::base("ajax/request/correctionDetail/".$requestID);
+				$correctionText = isset($totalCorrection[$requestID])?"And has previously done ".count($totalCorrection[$requestID])." corrections.":"";
+				$exclamationIcon= "<a data-toggle='ajaxModal' href='$urlCorrection' class='fa fa-exclamation-circle' style='color:red;' title='Waiting for correction. $correctionText'></a>&nbsp;&nbsp;";
 
 				$approvalIcon	= $row['siteRequestCorrectionFlag'] != 1?"$approveIcon $disapproveIcon":$exclamationIcon;
+
 
 				echo "<tr>";
 				echo "<td>$no.</td>";
 				echo "<td>$type</td>";
 				echo "<td>$date</td>";
 				echo "<td>$by</td>";
-				echo "<td>$approvalIcon $previewIcon</td>";
+				echo "<td>$correction $approvalIcon$previewIcon</td>";
 				echo "</tr>";
 
 				$no++;

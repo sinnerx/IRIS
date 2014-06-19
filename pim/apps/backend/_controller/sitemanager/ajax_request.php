@@ -36,8 +36,31 @@ class Controller_Ajax_Request
 		$this->lists();
 	}
 
-	public function details()
+	public function correctionDetail($siteRequestID)
 	{
-		return controller::load("clusterlead/ajax_request","detail");
+		$row = model::load("site/request")->getCorrection($siteRequestID);
+
+		$row_request			= model::load("site/request")->getRequest($siteRequestID);
+		$data['row']	= $row;
+		$data['typeName']	= model::load("site/request")->type($row_request['siteRequestType']);
+
+		## prepare urlToSubject.
+		list($typeObject)	= explode(".",$row_request['siteRequestType']);
+
+		switch($typeObject)
+		{
+			case "activity":
+			$data['urlToSubject']	= url::base("activity/edit/".$row_request['siteRequestRefID']);
+			break;
+			case "site":
+			$data['urlToSubject']	= url::base("site/edit");
+			break;
+			case "article":
+			$data['urlToSubject']	= url::base("site/editArticle/".$row_request['siteRequestRefID']);
+			break;
+		}
+	
+		$data['row_request']	= $row_request;		
+		view::render("sitemanager/request/ajax/correctionDetail",$data);
 	}
 }

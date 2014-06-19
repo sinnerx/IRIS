@@ -1,7 +1,7 @@
 <?php
 namespace model\site;
 use db, session, pagination, model;
-class Request
+class Request extends request_correction
 {
 	public function checkRequest($type,$siteID,$refID)
 	{
@@ -18,17 +18,6 @@ class Request
 		}
 
 		return false;
-	}
-
-	private function deactivateCorrection($requestID)
-	{
-		## site_request_correction
-		db::where("siteRequestID",$requestID);
-		db::where("siteRequestCorrectionStatus",1);
-		db::update("site_request_correction",Array("siteRequestCorrectionStatus"=>2));// updated.
-
-		## set flag.
-		db::where("siteRequestID",$requestID)->update("site_request",Array("siteRequestCorrectionFlag"=>0));
 	}
 
 	//used by model site:updateSiteInfo, page:updatePage
@@ -85,39 +74,6 @@ class Request
 		}
 	}
 
-	public function getCorrection($siteRequestID)
-	{
-		db::where("siteRequestID",$siteRequestID);
-		db::where("siteRequestCorrectionStatus",1);
-		db::get("site_request_correction");
-
-		return is_array($siteRequestID)?db::result():db::row();
-	}
-
-	public function createCorrection($siteRequestID,$txt)
-	{
-		## no correction mode yet.
-		if($this->getCorrection($siteRequestID))
-		{
-			return;
-		}
-
-		## set correction flag to 1.
-		db::where("siteRequestID",$siteRequestID)->update("site_request",Array(
-												"siteRequestCorrectionFlag"=>1,
-												"siteRequestUpdatedDate"=>now(),
-												"siteRequestUpdatedUser"=>session::get("userID")
-												));
-
-		## create correction message.
-		db::insert("site_request_correction",Array(
-										"siteRequestCorrectionMessage"=>$txt,
-										"siteRequestID"=>$siteRequestID,
-										"siteRequestCorrectionStatus"=>1,
-										"siteRequestCorrectionCreatedDate"=>now(),
-										"siteRequestCorrectionCreatedUser"=>session::get("userID")
-													));
-	}
 
 	## use in manager/edit, and page/edit.
 	public function getUnapprovedRequestData($param1,$param2 = null)
@@ -268,9 +224,8 @@ class Request
 				"article.add"=>"New Article",
 				"article.update"=>"Article Update",
 				"activity.add"=>"New Activity",
-				"activity.update"=>"Update Activity"
+				"activity.update"=>"Activity Update"
 						);
-
 
 		return !$id?$typeR:$typeR[$id];
 	}
@@ -299,7 +254,7 @@ class Request
 		db::join("user_profile","user_profile.userID = site_request.siteRequestCreatedUser");
 		db::order_by("siteRequestID","desc");
 
-		return db::get()->result();
+		return db::get()->result("siteRequestID");
 	}
 
 	public function getRequest($requestID)
@@ -374,12 +329,14 @@ class Request
 			case "article.add":  
 			db::where("articleID",$row['articleID'])->update("article",Array("articleStatus"=>1)); # approved.
 			break;
-			case "article.update": 
-				db::where("articleID",$row['siteRequestRefID'])->update("article",$data);
+			case "article.update":
+			db::where("articleID",$row['siteRequestRefID'])->update("article",$data);
 			break;
-
 			case "activity.add":
 			db::where("activityID",$row['siteRequestRefID'])->update("activity",Array('activityApprovalStatus'=>1));
+			break;
+			case "activity.update":
+			model::load("activity/activity")->_updateActivity($row['activityID'],$row['activityType'],$data);
 			break;
 		}
 	}
@@ -447,7 +404,12 @@ class Request
 			break;
 			case "activity.update":
 				$row_ori	= model::load("activity/activity")->getActivity($refID);
-				unset($row_ori['activityUpdatedDate'],$row_ori['activityUpdatedUser']);
+				unset($row_ori['activityUpdatedDate'],$row_ori['activityUpdatedUser'],$row_ori['activityDateTimeType']);
+			break;
+			case "article.update":
+				$row_ori	= model::load("blog/article")->getArticle($refID);
+				$row_ori['articlePublishedDate']	= date("Y-m-d",strtotime($row_ori['articlePublishedDate']));
+				unset($row_ori['articleUpdatedDate'],$row_ori['articleUpdatedUser']);
 			break;
 		}
 
