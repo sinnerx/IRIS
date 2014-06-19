@@ -366,7 +366,7 @@ class Activity
 	}
 
 	## return list of incoming and previous activity
-	public function getUnlinkedActivity($siteID,$year,$month,$flag = "both")
+	public function getUnlinkedActivity($siteID,$year,$month,$flag = "both",$articleID = 0)
 	{
 		$currDate	= date("Y-m-d H:i:s");
 
@@ -392,7 +392,7 @@ class Activity
 		}
 
 		## 1.4. no report about this activity yet, or not linked yet.
-		db::where("activityID NOT IN (SELECT activityID FROM activity_article WHERE activityArticleType != 1 OR activityID != activity.activityID)");
+		db::where("activityID NOT IN (SELECT activityID FROM activity_article WHERE activityArticleType != 1 OR activityID != activity.activityID OR articleID = ".$articleID.")");
 
 		##+execute+##
 		$res	= db::get()->result("activityID");

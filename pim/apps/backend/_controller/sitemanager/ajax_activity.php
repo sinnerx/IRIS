@@ -1,7 +1,7 @@
 <?php
 class Controller_Ajax_Activity
 {
-	public function incoming(){
+	public function incoming($articleID = 0){
 		$type = 'incoming';
 		$year = request::get('year',date("Y"));
 		$month = request::get('month',date("n"));
@@ -9,7 +9,7 @@ class Controller_Ajax_Activity
 
 		//var_dump($type." ".$year." ".$month." ".$siteID);die;
 
-		$data = model::load("activity/activity")->getUnlinkedActivity($siteID, $year, $month, $type);
+		$data = model::load("activity/activity")->getUnlinkedActivity($siteID, $year, $month, $type, $articleID);
 
 		if($month == 12){
 			$data['nextyear'] = $year+1;
@@ -27,19 +27,20 @@ class Controller_Ajax_Activity
 		$data['year'] = $year;
 		$data['month'] = $month;
 		$data['ref'] = 1;
+		$data['articleID'] = $articleID;
 		//echo '<pre>';print_r($data);die;
 		view::render("sitemanager/activity/ajax/incoming", $data);
 	}
-	public function previous($ref=0){
+	public function previous($articleID = 0){
 		$type = 'previous';
-		$ref = $ref == 0?request::get('ref'):$ref;
+		$ref = request::get('ref')?request::get('ref'):0;
 		$year = request::get('year',date("Y"));
 		$month = request::get('month',date("n"));
 		$siteID = model::load('access/auth')->getAuthData("site","siteID");
 
 		//var_dump($type." ".$year." ".$month." ".$siteID);die;
 
-		$data = model::load("activity/activity")->getUnlinkedActivity($siteID, $year, $month, $type);
+		$data = model::load("activity/activity")->getUnlinkedActivity($siteID, $year, $month, $type, $articleID);
 
 		if($month == 12){
 			$data['nextyear'] = $year+1;
@@ -57,6 +58,7 @@ class Controller_Ajax_Activity
 		$data['year'] = $year;
 		$data['month'] = $month;
 		$data['ref'] = $ref;
+		$data['articleID'] = $articleID;
 		//echo '<pre>';print_r($data);die;
 		view::render("sitemanager/activity/ajax/previous", $data);
 	}

@@ -118,8 +118,8 @@ Edit article
 						</span> 
                     </button>
                     <ul class="dropdown-menu dropdown-select">
-                        <li><a href="<?php echo url::base('ajax/activity/previous'); ?>" data-toggle="ajaxModal">As a report</a></li>
-	                    <li><a href="<?php echo url::base('ajax/activity/incoming'); ?>" data-toggle="ajaxModal">As a reference</a></li>
+                        <li><a href="<?php echo url::base('ajax/activity/previous/'.$row['articleID']); ?>" data-toggle="ajaxModal">As a report</a></li>
+	                    <li><a href="<?php echo url::base('ajax/activity/incoming/'.$row['articleID']); ?>" data-toggle="ajaxModal">As a reference</a></li>
 	                </ul>
                 </div>
 				<input type="hidden" name="activityID" id="activityID" <?php if($activity[0]['activityID']){ echo 'value="'.$activity[0]['activityID'].'"'; } ?> />
