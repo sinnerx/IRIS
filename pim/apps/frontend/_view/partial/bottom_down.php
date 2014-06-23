@@ -72,14 +72,18 @@
 			<h3 class="bottom-heading">Berita Terkini</h3>
 			<div class="bottom-content">
 				<ul>
-					<?php foreach($articles as $article): ?>
+					<?php if($articles): ?>
+					<?php foreach($articles as $article): 
+					$url	= model::load("helper")->buildDateBasedUrl($article['articleSlug'],$article['articlePublishedDate'],url::base($article['siteSlug']."/blog"));
+					?>
 					<li>
-						<a href="<?php echo url::base($article['siteSlug']."/blog/".date('Y',strtotime($article['articlePublishedDate']))."/".date('m',strtotime($article['articlePublishedDate']))."/".$article['articleSlug']); ?>">
+						<a href="<?php echo $url;?>">
 						<div class='news-title'><?php echo $article['articleName']; ?></div>
 						<div class="news-info"><?php echo date("F j Y",strtotime($article['articlePublishedDate']));?><!-- October 31 2013, 8:00 AM --></div>
 						</a>
 					</li>
 					<?php endforeach; ?>
+					<?php endif; ?>
 				</ul>
 				<!-- <ul> ## original example.
 					<li>

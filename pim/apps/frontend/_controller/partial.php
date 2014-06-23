@@ -80,7 +80,8 @@ class Controller_Partial
 
 	private function bottom_down()
 	{
-		$data['articles'] = model::load("blog/article")->getArticlesByCategoryName("beRitA");
+		$siteID = authData('current_site.siteID');
+		$data['articles'] = model::load("blog/article")->getArticlesByCategoryID($siteID,1);
 		$data['row_site']	= $this->row_site;
 		//echo '<pre>';print_r($data['articles']);
 
