@@ -18,6 +18,14 @@ Site Manager : sitemanager@gmail.com / 12345
 
 Cluster Lead : shamsul@nusuara.com / 12345
 
+Latest test info
+
+http://p1m.gaia.my/kopimpinan
+
+mary@celcom1cbc.com / 12345
+
+cluster lead  fitriyanie@nusuara.com / 12345
+
 FTP
 
 
