@@ -85,6 +85,16 @@ class Category
 		return $categoryList;
 	}
 
+	public function getArticleCategoryList2($articleID)
+	{
+		db::select("articleID,category.categoryID,categoryName,categoryParentID");
+		db::where("articleID",$articleID);
+		db::order_by("categoryName ASC");
+		db::join("category","category.categoryID = article_category.categoryID");
+
+		return db::get("article_category")->result("categoryID");
+	}
+
 	public function getCategory($id,$cols = null)
 	{
 		db::select($cols);

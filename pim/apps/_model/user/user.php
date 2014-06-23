@@ -106,12 +106,45 @@ class User
 								);
 
 		db::where('userID',$userID)->update("user_profile",$data_profile);
+
+		## update user_profile_additional.
+		$this->updateAdditional($userID,$data);
 	}
 
 	public function updateAvatarPhoto($userID,$path)
 	{
 		db::where("userID",$userID);
 		db::update("user_profile",Array("userProfileAvatarPhoto"=>$path));
+	}
+
+	public function getAdditional($userID)
+	{
+		return db::where("userID",$userID)->get("user_profile_additional")->row()?:Array();
+	}
+
+	public function updateAdditional($userID,$data)
+	{
+		## check if got this table already.
+		$check	= db::select("userProfileAdditionalID")->where("userID",$userID)->get("user_profile_additional")->row();
+
+		$data	= Array(
+				"userProfileOccupation"=>$data['userProfileOccupation'],
+				"userProfileFacebook"=>$data['userProfileFacebook'],
+				"userProfileTwitter"=>$data['userProfileTwitter'],
+				"userProfileWeb"=>$data['userProfileWeb'],
+				"userProfileEcommerce"=>$data['userProfileEcommerce'],
+				"userProfileIntroductional"=>$data['userProfileIntroductional']
+						);
+
+		if(!$check)
+		{
+			$data['userID']	= $userID;
+			db::insert("user_profile_additional",$data);
+		}
+		else
+		{
+			db::where("userID",$userID)->update("user_profile_additional",$data);
+		}
 	}
 
 	## member registration.

@@ -257,16 +257,17 @@ class Request extends request_correction
 		return db::get()->result("siteRequestID");
 	}
 
-	public function getRequest($requestID)
+	public function getRequest($requestID,$col = "*")
 	{
 		## get type first.
 		db::from("site_request");
-		db::select("siteRequestType");
+		db::select($col);
 		db::where("siteRequestID",$requestID);
 		list($type,$method)	= explode(".",db::get()->row("siteRequestType"));
 
 		## select and join based on type. i think this way is clearer.
 		db::from("site_request");
+		db::select("*");
 		db::where("siteRequestID",$requestID);
 		switch($type)
 		{
@@ -283,7 +284,12 @@ class Request extends request_correction
 				db::join("article","siteRequestRefID = article.articleID");
 			break;
 			case "activity":
+				db::select("activity.*");
 				db::join("activity","activity.activityID = siteRequestRefID");
+
+				## join event or training.
+				db::join("event","activityType = 1 AND activity.activityID = event.activityID");
+				db::join("training","activityType = 2 AND activity.activityID = training.activityID");
 			break;
 		}
 

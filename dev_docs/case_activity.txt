@@ -1,0 +1,5 @@
+1. each activity can have many date. or 1 date.
+2. two type of date obligation may be set by site manager, all date required OR participant may choose date.
+	2.1 if chose 'all date required', participant logically selects all the date, if he chose to participate.
+	2.2 else, he may choose any date. and participant may participate at any date of that activity.
+2. you (sitemanager) cannot change date of a participated activity, but you may change other information.

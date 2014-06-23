@@ -6,9 +6,14 @@ $routes[]	= Array("404",function()
 	require_once "apps/404.php";
 });
 
-# # # # # Hook controller # # # # # # # # # #
+
 $routes[]	= Array(function()
 {
+	## Require alias helper.
+	library::_require("alias");
+
+
+	# # # # # Hook controller # # # # # # # # # #
 	### Hook frontend pre controller with auth controller.
 	controller::hook("frontend:pre_controller",function()
 	{
@@ -144,7 +149,7 @@ $routes[]	= Array("[:site-slug]/profile/edit","controller=member@profile_edit");
 $routes[]	= Array("[:site-slug]/profile/uploadAvatar","controller=member@profileUploadAvatar");
 
 ## ajax request.
-$routes[]	= Array("[:site-slug]/ajax/[:controller]/[**:method]","controller=ajax/{controller}@{method}");
+$routes[]	= Array("[:site-slug]/ajax/[:controller]/[**:method]","controller=ajax/ajax_{controller}@{method}");
 
 ## site page.
 $routes[]	= Array("[:site-slug]/[**:trail]","controller=page@index");

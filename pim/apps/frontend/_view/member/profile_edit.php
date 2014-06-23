@@ -128,7 +128,7 @@ $(document).ready(function()
 });
 
 </script>
-<h3 class="block-heading">PROFIL AHLI<span class="subforum"> > KEMASKINI PROFIL</span></h3>
+<h3 class="block-heading"><a href='./'>PROFIL AHLI</a><span class="subforum"> > KEMASKINI PROFIL</span></h3>
 <form method='post'>
 <div class="block-content clearfix">
 	<div class="page-content">
@@ -238,7 +238,7 @@ $(document).ready(function()
 						</div>
 						<div class="profile-edit-row clearfix">
 							<label>Artikel Pengenalan:</label> <a href="#" class="panduan">Panduan</a>
-							<?php echo form::textarea("userProfileIntroduction",null,$userProfileIntroduction);?>
+							<?php echo form::textarea("userProfileIntroductional",null,$userProfileIntroductional);?>
 						</div>
 					</div>
 				</div>

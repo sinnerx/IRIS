@@ -6,8 +6,12 @@
 		<div class='table-responsive'>
 			<table class='table'>
 				<tr>
-					<th width="80px">Date</th><td style='border-left:1px dashed #bbdfac;'><?php echo model::load("helper")->dateRangeLabel(Array($row['activityStartDate'],$row['activityEndDate']));?></td>
-					<th width="150px">Participation</th><td><?php echo model::load("activity/activity")->participationName($row['activityParticipation']);?></td>
+					<th width="80px">Date</th>
+					<td style='border-left:1px dashed #bbdfac;'>
+						<?php
+						echo model::load("helper")->dateRangeLabel(Array($row['activityStartDate'],$row['activityEndDate']));?></td>
+					<th width="150px">Participation</th><td style='border-left:1px dashed #bbdfac;'><?php echo model::load("activity/activity")->participationName($row['activityParticipation']);?></td>
+					<th>Type of activity</th><td><?php echo model::load("activity/activity")->type($row['activityType']);?></td>
 				</tr>
 				<tr>
 					<td colspan='2' rowspan="2" style="padding-top:0px;">
@@ -32,11 +36,27 @@
 						endif;
 						?>
 					</td>
-					<td colspan="2">
+					<td style='border-left:1px dashed #bbdfac;' colspan="2">
 						<b>Location</b><br>
-						<?php 
+						<?php
 						$address	= $row['activityAddressFlag'] == 1?"< site address >":$row['activityAddress'];
 						echo $address;?>
+					</td>
+					<td rowspan="2" colspan="2">
+						<!-- type specific detail -->
+						<?php
+						# event.
+						if($row['activityType'] == 1):?>
+						<div><b>Event Type</b></div>
+						<div><?php echo model::load("activity/event")->type($row['eventType']);?></div>
+
+						<?php else:?>
+						<div><b>Type of training</b></div>
+						<div><?php echo model::load("activity/training")->type($row['trainingType']);?></div>
+						<div><b>Max pax</b></div>
+						<div><?php echo $row['trainingMaxPax'] == 0?"No-limit":$row['trainingMaxPax'];?></div>
+						<?php endif;
+						?>
 					</td>
 				</tr>
 				<tr>

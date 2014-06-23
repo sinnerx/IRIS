@@ -94,6 +94,7 @@ activity:
 	activityCreatedDate [datetime]
 	activityUpdatedUser [int]
 	activityUpdatedDate [datetime]
+	activityAllDateAttendance [int]	## all-date compulsory. 1 = ya, 2 = free to choose.
 
 activity_budget:			## incomplete.
 	activityBudgedID [int]
@@ -106,12 +107,22 @@ activity_date:
 	activityDateStartTime [time]
 	activityDateEndTime [time]
 
-activity_user:
+activity_user: ## joining table.
 	activityUserID [int]
 	activityID [int]
 	userID [int]
-	activityUserValue [int]			## 1 = join, 2 = no.
 	activityUserCreatedDate [datetime]
+	activityUserCreatedUser [int]
+
+activity_user_date:
+	activityUserDateID [int]
+	activityUserID [int]
+	activityUserDateValue [date]	## attend date. i think better use date as the foreignkey than activityDateID.
+	activityUserDateAttendance [int]	## 0 = not-signed, 1 = attend, 2 = absence
+	activityUserDateCreatedDate [datetime]
+	activityUserDateCreatedUser [int]
+	activityUserDateUpdatedDate [datetime]
+	activityUserDateUpdatedUser [int]
 
 activity_article:
 	activityArticleID [int]

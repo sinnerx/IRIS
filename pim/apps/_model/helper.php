@@ -75,7 +75,10 @@ class Helper
 	{
 		if(!$invert)
 		{
-			return date("d/m/Y",strtotime($dateR[0]))." - ".date("d/m/Y",strtotime($dateR[1]));
+			if(date("Y-m-d",strtotime($dateR[0])) == date("Y-m-d",strtotime($dateR[1]))) ## if same start and end date, just return one,
+				return date("j M Y",strtotime($dateR[0]));
+			else
+				return date("j M Y",strtotime($dateR[0]))." - ".date("j M Y",strtotime($dateR[1]));
 		}
 		else
 		{

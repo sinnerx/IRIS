@@ -76,7 +76,7 @@ class Controller_Activity
 				}
 			}
 
-			$data['participantList']	= model::load("activity/activity")->getParticipantList($actIDR);
+			$data['participantList']	= count($actIDR) > 0?model::load("activity/activity")->getParticipantList($actIDR):false;
 
 			view::render("activity/index_year",$data);
 		}
@@ -95,11 +95,13 @@ class Controller_Activity
 		## not found.
 		if(!$row_act)
 		{
-			die;
+			die();
 		}
-
 		## equate
 		$data	= $row_act;
+
+		## get list of date.
+		$data['activityDate']	= $activity->getDate($row_act['activityID']);
 
 		//get activity specific data.
 		switch($row_act['activityType'])
@@ -131,6 +133,9 @@ class Controller_Activity
 			if(isset($data['participantList']['attending'][session::get("userID")]))
 			{
 				$data['participationFlagMessage']	= "Anda telah memilih untuk hadir ke aktiviti ini.";
+
+				## get list of participated date.
+				$data['joinedDate']	= model::load("activity/activity")->getJoinedDate($row_act['activityID'],session::get("userID"));
 			}
 			else if(isset($data['participantList']['nonattending'][session::get("userID")]))
 			{

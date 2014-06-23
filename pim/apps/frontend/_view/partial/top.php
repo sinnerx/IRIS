@@ -20,6 +20,24 @@
 	color: white;
 }
 
+.in-active
+{
+	position: absolute;
+	background: #8c2f2f;
+	color:white;
+	right:0px;
+	box-shadow: 0px -5px 5px #000000;
+	padding:3px 6px 3px 6px;
+	line-height:normal;
+	border-bottom-right-radius: 10px;
+	border-bottom-left-radius: 10px;
+	width:220px;
+}
+.user-setting
+{
+	position: relative;
+}
+
 </style>
 <!-- Top Header start -->
 <div class="top-header">
@@ -54,6 +72,12 @@
 		<span style='vertical-align:top;color:#009BFF;position:relative;left:-5px;font-weight:lighter;'>
 		<span style='color:#888888;'>Selamat datang,</span> <a href='<?php echo url::base("{site-slug}/profile");?>' style='color:inherit;'><?php echo $username;?></a></span>
 		<a href='<?php echo url::base("{site-slug}/logout");?>' class='fa fa-power-off' style='color:#eb1414;position:relative;top:1px;'></a>
+
+		<?php if(!authData("user.isActive")):?>
+			<div class='in-active'>
+			Akaun anda masih belum aktif.
+			</div>
+		<?php endif;?>
 	<?php
 	## not logged.
 	else:?>
@@ -65,5 +89,5 @@
 	</form>
 <?php endif;?>
 	</div>
-	</div>
+	</div>	
 </div> <!-- Top Header End -->

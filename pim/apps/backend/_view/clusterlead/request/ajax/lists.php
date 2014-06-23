@@ -19,6 +19,13 @@ cluster.overview.updateApproval	= function(requestID,status,override)
 			pim.ajax.getModal(pim.base_url+"ajax/request/rejectionForm/"+requestID);return;
 		}
 	}
+	else
+	{
+		if(!confirm("Approve this request?"))
+		{
+			return false;
+		}
+	}
 
 	$.ajax({type:"GET",url:base_url+"ajax/request/"+statusR[status]+"/"+requestID}).done(function()
 	{
@@ -59,7 +66,12 @@ cluster.overview.previewRequestDetail = function(requestID)
 	<div class='panel-heading'>
 		<div class='row'>
 			<div class='col-sm-9'>
-			<h4 style="line-height:5px;">Change Requests - <?php echo ucwords($row['siteName']);?> (<?php echo count($res_requests);?>)</h4>
+			<h4 style="line-height:5px;">Site Requests - <?php echo ucwords($row['siteName']);?> (<?php echo count($res_requests);?>)
+
+			</h4>
+			</div>
+			<div class='col-sm-3' style='text-align:right;'>
+				<a style='font-size:1.5em;opacity:0.5;' href='javascript:cluster.overview.getSiteRequests(cluster.overview.currentSiteID);' class='fa fa-refresh pull-right'></a>
 			</div>
 		</div>
 	</div>
@@ -72,7 +84,7 @@ cluster.overview.previewRequestDetail = function(requestID)
 			<tr>
 				<th width='5%'>No.</th>
 				<th>Request Type</th>
-				<th>Date</th>
+				<th>Requests Date</th>
 				<th>By</th>
 				<th width='100px'></th>
 			</tr>
@@ -95,11 +107,12 @@ cluster.overview.previewRequestDetail = function(requestID)
 				$exclamationIcon= "<a data-toggle='ajaxModal' href='$urlCorrection' class='fa fa-exclamation-circle' style='color:red;' title='Waiting for correction. $correctionText'></a>&nbsp;&nbsp;";
 
 				$approvalIcon	= $row['siteRequestCorrectionFlag'] != 1?"$approveIcon $disapproveIcon":$exclamationIcon;
+				$correctionIcon = $correctionText != ""?"<span class='fa fa-wrench' style='opacity:0.7;' title='$correctionText'></span>":"";
 
 
 				echo "<tr>";
 				echo "<td>$no.</td>";
-				echo "<td>$type</td>";
+				echo "<td>$type $correctionIcon</td>";
 				echo "<td>$date</td>";
 				echo "<td>$by</td>";
 				echo "<td>$correction $approvalIcon$previewIcon</td>";

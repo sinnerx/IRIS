@@ -1,7 +1,14 @@
 <script type="text/javascript" src='<?php echo url::asset("backend/js/pim.js");?>'></script>
 <script type="text/javascript">
 
-var pim = new pim({base_url:"<?php echo url::base('{site-slug}/activity/'.$year);?>"});
+var pim = new pim({base_url:"<?php echo url::base('{site-slug}');?>"});
+function yearChange()
+{
+	var y = jQuery("#activityYear").val();
+	pim.redirect("activity/"+y);
+}
+
+
 
 </script>
 <link rel="stylesheet" type="text/css" href="<?php echo url::asset('_templates/css/aktiviti.css');?>">
@@ -22,11 +29,33 @@ Lorem ipsum dolor sit amet, maiores ornare ac fermentum, imperdiet ut vivamus a,
 </div>
 <div class="clr"></div>
 <div class="activity-year-select">
-<div class="year-select clearfix">
-<div class="prev-year"><a href="<?php echo url::base("{site-slug}/activity/".($year-1),true);?>"><i class="fa fa-angle-left"></i></a></div>
-<div class="year-count"><?php echo $year;?></div>
-<div class="next-year"><a href="<?php echo url::base("{site-slug}/activity/".($year+1),true);?>"><i class="fa fa-angle-right"></i></a></div>
 </div>
+
+<!-- month and date picker. -->
+<div class="activity-year-select clearfix">
+	<div class="month-left">
+	<ul>
+		<li><a href="#">Jan</a></li>
+		<li><a href="#">Feb</a></li>
+		<li><a href="#">Mac</a></li>
+		<li><a href="#">Apr</a></li>
+		<li><a href="#">Mei</a></li>
+		<li><a href="#">Jun</a></li>
+	</ul>
+	</div>
+	<div class="select-year-activity">
+		<?php echo form::select("activityYear",model::load("helper")->monthYear("year",date("Y")-4,date("Y")+1),"onchange='yearChange();' class='dropdown' data-settings='{\"wrapperClass\":\"select-year\"}'",$year,false);?>
+	</div>
+	<div class="month-right">
+		<ul>
+			<li><a href="#">Jul</a></li>
+			<li><a href="#">Ogs</a></li>
+			<li><a href="#">Sep</a></li>
+			<li><a href="#">Okt</a></li>
+			<li><a href="#">Nov</a></li>
+			<li><a href="#">Dis</a></li>
+		</ul>
+	</div>
 </div>
 <div class="clr"></div>
 <?php

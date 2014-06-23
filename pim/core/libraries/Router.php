@@ -87,6 +87,12 @@ class router
 		return $callback;
 	}
 
+	public function group($param_first,$param_second = Null,$callback = Null,$final_param = Null)
+	{
+		$this->groupMode = true;
+		$this->add($param_first,$param_second,$callback,$final_param);
+	}
+
 	## main multiultility function, to add route. 
 	public function add($param_first,$param_second = Null,$callback = Null,$final_param = Null)
 	{

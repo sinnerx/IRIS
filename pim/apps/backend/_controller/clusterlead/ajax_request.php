@@ -42,9 +42,15 @@ class Controller_Ajax_Request
 			## load activitiy date.
 			$data['activityDate']	= model::load("activity/activity")->getDate($data['row_request']['activityID']);
 			
+			## load event or training detail.
 			break;
 			case "activity.update":
 
+			break;
+			case "article.add":
+			$data['row_request']['article_category']	= model::load("blog/category")->getArticleCategoryList2($data['row_request']['articleID']);
+			$data['row_request']['res_category']		= model::load("blog/category")->getCategoryList();
+			$data['row_request']['article_tag']			= model::load("blog/article")->getArticleTag($data['row_request']['articleID']);
 			break;
 		}
 
@@ -81,7 +87,8 @@ class Controller_Ajax_Request
 											"trainingType"=>"Type of Training",
 											"trainingMaxPax"=>"Max pax",
 											"eventType"=>"Type of Event",
-											"activityAddressFlag"=>"Activity Address : On using site address"
+											"activityAddressFlag"=>"Activity Address : On using site address",
+											"activityAllDateAttendance"=>"All date compulsary (Is this activity require user to attend all?)"
 												);
 
 		$data['colNameR']['article']	= Array(
@@ -93,7 +100,8 @@ class Controller_Ajax_Request
 		## date list column.
 		$data['dateTimeListColumn']	= Array(
 							"activityStartDate",
-							"activityEndDate"
+							"activityEndDate",
+							"articlePublishedDate"
 										);
 
 		## param required column.
@@ -114,6 +122,11 @@ class Controller_Ajax_Request
 						{
 							return $no == 1?"Use site address":$data['row_request']['activityAddress'];
 						},
+						"activityAllDateAttendance"=>function($no)
+						{
+							$arr	= Array(1=>"Ya",2=>"No (may choose date)");
+							return $arr[$no];
+						}
 								);
 
 		view::render("clusterlead/request/ajax/detail",$data);
@@ -122,6 +135,10 @@ class Controller_Ajax_Request
 	public function rejectionForm($siteRequestID)
 	{
 		$data['siteRequestID']	= $siteRequestID;
+
+		## get request with type column only.
+		$reqs		= model::load("site/request")->getRequest($siteRequestID,'siteRequestType');
+		$data['typeName']		= model::load("site/request")->type($reqs['siteRequestType']);
 		view::render("clusterlead/request/ajax/rejectionForm",$data);
 	}
 

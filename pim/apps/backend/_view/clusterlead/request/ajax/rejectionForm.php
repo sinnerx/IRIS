@@ -44,7 +44,7 @@ cluster.overview.sendCorrection = function()
 	<div class="modal-content">
 		<div class="modal-header">
 			<button type="button" class="close" data-dismiss="modal">×</button>
-			<h4 class="modal-title">Reject changes - Announcement Update
+			<h4 class="modal-title">Reject changes - <?php echo $typeName;?>
 				<div style='font-size:11px;'>Any rejected changes will be discarded, and reverted to last approved value. Maybe you can <u>send a correction</u> message upon this request.</div>
 			</h4>
 		</div>

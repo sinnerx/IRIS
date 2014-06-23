@@ -6,7 +6,11 @@ class Controller_Member
 		if(session::get("userLevel") != 1)
 			redirect::to("dashboard/user/profile");
 
-		view::render("member/profile");
+		$data['row']	= model::load("access/auth")->getAuthData("user");
+		$additional		= model::load("user/user")->getAdditional($data['row']['userID']);
+		$data['row']	= array_merge($data['row'],$additional);
+
+		view::render("member/profile",$data);
 	}
 
 	public function profile_edit()
@@ -15,6 +19,10 @@ class Controller_Member
 			redirect::to("dashboard/user/profile");
 
 		$row	= model::load("access/auth")->getAuthData("user");
+		$additional	= model::load("user/user")->getAdditional($row['userID']);
+
+		## merge both row.
+		$row	= array_merge($row,$additional);
 
 		if(form::submitted())
 		{
@@ -24,7 +32,11 @@ class Controller_Member
 
 			if(input::get("userEmail") != "")
 			{
-				$rules['userEmail']	= "email:Sila masukkan format email yang betul.";
+				$rules['userEmail']	= 
+				Array(
+			"email:Sila masukkan format email yang betul.",
+			"callback"=>Array(!model::load("user/services")->checkEmail(input::get("userEmail"),$row['userID']),"Email already exists.")
+					);
 			}
 
 			if($error = input::validate($rules))

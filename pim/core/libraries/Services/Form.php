@@ -60,7 +60,10 @@ class Form
 		$value		= flash::data("_post.$name",$value);
 		$message	= /*session::has("fdata.$name")?"data-message='".session::get("fdata.$name")."'":*/"";
 		$attr		= self::buildAttr($attr);
-		$sel	= "<select name='$name' $message id='$name' $attr><option value=''>$firstVal</option>";
+
+		$firstVal	= $firstVal !== false?"<option value=''>$firstVal</option>":"";
+
+		$sel	= "<select name='$name' $message id='$name' $attr>$firstVal";
 		foreach($array as $key=>$val)
 		{
 			if($value != "")

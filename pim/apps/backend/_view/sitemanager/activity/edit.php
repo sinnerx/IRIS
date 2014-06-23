@@ -569,13 +569,29 @@ Content is waiting for approval
 			<div class='col-sm-6'>
 				<div class='form-group'>
 					<label>6. Date
+						<!-- main date button -->
+						<?php 
+						$allDateAttendanceDisabled	= $hasParticipation?"disabled":"";
+						if(!$hasParticipation):
+						?>
 						<a href='<?php echo url::base("ajax/activity/datePicker");?>' data-toggle='ajaxModal' class='fa fa-calendar'></a>
+						<?php endif;?>
 						<?php /*echo flash::data("activityDate");*/?>
 					</label>
+					<span style='text-align:right;position:absolute;right:0px;'>
+						<?php echo form::select("activityAllDateAttendance",Array(1=>"All date required",2=>"Participant may choose date"),"$allDateAttendanceDisabled style='padding:4px;border:1px solid #d2d2d2;'",$row['activityAllDateAttendance'],"[Date obligation]");?>
+						<?php if($hasParticipation):?>
+							<?php echo form::hidden("activityAllDateAttendance",null,$row['activityAllDateAttendance']);?> 
+						<?php endif;?>
+					</span>
 					<?php echo form::hidden("activityDateTime",null,$datetime);?>
-					<?php echo flash::data("activityDateTime");?>
+					<span style='position:relative;left:20px;'><?php echo flash::data("activityDateTime",flash::data("activityAllDateAttendance"));?></span>
 					<div class='summary_title'>Configure the activity date.</div>
 					<div id='activityDateSummary' style="display:none;">
+					<?php
+					if($hasParticipation):?>
+					<span style='color:red;'>This activity already has participation, you may not change date anymore.</span>
+					<?php endif;?>
 					<table id='summary_basic'>
 						<tr>
 							<td>From</td><td>: <span class='summary_from'></span></td>

@@ -4,11 +4,18 @@ use db, model, url;
 class Services
 {
 	## check email existance. used in manager/add and manager/edit
-	public function checkEmail($email)
+	public function checkEmail($email,$userID = null)
 	{
 		db::select("userID,userLevel");
 		db::from("user");
 		db::where("userEmail",$email);
+
+		## exception when userID is passed.
+		if($userID)
+		{
+			db::where("userID !=",$userID);
+		}
+
 		$row	= db::get()->row();
 
 		return $row?true:false;

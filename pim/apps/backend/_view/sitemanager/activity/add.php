@@ -551,13 +551,18 @@ Add activities to your side. Every activity added will be pending for your clust
 				</div>
 			</div>
 			<div class='col-sm-6'>
-				<div class='form-group'>
+				<div class='form-group' style="position:relative;">
 					<label>6. Date
 						<a href='<?php echo url::base("ajax/activity/datePicker");?>' data-toggle='ajaxModal' class='fa fa-calendar'></a>
 						<?php /*echo flash::data("activityDate");*/?>
+
+
 					</label>
+					<span style='text-align:right;position:absolute;right:0px;'>
+						<?php echo form::select("activityAllDateAttendance",Array(1=>"All date required",2=>"Participant may choose date"),"style='padding:4px;border:1px solid #d2d2d2;'",null,"[Date obligation]");?>
+					</span>
 					<?php echo form::hidden("activityDateTime");?>
-					<?php echo flash::data("activityDateTime");?>
+					<span style='position:relative;left:20px;'><?php echo flash::data("activityDateTime",flash::data("activityAllDateAttendance"));?></span>
 					<div class='summary_title'>Configure the activity date.</div>
 					<div id='activityDateSummary' style="display:none;">
 					<table id='summary_basic'>

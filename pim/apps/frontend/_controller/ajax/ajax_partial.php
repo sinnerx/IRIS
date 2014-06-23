@@ -1,7 +1,7 @@
 <?php
 
 ## an ajax controller.
-Class Controller_Partial
+Class Controller_Ajax_Partial
 {
 	public function calendarGetDateList($year,$month)
 	{
@@ -14,11 +14,35 @@ Class Controller_Partial
 		## get activities and group it by date.
 		$activity	= model::load("activity/activity");
 		$activityR	= $activity->getActivityList($siteID,$year,$month,null,false);
+		$resultR	= Array();
 
+		if($activityR)
+		{
+			$activityDateR	= $activity->getDate(array_keys($activityR));
 
-		$dateR	= Array();
+			$helper	= model::load("helper");
+			$base_url	= url::base("{site-slug}/activity");
 
-		$helper	= model::load("helper");
+			foreach($activityR as $actID=>$row)
+			{
+				$data	= Array(
+							"activityName"=>$row['activityName'],
+							"activityUrl"=>$helper->buildDateBasedUrl($row['activitySlug'],$row['activityStartDate'],$base_url),
+							"activityStartDate"=>date("j M Y",strtotime($row['activityStartDate'])),
+							"activityEndDate"=>date("j M Y",strtotime($row['activityEndDate']))
+									);
+
+				foreach($activityDateR[$actID] as $row_date)
+				{
+					$d	= date("j",strtotime($row_date['activityDateValue']));
+
+					$resultR[$d]	= !is_array($resultR)?Array():$resultR[$d];
+					$resultR[$d][]	= $data;
+				}
+			}
+		}
+
+		/*$dateR	= Array();
 		
 		$resultR	= Array();
 
@@ -41,7 +65,8 @@ Class Controller_Partial
 
 			## extract date range into list date that hold item on every date.
 			$helper->extractDateRange($resultR,$data,$range);
-		}
+		}*/
+
 
 		/*for($i=1;$i<=$total;$i++)
 		{
@@ -57,13 +82,13 @@ Class Controller_Partial
 		return response::json($resultR);
 	}
 
-	public function calendarGetDayActivity($year,$month,$day)
+	/*public function calendarGetDayActivity($year,$month,$day)
 	{
 		$siteID		= model::load("access/auth")->getAuthData("current_site","siteID");
 		$activityR	= model::load("activity/activity")->getActivityByDate($siteID,"$year-$month-$day");
 
 		return response::json($activityR);
-	}
+	}*/
 }
 
 

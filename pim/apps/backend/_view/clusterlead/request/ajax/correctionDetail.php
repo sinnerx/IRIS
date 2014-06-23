@@ -2,7 +2,7 @@
 	<div class="modal-content">
 		<div class="modal-header">
 			<button type="button" class="close" data-dismiss="modal">×</button>
-			<h4 class="modal-title">Correction detail
+			<h4 class="modal-title">Request Correction Message
 			<span style='font-size:11px;display:block;'>
 				You have previously sent a change request correction message. Below is the detail. 
 			</span>

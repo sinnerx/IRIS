@@ -119,7 +119,12 @@ class Activity
 	{
 		db::where("activityID",$activityID);
 		db::order_by("activityDateValue","asc");
-		return db::get("activity_date")->result();
+		db::get("activity_date");
+
+		if(!is_array($activityID))
+			return db::result();
+		else ## if is array, return while grouped by activityID.
+			return db::result("activityID",true);
 	}
 
 	## get all activity by date.
@@ -200,11 +205,14 @@ class Activity
 						"activityUpdatedDate"=>now(),
 						"activityCreatedUser"=>session::get("userID"),
 						"activitySlug"=>$activitySlug,
-						"activitySlugOriginal"=>$originalSlug
+						"activitySlugOriginal"=>$originalSlug,
+						"activityAllDateAttendance"=>$data['activityAllDateAttendance']
 									));
 
-		## update datetime.
-		$this->updateDateTime($activityID,$data['activityDateTime']);
+		## update datetime. only if there's no participation yet.
+		$participation	= $this->getParticipant($activityID);
+		if(!$participation)
+			$this->updateDateTime($activityID,$data['activityDateTime']);
 
 		switch($type)
 		{
@@ -245,6 +253,7 @@ class Activity
 					"activityCreatedDate"=>now(),
 					"activitySlug"=>$activitySlug,
 					"activitySlugOriginal"=>$originalSlug,
+					"activityAllDateAttendance"=>$data['activityAllDateAttendance']
 								);
 
 		db::insert("activity",$data_activity);
@@ -435,26 +444,23 @@ class Activity
 	{
 	}
 
+	## all selected now is the attending one.
 	public function getParticipantList($activityID)
 	{
 		if(!is_array($activityID))
 		{
-			db::select("user.*,userProfileAvatarPhoto,activityUserValue");
+			db::select("user.*,userProfileAvatarPhoto");
 			db::where("activityID",$activityID);
 			db::join("user","activity_user.userID = user.userID");
 			db::join("user_profile","user_profile.userID = activity_user.userID");
 
 			$res = db::get("activity_user")->result("userID");
 
-			## sort attending and nonattending
+			## 
 			$newRes	= Array();
 			foreach($res as $uID=>$row)
 			{
-
-				if($row['activityUserValue'] == 1)
-					$newRes['attending'][$uID]		= $row;
-				else
-					$newRes['nonattending'][$uID]	= $row;
+				$newRes['attending'][$uID]	= $row;
 			}
 
 			return $newRes;
@@ -463,12 +469,116 @@ class Activity
 		{
 			db::select("userID,activityID");
 			db::where("activityID",$activityID);
-			db::where("activityUserValue",1); ## select only attending one.
 			
 			## return while grouped with activityID.
 			return db::get("activity_user")->result("activityID",true);
 		}
 
+	}
+
+	## use only userID, activityID, and date. (actUserID is for recursive)
+	public function join($userID,$activityID,$date = null,$actUserID = false)
+	{
+		$recursive = $actUserID === false?false:true;
+
+		## create activity_user if not exist.
+		$where	= Array(
+				"activityID"=>$activityID,
+				"userID"=>$userID
+						);
+
+		$actUserID	= $actUserID?:db::select("activityUserID")->where($where)->get("activity_user")->row("activityUserID");
+
+		if(!$actUserID)
+		{
+			$where['activityUserCreatedDate']	= now();
+			$where['activityUserCreatedUser']	= session::get("userID");
+
+			db::insert("activity_user",$where);
+
+			$actUserID	= db::getLastID("activity_user","activityUserID");
+		}
+
+		## if date wasnt inputted.
+		if(!$date)
+		{
+			## the user join all date.
+			#1. get all date off the activity.
+			$dateList	= Array();
+			$date	= db::where("activityID",$activityID)->get("activity_date")->result("activityDateValue");
+
+			if(!$date)
+				return Array(false,"no-date");
+
+			$dateList	= array_keys($date);
+
+			#2. check if user has joined in any.
+			$check	= $this->checkUserJoin($activityID,$userID);
+
+			if($check)
+			{
+				return Array(false,"has-joined");
+			}
+
+			## recursive.
+			foreach($dateList as $val)
+			{
+				$res = $this->join($userID,$activityID,$val,$actUserID);
+				if(!$res[0])
+					return $res;
+			}
+
+			return Array(true);
+		}
+
+		## recursived just recently. no need to do this check.
+		if(!$recursive)
+		{
+			## validate if the selected activity got the date first, to deny any bad entry
+			$check	= db::select("activityID")
+			->where("activityID",$activityID)
+			->where("activityDateValue",$date)
+			->get("activity_date")->row();
+
+			if(!$check)
+				return Array(false,"date-invalid");
+
+			## if user has joined.
+			$userJoined	= $this->checkUserJoin($activityID,$userID,$date);
+
+			if($userJoined)
+				return Array(false,"has-joined");
+		}
+
+		## win. and join.
+		db::insert("activity_user_date",Array(
+								"activityUserID"=>$actUserID,
+								"activityUserDateValue"=>$date,
+								"activityUserDateAttendance"=>0,
+								"activityUserDateCreatedDate"=>now(),
+								"activityUserDateCreatedUser"=>session::get("userID"),
+											));
+
+		return Array(true);
+	}
+
+	public function checkUserJoin($activityID,$userID,$date = null)
+	{
+		db::select("activityUserDateID")
+		->where("activityUserID IN (SELECT activityUserID FROM activity_user WHERE activityID = '$activityID')");
+
+		if($date)
+			db::where("activityUserDateValue",$date);
+
+		return db::get("activity_user_date")->row();
+	}
+
+	public function getJoinedDate($activityID,$userID)
+	{
+		db::from("activity_user_date");
+		db::where("activityUserID IN (SELECT activityUserID FROM activity_user WHERE activityID = ? AND userID = ?)",Array($activityID,$userID));
+		
+		return db::get()->result("activityUserDateValue");
 	}
 
 	public function joinActivity($userID,$activityID,$join = true)

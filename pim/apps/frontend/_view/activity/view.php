@@ -1,3 +1,97 @@
+<script type="text/javascript" src='<?php echo url::asset("backend/js/pim.js");?>'></script>
+<script type="text/javascript">
+	
+var pim = new pim({base_url:"<?php echo url::base('{site-slug}');?>"});
+
+</script>
+<style type="text/css">
+.activity-date-list table
+{
+	font-size: 13px;
+	width: 100%;
+	margin-bottom: 5px;
+}
+.activity-date-list table td
+{
+	border-bottom:1px solid #c0c0c0;
+	text-align: center;
+}
+
+</style>
+<script type="text/javascript">
+var activity = new function()
+{
+	var working = false;
+	this.activityName	= "<?php echo $activityName;?>";
+	this.activityID		= "<?php echo $activityID;?>";
+	var $		= jQuery;
+	this.join = function(date)
+	{
+		if(working)
+		{
+			return alert("Please wait.");
+		}
+
+		if(date)
+		{
+			var e	= jQuery("#activityDate"+date);
+			var time	= e.data("starttime")+" hingga "+e.data("endtime");
+			if(!confirm("Anda akan sertai aktiviti : "+this.activityName+"\nTarikh : "+date+"\nMasa : "+time+"\n\nAnda Pasti?"))
+			{
+				return false;
+			}
+
+			var url	= pim.base_url+"ajax/activity/join/"+this.activityID+"/"+date;
+		}
+		else
+		{
+			var start	= $("#startDate").val();
+			var end		= $("#endDate").val();
+
+			var dateTxt = start == end?"Tarikh : "+start:"Tarikh : "+start+" hingga "+end;
+
+			if(!confirm("Adakah anda akan sertai aktiviti ini?\nNama : "+this.activityName+"\n"+dateTxt))
+			{
+				return false;
+			}
+
+			var url	= pim.base_url+"ajax/activity/join/"+this.activityID;
+		}
+
+		working = true;
+		$.ajax({type:"GET",url:url}).done(function(r)
+		{
+			var r = $.parseJSON(r);
+
+			if(!r[0])
+			{
+				alert("Problems, we're refreshing the browser.");
+				window.location.href = "";
+			}
+
+			// change icon and remove href.
+			var e = date?$("#activityDate"+date):$(".joinbutton");
+			e.removeClass("fa-sign-in").addClass("fa-check").attr("href","#");
+
+			// change image.
+			if($("#userJoined").val() != "true")
+			{
+				$("#members-attend-list-none").remove();
+				$("#userJoined").val("true");
+				$(".members-attend-list ul").append("<li><img style='height:63px;' alt='' src='"+r[1]['userProfileAvatarPhoto']+"' /></li>");
+
+				$(".joinTotal").html(Number($(".joinTotal").html())+1);
+			}
+
+			working = false;
+		});
+	}
+}
+
+</script>
+<input type='hidden' id='userJoined' value='<?php echo $joinedDate?"true":"false";?>' />
+<input type='hidden' id='startDate' value='<?php echo date("j M Y",strtotime($activityStartDate));?>' />
+<input type="hidden" id='endDate' value='<?php echo date("j M Y",strtotime($activityEndDate));?>' />
 <link rel="stylesheet" type="text/css" href="<?php echo url::asset('_templates/css/aktiviti.css');?>">
 <h3 class="block-heading">Kalendar Aktiviti  <span class="subheading"> > <?php echo $activityTypeLabel;?></span></h3>
 <div class="block-content clearfix">
@@ -34,6 +128,55 @@
 						<div class="event-short-desc">
 						<?php echo nl2br($activityDescription);?>
 						</div>
+						<div class='activity-date-list'>
+							<table>
+								<tr>
+									<th>Tarikh</th>
+									<th>Masa (mula)</th>
+									<th>Masa (tamat)</th>
+									<th></th>
+								</tr>
+								<?php
+								if($activityDate){
+									$no = 1;
+									foreach($activityDate as $row)
+									{
+										$date	= date("j M Y",strtotime($row['activityDateValue']));
+										$start	= date("g:i A",strtotime($row['activityDateStartTime']));
+										$end	= date("g:i A",strtotime($row['activityDateEndTime']));
+
+										## all date attendance flag.
+										$allDateAttendanceOptional = $activityAllDateAttendance == 2;
+										$allDateAttendanceCompulsary = $activityAllDateAttendance == 1 && $no == 1;
+
+										$rowspan	= $allDateAttendanceCompulsary?"rowspan='".count($activityDate)."'":"";
+
+										$href	= $allDateAttendanceOptional?"javascript:activity.join(\"$row[activityDateValue]\");":"javascript:activity.join();";
+
+										$attr	= "href='$href' class='joinbutton fa fa-sign-in'";
+
+										if($joinedDate)
+										{
+											if(isset($joinedDate[$row['activityDateValue']]))
+											{
+												$attr	= "href='#' class='joinbutton fa fa-check'";
+											}
+										}
+										?>
+									<tr>
+										<td><?php echo $date;?></td>
+										<td><?php echo $start;?></td>
+										<td><?php echo $end;?></td>
+										<?php if($allDateAttendanceOptional || $allDateAttendanceCompulsary):?>
+										<td <?php echo $rowspan;?> ><a id='activityDate<?php echo $row['activityDateValue'];?>' data-starttime='<?php echo $start;?>' data-endtime='<?php echo $end;?>' <?php echo $attr;?> title='Join'></a></td>
+										<?php endif;?>
+									</tr>
+									<?php
+										$no++;
+									}
+								}?>
+							</table>
+						</div>
 						<?php
 						if($participationFlag):
 						?>
@@ -49,12 +192,13 @@
 				</div>
 			</div>
 		<div class="event-members-join">
-		<div class="calendar-label-name">Kehadiran (<?php echo count($participantList['attending']);?>)</div>
-		<?php if(!$participantList['attending']):?>
-			Tiada
-		<?php else:?>
-			<div class="members-attend-list">
+		<div class="calendar-label-name">Kehadiran (<span class='joinTotal'><?php echo count($participantList['attending']);?></span>)</div>
+		<div class="members-attend-list">
 			<ul>
+		<?php if(!$participantList['attending']):?>
+			<span id='members-attend-list-none'>Tiada</span>
+		<?php else:?>
+			
 				<?php
 				foreach($participantList['attending'] as $row):
 				$imgUrl	= model::load("image/services")->getPhotoUrl($row['userProfileAvatarPhoto']);
@@ -63,7 +207,7 @@
 				<?php
 				endforeach;
 				?>
-			</ul>
+			
 				<!-- <ul>
 					<li><img src="images/1.jpg" width="64" height="63"  alt=""/></li>
 					<li><img src="images/2.jpg" width="64" height="63"  alt=""/></li>
@@ -78,8 +222,10 @@
 					<li><img src="images/2.jpg" width="64" height="63"  alt=""/></li>
 					<li><img src="images/3.jpg" width="64" height="63"  alt=""/></li>
 				</ul> -->
-			</div>
+			
 		<?php endif; /* /participantList*/?>
+			</ul>
+		</div>
 		</div>
 		<div class="clr"></div>
 		<?php /* +++++ Comment markup pending for this release (2) +++++

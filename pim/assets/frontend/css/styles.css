@@ -3249,3 +3249,365 @@ background-image: url("../../_landing/images/mCSB_buttons.png") !important;
 	border-bottom: none !important;
 	margin-top:-70px !important;
 }
+
+
+/** NEW ACTIVITY AMENDMENT = 23/6 **/
+
+.month-left{
+	float:left;
+	width:296px;
+}
+
+.month-left a{
+	background: none repeat scroll 0 0 #eaeaea;
+    display: block;
+    float: left;
+    font-size: 12px;
+    margin-right: 1px;
+    padding: 4px 11px 4px 11px;
+    text-align: center;
+    text-transform: uppercase;
+    width: 26px;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	color:#888;
+	 -webkit-transition: all 0.4s ease-out;
+   -moz-transition: all 0.4s ease-out;
+   -ms-transition: all 0.4s ease-out;
+   -o-transition: all 0.4s ease-out;
+   transition: all 0.4s ease-out;
+}
+
+.month-left a:hover,
+.month-left a.active{
+	color:#FFF;
+	background:#009bff;
+}
+
+
+
+.month-left ul{
+	margin:0px;
+	padding:0px;
+	list-style:none;
+}
+
+
+.month-left ul li{
+    display: block;
+    float: left;
+}
+
+
+.month-left ul li:last-child{
+	border-right:none;
+}
+.select-year-activity{
+	float:left;
+	width:80px;
+	margin-right:3px;
+}
+
+
+.month-right{
+	width:300px;
+	float:left;
+}
+
+
+
+.month-right ul{
+	margin:0px;
+	padding:0px;
+	list-style:none;
+}
+
+
+.month-right ul li{
+    display: block;
+    float: left;
+}
+
+.month-right ul li:first-child{
+	border:none;
+}
+
+
+.month-right a{
+	background: none repeat scroll 0 0 #eaeaea;
+	display: block;
+	float: left;
+	font-size: 12px;
+	margin-right: 1px;
+	padding: 4px 11px 4px 11px;
+	text-align: center;
+	text-transform: uppercase;
+	width: 26px;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	color:#888;
+	-webkit-transition: all 0.4s ease-out;
+	-moz-transition: all 0.4s ease-out;
+	-ms-transition: all 0.4s ease-out;
+	-o-transition: all 0.4s ease-out;
+	transition: all 0.4s ease-out;
+}
+
+.month-right a:hover,
+.month-right a.active{
+	background:#009bff;
+	color:#FFF;
+}
+
+.month-right ul li:last-child{
+}
+
+/* --- DEMO FLAT THEME --- */
+
+/* PREFIXED CSS */
+.select-year,
+.select-year div,
+.select-year li,
+.select-year div::after,
+.select-year .carat,
+.select-year .carat:after,
+.select-year .selected::after,
+.select-year:after{
+	-webkit-transition: all 150ms ease-in-out;
+	-moz-transition: all 150ms ease-in-out;
+	-ms-transition: all 150ms ease-in-out;
+	transition: all 150ms ease-in-out;
+}
+
+.select-year .selected::after,
+.select-year.scrollable div::after{
+	-webkit-pointer-events: none;
+	-moz-pointer-events: none;
+	-ms-pointer-events: none;
+	pointer-events: none;
+}
+
+/* WRAPPER */
+.select-year{
+	position: relative;
+	cursor: pointer;
+	font-weight: 200;
+	font-size:11px;
+	-webkit-border-radius: 3px;
+-moz-border-radius: 3px;
+border-radius: 3px;
+	padding:5px 15px;
+
+	
+	
+	color:  #000;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	user-select: none;
+	background:#009bff;
+}
+
+.select-year.open{
+	z-index: 2;
+}
+
+.select-year:hover,
+.select-year.focus{
+	background: #0062a1;
+}
+
+/* CARAT */
+
+.select-year .carat,
+.select-year .carat:after{
+	position: absolute;
+	right: 14px;
+	top: 50%;
+	margin-top: -3px;
+	border: 6px solid transparent;
+	border-top: 6px solid #FFF;
+	z-index: 1;
+	
+	-webkit-transform-origin: 50% 20%;
+	-moz-transform-origin: 50% 20%;
+	-ms-transform-origin: 50% 20%;
+	transform-origin: 50% 20%;
+}
+
+.select-year:hover .carat:after{
+	border-top-color: #f4f4f4;
+}
+
+.select-year.focus .carat{
+	border-top-color: #f8f8f8;
+}
+
+.select-year.focus .carat:after{
+	border-top-color: #0180d1;
+}
+
+.select-year.open .carat{
+	-webkit-transform: rotate(180deg);
+	-moz-transform: rotate(180deg);
+	-ms-transform: rotate(180deg);
+	transform: rotate(180deg);
+}
+
+/* OLD SELECT (HIDDEN) */
+
+.select-year .old{
+	position: absolute;
+	left: 0;
+	top: 0;
+	height: 0;
+	width: 0;
+	overflow: hidden;
+}
+
+.select-year select{
+	position: absolute;
+	left: 0px;
+	top: 0px;
+}
+
+.select-year.touch select{
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	opacity: 0;
+}
+
+/* SELECTED FEEDBACK ITEM */ 
+.select-year .selected {
+    color: #FFF;
+	margin-right:10px;
+}
+
+.select-year .selected,
+.select-year li{
+	font-weight: 400;
+	text-transform: uppercase;
+	line-height: 1;
+	overflow: hidden;
+	white-space: nowrap;
+	width:62% !important;
+}
+
+.select-year .selected::after{
+	content: '';
+	position: absolute;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	width: 60px;
+}
+
+.select-year:hover .selected::after,
+.select-year.focus .selected::after{
+}
+
+/* DROP DOWN WRAPPER */
+
+.select-year div{
+	position: absolute;
+	height: 0;
+	left: 0;
+	right: 0;
+	top: 100%;
+	overflow: hidden;
+	opacity: 0;
+	color: #04724E;
+	margin-top:5px;
+	-webkit-border-radius: 3px;
+-moz-border-radius: 3px;
+border-radius: 3px;
+	padding:5px 15px;
+}
+
+.select-year:hover div{
+}
+
+/* Height is adjusted by JS on open */
+.select-year.open div{
+	opacity: 1;
+	z-index: 2;
+}
+
+/* FADE OVERLAY FOR SCROLLING LISTS */
+
+.select-year.scrollable div::after{
+	content: '';
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	height: 50px;
+	box-shadow: inset 0 -50px 30px -35px #00c384;
+}
+
+.select-year.scrollable:hover div::after{
+	box-shadow: inset 0 -50px 30px -35px #00c384;
+}
+
+.select-year.scrollable.bottom div::after{
+	opacity: 0;
+}
+
+/* DROP DOWN LIST */
+.select-year ul{
+	position: absolute;
+	left: 0;
+	top: 0;
+	height: 100%;
+	width: 100%;
+	list-style: none;
+	overflow: hidden;
+	margin:0px;
+	padding:0px;
+}
+
+.select-year.scrollable.open ul{
+	overflow-y: auto;
+}
+
+/* DROP DOWN LIST ITEMS */
+
+.select-year li{
+	list-style: none;
+	border-bottom: 0.5px solid #0473ba !important;
+	background:#009bff !important;
+	border-top:none !important;
+	color:#FFF !important;
+	font-size:12px !important;
+	height:20px !important;
+	line-height:20px !important;
+	padding:5px 15px !important;
+}
+
+.select-year li:hover{
+	color:#0062a1;
+	
+}
+
+.select-year li:last-child {
+    border-bottom: 0;
+}
+
+/* .focus class is also added on hover */
+
+.select-year li.focus{
+	background: #00C384;
+	position: relative;
+	z-index: 3;
+	color: #fff;
+}
+
+.select-year li.active{
+	background: #29AF84;
+	color: #fff;
+}
+
+/** NEW ACTIVITY AMENDMENT - END **/

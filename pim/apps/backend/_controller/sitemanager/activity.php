@@ -13,11 +13,17 @@ class Controller_Activity
 		$row['activityDateTime']	= Array(); ## to override to replaceData limits.
 		$data['requestFlag']		= model::load("site/request")->replaceWithRequestData("activity.update",$activityID,$row);
 
+		## check participation
+		$data['hasParticipation']	= model::load("activity/activity")->getParticipant($activityID)?true:false;
+
 		if(form::submitted())
 		{
 			$rules	= Array(
 					"activityName,activityParticipation,activityDateTime"=>"required:Required",
 							);
+
+			if(!$data['hasParticipation'])
+				$rules['activityAllDateAttendance'] = "required:Required";
 
 			## rule based on type.
 			switch($row['activityType'])
@@ -48,7 +54,10 @@ class Controller_Activity
 			$data['activityStartDate']		= $datetime['startDate']." ".$datetime['timeList'][$datetime['startDate']]['start'];
 			$data['activityEndDate']		= $datetime['endDate']." ".$datetime['timeList'][$datetime['endDate']]['end'];
 			$data['activityDateTimeType']	= $datetime['dateTimeType'];
+
+			if(!$data['hasParticipation']): ## if has participation already, deny this data.
 			$data['activityDateTime']		= $datetime['timeList'];
+			endif;
 
 			## win
 			model::load("activity/activity")->updateActivity($activityID,$row['activityType'],$data);
@@ -99,7 +108,7 @@ class Controller_Activity
 		if(form::submitted())
 		{
 			$rules	= Array(
-					"activityName,activityType,activityParticipation,activityDateTime"=>"required:Required",
+					"activityName,activityType,activityParticipation,activityDateTime,activityAllDateAttendance"=>"required:Required",
 							);
 
 			## rule based on type.

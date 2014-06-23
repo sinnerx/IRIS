@@ -902,4 +902,13 @@ class Error
 	}
 }
 
+## library loader class load file under apps/_library
+class Library
+{
+	public function _require($name)
+	{
+		require_once "apps/_library/$name.php";
+	}
+}
+
 ?>

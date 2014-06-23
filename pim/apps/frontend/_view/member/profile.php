@@ -1,12 +1,15 @@
-<h3 class="block-heading">PROFIL AHLI <span class="subforum"> > Pemegang kad</span> </h3>
+<h3 class="block-heading"><a href='.'>PROFIL AHLI</a> <span class="subforum"> > Pemegang kad</span> </h3>
 <div class="block-content clearfix">
     <div class="page-content">
         <div class="page-description"> 
         </div>
         <div class="page-sub-wrapper profile-page clearfix">
             <div class="lft-sidebar">
-            <div class="profile-avatar-member"><img src="members_photo/luqman.jpg"></div>
-                <div class="profile-user-activity">
+            <?php
+            $photoUrl   = model::load("image/services")->getPhotoUrl($row['userProfileAvatarPhoto']);
+            ?>
+            <div class="profile-avatar-member"><img src="<?php echo $photoUrl;?>"></div>
+                <div class="profile-user-activity" style="opacity:0.2;">
                 <h3>Aktiviti</h3>
                     <div class="profile-activity-list">
                         <ul>
@@ -32,15 +35,24 @@
             </div>
             <div class="rght-sidebar">
                 <div class="profile-user-info">
-                <h3>Luqman Adris</h3>
-                <span class="profile-user-occupation">Usahawan Dodol</span>
-                <span class="profile-user-location"><span>Kampung Paya Simpang, Bukit Tangga</span><span><a href="#"><i class="fa fa-envelope"></i></a></span></span>
+                <h3><?php echo $row['userProfileFullName'];?></h3>
+                <span class="profile-user-occupation"><?php echo $row['userProfileOccupation']?:"Menganggur";?></span>
+                <span class="profile-user-location"><span><?php echo authData("site.siteName");?></span><span><a href="#"><i class="fa fa-envelope"></i></a></span></span>
                 <div class="profile-social-media">
                 <ul>
-                <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                <li><a href="#" class="light-blue"><i class="fa fa-twitter"></i></a></li>
-                <li><a href="#"><i class="fa fa-link"></i></a></li>
-                <li><a href="#" class="light-blue"><i class="fa fa-shopping-cart"></i></a></li>
+                    <?php 
+                    if($row['userProfileFacebook']):?>
+                        <li><a target="_blank" href="<?php echo $row['userProfileFacebook'];?>"><i class="fa fa-facebook"></i></a></li>
+                    <?php endif;
+                    if($row['userProfileTwitter']):?>
+                        <li><a target="_blank" href="<?php echo $row['userProfileTwitter'];?>" class="light-blue"><i class="fa fa-twitter"></i></a></li>
+                    <?php endif;
+                    if($row['userProfileWeb']):?>
+                        <li><a target="_blank" href="<?php echo $row['userProfileWeb'];?>"><i class="fa fa-link"></i></a></li>
+                    <?php endif;
+                    if($row['userProfileEcommerce']):?>
+                        <li><a target="_blank" href="<?php echo $row['userProfileEcommerce'];?>" class="light-blue"><i class="fa fa-shopping-cart"></i></a></li>
+                    <?php endif;?>
                 </ul>
                 </div>
                 </div>
@@ -52,52 +64,41 @@
                         </ul>
                         <div class="resp-tabs-container">
                             <div>
-                                <p>Lorem ipsum dolor sit amet, maiores ornare ac fermentum, imperdiet ut vivamus a, nam lectus at nunc. Quam euismod sem, semper ut potenti pellentesque quisque. In eget sapien sed, sit duis vestibulum ultricies, placerat morbi amet vel, nullam in in lorem vel. In molestie elit dui dictum, praesent nascetur pulvinar sed, in dolor pede in aliquam, risus nec error quis pharetra. Eros metus quam augue suspendisse, metus rutrum risus erat in.  In ultrices quo ut lectus, etiam vestibulum urna a est, pretium luctus euismod nisl, pellentesque turpis hac ridiculus massa. Venenatis a taciti dolor platea, curabitur lorem platea urna odio.<br>
+                                <p>
+                                    <?php echo nl2br($row['userProfileIntroductional']);?>
+                                </p>
+                                <!-- <p>Lorem ipsum dolor sit amet, maiores ornare ac fermentum, imperdiet ut vivamus a, nam lectus at nunc. Quam euismod sem, semper ut potenti pellentesque quisque. In eget sapien sed, sit duis vestibulum ultricies, placerat morbi amet vel, nullam in in lorem vel. In molestie elit dui dictum, praesent nascetur pulvinar sed, in dolor pede in aliquam, risus nec error quis pharetra. Eros metus quam augue suspendisse, metus rutrum risus erat in.  In ultrices quo ut lectus, etiam vestibulum urna a est, pretium luctus euismod nisl, pellentesque turpis hac ridiculus massa. Venenatis a taciti dolor platea, curabitur lorem platea urna odio.<br>
                                 <br>
                                 Lorem ipsum dolor sit amet, maiores ornare ac fermentum, imperdiet ut vivamus a, nam lectus at nunc. Quam euismod sem, semper ut potenti pellentesque quisque. In eget sapien sed, sit duis vestibulum ultricies, placerat morbi amet vel, nullam in in lorem vel. In molestie elit dui dictum, praesent nascetur pulvinar sed, in dolor pede in aliquam, risus nec error quis pharetra. Eros metus quam augue suspendisse, metus rutrum risus erat in.  In ultrices quo ut lectus, etiam vestibulum urna a est, pretium luctus euismod nisl, pellentesque turpis hac ridiculus massa. Venenatis a taciti dolor platea, curabitur lorem platea urna odio.<br>
                                 <br>
-                                Lorem ipsum dolor sit amet, maiores ornare ac fermentum, imperdiet ut vivamus a, nam lectus at nunc. Quam euismod sem, semper ut potenti pellentesque quisque. In eget sapien sed, sit duis vestibulum ultricies, placerat morbi amet vel, nullam in in lorem vel. In molestie elit dui dictum, praesent nascetur pulvinar sed, in dolor pede in aliquam, risus nec error quis pharetra. Eros metus quam augue suspendisse, metus rutrum risus erat in.  In ultrices quo ut lectus, etiam vestibulum urna a est, pretium luctus euismod nisl, pellentesque turpis hac ridiculus massa. Venenatis a taciti dolor platea, curabitur lorem platea urna odio.</p>
+                                Lorem ipsum dolor sit amet, maiores ornare ac fermentum, imperdiet ut vivamus a, nam lectus at nunc. Quam euismod sem, semper ut potenti pellentesque quisque. In eget sapien sed, sit duis vestibulum ultricies, placerat morbi amet vel, nullam in in lorem vel. In molestie elit dui dictum, praesent nascetur pulvinar sed, in dolor pede in aliquam, risus nec error quis pharetra. Eros metus quam augue suspendisse, metus rutrum risus erat in.  In ultrices quo ut lectus, etiam vestibulum urna a est, pretium luctus euismod nisl, pellentesque turpis hac ridiculus massa. Venenatis a taciti dolor platea, curabitur lorem platea urna odio.</p> -->
                             </div>
-                            <div>
+                            <div style="opacity:0.1;cursor:default;">
                             <div class="profile-activity-forum">
                             <div class="heading-category">Forum</div>
                             <div class="profile-activity-forum-container">
                             <ul>
-                            <li class="clearfix">
-                            <i class="fa fa-folder-open"></i>
-                            <div class="forum-activity-title">
-                            <a href="#">Hashim meninggalkan komen di Forum "Siapa boleh bekalkan atap nipah?"</a>
-                            <span>2 Jam Yang Lalu</span>
-                            </div>
-                            </li>
-                            <li class="clearfix">
-                            <i class="fa fa-folder-open"></i>
-                            <div class="forum-activity-title">
-                            <a href="#">Hashim meninggalkan komen di Forum "Siapa boleh bekalkan atap nipah?"</a>
-                            <span>2 Jam Yang Lalu</span>
-                            </div>
-                            </li>
-                            <li class="clearfix">
-                            <i class="fa fa-folder-open"></i>
-                            <div class="forum-activity-title">
-                            <a href="#">Hashim meninggalkan komen di Forum "Siapa boleh bekalkan atap nipah?"</a>
-                            <span>2 Jam Yang Lalu</span>
-                            </div>
-                            </li>
-                            <li class="clearfix">
-                            <i class="fa fa-folder-open"></i>
-                            <div class="forum-activity-title">
-                            <a href="#">Hashim meninggalkan komen di Forum "Siapa boleh bekalkan atap nipah?"</a>
-                            <span>2 Jam Yang Lalu</span>
-                            </div>
-                            </li>
-                            <li class="clearfix">
-                            <i class="fa fa-folder-open"></i>
-                            <div class="forum-activity-title">
-                            <a href="#">Hashim meninggalkan komen di Forum "Siapa boleh bekalkan atap nipah?"</a>
-                            <span>2 Jam Yang Lalu</span>
-                            </div>
-                            </li>
+                                <li class="clearfix">
+                                <i class="fa fa-folder-open"></i>
+                                <div class="forum-activity-title">
+                                <a href="#">Hashim meninggalkan komen di Forum "Siapa boleh bekalkan atap nipah?"</a>
+                                <span>2 Jam Yang Lalu</span>
+                                </div>
+                                </li>
+                                <li class="clearfix">
+                                <i class="fa fa-folder-open"></i>
+                                <div class="forum-activity-title">
+                                <a href="#">Hashim meninggalkan komen di Forum "Siapa boleh bekalkan atap nipah?"</a>
+                                <span>2 Jam Yang Lalu</span>
+                                </div>
+                                </li>
+                                <li class="clearfix">
+                                <i class="fa fa-folder-open"></i>
+                                <div class="forum-activity-title">
+                                <a href="#">Hashim meninggalkan komen di Forum "Siapa boleh bekalkan atap nipah?"</a>
+                                <span>2 Jam Yang Lalu</span>
+                                </div>
+                                </li>
                             </ul>
                             </div>
                             </div>

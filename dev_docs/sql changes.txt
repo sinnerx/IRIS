@@ -4,3 +4,5 @@ UPDATE site_request SET siteRequestType = 'page.update' WHERE siteRequestType = 
 UPDATE site_request SET siteRequestType = 'site.update' WHERE siteRequestType = '3';
 UPDATE site_request SET siteRequestType = 'announcement.add' WHERE siteRequestType = '4';
 UPDATE site_request SET siteRequestType = 'announcement.update' WHERE siteRequestType = '5';
+ALTER TABLE activity MODIFY activityStartDate DATETIME;
+ALTER TABLE activity MODIFY activityEndDate DATETIME;
