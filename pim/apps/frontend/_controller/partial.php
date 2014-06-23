@@ -80,7 +80,9 @@ class Controller_Partial
 
 	private function bottom_down()
 	{
+		$data['articles'] = model::load("blog/article")->getArticlesByCategoryName("beRitA");
 		$data['row_site']	= $this->row_site;
+		//echo '<pre>';print_r($data['articles']);
 
 		view::render("partial/bottom_down",$data);
 	}

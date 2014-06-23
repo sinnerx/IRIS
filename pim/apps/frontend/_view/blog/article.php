@@ -84,7 +84,7 @@
 							else:
 						?>
 	    				<ul>
-	    					<h3>No blog was added yet.</h3>
+	    					<h3>Tiada blog yang diterbitkan.</h3>
 						</ul>
 						<?php
 							endif;

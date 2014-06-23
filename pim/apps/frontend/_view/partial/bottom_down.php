@@ -67,23 +67,19 @@
 		</div>
 	</div>
 	<div class="bttm-2"> 
-		<div class="akan-datang"></div>
+		<!-- <div class="akan-datang"></div> -->
 		<div class="news-bottom">
 			<h3 class="bottom-heading">Berita Terkini</h3>
 			<div class="bottom-content">
 				<ul>
+					<?php foreach($articles as $article): ?>
 					<li>
-						<div class='news-title'>Lawatan SKMM ke Pusat Internet 1Malaysia</div>
-						<div class="news-info">October 31 2013, 8:00 AM</div>
+						<a href="<?php echo url::base($article['siteSlug']."/blog/".date('Y',strtotime($article['articlePublishedDate']))."/".date('m',strtotime($article['articlePublishedDate']))."/".$article['articleSlug']); ?>">
+						<div class='news-title'><?php echo $article['articleName']; ?></div>
+						<div class="news-info"><?php echo date("F j Y",strtotime($article['articlePublishedDate']));?><!-- October 31 2013, 8:00 AM --></div>
+						</a>
 					</li>
-					<li>
-						<div class='news-title'>Latihan Asas 'Blogging' Mendapat Sambutan</div>
-						<div class="news-info">October 31 2012, 8:00 AM</div>
-					</li>
-					<li>
-						<div class='news-title'>Hari Terbuka Pusat Internet 1Malaysia Meriah</div>
-						<div class="news-info">October 31 2014, 8:00 AM</div>
-					</li>
+					<?php endforeach; ?>
 				</ul>
 				<!-- <ul> ## original example.
 					<li>

@@ -431,6 +431,19 @@ class Article
 	{
 		db::delete("article_draft",Array("articleID"=>$articleID));
 	}
+
+	public function getArticlesByCategoryName($categoryName){
+		db::select("categoryID");
+		db::where("categoryName",$categoryName);
+		$categoryID = db::get("category")->row("categoryID");
+
+		db::from("article_category,article,site");
+		db::select("article.articleName,article.articlePublishedDate,article.articleSlug,site.siteSlug");
+		db::where("article_category.categoryID = ".$categoryID." AND article.articleID = article_category.articleID AND article.articleStatus = 1 AND site.siteID = article.siteID");
+		db::order_by("articlePublishedDate DESC");
+		db::limit(3);
+		return db::get()->result();
+	}
 }
 
 
