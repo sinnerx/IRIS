@@ -112,6 +112,11 @@ function refine_path($path)
 		case "Linux":
 		return str_replace("\\", "/", $path);
 		break;
+		case "Darwin":
+		return str_replace("\\", "/", $path);
+		break;
+		default:
+		return str_replace("\\", "/", $path);
 	}
 }
 
