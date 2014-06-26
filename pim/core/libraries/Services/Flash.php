@@ -1,7 +1,7 @@
 <?php
 class Flash
 {
-	public function set($name,$message = Null)
+	public static function set($name,$message = Null)
 	{
 		if(is_array($name))
 		{
@@ -22,18 +22,18 @@ class Flash
 		session::set("fdata.$name",$message);
 	}
 
-	public function data($name = "_main",$def = null)
+	public static function data($name = "_main",$def = null)
 	{
 		$message	= session::get("fdata.$name",$def);
 		return $message;
 	}
 
-	public function has($data,$value = null)
+	public static function has($data,$value = null)
 	{
 		return session::has("fdata.$data");
 	}
 
-	public function clear()
+	public static function clear()
 	{
 		session::destroy("fdata");
 	}

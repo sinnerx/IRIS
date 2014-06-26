@@ -10,7 +10,7 @@
 class Session
 {
 	## set session.
-	public function set($name,$val,$incr = false)
+	public static function set($name,$val,$incr = false)
 	{
 		if(is_array($name))
 		{
@@ -45,7 +45,7 @@ class Session
 	}
 
 	## get session, default, if not set.
-	public function get($name,$default = false)
+	public static function get($name,$default = false)
 	{
 		if(!self::has($name)) ##if session not set, return default
 			return $default;
@@ -67,7 +67,7 @@ class Session
 	}
 
 	## check session existance.
-	public function has($name)
+	public static function has($name)
 	{
 		$nameR	= explode(".",$name);
 		if(count($nameR) == 1) return isset($_SESSION[$name]);
@@ -87,7 +87,7 @@ class Session
 	}
 
 	## inspired bit by laravel array_forget usage of array_shift.
-	public function destroy($name = null)
+	public static function destroy($name = null)
 	{
 		## destroy all.
 		if(!$name)

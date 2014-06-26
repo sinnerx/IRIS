@@ -2,7 +2,7 @@
 
 class Form
 {
-	private function buildAttr($attr)
+	private static function buildAttr($attr)
 	{
 		if(is_string($attr) || is_int($attr) || !$attr)
 			return $attr;
@@ -16,7 +16,7 @@ class Form
 		return $str;
 	}
 
-	public function hidden($name,$attr = Null,$value = Null)
+	public static function hidden($name,$attr = Null,$value = Null)
 	{
 		$value		= flash::data("_post.$name",$value);
 		$message	= /*session::has("fdata.$name")?"data-message='".session::get("fdata.$name")."'":*/"";
@@ -24,7 +24,7 @@ class Form
 		return "<input name='$name' id='$name' type='hidden' $message $attr value='$value' />";
 	}
 
-	public function text($name,$attr = Null,$value = Null)
+	public static function text($name,$attr = Null,$value = Null)
 	{
 		$value		= flash::data("_post.$name",$value);
 		$message	= /*session::has("fdata.$name")?"data-message='".session::get("fdata.$name")."'":*/"";
@@ -32,13 +32,13 @@ class Form
 		return "<input name='$name' id='$name' type='text' $message $attr value='$value' />";
 	}
 
-	public function submit($value = "Submit",$attr = null)
+	public static function submit($value = "Submit",$attr = null)
 	{
 		$attr		= self::buildAttr($attr);
 		return "<input type='submit' $attr value='$value' />";
 	}
 
-	public function textarea($name,$attr = Null,$value = Null)
+	public static function textarea($name,$attr = Null,$value = Null)
 	{
 		$value		= flash::data("_post.$name",$value);
 		$message	= /*session::has("fdata.$name")?"data-message='".session::get("fdata.$name")."'":*/"";
@@ -46,7 +46,7 @@ class Form
 		return "<textarea name='$name' id='$name' $message $attr>$value</textarea>";
 	}
 
-	public function password($name,$attr = null,$value = Null)
+	public static function password($name,$attr = null,$value = Null)
 	{
 		$value		= flash::data("_post.$name",$value);
 		$message	= /*session::has("fdata.$name")?"data-message='".session::get("fdata.$name")."'":*/"";
@@ -54,7 +54,7 @@ class Form
 		return "<input type='password' name='$name' $message id='$name' $attr value='$value' />";
 	}
 
-	public function select($name,$array = Array(),$attr = Null,$value = Null,$firstVal	= "[PLEASE CHOOSE]")
+	public static function select($name,$array = Array(),$attr = Null,$value = Null,$firstVal	= "[PLEASE CHOOSE]")
 	{
 		$array		= is_array($array)?$array:Array();
 		$value		= flash::data("_post.$name",$value);
@@ -78,13 +78,13 @@ class Form
 		return $sel;
 	}
 
-	public function file($name,$attr = null)
+	public static function file($name,$attr = null)
 	{
 		$attr		= self::buildAttr($attr);
 		return "<input type='file' name='$name' id='$name' $attr />";
 	}
 
-	public function radio($name,$array = Array(),$attr = null,$value = null,$wrapper = null)
+	public static function radio($name,$array = Array(),$attr = null,$value = null,$wrapper = null)
 	{
 		$array		= is_array($array)?$array:Array();
 		$value		= flash::data("_post.$name",$value);
@@ -103,7 +103,7 @@ class Form
 		return $result;
 	}
 
-	public function submitted($param = null)
+	public static function submitted($param = null)
 	{
 
 		if(request::method() == "POST")

@@ -3,7 +3,7 @@ class Redirect
 {
 	## redirect to location.
 	private static $flashMessageR	= Array();
-	public function to($loc = Null,$message = Null,$type = "success")
+	public static function to($loc = Null,$message = Null,$type = "success")
 	{
 		## prepare base url, if relative, redirect using url::base. if absolute. just use it.
 		$base_url	= strpos($loc,'//') === 0 || strpos($loc, 'http://') === 0 || strpos($loc, 'https://') === 0?$loc:url::base($loc);
@@ -28,12 +28,12 @@ class Redirect
 	}
 
 	## an alias to flash::set()
-	public function withFlash($data,$msg = null)
+	public static function withFlash($data,$msg = null)
 	{
 		flash::set($data,$msg);
 	}
 
-	public function message($name,$message = "success")
+	public static function message($name,$message = "success")
 	{
 		if(in_array($message, Array("success","error")))
 		{
@@ -55,7 +55,7 @@ class Redirect
 		self::$flashMessageR[]	= Array($name,$message);
 	}
 
-	private function messageStore()
+	private static function messageStore()
 	{
 		if(count(self::$flashMessageR) == 0)
 		{

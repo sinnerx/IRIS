@@ -17,7 +17,7 @@ class Validator
 					"min_length"=>"Length must be longer than {length}"
 							);
 
-	public function _validate($value,$rule)
+	public static function _validate($value,$rule)
 	{
 		if(strpos($rule,"min_length") === 0)
 		{
@@ -51,7 +51,7 @@ class Validator
 		return true;
 	}
 
-	public function validate($item,$rules)
+	public static function validate($item,$rules)
 	{
 		$result	= Array();
 		$checked	= Array();
@@ -98,12 +98,12 @@ class Validator
 		return count($result) > 0?$result:false;
 	}
 
-	private function getRuleValue($rule_name,$rule)
+	private static function getRuleValue($rule_name,$rule)
 	{
 		return trim(str_replace($rule_name,"", $rule),"()");
 	}
 
-	private function getRuleMessage($rule,$curr = null)
+	private static function getRuleMessage($rule,$curr = null)
 	{
 		$msg	= $curr?$curr:(isset(self::$message[$rule])?self::$message[$rule]:null);
 		if(strpos($rule,"min_length") === 0)
@@ -116,7 +116,7 @@ class Validator
 		return $msg;
 	}
 
-	public function setRuleMessage($rule,$message = null)
+	public static function setRuleMessage($rule,$message = null)
 	{
 		if(is_array($rule) && is_null($message))
 		{

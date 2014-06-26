@@ -395,7 +395,8 @@ class router
 						break;
 						case "**":# trailing!
 							## get all the rest of uri for param.
-							$paramListR[$param_name]	= array_pop(explode("/",$uri,$no+1));
+							$v	= explode("/",$uri,$no+1);
+							$paramListR[$param_name]	= array_pop($v);
 							$match	= true;
 							
 							break 2; ## break the param loop, and set match directly to true.

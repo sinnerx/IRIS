@@ -38,7 +38,7 @@ class Apps
 	private static $apps_other			= false;
 
 	## Initiate config
-	public function run($callback,$argv = null)
+	public static function run($callback,$argv = null)
 	{
 		## start session.
 		session_start();
@@ -56,7 +56,7 @@ class Apps
 		echo !$argv?call_user_func_array($callback,Array($router)):console::execute($argv);			## initiate application or execute console.
 	}
 
-	public function initConfig($folder = "apps",$injectedConfig = null)
+	public static function initConfig($folder = "apps",$injectedConfig = null)
 	{
 		## reset apps_config, everytime it's initiated.
 		self::$apps_config	= null;
@@ -66,14 +66,14 @@ class Apps
 	}
 
 	## get apps folder.
-	public function getAppsFolder()
+	public static function getAppsFolder()
 	{
 		## check for folder.
 		$apps_other	= self::getGlobal("router")->getAppsOtherFolder();
 		return $apps_other !== false?$apps_other:self::$apps_folder;
 	}
 
-	public function register_autoload_path($dir)
+	public static function register_autoload_path($dir)
 	{
 		spl_autoload_register(function($class) use ($dir)
 		{
@@ -99,7 +99,7 @@ class Apps
 		});
 	}
 
-	public function loadFunctionLibrary($file)
+	public static function loadFunctionLibrary($file)
 	{
 		if(is_array($file))
 		{
@@ -119,7 +119,7 @@ class Apps
 	}
 
 	## return named param.
-	public function param($name = Null,$default = Null)
+	public static function param($name = Null,$default = Null)
 	{
 		$param	= self::getGlobal("router")->paramListR;
 
@@ -127,7 +127,7 @@ class Apps
 	}
 
 	### Global Variable Setter getter ###
-	function setGlobal($name,$val,$incr = false)
+	public static function setGlobal($name,$val,$incr = false)
 	{
 		if($incr)
 		{
@@ -139,19 +139,19 @@ class Apps
 		}
 	}
 
-	function getGlobal($name)
+	public static function getGlobal($name)
 	{
 		return self::$global[$name];
 	}
 
-	function hasGlobal($name)
+	public static function hasGlobal($name)
 	{
 		return isset(self::$global[$name]);
 	}
 
 	### Config ###
 	## Get ##
-	public function config($conf = Null,$default = null)
+	public static function config($conf = Null,$default = null)
 	{
 		if(!$conf)
 		{
@@ -162,7 +162,7 @@ class Apps
 	}
 
 	## Save ##
-	public function saveConfig($conf,$val = Null,$injectedConfig = null)
+	public static function saveConfig($conf,$val = Null,$injectedConfig = null)
 	{
 		if($val)
 		{
@@ -235,14 +235,14 @@ class Apps
 	}
 
 	### Default and Current apps set getter, initiated at controller initiation ###
-	public function initApps($name)
+	public static function initApps($name)
 	{
 		self::$current_apps	= $name;
 		self::initAppsConfig();
 	}
 
 	## Init config
-	private function initAppsConfig()
+	private static function initAppsConfig()
 	{
 		## recorrect base url
 		$apps	= self::getCurrent();
@@ -253,24 +253,24 @@ class Apps
 		}
 	}
 
-	public function setDefault($name)
+	public static function setDefault($name)
 	{
 		self::$default_apps	= $name;
 	}
 
 	## Application
-	public function getDefault()
+	public static function getDefault()
 	{
 		return self::config("default_apps")?self::config("default_apps"):self::$default_apps;
 	}
 
-	public function getCurrent()
+	public static function getCurrent()
 	{
 		return self::$current_apps;
 	}
 
 	## Set Environment or get
-	public function environment($env = Null)
+	public static function environment($env = Null)
 	{
 		if($env)
 		{
@@ -281,19 +281,19 @@ class Apps
 	}
 
 	## Register class.
-	public function classRegister($class)
+	public static function classRegister($class)
 	{
 		self::$registeredClass[]	= $class;
 	}
 
 	## return registered class.
-	public function classRegistered($class)
+	public static function classRegistered($class)
 	{
 		return in_array($class,self::$registeredClass)?true:false;
 	}
 
 	## load library located in apps/_library
-	public function loadLibrary($name)
+	public static function loadLibrary($name)
 	{
 		if(is_array($name))
 		{
@@ -314,7 +314,7 @@ class Apps
 		require_once $name;
 	}
 
-	public function isOther()
+	public static function isOther()
 	{
 		if(apps::getGlobal("router")->getAppsOtherFolder() !== false)
 			return true;
@@ -339,7 +339,7 @@ class Controller
 	private static $hooking				= false;	## store hooking status
 
 	## Main initiation method. Widely can be used in router.
-	public function init($controller,$param_method = null,$paramR = Array(),$constructData = null)
+	public static function init($controller,$param_method = null,$paramR = Array(),$constructData = null)
 	{
 		## if have been initiated 
 		if(self::$initiated)
@@ -388,7 +388,7 @@ class Controller
 		return $response;
 	}
 	
-	public function load($controller,$method = null, $paramR = Array(),$constructData = null)
+	public static function load($controller,$method = null, $paramR = Array(),$constructData = null)
 	{
 		## cannot load, if haven't init yet, and not in hooking mode.
 		if(!self::$initiated && !self::$hooking && !self::$initiating)
@@ -426,7 +426,8 @@ class Controller
 
 		$apps			= $chosenApps?$chosenApps:apps::getCurrent();
 		## save controller name.
-		$controller_name	= array_pop(explode("/",$controller));	## added 16/3, to permit loading controller under subfolder.
+		$v = explode("/",$controller);
+		$controller_name	= array_pop($v);	## added 16/3, to permit loading controller under subfolder.
 		$controllerFullName	= $controller; ## just added 15/6, to bring it's full name for saving and retrieving purpose.
 		$path			= apps::getAppsFolder()."/$apps/_controller/$controller.php";
 
@@ -548,13 +549,13 @@ class Controller
 	}
 
 	## return string based state.
-	private function currentState()
+	private static function currentState()
 	{
 		$state	= self::$hooking?"hooking":(self::$initiating?"initiation":(self::$initiated?"load":"hooking"));
 		return $state;
 	}
 
-	public function hook($type,$callback)
+	public static function hook($type,$callback)
 	{
 		$point	= $type;
 		$apps	= "_all";
@@ -595,27 +596,27 @@ class Controller
 		return $data;
 	}
 
-	public function getCurrentController()
+	public static function getCurrentController()
 	{
 		return self::$currentController;
 	}
 
-	public function getCurrentMethod()
+	public static function getCurrentMethod()
 	{
 		return self::$currentMethod;
 	}
 
-	public function getLastController()
+	public static function getLastController()
 	{
 		return self::$lastController;
 	}
 
-	public function getLastMethod()
+	public static function getLastMethod()
 	{
 		return self::$lastMethod;
 	}
 
-	public function getHooking()
+	public static function getHooking()
 	{
 		return self::$hooking;
 	}
@@ -624,7 +625,7 @@ class Controller
 class Model
 {
 	static $loadedModel	= Array();
-	public function load($model)
+	public static function load($model)
 	{
 		$args	= func_get_args();
 
@@ -651,7 +652,8 @@ class Model
 		## else, use normal convention.
 		else
 		{
-			$classname	= array_pop(explode("/",$model));
+			$v			= explode("/",$model);
+			$classname	= array_pop($v);
 			$classname	= "Model_".$classname;
 		}
 
@@ -683,7 +685,7 @@ class Model
 		return $theModel;
 	}
 
-	public function _require($model,$alias = Null)
+	public static function _require($model,$alias = Null)
 	{
 		## require, if not exist set error.
 		$path	= apps::getAppsFolder()."/_model/$model.php";
@@ -728,7 +730,7 @@ class View
 	static $data_main	= Null; ## main data saved for template::showContent
 
 	## Render view along with the template
-	public function render($view,$data = Array())
+	public static function render($view,$data = Array())
 	{
 		if(controller::getHooking())
 		{
@@ -780,7 +782,7 @@ class Template
 	static $template	= null;
 
 	## Used in main template.
-	public function showContent()
+	public static function showContent()
 	{
 		$data	= isset(view::$data_main)?view::$data_main:Array();
 		$path	= view::$path_main;
@@ -789,23 +791,23 @@ class Template
 		require_once $path;
 	}
 
-	public function showJs()
+	public static function showJs()
 	{
 		
 	}
 
-	public function showCss()
+	public static function showCss()
 	{
 
 	}
 
-	public function set($flag)
+	public static function set($flag)
 	{
 		self::$template	= $flag;
 	}
 
 	## to be use in View
-	public function load()
+	public static function load()
 	{
 		$apps		= apps::getCurrent();
 		$template	= controller::$instance[controller::getCurrentController()]->template;
@@ -854,7 +856,7 @@ class Error
 {
 	private static $errorList	= Array();
 
-	public function set($name,$val)
+	public static function set($name,$val)
 	{
 		$apps				= apps::getCurrent();
 		$currentController	= controller::getCurrentController();
@@ -867,7 +869,7 @@ class Error
 		self::$errorList[$name." ($current)"][]	= Array("message"=>$val,"at"=>$track[count($track)-1],"track"=>$track);
 	}
 
-	public function getErrorParam($type)
+	public static function getErrorParam($type)
 	{
 		$return	= Array();
 		foreach(self::$errorList as $key=>$res)
@@ -880,7 +882,7 @@ class Error
 		return $return;
 	}
 
-	public function show()
+	public static function show()
 	{
 		if(count(self::$errorList) == 0)
 		{
@@ -896,7 +898,7 @@ class Error
 		}
 	}
 
-	public function check()
+	public static function check()
 	{
 		return count(self::$errorList) > 0?true:false;
 	}
@@ -905,7 +907,7 @@ class Error
 ## library loader class load file under apps/_library
 class Library
 {
-	public function _require($name)
+	public static function _require($name)
 	{
 		require_once "apps/_library/$name.php";
 	}

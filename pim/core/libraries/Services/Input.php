@@ -4,13 +4,13 @@ class Input
 {
 	private static $file	= Array();
 
-	public function get($name = null,$default = null)
+	public static function get($name = null,$default = null)
 	{
 		return request::post($name,$default);
 	}
 
 	### flash input. if name is null, flash all. else, selected. if got except: flash all, except the input..
-	public function repopulate($name = null,$baseData = null)
+	public static function repopulate($name = null,$baseData = null)
 	{
 		## if got baseData, will base the repopulated data base on it, else use _POST.
 		$post	= !$baseData?request::post():$baseData;
@@ -23,12 +23,12 @@ class Input
 		}
 	}
 
-	public function validate($rule)
+	public static function validate($rule)
 	{
 		return validator::validate(request::post(),$rule);
 	}
 
-	public function file($name)
+	public static function file($name)
 	{
 		### file name.
 		if(isset(self::$file[$name]))
@@ -73,7 +73,8 @@ class Uploaded_File
 
 		if(in_array($key,Array("ext","extension")))
 		{
-			$ext	= array_pop(explode(".",$this->get("name")));
+			$v		= explode(".",$this->get("name"));
+			$ext	= array_pop($v);
 			
 			return $ext;
 		}

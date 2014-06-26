@@ -13,13 +13,13 @@ class Url
 	private static $query;
 
 	## return config:base_url
-	private function getProtocol()
+	private static function getProtocol()
 	{
 		return apps::config("secure")?"https://":"http://";
 	}
 
 	## forge given route with existing named param
-	private function forgeRoute($route)
+	private static function forgeRoute($route)
 	{
 		$route	= explode("/",$route);
 
@@ -39,7 +39,7 @@ class Url
 		return implode("/",$newP);
 	}
 
-	public function base($path = Null,$withquery = null)
+	public static function base($path = Null,$withquery = null)
 	{
 		if(strpos($path, '{current-uri}') !== false)
 		{
@@ -69,7 +69,7 @@ class Url
 		return !$withquery?$base_url:self::appendQueryString($base_url,$withquery);
 	}
 
-	private function appendQueryString($base_url,$filter)
+	private static function appendQueryString($base_url,$filter)
 	{
 		$filter	= $filter === true?"_all":$filter;
 
@@ -83,7 +83,7 @@ class Url
 		return count(explode("?",$base_url)) > 1?$base_url."&".implode("&",$querystring):$base_url."?".implode("&",$querystring);
 	}
 
-	public function to($path = Null)
+	public static function to($path = Null)
 	{
 		return self::base($path);
 	}
@@ -96,13 +96,13 @@ class Url
 		}
 
 	## return config:asset_url 
-	public function asset($path = Null)
+	public static function asset($path = Null)
 	{
 		return self::getProtocol().apps::config("asset_url").($path?"/".$path:"");
 	}
 
 	## return asset based apps.
-	public function apps_asset($path = Null)
+	public static function apps_asset($path = Null)
 	{
 		$curr_apps	= apps::getCurrent("current_apps");
 		return self::getProtocol().self::asset()."/$curr_apps".($path?"/".$path:"");

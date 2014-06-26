@@ -37,14 +37,14 @@ class Pagination
 								'limit'					=> 10
 											);
 
-	private function getFormat($var)
+	private static function getFormat($var)
 	{
 		$default	= self::$default_format;
 
 		return isset(self::$format[$var])?self::$format[$var]:$default[$var];
 	}
 
-	public function setFormat($name,$val = Null)
+	public static function setFormat($name,$val = Null)
 	{
 		if(is_array($name))
 		{
@@ -63,14 +63,14 @@ class Pagination
 		self::$format[$name]	= $val;
 	}
 
-	public function get($var)
+	public static function get($var)
 	{
 		return isset(self::$$var)?self::$$var:false;
 	}
 
 	### initiate pagination with config.
 	## required property : totalRow, currentPage, limit urlFormat
-	public function initiate($param)
+	public static function initiate($param)
 	{
 		### compulsary 1 : totalRow.
 		if(!isset($param['totalRow']))
@@ -137,7 +137,7 @@ class Pagination
 	}
 
 	### return rebuilt page num with url. Privatized. links should now be called through. link().
-	private function num_links($format = Null)
+	private static function num_links($format = Null)
 	{
 		$currentPage	= self::$currentPage;
 
@@ -156,7 +156,7 @@ class Pagination
 	}
 
 	## function to wrap each number with format and href.
-	private function pageNumWrap($no)
+	private static function pageNumWrap($no)
 	{
 		$urlFormat	= !self::$urlFormat?url::base("{page}"):self::$urlFormat;
 
@@ -170,7 +170,7 @@ class Pagination
 		return $result;
 	}
 
-	public function link($type = null,$text = null)
+	public static function link($type = null,$text = null)
 	{
 		$result	= self::prepare_link($type,$text);
 
@@ -178,7 +178,7 @@ class Pagination
 	}
 
 	## type : first, last, previous, next
-	private function prepare_link($type = Null,$text = Null)
+	private static function prepare_link($type = Null,$text = Null)
 	{
 		$type	= !$type?self::getFormat('link_format'):$type;
 
@@ -258,7 +258,7 @@ class Pagination
 		return $result;
 	}
 
-	private function wrapLink($result)
+	private static function wrapLink($result)
 	{
 		$result		= str_replace("{content}",$result,self::getFormat("html_wrapper"));
 
@@ -266,7 +266,7 @@ class Pagination
 	}
 
 	### return current first record no.
-	public function recordNo()
+	public static function recordNo()
 	{
 		if(!self::$initiated)
 		{
@@ -278,7 +278,7 @@ class Pagination
 	}
 
 	## return array format, useful for ajax based pagination querying result.
-	public function arrayResult()
+	public static function arrayResult()
 	{
 		if(!self::$initiated)
 		{
