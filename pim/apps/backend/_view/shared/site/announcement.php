@@ -70,7 +70,7 @@ Listing all your request Announcement here.
 </div>
 	<?php echo flash::data();?>
 <section class="panel panel-default">
-<div class="row wrapper" style='border-bottom:1px solid #f2f4f8;'>
+<div class="row wrapper">
 	<div class="col-sm-3 pull-right">
 	</div>
 	<div class='col-sm-3 pull-left'>
@@ -114,7 +114,8 @@ Listing all your request Announcement here.
 			</th>
 			<th>Date Added</th>
 			<th>Date Expired</th>
-			<th width="60"></th>
+			<th width="29"></th>
+			<th width="29"></th>
 		</tr>
 	</thead>
 	<tbody>
@@ -137,18 +138,23 @@ Listing all your request Announcement here.
 			</td>
 			<td><?php echo date("d-m-Y g:i A",strtotime($row['announcementCreatedDate']));?></td>
 			<td><?php echo date("d-m-Y",strtotime($row['announcementExpiredDate']));?></td>
-			<td>
 			<?php if($row['siteID'] != 0 || session::get("userLevel") == 99):?>
-				<?php if($row['announcementStatus'] != 2):?>
-				<a href='<?php echo url::base("site/editAnnouncement/".$row['announcementID']);?>' class='fa fa-edit'></a>
-				<?php endif; ?>
+            <td>
+			
+				
+                
 				<?php if(session::get("userLevel") == 99):?>
 					<a href="<?php echo $href;?>" class="<?php echo $active;?>" ><i class="fa fa-check text-success text-active"></i><i class="fa fa-times text-danger text"></i></a>
 				<?php else: ?>
 					<a><?php echo model::load('template/icon')->status($row['announcementStatus']); ?></a>
 				<?php endif; ?>
-			<?php endif;?>
+			
 			</td>
+			<td><?php if($row['announcementStatus'] != 2):?>
+				<a href='<?php echo url::base("site/editAnnouncement/".$row['announcementID']);?>' class='fa fa-edit'></a>
+				<?php endif; ?></td>
+            <?php endif;?>
+            
 		</tr>
 		<?php 
 		endforeach;

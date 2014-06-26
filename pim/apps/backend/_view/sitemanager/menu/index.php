@@ -9,6 +9,7 @@
 .menu-container
 {
 	position: relative;
+	margin-top:10px;
 }
 
 .menu-list
@@ -33,6 +34,7 @@
 {
 	font-size: inherit;
 	font-weight: normal;
+	margin-right:15px;
 }
 
 .menu-list li div
@@ -70,6 +72,41 @@
 	display:inline;
 }
 
+
+.menu-container .btn{
+	border-radius:0px;
+	padding:3px 12px;
+	margin-top:15px;
+	background:#177bbb;
+	border:none;
+	font-size:12px;
+	
+}
+
+
+.menu-container .panel .table td, .panel .table th{
+	padding-left:0px;
+	padding-right:0px;
+	
+}
+
+#component-list .i-plus2{
+	border:1px solid #d0d6dd;
+	margin-right:10px;
+	
+	
+}
+
+#component-list td{
+	padding-left:0px;
+	padding-right:0px;
+	
+}
+
+#component-list tr:hover{
+	background:none;
+	
+}
 </style>
 <script type="text/javascript">
 
