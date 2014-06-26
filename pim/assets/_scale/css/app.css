@@ -246,7 +246,7 @@ a.list-group-item:focus {
   background-color: #f7f8fb;
 }
 .panel {
-  border-radius: 2px;
+
 }
 .panel.panel-default {
   border-color: #eaeef1;
@@ -267,11 +267,44 @@ a.list-group-item:focus {
 }
 .panel .table td,
 .panel .table th {
-  padding: 8px 15px;
-  border-top: 1px solid #eaeef1;
+  border-top: 1px solid #eaeaea;
+  padding: 13px 15px;
 }
 .panel .table thead > tr > th {
   border-bottom: 1px solid #eaeef1;
+  
+}
+
+
+.panel .table tr{
+ -webkit-transition: all 0.4s ease-out;
+   -moz-transition: all 0.4s ease-out;
+   -ms-transition: all 0.4s ease-out;
+   -o-transition: all 0.4s ease-out;
+   transition: all 0.4s ease-out;	
+}
+
+.panel .table tr:hover{
+	background:#f5f5f5;
+	
+	
+}
+
+
+.panel .table tr:nth-child(2n+1){
+	background:#f9f9f9;
+	
+	
+}
+
+
+
+.panel .table tr th{
+background: none repeat scroll 0 0 #fff !important;
+    border-bottom: 3px solid #eaeaea !important;
+    border-top: medium none;
+    font-size: 12px;	
+	color:#000;
 }
 .panel .table-striped > tbody > tr:nth-child(odd) > td,
 .panel .table-striped > tbody > tr:nth-child(odd) > th {
@@ -285,10 +318,12 @@ a.list-group-item:focus {
   border-right: none;
 }
 .panel-heading {
-  border-radius: 2px 2px 0 0;
+ 
 }
 .panel-default .panel-heading {
   background-color: #f9fafc;
+  color:#000;
+  font-weight:bold;
 }
 .panel-heading.no-border {
   margin: -1px -1px 0 -1px;
@@ -2227,8 +2262,11 @@ fieldset[disabled] .btn-dark.active {
   background-color: #07080b !important;
 }
 .bg-primary {
-  background-color: #177bbb;
-  color: #aad7f4;
+background-color: #177bbb;
+    color: #fff;
+    float: right;
+    font-size: 11px;
+    width: 76px;
 }
 .bg-primary.lt,
 .bg-primary .lt {
@@ -2317,9 +2355,13 @@ fieldset[disabled] .btn-dark.active {
 .bg-primary .auto .list-group-item.active {
   background-color: #126da7 !important;
 }
+
 .bg-success {
   background-color: #1aae88;
-  color: #a3f1dd;
+  color: #FFF;
+  float:right;
+   font-size: 11px;
+    padding: 5px 10px;
 }
 .bg-success.lt,
 .bg-success .lt {
