@@ -297,14 +297,23 @@ a.list-group-item:focus {
 	
 }
 
+.mb-header{
+  margin-bottom: 10px;
+    margin-top: 10px;
+	
+}
 
+#activity:hover{
+	color:#FFF !important;
+	
+}
 
 .panel .table tr th{
 background: none repeat scroll 0 0 #fff !important;
     border-bottom: 3px solid #eaeaea !important;
     border-top: medium none;
     font-size: 12px;	
-	color:#000;
+	color:#788288;
 }
 .panel .table-striped > tbody > tr:nth-child(odd) > td,
 .panel .table-striped > tbody > tr:nth-child(odd) > th {
@@ -342,8 +351,18 @@ background: none repeat scroll 0 0 #fff !important;
   border-bottom-color: #fff !important;
 }
 .panel-heading .nav-tabs {
-  margin: -11px -16px;
+  margin:-16px -15px;
   border-color: #eaeef1;
+}
+
+#most{
+	padding:3px 15px;
+	
+}
+
+.tokenizer{
+	width: 100% !important;
+	
 }
 .panel-heading .nav-tabs.nav-justified {
   width: auto;
@@ -1266,10 +1285,22 @@ body.container {
 .btn-default:active,
 .btn-default.active,
 .open .dropdown-toggle.btn-default {
-  color: #788288 !important;
+  color: #FFF !important;
   background-color: #ebeef4;
   border-color: #b9c6d0;
 }
+
+#articlePublishedDate{
+		margin-top:10px;
+		
+	}
+	
+	
+	
+	.form-group .btn{
+		padding:7px 10px !important;
+		
+	}
 .btn-default:active,
 .btn-default.active,
 .open .dropdown-toggle.btn-default {
@@ -2328,6 +2359,11 @@ background-color: #177bbb;
 }
 .btn-default,
 .btn-default a{
+    color: #fff !important;
+}
+
+.btn-default:hover,
+.btn-default a:hover{
     color: #fff !important;
 }
 

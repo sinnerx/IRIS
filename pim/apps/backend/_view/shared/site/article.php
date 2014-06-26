@@ -52,7 +52,7 @@ Listing all your request blogs here.
 			</th>
 			<th>Tag(s)</th>
 			<th>Date to be Published</th>
-			<th width="60"></th>
+			<th colspan="2"></th>
 		</tr>
 	</thead>
 	<tbody>
@@ -81,7 +81,7 @@ Listing all your request blogs here.
 			<div class='articleName'><?php echo $row['articleName'];?></div>
 			</td>
 			<td>
-				<div class="tokenizer" style="width: 274px;border: 0px;background-color: transparent;">
+				<div class="tokenizer" style="width: 200px;border: 0px;background-color: transparent;">
 					<div>
 						<ul class="token">
 							<?php
@@ -99,12 +99,13 @@ Listing all your request blogs here.
 				</div>
 			</td>
 			<td><?php echo date("d-m-Y",strtotime($row['articlePublishedDate']));?></td>
-			<td>
-			<?php if($row['articleStatus'] != 2):?>
-				<a href='<?php echo url::base("site/editArticle/".$row['articleID']);?>' class='fa fa-edit'></a>
-			<?php endif; ?>
+			<td width="29">
+			
 			<a><?php echo model::load('template/icon')->status($row['articleStatus']); ?></a>
 			</td>
+			<td width="29"><?php if($row['articleStatus'] != 2):?>
+				<a href='<?php echo url::base("site/editArticle/".$row['articleID']);?>' class='fa fa-edit'></a>
+			<?php endif; ?></td>
 		</tr>
 		<?php 
 		endforeach;

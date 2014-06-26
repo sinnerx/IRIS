@@ -1,11 +1,20 @@
 <style type="text/css">
-	.mb-tab.active{
+.mb-tab.active{
 		font-weight: bold;
 	}
+	
+	table#table tbody tr td:not(#null){
+	 -webkit-transition: all 0.4s ease-out;
+   -moz-transition: all 0.4s ease-out;
+   -ms-transition: all 0.4s ease-out;
+   -o-transition: all 0.4s ease-out;
+   transition: all 0.4s ease-out;		
+	}
+	
 	table#table tbody tr:hover td:not(#null)
 	{
 		cursor:pointer;
-		background-color:#BCE954;
+		background-color:#f5f5f5;
 	}
 </style>
 <script type="text/javascript">
@@ -35,7 +44,7 @@
 <div class="modal-dialog">
 	<div class="modal-content">
 		<div class="modal-header">
-			<button type="button" class="close" data-dismiss="modal">✘</button>
+			<button type="button" class="close" data-dismiss="modal"><i class="fa fa-times"></i></button>
 			<h4 class="modal-title"><a id="one">☝</a>	
 					<span style='font-size:11px;'> Select only one activity.</span>
 			<span style='margin-right:20px;' class="pull-right"><?php if($year && $month){ echo date('M-Y',strtotime($year.'-'.$month)); } ?></span>
