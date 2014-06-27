@@ -1,12 +1,27 @@
 <?php
 class Controller_Member
 {
-	public function profile()
+	public function profile($userID = null)
 	{
 		if(session::get("userLevel") != 1)
 			redirect::to("dashboard/user/profile");
 
-		$data['row']	= model::load("access/auth")->getAuthData("user");
+		if(!$userID)
+		{
+			$data['row']		= authData("user");
+			$data['siteName']	= authData("site.siteName");
+		}
+		else
+		{
+			$data['row']	= model::load("site/member")->getUserMemberDetail($userID,authData("current_site.siteID"));
+
+			## cannot find the related userID and current siteID.
+			if(!$data['row'])
+				redirect::to("404");
+
+			$data['siteName']	= $data['row']['siteName'];
+		}
+
 		$additional		= model::load("user/user")->getAdditional($data['row']['userID']);
 		$data['row']	= array_merge($data['row'],$additional);
 

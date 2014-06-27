@@ -1,5 +1,6 @@
 <link rel="stylesheet" type="text/css" href="<?php echo url::asset('_templates/css/aktiviti.css');?>">
 <script type="text/javascript" src='<?php echo url::asset("_templates/js/jquery.easydropdown.js");?>'></script>
+<script type="text/javascript" src='<?php echo url::asset("backend/js/pim.js");?>'></script>
 <style type="text/css">
 	
 .calendar-right-mini-cal
@@ -16,8 +17,29 @@
 {
 	width:inherit;
 }
+.month-left .active-month, .month-right .active-month
+{
+	background: #009bff;
+	color: white;
+}
 
 </style>
+<script type="text/javascript">
+
+var pim = new pim({base_url:"<?php echo url::base('{site-slug}');?>"});
+function yearChange()
+{
+	var y = jQuery("#activityYear").val();
+	pim.redirect("activity/"+y);
+}
+
+function monthChange(month)
+{
+	var y = jQuery("#activityYear").val();
+	pim.redirect("activity/"+y+"/"+month);
+}
+
+</script>
 <h3 class="block-heading">Kalendar Aktiviti</h3>
 <div class="block-content clearfix">
 	<div class="page-content">
@@ -26,7 +48,35 @@
 		</div>
 		<div class="page-sub-wrapper calendar-page clearfix">
 			<div class="calendar-left-details">
-				<div class="calendar-heading-month">Bulan <span><?php echo $monthLabel;?></span></div>
+				<!-- month and date picker. -->
+				<div class="activity-year-select clearfix">
+					<div class="month-left">
+						<ul>
+							<?php
+							$monthLeft	= Array(1=>"Jan",2=>"Feb",3=>"Mac",4=>"Apr",5=>"Mei",6=>"Jun");
+							foreach($monthLeft as $m=>$name):
+							$active	= $month==$m?"class='active-month'":"";?>
+							<li><a <?php echo $active;?> href='javascript:monthChange(<?php echo $m;?>);'><?php echo $name;?></a></li>
+							<?php endforeach;?>
+						</ul>
+					</div>
+					<div class="select-year-activity">
+						<?php echo form::select("activityYear",model::load("helper")->monthYear("year",date("Y")-4,date("Y")+1),"onchange='yearChange();' class='dropdown' data-settings='{\"wrapperClass\":\"select-year\"}'",$year,false);?>
+					</div>
+					<div class="month-right">
+						<ul>
+							<?php
+							$monthRight	= Array(7=>"Jul",8=>"Ogs",9=>"Sep",10=>"Okt",11=>"Nov",12=>"Dis");
+							foreach($monthRight as $m=>$name):
+							$active	= $month==$m?"class='active-month'":"";?>
+							<li><a <?php echo $active;?> href='javascript:monthChange(<?php echo $m;?>);'><?php echo $name;?></a></li>
+							<?php
+							endforeach;
+							?>
+						</ul>
+					</div>
+				</div>
+				<!-- <div class="calendar-heading-month">Bulan <span><?php echo $monthLabel;?></span></div> -->
 				<?php
 				if(!$res_activity):?>
 				Tiada aktiviti untuk bulan ini.

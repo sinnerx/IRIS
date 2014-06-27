@@ -148,7 +148,7 @@ var Calendar	= function(id,dateListID)
 				this.record[ymd]	= dateList[date];
 			}
 
-			result	+= "<li "+total+" "+data+" class='"+disable+" "+exists+"'>"+date+"</li>";
+			result	+= "<li "+total+" "+data+" class='"+disable+" "+exists+"'>"+date+"<span></span></li>";
 
 			//increment col and date.
 			col++;
@@ -176,7 +176,8 @@ var Calendar	= function(id,dateListID)
 		{
 			if(!context.dateClicked)
 			{
-				context.showDayActivity($(this).html(),month,year);
+				var d	= $(this).data("date").split("-")[1]; // due to m-d format.
+				context.showDayActivity(d,month,year);
 			}
 		}).mouseout(function()
 		{
@@ -193,7 +194,8 @@ var Calendar	= function(id,dateListID)
 			}
 
 			context.dateClicked = $(this).data("date");
-			context.showDayActivity($(this).html(),month,year,true);
+			var d	= $(this).data("date").split("-")[1]; // due to m-d format.
+			context.showDayActivity(d,month,year,true);
 			$(this).addClass("clicked");
 		});
 	}
@@ -304,7 +306,7 @@ $(document).ready(function()
 .cal-date .exists
 {
 	cursor: pointer;
-	font-weight: bold;
+	/*font-weight: bold;*/
 	color: #0062a1;
 	position: relative;
 	/*background: #bee693;
@@ -322,10 +324,9 @@ $(document).ready(function()
 }
 .cal-date .exists.clicked
 {
-	background: #0062a1;
-	color: white;
+	font-weight: bold;
 }
-.cal-date-detail
+/*.cal-date-detail
 {
 	background:#f2f2f2;
 	position:absolute;
@@ -335,9 +336,9 @@ $(document).ready(function()
 	width:100%;
 	display:none;
 	opacity:0.6;
-}
+}*/
 
-.cal-date-detail ul
+/*.cal-date-detail ul
 {
 	background:#f2f2f2;
 	list-style: none;
@@ -347,7 +348,7 @@ $(document).ready(function()
 	box-shadow: -2px 0px 5px #c9c9c9;
 	border-top-right-radius: 5px;
 	border-bottom-right-radius: 5px;
-}
+}*/
 .cal-date-detail a
 {
 	color:inherit;
@@ -371,6 +372,57 @@ $(document).ready(function()
 	opacity: 0.7;
 	font-size:0.8em;
 }
+
+
+/* CSS UPDATE BELOW */
+.cal-date .exists span
+{
+	display: block;
+	position: absolute;
+
+	width:10px;
+	height:10px;
+	right:0px;
+	top:-4px;
+
+	/* triangle credited to http://css-tricks.com/snippets/css/css-triangle */
+	width: 0; 
+	height: 0; 
+	border-top: 6px solid transparent;
+	border-bottom: 6px solid transparent;
+	border-left:6px solid #dc5560;
+
+	-webkit-transform:rotate(-45deg);
+	-moz-transform:rotate(-45deg);
+}
+
+.cal-date-detail{
+
+    display: none;
+    opacity: 0.6;
+    padding-right: 0;
+    position: absolute;
+    right: 100%;
+    top: 20px;
+    width: 100%;	
+}
+
+
+.cal-date-detail ul{
+   color: #fff;
+    list-style: none outside none;
+    margin: 0;
+    padding: 5px;
+	border-right:7px solid #0062a1;
+
+background: #009bff;
+}
+
+.cal-date-detail a{
+color:#FFF;	
+}
+
+
 
 </style>
 

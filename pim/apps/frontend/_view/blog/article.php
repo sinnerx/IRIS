@@ -25,9 +25,14 @@
 										{
 											$length = (strpos($row['articleText'],'alt')-4)-(strpos($row['articleText'],'src')+2);
 											$start = (strpos($row['articleText'],'src=')+5);
+											$img	= substr($row['articleText'],$start,$length);
+										}
+										else
+										{
+											$img 	= model::load("image/services")->getPhotoUrl(null);
 										}
 									?>
-									<img src="<?php if(strpos($row['articleText'],'<img') !== false){ echo substr($row['articleText'],$start,$length); } ?>" width="1600" height="1205"  alt=""/> 
+									<img src="<?php echo $img;?>" width="1600" height="1205"  alt=""/> 
 								</div>
 								<div class="right-blog">
 									<div class="top-heading">

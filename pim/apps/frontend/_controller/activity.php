@@ -41,6 +41,8 @@ class Controller_Activity
 
 			$data['res_activity']	= $this->res_activity;
 			$data['monthLabel']		= $monthR[(int)$this->month];
+			$data['month']			= $this->month;
+			$data['year']			= $this->year;
 			$data['activityType']	= $this->activityType;
 
 			## prepare list activity list to be used in a query for getting list of participant.
@@ -53,7 +55,7 @@ class Controller_Activity
 				}
 			}
 
-			$data['participantList']	= model::load("activity/activity")->getParticipantList($actIDR);
+			$data['participantList']	= count($actIDR) > 0?model::load("activity/activity")->getParticipantList($actIDR):false;
 
 			view::render("activity/index_month",$data);
 		}
@@ -125,10 +127,14 @@ class Controller_Activity
 		$data['participantList']	= model::load("activity/activity")->getParticipantList($row_act['activityID']);
 
 		# 3. attending button show flag
-		$authData	= model::load("access/auth")->getAuthData();
+		$authData	= authData();
 		$data['participationFlag']	= false;
 
-		if($authData['user'])
+		if(time() > strtotime($data['activityEndDate']))
+		{
+			$data['participationFlagMessage']	= "Aktiviti telah berlaku. Tiada penyertaan lagi dibenarkan.";
+		}
+		else if($authData['user'])
 		{
 			if(isset($data['participantList']['attending'][session::get("userID")]))
 			{
@@ -137,14 +143,10 @@ class Controller_Activity
 				## get list of participated date.
 				$data['joinedDate']	= model::load("activity/activity")->getJoinedDate($row_act['activityID'],session::get("userID"));
 			}
-			else if(isset($data['participantList']['nonattending'][session::get("userID")]))
-			{
-				$data['participationFlagMessage']	= "Anda telah memlihih untuk tidak hadir.";
-			}
 			else
 			{
 				## user wasn't activated yet.
-				if(!$authData['user']['isActive'])
+				if($authData['user']['memberStatus'] == "inactive")
 				{
 					$data['participationFlagMessage']	= "Hanya pengguna yang telah diaktifkan sahaja boleh sertai.";
 				}

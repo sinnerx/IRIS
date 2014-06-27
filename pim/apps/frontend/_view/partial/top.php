@@ -20,18 +20,20 @@
 	color: white;
 }
 
-.in-active
+.top-message
 {
-	position: absolute;
-	background: #8c2f2f;
-	color:white;
-	right:0px;
-	box-shadow: 0px -5px 5px #000000;
+	box-shadow: 0px 3px 5px #820000;
 	padding:3px 6px 3px 6px;
 	line-height:normal;
-	border-bottom-right-radius: 10px;
-	border-bottom-left-radius: 10px;
-	width:220px;
+	width:100%;
+	text-align:center;
+}
+
+.top-message.in-active
+{
+	background: #8c2f2f;
+	background: #d90000;
+	color:white;
 }
 .user-setting
 {
@@ -73,10 +75,10 @@
 		<span style='color:#888888;'>Selamat datang,</span> <a href='<?php echo url::base("{site-slug}/profile");?>' style='color:inherit;'><?php echo $username;?></a></span>
 		<a href='<?php echo url::base("{site-slug}/logout");?>' class='fa fa-power-off' style='color:#eb1414;position:relative;top:1px;'></a>
 
-		<?php if(!authData("user.isActive")):?>
-			<div class='in-active'>
+		<?php if(authData("user.memberStatus") == "inactive"):?>
+			<!-- <div class='in-active'>
 			Akaun anda masih belum aktif.
-			</div>
+			</div> -->
 		<?php endif;?>
 	<?php
 	## not logged.
@@ -91,3 +93,8 @@
 	</div>
 	</div>	
 </div> <!-- Top Header End -->
+<?php if(authData("user.memberStatus") == "inactive"):?>
+<div class='top-message in-active'>
+Akaun anda masih belum aktif. Sila buat bayaran RM3 kepada pengurus laman di kawasan anda. [<?php echo authData("site.siteName");?>]
+</div>
+<?php endif;?>

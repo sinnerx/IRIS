@@ -9,6 +9,8 @@
             $photoUrl   = model::load("image/services")->getPhotoUrl($row['userProfileAvatarPhoto']);
             ?>
             <div class="profile-avatar-member"><img src="<?php echo $photoUrl;?>"></div>
+                <?php /*
+                [USER ACTIVITY]
                 <div class="profile-user-activity" style="opacity:0.2;">
                 <h3>Aktiviti</h3>
                     <div class="profile-activity-list">
@@ -31,13 +33,13 @@
                             </li>
                         </ul>
                     </div>
-                </div>
+                </div>*/?>
             </div>
             <div class="rght-sidebar">
                 <div class="profile-user-info">
                 <h3><?php echo $row['userProfileFullName'];?></h3>
                 <span class="profile-user-occupation"><?php echo $row['userProfileOccupation']?:"Menganggur";?></span>
-                <span class="profile-user-location"><span><?php echo authData("site.siteName");?></span><span><a href="#"><i class="fa fa-envelope"></i></a></span></span>
+                <span class="profile-user-location" style='position:relative;top:8px;'><span><?php echo $siteName;?></span><span><a href="#"><i class="fa fa-envelope"></i></a></span></span>
                 <div class="profile-social-media">
                 <ul>
                     <?php 
@@ -65,7 +67,12 @@
                         <div class="resp-tabs-container">
                             <div>
                                 <p>
-                                    <?php echo nl2br($row['userProfileIntroductional']);?>
+                                    <?php
+                                    if($row['userProfileIntroductional'] != ""):
+                                    echo nl2br($row['userProfileIntroductional']);?>
+                                    <?php else:?>
+                                    - Pengguna ini masih tidak punyai maklumat mengenai dirinya lagi -
+                                    <?php endif;?>
                                 </p>
                                 <!-- <p>Lorem ipsum dolor sit amet, maiores ornare ac fermentum, imperdiet ut vivamus a, nam lectus at nunc. Quam euismod sem, semper ut potenti pellentesque quisque. In eget sapien sed, sit duis vestibulum ultricies, placerat morbi amet vel, nullam in in lorem vel. In molestie elit dui dictum, praesent nascetur pulvinar sed, in dolor pede in aliquam, risus nec error quis pharetra. Eros metus quam augue suspendisse, metus rutrum risus erat in.  In ultrices quo ut lectus, etiam vestibulum urna a est, pretium luctus euismod nisl, pellentesque turpis hac ridiculus massa. Venenatis a taciti dolor platea, curabitur lorem platea urna odio.<br>
                                 <br>
@@ -73,6 +80,8 @@
                                 <br>
                                 Lorem ipsum dolor sit amet, maiores ornare ac fermentum, imperdiet ut vivamus a, nam lectus at nunc. Quam euismod sem, semper ut potenti pellentesque quisque. In eget sapien sed, sit duis vestibulum ultricies, placerat morbi amet vel, nullam in in lorem vel. In molestie elit dui dictum, praesent nascetur pulvinar sed, in dolor pede in aliquam, risus nec error quis pharetra. Eros metus quam augue suspendisse, metus rutrum risus erat in.  In ultrices quo ut lectus, etiam vestibulum urna a est, pretium luctus euismod nisl, pellentesque turpis hac ridiculus massa. Venenatis a taciti dolor platea, curabitur lorem platea urna odio.</p> -->
                             </div>
+                            <?php /*
+                            [USER ACTIVITY]
                             <div style="opacity:0.1;cursor:default;">
                             <div class="profile-activity-forum">
                             <div class="heading-category">Forum</div>
@@ -164,7 +173,7 @@
                             </ul>
                             </div>
                             </div>
-                            </div>
+                            </div> */ ?>
                         </div>
                     </div>
                 </div>

@@ -139,6 +139,7 @@ var activity = new function()
 								<?php
 								if($activityDate){
 									$no = 1;
+
 									foreach($activityDate as $row)
 									{
 										$date	= date("j M Y",strtotime($row['activityDateValue']));
@@ -168,7 +169,10 @@ var activity = new function()
 										<td><?php echo $start;?></td>
 										<td><?php echo $end;?></td>
 										<?php if($allDateAttendanceOptional || $allDateAttendanceCompulsary):?>
-										<td <?php echo $rowspan;?> ><a id='activityDate<?php echo $row['activityDateValue'];?>' data-starttime='<?php echo $start;?>' data-endtime='<?php echo $end;?>' <?php echo $attr;?> title='Join'></a></td>
+										<td <?php echo $rowspan;?> >
+										<?php if($participationFlag){?>
+										<a id='activityDate<?php echo $row['activityDateValue'];?>' data-starttime='<?php echo $start;?>' data-endtime='<?php echo $end;?>' <?php echo $attr;?> title='Join'></a></td>
+										<?php }?>
 										<?php endif;?>
 									</tr>
 									<?php
@@ -178,14 +182,19 @@ var activity = new function()
 							</table>
 						</div>
 						<?php
-						if($participationFlag):
-						?>
-						<div class="members-guest">
-							<span>Adakah Anda Akan Hadir?</span> <a href="?attend=ya">Ya </a><a href="?attend=no">Tidak</a>
+						if(!$participationFlag):?>
+						<div class='members-guest'>
+							<span><?php echo $participationFlagMessage;?></span>
 						</div>
 						<?php else:?>
 						<div class='members-guest'>
-							<span><?php echo $participationFlagMessage;?></span>
+							<span>
+							<?php if($activityAllDateAttendance == 2):?>
+							Sila pilih tarikh yang anda ingin sertai.
+							<?php elseif($activityAllDateAttendance == 1):?>
+							Klik <label onclick='activity.join();' style='color:blue;cursor:pointer;' class='fa fa-sign-in'></label> untuk sertai.
+							<?php endif;?>
+							</span>
 						</div>
 						<?php endif;?>
 					</div>

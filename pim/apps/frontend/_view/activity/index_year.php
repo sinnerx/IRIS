@@ -8,7 +8,11 @@ function yearChange()
 	pim.redirect("activity/"+y);
 }
 
-
+function monthChange(month)
+{
+	var y = jQuery("#activityYear").val();
+	pim.redirect("activity/"+y+"/"+month);
+}
 
 </script>
 <link rel="stylesheet" type="text/css" href="<?php echo url::asset('_templates/css/aktiviti.css');?>">
@@ -34,26 +38,26 @@ Lorem ipsum dolor sit amet, maiores ornare ac fermentum, imperdiet ut vivamus a,
 <!-- month and date picker. -->
 <div class="activity-year-select clearfix">
 	<div class="month-left">
-	<ul>
-		<li><a href="#">Jan</a></li>
-		<li><a href="#">Feb</a></li>
-		<li><a href="#">Mac</a></li>
-		<li><a href="#">Apr</a></li>
-		<li><a href="#">Mei</a></li>
-		<li><a href="#">Jun</a></li>
-	</ul>
+		<ul>
+			<li><a href="javascript:monthChange(1);">Jan</a></li>
+			<li><a href="javascript:monthChange(2);">Feb</a></li>
+			<li><a href="javascript:monthChange(3);">Mac</a></li>
+			<li><a href="javascript:monthChange(4);">Apr</a></li>
+			<li><a href="javascript:monthChange(5);">Mei</a></li>
+			<li><a href="javascript:monthChange(6);">Jun</a></li>
+		</ul>
 	</div>
 	<div class="select-year-activity">
 		<?php echo form::select("activityYear",model::load("helper")->monthYear("year",date("Y")-4,date("Y")+1),"onchange='yearChange();' class='dropdown' data-settings='{\"wrapperClass\":\"select-year\"}'",$year,false);?>
 	</div>
 	<div class="month-right">
 		<ul>
-			<li><a href="#">Jul</a></li>
-			<li><a href="#">Ogs</a></li>
-			<li><a href="#">Sep</a></li>
-			<li><a href="#">Okt</a></li>
-			<li><a href="#">Nov</a></li>
-			<li><a href="#">Dis</a></li>
+			<li><a href="javascript:monthChange(7);">Jul</a></li>
+			<li><a href="javascript:monthChange(8);">Ogs</a></li>
+			<li><a href="javascript:monthChange(9);">Sep</a></li>
+			<li><a href="javascript:monthChange(10);">Okt</a></li>
+			<li><a href="javascript:monthChange(11);">Nov</a></li>
+			<li><a href="javascript:monthChange(12);">Dis</a></li>
 		</ul>
 	</div>
 </div>
