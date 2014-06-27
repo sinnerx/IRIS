@@ -72,7 +72,7 @@ Listing all your request blogs here.
 		$active		= $row['articleStatus'] == 1?"active":"";
 		$opacity	= $row['articleStatus'] == 0 || isset($requestdata[$row['articleID']])?"style='opacity:0.5;'":"";
 		$href		= ($row['articleStatus'] == 1?"deactivate":"activate")."?".$row['articleID'];
-		$row['articleStatus'] = $row['articleStatus'] == 1 && $requestdata?4:$row['articleStatus'];
+		$row['articleStatus'] = $row['articleStatus'] == 1 && isset($requestdata[$row['articleID']])?4:$row['articleStatus'];
 		$href		= "?toggle=".$row['articleID'];
 			?>
 		<tr <?php echo $opacity;?>>
