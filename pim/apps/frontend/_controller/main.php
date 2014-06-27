@@ -112,11 +112,14 @@ Class Controller_Main
 			$ic			= str_replace("-","",input::get("userIC"));## remove '-' if got.
 			$password	= input::get("userPassword");
 
+			$icCheck	= Array(!model::load("user/services")->checkIC($ic),"I.C. ini telah didaftarkan.");
+			$icCheck	= $icCheck[0]?(is_numeric($ic)?Array(true):Array(false,"IC mestilah nombor yang betul")):$icCheck;
+		
 			$rules	= Array(
 					"userProfileFullName,userProfileLastName"=>"required:Lapangan ini tidak lengkap",
 					"except:checkPenduduk,checkTerm"=>"required:Lapangan ini diperlukan.",
 					"userIC"=>Array(
-							 "callback"=>Array(!model::load("user/services")->checkIC($ic),"I.C. ini telah didaftarkan.")
+							 "callback"=>Array($icCheck[0],$icCheck[1])
 									)
 							);
 
