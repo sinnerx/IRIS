@@ -66,7 +66,7 @@ cluster.overview.previewRequestDetail = function(requestID)
 	<div class='panel-heading'>
 		<div class='row'>
 			<div class='col-sm-9'>
-			<h4 style="line-height:5px;">Site Requests - <?php echo ucwords($row['siteName']);?> (<?php echo count($res_requests);?>)
+			<h4>Site Requests - <?php echo ucwords($row['siteName']);?> (<?php echo count($res_requests);?>)
 
 			</h4>
 			</div>

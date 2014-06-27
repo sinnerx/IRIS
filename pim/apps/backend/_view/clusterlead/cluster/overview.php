@@ -12,6 +12,17 @@
 .state-name
 {
 	font-weight: bold;
+	color: #177bbb;
+    display: block;
+    font-size: 16px;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+}
+
+
+.site-name{
+	margin-bottom:20px;
+	
 }
 
 .state-site-list
