@@ -153,7 +153,7 @@ Edit article
 	        </header>
 	        <div class="panel-body" style="border-style:solid;border-width:1px;border-color:#eaeef1 !important;">
 	            <div class="tab-content">
-	                <div class="tab-pane active" id="all"><!--  style="overflow: auto;height:100px;"> -->
+	                <div class="tab-pane active" style="padding-left: 15px;" id="all"><!--  style="overflow: auto;height:100px;"> -->
 	                	<?php
 	                		foreach($category as $cat):
 	                	?>	

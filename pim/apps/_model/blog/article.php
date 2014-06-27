@@ -449,6 +449,7 @@ class Article
 		db::from("article");
 		db::select("article.articleName,article.articlePublishedDate,article.articleSlug,site.siteSlug");
 		db::where("articleID IN (SELECT articleID FROM article_category WHERE categoryID = '$categoryID')");
+		db::where("article.siteID",$siteID);
 		db::where("articleStatus",1);
 		db::where("articlePublishedDate <",date("Y-m-d"));
 		#db::join("article","article.articleID = article_category.articleID AND article.articleStatus = '1'");
