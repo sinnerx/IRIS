@@ -74,6 +74,41 @@
 			?>
 
 		})
+
+		function setActivityRelation(param)
+		{
+			$("#activityID").val(param.id);
+			$("#activityArticleType").val(param.type);
+
+			if(param.name)
+			{
+
+				if(param.disable)
+				{
+					$("#activity").parent().parent().removeAttr("data-toggle").removeClass("dropdown-toggle").click(function(e)
+						{
+							return e.preventDefault();
+						});
+					$("#activity").html('<i class="fa fa-link""></i> '+param.name+' &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;');
+				}
+				else
+				{
+					$("#activity").html('<i class="fa fa-link"></i> '+param.name+' &nbsp;&nbsp;&nbsp;<a><i style="cursor: pointer;" onclick="removeActivity();" class="fa fa-times text-danger text"></i></a>&nbsp;&nbsp;&nbsp;');
+				}
+			}
+		}
+
+	<?php if($reportfor['activityID']):?>
+	$(document).ready(function()
+	{
+		setActivityRelation({
+			id:"<?php echo $reportfor['activityID'];?>",
+			type:"<?php echo 1;?>",
+			name:"<?php echo $reportfor['activityName'];?>",
+			disable:true
+		});
+	});
+	<?php endif;?>
 </script>
 <h3 class="m-b-xs text-black">
 <a href='info'>Add Article</a>

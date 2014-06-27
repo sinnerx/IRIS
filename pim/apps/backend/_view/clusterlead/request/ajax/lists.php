@@ -96,6 +96,7 @@ cluster.overview.previewRequestDetail = function(requestID)
 				$requestID	= $row['siteRequestID'];
 				$type	= $typeR[$row['siteRequestType']];
 				$date	= date("d F, g:i A",strtotime($row['siteRequestCreatedDate']));
+				$date	= $row['siteRequestUpdatedDate']?date("d F, g:i A",strtotime($row['siteRequestUpdatedDate'])):$date;
 				$by		= $row['userProfileFullName'];
 
 				$previewIcon	= "<a href='javascript:cluster.overview.previewRequestDetail($requestID);'  data-toggle='tooltip' data-placement='bottom' data-original-title='Preview update detail' class='fa fa-search'></a>";

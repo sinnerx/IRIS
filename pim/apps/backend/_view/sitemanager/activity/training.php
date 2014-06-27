@@ -62,8 +62,9 @@ List of training activities of your site. <a href='<?php echo url::base("activit
 			<?php 
 			endforeach;
 			else:?>
-
-
+			<tr>
+				<td colspan="6" align="center">No event was added at all.</td>
+			</tr>
 			<?php endif;?>
 		</table>
 	</div>

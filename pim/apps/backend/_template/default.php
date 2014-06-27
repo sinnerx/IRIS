@@ -316,8 +316,9 @@
         <nav class="nav-primary hidden-xs">
           <ul class="nav nav-main" data-ride="collapse">                
             <?php
-              $controller = controller::getCurrentController(); 
-              $controller = array_pop(explode("/",$controller));## pop last name from it.
+              $controller = controller::getCurrentController();
+              $v          = explode("/",$controller);
+              $controller = array_pop($v);## pop last name from it.
               $method   = controller::getCurrentMethod();
 
               foreach($menu as $menu_name=>$module)

@@ -56,6 +56,7 @@ var sitealbum	= new function()
 				</tr>
 				<tr>
 					<td colspan='2' rowspan="2">
+						<div><b>Date obligation</b> : <?php echo model::load("activity/activity")->dateObligation($row['activityAllDateAttendance']);?></div>
 						<?php
 						if($activityDate):
 						echo "<table class='activityDate'>";
@@ -99,7 +100,7 @@ var sitealbum	= new function()
 				<ul class='nav nav-tabs nav-justified'>
 					<li class='active'><a href='#detail' data-toggle='tab'><?php echo ucwords($typeName);?>'s Detail</a></li>
 					<li><a data-toggle='tab' href='#album'>Albums (<?php echo count($res_album);?>)</a></li>
-					<li><a data-toggle='tab' href='#blog'>Related Blogs</a></li>
+					<li><a data-toggle='tab' href='#blog'>Related Blogs (<?php echo count($res_article);?>)</a></li>
 				</ul>
 			</header>
 			<div class='panel-body'>
@@ -126,18 +127,26 @@ var sitealbum	= new function()
 					</div>
 					<div class='row'>
 					<div class='col-sm-12'>
-						<h5>Participants :</h5>
+						<h5>Current Participants :</h5>
 						<div class='table-responsive'>
 							<?php if($res_participant):?>
+							<p>
+								List of participants currently joined through the site.
+							</p>
 							<table class='table'>
 								<tr>
-									<th>Name</th><th>I.C.</th>
+									<th style="width:15px;">No.</th><th>Name</th><th>I.C.</th><th>Date</th><th width="25px"></th>
 								</tr>
-								<?php foreach($res_participant as $row)
+								<?php 
+								$no = 1;
+								foreach($res_participant as $row)
 								{?>
 								<tr>
+									<td><?php echo $no++;?></td>
 									<td><?php echo $row['userProfileFullName'];?></td>
 									<td><?php echo $row['userIC'];?></td>
+									<td><?php echo date("j M Y",strtotime($row['activityUserCreatedDate']));?></td>
+									<td><a href='<?php echo url::base("ajax/member/detail?userID=".$row['userID']);?>' data-toggle='ajaxModal' class='fa fa-search'></a></td>
 								</tr>
 								<?php }?>
 							</table>
@@ -182,9 +191,37 @@ var sitealbum	= new function()
 					</div>
 					<div class='tab-pane' id='blog'>
 					<?php if(!$res_article):?>
-					There's no related blog written about this activity yet.
+					There's no related blog written about this activity yet. Or you may <a target='_blank' href='<?php echo url::base("site/addArticle?reportfor=".$activityID);?>'>write a new report article</a> or <a href='#'>choose from a list just as a reference</a> for this activity.
 					<?php else:?>
+					<p>List of blog article related to this activity.</p>
+					<div class='table-responsive'>
+						<table style="width:100%;" class='table'>
+						<tr>
+							<th>Article Name</th>
+							<th>Related As</th>
+							<th>Date Published</th>
+							<th></th>
+						</tr>
+						<?php foreach($res_article as $row):
+						$articleName	= $row['articleName'];
+						$publishedDate	= $row['articlePublishedDate'];
+						$type			= $row['activityArticleType'];
+						$status			= $row['articleStatus'];
+						$typeR			= Array(1=>"Report",2=>"Reference");
 
+						$statustitle	= Array(
+										"Currently pending for approval."
+												);
+						?>
+						<tr>
+							<td><?php echo ucwords($articleName);?></td>
+							<td><?php echo $typeR[$type];?></td>
+							<td><?php echo date("j M Y",strtotime($publishedDate));?></td>
+							<td><?php echo model::load("template/icon")->status($status,$statustitle[$status]);?></td>
+						</tr>
+						<?php endforeach;?>
+						</table>
+					</div>
 					<?php endif;?>
 					</div>
 				</div>

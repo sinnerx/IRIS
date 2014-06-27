@@ -4,7 +4,7 @@ List of member registered in for site.
 </div>
 <script type="text/javascript">
 		function confirmation(){
-			var r = confirm("Are you sure this member has been paid?");
+			var r = confirm("Are you sure this member has paid?");
     		if (r == true) {
         		return true;
     		} else {
@@ -15,7 +15,18 @@ List of member registered in for site.
 <?php echo flash::data();?>
 <section class='panel panel-default'>
 	<div class='panel-heading'>
-
+		<div class="row">
+			<div class="col-sm-3 pull-right">
+				<form method="get" id="formSearch"><!-- search form -->
+					<div class="input-group">
+					<input class="input-sm form-control" name="search" placeholder="Search : by IC or by name" value='<?php echo request::get("search");?>' type="text">
+						<span class="input-group-btn">
+							<button class="btn btn-sm btn-default" type="button" onclick="$('#formSearch').submit();">Go!</button>
+						</span>
+					</div>
+				</form>
+			</div>
+		</div>
 	</div>
 	<div class='table-responsive'>
 		<table class='table'>
@@ -49,7 +60,7 @@ List of member registered in for site.
 						<i class="fa fa-check-square text-success text-active"></i>
 						<i class="fa fa-square text"></i>
 					</a>
-	                <a href="<?php echo url::base('ajax/member/detail'); ?>?userID=<?php echo $row['userID']; ?>&siteMemberID=<?php echo $row['siteMemberID']; ?>" data-toggle="ajaxModal">
+	                <a href="<?php echo url::base('ajax/member/detail'); ?>?userID=<?php echo $row['userID']; ?>" data-toggle="ajaxModal">
 						<i class="fa fa-external-link"></i>
 					</a>
 					</center>

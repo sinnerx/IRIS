@@ -450,6 +450,20 @@ Class Controller_Site
 			redirect::to("site/article","Successfully added a blog post.");
 		}
 
+		## if there's this flag.
+		if(request::get("reportfor"))
+		{
+			$activity	= model::load("activity/activity")->getActivity(request::get("reportfor"));
+
+			if($activity)
+			{
+				$data['reportfor']	= Array(
+									"activityID"=>request::get("reportfor"),
+									"activityName"=>$activity['activityName']
+											);
+			}
+		}
+
 		$category	= model::load("blog/category")->getCategoryList();
 		
 		$data['category'] = $category;

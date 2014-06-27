@@ -9,7 +9,7 @@
 			<button type="button" class="close" data-dismiss="modal"><i class="fa fa-times"></i></button>
 			<h4 class="modal-title">☮
 			<span style='font-size:11px;'> Member profile detail.</span>
-			<span style='margin-right:20px;' class="pull-right">Fullname : <?php echo $user['userProfileFullName']; ?></span>
+			<span style='margin-right:20px;' class="pull-right">Fullname : <?php echo $user['userProfileFullName']." ".$user['userProfileLastName']; ?></span>
 			</h4>
 		</div>
 		<div class="modal-body" style='padding-top:5px;'><!-- 

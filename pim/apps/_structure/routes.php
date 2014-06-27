@@ -144,9 +144,9 @@ $routes[]	= Array("[:site-slug]/blog/[:year]/[:month]/[:article-slug]","controll
 $routes[]	= Array("[:site-slug]/members","controller=member@index");
 
 ## +++ profile.
-$routes[]	= Array("[:site-slug]/profile","controller=member@profile");
 $routes[]	= Array("[:site-slug]/profile/edit","controller=member@profile_edit");
 $routes[]	= Array("[:site-slug]/profile/uploadAvatar","controller=member@profileUploadAvatar");
+$routes[]	= Array("[:site-slug]/profile/[i:userID?]","controller=member@profile","{userID}");
 
 ## ajax request.
 $routes[]	= Array("[:site-slug]/ajax/[:controller]/[**:method]","controller=ajax/ajax_{controller}@{method}");

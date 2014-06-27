@@ -1,9 +1,17 @@
 <?php
 class Controller_Activity
 {
-	public function overview()
+	public function overview($page = 1)
 	{
-		view::render("sitemanager/activity/overview");
+		$paginConf	= Array(
+				"urlFormat"=>url::base("activity/overview/{page}"),
+				"currentPage"=>$page
+							);
+
+		## listing type. default : upcoming.
+		$type	= request::get("list","upcoming");
+		$data['res_activity']	= model::load("activity/activity")->getRecentIncomingActivity(authData("site.siteID"),$paginConf,$type);
+		view::render("sitemanager/activity/overview",$data);
 	}
 
 	public function edit($activityID)
@@ -145,7 +153,7 @@ class Controller_Activity
 			## win.
 			model::load("activity/activity")->addActivity($row_site['siteID'],input::get("activityType"),$data);
 
-			redirect::to("","Yes you win.");
+			redirect::to("","New activity has been submitted, and is pending for cluster lead approval.");
 		}
 
 		view::render("sitemanager/activity/add",$data);
@@ -173,6 +181,9 @@ class Controller_Activity
 
 		## get activity date.
 		$data['activityDate']	= model::load("activity/activity")->getDate($activityID);
+
+		## get related article.
+		$data['res_article']	= model::load("activity/activity")->getRelatedArticle($activityID);
 
 		view::render("sitemanager/activity/view",$data);
 	}
