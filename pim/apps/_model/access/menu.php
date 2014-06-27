@@ -18,13 +18,13 @@ class Menu extends Data
 									"Slider"=>Array("site/slider","site/slider_add","site/slider_edit"),
 									"Announcement"=>Array("site/announcement","site/editAnnouncement"),
 									"Site Menu"=>"menu/index",
-									"Transaction"=>"account/transaction"
+									#"Transaction"=>"account/transaction"
 											),
 					"Pages"=>"page/index",
 					"Blog" =>Array("List of Articles"=>"site/article","Add Article"=>"site/addArticle"),
 					"Albums"=>Array("Overview"=>Array("image/album","image/albumPhotos")),
 					"Activities"=>Array(
-									"Overview"=>Array("activity/overview","activity/add","activity/view"),
+									"Overview"=>Array("activity/overview","activity/add","activity/view","activity/edit"),
 									"Events"=>"activity/event",
 									"Training"=>"activity/training"
 										),

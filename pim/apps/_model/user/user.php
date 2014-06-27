@@ -76,9 +76,12 @@ class User
 	## full update except password.
 	public function fullUpdate($userID,$data)
 	{
-		$data_user	= Array(
-				"userIC"=>$data['userIC']
-						);
+		if($data['userIC'])
+		{
+			$data_user	= Array(
+					"userIC"=>$data['userIC']
+							);
+		}
 
 		if(isset($data['userEmail']))
 		{

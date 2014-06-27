@@ -77,9 +77,9 @@ Class Auth
 			## prepare flag for member authentication.
 			# 1. isMember
 
-			# 2. is active flag
-			$data['user']['isActive']	= $data['site']['siteMemberStatus'] == 1;
-
+			# 2. is active/inactive status
+			$data['user']['memberStatus']	= $data['site']['siteMemberStatus'] == 1?"active":"inactive";
+			$data['user']['isMember']	= true;
 
 			break;
 			case 2: # site-manager.

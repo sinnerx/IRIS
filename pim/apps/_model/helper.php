@@ -106,6 +106,9 @@ class Helper
 	## temporary fix.
 	public function purifyHTML($text,$count = null)
 	{
+		## just... return a stripped text..
+		return strip_tags($text);
+
 		## replace all block closing tags with line break.
 		$blocktags	= Array("p","div");
 

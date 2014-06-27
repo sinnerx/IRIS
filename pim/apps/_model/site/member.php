@@ -3,11 +3,20 @@ namespace model\site;
 use db, model, pagination, session;
 class Member
 {
-	public function getPaginatedList($siteID,$pgConf = null)
+	public function getPaginatedList($siteID,$pgConf = null,$where = null)
 	{
+		if($where)
+		{
+			foreach($where as $k=>$v)
+			{
+				db::where($k,$v);
+			}
+		}
+
 		//echo '<pre>';print_r($pgConf);die;
 		db::where("siteID",$siteID);
 		db::from("site_member");
+
 		if($pgConf)
 		{
 			pagination::setFormat(model::load("template/cssbootstrap")->paginationLink());
@@ -20,7 +29,7 @@ class Member
 
 			db::limit(10,pagination::recordNo()-1);
 		}
-
+		
 		db::join("user","user.userID = site_member.userID");
 		db::join("user_profile","user_profile.userID = site_member.userID");
 
@@ -80,13 +89,12 @@ class Member
 	}
 
 	## get user member detail
-	public function getUserMemberDetail($siteMemberID=null,$userID=null,$siteID=null){
+	public function getUserMemberDetail($userID=null,$siteID=null){
 		//echo '<pre>';print_r($pgConf);die;
 		db::where("site_member.siteID",$siteID);
 		db::where("site_member.userID",$userID);
-		db::where("site_member.siteMemberID",$siteMemberID);
 		db::from("site_member");
-
+		db::join("site","site.siteID = site_member.siteID");
 		db::join("user","user.userID = site_member.userID");
 		db::join("user_profile","user_profile.userID = site_member.userID");
 

@@ -13,6 +13,13 @@ class Activity
 		return $no?$arr[$no]:$arr;
 	}
 
+	public function dateObligation($no = null)
+	{
+		$arrR	= Array(1=>"All date required",2=>"Participant may choose date");
+
+		return $no?$arrR[$no]:$arrR;
+	}
+
 	public function getActivityByDate($siteID,$date)
 	{
 		db::where("siteID",$siteID);
@@ -348,10 +355,11 @@ class Activity
 
 	public function getParticipant($activityID)
 	{
-		db::select("userIC,userProfileFullName");
+		db::select("userIC,userProfileFullName,user.userID,activityUserCreatedDate");
 		db::where("activityID",$activityID);
 		db::join("user","user.userID = activity_user.userID");
 		db::join("user_profile","user_profile.userID = activity_user.userID");
+		db::order_by("userProfileFullName","ASC");
 
 		return db::get("activity_user")->result();
 	}
@@ -373,6 +381,56 @@ class Activity
 								"activityArticleCreatedDate"=>now(),
 								"activityArticleCreatedUser"=>session::get("userID")
 											));
+	}
+
+	public function getRelatedArticle($activityID)
+	{
+		db::where("activityID",$activityID);
+		db::join("article","article.articleID = activity_article.articleID");
+
+		return db::get("activity_article")->result();
+	}
+
+	## used in overview. select only all the approved activities.
+	public function getRecentIncomingActivity($siteID,$paginationConf = null,$type = "upcoming",$where = null)
+	{
+		db::from('activity');
+
+		db::where("siteID",$siteID);
+
+		if($type == "upcoming")
+		{
+			db::where("activityStartDate >",now());
+		}
+		else if($type == "recent")
+		{
+			db::where("activityStartDate <",now());
+		}
+
+		db::where("activityApprovalStatus",1); ## only approved one.
+
+		if($where)
+		{
+			foreach($where as $k=>$v)
+			{
+				db::where($k,$v);
+			}
+		}
+
+		if($paginationConf)
+		{
+			pagination::setFormat(model::load("template/cssbootstrap")->paginationLink());
+			pagination::initiate(Array(
+						"urlFormat"=>$paginationConf['urlFormat'],
+						"currentPage"=>$paginationConf['currentPage'],
+						"totalRow"=>db::num_rows(),
+						"limit"=>10
+										));
+			db::limit(10,pagination::recordNo()-1);
+		}
+
+		db::join("user_profile","user_profile.userID = activity.activityCreatedUser");
+		return db::get()->result();
 	}
 
 	## return list of incoming and previous activity
@@ -565,7 +623,7 @@ class Activity
 	public function checkUserJoin($activityID,$userID,$date = null)
 	{
 		db::select("activityUserDateID")
-		->where("activityUserID IN (SELECT activityUserID FROM activity_user WHERE activityID = '$activityID')");
+		->where("activityUserID IN (SELECT activityUserID FROM activity_user WHERE activityID = ? AND userID = ?)",Array($activityID,$userID));
 
 		if($date)
 			db::where("activityUserDateValue",$date);

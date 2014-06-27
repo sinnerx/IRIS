@@ -252,6 +252,7 @@ class Request extends request_correction
 				"siteRequestStatus"=>0
 						));
 		db::join("user_profile","user_profile.userID = site_request.siteRequestCreatedUser");
+		db::order_by("siteRequestUpdatedDate","desc");
 		db::order_by("siteRequestID","desc");
 
 		return db::get()->result("siteRequestID");
