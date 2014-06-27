@@ -1,0 +1,40 @@
+Test Name : Frontend.General
+
+Test Variables
+	site.main	= p1m.gaia.my
+	site.name	= Felda Ayer Hitam
+	newUser.userIC = 890910105110
+	newUser.userPassword = 12345
+
+Calendar
+	## Changing Date
+	- Click left and right arrow icon on calendar, to navigate
+		[expectation : month changed]
+
+	## Selecting Activity
+	- Navigate the month to the month of the recent added activity
+	- Mouseover to the highlighted date
+		[expectation : a transparent preview of the activities for that date shown]
+	- Click the highlighted date
+		[expectation : the fully shown, and stay]
+	- Click on the activity link from the preview box
+		[expectation : redirected to detail of the selected activity]
+
+Activity
+	## Accessing from menu
+	- Click activity from top menu
+		[expectation : open an activity page listing all activities based on current year]
+
+		## changing year
+		- Click the year selection, change year to previous year.
+			[expectation : list changed according to the selected year]
+
+		## changing month
+		- Click any of the month
+			[expectation : list based on the selected month, of the current year]
+
+Blog
+	- Click blog from top menu
+		[expectation : open the main list of blog of the current site]
+	- Choose and click the recent added article
+		[expectation : read the selected article]

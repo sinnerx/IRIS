@@ -1,0 +1,9 @@
+Test Variables
+
+site.url	= p1m.gaia.my
+site.name = "Felda Ayer Hitam"
+site.manager.userEmail = "adam@celcom1cbc.com";
+site.manager.userPassword = "12345"
+
+site.clusterlead.userEmail = "shamsul@nusuara.com";
+site.clusterlead.userPassword = "12345";

@@ -1,0 +1,39 @@
+Test name : Backend.Clusterlead
+
+Test Variables : 
+	login.userEmail = shamsul@nusuara.com
+	login.userPassword = shamsul@nusuara.com
+
+Cluster Overview
+	## Showing list of request
+		- click the total request number
+			[expectation : list of site request according to what we did before are shown, 
+				- announcement.add, 
+				- article.add, 
+				- activity.add]
+
+	## Viewing detail of request
+		- click magnifier icon of first request
+			[expectation : detail and enlarged page are shown.]
+			### Approving Request
+			- click a green checked icon to approve this request
+				[expectation : a question popped for confirmation, and if clicked on, will approve the request, and refreshed the list of request]
+		- click magnifier icon of second request
+			[expectation : same]
+			### Request Correction
+				- click red cross
+					[expectation : a modal box shown asking to reject or just send a correction message]
+				- Click 'Just send a correction message'
+					[expectation : a textarea will shown, and reject button be removed]
+				- Fill some correction message, and click 'Send Correction Message']
+					[expectation 1 : request list refreshed]
+					[expectation 2 : the current item will be marked as 'waiting for correction', with red alert icon as indicator]
+				- Click the red alert icon
+					[expectation : a modal box about detail of the correction will be shown]
+		- click magnifier icon of third request
+			[expectation : same]
+			### Rejecting Request
+				- click the red cross
+					[expectation : same]
+				- Click Reject Button
+					[expectation : a confirmation will be asked and if clicked OK, request be rejected and will refresh the request list]

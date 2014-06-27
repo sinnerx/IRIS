@@ -1,0 +1,43 @@
+Test Name : Frontend.Member
+
+Test Variables
+	site.url	= p1m.gaia.my
+	site.name	= Felda Ayer Hitam
+	newUser.userIC = 890910105110
+	newUser.userPassword = 12345
+
+Registration
+	- open the $site.name, through $site.url
+	* if you're still logged in as clusterlead/sitemanager, logout first, by clicking red poweroff icon.
+	- click register.
+	- testing incorrection
+		- fill no fields and click Daftar button
+			[expectation : error]
+		- fill all fields, with IC is alpha/alphanumeric
+			[expectation : IC mestilah nombor yang betul]
+	- fill correctly using $newUser.userIC and $newUser.userPassword, other fields as cincai
+		[expectation : redirected to the same page, while showing login tab]
+
+Login
+	- Login from login tab
+		- fill no fields dan klik log masuk
+			[expectation : error = Sila pastikan form anda lengkap]
+		- fill with a wrong credential
+			[expectation : error = Tidak dapat mengenal pasti login anda]
+		- fill with the right credential using $newUser.userIC and $newUser.userPassword
+			[expectation : redirected to main microsite page]
+
+Profile
+	- Click the name on top
+		[expectation : redirected to profile page]
+	- Click edit icon next to the name
+		[expectation : redirected to edit page]
+
+Profile Editing
+	- Testing incorrection
+		- empty all the fields
+			[expectation : error, with only 2 field required]
+		- inputting wrong format email, and submit
+			[expectation : error = sila masukkan format email yang betul]
+	- Submit will all field filled.
+		[expectation : profile updated]
