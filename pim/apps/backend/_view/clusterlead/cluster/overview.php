@@ -78,6 +78,12 @@ padding:20px 25px;
 }
 
 
+#site-detail .btn-wrapper .pull-right{
+	margin-right:0px;
+	margin-top:0px;
+	
+}
+
 #request-list{
 	padding:25px;
 	
