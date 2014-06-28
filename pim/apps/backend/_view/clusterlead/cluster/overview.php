@@ -36,6 +36,53 @@
 	border-bottom:1px dashed #e4e9f1;
 }
 
+.panel-default{
+	padding:0px !important;
+	
+}
+
+
+.col-sm-9 h4{
+	line-height:normal !important;
+	
+}
+.site-name a {
+    transition: all 0.4s ease-out 0s;
+}
+
+.site-name a.badge{
+	padding-left:7px;
+	padding-right:7px;
+	
+}
+
+.second-block{
+padding: 0 !important;	
+}
+
+
+.row.state-list{
+padding:20px 25px;	
+}
+
+#site-detail .panel-body{
+	padding-left:25px;
+	padding-right:25px;
+	
+}
+
+#site-detail .pull-right{
+	margin-right:25px;
+	margin-top:15px;
+	
+}
+
+
+#request-list{
+	padding:25px;
+	
+}
+
 </style>
 <script type="text/javascript">
 var base_url	= "<?php echo url::base();?>/";
