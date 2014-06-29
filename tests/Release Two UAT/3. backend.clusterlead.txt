@@ -1,8 +1,8 @@
 Test name : Backend.Clusterlead
 
-Test Variables : 
-	login.userEmail = shamsul@nusuara.com
-	login.userPassword = shamsul@nusuara.com
+Requirement
+- Logout any logged in member
+- Login as clusterlead
 
 Cluster Overview
 	## Showing list of request

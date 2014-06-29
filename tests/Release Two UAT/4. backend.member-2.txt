@@ -1,10 +1,8 @@
-Test Name : Frontend.General
+Test Name : Frontend.Member
 
-Test Variables
-	site.main	= p1m.gaia.my
-	site.name	= Felda Ayer Hitam
-	newUser.userIC = 890910105110
-	newUser.userPassword = 12345
+Requirement
+	- logout any logged in user.
+	- log in as recent registered member
 
 Calendar
 	## Changing Date
@@ -33,8 +31,19 @@ Activity
 		- Click any of the month
 			[expectation : list based on the selected month, of the current year]
 
+		## viewing activity detail
+		- Click on activity name [choose 'Activity 1']
+			[expectation : redirected to detail of the selected activity]
+
+		## join activity
+		- Click on button join on date list.
+			[expectation : if user confirmed, will mark the selected date, and set the photo in attendance list]
+
 Blog
+	## List of blog
 	- Click blog from top menu
 		[expectation : open the main list of blog of the current site]
-	- Choose and click the recent added article
-		[expectation : read the selected article]
+
+		## Blog view
+		- Choose and click the one of the article
+			[expectation : read the selected article]

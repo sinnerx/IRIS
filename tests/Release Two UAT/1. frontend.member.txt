@@ -1,14 +1,10 @@
 Test Name : Frontend.Member
 
-Test Variables
-	site.url	= p1m.gaia.my
-	site.name	= Felda Ayer Hitam
-	newUser.userIC = 890910105110
-	newUser.userPassword = 12345
+Requirement
+- Not logged in as any member
 
 Registration
 	- open the $site.name, through $site.url
-	* if you're still logged in as clusterlead/sitemanager, logout first, by clicking red poweroff icon.
 	- click register.
 	- testing incorrection
 		- fill no fields and click Daftar button
