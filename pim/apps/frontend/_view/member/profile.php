@@ -37,8 +37,13 @@
             </div>
             <div class="rght-sidebar">
                 <div class="profile-user-info">
-                <h3><?php echo $row['userProfileFullName'];?></h3>
-                <span class="profile-user-occupation"><?php echo $row['userProfileOccupation']?:"Menganggur";?></span>
+                <h3><?php echo $row['userProfileFullName'];?>
+
+                <?php if($ownPage):?>
+                    <a href='<?php echo url::base("{site-slug}/profile/edit");?>' class='fa fa-edit pull-right' style='color:#0062a1;opacity:0.5;'></a>
+                <?php endif;?>
+                </h3>
+                <span class="profile-user-occupation"><?php echo $row['userProfileOccupation']?:"-";?></span>
                 <span class="profile-user-location" style='position:relative;top:8px;'><span><?php echo $siteName;?></span><span><a href="#"><i class="fa fa-envelope"></i></a></span></span>
                 <div class="profile-social-media">
                 <ul>

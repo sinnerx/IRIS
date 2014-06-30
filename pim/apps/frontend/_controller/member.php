@@ -8,6 +8,7 @@ class Controller_Member
 
 		if(!$userID)
 		{
+			$data['ownPage']	= true;
 			$data['row']		= authData("user");
 			$data['siteName']	= authData("site.siteName");
 		}

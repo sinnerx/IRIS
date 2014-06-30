@@ -107,7 +107,10 @@ class Helper
 	public function purifyHTML($text,$count = null)
 	{
 		## just... return a stripped text..
-		return strip_tags($text);
+		$stripped	= strip_tags($text);
+		$stripped	= implode(" ",array_slice(explode(" ",$stripped),0,90))."...";
+		
+		return strip_tags($stripped);
 
 		## replace all block closing tags with line break.
 		$blocktags	= Array("p","div");

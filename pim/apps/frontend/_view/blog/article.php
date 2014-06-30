@@ -40,19 +40,20 @@
 										<div class="story-info">
 											<span class="story-author">Ditulis Oleh <a href="#"><?php echo $row['articleCreatedUser']; ?> </a></span>
 											<span class="story-date">Pada <a href="#"><?php echo date("jS F Y",strtotime($row['articleCreatedDate'])); ?></a></span>
-											<span class="story-category">Dalam <a href="#">
+											
 											<?php
 												$count = 0;
+												$item	= "";
 						                		foreach($row['category'] as $cat):
 						                			$count++;
 						                			if($cat['checked']){
-						                				echo $cat['categoryName'].'&nbsp;&nbsp;';
+						                				$item	.= $cat['categoryName'].'&nbsp;&nbsp;';
 						                			}
 						                			if($cat['child']):
 						                				foreach($cat['child'] as $c):
 							                				$count++;
 							                				if($c['checked']){
-							                					echo $c['categoryName'].'&nbsp;&nbsp;';
+							                					$item .= $c['categoryName'].'&nbsp;&nbsp;';	
 							                				}
 								                			if($count == 4){
 								                				break;
@@ -65,7 +66,11 @@
 						                			}
 						                		endforeach;
 						                	?>
+						                	<?php if($item != ""):?>
+						                	<span class="story-category">Dalam <a href="#">
+						                		<?php echo $item;?>
 											</a> </span>
+						                	<?php endif;?>
 										</div>
 									</div>
 									<div class="short-story">

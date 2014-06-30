@@ -21,6 +21,15 @@
 								<div class="story-info">
 									<span class="stpry-author">Ditulis Oleh <a href="#"><?php echo $article['articleEditedUser']; ?> </a></span>
 									<span class="story-date">Pada <a href="#"><?php echo date('jS F Y', strtotime($article['articlePublishedDate'])); ?></a></span>
+									<?php
+									$flag	= false;
+									foreach($category as $cat)
+									{
+										if($cat['checked'])
+											$flag	= true;
+									}
+
+								 	if($flag):?>
 									<span class="story-category">Dalam 
 										<a href="#">
 										<?php
@@ -49,6 +58,7 @@
 					                	?>
 					                	</a>
 									</span>
+									<?php endif;?>
 								</div>
 							</div>
 							<div class="short-story" style="clear: both;">
