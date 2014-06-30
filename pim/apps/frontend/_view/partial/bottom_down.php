@@ -83,6 +83,8 @@
 						</a>
 					</li>
 					<?php endforeach; ?>
+					<?php else: ?>
+						<center>No blog post.</center>
 					<?php endif; ?>
 				</ul>
 				<!-- <ul> ## original example.
