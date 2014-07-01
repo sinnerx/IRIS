@@ -1,6 +1,12 @@
 <link rel="stylesheet" href="<?php echo url::asset("frontend/css/blog.css"); ?>" type="text/css" />
 <div class="lft-container">
-	<a href="<?php echo url::base(request::named("site-slug")."/blog/"); ?>"><h3 class="block-heading">BLOG</h3></a>
+	<div class="top-heading">
+	<h3 class="block-heading">
+		<a href="<?php echo url::base(request::named("site-slug")."/blog/"); ?>">BLOG</a>
+		&nbsp; → &nbsp;
+		<a><?php echo $article['articleName']; ?></a>
+	</h3>
+	</div>
 	<div class="block-content clearfix">
 		<div class="page-content">
 			<div class="page-sub-wrapper blog-page">
@@ -17,7 +23,7 @@
 					</div> -->
 						<div class="single-blog-wrap">
 							<div class="top-heading">
-								<h3><a href="#"><?php echo $article['articleName']; ?></a></h3>
+								<h3><a><?php echo $article['articleName']; ?></a></h3>
 								<div class="story-info">
 									<span class="stpry-author">Ditulis Oleh <a href="#"><?php echo $article['articleEditedUser']; ?> </a></span>
 									<span class="story-date">Pada <a href="#"><?php echo date('jS F Y', strtotime($article['articlePublishedDate'])); ?></a></span>
