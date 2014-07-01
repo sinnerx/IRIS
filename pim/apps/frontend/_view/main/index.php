@@ -16,7 +16,7 @@ $photoName	= !$photoName?"noimage.png":$photoName;
 <h3 class="block-heading"><?php echo $pageName;?>, <span>di <?php echo $siteName;?></span></h3>
 <div class="block-content clearfix">
 	<div class="block-image">
-		<div class="story-thumbs"><img src="<?php echo url::asset("frontend/images/photo/$photoName");?>" width="253" height="166"  alt=""/></div>
+		<div class="story-thumbs"><img src="<?php echo model::load("image/services")->getPhotoUrl($photoName);?>" width="253" height="166"  alt=""/></div>
 		<div class="read-more-story"><a href="<?php echo $pageSlug;?>">Baca Lagi</a></div>
 	</div>
 	<div class="block-story">
