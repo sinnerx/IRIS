@@ -148,7 +148,7 @@ Edit article
 	        <header class="panel-heading bg-light">
 	            <ul class="nav nav-tabs nav-justified">
 	                <li class="active"><a href="#all" data-toggle="tab">All categories</a></li>
-                    <li><a href="#most" data-toggle="tab">Most used</a></li>
+                    <!-- <li><a href="#most" data-toggle="tab">Most used</a></li> -->
 	            </ul>
 	        </header>
 	        <div class="panel-body" style="border-style:solid;border-width:1px;border-color:#eaeef1 !important;">
@@ -173,9 +173,9 @@ Edit article
 	                		endforeach;
 	                	?>	
 	                </div>
-                    <div class="tab-pane" id="most"><!--  style="overflow: auto;height:100px;"> -->
+                    <!--<div class="tab-pane" id="most">  style="overflow: auto;height:100px;"> 
 	                	<input type="checkbox">
-	                </div>
+	                </div>-->
 	            </div>
 	        </div>
         </div>
