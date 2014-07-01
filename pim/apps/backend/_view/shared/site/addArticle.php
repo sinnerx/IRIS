@@ -123,8 +123,8 @@ Add an article
 	<section class="panel panel-default">
 		<div class="panel-body">
 			<div class="form-group form-inline">
-				<?php echo form::text("articleName","style='width: 75.5%;' size='40' class='form-control input-s' placeholder='Insert title'");?>
-				<?php echo form::text("articlePublishedDate","class='input-sm input-s datepicker-input form-control' date-date-format='dd-mm-yyyy'",date('d-m-Y', strtotime(now(). ' + 5 days')));?>
+				<?php echo form::text("articleName","style='width: 74.5%;' size='40' class='form-control input-s' placeholder='Insert title'");?>
+				<?php echo form::text("articlePublishedDate","style='margin-top: -5px;' class='input-sm input-s datepicker-input form-control' date-date-format='dd-mm-yyyy'",date('d-m-Y', strtotime(now(). ' + 5 days')));?>
 				<?php echo flash::data('articleName');?>
 				<?php echo flash::data("articlePublishedDate");?>
 			</div>

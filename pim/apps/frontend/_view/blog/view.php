@@ -2,15 +2,22 @@
 <div class="lft-container">
 	<div class="top-heading">
 	<h3 class="block-heading">
-		<a href="<?php echo url::base(request::named("site-slug")."/blog/"); ?>">BLOG</a>
-		&nbsp; → &nbsp;
-		<a><?php echo $article['articleName']; ?></a>
+		<a>BLOG</a>
 	</h3>
 	</div>
 	<div class="block-content clearfix">
 		<div class="page-content">
 			<div class="page-sub-wrapper blog-page">
   				<div class="blog-container">
+  					<div class="story-info">
+						<span class="story-author">
+							<a href="<?php echo url::base(request::named("site-slug")); ?>">Home</a>
+							&nbsp; → &nbsp;
+							<a href="<?php echo url::base(request::named("site-slug").'/blog'); ?>">Blog</a>
+							<!--&nbsp; → &nbsp;
+							<a href="<?php //echo url::base(request::named("site-slug").'/blog/'.); ?>">Category Name</a>-->
+						</span>
+					</div>
 					<!-- <div class="single-featured-image">
 						<?php 
 							/*if(strpos($article['articleText'],'<img') !== false)
@@ -25,7 +32,7 @@
 							<div class="top-heading">
 								<h3><a><?php echo $article['articleName']; ?></a></h3>
 								<div class="story-info">
-									<span class="stpry-author">Ditulis Oleh <a href="#"><?php echo $article['articleEditedUser']; ?> </a></span>
+									<span class="story-author">Ditulis Oleh <a href="#"><?php echo $article['articleEditedUser']; ?> </a></span>
 									<span class="story-date">Pada <a href="#"><?php echo date('jS F Y', strtotime($article['articlePublishedDate'])); ?></a></span>
 									<?php
 									$flag	= false;
