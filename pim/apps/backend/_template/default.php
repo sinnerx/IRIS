@@ -246,9 +246,9 @@
             <li>
               <a href="<?php echo url::base("user/changePassword");?>">Change Password</a>
             </li>
-            <li>
+            <!-- <li>
               <a href='<?php echo url::base("account/my_transaction");?>'>Account's Transaction</a>
-            </li>
+            </li> -->
             <li class="divider"></li>
             <li>
               <a href="<?php echo url::base("logout");?>"  >Logout</a>
@@ -303,9 +303,9 @@
     <li>
       <a href="<?php echo url::base("user/changePassword");?>">Change Password</a>
     </li>
-    <li>
+    <!-- <li>
       <a href='<?php echo url::base("account/my_transaction");?>'>Account's Transaction</a>
-    </li>
+    </li> -->
     <li class="divider"></li>
     <li>
       <a href="<?php echo url::base("logout");?>" >Logout</a>

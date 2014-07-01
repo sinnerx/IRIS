@@ -11,7 +11,7 @@
 	</div>
 </div> -->
 <?php
-$photoName	= !$photoName?"noimage.png":$photoName;
+$photoName	= !$photoName?null:$photoName;
 ?>
 <h3 class="block-heading"><?php echo $pageName;?>, <span>di <?php echo $siteName;?></span></h3>
 <div class="block-content clearfix">
