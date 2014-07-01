@@ -18,6 +18,14 @@ var album	= new function()
 }
 
 </script>
+<style type="text/css">
+	
+.panel
+{
+	padding:0px;
+}
+
+</style>
 <h3 class='m-b-xs text-black'>
 	<a href='<?php echo url::base("image/album");?>'>Album</a> : <?php echo $row['albumName'];?>
 </h3>

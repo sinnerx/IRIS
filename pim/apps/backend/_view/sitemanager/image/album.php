@@ -62,6 +62,11 @@ var album	= new function()
 }
 
 
+.panel
+{
+	padding:0px;
+}
+
 </style>
 
 <h3 class='m-b-xs text-black'>
