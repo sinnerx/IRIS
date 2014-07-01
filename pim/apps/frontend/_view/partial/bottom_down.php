@@ -84,7 +84,7 @@
 					</li>
 					<?php endforeach; ?>
 					<?php else: ?>
-						<center>No blog post.</center>
+						<center>Tiada artikel terkini.</center>
 					<?php endif; ?>
 				</ul>
 				<!-- <ul> ## original example.
