@@ -83,6 +83,7 @@ class Activity
 		db::order_by("activityStartDate","desc");
 		db::join("event","activityType = '1' AND activity.activityID = event.activityID");
 		db::join("training","activityType = '2' AND activity.activityID = training.activityID");
+		db::join("user_profile","user_profile.userID = activity.activityCreatedUser");
 
 		## return and grouped type key.
 		return db::get("activity")->result($groupBy,$secondGroupBy);

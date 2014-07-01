@@ -58,6 +58,9 @@ class Controller_Ajax_Request
 			case "article":
 			$data['urlToSubject']	= url::base("site/editArticle/".$row_request['siteRequestRefID']);
 			break;
+			case "announcement":
+			$data['urlToSubject']	= url::base("site/editAnnouncement/".$row_request['siteRequestRefID']);
+			break;
 		}
 	
 		$data['row_request']	= $row_request;		

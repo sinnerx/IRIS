@@ -100,5 +100,53 @@ class Controller_Ajax_Activity
 
 		view::render("sitemanager/activity/ajax/datePicker_calendar",$data);
 	}
+
+	public function calendarGetDateList($year,$month)
+	{
+		## get current date list, based on month and year.
+		$siteID	= model::load("access/auth")->getAuthData("site","siteID");
+
+		## total date of current month/year.
+		$total	= date("t",strtotime("$year-$month-1"));
+
+		## get activities and group it by date.
+		$activity	= model::load("activity/activity");
+		$activityR	= $activity->getActivityList($siteID,$year,$month,null,false);
+		$resultR	= Array();
+
+
+
+		if($activityR)
+		{
+			$activityDateR	= $activity->getDate(array_keys($activityR));
+
+			$helper	= model::load("helper");
+			$base_url	= url::base("{site-slug}/activity");
+			$typeEngR	= Array(1=>"event",2=>"training");
+
+			foreach($activityR as $actID=>$row)
+			{
+				$data	= Array(
+							"activityID"=>$row['activityID'],
+							"activityTypeEng"=>$typeEngR[$row['activityType']],
+							"activityType"=>$activity->type($row['activityType']),
+							"activityName"=>$row['activityName'],
+							"activityStartDate"=>date("j M Y",strtotime($row['activityStartDate'])),
+							"activityEndDate"=>date("j M Y",strtotime($row['activityEndDate'])),
+							"activityCreatedUser"=>$row['userProfileFullName']
+									);
+
+				foreach($activityDateR[$actID] as $row_date)
+				{
+					$d	= date("j",strtotime($row_date['activityDateValue']));
+
+					$resultR[$d]	= !is_array($resultR)?Array():$resultR[$d];
+					$resultR[$d][]	= $data;
+				}
+			}
+		}
+
+		return response::json($resultR);
+	}
 }
 ?>
