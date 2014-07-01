@@ -51,7 +51,7 @@ Class Controller_Auth
 		## 3. access list check.
 		if(!$accessServices->accessListCheck($level) && controller::getCurrentMethod() != "login")
 		{
-			redirect::to("../404","You have no access to these page.");
+			redirect::to("../404?error=noaccess");
 		}
 
 		## return user record in construct to initiation construct.
@@ -187,7 +187,7 @@ Class Controller_Auth
 		## not found. then this token is invalid.
 		if(!$row_token)
 		{
-			redirect::to("../404","Sorry but this access token is no longer invalid.");
+			redirect::to("../404?tokeninvalid");
 		}
 
 		switch($row_token['tokenType'])

@@ -22,7 +22,7 @@ class Controller_Auth
 			## if not exists, 404. else, save it in authData.
 			if(!model::load("access/auth")->authSite($slug))
 			{
-				redirect::to("404","Couldn't find site : <b>".$slug."</b>","error");
+				redirect::to("404?site_not_found=".$slug);
 			}
 
 		}

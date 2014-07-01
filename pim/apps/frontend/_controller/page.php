@@ -27,7 +27,7 @@ Class Controller_Page
 
 			if(!$row)
 			{
-				redirect::to("404","Couldn't find the page you're looking for.","error");
+				redirect::to("404?error=pagenotfound");
 			}
 
 			if($no == count(explode("/",$trail)))

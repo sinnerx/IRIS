@@ -28,6 +28,20 @@
 <div id='fourofour'>
 	<div id='num'>404</div>
 	<div id='text'>Unable to execute the page request.</div>
-	<?php echo flash::data();flash::clear();?>
-	<div id='text'><a href='<?php echo url::base();?>'>Go back</div>
+	<?php
+	if(request::get("site_not_found")):?>
+	Error : site <u><?php echo request::get("site_not_found");?></u> not found.
+	<?php
+	elseif(request::get("error")):?>
+		Error : 
+		<?php
+		$errorCode	= Array(
+					"pagenotfound"=>"Couldn't find the page you're looking for.",
+					"tokeninvalid"=>"Sorry but this access token is no longer invalid.",
+					"noaccess"=>"You have no access to these page."
+							);
+
+		echo isset($errorCode[request::get("error")])?$errorCode[request::get("error")]:"Unable to parse error message";
+		?>
+	<?php endif;?>
 </div>
