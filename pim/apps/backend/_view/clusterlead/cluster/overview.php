@@ -129,8 +129,8 @@ var cluster	= new function()
 
 		this.minimize	= function()
 		{
-			$("#site-list").removeClass("col-sm-6").addClass("col-sm-2");
-			$("#site-detail").removeClass("col-sm-6").addClass("col-sm-10");
+			$("#site-list").removeClass("col-sm-6").addClass("col-sm-3");
+			$("#site-detail").removeClass("col-sm-6").addClass("col-sm-9");
 
 			$(".site-name").addClass("unfloat").removeClass("col-sm-4").addClass("col-sm-12");
 		}
