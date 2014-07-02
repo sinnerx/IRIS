@@ -8,11 +8,11 @@ class Icon
 	public function status($no = 0,$title = null)
 	{
 		$title	= $title?"title='$title'":"";
-		$arr[0]	= "<span {title} class='fa fa-stop' style='color:grey;'></span>";
-		$arr[1]	= "<span {title} class='fa fa-stop' style='color:green;'></span>";
-		$arr[2] = "<span {title} class='fa fa-stop' style='color:red;'></span>";
-		$arr[3] = "<span {title} class='fa fa-stop' style='color:yellow;'></span>";
-		$arr[4] = "<span {title} class='fa fa-stop' style='color:blue;'></span>";
+		$arr[0]	= "<span {title} class='fa fa-stop' title='Pending' style='color:grey;'></span>";
+		$arr[1]	= "<span {title} class='fa fa-stop' title='Approved' style='color:green;'></span>";
+		$arr[2] = "<span {title} class='fa fa-stop' title='Rejected' style='color:red;'></span>";
+		$arr[3] = "<span {title} class='fa fa-stop' title='As draft' style='color:yellow;'></span>";
+		$arr[4] = "<span {title} class='fa fa-stop' title='Pending' style='color:blue;'></span>";
 
 		return str_replace('{title}',$title,$arr[$no]);
 	}
