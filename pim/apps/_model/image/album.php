@@ -90,6 +90,7 @@ class album
 	## list all sites allbum.
 	public function getSiteAlbums($siteID,$year = null,$month = null)
 	{
+		db::where("siteID",$siteID);
 		## if year.
 		if($year)
 		{
