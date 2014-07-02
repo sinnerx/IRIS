@@ -1,15 +1,44 @@
 <link rel="stylesheet" href="<?php echo url::asset("frontend/css/blog.css"); ?>" type="text/css" />
+<style type="text/css">
+
+.pagination-wrapper > div
+{
+	text-align: center;
+}
+.pagination-wrapper > div a:nth-child(2)
+{
+	border-left:1px solid #c6def0;
+}
+.pagination-wrapper > div a
+{
+	padding:5px;
+}
+
+</style>
 <div class="body-container clearfix">
-
 	<div class="lft-container">
-
-		<a href="<?php echo url::base(request::named("site-slug")."/blog/"); ?>"><h3 class="block-heading">BLOG</h3></a>
+		<h3 class="block-heading"><a href='<?php echo url::base("{site-slug}");?>'>HOME</a> > <a href="<?php echo url::base(request::named("site-slug")."/blog/"); ?>">BLOG</a>
+		<?php
+		## bread build simple breadcrump. later need new one.
+		if($typeSortBy):
+		echo " > ";
+		echo strtoupper($typeSortBy);
+		echo " > ".$typeSortByValue;
+		elseif($dateSortBy):
+		echo " > ";
+		echo "<a href='".url::base("{site-slug}/blog/$year")."'>$year</a>";
+			if($month):
+				echo " > ";
+				echo $month;
+			endif;
+		elseif($userSortBy):
+		echo " > BY > $userProfileFullName";
+		endif;
+		?>
+		</h3>
 		<div class="block-content clearfix">
-
 			<div class="page-content">
-
 				<div class="page-sub-wrapper blog-page">
-
   					<div class="blog-container">
 	    				<?php 
 	    					if($article):
@@ -32,43 +61,42 @@
 											$img 	= model::load("image/services")->getPhotoUrl(null);
 										}
 									?>
-									<img src="<?php echo $img;?>" width="1600" height="1205"  alt=""/> 
+									<img src="<?php echo $img;?>" style='height:100%;' alt=""/> 
 								</div>
 								<div class="right-blog">
 									<div class="top-heading">
 										<h3><a href="<?php echo url::base(request::named("site-slug")."/blog/".date('Y',strtotime($row['articlePublishedDate']))."/".date('m',strtotime($row['articlePublishedDate']))."/".$row['articleSlug']);?>"><?php echo $row['articleName']; ?></a></h3>
 										<div class="story-info">
-											<span class="story-author">Ditulis Oleh <a href="#"><?php echo $row['articleCreatedUser']; ?> </a></span>
-											<span class="story-date">Pada <a href="#"><?php echo date("jS F Y",strtotime($row['articleCreatedDate'])); ?></a></span>
+											<span class="story-author">
+											<?php
+											$userUrl	= url::base("{site-slug}/blog/user/".$row['articleCreatedUser']);
+											?>
+											Ditulis Oleh <a href="<?php echo $userUrl;?>"><?php echo $row['userProfileFullName']; ?> </a></span>
+											<span class="story-date">Pada <?php
+											$dateR	= explode(" ",date("jS F Y",strtotime($row['articlePublishedDate'])));
+
+											list($articleMonth,$articleYear) = explode(" ",date("m Y",strtotime($row['articlePublishedDate'])));
+
+											$monthUrl	= url::base("{site-slug}/blog/$articleYear/$articleMonth");
+											$yearUrl	= url::base("{site-slug}/blog/$articleYear");
+
+											echo $dateR[0]." "."<a href='$monthUrl'>$dateR[1]</a> <a href='$yearUrl'>$dateR[2]</a>"; ?></span>
 											
 											<?php
-												$count = 0;
-												$item	= "";
-						                		foreach($row['category'] as $cat):
-						                			$count++;
-						                			if($cat['checked']){
-						                				$item	.= $cat['categoryName'].'&nbsp;&nbsp;';
-						                			}
-						                			if($cat['child']):
-						                				foreach($cat['child'] as $c):
-							                				$count++;
-							                				if($c['checked']){
-							                					$item .= $c['categoryName'].'&nbsp;&nbsp;';	
-							                				}
-								                			if($count == 4){
-								                				break;
-								                			}
-						                				endforeach;
-						                			endif;
+												$item	= Array();
 
-						                			if($count == 4){
-						                				break;
-						                			}
-						                		endforeach;
+												if(isset($categoryR[$row['articleID']]))
+												{
+													foreach($categoryR[$row['articleID']] as $row_cat)
+													{
+														$url	= url::base("{site-slug}/blog/category/".$row_cat['categoryID']);
+														$item[] = "<a href='$url'>".$row_cat['categoryName']."</a>";
+													}
+												}
 						                	?>
-						                	<?php if($item != ""):?>
+						                	<?php if($item):?>
 						                	<span class="story-category">Dalam <a href="#">
-						                		<?php echo $item;?>
+						                		<?php echo implode(", &nbsp;&nbsp;",$item);?>
 											</a> </span>
 						                	<?php endif;?>
 										</div>
@@ -90,6 +118,11 @@
 							endforeach;
 						?>
 						</ul>
+						<!-- pagination -->
+						<div class='pagination-wrapper'>
+						<?php echo pagination::link();?>
+						</div>
+						<!-- /pagination -->
 						<?php
 							else:
 						?>
@@ -100,13 +133,8 @@
 							endif;
 						?>
 					</div>
-
 				</div>
-
 			</div>
-		
 		</div>
-	
 	</div>
-
 </div>

@@ -97,43 +97,13 @@
 									<?php
 										foreach($articleTags as $tag){
 									?>
-									<a href="#"><?php echo $tag['articleTagName']; ?></a> 
+									<a href="<?php echo url::base("{site-slug}/blog/tag/$tag[articleTagName]");?>"><?php echo $tag['articleTagName']; ?></a> 
 									<?php
 										}
 									?>
 								</div>
 							</div>
 						</div>
-						<!-- <div class="forum-post-comment">
-							<div class="forum-post-comment-count">KOMEN <span>(3)</span></div>
-							<div class="forum-post-comment-content">
-								<ul>
-								<li class="clearfix">
-									<div class="forum-post-comment-avatar"> <img src="members_photo/1538817_10202447454481584_450404680_n.jpg" alt=""/> </div>
-									<div class="forum-post-comment-message">
-										<div class="forum-post-comment-info">Mohd Hafiz
-  											<div class="comment-post-date"><i class="fa fa-clock-o"></i>  2 Jam Lalu</div>
-  										</div>
-
-Lorem ipsum dolor sit amet, maiores ornare ac fermentum, imperdiet ut vivamus a, nam lectus at nunc. Quam euismod sem, semper ut potenti pellentesque quisque. In eget sapien sed, sit duis vestibulum ultricies, placerat morbi amet vel, nullam in in lorem vel. In molestie elit dui dictum, praesent nascetur pulvinar sed.
-
-									</div>
-
-								</li>
-								</ul>
-								<div class="forum-comment-form">
-									<div class="comment-user-avatar"></div>
-									<div class="comment-post-input">
-										<h3>Nama Komentator (Logged-in)</h3>
-										<div class="comment-text-input">
-											<div class="comment-text-input-arrow"></div>
-											<textarea>Taipkan komen anda di sini...</textarea>
-											<input type="submit" value="Hantar" class="bttn-submit">
-										</div>
-									</div>
-								</div>
-							</div>
-						</div> -->
 				</div>
 			</div>
 		</div>

@@ -26,6 +26,8 @@
 					continue;
 				}
 
+				
+
 				$component	= $row['componentNo'];
 				$menuName	= !$row['componentName']?$row['menuName']:$row['componentName'];
 				$main_url	= url::base(request::named("site-slug")."/".$row['componentRoute']);

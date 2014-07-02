@@ -92,13 +92,27 @@ class Category
 		db::order_by("categoryName ASC");
 		db::join("category","category.categoryID = article_category.categoryID");
 
-		return db::get("article_category")->result("categoryID");
+		if(is_array($articleID))
+		{
+			return db::get("article_category")->result("articleID",true);
+		}
+		else
+		{
+			return db::get("article_category")->result("categoryID");
+		}
 	}
 
 	public function getCategory($id,$cols = null)
 	{
 		db::select($cols);
 		db::where("categoryID",$id);
+		return db::get("category")->row($cols);
+	}
+
+	public function getCategoryByName($name)
+	{
+		db::select($cols);
+		db::where("categoryName",$name);
 		return db::get("category")->row($cols);
 	}
 

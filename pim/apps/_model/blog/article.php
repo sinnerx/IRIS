@@ -22,7 +22,7 @@ class Article
 				pagination::setFormat(model::load('template/cssbootstrap')->paginationLink());
 				pagination::initiate(Array(
 								"totalRow"=>db::num_rows(), 
-								"limit"=>6,				
+								"limit"=>10,				
 								"urlFormat"=>url::base("site/article/{page}"),
 								"currentPage"=>$page
 										));
@@ -58,10 +58,57 @@ class Article
 		return $data;
 	}
 
+	public function getArticleList2($siteID,$pageConf = null,$where = null,$join = null)
+	{
+		db::from("article");
+		db::where("siteID",$siteID);
+		db::where("articleStatus",1);
+		db::where("date(articlePublishedDate) <",date("Y-m-d",strtotime("+1 days",time())));
+
+		## additional where clause.
+		if($where)
+		{
+			foreach($where as $key=>$val)
+			{
+				db::where($key,$val);
+			}
+		}
+
+		## pagination.
+		if($pageConf)
+		{
+			pagination::initiate(Array(
+								"urlFormat"=>$pageConf['urlFormat'],
+								"totalRow"=>db::num_rows(),
+								"limit"=>$pageConf['limit'],
+								"currentPage"=>$pageConf['currentPage']
+										));
+
+			db::limit($pageConf['limit'],pagination::recordNo()-1);
+		}
+
+		## join
+		if($join)
+		{
+			foreach($join as $key=>$val)
+			{
+				db::join($key,$val);
+			}
+		}
+
+		db::join("user_profile","user_profile.userID = article.articleCreatedUser");
+		db::order_by("articlePublishedDate DESC, articleID DESC");
+
+		return db::get()->result("articleID");
+	}
+
 	public function slugChecker($slug,$date,$articleID=null)
 	{
 		db::from("article");
-		db::where("articleOriginalSlug = '".$slug."' AND YEAR(articleCreatedDate) = '".date('Y', strtotime($date))."' AND MONTH(articleCreatedDate) = '".date('n', strtotime($date))."'");
+		db::where("articleOriginalSlug",$slug);
+		db::where("year(articlePublishedDate)",date("Y",strtotime($date)));
+		db::where("month(articlePublishedDate)",date("n",strtotime($date)));
+		// db::where("articleOriginalSlug = '".$slug."' AND YEAR(articlePublishedDate) = '".date('Y', strtotime($date))."' AND MONTH(articlePublishedDate) = '".date('n', strtotime($date))."'");
 		
 		if($articleID)
 		{
@@ -98,7 +145,7 @@ class Article
 
 	private function _updateArticle($articleID,$data,$withoutOthers = false){
 		$originalSlug = model::load('helper')->slugify($data['articleName']);
-		$articleSlug = $this->slugChecker($originalSlug,$data['articlePublishedDate']);
+		$articleSlug = $this->slugChecker($originalSlug,$data['articlePublishedDate'],$articleID);
 
 		$dataArticle	= Array(
 				"articleStatus"=>$data['articleStatus'],

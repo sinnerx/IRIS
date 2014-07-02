@@ -3,16 +3,90 @@ Class Controller_Blog
 {
 	public function article()
 	{
-		$siteArticle	= model::load("blog/article");
-		$siteID	= model::load("site/site")->getSiteIDBySlug(request::named("site-slug"));
+		$urlFormat	= url::base("{site-slug}/blog/?page={page}");
+		return $this->articleRenderer($urlFormat,$data,null);
+	}
 
-		$data['article']	= $siteArticle->getArticleList($siteID, true);
+	## used for route tag/{tag} or category/{category}
+	public function articleByTagOrCategory($type,$val)
+	{
+		$where	= null;
 
-		foreach ($data['article'] as $article => $row) {
-			$data['article'][$article]['category'] = model::load("blog/category")->getArticleCategoryList($row['articleID']);
+		## if category sort.
+		if($type == "category")
+		{
+			$data['typeSortBy']	= $type;
+			$row_cat	= model::load("blog/category")->getCategory($val,"categoryName");
+			$data['typeSortByValue']	= $row_cat;
+
+			$where['articleID IN (SELECT articleID FROM article_category WHERE categoryID = ?)'] = Array($val);
 		}
 
-		view::render("blog/article", $data);
+		## if tag sort.
+		if($type == "tag")
+		{
+			$data['sortBy']	= $type;
+			$data['sortByValue']	= $val;
+			$where['articleID IN (SELECT articleID FROM article_tag WHERE articleTagName = ?)'] = Array($val);
+		}
+
+		$urlFormat	= url::base("{site-slug}/blog/$type/$val/?page={page}");
+
+		// view::render("blog/article",$data);
+		return $this->articleRenderer($urlFormat,$data,$where);
+	}
+
+	## used for route blog/year or blog/year/month
+	public function articleByYearOrMonth($year,$month = null)
+	{
+		$where['year(articlePublishedDate)']	= $year;
+		$data['dateSortBy']	= true;
+		$data['year']		= $year;
+		$urlFormat			= url::base("{site-slug}/blog/$year?page={page}");
+
+		if($month)
+		{
+			$data['month']	= date("F",strtotime("2014-$month-1"));
+			$where['month(articlePublishedDate)'] = $month;
+			$urlFormat		= url::base("{site-slug}/blog/$year/".zeronating($month,2)."?page={page}");
+		}
+
+		return $this->articleRenderer($urlFormat,$data,$where);
+	}
+
+	## used for route blog/user/$userID
+	public function articleByUser($userID)
+	{
+		$urlFormat	= url::base("{site-slug}/blog/user/$userID?page={page}");
+		$row_user	= model::load("user/user")->get($userID);
+
+		$data['userSortBy']	= true;
+		$data['userProfileFullName'] = $row_user['userProfileFullName'];
+
+		return $this->articleRenderer($urlFormat,$data,$where);
+	}
+
+	## re-factored. main logic renderer.
+	private function articleRenderer($urlFormat,$data,$where)
+	{
+		$page	= request::get("page",1);
+		$siteID	= authData("current_site.siteID");
+
+		$paginConf['urlFormat']	= $urlFormat;
+		$paginConf['currentPage']	= $page;
+		$paginConf['limit']			= 5;
+
+		pagination::setFormat(model::load("template/frontend")->paginationFormat());
+
+		$data['article'] = model::load("blog/article")->getArticleList2($siteID,$paginConf,$where);
+
+		if($data['article'])
+		{
+			$res_cat	= model::load("blog/category")->getArticleCategoryList2(array_keys($data['article']));
+			$data['categoryR']	= $res_cat;
+		}
+
+		view::render("blog/article",$data);
 	}
 
 	public function view()

@@ -152,7 +152,7 @@ class Menu
 					"componentNo"=>4,
 					"componentName"=>"Ruangan Ahli",
 					"componentRoute"=>"members",
-					"componentStatus"=>1
+					"componentStatus"=>0
 					),
 				5=>Array(
 					"componentNo"=>5,
