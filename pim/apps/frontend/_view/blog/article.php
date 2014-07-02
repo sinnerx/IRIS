@@ -52,7 +52,8 @@
 									<?php 
 										if(strpos($row['articleText'],'<img') !== false)
 										{
-											$length = (strpos($row['articleText'],'alt')-4)-(strpos($row['articleText'],'src')+2);
+											$offset	= strpos($row['articleText'],'<img');
+											$length = (strpos($row['articleText'],'alt',$offset)-4)-(strpos($row['articleText'],'src')+2);
 											$start = (strpos($row['articleText'],'src=')+5);
 											$img	= substr($row['articleText'],$start,$length);
 										}

@@ -25,8 +25,8 @@ Class Controller_Blog
 		## if tag sort.
 		if($type == "tag")
 		{
-			$data['sortBy']	= $type;
-			$data['sortByValue']	= $val;
+			$data['typeSortBy']	= $type;
+			$data['typeSortByValue']	= $val;
 			$where['articleID IN (SELECT articleID FROM article_tag WHERE articleTagName = ?)'] = Array($val);
 		}
 
@@ -74,7 +74,7 @@ Class Controller_Blog
 
 		$paginConf['urlFormat']	= $urlFormat;
 		$paginConf['currentPage']	= $page;
-		$paginConf['limit']			= 5;
+		$paginConf['limit']			= 3;
 
 		pagination::setFormat(model::load("template/frontend")->paginationFormat());
 
