@@ -55,6 +55,11 @@ class Helper
 					11=>"NOVEMBER",
 					12=>"DISEMBER"
 							);
+
+				if($firstParam)
+				{
+					return $arrR[$firstParam];
+				}
 			break;
 			case "year":
 				$startY	= !$firstParam?date("Y")-5:$firstParam;

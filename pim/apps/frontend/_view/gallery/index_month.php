@@ -34,7 +34,7 @@ function monthChange(month)
 <span class="subheading"> >
 <a href='<?php echo url::base("{site-slug}/gallery");?>'>Galeri Foto</a> > 
 <a href='<?php echo url::base("{site-slug}/gallery/$year");?>'><?php echo $year;?></a> > 
-<?php echo date("F",strtotime("2014-$month-1"));?></span></h3>
+<?php echo model::load("helper")->monthYear("month",$month);?></span></h3>
 <div class="block-content clearfix">
 	<div class="page-content">
 		<div class="page-description"> 
@@ -50,7 +50,7 @@ function monthChange(month)
 					<option value="4">Tarikh</option>
 				</select> -->
 				</div>
-				<h5 class="album-heading">Album 2014</h5>
+				<h5 class="album-heading">Album <?php echo model::load("helper")->monthYear("month",$month)." ".$year;?></h5>
 			</div>
 			<div class="activity-year-select clearfix">
 				<div class="month-left">

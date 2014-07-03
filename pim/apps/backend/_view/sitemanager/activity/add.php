@@ -504,7 +504,7 @@ pim.uriHash.addCallback({"event":function(){activity.showTypeDetail(1)},"trainin
 Add Activity 
 </h3>
 <div class='well well-sm'>
-Add activities to your side. Every activity added will be pending for your cluster lead approval first.
+Add an activity to your site. All new activities will not be published until they are approved by your cluster lead.
 </div>
 <?php echo flash::data();?>
 <form method='post' onsubmit="return confirm('Add activity, are you sure.?');">

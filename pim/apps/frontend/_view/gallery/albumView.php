@@ -4,8 +4,6 @@
 <link rel="stylesheet" type="text/css" href="<?php echo url::asset("frontend/css/album.css");?>">
 <script type="text/javascript">
 
-jQuery(document).ready(function()
-{
   jQuery(function(){
     //SyntaxHighlighter.all();
   });
@@ -31,7 +29,6 @@ jQuery(document).ready(function()
       }
     });
   });
-});
 </script>
 <style type="text/css">
 .flexslider
@@ -110,7 +107,7 @@ jQuery(document).ready(function()
       {
         $url  = model::load("image/services")->getPhotoUrl($row['photoName']);
         ?>
-        <li style="width: 210px; height:62px; float: left; display: block;" class="flexslider-thumb-list">
+        <li style="width: 100px; height:62px; float: left; display: block;" class="flexslider-thumb-list">
           <img src="<?php echo $url;?>" draggable="false">
         </li>
         <?php

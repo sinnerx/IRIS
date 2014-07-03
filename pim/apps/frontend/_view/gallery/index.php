@@ -38,7 +38,7 @@ function monthChange(month)
 					<option value="4">Tarikh</option>
 				</select> -->
 				</div>
-				<h5 class="album-heading">Album 2014</h5>
+				<h5 class="album-heading">Album <?php echo $year;?></h5>
 			</div>
 			<div class="activity-year-select clearfix">
 				<div class="month-left">

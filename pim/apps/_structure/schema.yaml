@@ -85,7 +85,7 @@ activity:
 	activityAddressFlag [int]		## 0 = use field activityAddress, 1 = use site info address.
 	activityAddress [text]
 	activityDescription [text]
-	activityParticipation [int]		## 1 = open for all, 2 = closed to member
+	activityParticipation [int]		## 1 = open for all p1m member, 2 = closed to member, 3 = open for all.
 	activityStartDate [datetime]
 	activityEndDate [datetime]
 	activityDateTimeType [int]		## 1 = multiple selection, 2 = single date. (not really important.)

@@ -6,7 +6,7 @@ class Activity
 	public function type($no = null)
 	{
 		$arr	= Array(
-				1=>"Peristiwa",
+				1=>"Program",
 				2=>"Latihan"
 						);
 
@@ -317,8 +317,9 @@ class Activity
 	public function participationName($no = null)
 	{
 		$arr	= Array(
-				1=>"Terbuka kepada semua",
-				2=>"Hanya untuk ahli"
+				1=>"Terbuka kepada semua ahli",
+				2=>"Hanya untuk ahli",
+				3=>"Terbuka kepada umum"
 						);
 
 		return $no?$arr[$no]:$arr;
