@@ -1,9 +1,7 @@
 <link rel="stylesheet" href="<?php echo url::asset("frontend/css/blog.css"); ?>" type="text/css" />
 <div class="lft-container">
 	<div class="top-heading">
-	<h3 class="block-heading">
-		<a>BLOG</a>
-	</h3>
+	
 	</div>
 	<div class="block-content clearfix">
 		<div class="page-content">
@@ -11,11 +9,17 @@
   				<div class="blog-container">
   					<div class="story-info">
 						<span class="story-author">
+                        <h3 class="block-heading">
+		<a>BLOG</a>
+	
 							<a href="<?php echo url::base(request::named("site-slug")); ?>">Home</a>
-							&nbsp; → &nbsp;
+							<span class="subbread"> >
 							<a href="<?php echo url::base(request::named("site-slug").'/blog'); ?>">Blog</a>
 							<!--&nbsp; → &nbsp;
 							<a href="<?php //echo url::base(request::named("site-slug").'/blog/'.); ?>">Category Name</a>-->
+                            </span>
+                            
+                            </h3>
 						</span>
 					</div>
 					<!-- <div class="single-featured-image">

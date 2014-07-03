@@ -17,7 +17,7 @@
 </style>
 <div class="body-container clearfix">
 	<div class="lft-container">
-		<h3 class="block-heading"><a href='<?php echo url::base("{site-slug}");?>'>HOME</a> > <a href="<?php echo url::base(request::named("site-slug")."/blog/"); ?>">BLOG</a>
+		<h3 class="block-heading"><a href='<?php echo url::base("{site-slug}");?>'>HOME</a><span class="subbread"> > <a href="<?php echo url::base(request::named("site-slug")."/blog/"); ?>">BLOG</a>
 		<?php
 		## bread build simple breadcrump. later need new one.
 		if($typeSortBy):
@@ -34,7 +34,7 @@
 		elseif($userSortBy):
 		echo " > BY > $userProfileFullName";
 		endif;
-		?>
+		?></span>
 		</h3>
 		<div class="block-content clearfix">
 			<div class="page-content">
