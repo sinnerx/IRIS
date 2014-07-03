@@ -24,6 +24,30 @@
 	background: #fbece1;
 }
 
+
+.cal-paging{
+		color:#000;
+	font-weight:bold;
+	
+}
+.cal-paging a{
+	color:#000;
+	font-weight:bold;
+	-webkit-transition: all 0.4s ease-out;
+   -moz-transition: all 0.4s ease-out;
+   -ms-transition: all 0.4s ease-out;
+   -o-transition: all 0.4s ease-out;
+   transition: all 0.4s ease-out;
+	
+	
+}
+
+.cal-paging a:hover{
+	color:#428bca;
+
+
+
+}
 </style>
 
 <?php
@@ -34,10 +58,11 @@ $yAfter		= $month == 12?$year+1:$year;
 
 ?>
 <label class='pull-right cal-paging'>
-	<a href='<?php echo url::base("ajax/activity/datePicker_calendar/$yBefore/$mBefore");?>'><</a> 
+	<a href='<?php echo url::base("ajax/activity/datePicker_calendar/$yBefore/$mBefore");?>' style="margin-right:10px;"><<</a> 
 	<?php echo $monthLabel." ".$yearLabel;?> 
-	<a href='<?php echo url::base("ajax/activity/datePicker_calendar/$yAfter/$mAfter");?>'>></a>
+	<a href='<?php echo url::base("ajax/activity/datePicker_calendar/$yAfter/$mAfter");?>' style="margin-left:10px;">>></a>
 </label>
+<div class="clearfix"></div>
 <?php 
 //Main calendar show.
 echo $calendar->showCalendar();?>

@@ -54,7 +54,7 @@ cluster.overview.previewRequestDetail = function(requestID)
 	
 .request-info
 {
-	padding:5px;
+	padding:15px;
 }
 #request-list table tr td:last-child
 {

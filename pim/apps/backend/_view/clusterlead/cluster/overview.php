@@ -23,6 +23,7 @@
 .site-name{
 	margin-bottom:20px;
 	
+	
 }
 
 .state-site-list
@@ -34,6 +35,7 @@
 {
 	float:none;
 	border-bottom:1px dashed #e4e9f1;
+	padding-bottom:20px;
 }
 
 .panel-default{

@@ -17,7 +17,8 @@
 .btn-wrapper a
 {
 	position: relative;
-	top:5px;
+	right: 10px;
+    top: 15px;
 }
 .btn-wrapper
 {

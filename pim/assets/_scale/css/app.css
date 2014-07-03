@@ -2676,7 +2676,10 @@ background-color: #177bbb;
 }
 .bg-danger {
   background-color: #e33244;
-  color: #fce5e8;
+
+    color: #fff;
+    float: right;
+    font-size: 11px;
 }
 .bg-danger.lt,
 .bg-danger .lt {

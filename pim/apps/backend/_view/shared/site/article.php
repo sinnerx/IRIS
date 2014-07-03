@@ -26,6 +26,11 @@
 	opacity: 0.5;
 }
 
+.tags-article{
+	width:200px !important;
+	
+}
+
 </style>
 <h3 class="m-b-xs text-black">
 <a href='info'>My Blog Posts</a>
@@ -73,7 +78,7 @@ List of all your approved and pending blog articles.
 			<div class='articleName'><?php echo $row['articleName'];?></div>
 			</td>
 			<td>
-				<div class="tokenizer" style="width: 200px;border: 0px;background-color: transparent;">
+				<div class="tokenizer tags-article" style="border: 0px;background-color: transparent;">
 					<div>
 						<ul class="token">
 							<?php

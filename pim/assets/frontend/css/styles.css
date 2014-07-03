@@ -386,6 +386,7 @@ ul.dropdown{
 	float:left;
 	margin-top:10px;
 	padding-top:38px;
+	min-width:255px;
 	
 }
 

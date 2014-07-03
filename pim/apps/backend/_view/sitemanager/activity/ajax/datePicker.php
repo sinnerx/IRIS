@@ -23,7 +23,7 @@
 
 #table-calendar th
 {
-	text-align: center;
+	text-align: left;
 }
 #table-calendar td
 {
@@ -64,6 +64,13 @@
 .clicked-end
 {
 	background: #bee7e7;
+}
+
+
+.pull-right.cal-paging{
+	margin-top:10px;
+	margin-bottom:10px;
+
 }
 
 </style>
