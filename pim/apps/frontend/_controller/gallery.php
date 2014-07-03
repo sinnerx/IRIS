@@ -10,16 +10,20 @@ class Controller_Gallery
 
 		// loop res_album prepares list of siteAlbumID.
 		$albumIDR	= Array();
-		foreach($res_album as $month=>$list_album)
+		if($res_album)
 		{
-			foreach($list_album as $row_album)
+			foreach($res_album as $month=>$list_album)
 			{
-				if(!in_array($row_album['siteAlbumID'],$albumIDR))
-					$albumIDR[]	= $row_album['siteAlbumID'];
+				foreach($list_album as $row_album)
+				{
+					if(!in_array($row_album['siteAlbumID'],$albumIDR))
+						$albumIDR[]	= $row_album['siteAlbumID'];
+				}
 			}
 		}
 
-		$data['photoTotalR']	= model::load("image/album")->getSiteAlbumTotalPhoto($albumIDR);
+		if($res_album)
+			$data['photoTotalR']	= model::load("image/album")->getSiteAlbumTotalPhoto($albumIDR);
 		$data['res_album']		= $res_album;
 
 		$data['year']	= $year;
