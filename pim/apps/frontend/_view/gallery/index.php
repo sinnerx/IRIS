@@ -95,8 +95,8 @@ function monthChange(month)
 
 					?>
 					<li>
-						<div class="gallery-thumnbail"><a href="<?php echo $href;?>"><img src="<?php echo $url;?>" width="270" alt=""/></a></div>
-						<div class="album-comments-count">0</div>
+						<div class="gallery-thumnbail"><a href="<?php echo $href;?>"><img src="<?php echo $url;?>" width="270" alt=""/></a>
+						<div class="album-comments-count">0</div></div>
 						<div class="album-gallery-info">
 						<div class="album-name"><?php echo $albumName;?></div>
 						<div class="album-count-gallery"><?php echo $totalPhoto?:"Tiada";?> Gambar</div>

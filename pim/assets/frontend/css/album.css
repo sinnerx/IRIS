@@ -72,6 +72,7 @@ margin-right:0px !important;
 position:absolute;
 	right:5px;
 	top:85px;
+	bottom:25px;
 	border:2px solid #009bff;
 	color:#FFF;
 font-family: 'Lato', sans-serif;
@@ -247,8 +248,14 @@ font-size:20px;
 	
 }
 
+/* NEWLY ADDED BY EIMIHAR*/
 .album-comments-count
 {
-	bottom:75px;
+	bottom:15px;
 	top:auto;
+}
+
+.gallery-thumnbail
+{
+	position: relative;
 }
