@@ -42,7 +42,12 @@ input
    						}else{
         				   $target = "target='_blank'";
     					}
-    					echo "<li><a ".$target." href='".$row['announcementLink']."'>".$row['announcementText']."</a></li>";
+					    if($row['announcementLink'] != ""){
+					        $href = "href='".$row['announcementLink']."'";
+					    }else{
+					        $href = "";
+					    }
+    					echo "<li><a ".$target." ".$href.">".$row['announcementText']."</a></li>";
 				  }
 				  ?>
 				  </ul>

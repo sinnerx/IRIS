@@ -9,11 +9,17 @@ class Announcement
 	{
 		$status = session::get('userLevel') == 99?1:0;
 
+		if(strpos($data['announcementLink'], 'http') === false || strpos($data['announcementLink'], '//') === false){
+			$link = "http://".$data['announcementLink'];
+		}else{
+			$link = $data['announcementLink'];
+		}
+
 		$data	= Array(
 				"siteID"=>$siteID,
 				"announcementStatus"=>$status,
 				"announcementText"=>$data['announcementText'],
-				"announcementLink"=>$data['announcementLink'],
+				"announcementLink"=>$link,
 				"announcementExpiredDate"=>$data['announcementExpiredDate'],
 				"announcementCreatedDate"=>now(),
 				"announcementCreatedUser"=>session::get("userID")

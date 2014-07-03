@@ -381,6 +381,10 @@ Class Controller_Site
 			$postdata['announcementExpiredDate'] = date('Y-m-d',strtotime($postdata['announcementExpiredDate']));
 			$postdata['siteID'] = $data['row']['siteID'];
 
+			if(strpos($postdata['announcementLink'], 'http') === false || strpos($postdata['announcementLink'], '//') === false){
+				$postdata['announcementLink'] = "http://".$postdata['announcementLink'];
+			}
+
 			## update db.
 			model::load("site/announcement")->updateAnnouncement($announceID,$postdata);
 
