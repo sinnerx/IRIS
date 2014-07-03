@@ -2,12 +2,12 @@
 Activity : Event
 </h3>
 <div class='well well-sm'>
-List of event activities of your site. <a href='<?php echo url::base("activity/add#event");?>'>Add?</a>
+List of event activities of your site.
 </div>
 <section class='panel panel-default'>
-	<div class='panel-heading'>
-
-	</div>
+		<div class='row'>
+		<a style="position:relative;right:10px;" href='<?php echo url::base("activity/add#event");?>' class='btn btn-primary pull-right'>Add New Event</a>
+		</div>
 	<div class='table-responsive'>
 		<table class='table'>
 			<tr>

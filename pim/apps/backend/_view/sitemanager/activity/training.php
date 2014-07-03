@@ -2,11 +2,11 @@
 Activity : Training
 </h3>
 <div class='well well-sm'>
-List of training activities of your site. <a href='<?php echo url::base("activity/add#training");?>'>Add?</a>
+List of training activities of your site.
 </div>
 <section class='panel panel-default'>
-	<div class='panel-heading'>
-		
+	<div class='row'>
+	<a style="position:relative;right:10px;" href='<?php echo url::base("activity/add#event");?>' class='btn btn-primary pull-right'>Add New Training</a>
 	</div>
 	<div class='table-responsive'>
 		<table class='table'>
