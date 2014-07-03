@@ -28,18 +28,10 @@
 
 </style>
 <h3 class="m-b-xs text-black">
-<?php if(session::get("userLevel") == 99):?>
-<a href='info'>General Blog</a>
-<?php else:?>
 <a href='info'>My Blog Posts</a>
-<?php endif;?>
 </h3>
 <div class='well well-sm'>
-<?php if(session::get("userLevel") == 99):?>
-List of requested blog posts on all Pi1M sites. Only root admin can manage this section.
-<?php else:?>
-Listing all your request blogs here.
-<?php endif;?>
+List of all your approved and pending blog articles.
 </div>
 	<?php echo flash::data();?>
 <section class="panel panel-default">
