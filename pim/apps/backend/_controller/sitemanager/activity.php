@@ -52,7 +52,7 @@ class Controller_Activity
 			{
 				input::repopulate();
 				redirect::withFlash(model::load("template/services")->wrap("input-error",$error));
-				redirect::to("","Got error in your form.","error");
+				redirect::to("","Please correct the error highlighted.","error");
 			}
 
 			$data	= input::get();
@@ -138,7 +138,7 @@ class Controller_Activity
 			{
 				input::repopulate();
 				redirect::withFlash(model::load("template/services")->wrap("input-error",$error));
-				redirect::to("","Got error in your form.","error");
+				redirect::to("","Please correct the error highlighted.","error");
 			}
 
 			$data	= input::get();
