@@ -39,21 +39,55 @@ class album
 		return db::get("site_album")->row();
 	}
 
+	public function getSiteAlbumBySlug($slug,$year,$month)
+	{
+		db::where("siteAlbumSlug",$slug);
+		db::where("site_album.albumID IN (SELECT albumID FROM album WHERE year(albumCreatedDate) = ? AND month(albumCreatedDate) = ? )",Array($year,$month));
+		db::join("album","album.albumID = site_album.albumID");
+		return db::get("site_album")->row();
+	}
+
 	## add album.
 	public function addSiteAlbum($siteID,$siteAlbumType,$data)
 	{
 		$albumID	= $this->_addAlbum($data);
 
+		$originalSlug	= model::load("helper")->slugify($data['albumName']);
+		$siteAlbumSlug	= $this->refineSiteAlbumSlug($originalSlug,now());
+
 		## insert site_album
 		$data_sitealbum	= Array(
 				"siteID"=>$siteID,
 				"siteAlbumType"=>$siteAlbumType,
-				"albumID"=>$albumID
+				"albumID"=>$albumID,
+				"siteAlbumSlugOriginal"=>$originalSlug,
+				"siteAlbumSlug"=>$siteAlbumSlug
 								);
 
 		db::insert("site_album",$data_sitealbum);
 		$siteAlbumID	= db::getLastID("site_album","siteAlbumID");
 		return $siteAlbumID;
+	}
+
+	## create slug for site album.
+	public function refineSiteAlbumSlug($slug,$date,$siteAlbumID = null)
+	{
+		$year	= date("Y",strtotime($date));
+		$month	= date("n",strtotime($date));
+
+		db::where("siteAlbumSlugOriginal",$slug);
+		db::where("albumID IN (SELECT albumID FROM album WHERE month(albumCreatedDate) = ? AND year(albumCreatedDate) = ?)",Array($month,$year));
+
+		if($siteAlbumID)
+		{
+			db::where("siteAlbumID !=",$siteAlbumID);
+		}
+
+		$result	= db::get("site_album")->result();
+		if(!$result)
+			return $slug;
+
+		return $slug."-".(count($result)+1);
 	}
 
 	private function _addAlbum($data)
@@ -91,23 +125,37 @@ class album
 	public function getSiteAlbums($siteID,$year = null,$month = null)
 	{
 		db::where("siteID",$siteID);
+		db::select("site_album.*,album.*");
 		## if year.
 		if($year)
 		{
 			db::where("year(albumCreatedDate)",$year);
+			db::select("month(albumCreatedDate) as month");
 		}
 
 		## if month.
 		if($month)
 		{
-			db::where("month(albumCreatedMonth)",$month);
+			db::where("month(albumCreatedDate)",$month);
 		}
 
 		## join-album.
 		db::join("album","album.albumID = site_album.albumID");
 
 		## get it
-		return db::get("site_album")->result();
+		# if got year group it by month.
+		if($year && !$month)
+		{
+			return db::get("site_album")->result("month",true);
+		}
+		else if($month)
+		{
+			return db::get("site_album")->result("siteAlbumID");
+		}
+		else
+		{
+			return db::get("site_album")->result();
+		}
 	}
 
 	public function getActivityAlbum($activityID)
@@ -135,5 +183,29 @@ class album
 				1=>"User album",
 				2=>"Site album"
 						);
+	}
+
+	public function getSiteAlbumTotalPhoto($siteAlbumID)
+	{
+		$total	= Array();
+
+		if($siteAlbumID)
+		{
+			db::select("photoID,siteAlbumID");
+			db::where("siteAlbumID",$siteAlbumID);
+
+			$res	= db::get("site_photo")->result("siteAlbumID",true);
+
+			if($res)
+			{
+				foreach($res as $siteAlbumID=>$sitePhotoR)
+				{
+					$total[$siteAlbumID]	= count($sitePhotoR);
+				}
+
+			}
+		}
+
+		return $total;
 	}
 }

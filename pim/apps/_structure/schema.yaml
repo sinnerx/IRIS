@@ -372,6 +372,8 @@ album:
 
 site_album:
 	siteAlbumID [int]
+	siteAlbumSlug [varchar]
+	siteAlbumSlugOriginal [varchar]
 	albumID [int]
 	siteID [int]
 	siteAlbumType [int] ## 1 = activity-album.

@@ -155,6 +155,12 @@ $routes[]	= Array("[:site-slug]/profile/[i:userID?]","controller=member@profile"
 ## ajax request.
 $routes[]	= Array("[:site-slug]/ajax/[:controller]/[**:method]","controller=ajax/ajax_{controller}@{method}");
 
+## gallery
+$routes[]	= Array("[:site-slug]/gallery/[:year?]","controller=gallery@index");
+$routes[]	= Array("[:site-slug]/gallery/[:year]/[:month]","controller=gallery@index_month");
+$routes[]	= Array("[:site-slug]/gallery/[:year]/[:month]/id/[i:siteAlbumID]","controller=gallery@albumView","{siteAlbumID}");
+$routes[]	= Array("[:site-slug]/gallery/[:year]/[:month]/[:sitealbum-slug]","controller=gallery@albumView","{sitealbum-slug},{year},{month}");
+
 ## site page.
 $routes[]	= Array("[:site-slug]/[**:trail]","controller=page@index");
 ########################

@@ -151,8 +151,8 @@ class Menu
 				4=>Array(
 					"componentNo"=>4,
 					"componentName"=>"Ruangan Ahli",
-					"componentRoute"=>"members",
-					"componentStatus"=>0
+					"componentRoute"=>"#",
+					"componentStatus"=>1
 					),
 				5=>Array(
 					"componentNo"=>5,
@@ -173,6 +173,21 @@ class Menu
 					"componentStatus"=>1
 					)
 					);
+
+		return $arr;
+	}
+
+	public function componentChild($no = null)
+	{
+		$arr	= Array(
+				4=>Array(
+					"Galeri Media"=>Array(
+							Array("Galeri Foto","gallery"),
+							Array("Galeri Video","#"),
+							Array("Galeri Muat Turun","#")
+								)
+						)
+				);
 
 		return $arr;
 	}

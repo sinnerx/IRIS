@@ -7,6 +7,8 @@
 		<div class='navigation'>
 		<ul class='nav'>
 		<?php
+		$componentChildR	= model::load("site/menu")->componentChild();
+
 		if($menuR)
 		{
 			## prepare component controller mapping first.
@@ -86,7 +88,7 @@
 
 				$cssActive	= $controller."/".$method == $componentControllerR[$component]?"active":"";
 
-				$dropdownIcon	= isset($childPageR[$pageID])?'<span><i class="fa fa-sort-asc"></i></span>':"";
+				$dropdownIcon	= isset($childPageR[$pageID]) || isset($componentChildR[$component])?'<span><i class="fa fa-sort-asc"></i></span>':"";
 				echo "<li><a href='$main_url' class='$cssActive'>$menuName $dropdownIcon</a>";
 
 				## for first appearance in childmenu. github #10
@@ -114,6 +116,30 @@
 						echo "</div></div>";
 						echo "</div>";
 					}
+				}
+
+
+				if(isset($componentChildR[$component]))
+				{
+					echo "<div>";
+					echo '<div class="nav-column"><div class="menu-block">';
+					echo "<ul class='clearfix'>";
+					$no	= 1;
+					foreach($componentChildR[$component] as $headername=>$rowR)
+					{
+
+						echo "<h3>$headername</h3>";
+						foreach($rowR as $row)
+						{
+							$href	= $row[1] == "#"?"#":url::base("{site-slug}/".$row[1]);
+							echo "<li><a href='$href'>$row[0]</a></li>";
+							$no++;
+						}
+					}
+
+					echo "</ul>";
+					echo "</div></div>";
+					echo "</div>";
 				}
 
 
