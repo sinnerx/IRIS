@@ -27,7 +27,12 @@ function monthChange(month)
 }
 
 </script>
-<h3 class="block-heading">Galeri Foto <span class="subheading"> > <?php echo $year;?> > <?php echo date("F",strtotime("2014-$month-1"));?></span></h3>
+<h3 class="block-heading">
+<a href='<?php echo url::base("{site-slug}");?>'>Home</a>
+<span class="subheading"> >
+<a href='<?php echo url::base("{site-slug}/gallery");?>'>Galeri Foto</a> > 
+<a href='<?php echo url::base("{site-slug}/gallery/$year");?>'><?php echo $year;?></a> > 
+<?php echo date("F",strtotime("2014-$month-1"));?></span></h3>
 <div class="block-content clearfix">
 	<div class="page-content">
 		<div class="page-description"> 

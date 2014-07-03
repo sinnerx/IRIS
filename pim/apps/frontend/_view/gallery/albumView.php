@@ -66,7 +66,11 @@ jQuery(document).ready(function()
 
 
 </style>
-<h3 class="block-heading"><a href='<?php echo url::base("{site-slug}/gallery");?>'>Galeri Foto</a> <span class="subheading"> > Album > Foto</span></h3>
+<h3 class="block-heading">
+<a href='<?php echo url::base("{site-slug}");?>'>Home</a><span class="subheading"> >
+<a href='<?php echo url::base("{site-slug}/gallery");?>'> Galeri Foto</a>
+ > Album > Foto</span>
+ </h3>
 <div class="block-content clearfix">
 <div class="page-content">
 <div class="page-description"> 
