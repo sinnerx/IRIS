@@ -126,7 +126,7 @@ jQuery(document).ready(function()
   </section>
 <?php endif;?>
   <div class="album-info">
-    <?php echo $row_album['albumDescription'];?>
+    <?php echo nl2br($row_album['albumDescription']);?>
   </div>
 </div>
 <div class="clr"></div>
