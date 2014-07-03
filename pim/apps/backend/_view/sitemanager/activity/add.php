@@ -514,20 +514,20 @@ Add activities to your side. Every activity added will be pending for your clust
 			<div class='col-sm-6'>
 				<div class='form-group'>
 					<label>
-						1. Activity Name <?php echo flash::data("activityName");?>
+						Activity Name <?php echo flash::data("activityName");?>
 					</label>
 					<?php echo form::text("activityName","class='form-control'");?>
 				</div>
 			</div>
 			<div class='col-sm-3'>
 				<div class='form-group'>
-					<label>5. Participation <?php echo flash::data("activityParticipation");?></label>
-					<?php echo form::select("activityParticipation",Array(1=>"Open",2=>"Only for site member"),"class='form-control'");?>
+					<label>Participation <?php echo flash::data("activityParticipation");?></label>
+					<?php echo form::select("activityParticipation",Array(1=>"Open for all member",2=>"Only for site member",3=>"Open for all"),"class='form-control'");?>
 				</div>
 			</div>
 			<div class='col-sm-3'>
 				<div class='form-group'>
-					<label>2. Type <?php echo flash::data("activityType");?></label>
+					<label>Type <?php echo flash::data("activityType");?></label>
 					<?php
 					$conv	= Array("event"=>1,"training"=>2);
 					?>
@@ -538,12 +538,12 @@ Add activities to your side. Every activity added will be pending for your clust
 		<div class='row'>
 			<div class='col-sm-6'>
 				<div class='form-group'>
-				<label>3. Description</label>
+				<label>Description</label>
 				<?php echo form::textarea("activityDescription","class='form-control'");?>
 				</div>
 
 				<div class='form-group'>
-				<label style='display:block;'>4. Where? (Address) 
+				<label style='display:block;'>Where? (Address) 
 					<span class='pull-right'>Use site address <input onclick='activity.disableAddress();' type='checkbox' id='activityAddressFlag' name='activityAddressFlag' value='1' /></span>
 				</label>
 				<?php echo form::textarea("activityAddress","class='form-control'");?>
@@ -552,7 +552,7 @@ Add activities to your side. Every activity added will be pending for your clust
 			</div>
 			<div class='col-sm-6'>
 				<div class='form-group' style="position:relative;">
-					<label>6. Date
+					<label>Date
 						<a href='<?php echo url::base("ajax/activity/datePicker");?>' data-toggle='ajaxModal' class='fa fa-calendar'></a>
 						<?php /*echo flash::data("activityDate");*/?>
 

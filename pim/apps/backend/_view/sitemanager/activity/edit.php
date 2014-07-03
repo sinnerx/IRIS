@@ -527,20 +527,20 @@ Content is waiting for approval
 			<div class='col-sm-6'>
 				<div class='form-group'>
 					<label>
-						1. Activity Name <?php echo flash::data("activityName");?>
+						Activity Name <?php echo flash::data("activityName");?>
 					</label>
 					<?php echo form::text("activityName","class='form-control'",$row['activityName']);?>
 				</div>
 			</div>
 			<div class='col-sm-3'>
 				<div class='form-group'>
-					<label>5. Participation <?php echo flash::data("activityParticipation");?></label>
+					<label>Participation <?php echo flash::data("activityParticipation");?></label>
 					<?php echo form::select("activityParticipation",Array(1=>"Open",2=>"Only for site member"),"class='form-control'",$row['activityParticipation']);?>
 				</div>
 			</div>
 			<div class='col-sm-3'>
 				<div class='form-group'>
-					<label>2. Type <?php echo flash::data("activityType");?></label>
+					<label>Type <?php echo flash::data("activityType");?></label>
 					<?php
 					$conv	= Array("event"=>1,"training"=>2);
 					?>
@@ -551,7 +551,7 @@ Content is waiting for approval
 		<div class='row'>
 			<div class='col-sm-6'>
 				<div class='form-group'>
-				<label>3. Description</label>
+				<label>Description</label>
 				<?php echo form::textarea("activityDescription","class='form-control'",$row['activityDescription']);?>
 				</div>
 
@@ -559,7 +559,7 @@ Content is waiting for approval
 				<?php
 				$checked = flash::data("activityAddressFlag",$row['activityAddressFlag']) == 1?"checked":"";
 				?>
-				<label style='display:block;'>4. Where? (Address) 
+				<label style='display:block;'>Where? (Address) 
 					<span class='pull-right'>Use site address <input <?php echo $checked;?> onclick='activity.disableAddress();' type='checkbox' id='activityAddressFlag' name='activityAddressFlag' value='1' /></span>
 				</label>
 				<?php echo form::textarea("activityAddress","class='form-control'",$row['activityAddress']);?>
@@ -568,7 +568,7 @@ Content is waiting for approval
 			</div>
 			<div class='col-sm-6'>
 				<div class='form-group'>
-					<label>6. Date
+					<label>Date
 						<!-- main date button -->
 						<?php 
 						$allDateAttendanceDisabled	= $hasParticipation?"disabled":"";
