@@ -507,7 +507,7 @@ Add Activity
 Add activities to your side. Every activity added will be pending for your cluster lead approval first.
 </div>
 <?php echo flash::data();?>
-<form method='post' onsubmit="">
+<form method='post' onsubmit="return confirm('Add activity, are you sure.?');">
 <div class='row'>
 	<div class='col-sm-7'>
 		<div class='row'>

@@ -520,7 +520,7 @@ if(!flash::data() && $requestFlag == true):?>
 Content is waiting for approval
 </div>
 <?php endif;?>
-<form method='post' onsubmit="">
+<form method='post' onsubmit="return confirm('Update activity, are you sure.?');">
 <div class='row'>
 	<div class='col-sm-7'>
 		<div class='row'>
