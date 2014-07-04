@@ -112,10 +112,9 @@
 		</div>
 	</div>
 	<div class="bttm-3 foto-wrapper">
-		<div class="akan-datang"></div>
 		<h3 class="bottom-heading">Foto Terkini</h3>
 		<div class="bottom-content foto-bottom">
-			<img src="<?php echo url::asset("frontend/images/gallery1.gif");?>" width="270" height="208"  alt=""/>
+			<img src="<?php echo $latestPhotoUrl;?>" width="270" height="208"  alt=""/>
 			<?php /*<ul>
 				<li><img src="<?php echo url::asset("frontend/images/1.jpg");?>" width="64" height="63"  alt=""/></li>
 				<li><img src="<?php echo url::asset("frontend/images/2.jpg");?>" width="64" height="63"  alt=""/></li>

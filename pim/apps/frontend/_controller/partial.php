@@ -83,6 +83,7 @@ class Controller_Partial
 		$siteID = authData('current_site.siteID');
 		$data['articles'] = model::load("blog/article")->getArticlesByCategoryID($siteID,1);
 		$data['row_site']	= $this->row_site;
+		$data['latestPhotoUrl']	= model::load("image/services")->getPhotoUrl(model::load("image/photo")->getSiteLatestPhoto($siteID));
 		//echo '<pre>';print_r($data['articles']);
 
 		view::render("partial/bottom_down",$data);

@@ -94,6 +94,18 @@ class Photo extends Services
 	{
 		return db::where("photoOriginalName",$filename)->get("photo")->result();
 	}
+
+	## return photo.photoName
+	public function getSiteLatestPhoto($siteID)
+	{
+		db::select("photoName");
+		db::where("siteID",$siteID);
+		db::order_by("sitePhotoID","DESC");
+		db::join("photo","site_photo.photoID = photo.photoID");
+		db::limit(1);
+
+		return db::get("site_photo")->row("photoName");
+	}
 }
 
 
