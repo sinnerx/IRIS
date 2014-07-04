@@ -78,6 +78,7 @@ var activity = new function()
 			{
 				$("#members-attend-list-none").remove();
 				$("#userJoined").val("true");
+				$("#rsvp-message-box").remove();
 				$(".members-attend-list ul").append("<li><img style='height:63px;' alt='' src='"+r[1]['userProfileAvatarPhoto']+"' /></li>");
 
 				$(".joinTotal").html(Number($(".joinTotal").html())+1);
@@ -189,11 +190,16 @@ var activity = new function()
 						<?php else:?>
 						<div class='members-guest'>
 							<span>
+							<?php if($activityParticipation == 3):?>
+							Aktiviti ini terbuka kepada penyertaan umum.
+							<?php endif;?>
+							<span id='rsvp-message-box'>
 							<?php if($activityAllDateAttendance == 2):?>
 							Sila pilih tarikh yang anda ingin sertai.
 							<?php elseif($activityAllDateAttendance == 1):?>
 							Klik <label onclick='activity.join();' style='color:blue;cursor:pointer;' class='fa fa-sign-in'></label> untuk sertai.
 							<?php endif;?>
+							</span><!-- end of rsvp-message-box -->
 							</span>
 						</div>
 						<?php endif;?>
@@ -211,8 +217,9 @@ var activity = new function()
 				<?php
 				foreach($participantList['attending'] as $row):
 				$imgUrl	= model::load("image/services")->getPhotoUrl($row['userProfileAvatarPhoto']);
+				$userProfileHref	= url::base($row['siteSlug']."/profile/".$row['userID']);
 				?>
-				<li><img src="<?php echo $imgUrl;?>" style='height:63px;' alt=""/></li>
+				<li><a href='<?php echo $userProfileHref;?>'><img src="<?php echo $imgUrl;?>" style='height:63px;' alt=""/></a></li>
 				<?php
 				endforeach;
 				?>

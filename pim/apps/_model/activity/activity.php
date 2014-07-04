@@ -319,7 +319,7 @@ class Activity
 		$arr	= Array(
 				1=>"Terbuka kepada semua ahli",
 				2=>"Hanya untuk ahli",
-				3=>"Terbuka kepada umum"
+				3=>"Terbuka kepada penyertaan umum"
 						);
 
 		return $no?$arr[$no]:$arr;
@@ -516,11 +516,15 @@ class Activity
 
 			$res = db::get("activity_user")->result("userID");
 
-			## 
+			## get participant's site. joining for site-slug building later.
+			if($res)
+				$siteR	= model::load("site/member")->getMemberSite(array_keys($res));
+
 			$newRes	= Array();
 			foreach($res as $uID=>$row)
 			{
-				$newRes['attending'][$uID]	= $row;
+				## and join.
+				$newRes['attending'][$uID]	= array_merge($row,$siteR[$uID]);
 			}
 
 			return $newRes;

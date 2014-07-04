@@ -130,11 +130,12 @@ class Controller_Activity
 		$authData	= authData();
 		$data['participationFlag']	= false;
 
+
 		if(time() > strtotime($data['activityEndDate']))
 		{
 			$data['participationFlagMessage']	= "Aktiviti telah berlaku. Tiada penyertaan lagi dibenarkan.";
 		}
-		else if($authData['user'])
+		else if($authData['user'] || $data['activityParticipation'] == 3) ## or open for all.
 		{
 			if(isset($data['participantList']['attending'][session::get("userID")]))
 			{
@@ -145,23 +146,31 @@ class Controller_Activity
 			}
 			else
 			{
-				## user wasn't activated yet.
-				if($authData['user']['memberStatus'] == "inactive")
+				if($data['activityParticipation'] != 3)
 				{
-					$data['participationFlagMessage']	= "Hanya pengguna yang telah diaktifkan sahaja boleh sertai.";
+					## user wasn't activated yet.
+					if($authData['user']['memberStatus'] == "inactive")
+					{
+						$data['participationFlagMessage']	= "Hanya pengguna yang telah diaktifkan sahaja boleh sertai.";
+					}
+					else if($data['activityParticipation'] == 1) # open for all.
+					{
+						$data['participationFlag']	= true;
+					}
+					## else is 2 (hanya untuk ahli.)
+					else if($authData['site']['siteID'] == $authData['current_site']['siteID'])
+					{
+						$data['participationFlag']	= true;
+					}
+					else ## non-member
+					{
+						$data['participationFlagMessage']	= "Hanya ahli untuk laman ini sahaja boleh menyertai";
+					}
 				}
-				else if($data['activityParticipation'] == 1) # open for all.
+				else
 				{
-					$data['participationFlag']	= true;
-				}
-				## else is 2 (hanya untuk ahli.)
-				else if($authData['site']['siteID'] == $authData['current_site']['siteID'])
-				{
-					$data['participationFlag']	= true;
-				}
-				else ## non-member
-				{
-					$data['participationFlagMessage']	= "Hanya ahli untuk laman ini sahaja boleh menyertai";
+					$data['participationFlag']			= true;
+					$data['participationFlagMessage']	= "Aktiviti ini terbuka untuk penyertaan umum.";
 				}
 			}
 		}

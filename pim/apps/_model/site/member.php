@@ -100,6 +100,29 @@ class Member
 
 		return db::get()->row();
 	}
+
+	## return user's site.
+	public function getMemberSite($userID)
+	{
+		if(!$userID)
+		{
+			return false;
+		}
+
+		db::from("site_member");
+		db::select("site.*,site_member.userID");
+		db::where("userID",$userID);
+		db::join("site","site.siteID = site_member.siteID");
+
+		if(is_array($userID))
+		{
+			return db::get()->result("userID");
+		}
+		else
+		{
+			return db::get()->row();
+		}
+	}
 }
 
 ?>
