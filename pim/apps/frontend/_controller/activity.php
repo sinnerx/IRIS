@@ -167,9 +167,12 @@ class Controller_Activity
 						$data['participationFlagMessage']	= "Hanya ahli untuk laman ini sahaja boleh menyertai";
 					}
 				}
-				else
+				else ## is open for all. but he can still rsvp.
 				{
-					$data['participationFlag']			= true;
+					## active and a user.
+					if($authData['user'] && $authData['user']['memberStatus'] == "active")
+						$data['participationFlag']	= true;
+
 					$data['participationFlagMessage']	= "Aktiviti ini terbuka untuk penyertaan umum.";
 				}
 			}
