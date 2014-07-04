@@ -17,6 +17,13 @@
 	top:0px;
 	z-index:999;
 }
+
+
+.no-result{
+	color:#999;
+	font-style:italic;
+	
+}
 </style>
 <!-- temporary overly css ends -->
 <div class="bttm-down clearfix">
@@ -84,7 +91,7 @@
 					</li>
 					<?php endforeach; ?>
 					<?php else: ?>
-						<center>Tiada artikel terkini.</center>
+						<div class="no-result">- Tiada artikel terkini - </div>
 					<?php endif; ?>
 				</ul>
 				<!-- <ul> ## original example.

@@ -14,6 +14,12 @@
 	padding:5px;
 }
 
+
+.no-result{
+	color:#999;
+	font-style:italic;
+	
+}
 </style>
 <div class="body-container clearfix">
 	<div class="lft-container">
@@ -128,7 +134,7 @@
 							else:
 						?>
 	    				<ul>
-	    					<h3>Tiada blog yang diterbitkan.</h3>
+	    					<div class="no-result">Tiada blog yang diterbitkan.</div>
 						</ul>
 						<?php
 							endif;
