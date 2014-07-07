@@ -9,6 +9,7 @@ class album
 		db::from("site_photo");
 		db::where("site_photo.siteID",!$siteID?0:$siteID);
 		db::where("siteAlbumID",$siteAlbumID);
+		db::where("sitePhotoStatus",1); ## active only.
 
 		## if got pagination..
 		if($paginationConf)
@@ -34,6 +35,7 @@ class album
 	## get just album row.
 	public function getSiteAlbum($siteAlbumID)
 	{
+		db::where("siteAlbumStatus",1);
 		db::where("siteAlbumID",$siteAlbumID);
 		db::join("album","album.albumID = site_album.albumID");
 		return db::get("site_album")->row();
@@ -41,6 +43,7 @@ class album
 
 	public function getSiteAlbumBySlug($slug,$year,$month)
 	{
+		db::where("siteAlbumStatus",1);
 		db::where("siteAlbumSlug",$slug);
 		db::where("site_album.albumID IN (SELECT albumID FROM album WHERE year(albumCreatedDate) = ? AND month(albumCreatedDate) = ? )",Array($year,$month));
 		db::join("album","album.albumID = site_album.albumID");
@@ -61,12 +64,24 @@ class album
 				"siteAlbumType"=>$siteAlbumType,
 				"albumID"=>$albumID,
 				"siteAlbumSlugOriginal"=>$originalSlug,
-				"siteAlbumSlug"=>$siteAlbumSlug
+				"siteAlbumSlug"=>$siteAlbumSlug,
+				"siteAlbumStatus"=>1
 								);
 
 		db::insert("site_album",$data_sitealbum);
 		$siteAlbumID	= db::getLastID("site_album","siteAlbumID");
 		return $siteAlbumID;
+	}
+
+	public function deleteSiteAlbum($siteID,$siteAlbumID)
+	{
+		db::where(Array(
+				"siteID"=>$siteID,
+				"siteAlbumID"=>$siteAlbumID,
+				"siteAlbumStatus"=>1
+						))->update("site_album",Array(
+										"siteAlbumStatus"=>2
+													));
 	}
 
 	## create slug for site album.
@@ -124,6 +139,7 @@ class album
 	## list all sites allbum.
 	public function getSiteAlbums($siteID,$year = null,$month = null)
 	{
+		db::where("siteAlbumStatus",1);
 		db::where("site_album.siteID",$siteID);
 		db::select("site_album.*,album.*");
 		## if year.
@@ -207,5 +223,24 @@ class album
 		}
 
 		return $total;
+	}
+
+	public function updateSiteAlbum($siteAlbumID,$data)
+	{
+		db::where("albumID IN (SELECT albumID FROM site_album WHERE siteAlbumID = ?)",Array($siteAlbumID));
+		db::update("album",Array(
+					"albumDescription"=>$data['albumDescription']
+								));
+	}
+
+	public function getSiteLatestAlbum($siteID)
+	{
+		db::where("site_album.albumID IN (SELECT albumID FROM album WHERE albumCoverImageName is not ?)",Array(null));
+		db::where("siteID",$siteID);
+
+		db::join("album","album.albumID = site_album.albumID");
+		db::order_by("siteAlbumID","desc");
+
+		return db::get("site_album")->row();
 	}
 }

@@ -62,6 +62,61 @@ class Controller_Ajax_Gallery
 
 		view::render("sitemanager/image/ajax/albumList",$data);
 	}
+
+	public function deletePhoto($photoID)
+	{
+		$siteID	= authData("site.siteID");
+
+		## delete.
+		model::load("image/photo")->deleteSitePhoto($siteID,$photoID);
+
+		return true;
+	}
+
+	public function undeletePhoto($photoID)
+	{
+		$siteID	= authData("site.siteID");
+
+		## undelete.
+		model::load("image/photo")->undeleteSitePhoto($photoID);
+
+		return true;
+	}
+
+	public function deleteAlbum($siteAlbumID)
+	{
+		$siteID	= authData("site.siteID");
+
+		model::load("image/album")->deleteSiteAlbum($siteID,$siteAlbumID);
+
+		return true;
+	}
+
+	public function showEditAlbum($siteAlbumID)
+	{
+		$data['row']	= model::load("image/album")->getSiteAlbum($siteAlbumID);
+
+		view::render("sitemanager/image/ajax/showEditAlbum",$data);
+	}
+
+	public function editAlbum($siteAlbumID)
+	{
+		if(form::submitted())
+		{
+			$rules	= Array("albumDescription"=>"required:Album description is required.");
+
+			if(input::validate($rules))
+			{
+				return response::json(Array(false));
+			}
+
+			$data['albumDescription']	= input::get("albumDescription");
+
+			model::load("image/album")->updateSiteAlbum($siteAlbumID,$data);
+
+			return response::json(Array(true));
+		}
+	}
 }
 
 

@@ -3,6 +3,7 @@ config:
 	configMemberFee [float]
 	configResetPassFee [float]
 	configAllSiteMenu [int]		## 1 = use site menu, 2 = use default menu.
+	configNewsCategoryID [int]	## stores category for news.
 
 user:
 	userID [int]
@@ -377,12 +378,14 @@ site_album:
 	albumID [int]
 	siteID [int]
 	siteAlbumType [int] ## 1 = activity-album.
+	siteAlbumStatus [int] ## 1 = active, 2 = deleted.
 
 site_photo:
 	sitePhotoID [int]
 	photoID [int]
 	siteID [int]
 	siteAlbumID [int]
+	sitePhotoStatus [int]	## 1 = active, 2 = deleted.
 
 user_album:
 	userAlbumID [int]

@@ -34,13 +34,36 @@ class Photo extends Services
 		$data	= Array(
 			"photoID"=>$addPhoto[1],
 			"siteID"=>$siteID,
-			"siteAlbumID"=>$siteAlbumID
+			"siteAlbumID"=>$siteAlbumID,
+			"sitePhotoStatus"=>1
 				);
 
 		db::insert("site_photo",$data);
 
 		// return $this->_add(2,$albumID,$name,$desc);
 		return $addPhoto[0]; ## return name.
+	}
+
+	public function deleteSitePhoto($siteID,$sitePhotoID)
+	{
+		db::where(Array(
+				"sitePhotoID"=>$sitePhotoID,
+				"siteID"=>$siteID,
+				"sitePhotoStatus"=>1,
+						))->update("site_photo",Array(
+											"sitePhotoStatus"=>2 ## deleted.
+													));
+	}
+
+	public function undeleteSitePhoto($siteID,$sitePhotoID)
+	{
+		db::where(Array(
+				"sitePhotoID"=>$sitePhotoID,
+				"sitePhotoStatus"=>2,
+				"siteID"=>$siteID
+						))->update("site_photo",Array(
+											"sitePhotoID"=>1
+													));
 	}
 
 	private function _addPhoto($originalname,$desc)
@@ -100,6 +123,7 @@ class Photo extends Services
 	{
 		db::select("photoName");
 		db::where("siteID",$siteID);
+		db::where("sitePhotoStatus",1);
 		db::order_by("sitePhotoID","DESC");
 		db::join("photo","site_photo.photoID = photo.photoID");
 		db::limit(1);

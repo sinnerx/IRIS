@@ -48,6 +48,28 @@ var album	= new function()
 
 		pim.uriHash.addCallback({"photoAdd":function(){album.addPhotoForm.show()}});
 	}
+
+	this.deleteAlbum	= function(siteAlbumID)
+	{
+		if(confirm("Are you sure?"))
+		{
+			$.ajax({type:"GET",url:pim.base_url+"ajax/gallery/deleteAlbum/"+siteAlbumID}).done(function(res)
+			{
+				if(res)
+				{
+					$("#album"+siteAlbumID).addClass("deleted");
+				}
+			});
+		}
+	}
+
+	this.showEditAlbum = function(siteAlbumID)
+	{
+		$.ajax({type:"GET",url:pim.base_url+"ajax/gallery/showEditAlbum/"+siteAlbumID}).done(function(res)
+		{
+			$("#right-panel").show().html(res);
+		});
+	}
 }
 
 
@@ -56,15 +78,56 @@ var album	= new function()
 
 <style type="text/css">
 	
-.album-list
+.album-list div:nth-child(2)
 {
 	cursor: pointer;
 }
 
+.album-list .panel-heading
+{
+	position: relative;
+}
 
-.panel
+#album-wrapper .panel
 {
 	padding:0px;
+}
+.album-list.deleted
+{
+	opacity: 0.3;
+}
+
+.album-list.deleted .album-list-buttons a
+{
+	display:none;
+}
+.button-delete
+{
+	color:red;
+}
+
+.button-delete, .button-edit
+{
+	font-size:16px;
+	padding:3px;
+}
+
+.album-list-buttons
+{
+	position: absolute;
+	right:0px;
+	top:0px;
+	display: none;
+}
+.album-list:hover .album-list-buttons
+{
+	display: block;
+}
+
+/* right panel */
+#right-panel
+{
+	display: none;
 }
 
 </style>
@@ -94,12 +157,16 @@ Overview of your site albums. You can <a href='javascript:album.addForm.show();'
 					echo "<div class='row'>";
 				}
 				?>
-				<div class='col-sm-4 album-list' onclick='album.showDetail(<?php echo $row['siteAlbumID'];?>);'>
+				<div id='album<?php echo $row['siteAlbumID'];?>' class='col-sm-4 album-list'>
 					<section class='panel panel-default'>
 						<div class='panel-heading'>
 						<?php echo $row['albumName'];?>
+						<div class='album-list-buttons'>
+							<a href='javascript:album.deleteAlbum(<?php echo $row['siteAlbumID'];?>);' class='i i-cross2 button-delete'></a>
+							<a href='javascript:album.showEditAlbum(<?php echo $row['siteAlbumID'];?>);' class='fa fa-edit button-edit'></a>
 						</div>
-						<div>
+						</div>
+						<div onclick='album.showDetail(<?php echo $row['siteAlbumID'];?>);'>
 						<img src='<?php echo $coverimageUrl;?>' width='100%' />
 						</div>
 					</section>
@@ -153,5 +220,6 @@ Overview of your site albums. You can <a href='javascript:album.addForm.show();'
 		</div>
 	</div> <!-- end of left panel -->
 	<div class='col-sm-6' id='right-panel'>
+
 	</div>
 </div>
