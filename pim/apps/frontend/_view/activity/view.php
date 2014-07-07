@@ -11,10 +11,63 @@ var pim = new pim({base_url:"<?php echo url::base('{site-slug}');?>"});
 	width: 100%;
 	margin-bottom: 5px;
 }
+.activity-date-list table th{
+	background:#009bff;
+	color:#FFF;
+	font-size:16px;
+	padding:10px 0px;
+	font-weight:lighter;
+	border-bottom:3px solid #0062a1;
+	
+	
+	
+}
+
+a.fa-sign-in{
+	color:#009bff;
+	
+}
+
+a.fa-check{
+	color:#dddddd;
+	
+}
+
+.activity-date-list table tr{
+		background: none;
+		 -webkit-transition: all 0.4s ease-out;
+   -moz-transition: all 0.4s ease-out;
+   -ms-transition: all 0.4s ease-out;
+   -o-transition: all 0.4s ease-out;
+   transition: all 0.4s ease-out;	
+
+	
+}
+.activity-date-list table tr:nth-child(2n+1){
+background: none repeat scroll 0 0 #f2f2f2;
+}
+
+
+
+.activity-date-list table tr:hover{
+		background:#f5f5f5;
+}
 .activity-date-list table td
 {
-	border-bottom:1px solid #c0c0c0;
-	text-align: center;
+    border-right: 1px solid #fff;
+    border-top: 1px solid #fff;
+    color: #868686;
+    cursor: pointer;
+	padding:15px 0px;
+	text-align:center;
+
+}
+
+
+.activity-date-list{
+
+margin-top:30px;
+	
 }
 
 </style>
@@ -130,12 +183,11 @@ var activity = new function()
 						<?php echo nl2br($activityDescription);?>
 						</div>
 						<div class='activity-date-list'>
-							<table>
+							<table cellpadding="0" cellspacing="0">
 								<tr>
 									<th>Tarikh</th>
 									<th>Masa (mula)</th>
-									<th>Masa (tamat)</th>
-									<th></th>
+									<th colspan="2">Masa (tamat)</th>
 								</tr>
 								<?php
 								if($activityDate){
