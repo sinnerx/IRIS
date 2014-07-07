@@ -1247,11 +1247,12 @@ position:relative;
 	float:left;
 	border-right:1px solid #e8e8e8;
 	padding-right:30px;
+	font-size:14px;
 	
 }
 
 .event-short-desc{
-	font-size:12px;
+	font-size:14px;
 	font-family:Arial, "Gill Sans", "Gill Sans MT", "Myriad Pro", "DejaVu Sans Condensed", Helvetica, sans-serif;
 	color:#666666;
 	margin-top:10px;
@@ -1265,7 +1266,7 @@ position:relative;
 }
 
 .event-more-details{
-		font-size:12px;
+		font-size:14px;
 	font-family:Arial, "Gill Sans", "Gill Sans MT", "Myriad Pro", "DejaVu Sans Condensed", Helvetica, sans-serif;
 	color:#666666;
 	margin-top:20px;
@@ -1411,6 +1412,7 @@ margin-left:10px;
 span.title-event{
 	float:left;
 	display:inline-block;
+	width:450px;
 	
 }
 
