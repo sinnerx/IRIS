@@ -29,7 +29,10 @@ input
 				<div class="announcement clearfix">
 				<?php 
 				## set announcement only for site landing page. (main/index)
-				if(controller::getCurrentController() == "main" && controller::getCurrentMethod() == "index"):?>
+				if(controller::getCurrentController() == "main" && controller::getCurrentMethod() == "index"):
+
+				if($annList){
+				?>
 				<div class="label-anncmnt">Pengumuman</div>
 				<div class="cntnt-anncmnt">
 					<ul id="js-news" class="js-hidden">
@@ -52,6 +55,7 @@ input
 				  ?>
 				  </ul>
 				</div>
+				<?php }?>
 				<?php endif;## end main/index check. ?>
 				</div>
 			</div>
