@@ -4,7 +4,7 @@ var activity	= function()
 {
 	this.showTypeDetail	= function(type)
 	{
-		var r	= {1:"event",2:"training"};
+		var r	= {1:"event",2:"training",99:"others"};
 		$("#activityType").val(type);
 		$("#type-event, #type-training").hide();
 		$("#type-"+r[type]).show();
@@ -473,7 +473,7 @@ $(document).ready(function()
 	}
 });
 
-pim.uriHash.addCallback({"event":function(){activity.showTypeDetail(1)},"training":function(){activity.showTypeDetail(2)}});
+pim.uriHash.addCallback({"event":function(){activity.showTypeDetail(1)},"training":function(){activity.showTypeDetail(2)},"others":function(){activity.showTypeDetail(99)}});
 
 </script>
 <style type="text/css">
@@ -531,7 +531,7 @@ Add an activity to your site. All new activities will not be published until the
 					<?php
 					$conv	= Array("event"=>1,"training"=>2);
 					?>
-					<?php echo form::select("activityType",Array(1=>"Event",2=>"Training"),"onchange='activity.showTypeDetail(this.value);' class='form-control'",$conv[request::get("type")]);?>
+					<?php echo form::select("activityType",Array(1=>"Event",2=>"Training",99=>"Others"),"onchange='activity.showTypeDetail(this.value);' class='form-control'",$conv[request::get("type")]);?>
 				</div>
 			</div>
 		</div>

@@ -4,7 +4,7 @@ var activity	= function()
 {
 	this.showTypeDetail	= function(type)
 	{
-		var r	= {1:"event",2:"training"};
+		var r	= {1:"event",2:"training",99:"others"};
 		$("#activityType").val(type);
 		$("#type-event, #type-training").hide();
 		$("#type-"+r[type]).show();
@@ -535,7 +535,7 @@ Content is waiting for approval
 			<div class='col-sm-3'>
 				<div class='form-group'>
 					<label>Participation <?php echo flash::data("activityParticipation");?></label>
-					<?php echo form::select("activityParticipation",Array(1=>"Open",2=>"Only for site member"),"class='form-control'",$row['activityParticipation']);?>
+					<?php echo form::select("activityParticipation",Array(1=>"Open for all members",2=>"Only for site members",3=>"Open for all"),"class='form-control'",$row['activityParticipation']);?>
 				</div>
 			</div>
 			<div class='col-sm-3'>
@@ -544,7 +544,7 @@ Content is waiting for approval
 					<?php
 					$conv	= Array("event"=>1,"training"=>2);
 					?>
-					<?php echo form::select("activityType",Array(1=>"Event",2=>"Training"),"disabled onchange='activity.showTypeDetail(this.value);' class='form-control'",$row['activityType']);?>
+					<?php echo form::select("activityType",Array(1=>"Event",2=>"Training",99=>"Others"),"disabled onchange='activity.showTypeDetail(this.value);' class='form-control'",$row['activityType']);?>
 				</div>
 			</div>
 		</div>

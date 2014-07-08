@@ -82,7 +82,7 @@ var pim = function(conf)
 				// gather all name.
 				var data	= {};
 				var method	= $(this).attr("method")?$(this).attr("method"):"GET";
-				$(this).find("input, select").each(function(i,e)
+				$(this).find("input, select, textarea").each(function(i,e)
 				{
 					if($(e).attr("name"))
 					{

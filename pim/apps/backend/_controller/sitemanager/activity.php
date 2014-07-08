@@ -207,4 +207,14 @@ class Controller_Activity
 
 		view::render("sitemanager/activity/training",$data);
 	}
+
+	public function other($page = 1)
+	{
+		$siteID	= authData("site.siteID");
+
+		$data['activity']	= model::load("activity/activity");
+		$data['res_other']	=$data['activity']->getPaginatedActivityList($siteID,99,url::base("activity/other/{page}"),$page);
+
+		view::render("sitemanager/activity/other",$data);
+	}
 }

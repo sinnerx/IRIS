@@ -98,7 +98,7 @@ var sitealbum	= new function()
 		<section class='panel panel-default'>
 			<header class='panel-heading bg-light'>
 				<ul class='nav nav-tabs nav-justified'>
-					<li class='active'><a href='#detail' data-toggle='tab'><?php echo ucwords($typeName);?>'s Detail</a></li>
+					<li class='active'><a href='#detail' data-toggle='tab'><?php echo ucwords($typeName);?> Activity's Detail</a></li>
 					<li><a data-toggle='tab' href='#album'>Albums (<?php echo count($res_album);?>)</a></li>
 					<li><a data-toggle='tab' href='#blog'>Related Blogs (<?php echo count($res_article);?>)</a></li>
 				</ul>

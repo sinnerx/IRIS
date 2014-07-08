@@ -26,7 +26,8 @@ class Menu extends Data
 					"Activities"=>Array(
 									"Overview"=>Array("activity/overview","activity/add","activity/view","activity/edit"),
 									"Events"=>"activity/event",
-									"Training"=>"activity/training"
+									"Training"=>"activity/training",
+									"Others"=>"activity/other"
 										),
 					"Member's Management"=>Array(
 									"List of Member"=>Array("member/lists")
@@ -59,7 +60,8 @@ class Menu extends Data
 							"User"=>Array("user/lists","user/add","user/edit")
 										),
 					"Configuration"=>Array(
-								"Article Category"=>Array("article/category")
+								"Parameters"=>Array("config/index"),
+								"Article Category"=>Array("article/category"),
 											)
 					/*"Activities"=>"activity/index",
 					"Reports"=>"reports/index"*/

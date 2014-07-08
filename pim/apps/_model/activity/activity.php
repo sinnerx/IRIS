@@ -7,7 +7,8 @@ class Activity
 	{
 		$arr	= Array(
 				1=>"Program",
-				2=>"Latihan"
+				2=>"Latihan",
+				99=>"Lain-lain"
 						);
 
 		return $no?$arr[$no]:$arr;
