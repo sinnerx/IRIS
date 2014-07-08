@@ -236,7 +236,7 @@ class album
 	public function getSiteLatestAlbum($siteID)
 	{
 		db::where("site_album.albumID IN (SELECT albumID FROM album WHERE albumCoverImageName is not ?)",Array(null));
-		db::where("siteID",$siteID);
+		db::where("site_album.siteID",$siteID);
 
 		db::join("album","album.albumID = site_album.albumID");
 		db::order_by("siteAlbumID","desc");
