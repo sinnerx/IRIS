@@ -83,8 +83,10 @@ class Controller_Partial
 		$siteID = authData('current_site.siteID');
 		$data['articles'] = model::load("blog/article")->getArticlesByCategoryID($siteID,1);
 		$data['row_site']	= $this->row_site;
-		$data['latestPhotoUrl']	= model::load("image/services")->getPhotoUrl(model::load("image/photo")->getSiteLatestPhoto($siteID));
-		//echo '<pre>';print_r($data['articles']);
+		$row_latestalbum	=model::load("image/album")->getSiteLatestAlbum($siteID);
+
+		$data['latestPhotoUrl']	=  model::load("image/services")->getPhotoUrl($row_latestalbum['albumCoverImageName']);
+		$data['latestPhotoLink']	= model::load("helper")->buildDateBasedUrl($row_latestalbum['siteAlbumSlug'],$row_latestalbum['albumCreatedDate'],url::base("{site-slug}/galeri"));
 
 		view::render("partial/bottom_down",$data);
 	}

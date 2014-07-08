@@ -114,6 +114,9 @@
 	<div class="bttm-3 foto-wrapper">
 		<h3 class="bottom-heading">Foto Terkini</h3>
 		<div class="bottom-content foto-bottom">
+			<?php if($latestPhotoLink):?>
+				<a href='<?php echo $latestPhotoLink;?>'>
+			<?php endif;?>
 			<img src="<?php echo $latestPhotoUrl;?>" width="270" height="208"  alt=""/>
 			<?php /*<ul>
 				<li><img src="<?php echo url::asset("frontend/images/1.jpg");?>" width="64" height="63"  alt=""/></li>
@@ -130,6 +133,9 @@
 				<li><img src="<?php echo url::asset("frontend/images/3.jpg");?>" width="64" height="63"  alt=""/></li>
 			</ul>*/
 			?>
+			<?php if($latestPhotoLink):?>
+				</a>
+			<?php endif;?>
 		</div>
 	</div>
 </div> 
