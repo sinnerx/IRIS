@@ -147,6 +147,14 @@ var activity = new function()
 <input type='hidden' id='startDate' value='<?php echo date("j M Y",strtotime($activityStartDate));?>' />
 <input type="hidden" id='endDate' value='<?php echo date("j M Y",strtotime($activityEndDate));?>' />
 <link rel="stylesheet" type="text/css" href="<?php echo url::asset('_templates/css/aktiviti.css');?>">
+<style type="text/css">
+	
+.event-more-details ul li span.label-info
+{
+	width:130px;
+}
+
+</style>
 <h3 class="block-heading">Kalendar Aktiviti  <span class="subheading"> > <?php echo $activityTypeLabel;?></span></h3>
 <div class="block-content clearfix">
 	<div class="page-content">
@@ -173,10 +181,22 @@ var activity = new function()
 					<div class="event-info-description">
 						<div class="event-more-details">
 						<ul>
-						<li><span class="label-info">Jenis <?php echo $activityTypeLabel; ?></span><span>: <?php echo $activityType;?></span></li>
+						<?php ## lain-lain dont have type.
+						 if($activityType != 99):?>
+						<li><span class="label-info">Jenis <?php echo $activityTypeLabel; ?></span><span>: <?php echo $activityTypeType;?></span></li>
+						<?php endif;?>
 						<li><span class="label-info">Lokasi</span><span>: <?php echo $location;?></span></li>
 						<li><span class="label-info">Penyertaan</span><span>: <?php echo $activityParticipationLabel;?></span></li>
 						<li><span class="label-info">Yuran/Bulanan</span><span>: Percuma</span></li>
+						<?php
+						if($activityType == 2):?>
+						<li><span class='label-info'>Had Penyertaan</span><span>: 
+
+						<?php echo $trainingMaxPax == 0?"Tiada had":$trainingMaxPax." orang";?>
+						</span></li>
+						<?php
+						endif;
+						?>
 						</ul>
 						</div>
 						<div class="event-short-desc">

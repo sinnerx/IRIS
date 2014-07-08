@@ -109,10 +109,10 @@ class Controller_Activity
 		switch($row_act['activityType'])
 		{
 			case 1:# event.
-				$data['activityType']	= model::load("activity/event")->type($row_act['eventType']);
+				$data['activityTypeType']	= model::load("activity/event")->type($row_act['eventType']);
 			break;
 			case 2:# training.
-				$data['activityType']	= model::load("activity/training")->type($row_act['trainingType']);
+				$data['activityTypeType']	= model::load("activity/training")->type($row_act['trainingType']);
 			break;
 		}
 
@@ -130,56 +130,75 @@ class Controller_Activity
 		$authData	= authData();
 		$data['participationFlag']	= false;
 
-
-		if(time() > strtotime($data['activityEndDate']))
+		
+		## if activity is training, and participant exceeded.
+		## below logic is so sleepy.
+		# user logged in, and user is not p1m member.
+		if(authData("user") && authData("user.userLevel") != 1)
 		{
-			$data['participationFlagMessage']	= "Aktiviti telah berlaku. Tiada penyertaan lagi dibenarkan.";
+			$data['participationFlag']	= false;
+			$data['participationFlagMessage'] = "Pengguna selain dari ahli pi1m tidak dapat membuat penyertaan.";
 		}
-		else if($authData['user'] || $data['activityParticipation'] == 3) ## or open for all.
+		# a training, and participation have reached maxpax (if only not limited)
+		else if($data['activityType'] == 2 && $data['trainingMaxPax'] != 0 && $data['trainingMaxPax'] >= count($data['participantList']))
 		{
-			if(isset($data['participantList']['attending'][session::get("userID")]))
-			{
-				$data['participationFlagMessage']	= "Anda telah memilih untuk hadir ke aktiviti ini.";
-
-				## get list of participated date.
-				$data['joinedDate']	= model::load("activity/activity")->getJoinedDate($row_act['activityID'],session::get("userID"));
-			}
-			else
-			{
-				if($data['activityParticipation'] != 3)
-				{
-					## user wasn't activated yet.
-					if($authData['user']['memberStatus'] == "inactive")
-					{
-						$data['participationFlagMessage']	= "Hanya pengguna yang telah diaktifkan sahaja boleh sertai.";
-					}
-					else if($data['activityParticipation'] == 1) # open for all.
-					{
-						$data['participationFlag']	= true;
-					}
-					## else is 2 (hanya untuk ahli.)
-					else if($authData['site']['siteID'] == $authData['current_site']['siteID'])
-					{
-						$data['participationFlag']	= true;
-					}
-					else ## non-member
-					{
-						$data['participationFlagMessage']	= "Hanya ahli untuk laman ini sahaja boleh menyertai";
-					}
-				}
-				else ## is open for all. but he can still rsvp.
-				{
-					## active and a user.
-					if($authData['user'] && $authData['user']['memberStatus'] == "active")
-						$data['participationFlag']	= true;
-
-					$data['participationFlagMessage']	= "Aktiviti ini terbuka untuk penyertaan umum.";
-				}
-			}
+			$data['participationFlagMessage']	= "Latihan ini telahpun penuh. Tiada penyertaan lagi boleh dibuat.";
 		}
 		else
 		{
-			$data['participationFlagMessage']	= "Hanya ahli berdaftar boleh menyertai aktiviti.";
+			# timeout - no more join.
+			if(time() > strtotime($data['activityEndDate']))
+			{
+				$data['participationFlagMessage']	= "Aktiviti telah berlaku. Tiada penyertaan lagi dibenarkan.";
+			}
+			# user logged in or, is open for all.
+			else if($authData['user'] || $data['activityParticipation'] == 3) ## or open for all.
+			{
+				## current user attending.
+				if(isset($data['participantList']['attending'][session::get("userID")]))
+				{
+					$data['participationFlagMessage']	= "Anda telah memilih untuk hadir ke aktiviti ini.";
+
+					## get list of participated date.
+					$data['joinedDate']	= model::load("activity/activity")->getJoinedDate($row_act['activityID'],session::get("userID"));
+				}
+				else
+				{
+					if($data['activityParticipation'] != 3)
+					{
+						## user wasn't activated yet.
+						if($authData['user']['memberStatus'] == "inactive")
+						{
+							$data['participationFlagMessage']	= "Hanya pengguna yang telah diaktifkan sahaja boleh sertai.";
+						}
+						else if($data['activityParticipation'] == 1) # open for all p1m members.
+						{
+							$data['participationFlag']	= true;
+						}
+						## else is 2 (hanya untuk ahli.)
+						else if($authData['site']['siteID'] == $authData['current_site']['siteID'])
+						{
+							$data['participationFlag']	= true;
+						}
+						else ## non-member
+						{
+							$data['participationFlagMessage']	= "Hanya ahli untuk laman ini sahaja boleh menyertai";
+						}
+					}
+					else ## is open for all. but he can still rsvp.
+					{
+						## active and a user.
+						if($authData['user'] && $authData['user']['memberStatus'] == "active")
+							$data['participationFlag']	= true;
+
+						$data['participationFlagMessage']	= "Aktiviti ini terbuka untuk penyertaan umum.";
+					}
+				}
+			}
+			else
+			{
+				$data['participationFlagMessage']	= "Hanya ahli berdaftar boleh menyertai aktiviti.";
+			}
 		}
 
 		## attend flag was sent
