@@ -65,7 +65,7 @@
 </style>
 <h3 class="block-heading">
 <a href='<?php echo url::base("{site-slug}");?>'>Home</a><span class="subheading"> >
-<a href='<?php echo url::base("{site-slug}/gallery");?>'> Galeri Foto</a>
+<a href='<?php echo url::base("{site-slug}/galeri");?>'> Galeri Foto</a>
  > Album > Foto</span>
  </h3>
 <div class="block-content clearfix">

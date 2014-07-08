@@ -145,7 +145,7 @@ class Menu
 				3=>Array(
 					"componentNo"=>3,
 					"componentName"=>"Aktiviti",
-					"componentRoute"=>"activity",
+					"componentRoute"=>"aktivity",
 					"componentStatus"=>1
 					),
 				4=>Array(
@@ -182,7 +182,7 @@ class Menu
 		$arr	= Array(
 				4=>Array(
 					"Galeri Media"=>Array(
-							Array("Galeri Foto","gallery"),
+							Array("Galeri Foto","galeri"),
 							Array("Galeri Video","#"),
 							Array("Galeri Muat Turun","#")
 								)

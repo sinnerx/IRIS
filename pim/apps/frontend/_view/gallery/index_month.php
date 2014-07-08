@@ -19,21 +19,21 @@ var pim = new pim({base_url:"<?php echo url::base('{site-slug}');?>"});
 function yearChange()
 {
 	var y = jQuery("#activityYear").val();
-	pim.redirect("gallery/"+y);
+	pim.redirect("galeri/"+y);
 }
 
 function monthChange(month)
 {
 	var y = jQuery("#activityYear").val();
-	pim.redirect("gallery/"+y+"/"+month);
+	pim.redirect("galeri/"+y+"/"+month);
 }
 
 </script>
 <h3 class="block-heading">
 <a href='<?php echo url::base("{site-slug}");?>'>Home</a>
 <span class="subheading"> >
-<a href='<?php echo url::base("{site-slug}/gallery");?>'>Galeri Foto</a> > 
-<a href='<?php echo url::base("{site-slug}/gallery/$year");?>'><?php echo $year;?></a> > 
+<a href='<?php echo url::base("{site-slug}/galeri");?>'>Galeri Foto</a> > 
+<a href='<?php echo url::base("{site-slug}/galeri/$year");?>'><?php echo $year;?></a> > 
 <?php echo model::load("helper")->monthYear("month",$month);?></span></h3>
 <div class="block-content clearfix">
 	<div class="page-content">
@@ -87,7 +87,7 @@ function monthChange(month)
 					$totalPhoto	= $photoTotalR[$row['siteAlbumID']];
 					$url		= model::load("image/services")->getPhotoUrl($row['albumCoverImageName']);
 					list($year,$month)	= explode(" ",date("Y m",strtotime($row['albumCreatedDate'])));
-					$href		= url::base("{site-slug}/gallery/$year/$month/".($row['siteAlbumSlug']?:"id/".$row['siteAlbumID']));
+					$href		= url::base("{site-slug}/galeri/$year/$month/".($row['siteAlbumSlug']?:"id/".$row['siteAlbumID']));
 
 
 					?>
