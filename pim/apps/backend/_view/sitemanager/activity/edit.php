@@ -648,7 +648,7 @@ Content is waiting for approval
 <div class='row'>
 	<div class='col-sm-12' style='text-align:center;'>
 		<input type='submit' value='Update Activity' class='btn btn-primary' />
-		<input type='button' value='Cancel' class='btn btn-default' />
+		<input type='button' value='Cancel' onclick='window.location.href = "<?php echo url::base("activity/overview");?>"' class='btn btn-default' />
 	</div>
 </div>
 </form>
