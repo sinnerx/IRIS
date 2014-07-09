@@ -183,8 +183,8 @@ class Menu
 				4=>Array(
 					"Galeri Media"=>Array(
 							Array("Galeri Foto","galeri"),
-							Array("Galeri Video","#"),
-							Array("Galeri Muat Turun","#")
+							#Array("Galeri Video","#"),
+							#Array("Galeri Muat Turun","#")
 								)
 						)
 				);
