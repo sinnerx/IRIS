@@ -120,7 +120,10 @@ Class Controller_Main
 					"except:checkPenduduk,checkTerm"=>"required:Lapangan ini diperlukan.",
 					"userIC"=>Array(
 							 "callback"=>Array($icCheck[0],$icCheck[1])
-									)
+									),
+					"userPassword"=>Array(
+							"callback"=>Array((strlen($password) >= 6),"Minimum kata laluan adalah 6 karakter")
+										)
 							);
 
 			$checkPenduduk	= input::get("checkPenduduk")?true:false;
