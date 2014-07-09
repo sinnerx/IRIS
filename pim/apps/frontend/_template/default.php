@@ -4,7 +4,21 @@
 input
 {
 	color:#727272 !important;
-}	
+}
+.announcement-linked
+{
+	color:blue !important;
+}
+.announcement-unlinked
+{
+	color:inherit;
+	cursor: default !important;
+}
+.announcement-unlinked:hover
+{
+	color:inherit !important;
+	text-decoration:none !important;
+}
 
 </style>
 <?php controller::load("partial","top");?>
@@ -31,26 +45,37 @@ input
 				## set announcement only for site landing page. (main/index)
 				if(controller::getCurrentController() == "main" && controller::getCurrentMethod() == "index"):
 
+			  	$annList = model::load("site/announcement")->getAnnouncementList($row_site['siteID'],true);
 				if($annList){
 				?>
 				<div class="label-anncmnt">Pengumuman</div>
 				<div class="cntnt-anncmnt">
 					<ul id="js-news" class="js-hidden">
 				  <?php
-				  $annList = model::load("site/announcement")->getAnnouncementList($row_site['siteID'],true);
 				  foreach($annList as $row)
 				  {
-    					if(strpos($row['announcementLink'], 'localhost') !== false || strpos($row['announcementLink'], 'p1m') !== false){
+    					/*if(strpos($row['announcementLink'], 'localhost') !== false || strpos($row['announcementLink'], 'p1m') !== false){
      					   $target = '';
    						}else{
         				   $target = "target='_blank'";
     					}
 					    if($row['announcementLink'] != ""){
-					        $href = "href='".$row['announcementLink']."'";
+					        $href = "href='".$row['announcementLink']."' class='announcement-linked'";
 					    }else{
-					        $href = "";
+					        $href = "href='#'  class='announcement-unlinked'";
+					    }*/
+					    if($row['announcementLink'] != "http://")
+					    {
+					    	$attr = "class='announcement-linked' ";
+					    	$attr .= "href='".$row['announcementLink']."'";
 					    }
-    					echo "<li><a ".$target." ".$href.">".$row['announcementText']."</a></li>";
+					    else
+					    {
+					    	$attr = "class='announcement-unlinked'";
+					    	$attr .= "href='#'";
+					    }
+
+    					echo "<li><a $attr>".$row['announcementText']."</a></li>";
 				  }
 				  ?>
 				  </ul>
