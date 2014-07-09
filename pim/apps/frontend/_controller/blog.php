@@ -63,6 +63,8 @@ Class Controller_Blog
 		$data['userSortBy']	= true;
 		$data['userProfileFullName'] = $row_user['userProfileFullName'];
 
+		$where['articleCreatedUser'] = $userID;
+
 		return $this->articleRenderer($urlFormat,$data,$where);
 	}
 
