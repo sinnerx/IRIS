@@ -67,7 +67,8 @@ input
 					    if($row['announcementLink'] != "http://")
 					    {
 					    	$attr = "class='announcement-linked' ";
-					    	$attr .= "href='".$row['announcementLink']."'";
+					    	$attr .= "href='".$row['announcementLink']."' ";
+					    	$attr .= "target='_blank'";
 					    }
 					    else
 					    {
