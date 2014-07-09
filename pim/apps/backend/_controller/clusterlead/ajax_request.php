@@ -58,7 +58,7 @@ class Controller_Ajax_Request
 		$data['totalCorrection']	= model::load("site/request")->getTotalCorrection($requestID);
 
 		## sanitize column name for page.
-		$data['colNameR']['page']	= Array("pageTitle"=>"Page Name","pageText"=>"Page Content");
+		$data['colNameR']['page']	= Array("pageTitle"=>"Page Name","pageText"=>"Page Content","pageTextExcerpt"=>"Text Excerpt (shortened text version)");
 
 		$data['colNameR']['site']	= Array("siteInfoPhone"=>"Phone No.",
 											"siteInfoAddress"=>"Address",
@@ -126,6 +126,11 @@ class Controller_Ajax_Request
 						{
 							$arr	= Array(1=>"Ya",2=>"No (may choose date)");
 							return $arr[$no];
+						},
+						"pageTextExcerpt"=>function($text)
+						{
+							$text	= $text == ""?"< Due to empty, will use unformatted and html stripped text >":$text;
+							return $text;
 						}
 								);
 

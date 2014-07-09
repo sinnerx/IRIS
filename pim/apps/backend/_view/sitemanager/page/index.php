@@ -7,6 +7,35 @@
 var base_url	= "<?php echo url::base();?>/";
 var page	= function()
 {
+	this.showEditorTab = function(type)
+	{
+		$(".editor-tab a").removeClass("editor-tab-active");
+		$(".editor-tab a:nth-child("+type+")").addClass("editor-tab-active");
+
+		switch(type)
+		{
+			case 1:
+			$("#pageMainText").slideDown();
+			$(".imagebox").slideDown();
+
+			$("#pageExcerpt").slideUp();
+			break;
+			case 2:
+			$("#pageMainText").slideUp();
+			$(".imagebox").slideUp();
+
+			$("#pageExcerpt").slideDown();
+			break;
+		}
+	}
+
+	this.copyMainText = function()
+	{
+		var text = $($("#editor").html()).text();
+
+		$("#pageTextExcerpt").val(text);
+	}
+
 	this.getParamURL	= function()
 	{
 		var url	= window.location.href;
@@ -87,6 +116,8 @@ var page	= function()
 			$("#pageContent").html("");
 			$("#editor").show().html(row['pageContent']);
 
+			$("#pageTextExcerpt").val(row['pageTextExcerpt']);
+			
 			//pageID
 			$("#pageID").val(row['pageID']);
 		});
@@ -104,6 +135,8 @@ var page	= function()
 		p1mloader.start("#email-content");
 
 		var data	= {pageName:$("#pageName").val(),pageText:$("#editor").html()};
+		data['pageTextExcerpt']	= $("#pageTextExcerpt").val();
+
 		var pageID	= $("#pageID").val();
 
 		$.ajax({type:"POST",url:base_url+"ajax/page/pageUpdate/"+pageID,data:data}).done(function(txt)
@@ -261,6 +294,29 @@ function showFilter()
 	position: relative;
 }
 
+.editor-tab
+{
+	position: absolute;
+	right:0px;
+	padding-right: 25px;
+	top:5px;
+}
+.editor-tab-active
+{
+	font-weight: bold;
+}
+
+#pageExcerpt
+{
+	position: relative;
+	top:23px;
+}
+#pageExcerpt textarea
+{
+	width: 100%;
+	height:200px;
+}
+
  </style>
  <section class='hbox stretch'>
  <aside class="aside-lg" id="email-list">
@@ -369,7 +425,9 @@ function showFilter()
               <div id='pageStatus'></div>
             </div>
             <!-- /page header -->
-            <div class="wrapper">
+            <div class="wrapper" style="padding-top:5px;">
+            
+
 <div class='imagebox'>
 Photo : <span id='pageImageUrl'><a href='javascript:void(0);' class='fa fa-picture-o' onclick="page.showImage(this);"></a><br><img style='display:none;' /></span>
 </div>
@@ -378,6 +436,15 @@ Photo : <span id='pageImageUrl'><a href='javascript:void(0);' class='fa fa-pictu
 </div>
             	<!-- main content -->
 <div id='pageEditor' style='display:none;'>
+<div class='editor-tab'>
+	<a href='javascript:page.showEditorTab(1);' class='editor-tab-active'>Main text</a> | <a href='javascript:page.showEditorTab(2);'>Excerpt</a>
+</div>
+<!-- page excerpt -->
+<div id='pageExcerpt' style="display:none;">
+	<textarea name='pageTextExcerpt' id='pageTextExcerpt'></textarea>
+	<p>An excerpt can be used to serve as a shortened version of the main text. Basically this is what would be seen on your site frontend. Click <a style="text-decoration:underline;" href='javascript:page.copyMainText();'>here</a> to paste the main text into this input. If this excerpt was empty, the main frontend page will show the stripped and non-formatted version of the main text.</p>
+</div>
+<div id='pageMainText'>
 <div class="btn-toolbar m-b-sm btn-editor" data-role="editor-toolbar" data-target="#editor">
 	<div class="btn-group">
 	<ul class="dropdown-menu">
@@ -440,6 +507,7 @@ Photo : <span id='pageImageUrl'><a href='javascript:void(0);' class='fa fa-pictu
 </div>
 <div id="editor" class="form-control" style="overflow:scroll;">
 </div>
+</div> <!-- /pageMainText -->
 <input type='hidden' name='pageID' id='pageID' />
 <div class'row' style='padding-top:5px;'>
 	<input type='button' class='btn btn-primary pull-right' value='Save' onclick='page.updatePage();' />

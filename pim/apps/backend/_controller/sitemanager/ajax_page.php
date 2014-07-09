@@ -22,19 +22,21 @@ class Controller_Ajax_Page
 		$updated				= !$row_page['pageUpdatedDate']?"Written":"Last updated";
 		$row['pageLabel']		= "$updated at , ".date("d-F-Y g:i A",strtotime($date));
 		$row['pageContent']		= $row_page['pageText'];
+		$row['pageTextExcerpt']	= $row_page['pageTextExcerpt'];
 
 		## get page photo.
 		$row['pageImageUrl']	= model::load("page/page")->getPagePhotoUrl($pageID);
 		$row['pageImageUrl']	= !$row['pageImageUrl']?null:url::asset("frontend/images/photo/".$row['pageImageUrl']);
 		
 		## get unapproved flag content 
-		$unapprovedData	= model::load("site/request")->getUnapprovedRequestData(2,$pageID);
+		$unapprovedData	= model::load("site/request")->getUnapprovedRequestData('page.update',$pageID);
 
 		$row['pageStatus']		= "";
 		if($unapprovedData)
 		{
-			$row['pageContent']	= $unapprovedData['pageText'];
-			$row['pageStatus']	= "<span style='color:#de7c7c;'>Content waiting for approval</span>";
+			$row['pageContent']		= $unapprovedData['pageText'];
+			$row['pageStatus']		= "<span style='color:#de7c7c;'>Content waiting for approval</span>";
+			$row['pageTextExcerpt'] = $unapprovedData['pageTextExcerpt'];
 		}
 
 		$row['pageContent']	= stripslashes($row['pageContent']);
@@ -64,9 +66,11 @@ class Controller_Ajax_Page
 		{
 			$pageName	= input::get("pageName");
 			$text		= input::get("pageText");
+			$excerpt	= input::get("pageTextExcerpt");
 
 			$data['pageName']	= $pageName;
 			$data['pageText']	= $text;
+			$data['pageTextExcerpt']	= $excerpt;
 
 			model::load("page/page")->updatePage($pageID,$data);
 		}
