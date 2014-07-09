@@ -256,6 +256,7 @@ page: 		## by default, will create about me page.
 	pageName [varchar]
 	pageSlug [varchar]			## page slug
 	pageText [text]
+	pageTextExcerpt [text]		## a shortened version for pageText
 	pageType [int]			## 1 = default, 2 = manual, 3 = general page
 	pageDefaultType [int]	## if pageType is 0, this column is 0. 1 = about-us, 2 = about-pengurus, 3 = about-kampung.
 	pageCreatedUser [int]
