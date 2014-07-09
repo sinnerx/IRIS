@@ -104,7 +104,7 @@ Class Controller_Main
 		$data['siteName']	= $row_site['siteName'];
 		$data['siteInfoDescription']	= $row_site['siteInfoDescription'];
 		$data['monthR']					= model::load("helper")->monthYear("month");
-		$data['yearR']				 	= model::load("helper")->monthYear('year',1990,date("Y"));
+		$data['yearR']				 	= model::load("helper")->monthYear('year',1925,date("Y"));
 
 		if(form::submitted())
 		{
@@ -154,7 +154,7 @@ Class Controller_Main
 			model::load("site/member")->register($row_site['siteID'],$ic,$password,$birthdate,$fullname,$lastname);
 
 			## success and redirect.
-			redirect::to("{site-slug}/registration#horizontalTab1","<br>Anda telah berjaya di daftarkan.");
+			redirect::to("{site-slug}/registration#horizontalTab1","<br>Anda telah berjaya di daftarkan. Sila buat pembayaran RM 3 di Pusat Internet 1Malaysia anda untuk menikmati kemudahan laman web ini sepenuhnya.");
 		}
 
 		view::render("main/registration",$data);

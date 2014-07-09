@@ -45,7 +45,7 @@ input
 }
 .main-container
 {
-    min-height:800px;
+    min-height:850px;
 }
 
 </style>
@@ -90,7 +90,7 @@ input
                <div>
                <div class="register">
                <form method='post'>
-                 <label>NAMA <?php echo flash::data("userProfileFullName");?></label>
+                 <label>NAMA <?php echo flash::data("userProfileFullName",flash::data("userProfileLastName"));?></label>
                  <?php echo form::text("userProfileFullName","style='width:40%;display:inline;' class='name username-login' placeholder='Nama'");?>
                  <?php echo form::text("userProfileLastName","style='width:45%;display:inline;' class='name username-login' placeholder='Nama Ayah'");?>
                  <label>KAD PENGENALAN <?php echo flash::data("userIC");?></label>
@@ -99,19 +99,27 @@ input
                  <label>KATA LALUAN <?php echo flash::data("userPassword");?></label>
                  <?php echo form::password("userPassword","class='name password-login' placeholder='Kata Laluan Anda'");?>
                  
-                 <label>Tarikh Lahir</label>
+                 <label>Tarikh Lahir <?php echo flash::data("birthday_month",flash::data("birthday_day"),flash::data("birthday_year"));?></label>
                  <div class="dob clearfix">
                  <div class="dob-month">
-                 <?php echo form::select("birthday_month",$monthR,"","","Month");?>
+                 <?php echo form::select("birthday_month",$monthR,"","","Bulan");?>
                  </div>
                  <div class="dob-day">
-                 <select id="day" name="birthday_day"><option selected="1" value="">Day</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option><option value="21">21</option><option value="22">22</option><option value="23">23</option><option value="24">24</option><option value="25">25</option><option value="26">26</option><option value="27">27</option><option value="28">28</option><option value="29">29</option><option value="30">30</option><option value="31">31</option></select>
+                 <!-- <select id="day" name="birthday_day"><option selected="1" value="">Day</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option><option value="21">21</option><option value="22">22</option><option value="23">23</option><option value="24">24</option><option value="25">25</option><option value="26">26</option><option value="27">27</option><option value="28">28</option><option value="29">29</option><option value="30">30</option><option value="31">31</option></select> -->
+                 <?php
+                 ## build dayR.
+                 $dayR   = Array();
+                 foreach(range(1,31) as $d)
+                 {
+                    $dayR[$d]   = $d;
+                 }
+
+                 echo form::select("birtyday_day",$dayR,"","","Hari");
+
+                 ?>
                  </div>
-
-
-
                  <div class="dob-year">
-                 <?php echo form::select("birthday_year",$yearR,"","","Year");?>
+                 <?php echo form::select("birthday_year",$yearR,"","","Tahun");?>
                  </div>
                  </div>
                  <div class="check-agree">
