@@ -499,6 +499,17 @@ pim.uriHash.addCallback({"event":function(){activity.showTypeDetail(1)},"trainin
 	font-weight: bold;
 }
 
+.form-group .date-button{
+	 font-size: 13px;
+    margin-right: 5px;
+    padding: 5px 9px !important;
+	
+}
+
+.form-group .date-button a.fa.fa-calendar{
+	color:#FFF;
+	
+}
 </style>
 <h3 class='m-b-xs text-black'>
 Add Activity 
@@ -552,9 +563,12 @@ Add an activity to your site. All new activities will not be published until the
 			</div>
 			<div class='col-sm-6'>
 				<div class='form-group' style="position:relative;">
-					<label>Date
+					<label>
+                    <div class="date-button btn btn-primary">
+                    Date
 						<a href='<?php echo url::base("ajax/activity/datePicker");?>' data-toggle='ajaxModal' class='fa fa-calendar'></a>
 						<?php /*echo flash::data("activityDate");*/?>
+                        </div>
 
 
 					</label>
