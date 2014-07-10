@@ -120,7 +120,7 @@ Add an article
 <?php echo flash::data();?>
 <div class='row'>
 	<div class='col-sm-8'>
-	<section class="panel panel-default">
+	<section class="panel panel-default add-article">
 		<div class="panel-body">
 			<div class="form-group form-inline">
 				<?php echo form::text("articleName","style='width: 74.5%;' size='40' class='form-control input-s' placeholder='Insert title'");?>
@@ -154,7 +154,7 @@ Add an article
 	</section>
 	</div>
 	<div class='col-sm-4'>
-	<section class="panel panel-default">
+	<section class="panel panel-default add-article">
 		<header class="panel-heading">Publish</header>
 		<div class="panel-body">
 			<div class="form-group">
@@ -163,7 +163,7 @@ Add an article
 			</div>
 		</div>
 	</section>
-	<section class="panel panel-default">
+	<section class="panel panel-default add-article">
 		<header class="panel-heading">Categories</header>
 		<div class="panel-body">
 	        <header class="panel-heading bg-light">
@@ -201,7 +201,7 @@ Add an article
 	        </div>
         </div>
     </section>
-	<section class="panel panel-default">
+	<section class="panel panel-default add-article">
 		<header class="panel-heading">Post Tags</header>
 		<div class="panel-body">
 			<div class="form-group">

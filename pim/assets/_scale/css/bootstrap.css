@@ -1422,6 +1422,16 @@ th {
   vertical-align: top;
   border-top: 1px solid #ddd;
 }
+
+.panel .table td, .panel .table th{
+	padding:0px ;
+	
+}
+
+.table-responsive > .table > thead > tr > th, .table-responsive > .table > tbody > tr > th, .table-responsive > .table > tfoot > tr > th, .table-responsive > .table > thead > tr > td, .table-responsive > .table > tbody > tr > td, .table-responsive > .table > tfoot > tr > td{
+	white-space:normal;
+	
+}
 .table > thead > tr > th {
   vertical-align: bottom;
   border-bottom: 2px solid #ddd;
@@ -1590,10 +1600,70 @@ table th[class*="col-"] {
     overflow-y: hidden;
     -webkit-overflow-scrolling: touch;
     -ms-overflow-style: -ms-autohiding-scrollbar;
-    border: 1px solid #ddd;
+
+  }
+  
+  .pagination-numlink{
+	  text-align:center;
+	  
+  }
+  
+  .pagination-numlink .pull-right{
+	  float:none !important;
+	  
+  }
+  
+  #siteAddForm .panel-body{
+	  padding:15px;
+	  
+  }
+  
+  .panel-default .col-sm-3{
+	  padding-left:15px !important;
+	  padding-right:15px !important;
+	  margin-top:5px !important;
+	  
+  }
+  
+  .add-article .panel-body{
+	  padding-left:15px !important;
+	  padding-right:15px !important;
+	  
+  }
+  .btn-toolbar > .btn, .btn-toolbar > .btn-group, .btn-toolbar > .input-group{
+	  margin-bottom:5px !important;
+	  margin-left:0px !important;
+	  margin-right:5px !important;
+	  
+  }
+  .navbar-brand img{
+	  max-height:none !important;
+	  
+  }
+  
+  .site-info{
+	  display:none !important;
+	  
+  }
+
+  .btn-primary{
+	  font-size:12px !important;
+	  right:14px !important;
+	  
+  }
+  .bg-success,
+  .bg-danger,
+  .bg-primary{
+	  float:left !important;
+	  
   }
   .table-responsive > .table {
     margin-bottom: 0;
+  }
+  
+  .panel{
+	  padding:0px !important;
+	  
   }
   .table-responsive > .table > thead > tr > th,
   .table-responsive > .table > tbody > tr > th,
@@ -1601,7 +1671,7 @@ table th[class*="col-"] {
   .table-responsive > .table > thead > tr > td,
   .table-responsive > .table > tbody > tr > td,
   .table-responsive > .table > tfoot > tr > td {
-    white-space: nowrap;
+   
   }
   .table-responsive > .table-bordered {
     border: 0;

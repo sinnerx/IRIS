@@ -83,7 +83,7 @@
         <a class="btn btn-link visible-xs" data-toggle="class:nav-off-screen" data-target="#nav">
           <i class="fa fa-bars"></i>
         </a>
-        <a href="" class="navbar-brand"><img src="<?php echo url::asset("_scale/images/logo.png");?>"><span <?php echo $siteHref;?> ><?php echo $dashboardTitle;?> </span></a>
+        <a href="" class="navbar-brand"><img src="<?php echo url::asset("_scale/images/logo.png");?>"><span class="site-info" <?php echo $siteHref;?> ><?php echo $dashboardTitle;?> </span></a>
         <a class="btn btn-link visible-xs" data-toggle="dropdown" data-target=".user">
           <i class="fa fa-cog"></i>
         </a>
