@@ -70,6 +70,20 @@ margin-top:30px;
 	
 }
 
+.label-details{
+	float:left;
+	width:286px;
+	padding-left:4px;
+	
+}
+
+.double-dot{
+	width:5px;
+	float:left;
+	margin-right:px;
+	
+}
+
 </style>
 <script type="text/javascript">
 var activity = new function()
@@ -152,6 +166,7 @@ var activity = new function()
 .event-more-details ul li span.label-info
 {
 	width:130px;
+	float:left;
 }
 
 </style>
@@ -190,14 +205,14 @@ echo model::load("template/frontend")
 						<ul>
 						<?php ## lain-lain dont have type.
 						 if($activityType != 99):?>
-						<li><span class="label-info">Jenis <?php echo $activityTypeLabel; ?></span><span>: <?php echo $activityTypeType;?></span></li>
+						<li class="clearfix"><span class="label-info">Jenis <?php echo $activityTypeLabel; ?></span><span class="double-dot">:</span><span class="label-details"><?php echo $activityTypeType;?></span></li>
 						<?php endif;?>
-						<li><span class="label-info">Lokasi</span><span>: <?php echo $location;?></span></li>
-						<li><span class="label-info">Penyertaan</span><span>: <?php echo $activityParticipationLabel;?></span></li>
-						<li><span class="label-info">Yuran/Bulanan</span><span>: Percuma</span></li>
+						<li class="clearfix"><span class="label-info">Lokasi</span><span class="double-dot">:</span><span class="label-details"><?php echo $location;?></span></li>
+						<li class="clearfix"><span class="label-info">Penyertaan</span><span class="double-dot">:</span><span class="label-details"><?php echo $activityParticipationLabel;?></span></li>
+						<li class="clearfix"><span class="label-info">Yuran/Bulanan</span><span class="double-dot">:</span><span class="label-details">Percuma</span></li>
 						<?php
 						if($activityType == 2):?>
-						<li><span class='label-info'>Had Penyertaan</span><span>: 
+						<li class="clearfix"><span class='label-info'>Had Penyertaan</span><span class="double-dot">:</span><span class="label-details">
 
 						<?php echo $trainingMaxPax == 0?"Tiada had":$trainingMaxPax." orang";?>
 						</span></li>
