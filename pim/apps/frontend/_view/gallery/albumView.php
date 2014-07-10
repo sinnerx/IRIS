@@ -70,8 +70,7 @@
  <?php
 echo model::load("template/frontend")->buildBreadCrumbs(Array(
                                           Array("Galeri Foto",url::base("{site-slug}/galeri")),
-                                          Array("Album"),
-                                          Array("Foto")
+                                          Array("Album")
                                                             ));
 
  ?>
