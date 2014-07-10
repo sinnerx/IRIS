@@ -61,7 +61,7 @@
   opacity: 1;
 }
 
-.flex-direction-nav
+.flexslider.thumbnail-album .flex-direction-nav
 {
   display: none;
 }
