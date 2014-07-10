@@ -48,6 +48,13 @@ input
     min-height:850px;
 }
 
+ul.front-tab li.resp-tab-active
+{
+    font-weight: bold !important;
+    color:#555555 !important;
+    text-shadow: 0px 0px 1px #585858;
+}
+
 </style>
 <div class="left-info">
      <div class="front-logo">
