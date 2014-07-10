@@ -185,7 +185,7 @@ margin-top:25px;
 	font-family:Times New Roman;
 	font-style:italic;
 	font-size:13px;
-	color:#FFF;
+	color:#FFF !important;
 }
 
 .username{
@@ -3181,16 +3181,16 @@ span.info-contact{
 	border:1px solid #999;
 }
 ::-webkit-input-placeholder {
-    color:#888;
+    color:#eaeaea;
 }
 :-moz-placeholder {
-    color:#888;
+    color:#eaeaea;
 }
 ::-moz-placeholder {
-    color:#888;
+    color:#eaeaea;
 }
 :-ms-input-placeholder {
-    color:#888;
+    color:#eaeaea;
 }
 
 
