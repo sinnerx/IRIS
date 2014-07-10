@@ -201,7 +201,7 @@ class User
 					"userProfileTitle"=>$data['userProfileTitle'],
 					"userProfilePhoneNo"=>$data['userProfilePhoneNo'],
 					"userProfileGender"=>$data['userProfileGender'],
-					"userProfilePOB"=>$data['userProfileDOB'],
+					"userProfilePOB"=>$data['userProfilePOB'],
 					"userProfileMarital"=>$data['userProfileMarital'],
 					"userProfileDOB"=>$data['userProfileDOB'],
 					"userProfileMobileNo"=>$data['userProfileMobileNo'],

@@ -114,7 +114,7 @@ input
                     $dayR[$d]   = $d;
                  }
 
-                 echo form::select("birtyday_day",$dayR,"","","Hari");
+                 echo form::select("birthday_day",$dayR,"","","Hari");
 
                  ?>
                  </div>

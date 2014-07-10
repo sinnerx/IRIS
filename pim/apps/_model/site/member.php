@@ -43,7 +43,7 @@ class Member
 		$data_user	= Array(
 					"userIC"=>$ic,
 					"userPassword"=>$password,
-					"userProfileBirthDate"=>$birthDate,
+					"userProfileDOB"=>$birthDate,
 					"userProfileFullName"=>$fullname,
 					"userProfileLastName"=>$lastname
 							);
