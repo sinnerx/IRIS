@@ -50,7 +50,7 @@
 }
 #date-time tr th:nth-child(2), #date-time tr th:nth-child(3)
 {
-	width:30%;
+	width:35%;
 }
 .date-selected
 {
