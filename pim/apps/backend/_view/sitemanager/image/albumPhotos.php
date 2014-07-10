@@ -452,8 +452,9 @@ var album	= new function()
 		<?php
 		foreach($res_photo as $row_photo):
 			$imageUrl	= model::load("image/services")->getPhotoUrl($row_photo['photoName']);
+			$row_photo['photoDescription']	= htmlentities($row_photo['photoDescription']);
 			?>
-			<div id='photo<?php echo $row_photo['sitePhotoID'];?>' data-sitephotoid='<?php echo $row_photo['sitePhotoID'];?>' data-description='<?php echo nl2br($row_photo['photoDescription']);?>' data-descriptionclean='<?php echo $row_photo['photoDescription'];?>' data-photopath='<?php echo $row_photo['photoName'];?>' class='col-sm-3 album-photo' style='height:150px;margin-bottom:25px;'>
+			<div id='photo<?php echo $row_photo['sitePhotoID'];?>' data-sitephotoid='<?php echo $row_photo['sitePhotoID'];?>' data-description="<?php echo nl2br($row_photo['photoDescription']);?>" data-descriptionclean="<?php echo $row_photo['photoDescription'];?>" data-photopath='<?php echo $row_photo['photoName'];?>' class='col-sm-3 album-photo' style='height:150px;margin-bottom:25px;'>
 			<section class='panel panel-default'>
 				<div class='photo-panel'>
 					<a href='javascript:album.deletePhoto(<?php echo $row_photo['sitePhotoID'];?>);' class='i i-cross2 delete-button'></a>
