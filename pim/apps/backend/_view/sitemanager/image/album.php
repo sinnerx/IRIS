@@ -26,17 +26,17 @@ var album	= new function()
 		pim.redirect("image/albumPhotos/"+id);
 		return; //temporary.
 
-		var id		= id?id:currID;
+		/*var id		= id?id:currID;
 		var currID	= id;
 
 		//load list of photos through ajax.
 		$.ajax({type:"GET",url:pim.base_url+"ajax/shared/image/albumPhotos/"+id}).done(function(res)
 		{
 			$("#right-panel").html(res);
-		});
+		});*/
 	}
 
-	this.addPhotoForm	= new function()
+	/*this.addPhotoForm	= new function()
 	{
 		this.show 	= function(id)
 		{
@@ -47,11 +47,11 @@ var album	= new function()
 		}
 
 		pim.uriHash.addCallback({"photoAdd":function(){album.addPhotoForm.show()}});
-	}
+	}*/
 
 	this.deleteAlbum	= function(siteAlbumID)
 	{
-		if(confirm("Are you sure?"))
+		if(confirm("Delete this album. Are you sure?"))
 		{
 			$.ajax({type:"GET",url:pim.base_url+"ajax/gallery/deleteAlbum/"+siteAlbumID}).done(function(res)
 			{
@@ -61,14 +61,6 @@ var album	= new function()
 				}
 			});
 		}
-	}
-
-	this.showEditAlbum = function(siteAlbumID)
-	{
-		$.ajax({type:"GET",url:pim.base_url+"ajax/gallery/showEditAlbum/"+siteAlbumID}).done(function(res)
-		{
-			$("#right-panel").show().html(res);
-		});
 	}
 }
 
@@ -140,7 +132,7 @@ Overview of your site albums. You can <a href='javascript:album.addForm.show();'
 </div>
 <?php echo flash::data();?>
 <div class='row'>
-	<div class='col-sm-6'>
+	<div class='col-sm-12'>
 		<div class='row-wrapper' id='album-wrapper'>
 		<?php
 		if($res_album)
@@ -157,13 +149,12 @@ Overview of your site albums. You can <a href='javascript:album.addForm.show();'
 					echo "<div class='row'>";
 				}
 				?>
-				<div id='album<?php echo $row['siteAlbumID'];?>' class='col-sm-4 album-list'>
+				<div id='album<?php echo $row['siteAlbumID'];?>' class='col-sm-2 album-list'>
 					<section class='panel panel-default'>
 						<div class='panel-heading'>
 						<?php echo $row['albumName'];?>
 						<div class='album-list-buttons'>
 							<a href='javascript:album.deleteAlbum(<?php echo $row['siteAlbumID'];?>);' class='i i-cross2 button-delete'></a>
-							<a href='javascript:album.showEditAlbum(<?php echo $row['siteAlbumID'];?>);' class='fa fa-edit button-edit'></a>
 						</div>
 						</div>
 						<div onclick='album.showDetail(<?php echo $row['siteAlbumID'];?>);'>
@@ -172,7 +163,7 @@ Overview of your site albums. You can <a href='javascript:album.addForm.show();'
 					</section>
 				</div>
 				<?php
-				if($no == 3)
+				if($no == 6)
 				{
 					echo "</div>";
 					$opened	= false;
@@ -197,6 +188,7 @@ Overview of your site albums. You can <a href='javascript:album.addForm.show();'
 		}
 		?>
 		</div>
+		<!-- adding new album form -->
 		<div class='row' id='add-form' style='display:none;'>
 		<div class='col-sm-12'>
 			<form method="post" action='<?php echo url::base("image/addAlbum");?>'>
