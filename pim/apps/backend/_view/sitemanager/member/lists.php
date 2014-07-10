@@ -32,8 +32,10 @@ List of member registered in for site.
 		<table class='table'>
 			<tr>
 				<th width='15px'>No.</th>
-				<th>Name</th>
+				<th width="300px">Name</th>
+				<th>Email</th>
 				<th>I.C.</th>
+				<th width='200px'>Date registered</th>
 				<th width='65px'></th>
 			</tr>
 			<?php if(!$user):?>
@@ -52,8 +54,10 @@ List of member registered in for site.
 			?>
 			<tr <?php echo $opacity;?>>
 				<td><?php echo $no++;?></td>
-				<td><?php echo $row['userProfileFullName'];?></td>
+				<td><?php echo $row['userProfileFullName']." ".$row['userProfileLastName'];?></td>
+				<td><?php echo $row['userEmail'];?></td>
 				<td><?php echo $row['userIC'];?></td>
+				<td><?php echo date("j F Y, g:i A",strtotime($row['userCreatedDate']));?></td>
 				<td>
 					<center>
 					<a <?php if(!$active): ?>onclick="return confirmation();" href="<?php echo $href;?>"<?php endif; ?> class="<?php echo $active;?>" >

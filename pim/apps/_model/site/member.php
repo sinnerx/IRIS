@@ -97,6 +97,7 @@ class Member
 		db::join("site","site.siteID = site_member.siteID");
 		db::join("user","user.userID = site_member.userID");
 		db::join("user_profile","user_profile.userID = site_member.userID");
+		db::join("user_profile_additional","user_profile_additional.userID = user.userID");
 
 		return db::get()->row();
 	}
