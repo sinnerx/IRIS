@@ -92,30 +92,37 @@ class Controller_Ajax_Gallery
 		return true;
 	}
 
-	public function showEditAlbum($siteAlbumID)
+	public function changeDescription($siteAlbumID)
 	{
-		$data['row']	= model::load("image/album")->getSiteAlbum($siteAlbumID);
+		$data['albumDescription']	= input::get("albumDescription");
 
-		view::render("sitemanager/image/ajax/showEditAlbum",$data);
+		if($data['albumDescription'] == "")
+			return false;
+		model::load("image/album")->updateSiteAlbum($siteAlbumID,$data);
+
+		return response::json(Array($data['albumDescription'],nl2br($data['albumDescription'])));
 	}
 
-	public function editAlbum($siteAlbumID)
+	public function changeCoverPhoto($siteAlbumID)
 	{
-		if(form::submitted())
-		{
-			$rules	= Array("albumDescription"=>"required:Album description is required.");
+		$siteID		= authData("site.siteID");
+		$photoName	= input::get("photoName");
 
-			if(input::validate($rules))
-			{
-				return response::json(Array(false));
-			}
+		$res = model::load("image/album")->changeCoverPhoto($siteID,$siteAlbumID,$photoName);
 
-			$data['albumDescription']	= input::get("albumDescription");
+		if($res)
+			return model::load("image/services")->getPhotoUrl($photoName);
 
-			model::load("image/album")->updateSiteAlbum($siteAlbumID,$data);
+		return false;
+	}
 
-			return response::json(Array(true));
-		}
+	public function changePhotoDescription($sitePhotoID)
+	{
+		$siteID	= authData("site.siteID");
+		$desc	= input::get("photoDescription");
+		model::load("image/photo")->changePhotoDescription($siteID,$sitePhotoID,$desc);
+
+		return response::json(Array($desc,nl2br($desc)));
 	}
 }
 
