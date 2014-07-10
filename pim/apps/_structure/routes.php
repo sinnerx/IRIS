@@ -144,7 +144,7 @@ $routes[]	= Array("[:site-slug]/blog","controller=blog@article");
 $routes[]	= Array("[:site-slug]/blog/user/[i:userID]","controller=blog@articleByUser","{userID}");
 $routes[]	= Array("[:site-slug]/blog/[i:year]/[i:month?]","controller=blog@articleByYearOrMonth","{year},{month}");
 $routes[]	= Array("[:site-slug]/blog/tag/[:tag]","controller=blog@articleByTagOrCategory","tag,{tag}");
-$routes[]	= Array("[:site-slug]/blog/category/[:category]","controller=blog@articleByTagOrCategory","category,{category}");
+$routes[]	= Array("[:site-slug]/blog/kategori/[:category]","controller=blog@articleByTagOrCategory","category,{category}");
 
 ## site view an article
 $routes[]	= Array("[:site-slug]/blog/[:year]/[:month]/[:article-slug]","controller=blog@view");

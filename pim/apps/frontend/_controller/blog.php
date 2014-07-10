@@ -15,7 +15,7 @@ Class Controller_Blog
 		## if category sort.
 		if($type == "category")
 		{
-			$data['typeSortBy']	= $type;
+			$data['typeSortBy']	= "kategori";
 			$row_cat	= model::load("blog/category")->getCategory($val,"categoryName");
 			$data['typeSortByValue']	= $row_cat;
 
@@ -25,7 +25,7 @@ Class Controller_Blog
 		## if tag sort.
 		if($type == "tag")
 		{
-			$data['typeSortBy']	= $type;
+			$data['typeSortBy']	= "tag";
 			$data['typeSortByValue']	= $val;
 			$where['articleID IN (SELECT articleID FROM article_tag WHERE articleTagName = ?)'] = Array($val);
 		}

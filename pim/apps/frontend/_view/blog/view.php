@@ -35,7 +35,9 @@
 							<div class="top-heading">
 								<h3><a><?php echo $article['articleName']; ?></a></h3>
 								<div class="story-info">
-									<span class="story-author">Ditulis Oleh <a href="#"><?php echo $article['articleEditedUser']; ?> </a></span>
+									<span class="story-author">Ditulis Oleh 
+									<a href="<?php echo url::base("{site-slug}/blog/user/$article[articleCreatedUser]");?>"><?php echo $article['articleEditedUser']; ?> </a>
+									</span>
 									<span class="story-date">Pada <a href="#"><?php echo date('jS F Y', strtotime($article['articlePublishedDate'])); ?></a></span>
 									<?php
 									$flag	= false;
@@ -47,19 +49,18 @@
 
 								 	if($flag):?>
 									<span class="story-category">Dalam 
-										<a href="#">
 										<?php
 											$count = 0;
 					                		foreach($category as $cat):
 					                			$count++;
 					                			if($cat['checked']){
-					                				echo $cat['categoryName'].'&nbsp;&nbsp;';
+					                				echo "<a href='".url::base("{site-slug}/blog/kategori/$cat[categoryID]")."'>".strtolower($cat['categoryName'])."</a>".'&nbsp;&nbsp;';
 					                			}
 					                			if($cat['child']):
 					                				foreach($cat['child'] as $c):
 						                				$count++;
 						                				if($c['checked']){
-						                					echo $c['categoryName'].'&nbsp;&nbsp;';
+						                					echo "<a href='".url::base("{site-slug}/blog/kategori/$c[categoryID]")."'>".strtolower($c['categoryName'])."</a>".'&nbsp;&nbsp;';
 						                				}
 							                			if($count == 4){
 							                				break;
@@ -72,7 +73,6 @@
 					                			}
 					                		endforeach;
 					                	?>
-					                	</a>
 									</span>
 									<?php endif;?>
 								</div>
@@ -87,6 +87,7 @@
 								?>
 								<?php echo $article['articleText']; ?>
 							</div>
+							<?php if($articleTags || $activity[0]['activityID']):?>
 							<div class="blog-additional-info">
 								<?php if($activity[0]['activityID']): ?>
 								<div class="events">
@@ -94,7 +95,7 @@
 										<i class="fa fa-calendar"></i> <span class="event-heading"><?php echo $activity[0]['data']['activityName']; ?>:</span> <?php if($activity[0]['data']['activityAddress']): ?><span> <strong>Tempat Lokasi :</strong> <?php echo $activity[0]['data']['activityAddress']; ?></span><?php endif; ?> <span><strong>Tarikh:</strong> <?php echo date('jS F Y', strtotime($activity[0]['data']['activityStartDate'])); ?></span> <span> <strong>Masa:</strong> 10.00 Pagi</span>
 									</a>
 								</div>
-							<?php endif; ?>
+								<?php endif; ?>
 								<div class="tags">
 									<span>Tags:</span>
 									<?php
@@ -106,6 +107,7 @@
 									?>
 								</div>
 							</div>
+							<?php endif;?>
 						</div>
 				</div>
 			</div>

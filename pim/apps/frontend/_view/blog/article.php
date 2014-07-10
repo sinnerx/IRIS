@@ -102,7 +102,7 @@
 												{
 													foreach($categoryR[$row['articleID']] as $row_cat)
 													{
-														$url	= url::base("{site-slug}/blog/category/".$row_cat['categoryID']);
+														$url	= url::base("{site-slug}/blog/kategori/".$row_cat['categoryID']);
 														$item[] = "<a href='$url'>".$row_cat['categoryName']."</a>";
 													}
 												}
