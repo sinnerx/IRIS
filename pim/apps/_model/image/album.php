@@ -237,10 +237,19 @@ class album
 	{
 		db::where("site_album.albumID IN (SELECT albumID FROM album WHERE albumCoverImageName is not ?)",Array(null));
 		db::where("site_album.siteID",$siteID);
+		db::where("siteAlbumStatus",1);
 
 		db::join("album","album.albumID = site_album.albumID");
 		db::order_by("siteAlbumID","desc");
 
 		return db::get("site_album")->row();
+	}
+
+	public function changeCoverPhoto($siteID,$siteAlbumID,$photoName)
+	{
+		db::where("albumID IN (SELECT albumID FROM site_album WHERE siteID = ? AND siteAlbumID = ?)",Array($siteID,$siteAlbumID));
+		db::update("album",Array("albumCoverImageName"=>$photoName));
+
+		return true;
 	}
 }
