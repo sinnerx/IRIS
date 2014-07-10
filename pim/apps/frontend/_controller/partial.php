@@ -86,7 +86,14 @@ class Controller_Partial
 		$row_latestalbum	=model::load("image/album")->getSiteLatestAlbum($siteID);
 
 		$data['latestPhotoUrl']	=  model::load("image/services")->getPhotoUrl($row_latestalbum['albumCoverImageName']);
-		$data['latestPhotoLink']	= model::load("helper")->buildDateBasedUrl($row_latestalbum['siteAlbumSlug'],$row_latestalbum['albumCreatedDate'],url::base("{site-slug}/galeri"));
+		if($row_latestalbum)
+		{
+			$data['latestPhotoLink']	= model::load("helper")->buildDateBasedUrl($row_latestalbum['siteAlbumSlug'],$row_latestalbum['albumCreatedDate'],url::base("{site-slug}/galeri"));
+		}
+		else
+		{
+			$data['latestPhotoLink'] = null;
+		}
 
 		view::render("partial/bottom_down",$data);
 	}
