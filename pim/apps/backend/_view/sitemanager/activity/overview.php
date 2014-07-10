@@ -422,7 +422,7 @@ function changeList()
 Activity : Overview
 </h3>
 <div class='well well-sm'>
-Overview of your site activities like events and training. Click <a href='add'>here</a> to add new activity.
+Overview of your site activities like events and training. <a href='add' class='label label-primary'>Add New Activity</a>
 </div>
 <div class='row'>
 <div class='col-md-8'>
