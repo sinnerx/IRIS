@@ -128,8 +128,13 @@ $routes[]	= Array("[:site-slug]/logout","controller=main@logout");
 
 ## site activity
 #$routes[]	= Array("[:site-slug]/activity","controller=activity@index");
+$routes[]	= Array("[:site-slug]/aktiviti/[:year?]/[:month?]","controller=activity@index");
+$routes[]	= Array("[:site-slug]/aktiviti/[:year]/[:month]/[:activity-slug]","controller=activity@view/{activity-slug}");
+
+## old routes for activity.
 $routes[]	= Array("[:site-slug]/activity/[:year?]/[:month?]","controller=activity@index");
 $routes[]	= Array("[:site-slug]/activity/[:year]/[:month]/[:activity-slug]","controller=activity@view/{activity-slug}");
+## /old routes
 
 ## site contact-us
 $routes[]	= Array("[:site-slug]/hubungi-kami","controller=main@contact");

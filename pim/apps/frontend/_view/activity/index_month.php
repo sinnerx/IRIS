@@ -30,17 +30,26 @@ var pim = new pim({base_url:"<?php echo url::base('{site-slug}');?>"});
 function yearChange()
 {
 	var y = jQuery("#activityYear").val();
-	pim.redirect("activity/"+y);
+	pim.redirect("aktiviti/"+y);
 }
 
 function monthChange(month)
 {
 	var y = jQuery("#activityYear").val();
-	pim.redirect("activity/"+y+"/"+month);
+	pim.redirect("aktiviti/"+y+"/"+month);
 }
 
 </script>
-<h3 class="block-heading">Kalendar Aktiviti</h3>
+<h3 class="block-heading">
+<?php
+echo model::load("template/frontend")
+->buildBreadCrumbs(Array(
+			Array("Aktiviti",url::base("{site-slug}/aktiviti")),
+			Array($year,url::base("{site-slug}/aktiviti/$year")),
+			Array(model::load("helper")->monthYear("month",$month))
+						));
+						?>
+</h3>
 <div class="block-content clearfix">
 	<div class="page-content">
 		<div class="page-description">
@@ -95,7 +104,7 @@ function monthChange(month)
 						foreach($res_activity[$type] as $row)
 						{
 							$total	= isset($participantList[$row['activityID']])?count($participantList[$row['activityID']]):0;
-							$url	= model::load("helper")->buildDateBasedUrl($row['activitySlug'],$row['activityStartDate'],url::base("{site-slug}/activity"));
+							$url	= model::load("helper")->buildDateBasedUrl($row['activitySlug'],$row['activityStartDate'],url::base("{site-slug}/aktiviti"));
 							?>
 						<li class="clearfix">
 							<div class="activity-details-left">

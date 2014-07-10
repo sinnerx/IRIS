@@ -5,19 +5,27 @@ var pim = new pim({base_url:"<?php echo url::base('{site-slug}');?>"});
 function yearChange()
 {
 	var y = jQuery("#activityYear").val();
-	pim.redirect("activity/"+y);
+	pim.redirect("aktiviti/"+y);
 }
 
 function monthChange(month)
 {
 	var y = jQuery("#activityYear").val();
-	pim.redirect("activity/"+y+"/"+month);
+	pim.redirect("aktiviti/"+y+"/"+month);
 }
 
 </script>
 <link rel="stylesheet" type="text/css" href="<?php echo url::asset('_templates/css/aktiviti.css');?>">
 <script type="text/javascript" src='<?php echo url::asset("_templates/js/jquery.easydropdown.js");?>'></script>
-<h3 class="block-heading">Kalendar Aktiviti</h3>
+<h3 class="block-heading">
+<?php
+echo model::load("template/frontend")
+->buildBreadCrumbs(Array(
+			Array("Aktiviti",url::base("{site-slug}/aktiviti")),
+			Array($year)
+						));
+?>
+</h3>
 <div class="block-content clearfix">
 <div class="page-content">
 <div class="page-description"> 
@@ -87,7 +95,7 @@ foreach(array_keys($res_activity) as $m)
 <div class='calendar-type-left'>
 <?php ## left month loop ## 
 foreach($leftR as $m):?>
-	<div class='calendar-label-name'><a href='<?php echo url::base("{site-slug}/activity/$year/$m");?>' style='color:inherit;'><?php echo $monthR[$m];?></a></div>
+	<div class='calendar-label-name'><a href='<?php echo url::base("{site-slug}/aktiviti/$year/$m");?>' style='color:inherit;'><?php echo $monthR[$m];?></a></div>
 	<div class='calendar-activity-list'>
 		<ul>
 			<?php
@@ -97,7 +105,7 @@ foreach($leftR as $m):?>
 				$total	= isset($participantList[$row['activityID']])?count($participantList[$row['activityID']]):0;
 
 				## prepare perma url.
-				$url	= url::base("{site-slug}/activity/$year/").date("m",strtotime($row['activityStartDate']))."/".$row['activitySlug'];
+				$url	= url::base("{site-slug}/aktiviti/$year/").date("m",strtotime($row['activityStartDate']))."/".$row['activitySlug'];
 				?>
 			<li class='clearfix'>
 				<div class='activity-details-left'>
@@ -125,7 +133,7 @@ foreach($leftR as $m):?>
 <div class='calendar-type-right'>
 <?php ## left month loop ## 
 foreach($rightR as $m):?>
-	<div class='calendar-label-name'><a href='<?php echo url::base("{site-slug}/activity/$year/$m");?>' style='color:inherit;'><?php echo $monthR[$m];?></a></div>
+	<div class='calendar-label-name'><a href='<?php echo url::base("{site-slug}/aktiviti/$year/$m");?>' style='color:inherit;'><?php echo $monthR[$m];?></a></div>
 	<div class='calendar-activity-list'>
 		<ul>
 			<?php
@@ -135,7 +143,7 @@ foreach($rightR as $m):?>
 				$total	= isset($participantList[$row['activityID']])?count($participantList[$row['activityID']]):0;
 				
 				## prepare perma url.
-				$url	= url::base("{site-slug}/activity/$year/").date("m",strtotime($row['activityStartDate']))."/".$row['activitySlug'];
+				$url	= url::base("{site-slug}/aktiviti/$year/").date("m",strtotime($row['activityStartDate']))."/".$row['activitySlug'];
 				?>
 			<li class='clearfix'>
 				<div class='activity-details-left'>

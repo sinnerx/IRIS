@@ -145,7 +145,7 @@ class Menu
 				3=>Array(
 					"componentNo"=>3,
 					"componentName"=>"Aktiviti",
-					"componentRoute"=>"activity",
+					"componentRoute"=>"aktiviti",
 					"componentStatus"=>1
 					),
 				4=>Array(

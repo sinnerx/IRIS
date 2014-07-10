@@ -155,7 +155,14 @@ var activity = new function()
 }
 
 </style>
-<h3 class="block-heading">Kalendar Aktiviti  <span class="subheading"> > <?php echo $activityTypeLabel;?></span></h3>
+<h3 class="block-heading">
+<?php
+echo model::load("template/frontend")
+->buildBreadCrumbs(Array(
+			Array("Aktiviti",url::base("{site-slug}/aktiviti")),
+			Array($activityTypeLabel)
+						));
+?></h3>
 <div class="block-content clearfix">
 	<div class="page-content">
 		<div class="page-description">
