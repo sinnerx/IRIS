@@ -61,6 +61,10 @@
   opacity: 1;
 }
 
+.flex-direction-nav
+{
+  display: none;
+}
 
 </style>
 <h3 class="block-heading">
