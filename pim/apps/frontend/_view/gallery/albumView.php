@@ -64,9 +64,17 @@
 
 </style>
 <h3 class="block-heading">
-<a href='<?php echo url::base("{site-slug}");?>'>Home</a><span class="subheading"> >
+<!-- <a href='<?php echo url::base("{site-slug}");?>'>Home</a><span class="subheading"> >
 <a href='<?php echo url::base("{site-slug}/galeri");?>'> Galeri Foto</a>
- > Album > Foto</span>
+ > Album > Foto</span> -->
+ <?php
+echo model::load("template/frontend")->buildBreadCrumbs(Array(
+                                          Array("Galeri Foto",url::base("{site-slug}/galeri")),
+                                          Array("Album"),
+                                          Array("Foto")
+                                                            ));
+
+ ?>
  </h3>
 <div class="block-content clearfix">
 <div class="page-content">

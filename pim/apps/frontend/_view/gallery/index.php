@@ -19,10 +19,15 @@ function monthChange(month)
 
 </script>
 <h3 class="block-heading">
-<a href='<?php echo url::base("{site-slug}");?>'>Home</a>
-<span class="subheading"> > 
-<a href='<?php echo url::base("{site-slug}/galeri");?>'>Galeri Foto</a>
- > <?php echo $year;?></span></h3>
+<?php
+echo model::load("template/frontend")
+->buildBreadCrumbs(Array(
+			Array("Galeri Foto"),
+			Array($year)
+						));
+
+?>
+ </h3>
 <div class="block-content clearfix">
 	<div class="page-content">
 		<div class="page-description"> 

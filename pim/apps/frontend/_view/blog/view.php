@@ -10,15 +10,14 @@
   					<div class="story-info">
 						<span class="story-author">
                         <h3 class="block-heading">
-		<a>BLOG</a>
-	
-							<a href="<?php echo url::base(request::named("site-slug")); ?>">Home</a>
-							<span class="subbread"> >
-							<a href="<?php echo url::base(request::named("site-slug").'/blog'); ?>">Blog</a>
-							<!--&nbsp; → &nbsp;
-							<a href="<?php //echo url::base(request::named("site-slug").'/blog/'.); ?>">Category Name</a>-->
-                            </span>
-                            
+                            <?php
+                            echo model::load("template/frontend")
+                            ->buildBreadCrumbs(Array(
+                            			Array("Blog",url::base(request::named("site-slug").'/blog')),
+                            			Array("Baca")
+                            						));
+
+                            ?>
                             </h3>
 						</span>
 					</div>

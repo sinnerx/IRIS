@@ -23,24 +23,30 @@
 </style>
 <div class="body-container clearfix">
 	<div class="lft-container">
-		<h3 class="block-heading"><a href='<?php echo url::base("{site-slug}");?>'>HOME</a><span class="subbread"> > <a href="<?php echo url::base(request::named("site-slug")."/blog/"); ?>">BLOG</a>
+
+		<!-- <a href='<?php echo url::base("{site-slug}");?>'>HOME</a><span class="subbread"> > <a href="<?php echo url::base(request::named("site-slug")."/blog/"); ?>">BLOG</a> -->
 		<?php
-		## bread build simple breadcrump. later need new one.
-		if($typeSortBy):
-		echo " > ";
-		echo strtoupper($typeSortBy);
-		echo " > ".$typeSortByValue;
-		elseif($dateSortBy):
-		echo " > ";
-		echo "<a href='".url::base("{site-slug}/blog/$year")."'>$year</a>";
-			if($month):
-				echo " > ";
-				echo $month;
-			endif;
-		elseif($userSortBy):
-		echo " > BY > $userProfileFullName";
+		$breadcrumb = Array();
+		$breadcrumb[] = Array("Blog",url::base(request::named("site-slug")."/blog/"));
+		if($typeSortBy): ## sort by tag or category
+			$breadcrumb[] = Array(strtoupper($typeSortBy));
+			$breadcrumb[] = Array($typeSortByValue);
+		elseif($dateSortBy): ## sort by date. (year or month)
+			$breadcrumb[] = Array($year,url::base("{site-slug}/blog/$year"));
+				if($month):
+					$breadcrumb[] = Array($month);
+				endif;
+		elseif($userSortBy): ## sort by user
+			$breadcrumb[] = Array("By");
+			$breadcrumb[] = Array($userProfileFullName);
 		endif;
-		?></span>
+		?>
+		<h3 class="block-heading">
+		<?php
+		## build breadcrumbo
+		echo model::load("template/frontend")
+		->buildBreadCrumbs($breadcrumb);
+		?>
 		</h3>
 		<div class="block-content clearfix">
 			<div class="page-content">

@@ -30,11 +30,15 @@ function monthChange(month)
 
 </script>
 <h3 class="block-heading">
-<a href='<?php echo url::base("{site-slug}");?>'>Home</a>
-<span class="subheading"> >
-<a href='<?php echo url::base("{site-slug}/galeri");?>'>Galeri Foto</a> > 
-<a href='<?php echo url::base("{site-slug}/galeri/$year");?>'><?php echo $year;?></a> > 
-<?php echo model::load("helper")->monthYear("month",$month);?></span></h3>
+<?php
+echo model::load("template/frontend")
+->buildBreadCrumbs(Array(
+			Array("Galeri Foto"),
+			Array($year,url::base("{site-slug}/galeri/$year")),
+			Array(model::load("helper")->monthYear("month",$month))
+						));
+						?>
+</h3>
 <div class="block-content clearfix">
 	<div class="page-content">
 		<div class="page-description"> 
