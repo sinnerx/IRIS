@@ -68,7 +68,10 @@ echo model::load("template/frontend")
 					</ul>
 				</div>
 				<div class="select-year-activity">
-					<?php echo form::select("activityYear",model::load("helper")->monthYear("year",date("Y")-4,date("Y")+1),"onchange='yearChange();' class='dropdown' data-settings='{\"wrapperClass\":\"select-year\"}'",$year,false);?>
+					<?php
+					$yearR	= model::load("helper")->monthYear("year",date("Y")-4,date("Y")+1);
+					$yearR	= array_combine( array_reverse(array_keys( $yearR )), array_reverse( array_values( $yearR ) ) );
+					echo form::select("activityYear",$yearR,"onchange='yearChange();' class='dropdown' data-settings='{\"wrapperClass\":\"select-year\"}'",$year,false);?>
 				</div>
 				<div class="month-right">
 					<ul>
