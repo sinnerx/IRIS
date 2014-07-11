@@ -58,7 +58,7 @@ Class Controller_Main
 			$pass	= input::get("login_userPassword");
 
 			$rules	= Array(
-					"_all"=>"required:Ruangan ini diperlukan."
+					"_all"=>"required:Maklumat ini diperlukan"
 							);
 
 			## validate 
@@ -66,7 +66,7 @@ Class Controller_Main
 			{
 				input::repopulate();
 				redirect::withFlash(model::load("template/services")->wrap("span-error",$error));
-				redirect::to("{site-slug}/registration#horizontalTab1","<br>Sila pastikan form anda lengkap.","error");
+				redirect::to("{site-slug}/registration#horizontalTab1","<br>Sila pastikan maklumat anda lengkap.","error");
 			}
 
 			## check member login.

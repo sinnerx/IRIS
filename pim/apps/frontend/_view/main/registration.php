@@ -84,10 +84,9 @@ ul.front-tab li.resp-tab-active
                     <form method='post' action='<?php echo url::base("{site-slug}/login");?>'>
                          <label>KAD PENGENALAN <?php echo flash::data("login_userIC");?></label>
                               <?php echo form::text("login_userIC","class='name username-login' placeholder='Kad Pengenalan Anda'");?>
-                              <div class="help-login"><a href="#">Lupa Alamat Email? </a></div>
-                         <label>KATA LALUAN <?php echo flash::data("login_userPassword");?></label>
+                         <label style="margin-top:15px;">KATA LALUAN <?php echo flash::data("login_userPassword");?></label>
                               <?php echo form::password("login_userPassword","class='name password-login' placeholder='Kata Laluan Anda'");?>
-                    <div class="help-login"><a href="#">Lupa Kata Laluan? </a></div>
+                            <!-- <div class="help-login"><a href="#">Lupa Kata Laluan? </a></div> -->
                     <div class="bottom-button clearfix">
                     <input type="submit" class="submit-bttn" value="Log Masuk"> <a href="#" class="fb-login"><i class="fa fa-facebook"></i>  Log Masuk Guna Facebook</a>
                     </div>
