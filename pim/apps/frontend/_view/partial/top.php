@@ -86,8 +86,8 @@
 	<form method='post' action='<?php echo url::base("{site-slug}/login");?>'>
 		<input type="text" name='login_userIC' class="username" placeholder='Kad Pengenalan'>
 		<input type="password" name='login_userPassword' class="password" placeholder='Kata Laluan'> 
-		<input type="submit" class="submit" value="Login">
-		<a href="<?php echo url::base("{site-slug}/registration#horizontalTab2");?>" class="rgstr-button">Register</a>
+		<input type="submit" class="submit" value="Log Masuk">
+		<a href="<?php echo url::base("{site-slug}/registration#horizontalTab2");?>" class="rgstr-button">Daftar</a>
 	</form>
 <?php endif;?>
 	</div>
