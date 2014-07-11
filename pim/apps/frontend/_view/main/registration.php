@@ -88,7 +88,7 @@ ul.front-tab li.resp-tab-active
                               <?php echo form::password("login_userPassword","class='name password-login' placeholder='Kata Laluan Anda'");?>
                             <!-- <div class="help-login"><a href="#">Lupa Kata Laluan? </a></div> -->
                     <div class="bottom-button clearfix">
-                    <input type="submit" class="submit-bttn" value="Log Masuk"> <a href="#" class="fb-login"><i class="fa fa-facebook"></i>  Log Masuk Guna Facebook</a>
+                    <input type="submit" class="submit-bttn" value="Log Masuk"> <!-- <a href="#" class="fb-login"><i class="fa fa-facebook"></i>  Log Masuk Guna Facebook</a> -->
                     </div>
                     </form>
                     </div>
@@ -151,7 +151,7 @@ ul.front-tab li.resp-tab-active
                  </div>
                  </div>
                  <div class="bottom-button clearfix">
-                 <input type="submit" class="submit-bttn" value="Daftar"> <a href="#" class="fb-login"><i class="fa fa-facebook"></i>  Log Masuk Guna Facebook</a>
+                 <input type="submit" class="submit-bttn" value="Daftar"> <!-- <a href="#" class="fb-login"><i class="fa fa-facebook"></i>  Log Masuk Guna Facebook</a> -->
                  </div>
                </form>
                </div>
