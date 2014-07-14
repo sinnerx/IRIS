@@ -113,6 +113,9 @@ $routes[]	= Array("","controller=main@landing");
 $routes[]	= Array("mengenai-kami","controller=main@landing_about");
 $routes[]	= Array("hubungi-kami","controller=main@landing_contact");
 
+## error page
+$routes[]	= Array("[:site-slug]/404","controller=error@index");
+
 ## site test uri
 $routes[]	= Array("[:site-slug]/test/[:controller]/[**:method]","controller={controller}@{@method}");
 

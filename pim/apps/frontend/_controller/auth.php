@@ -25,6 +25,11 @@ class Controller_Auth
 				redirect::to("404?site_not_found=".$slug);
 			}
 
+			## check logged user.
+			if(!model::load("site/access")->checkLoggedAccess(controller::getCurrentController(),controller::getCurrentMethod()))
+			{
+				redirect::to("{site-slug}/404?tiada_akses=1");
+			}
 		}
 	}
 }

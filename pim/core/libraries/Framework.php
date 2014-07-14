@@ -408,7 +408,7 @@ class Controller
 		}
 
 		## if this function was called in controller, while controller havent load any view. we set it as forwarding.
-		if(!template::$loaded && !self::$hooking)
+		if(self::$initiated && !template::$loaded && !self::$hooking && $method)
 		{
 			self::$forwarding = true;
 		}
@@ -447,10 +447,7 @@ class Controller
 		$controllerFullName	= $controller; ## just added 15/6, to bring it's full name for saving and retrieving purpose.
 		$path			= apps::getAppsFolder()."/$apps/_controller/$controller.php";
 
-		if(!$method)
-		{
-			return $controller;
-		}
+
 
 		## check if in method got param.
 		$methodR	= explode("/",$method);
@@ -462,10 +459,6 @@ class Controller
 
 		## save all controller trying to load into loadedListR.
 		self::$loadedListR[]	= "[".controller::currentState()."]$apps:".$controllerFullName."@".$method;
-
-		## set last executed controller and method;
-		self::$lastController	= $controllerFullName;
-		self::$lastMethod		= $method;
 
 		## check controller existance.
 		if(isset(self::$instance[$controllerFullName]))
@@ -497,6 +490,15 @@ class Controller
 			## save controller instance and it's name
 			self::$instance[$controllerFullName]	= $controller;
 		}
+
+		if(!$method)
+		{
+			return $controller;
+		}
+
+		## set last executed controller and method;
+		self::$lastController	= $controllerFullName;
+		self::$lastMethod		= $method;
 
 		## moving : from point here.
 		
