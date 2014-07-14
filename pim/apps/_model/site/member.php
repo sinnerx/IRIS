@@ -91,6 +91,7 @@ class Member
 	## get user member detail
 	public function getUserMemberDetail($userID=null,$siteID=null){
 		//echo '<pre>';print_r($pgConf);die;
+		db::select("site_member.*,user_profile.*,user_profile_additional.*,user.*");
 		db::where("site_member.siteID",$siteID);
 		db::where("site_member.userID",$userID);
 		db::from("site_member");

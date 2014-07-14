@@ -26,6 +26,19 @@
 		margin-bottom: 20px;
 	}
 </style>
+<script type="text/javascript">
+
+//in-case it's loaded somewhere.
+function confirmation(){
+			var r = confirm("Are you sure this member has paid?");
+    		if (r == true) {
+        		return true;
+    		} else {
+        		return false;
+    		}
+		}
+
+</script>
 <div class="modal-dialog">
 	<div class="modal-content">
 		<div class="modal-header">
@@ -33,6 +46,9 @@
 			<h4 class="modal-title"><!-- ☮ -->
 			<span><span class='fa fa-user'></span> Member Information</span>
 			<span>: <?php echo ucwords($user['userProfileFullName']." ".$user['userProfileLastName']); ?></span>
+			<?php if($user['siteMemberStatus'] != 1):?>
+			<a href='?toggle=<?php echo $user['userID'];?>' onclick='return confirmation();' class='label label-primary pull-right' style='position:relative;right:10px;' >Approve Membership</a>
+			<?php endif;?>
 			</h4>
 		</div>
 		<?php
