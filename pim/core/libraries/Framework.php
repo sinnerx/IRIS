@@ -338,6 +338,8 @@ class Controller
 	private static $hookListR			= Array();	## list of hooks
 	private static $hooking				= false;	## store hooking status
 
+	public static $forwarding			= false;
+
 	## Main initiation method. Widely can be used in router.
 	public static function init($controller,$param_method = null,$paramR = Array(),$constructData = null)
 	{
@@ -387,6 +389,14 @@ class Controller
 		## if result is returned with some sort of response.
 		return $response;
 	}
+
+	/*
+	a temporary comment to see if feature forwarding is ok, to be used through controller::load
+	public static function forward($controller,$method = null,$paramR = Array(),$constructData = null)
+	{
+		self::$forwarding = true;
+		return self::load($controller,$method,$paramR,$constructData);
+	}*/
 	
 	public static function load($controller,$method = null, $paramR = Array(),$constructData = null)
 	{
@@ -395,6 +405,12 @@ class Controller
 		{
 			error::set("Controller Load","Cannot load without initiation or not in the mode of hooking.");
 			return;
+		}
+
+		## if this function was called in controller, while controller havent load any view. we set it as forwarding.
+		if(!template::$loaded && !self::$hooking)
+		{
+			self::$forwarding = true;
 		}
 
 		## check if apps was passed along.
@@ -743,8 +759,10 @@ class View
 
 		if(file_exists($path))
 		{
-			if(!template::$loaded && (controller::getCurrentController() == controller::getLastController() && controller::getCurrentMethod() == controller::getLastMethod()))
+			if(!template::$loaded &&  (controller::$forwarding || (controller::getCurrentController() == controller::getLastController() && controller::getCurrentMethod() == controller::getLastMethod())))
 			{
+				controller::$forwarding = false; ## reset forwarding mode if got any.
+
 				self::$path_main	= $path;
 				self::$data_main	= $data;
 				template::load();
