@@ -158,7 +158,7 @@ class Controller_Activity
 				if(isset($data['participantList']['attending'][session::get("userID")]))
 				{
 					$data['participationFlagMessage']	= "Anda telah memilih untuk hadir ke aktiviti ini.";
-
+					$data['participationFlag']		= true;
 					## get list of participated date.
 					$data['joinedDate']	= model::load("activity/activity")->getJoinedDate($row_act['activityID'],session::get("userID"));
 				}

@@ -84,6 +84,23 @@ margin-top:30px;
 	
 }
 
+/* new checkin button */
+.pim-icon-checkbox-unchecked
+{
+	background: url("<?php echo url::asset('frontend/images/check-no.png');?>");
+	width: 28px;
+	height:28px;
+	display: inline-block;
+}
+
+.pim-icon-checkbox-checked
+{
+	background: url("<?php echo url::asset('frontend/images/check-yes.png');?>");
+	width: 28px;
+	height:28px;
+	display: inline-block;
+}
+
 </style>
 <script type="text/javascript">
 var activity = new function()
@@ -138,7 +155,7 @@ var activity = new function()
 
 			// change icon and remove href.
 			var e = date?$("#activityDate"+date):$(".joinbutton");
-			e.removeClass("fa-sign-in").addClass("fa-check").attr("href","#");
+			e.removeClass("pim-icon-checkbox-unchecked").addClass("pim-icon-checkbox-checked").attr("href","#");
 
 			// change image.
 			if($("#userJoined").val() != "true")
@@ -249,13 +266,13 @@ echo model::load("template/frontend")
 
 										$href	= $allDateAttendanceOptional?"javascript:activity.join(\"$row[activityDateValue]\");":"javascript:activity.join();";
 
-										$attr	= "href='$href' class='joinbutton fa fa-sign-in'";
+										$attr	= "href='$href' class='joinbutton pim-icon-checkbox-unchecked'";
 
 										if($joinedDate)
 										{
 											if(isset($joinedDate[$row['activityDateValue']]))
 											{
-												$attr	= "href='#' class='joinbutton fa fa-check'";
+												$attr	= "href='#' class='joinbutton pim-icon-checkbox-checked'";
 											}
 										}
 										?>
@@ -282,20 +299,26 @@ echo model::load("template/frontend")
 							<span><?php echo $participationFlagMessage;?></span>
 						</div>
 						<?php else:?>
-						<div class='members-guest'>
-							<span>
-							<?php if($activityParticipation == 3):?>
-							Aktiviti ini terbuka kepada penyertaan umum.
+						<?php if($participationFlagMessage):?>
+							<div class='members-guest'>
+								<span><?php echo $participationFlagMessage;?></span>
+							</div>
+							<?php else:?>
+							<div class='members-guest'>
+								<span>
+								<?php if($activityParticipation == 3):?>
+								Aktiviti ini terbuka kepada penyertaan umum.
+								<?php endif;?>
+								<span id='rsvp-message-box'>
+								<?php if($activityAllDateAttendance == 2):?>
+								Sila pilih tarikh yang anda ingin sertai.
+								<?php elseif($activityAllDateAttendance == 1):?>
+								Klik <label onclick='activity.join();' style='color:blue;cursor:pointer;' class='fa fa-sign-in'></label> untuk sertai.
+								<?php endif;?>
+								</span><!-- end of rsvp-message-box -->
+								</span>
+							</div>
 							<?php endif;?>
-							<span id='rsvp-message-box'>
-							<?php if($activityAllDateAttendance == 2):?>
-							Sila pilih tarikh yang anda ingin sertai.
-							<?php elseif($activityAllDateAttendance == 1):?>
-							Klik <label onclick='activity.join();' style='color:blue;cursor:pointer;' class='fa fa-sign-in'></label> untuk sertai.
-							<?php endif;?>
-							</span><!-- end of rsvp-message-box -->
-							</span>
-						</div>
 						<?php endif;?>
 					</div>
 				</div>
