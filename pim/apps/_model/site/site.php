@@ -338,8 +338,17 @@ class Site
 		db::insert("site_manager",$data);
 	}
 
+	## used by frontend/partial@pim_list
 	public function getSiteByState($stateID = null)
 	{
+		## select everything except manager siteID.
+		$managerSiteID	= model::load("config")->get("configManagerSiteID");
+
+		if($managerSiteID != 0)
+		{
+			db::where("siteID !=",$managerSiteID);
+		}
+
 		if($stateID)
 		{
 			db::where("stateID",$stateID);
