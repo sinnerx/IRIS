@@ -67,7 +67,7 @@ Class Auth
 		if(!db::get("site_member")->row())
 		{
 			## add site_member
-			model::load("site/member")->add($userID,$siteID,1,0);
+			model::load("site/member")->add($row['userID'],$siteID,1,0);
 		}
 
 		return $row;
