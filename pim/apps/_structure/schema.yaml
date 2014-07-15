@@ -4,6 +4,7 @@ config:
 	configResetPassFee [float]
 	configAllSiteMenu [int]		## 1 = use site menu, 2 = use default menu.
 	configNewsCategoryID [int]	## stores category for news.
+	configManagerSiteID [int]	## id for managers site.
 
 user:
 	userID [int]
@@ -196,6 +197,7 @@ site_member:
 	siteID [int]
 	userID [int]
 	siteMemberStatus [int]			## 0 = in-active, 1 = active.	// activation require payment.
+	siteMemberOutsider [int]		## 1 = yes, 0 = no.
 
 site_slider:
 	siteSliderID [int]
