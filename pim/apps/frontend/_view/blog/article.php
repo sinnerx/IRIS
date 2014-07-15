@@ -21,6 +21,17 @@
 	
 }
 </style>
+<script type="text/javascript">
+	
+function changeCategory()
+{
+	var catID	= jQuery("#category").val();
+
+	var url		= "<?php echo url::base('{site-slug}/blog/kategori/');?>"+catID;
+	window.location.href	= url;
+}
+
+</script>
 <div class="body-container clearfix">
 	<div class="lft-container">
 
@@ -47,6 +58,11 @@
 		echo model::load("template/frontend")
 		->buildBreadCrumbs($breadcrumb);
 		?>
+		<div class="dob clearfix" style="float:right;">
+			<div class='dob-month' style="width:200px;">
+				<?php echo form::select("category",$categoryListR,"style='width:200px;' onchange='changeCategory();'",$currCatID,"[CATEGORY]");?>
+			</div>
+		</div>
 		</h3>
 		<div class="block-content clearfix">
 			<div class="page-content">

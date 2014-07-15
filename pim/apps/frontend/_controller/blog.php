@@ -4,6 +4,7 @@ Class Controller_Blog
 	public function article()
 	{
 		$urlFormat	= url::base("{site-slug}/blog/?page={page}");
+		
 		return $this->articleRenderer($urlFormat,$data,null);
 	}
 
@@ -16,6 +17,7 @@ Class Controller_Blog
 		if($type == "category")
 		{
 			$data['typeSortBy']	= "kategori";
+			$data['currCatID']	= $val; ## tu be used by <select>
 			$row_cat	= model::load("blog/category")->getCategory($val,"categoryName");
 			$data['typeSortByValue']	= $row_cat;
 
@@ -87,6 +89,25 @@ Class Controller_Blog
 			$res_cat	= model::load("blog/category")->getArticleCategoryList2(array_keys($data['article']));
 			$data['categoryR']	= $res_cat;
 		}
+
+		### build categoryListR. Get cat list and build one for <select>.
+		$res_cat	= model::load("blog/category")->getCategoryList();
+
+		$catR	= Array();
+		foreach($res_cat as $row)
+		{
+			$catR[$row['categoryID']]	= $row['categoryName'];
+
+			if($row['child'])
+			{
+				foreach($row['child'] as $row_child)
+				{
+					$catR[$row_child['categoryID']] = "- $row_child[categoryName]";
+				}
+			}
+		}
+		$data['categoryListR']	= $catR;
+		### /build categoryListR
 
 		view::render("blog/article",$data);
 	}
