@@ -46,6 +46,33 @@ Class Auth
 		return $row;
 	}
 
+	public function checkManagerSiteLogin($email,$password,$siteID)
+	{
+		db::where(Array(
+				"userEmail"=>$email,
+				"userPassword"=>model::load("helper")->hashPassword($password),
+				"userLevel"=>2
+						));
+
+		db::from("user");
+		$row	= db::get()->row();
+		if(!$row)
+		{
+			return false;
+		}
+
+		## check if he already got site_member table.
+		db::where("userID",$row['userID']);
+
+		if(!db::get("site_member")->row())
+		{
+			## add site_member
+			model::load("site/member")->add($userID,$siteID,1,0);
+		}
+
+		return $row;
+	}
+
 	public function login($userID,$userLevel)
 	{
 		## set session : userLevel and userID

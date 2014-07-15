@@ -70,7 +70,18 @@ Class Controller_Main
 			}
 
 			## check member login.
-			$login	= model::load("access/auth")->checkMemberLogin($userIC,$pass);
+			# check if current site is pengurus site.
+			if(authData("current_site.siteID") == model::load("config")->get("configManagerSiteID"))
+			{
+				## this login is using email instead..
+				$login	= model::load("access/auth")->checkManagerSiteLogin($userIC,$pass,authData("current_site.siteID"));
+			}
+			## normal member login.
+			else
+			{
+				$login	= model::load("access/auth")->checkMemberLogin($userIC,$pass);
+			}
+
 			if(!$login)
 			{
 				input::repopulate();
@@ -126,16 +137,16 @@ Class Controller_Main
 										)
 							);
 
-			$checkPenduduk	= input::get("checkPenduduk")?true:false;
+			$isOutsider		= input::get("checkPenduduk")?0:1;
 			$checkTerm		= input::get("checkTerm")?true:false;
 
 			## if got error.
-			if(($error = input::validate($rules)) || !$checkPenduduk || !$checkTerm)
+			if(($error = input::validate($rules)) || /*!$checkPenduduk || */!$checkTerm)
 			{
-				if(!$checkPenduduk)
+				/*if(!$checkPenduduk)
 				{
 					$error['checkPenduduk']	= "Hanya penduduk di kampung ini sahaja boleh berdaftar.";
-				}
+				}*/
 
 				if(!$checkTerm)
 				{
@@ -154,10 +165,11 @@ Class Controller_Main
 			$lastname	= input::get("userProfileLastName");
 
 			## register.
-			model::load("site/member")->register($row_site['siteID'],$ic,$password,$birthdate,$fullname,$lastname);
+			model::load("site/member")->register($row_site['siteID'],$ic,$password,$birthdate,$fullname,$lastname,$isOutsider);
 
 			## success and redirect.
-			redirect::to("{site-slug}/registration#horizontalTab1","<br>Anda telah berjaya di daftarkan. Sila buat pembayaran RM 3 di Pusat Internet 1Malaysia anda untuk menikmati kemudahan laman web ini sepenuhnya.");
+			$memberFee	= model::load("config")->get("configMemberFee",5);
+			redirect::to("{site-slug}/registration#horizontalTab1","<br>Anda telah berjaya di daftarkan. Sila buat pembayaran RM $memberFee di Pusat Internet 1Malaysia anda untuk menikmati kemudahan laman web ini sepenuhnya.");
 		}
 
 		view::render("main/registration",$data);

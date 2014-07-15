@@ -49,7 +49,7 @@ class Site
 		{
 			db::where("stateID",$stateID);
 		}
-
+		db::order_by("siteName","asc");
 		$result	= db::get()->result();
 
 		return $result;

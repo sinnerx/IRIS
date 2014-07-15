@@ -38,12 +38,16 @@ At least one manager is required for each site. Please make sure the site manage
 		<div class="panel-body">
 			<div class="form-group">
 			<label>1. P1m Name</label>
-			<?php echo form::text("siteName","size='40' class='form-control' onkeyup='prepareSlug();' placeholder='For example Kampung Pandan'");?>
+			<?php
+			$readOnly	= $siteName?"readonly='true'":"";
+			echo form::text("siteName","$readOnly size='40' class='form-control' onkeyup='prepareSlug();' placeholder='For example Kampung Pandan'",$siteName);?>
 			<?php echo flash::data('siteName');?>
 			</div>
 			<div class="form-group">
 			<label>2. P1m Slug</label>
-			<?php echo form::text("siteSlug","class='form-control' placeholder=\"A url represents the p1m, make sure it's as clear as possible.\"");?>
+			<?php
+			$readOnly	= $siteSlug?"readonly='true'":"";
+			echo form::text("siteSlug","$readOnly class='form-control' placeholder=\"A url represents the p1m, make sure it's as clear as possible.\"",$siteSlug);?>
 			<?php echo flash::data("siteSlug");?>
 			</div>
 		</div>

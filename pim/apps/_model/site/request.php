@@ -66,11 +66,22 @@ class Request extends request_correction
 			{
 				$this->deactivateCorrection($requestID);
 			}
+
+			$id	= $check['siteRequestID'];
 		}
 		else
 		{
 			## create a new request;
 			db::insert("site_request",$data);
+
+			$id	= db::getLastID("site_request","siteRequestID");
+		}
+
+		## if this request is being made for pengurus site, terus approve request.
+		if($siteID == model::load("config")->get("configManagerSiteID"))
+		{
+			## approve.
+			$this->approve($id);
 		}
 	}
 

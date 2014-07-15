@@ -150,6 +150,12 @@ class Controller_Site
 			redirect::to("","New site has been added!.");
 		}
 
+		if(request::get("flag") == "add-manager-site")
+		{
+			$data['siteName']	= "Laman Pengurus Pi1M";
+			$data['siteSlug']	= "pengurus";
+		}
+
 		$data['stateR']	= model::load("helper")->state();
 
 		view::render("root/site/add",$data);

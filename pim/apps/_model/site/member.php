@@ -38,7 +38,7 @@ class Member
 		return db::get()->result("userID");
 	}
 
-	public function register($siteID,$ic,$password,$birthDate,$fullname,$lastname)
+	public function register($siteID,$ic,$password,$birthDate,$fullname,$lastname,$isOutsider)
 	{
 		$data_user	= Array(
 					"userIC"=>$ic,
@@ -51,12 +51,19 @@ class Member
 		## register as level one (1) user..
 		$row_user	= model::load("user/user")->add($data_user,1);
 
+		## add.
+		$this->add($row_user['userID'],$siteID,0,$isOutsider);
+	}
+
+	public function add($userID,$siteID,$status,$isOutsider = 0)
+	{
 		## add as site_member
 		$data_sitemember	= Array(
-						"userID"=>$row_user['userID'],
+						"userID"=>$userID,
 						"siteID"=>$siteID,
-						"siteMemberStatus"=>0 ## in-active member.
-									);
+						"siteMemberStatus"=>$status, ## in-active member
+						"siteMemberOutsider"=>$isOutsider	## 1 is outsider, 0 is nope.
+						);
 
 		## WIN.
 		db::insert("site_member",$data_sitemember);
@@ -81,7 +88,7 @@ class Member
 		$transaction	= model::load("account/transaction");
 
 		## fees
-		$fee	= model::load("config")->get("configMemberFee")?:3;
+		$fee	= model::load("config")->get("configMemberFee")?:5;
 		
 		## 1. top user up first.
 		$transaction->topUpUser($userID,$fee); ## top up user
