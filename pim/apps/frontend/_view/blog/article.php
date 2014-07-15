@@ -20,6 +20,10 @@
 	font-style:italic;
 	
 }
+
+.dob-month{
+	
+}
 </style>
 <script type="text/javascript">
 	
@@ -59,8 +63,8 @@ function changeCategory()
 		->buildBreadCrumbs($breadcrumb);
 		?>
 		<div class="dob clearfix" style="float:right;">
-			<div class='dob-month' style="width:200px;">
-				<?php echo form::select("category",$categoryListR,"style='width:200px;' onchange='changeCategory();'",$currCatID,"[CATEGORY]");?>
+			<div class='dob-month'>
+				<?php echo form::select("category",$categoryListR,"onchange='changeCategory();'",$currCatID,"[CATEGORY]");?>
 			</div>
 		</div>
 		</h3>

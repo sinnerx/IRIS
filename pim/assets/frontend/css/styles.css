@@ -2635,7 +2635,7 @@ a.fb-login i{
 	
 }
 
-.dob select{
+/**.dob select{
 	border:none;
 	background:none;
 	width:110px;
@@ -2669,13 +2669,50 @@ border-bottom-right-radius: 3px;
 	margin-right:10px;
 	
 }
+**/
+.dob-month,
+.dob-day,
+.dob-year {
+    background: url("../images/arrow_bg.png") no-repeat scroll right center #fff;
+    border: 1px solid #dae4eb;
+    border-bottom-right-radius: 3px;
+    border-top-right-radius: 3px;
+    cursor: pointer;
+    float: left;
+    font-size: 12px;
+    height: 29px;
+    line-height: 15px;
+
+    overflow: hidden;
+    min-width: 130px;
+
+}
 
 .register input{
 	margin-bottom:10px;
 	
 }
+
+.dob select {
+    background: none repeat scroll 0 0 rgba(0, 0, 0, 0);
+    border: medium none;
+    cursor: pointer;
+    height: 30px;
+    padding-left: 10px;
+    padding-top: 7px;
+	width:230px;
+	position:absolute;
+}
+
+
+.dob select option:first-child
+{
+	width:200px;
+
+} 
+
 .dob{
-	margin-bottom:10px;
+	margin-top:5px;
 	
 }
 
