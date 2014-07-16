@@ -62,13 +62,13 @@ Class Auth
 		}
 
 		## check if he already got site_member table.
-		db::where("userID",$row['userID']);
+		/*db::where("userID",$row['userID']);
 
 		if(!db::get("site_member")->row())
 		{
 			## add site_member
 			model::load("site/member")->add($row['userID'],$siteID,1,0);
-		}
+		}*/
 
 		return $row;
 	}
