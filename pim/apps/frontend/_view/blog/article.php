@@ -30,7 +30,10 @@
 function changeCategory()
 {
 	var catID	= jQuery("#category").val();
-
+	if(catID == "")
+	{
+		return false;
+	}
 	var url		= "<?php echo url::base('{site-slug}/blog/kategori/');?>"+catID;
 	window.location.href	= url;
 }
