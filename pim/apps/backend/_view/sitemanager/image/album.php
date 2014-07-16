@@ -142,6 +142,7 @@ Overview of your site albums. You can <a href='javascript:album.addForm.show();'
 			foreach($res_album as $row)
 			{
 				$coverimageUrl	= model::load("image/services")->getPhotoUrl($row['albumCoverImageName']);
+				$coverimageUrl	= model::load("api/image")->buildPhotoUrl($row['albumCoverImageName'],"small");
 
 				if($no == 1)
 				{

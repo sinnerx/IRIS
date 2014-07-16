@@ -94,6 +94,7 @@ echo model::load("template/frontend")->buildBreadCrumbs(Array(
       foreach($res_photo as $row)
       {
         $url  = model::load("image/services")->getPhotoUrl($row['photoName']);
+        $url  = model::load("api/image")->buildPhotoUrl($row['photoName'],"big");
         ?>
         <li style="width: 772px; text-align:center; float: left; display: block;" class="flexslider-main">
           <span><img height='400px' style="width:auto;" src="<?php echo $url;?>" draggable="false"></span>
@@ -117,6 +118,7 @@ echo model::load("template/frontend")->buildBreadCrumbs(Array(
       foreach($res_photo as $row)
       {
         $url  = model::load("image/services")->getPhotoUrl($row['photoName']);
+        $url  = model::load("api/image")->buildPhotoUrl($row['photoName'],"small");
         ?>
         <li style="width: 100px; height:62px; float: left; display: block;" class="flexslider-thumb-list">
           <img src="<?php echo $url;?>" draggable="false">

@@ -55,6 +55,8 @@ class Controller_Image
 		$data['row']		= model::load("image/album")->getSiteAlbum($siteAlbumID);
 		$data['res_photo']	= model::load("image/album")->getSitePhotos($siteID,$siteAlbumID);
 
+		$data['siteSlug']	= authData("site.siteSlug");
+
 		if(form::submitted())
 		{
 			$file			= input::file("photoName");

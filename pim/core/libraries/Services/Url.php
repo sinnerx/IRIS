@@ -13,7 +13,7 @@ class Url
 	private static $query;
 
 	## return config:base_url
-	private static function getProtocol()
+	public static function getProtocol()
 	{
 		return apps::config("secure")?"https://":"http://";
 	}

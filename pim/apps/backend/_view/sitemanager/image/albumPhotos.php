@@ -152,7 +152,7 @@ var album	= new function()
 
 		var e = $("#photo"+sitePhotoID);
 		var desc = e.data("description") == ""?"< This photo has no description >":e.data("description");
-		var img  = e.find("img").attr("src");
+		var img  = e.find("img").data("srcbig");
 		var sitePhotoID = e.data("sitephotoid");
 
 		// set highlight.
@@ -453,6 +453,10 @@ var album	= new function()
 		foreach($res_photo as $row_photo):
 			$imageUrl	= model::load("image/services")->getPhotoUrl($row_photo['photoName']);
 			$row_photo['photoDescription']	= htmlentities($row_photo['photoDescription']);
+
+			## now use image resizer.
+			$imageUrl	= model::load("api/image")->buildPhotoUrl($row_photo['photoName'],"small");
+			$imageBigUrl= model::load("api/image")->buildPhotoUrl($row_photo['photoName'],"big");
 			?>
 			<div id='photo<?php echo $row_photo['sitePhotoID'];?>' data-sitephotoid='<?php echo $row_photo['sitePhotoID'];?>' data-description="<?php echo nl2br($row_photo['photoDescription']);?>" data-descriptionclean="<?php echo $row_photo['photoDescription'];?>" data-photopath='<?php echo $row_photo['photoName'];?>' class='col-sm-3 album-photo' style='height:150px;margin-bottom:25px;'>
 			<section class='panel panel-default'>
@@ -460,7 +464,7 @@ var album	= new function()
 					<a href='javascript:album.deletePhoto(<?php echo $row_photo['sitePhotoID'];?>);' class='i i-cross2 delete-button'></a>
 				</div>
 			<div class='panel-body' onclick='album.showPhotoDetail(<?php echo $row_photo['sitePhotoID'];?>);' style='padding:3px;'>
-				<img style='width:100%;' src='<?php echo $imageUrl;?>' />
+				<img style='width:100%;' data-srcbig='<?php echo $imageBigUrl;?>' src='<?php echo $imageUrl;?>' />
 			</div>
 			</section>
 			</div>

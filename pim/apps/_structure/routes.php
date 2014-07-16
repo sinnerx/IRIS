@@ -20,6 +20,12 @@ $routes[]	= Array(function()
 		controller::load("auth","index");
 	});
 
+	### Hook API pre controller with same auth controller of frontend one.
+	controller::hook("api:pre_controller",function()
+	{
+		controller::load("frontend:auth","index");
+	});
+
 	### Hook backend pre controller with backend:auth controller.
 	controller::hook("backend:pre_controller",function()
 	{
@@ -107,11 +113,16 @@ $routes[]	= Array("dashboard/[:controller]/[**:method]",function($param)
 
 #######################
 
+### API Routes ####
+$routes[]	= Array("api/photo/[:year]/[:month]/[:day]/[:photo-name]/[:size]","controller=api:image@get","{year},{month},{day},{photo-name},{size}");
+
 ### Frontend Route ####
+
 ## root. will direct to main.
 $routes[]	= Array("","controller=main@landing");
 $routes[]	= Array("mengenai-kami","controller=main@landing_about");
 $routes[]	= Array("hubungi-kami","controller=main@landing_contact");
+
 
 ## error page
 $routes[]	= Array("[:site-slug]/404","controller=error@index");

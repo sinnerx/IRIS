@@ -131,6 +131,15 @@ class Photo extends Services
 		return db::get("site_photo")->row("photoName");
 	}
 
+	public function getSitePhoto($siteID,$sitePhotoID)
+	{
+		db::where("siteID",$siteID);
+		db::where("sitePhotoID",$sitePhotoID);
+		db::join("photo","site_photo.photoID = photo.photoID");
+
+		return db::get("site_photo")->row();
+	}
+
 	public function changePhotoDescription($siteID,$sitePhotoID,$desc)
 	{
 		db::where("photoID IN (SELECT photoID FROM site_photo WHERE siteID = ? AND sitePhotoID = ?)",Array($siteID,$sitePhotoID));
@@ -138,6 +147,8 @@ class Photo extends Services
 						"photoDescription"=>$desc
 								));
 	}
+
+	
 }
 
 
