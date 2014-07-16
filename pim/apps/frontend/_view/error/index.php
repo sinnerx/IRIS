@@ -1,4 +1,5 @@
 <h3 class="block-heading">
+<a href='#' name='title'></a>
 <?php
 echo model::load("template/frontend")
 ->buildBreadCrumbs(Array(

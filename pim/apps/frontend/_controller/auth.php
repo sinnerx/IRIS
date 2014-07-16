@@ -28,7 +28,7 @@ class Controller_Auth
 			## check logged user.
 			if(!model::load("site/access")->checkLoggedAccess(controller::getCurrentController(),controller::getCurrentMethod()))
 			{
-				redirect::to("{site-slug}/404?tiada_akses=1");
+				redirect::to("{site-slug}/404?tiada_akses=1#title");
 			}
 		}
 	}
