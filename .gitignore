@@ -9,3 +9,4 @@ pim/vendor/*
 pim_sta
 pim/logs/access.txt
 pim/php.ini
+pim/assets/frontend/images/cache/*

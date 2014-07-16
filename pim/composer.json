@@ -1,6 +1,6 @@
 {
 	"require":{
 		"phpmailer/phpmailer": "dev-master",
-		"gregwar/image": "dev-master"
+		"abeautifulsite/simpleimage": "2.5.3"
 	}
 }
