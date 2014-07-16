@@ -95,6 +95,6 @@
 </div> <!-- Top Header End -->
 <?php if(authData("user.memberStatus") == "inactive"):?>
 <div class='top-message in-active'>
-Akaun anda masih belum aktif. Sila buat bayaran RM3 kepada pengurus laman di kawasan anda. [<?php echo authData("site.siteName");?>]
+Akaun anda masih belum aktif. Sila buat bayaran RM <?php echo model::load("config")->get("configMemberFee",5);?> kepada pengurus laman di kawasan anda. [<?php echo authData("site.siteName");?>]
 </div>
 <?php endif;?>
