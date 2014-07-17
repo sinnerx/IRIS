@@ -23,7 +23,7 @@ class Services
 	## return path to cached folder.
 	public function getPhotoCachePath($filename = null)
 	{
-		return path::asset("frontend/images/cache/site_photo".($filename?"/$filename":""));
+		return "frontend/images/cache/site_photo".($filename?"/$filename":"");
 	}
 
 	## return the SimpleImage object, for site_photo.
@@ -61,9 +61,9 @@ class Services
 		$cachePath	= $this->reCreatePhotoName($cachePath,"-w$width"."h$height");
 
 		## check if image already exists in cache, just return the cached one.
-		if(file_exists($cachePath))
+		if(file_exists(path::asset($cachePath)))
 		{
-			$img	= new SimpleImage($cachePath);
+			$img	= new SimpleImage(path::asset($cachePath));
 			return $img;
 		}
 
@@ -75,21 +75,23 @@ class Services
 
 		## save the file to frontend/cache/$type
 		## create path if not exists.
-		$cachePathR	= explode("\\",$cachePath);
+		$cachePathR	= explode("/",$cachePath);
 		array_pop($cachePathR);
 
-		if(!is_dir(implode("\\",$cachePathR)))
-			mkdir(implode("\\",$cachePathR),0755,true);
+		$cachePathS	= path::asset(implode("/",$cachePathR));
+
+		if(!is_dir($cachePathS))
+			mkdir($cachePathS,0755,true);
 
 		## save the cache.
-		$img->save($cachePath);
+		$img->save(path::asset($cachePath));
 
 		return $img;
 	}
 
 	public function reCreatePhotoName($original,$additional_str)
 	{
-		$pathR	= explode("\\",$original);
+		$pathR	= explode("/",$original);
 		$photoName	= array_pop($pathR);
 
 		## remove extension.
@@ -98,7 +100,7 @@ class Services
 
 		$photoName  = implode(".",$photoNameR).$additional_str.".".$ext;
 
-		return implode("\\",$pathR)."\\".$photoName;
+		return implode("/",$pathR)."/".$photoName;
 	}
 
 	public function sizeSets($name = null)
