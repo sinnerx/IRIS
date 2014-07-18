@@ -1,7 +1,7 @@
 <?php
 require_once "libraries/Framework.php";
 
-apps::run(function($router)
+apps::run(ROOT_FOLDER,function($router)
 {
 	$router->add("domain:all",function($param) use($router)
 	{
@@ -15,6 +15,8 @@ apps::run(function($router)
 			->add(function(){error::show();})
 			->dispatch("test");
 		}
+
+
 
 		## if current domain is localhost and exedra.
 		if(in_array($param['domain_name'], Array("localhost","p1m.gaia.my","celcom1cbc.com")))
@@ -42,7 +44,7 @@ apps::run(function($router)
 			## no route found at all.
 			$router->add('_404',function()
 			{
-				require_once "apps/404.php";
+				require_once "pim/apps/404.php";
 			});
 		}
 
@@ -64,7 +66,7 @@ apps::run(function($router)
 				## else if not in development environment, and got error..
 				if(error::check())
 				{
-					require_once "apps/404.php";
+					#require_once "apps/404.php";
 				}
 			}
 		});

@@ -123,7 +123,7 @@ class router
 				if(strpos($param_first,"routes:") === 0)
 				{
 					$apps	= substr($param_first,7,strlen($param_first));
-					$path	= "apps/$apps/_structure/routes.php";
+					$path	= apps::$root."apps/$apps/_structure/routes.php";
 				}
 				### other apps routes initiation.
 				else if(strpos($param_first,"apps_other:") === 0)
@@ -147,6 +147,11 @@ class router
 					}
 
 					return $this;
+				}
+				else
+				{
+					## final.
+					$path	= apps::$root.$path;
 				}
 
 				if(!file_exists($path))

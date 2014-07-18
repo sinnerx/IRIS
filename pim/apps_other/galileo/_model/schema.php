@@ -4,7 +4,7 @@ Class Model_Schema
 {
 	private function load()
 	{
-		$schema	= file_get_contents("apps/_structure/schema.yaml");
+		$schema	= file_get_contents("pim/apps/_structure/schema.yaml");
 
 		return $schema;
 	}

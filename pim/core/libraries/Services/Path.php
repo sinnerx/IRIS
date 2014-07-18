@@ -10,14 +10,14 @@ class Path
 	## path to assets
 	public static function asset($path = null)
 	{
-		$path	= self::concat_path("assets",$path);
+		$path	= self::concat_path(apps::$root."assets",$path);
 		return $path;
 	}
 
 	## path to apps/_files
 	public static function files($path = null)
 	{
-		$path	= self::concat_path("apps/_files",$path);
+		$path	= self::concat_path(apps::$root."apps/_files",$path);
 		return $path;
 	}
 }

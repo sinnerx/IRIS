@@ -36,10 +36,14 @@ class Apps
 	private static $registeredClass		= Array();
 	private static $apps_folder			= "apps";
 	private static $apps_other			= false;
+	public static $root					= "";
 
 	## Initiate config
-	public static function run($callback,$argv = null)
+	public static function run($root = null,$callback,$argv = null)
 	{
+		## set root folder.
+		self::$root	= !$root?self::$root:(trim($root,"/")."/");
+
 		## start session.
 		session_start();
 
@@ -49,7 +53,7 @@ class Apps
 
 		self::loadFunctionLibrary('helper');
 		self::register_autoload_path(refine_path(dirname(__FILE__)."/Services"));		## register services autoload path.
-		self::register_autoload_path("apps/_");											## register any class that loaded, without the use of model() class;
+		self::register_autoload_path(self::$root."apps/_");								## register any class that loaded, without the use of model() class;
 
 		self::setGlobal("router",$router); 						## save router instance
 		self::initConfig();										## initiate /apps folder config.
@@ -61,8 +65,8 @@ class Apps
 		## reset apps_config, everytime it's initiated.
 		self::$apps_config	= null;
 
-		self::saveConfig("$folder/_config/config.php",null,$injectedConfig);		## initiate config
-		self::saveConfig("$folder/_config/database.php",null,$injectedConfig); 	## database config.
+		self::saveConfig(self::$root."$folder/_config/config.php",null,$injectedConfig);		## initiate config
+		self::saveConfig(self::$root."$folder/_config/database.php",null,$injectedConfig); 	## database config.
 	}
 
 	## get apps folder.
@@ -70,7 +74,7 @@ class Apps
 	{
 		## check for folder.
 		$apps_other	= self::getGlobal("router")->getAppsOtherFolder();
-		return $apps_other !== false?$apps_other:self::$apps_folder;
+		return self::$root.($apps_other !== false?$apps_other:self::$apps_folder);
 	}
 
 	public static function register_autoload_path($dir)
@@ -468,7 +472,7 @@ class Controller
 		else
 		{
 			if(!file_exists($path)) ## controller not found.
-			{
+			{echo $path;die;
 				$state	= self::currentState();
 				error::set("controller : $state","Controller not found.");
 				return;
@@ -929,7 +933,7 @@ class Library
 {
 	public static function _require($name)
 	{
-		require_once "apps/_library/$name.php";
+		require_once apps::$root."apps/_library/$name.php";
 	}
 }
 

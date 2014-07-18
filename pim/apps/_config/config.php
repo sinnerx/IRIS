@@ -6,8 +6,8 @@ $config['model_namespace']	= true;
 
 ### domain based configuration :
 $config['domain']['localhost'][]	= Array(
-						"base_url:backend"=>"localhost/digitalgaia/iris/pim/dashboard",
-						"base_url:frontend"=>"localhost/digitalgaia/iris/pim",
+						"base_url:backend"=>"localhost/digitalgaia/iris/dashboard",
+						"base_url:frontend"=>"localhost/digitalgaia/iris",
 						"asset_url"=>"localhost/digitalgaia/iris/pim/assets"
 										);
 
