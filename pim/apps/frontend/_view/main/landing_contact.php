@@ -33,7 +33,48 @@
       });
     </script>
     
-    
+    <style type="text/css">
+    #category-container label
+    {
+      display: inline-block;
+      padding:0 5px 0 5px;
+    }
+    .contact-form table
+    {
+      width:400px;
+    }
+    .contact-form table tr td:first-child
+    {
+      color:#009bff;
+      font-weight: bold;
+    }
+
+    .contact-form
+    {
+      border-top:1px dashed #5f5f5f;
+      padding-top:20px;
+    }
+
+     .content-info b
+    {
+      color:#009bff;
+      margin-left: 0px;
+    }
+
+    .contact-form input[type=text], .contact-form textarea
+    {
+      width: 93%;
+    }
+
+    .contact-form input[type=submit]
+    {
+      background: #009bff;
+      color:white;
+      padding:5px;
+      border:0px;
+    }
+
+    </style>
 </head>
 
 
@@ -76,11 +117,49 @@
            
              <div id="Default" class="contentHolder">
       <div class="content">
+      Maklumat kami untuk dihubungi
+
+      <div class='content-info'><b>EMEL LAMAN : </b> support@celcom1cbc.com </div>
+      <div class='content-info'><b>NO. TELEFON : </b> 03-7451 8082 </div>
+      <div class='content-info'><b>NO. FAX : </b> 03- 7451 8081 </div>
+      <div class='content-info'><b>ALAMAT :</b>
+
+      <p>Pengurusan Operasi Pusat Internet 1Malaysia,
+      NuSuara Technologies Sdn Bhd
+      Unit No. 2-19-01, Block 2, VSQ@PJ City Centre,
+      Jalan Utara 46200 Petaling Jaya, Selangor.</p>
+      </div>
       
-      
-      
-       Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.<br><br>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-     
+      <p>
+      Jika anda mempunyai sebarang aduan atau pertanyaan, sila hubungi 
+      kami menerusi borang online di bawah ini. Kami mengalu-alukan 
+      sebarang maklum balas daripada anda
+      </p>
+      <div class='contact-form'>
+        <table>
+          <tr>
+            <td style="width:80px;">Kategori</td><td id='category-container'>: <?php echo form::radio("siteMessageCategory",$categoryNameR,null,null,"<div style='display:inline;'> {content} </div>");?></td>
+          </tr>
+          <tr>
+            <td>Nama</td><td>: <?php echo form::text("contactName");?></td>
+          </tr>
+          <tr>
+            <td>Email</td><td>: <?php echo form::text("contactEmail");?></td>
+          </tr>
+          <tr>
+            <td>Telefon</td><td>: <?php echo form::text("contactPhoneNo");?></td>
+          </tr>
+          <tr>
+            <td>Tajuk</td><td>: <?php echo form::text("messageSubject");?></td>
+          </tr>
+          <tr>
+            <td>Mesej</td><td>: <?php echo form::textarea("messageContent","style='height:120px;'");?></td>
+          </tr>
+          <tr>
+            <td></td><td><input class='pull-right' type='submit' value='Hantar' /></td>
+          </tr>
+        </table>
+      </div>
       </div>
     </div>
             

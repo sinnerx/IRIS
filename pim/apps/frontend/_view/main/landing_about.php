@@ -5,7 +5,14 @@
 <!--[if (IE 9)]><html class="no-js ie9" lang="en"><![endif]-->
 <!--[if gt IE 8]><!--> <html lang="en-US"> <!--<![endif]-->
 <head>
+<style type="text/css">
+  
+#mengenai-kami-list li
+{
+  padding:5px;
+}
 
+</style>
 <!-- Meta Tags -->
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
@@ -77,8 +84,29 @@
            
              <div id="Default" class="contentHolder">
       <div class="content">
-      <img src="<?php echo url::asset("_landing/images/1000px-1Malaysia.svg.png");?>" alt="" width="100" class="image-left"/>  Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.<br><br>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-      <br>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.<br><br>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.<br><br>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+      <img src="<?php echo url::asset("_landing/images/1000px-1Malaysia.svg.png");?>" alt="" width="100" class="image-left"/> 
+      <p>
+      PI1M adalah antara projek yang terawal di bawah inisiatif Program 
+      Pemberian Perkhidmatan Sejagat (PPS) di mana PI1M yang pertama 
+      telah dibina pada tahun 2007. Projek ini telah membawa impak sosial 
+      dan juga ekonomi kepada masyarakat. Dilengkapkan dengan komputer 
+      meja serta perkakasannya beserta dengan capaian internet jalurlebar, 
+      PI1M juga menawarkan peluang-peluang latihan berkaitan ICT yang 
+      dikendalikan oleh dua orang penyelia sepenuh masa di PI1M tersebut.</p>
+      <p>Program Pemberian Perkhidmatan Sejagat adalah inisiatif Kerajaan 
+      melalui Suruhanjaya Komunikasi dan Multimedia Malaysia yang 
+      dilaksanakan bagi mencapai objektif utama berikut: </p>
+
+      <ol id='mengenai-kami-list'>
+        <li>Menyediakan capaian komunikasi kepada kumpulan & individu di kawasan kurang liputan</li>
+        <li>Meningkatkan penggunaan ICT di kalangan komuniti ke arah pembangunan sosio ekonomi masyarakat setempat</li>
+        <li>Merapatkan jurang digital.</li>
+      </ol>
+
+      <p>Sehingga Julai 2014, sebanyak 85 PI1M telah dibangunkan dan diuruskan 
+      oleh pihak NuSuara Technologies Sdn Bhd di bawah naungan Celcom. 
+      PI1M tersebut terdapat di sekitar negeri Johor, Perlis, Kedah, Negeri 
+      Sembilan, Sabah, Sarawak dan Wilayah Persekutuan Kuala Lumpur.</p>
       
       </div>
     </div>

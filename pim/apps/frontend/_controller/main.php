@@ -19,7 +19,9 @@ Class Controller_Main
 	public function landing_contact()
 	{
 		$this->template	= false;
-		view::render("main/landing_contact");
+		$data['categoryNameR']	= model::load("site/message")->getCategoryName();
+
+		view::render("main/landing_contact",$data);
 	}
 
 	## site landing page. example : pim.my/[site-slug]
