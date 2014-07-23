@@ -180,6 +180,9 @@ $routes[]	= Array("[:site-slug]/galeri/[:year]/[:month]","controller=gallery@ind
 $routes[]	= Array("[:site-slug]/galeri/[:year]/[:month]/id/[i:siteAlbumID]","controller=gallery@albumView","{siteAlbumID}");
 $routes[]	= Array("[:site-slug]/galeri/[:year]/[:month]/[:sitealbum-slug]","controller=gallery@albumView","{sitealbum-slug},{year},{month}");
 
+## faq
+$routes[]	= Array("[:site-slug]/soalan-lazim","controller=main@faq");
+
 ## site page.
 $routes[]	= Array("[:site-slug]/[**:trail]","controller=page@index");
 ########################

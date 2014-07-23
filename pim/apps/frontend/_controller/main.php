@@ -214,6 +214,13 @@ Class Controller_Main
 
 		view::render("main/contact_us",$data);
 	}
+
+
+	## site faq
+	public function faq()
+	{
+		view::render("main/faq");
+	}
 }
 
 

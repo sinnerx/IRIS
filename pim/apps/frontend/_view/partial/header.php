@@ -19,9 +19,19 @@
 									4=>"member/index",
 									5=>"main/contact"
 											);
-
+			$menuNo = 0;
 			foreach($menuR as $row)
 			{
+				$menuNo++;
+
+				## custom hardcoded top menu.
+				if($menuNo == count($menuR))
+				{
+					$faqHref	= url::base("{site-slug}/soalan-lazim");
+					$cssActive	= controller::getCurrentMethod() == "faq"?"active":"";
+					echo "<li><a href='$faqHref' class='$cssActive'>Soalan Lazim</a></li>";
+				}
+
 				## if component status deactivated, skip.
 				if($row['componentStatus'] == 0)
 				{
