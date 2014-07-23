@@ -3,7 +3,7 @@ class Controller_Member
 {
 	public function profile($userID = null)
 	{
-		if(session::get("userLevel") != 1)
+		if(session::get("userLevel") != 1 && !$userID)
 			redirect::to("dashboard/user/profile");
 
 		if(!$userID)
@@ -18,7 +18,8 @@ class Controller_Member
 
 			## cannot find the related userID and current siteID.
 			if(!$data['row'])
-				redirect::to("404");
+				return controller::load("error")->index();
+			#redirect::to("404");
 
 			$data['siteName']	= $data['row']['siteName'];
 		}
@@ -27,6 +28,11 @@ class Controller_Member
 		$data['row']	= array_merge($data['row'],$additional);
 
 		view::render("member/profile",$data);
+	}
+
+	public function test()
+	{
+		return view::render("auth/error");
 	}
 
 	public function profile_edit()

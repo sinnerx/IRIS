@@ -51,10 +51,13 @@ List of member registered in for site.
 				$opacity	= $row['siteMemberStatus'] == 0?"style='opacity:0.5;'":"";
 				$href		= ($row['siteMemberStatus'] == 1?"deactivate":"activate")."?".$row['userID'];
 				$href		= "?toggle=".$row['userID'];
+
+				$isOutsider	= $row['siteMemberOutsider'] == 1?"<span class='label label-primary'>An Outsider</span>":null;
+
 			?>
 			<tr <?php echo $opacity;?>>
 				<td><?php echo $no++;?></td>
-				<td><?php echo $row['userProfileFullName']." ".$row['userProfileLastName'];?></td>
+				<td><?php echo $row['userProfileFullName']." ".$row['userProfileLastName']." $isOutsider";?></td>
 				<td><?php echo $row['userEmail'];?></td>
 				<td><?php echo $row['userIC'];?></td>
 				<td><?php echo date("j F Y, g:i A",strtotime($row['userCreatedDate']));?></td>
