@@ -15,6 +15,7 @@ user:
 	userStatus [int]			## 0 = inactive, 1 = active
 	userCreatedDate [datetime]
 	userCreatedUser [int]
+	userLastLogin [datetime]
 
 account:
 	accountID [int]
@@ -62,6 +63,7 @@ user_profile_additional: ## additional info for user.
 	userProfileWeb [varchar]			##
 	userProfileEcommerce [varchar]		##
 	userProfileIntroductional [text]	##
+	userProfileEducation [varchar]
 
 user_activity:
 	userActivityID [int]
@@ -177,6 +179,7 @@ site:
 	siteCreatedDate [datetime]
 	siteUpdatedUser [int]
 	siteUpdatedDate [datetime]
+	siteRefID [int]				## the site_id for old pi1m site.
 
 site_info:
 	siteInfoID [int]
@@ -198,6 +201,7 @@ site_member:
 	userID [int]
 	siteMemberStatus [int]			## 0 = in-active, 1 = active.	// activation require payment.
 	siteMemberOutsider [int]		## 1 = yes, 0 = no.
+	siteMemberImported [int]		##  0 = no (new registration), 1 = yes.
 
 site_slider:
 	siteSliderID [int]
@@ -255,6 +259,7 @@ page: 		## by default, will create about me page.
 	pageID [int]
 	siteID [int]
 	pageApprovedStatus [int]	## 0 = unapproved, 1 = approve, 2 = unapproved.
+	pagePhoto [varchar]			## store path to page photo.
 	pageName [varchar]
 	pageSlug [varchar]			## page slug
 	pageText [text]
@@ -448,3 +453,44 @@ token_resetpass:
 	tokenID [int]
 	userID [int]
 	tokenResetpassStatus [int] ## 0 = in-active, 1 = active (after user has accessed the link), 2 = reset success. 
+
+log_login:
+	logLoginID [int]
+	userID [int]
+	logLoginCreatedDate [datetime]
+	logLoginIP [varchar]
+
+log_error:
+	logErrorID [int]
+	logErrorMessage [text]
+	logErrorCreatedDate [datetime]
+	logErrorCreatedUser [int]
+	logErrorStatus [int]		## 0 = un-attended, 1 = attended.
+
+temp_user:
+	tempUserID [int]
+	temp_userid [int]
+	temp_username [varchar]
+	temp_usernameOriginal [varchar]
+	temp_password [varchar]
+	temp_totallogin [int]
+	temp_lastlogin [datetime]
+	temp_userright [int]
+	temp_user_status [int]
+	temp_name [varchar]
+	temp_ic_no [varchar]
+	temp_contact_no [varchar]
+	temp_Address [text]
+	temp_datecreated [datetime]
+	temp_DOB [date]
+	temp_POB [varchar]
+	temp_Tel [varchar]
+	temp_CBC_Site [varchar]
+	temp_email [varchar]
+	temp_Occupation [varchar]
+	temp_Education [varchar]
+	temp_Title [varchar]
+	temp_activationCode [varchar]
+	temp_Gender [varchar]
+	temp_mobile [varchar]
+	temp_cbc_siteRight [varchar]
