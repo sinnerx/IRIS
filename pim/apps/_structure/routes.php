@@ -3,7 +3,7 @@
 ### Error page ###
 $routes[]	= Array("404",function()
 {
-	require_once "apps/404.php";
+	require_once apps::$root."apps/404.php";
 });
 
 

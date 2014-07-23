@@ -13,6 +13,10 @@ $config['domain']['celcom1cbc.com'][]	= Array(
 					"asset_url"=>"celcom1cbc.com/sta/assets"
 								);
 
+$config['domain']['dev.celcom1cbc.com'][]	= Array(
+					"asset_url"=>"pi1m.celcom1cbc.com/dev/pim/assets"
+								);
+
 return $config;
 
 ?>

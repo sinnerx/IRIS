@@ -31,7 +31,7 @@ class Db_Creator
 
 	public function loadSchema()
 	{
-		$path	= !$this->path?"apps/_structure/schema.yaml":$this->path;
+		$path	= !$this->path?apps::$root."apps/_structure/schema.yaml":$this->path;
 
 		if(!file_exists($path))
 		{
@@ -41,8 +41,8 @@ class Db_Creator
 
 		if(is_null($this->schema))
 		{
-			require_once "core/libraries/Services/Spyc.php";
-			$this->schema	= spyc_load_file("apps/_structure/schema.yaml");
+			require_once apps::$root."core/libraries/Services/Spyc.php";
+			$this->schema	= spyc_load_file(apps::$root."apps/_structure/schema.yaml");
 		}
 
 		return $this->schema;

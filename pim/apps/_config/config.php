@@ -11,6 +11,13 @@ $config['domain']['localhost'][]	= Array(
 						"asset_url"=>"localhost/digitalgaia/iris/pim/assets"
 										);
 
+## live dev
+$config['domain']['dev.celcom1cbc.com'][]	= Array(
+						"base_url:backend"=>"dev.celcom1cbc.com/dashboard",
+						"base_url:frontend"=>"dev.celcom1cbc.com",
+						"asset_url"=>"dev.celcom1cbc.com/pim/assets"
+										);
+
 $config['domain']['p1m.gaia.my'][]	= Array(
 						"base_url:backend"=>"p1m.gaia.my/dashboard",
 						"base_url:frontend"=>"p1m.gaia.my",

@@ -22,5 +22,12 @@ $config['domain']['celcom1cbc.com'][]	= Array(
 				"db_pass"=>"fulkrum@123"
 									);
 
+$config['domain']['dev.celcom1cbc.com'][]	= Array(
+				"db_host"=>"localhost",
+				"db_name"=>"pi1m_dev_01",
+				"db_user"=>"fulkrum",
+				"db_pass"=>"fulkrum@123"
+									);
+
 return $config;
 ?>
