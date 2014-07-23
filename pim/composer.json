@@ -1,6 +1,7 @@
 {
 	"require":{
 		"phpmailer/phpmailer": "dev-master",
-		"abeautifulsite/simpleimage": "2.5.3"
+		"abeautifulsite/simpleimage": "2.5.3",
+		"parsecsv/php-parsecsv": "dev-master"
 	}
 }
