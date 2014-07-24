@@ -472,7 +472,7 @@ class Controller
 		else
 		{
 			if(!file_exists($path)) ## controller not found.
-			{echo $path;die;
+			{
 				$state	= self::currentState();
 				error::set("controller : $state","Controller not found.");
 				return;

@@ -25,8 +25,8 @@ class Controller_Ajax_Page
 		$row['pageTextExcerpt']	= $row_page['pageTextExcerpt'];
 
 		## get page photo.
-		$row['pageImageUrl']	= model::load("page/page")->getPagePhotoUrl($pageID);
-		$row['pageImageUrl']	= !$row['pageImageUrl']?null:url::asset("frontend/images/photo/".$row['pageImageUrl']);
+		#$row['pageImageUrl']	= model::load("page/page")->getPagePhotoUrl($pageID);
+		#$row['pageImageUrl']	= !$row['pageImageUrl']?null:url::asset("frontend/images/photo/".$row['pageImageUrl']);
 		
 		## get unapproved flag content 
 		$unapprovedData	= model::load("site/request")->getUnapprovedRequestData('page.update',$pageID);
@@ -37,7 +37,10 @@ class Controller_Ajax_Page
 			$row['pageContent']		= $unapprovedData['pageText'];
 			$row['pageStatus']		= "<span style='color:#de7c7c;'>Content waiting for approval</span>";
 			$row['pageTextExcerpt'] = $unapprovedData['pageTextExcerpt'];
+			#$row['pageImageUrl']	= url::asset("frontend/images/photo/".$unapprovedData['pagePhoto']);
 		}
+
+		$row['pageImageUrl']	= url::asset("frontend/images/photo/".$row_page['pagePhoto']);
 
 		$row['pageContent']	= stripslashes($row['pageContent']);
 

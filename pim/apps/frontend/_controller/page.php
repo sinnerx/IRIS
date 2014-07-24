@@ -40,9 +40,10 @@ Class Controller_Page
 
 		$defaultR	= $page->getDefault();
 		$data['row_page']	= $row_page;
-		$photoName				= $page->getPagePhotoUrl($row_page['pageID']);
+		/*$photoName				= $page->getPagePhotoUrl($row_page['pageID']); ## migration plan. now uses column.
 		
-		$data['pageImageUrl']	= $photoName?url::asset("frontend/images/photo/$photoName"):false;
+		$data['pageImageUrl']	= $photoName?url::asset("frontend/images/photo/$photoName"):false;*/
+		$data['pageImageUrl']	= $row['pagePhoto']?url::asset("frontend/images/photo/$row[pagePhoto]"):false;
 
 		$data['title']		= $row_page['pageType'] == 1?$defaultR[$row_page['pageDefaultType']]['pageDefaultName']:$row_page['pageName'];
 

@@ -43,7 +43,8 @@ Class Controller_Main
 		$data['pageName']	= $defaultR[1]['pageDefaultName'];
 		$data['pageSlug']	= url::base("{site-slug}/".$defaultR[1]['pageDefaultSlug']);
 		$row				= db::get()->row();
-		$data['photoName']	= model::load("page/page")->getPagePhotoUrl($row['pageID']);
+		#$data['photoName']	= model::load("page/page")->getPagePhotoUrl($row['pageID']); migration plan. now uses column pagePhotos
+		$data['photoName']	= $row['pagePhoto'];
 
 		## repair page text to 90 words.
 		$data['pageText'] = $row['pageTextExcerpt'] == ""?model::load("helper")->purifyHTML(stripslashes($row['pageText']),90):nl2br($row['pageTextExcerpt']);

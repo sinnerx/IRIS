@@ -70,11 +70,11 @@ class Page
 	## get page photo. used by ajax/page/photo.
 	public function getPagePhotoUrl($pageID)
 	{
-		db::from("page_photo");
-		db::where("pageID",$pageID);
-		db::join("photo","photo.photoID = page_photo.photoID");
-
-		return db::get()->row('photoName');
+		#db::from("page_photo");
+		#db::where("pageID",$pageID);
+		#db::join("photo","photo.photoID = page_photo.photoID");
+		$page	= db::select("pagePhoto")->from("page")->where("pageID",$pageID);
+		return db::get()->row('pagePhoto');
 	}
 
 	## get page ID.
@@ -163,7 +163,7 @@ class Page
 		$siteID		= db::select("siteID")->where("pageID",$pageID)->get("page")->row("siteID");
 
 		## clear all existing photo first.
-		db::delete("page_photo",Array("pageID"=>$pageID));
+		/*db::delete("page_photo",Array("pageID"=>$pageID));
 
 		## reinsert new photo.
 		$data_photo	= Array(
@@ -179,7 +179,10 @@ class Page
 		$photoID	= db::getLastID("photo","photoID");
 
 		## insert page_photo
-		db::insert("page_photo",Array("photoID"=>$photoID,"pageID"=>$pageID)); 
+		db::insert("page_photo",Array("photoID"=>$photoID,"pageID"=>$pageID)); */
+
+		## now use column pagePhoto
+		db::where("pageID",$pageID)->update("page",Array("pagePhoto"=>$filename));
 	}
 }
 
