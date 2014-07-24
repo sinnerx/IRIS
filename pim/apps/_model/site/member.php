@@ -55,14 +55,52 @@ class Member
 		$this->add($row_user['userID'],$siteID,0,$isOutsider);
 	}
 
-	public function add($userID,$siteID,$status,$isOutsider = 0)
+	public function registerByImport($siteRefID,$ic,$data)
+	{
+		## find siteID by given old site_id.
+		$siteID	= db::select("siteID")->where("siteRefID",$siteRefID)->get("site")->row("siteID");
+
+		## return false, if not found. cancel registration.
+		if(!$siteID)
+			return false;
+
+		## gender translate.
+		$userParam	= model::load("user/param");
+		$genderR	= array_flip($userParam->gender());
+		$titleR		= array_flip($userParam->title());
+
+		$data_user	= Array(
+					"userIC"=>$ic,
+					"userPassword"=>$data['temp_password'],
+					"userEmail"=>$data['temp_email'],
+					"userProfileDOB"=>$data['temp_DOB'],
+					"userProfileTitle"=>$titleR[$data['temp_Title']]?:0,
+					"userProfileFullName"=>$data['temp_name'],
+					"userProfileLastName"=>"",
+					"userProfileGender"=>$genderR[$data['temp_Gender']]?:0,
+					"userProfileDOB"=>$data['temp_DOB'],
+					"userProfilePhoneNo"=>$data['temp_contact_no'],
+					"userProfileMobileNo"=>$data['temp_Tel'],
+					"userProfileMailingAddress"=>$data['temp_Address'],
+					"userProfileOccupation"=>$data['temp_Occupation'],
+					"userProfileEducation"=>$data['temp_Education']
+							);
+
+		$row_user	= model::load("user/user")->add($data_user,1);
+
+		## create site_member with an imported flag.
+		$this->add($row_user['userID'],$siteID,1,0,1);
+	}
+
+	public function add($userID,$siteID,$status,$isOutsider = 0,$imported = 0)
 	{
 		## add as site_member
 		$data_sitemember	= Array(
 						"userID"=>$userID,
 						"siteID"=>$siteID,
 						"siteMemberStatus"=>$status, ## in-active member
-						"siteMemberOutsider"=>$isOutsider	## 1 is outsider, 0 is nope.
+						"siteMemberOutsider"=>$isOutsider,	## 1 is outsider, 0 is nope.
+						"siteMemberImported"=>$imported
 						);
 
 		## WIN.
@@ -131,6 +169,55 @@ class Member
 		{
 			return db::get()->row();
 		}
+	}
+
+	public function importTemporaryUser($d)
+	{
+		## strip - from username
+
+		## check if the record already exists. if it is, deny.
+		if(db::select("tempUserID")->where("temp_username",$d['username'])->get("temp_user")->row())
+		{
+			return false;
+		}
+
+		$data	= Array(
+		"temp_userid"=>$d['userid'],
+		"temp_username"=>str_replace("-", "", $d['username']),
+		"temp_usernameOriginal"=>$d['username'],
+		"temp_password"=>$d['password'],
+		"temp_totallogin"=>$d['totallogin'],
+		"temp_lastlogin"=>$d['lastlogin'],
+		"temp_userright"=>$d['userright'],
+		"temp_user_status"=>$d['user_status'],
+		"temp_name"=>$d['name'],
+		"temp_ic_no"=>$d['ic_no'],
+		"temp_contact_no"=>$d['contact_no'],
+		"temp_Address"=>$d['Address'],
+		"temp_datecreated"=>$d['datecreated'],
+		"temp_DOB"=>$d['DOB'],
+		"temp_POB"=>$d['POB'],
+		"temp_Tel"=>$d['Tel'],
+		"temp_CBC_Site"=>$d['CBC_Site'],
+		"temp_email"=>$d['email'],
+		"temp_Occupation"=>$d['Occupation'],
+		"temp_Education"=>$d['Education'],
+		"temp_Title"=>$d['Title'],
+		"temp_activationCode"=>$d['activationCode'],
+		"temp_Gender"=>$d['Gender'],
+		"temp_mobile"=>$d['mobile'],
+		"temp_cbc_siteRight"=>$d['cbc_siteRight']
+							);
+
+		db::insert("temp_user",$data);
+	}
+
+	public function getTemporaryUser($userIC,$userPassword = null)
+	{
+		if($userPassword)
+			db::where("temp_password",$userPassword);
+
+		return db::where("temp_username",$userIC)->get("temp_user")->row();
 	}
 }
 

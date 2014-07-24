@@ -40,6 +40,17 @@ Class Auth
 		## not found.
 		if(!$row)
 		{
+			## check temp_user
+			$temp	= model::load("site/member")->getTemporaryUser($userIC,$userPassword);
+
+			## if got in temporary, register him based on temporary data.
+			if($temp)
+			{
+				#echo $userIC." ".model::load("helper")->hashPassword($userPassword);
+				#die;
+				model::load("site/member")->registerByImport($temp['temp_CBC_Site'],$userIC,$temp);
+			}
+
 			return false;
 		}
 
@@ -78,6 +89,12 @@ Class Auth
 		## set session : userLevel and userID
 		session::set("userLevel",$userLevel);
 		session::set("userID",$userID);
+
+		## create a log, everytime user login.
+		model::load("log/login")->createLog($userID);
+
+		## update lastLogin for easier login.
+		db::where("userID",$userID)->update("user",Array("userLastLogin"=>now()));
 	}
 
 	## used in backend : auth controller, and save data for later use.

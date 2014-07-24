@@ -21,7 +21,8 @@ class Site
 							"siteSlug"=>$data['siteSlug'],
 							"stateID"=>$data['stateID'],
 							"siteUpdatedDate"=>now(),
-							"siteUpdatedUser"=>session::get("userID")
+							"siteUpdatedUser"=>session::get("userID"),
+							"siteRefID"=>$data['siteRefID']
 									));
 
 			$data	= Array(
@@ -135,7 +136,8 @@ class Site
 					"siteSlug"=>$data['siteSlug'],
 					"siteCreatedDate"=>now(),
 					"siteCreatedUser"=>session::get("userID"),
-					"stateID"=>$data['stateID']
+					"stateID"=>$data['stateID'],
+					"siteRefID"=>$data['siteRefID']
 							);
 
 		db::insert("site",$data_site);
@@ -355,6 +357,58 @@ class Site
 		}
 
 		return db::get("site")->result("stateID",true);
+	}
+
+	## get site slug, by given one id or list of id. and return like $siteID=>$siteSlug style for list, $siteSlug for one.
+	public function getSiteSlug($siteID)
+	{
+		db::from("site");
+		db::select("siteSlug");
+
+		db::where("siteID",$siteID);
+
+		if(is_array($siteID))
+		{
+			$arr	= Array();
+			$res	= db::get()->result();
+
+			if($res)
+			{
+				foreach($res as $row)
+				{
+					$arr[$row['siteID']]	= $row['siteSlug'];
+				}
+			}
+
+			return $arr;
+		}
+		else
+		{
+			return db::get()->row("siteSlug");
+		}
+
+	}
+
+	## generate a new siteID, if there null siteRefID still unappended, will return false.
+	public function getNewSiteID()
+	{
+		## check if there're still an empty siteID.
+		db::where("siteRefID",null);
+
+		if(db::get("site")->row())
+			return false;
+
+		## get last siteRefID.
+		db::limit(1);
+		db::order_by("siteRefID","desc");
+		$lastID = db::get("site")->row("siteRefID");
+
+		return $lastID+1;
+	}
+
+	public function getAllSite()
+	{
+		return db::get("site")->result();
 	}
 }
 

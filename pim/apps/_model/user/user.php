@@ -211,6 +211,19 @@ class User
 		## insert into profile.
 		db::insert("user_profile",$data_profile);
 
+		## insert into additonal.
+		$data_additional	= Array(
+					"userID"=>$userID,
+					"userProfileOccupation"=>$data['userProfileOccupation'],
+					"userProfileEducation"=>$data['userProfileEducation'],
+					"userProfileTwitter"=>$data['userProfileTwitter'],
+					"userProfileEcommerce"=>$data['userProfileEcommerce'],
+					"userProfileWeb"=>$data['userProfileWeb'],
+					"userProfileIntroductional"=>$data['userProfileIntroductional']
+									);
+
+		db::insert("user_profile_additional",$data_additional);
+
 		## create user account.
 		model::load("account/account")->createAccount(1,$userID);
 
