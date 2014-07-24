@@ -41,6 +41,16 @@ class Site
 			db::update("site_info",$data);
 		}
 	}
+
+	public function checkSiteRefID($siteRefID,$siteID = null)
+	{
+		## exception
+		if($siteID)
+			db::where("siteID !=",$siteID);
+
+		db::where("siteRefID",$siteRefID);
+		return db::get("site")->row();
+	}
 	
 	public function lists($stateID = null)
 	{

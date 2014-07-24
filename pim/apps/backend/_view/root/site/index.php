@@ -118,6 +118,7 @@ List of all Pi1M sites and related information
 			<th width="20">No.</th>
 			<th>Site
 			</th>
+			<th class='site-col'>Site ID</th>
 			<th class='site-col'>Slug</th>
 			<th class='site-col'>State</th>
 			<th class='site-col' colspan='2'>Manager</th>
@@ -152,6 +153,7 @@ List of all Pi1M sites and related information
 			<tr id='row<?php echo $row['siteID'];?>'>
 				<td><?php echo $no;?>.</td>
 				<td><?php echo $row['siteName'];?></td>
+				<td><?php echo $row['siteRefID'];?></td>
 				<td class='site-col'><?php echo !$row['siteSlug']?'null':strtolower($row['siteSlug']);?></td>
 				<td><?php echo $stateR[$row['stateID']];?></td>
 				<td class='site-col'><?php echo implode(", ",$sitemanager);?></td>

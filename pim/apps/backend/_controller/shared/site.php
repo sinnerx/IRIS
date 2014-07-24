@@ -40,8 +40,6 @@ Class Controller_Site
 			$siteID	= $data['row']['siteID'];
 		}
 
-
-
 		## get unapproved site request;
 		$unapprovedRequest	= model::load("site/request")->getUnapprovedRequestData(3,$siteID);
 		
@@ -76,6 +74,15 @@ Class Controller_Site
 							"callback"=>Array($siteSlugCheck[0],$siteSlugCheck[1])
 									)
 								);
+
+				if(input::get("siteRefID") != "")
+				{
+					$rules['siteRefID']	= Array(
+								"callback"=>Array(!model::load("site/site")->checkSiteRefID(input::get("siteRefID"),$siteID),"This site_id already exists")
+												);
+
+
+				}
 			}
 
 			## error.

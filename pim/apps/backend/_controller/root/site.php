@@ -64,6 +64,11 @@ class Controller_Site
 
 	public function add()
 	{
+		## generate siteRefID.
+		
+
+		#flash::set("siteRefID","<span class='label label-danger'>Unable to generate ID</span>");
+
 		if(form::submitted())
 		{
 			## load site model.
@@ -129,6 +134,17 @@ class Controller_Site
 							"callback"=>Array($siteSlugCheck[0],$siteSlugCheck[1])
 									)
 							);
+
+			if(input::get("siteRefID") != "")
+			{
+				if(model::load("site/site")->checkSiteRefID(input::get("siteRefID")))
+				{
+					## add error to rules
+					$rules['siteRefID']	= Array(
+									"callback"=>Array(false,"site_id already exists")
+												);
+				}
+			}
 
 			## 5. if got error in validating input.
 			if($error = input::validate($rules))

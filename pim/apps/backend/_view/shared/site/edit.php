@@ -55,8 +55,16 @@ endif;
 		<div class="panel-body">
 			<div class="form-group">
 			<label>2. P1m Slug</label>
-			<?php echo form::text("siteSlug","class='form-control' onkeyup='prepareSlug(this.value);' $disabled placeholder=\"A url represents the p1m, make sure it's as clear as possible.\"",$row['siteSlug']);?>
-			<?php echo flash::data("siteSlug");?>
+			<div class='row'>
+				<div class='col-sm-9'>
+				<?php echo form::text("siteSlug","class='form-control' onkeyup='prepareSlug(this.value);' $disabled placeholder=\"A url represents the p1m, make sure it's as clear as possible.\"",$row['siteSlug']);?>
+				<?php echo flash::data("siteSlug");?>
+				</div>
+				<div class='col-sm-3'>
+				<?php echo form::text("siteRefID","placeholder='Old Pi1M Site ID' $disabled class='form-control'",$row['siteRefID']);?>
+				<?php echo flash::data("siteRefID");?>
+				</div>
+			</div>
 			</div>
 		</div>
 	</section>

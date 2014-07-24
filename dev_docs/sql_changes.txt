@@ -6,3 +6,10 @@ UPDATE site_request SET siteRequestType = 'announcement.add' WHERE siteRequestTy
 UPDATE site_request SET siteRequestType = 'announcement.update' WHERE siteRequestType = '5';
 ALTER TABLE activity MODIFY activityStartDate DATETIME;
 ALTER TABLE activity MODIFY activityEndDate DATETIME;
+
+-- UPDATE site_photo SET sitePhotoStatus =  '1'; commented for now.
+-- UPDATE site_album SET siteAlbumStatus =  '1'; commented for now
+
+-- Run this after moved all photoName to page.pagePhoto
+-- ALTER TABLE photo DROP COLUMN siteID, articleID, albumType
+-- 
