@@ -86,7 +86,7 @@ select
 }
 
 </style>
-<script type="text/javascript" src='<?php echo url::base("assets/backend/js/pim.js");?>'></script>
+<script type="text/javascript" src='<?php echo url::asset("backend/js/pim.js");?>'></script>
 <script type="text/javascript">
 var pim	= new pim({base_url:"<?php echo url::base('{site-slug}');?>"});
 function selectTab(tab)
