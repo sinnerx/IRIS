@@ -20,6 +20,61 @@ input
 	text-decoration:none !important;
 }
 
+/* MCMC Update */
+.header
+{
+	border-bottom-color: #f2970e;
+	position: relative;
+}
+.logo
+{
+	background:url("<?php echo url::asset('frontend/images/vMCMC/logo.jpg');?>") no-repeat scroll left top rgba(0, 0, 0, 0);
+	padding-left:83px;
+	min-width: 350px;
+
+	/* absolution */
+	position: absolute;
+	top:5px;
+}
+.navigation
+{
+	font-size: 13px;
+}
+.logo h1
+{
+	font-size: 22px;
+	font-family: 'Roboto Condensed',sans-serif;
+	font-weight: 700;
+	text-transform: capitalize;
+	position: relative;
+	top:-3px;
+}
+.logo h1 a
+{
+	color:black !important;
+}
+.navigation ul li a:hover, .navigation ul li a.active, .nav > li:hover > a
+{
+	color:#f2970e;
+	background: url(<?php echo url::asset('frontend/images/vMCMC/navi_arrow_active.jpg');?>) no-repeat bottom center;
+}
+.footer, .copyright a:hover, .copyright a, .copyright ul li
+{
+	border-color:#f2970e;
+
+	color:#f2970e;
+}
+.nav > li > div
+{
+	background: #f2970e;
+}
+.footer
+{
+	background: #000 url(<?php echo url::asset('frontend/images/vMCMC/footer_bg.jpg');?>) no-repeat top center;
+}
+
+/* MCMC Update Ends */
+
 </style>
 <?php controller::load("partial","top");?>
 <?php controller::load("partial","header");?>

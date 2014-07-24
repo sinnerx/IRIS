@@ -2,6 +2,9 @@
 <html>
 <head>
 	<meta charset="UTF-8">
+	<style type="text/css">
+	@import url(http://fonts.googleapis.com/css?family=Roboto+Condensed:700);
+	</style>
 	<link href="<?php echo url::asset("frontend/css/styles.css");?>" rel="stylesheet" type="text/css">
 	<!-- <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet"> -->
 	<link rel="stylesheet" type="text/css" href="<?php echo url::asset("_scale/css/font-awesome.min.css");?>">
