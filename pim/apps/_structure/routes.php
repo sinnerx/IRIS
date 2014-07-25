@@ -131,7 +131,7 @@ $routes[]	= Array("[:site-slug]/404","controller=error@index");
 $routes[]	= Array("[:site-slug]/test/[:controller]/[**:method]","controller={controller}@{@method}");
 
 ## site landing page
-$routes[]	= Array("[:site-slug]","controller=main@index");
+$routes['main-index']	= Array("[:site-slug]","controller=main@index");
 
 ## site registration
 $routes[]	= Array("[:site-slug]/registration","controller=main@registration");
@@ -151,7 +151,7 @@ $routes[]	= Array("[:site-slug]/activity/[:year]/[:month]/[:activity-slug]","con
 ## /old routes
 
 ## site contact-us
-$routes[]	= Array("[:site-slug]/hubungi-kami","controller=main@contact");
+$routes['main-contact']	= Array("[:site-slug]/hubungi-kami","controller=main@contact");
 
 ## site blog [articleList]
 $routes[]	= Array("[:site-slug]/blog","controller=blog@article");
@@ -175,13 +175,13 @@ $routes[]	= Array("[:site-slug]/profile/[i:userID?]","controller=member@profile"
 $routes[]	= Array("[:site-slug]/ajax/[:controller]/[**:method]","controller=ajax/ajax_{controller}@{method}");
 
 ## gallery
-$routes[]	= Array("[:site-slug]/galeri/[:year?]","controller=gallery@index");
-$routes[]	= Array("[:site-slug]/galeri/[:year]/[:month]","controller=gallery@index_month");
-$routes[]	= Array("[:site-slug]/galeri/[:year]/[:month]/id/[i:siteAlbumID]","controller=gallery@albumView","{siteAlbumID}");
-$routes[]	= Array("[:site-slug]/galeri/[:year]/[:month]/[:sitealbum-slug]","controller=gallery@albumView","{sitealbum-slug},{year},{month}");
+$routes['gallery-year']		= Array("[:site-slug]/galeri/[:year?]","controller=gallery@index");
+$routes['gallery-month']	= Array("[:site-slug]/galeri/[:year]/[:month]","controller=gallery@index_month");
+$routes['gallery-view']		= Array("[:site-slug]/galeri/[:year]/[:month]/id/[i:siteAlbumID]","controller=gallery@albumView","{siteAlbumID}");
+$routes['gallery-view2']	= Array("[:site-slug]/galeri/[:year]/[:month]/[:sitealbum-slug]","controller=gallery@albumView","{sitealbum-slug},{year},{month}");
 
 ## faq
-$routes[]	= Array("[:site-slug]/soalan-lazim","controller=main@faq");
+$routes['main-faq']			= Array("[:site-slug]/soalan-lazim","controller=main@faq");
 
 ## site page.
 $routes[]	= Array("[:site-slug]/[**:trail]","controller=page@index");

@@ -12,6 +12,8 @@ class router
 	private $callbackListR		= Array();
 	private $storedCallbackR	= Array();
 	private $routeMatched		= false;
+	public $routeList			= Array(); ## list of route added as an array.
+	public $executedRoute		= null;
 
 	#private $basePathListR		= Array();	## reused at dispatch.
 
@@ -165,8 +167,10 @@ class router
 			}
 			else if(is_array($param_first))
 			{
-				foreach($param_first as $routeR)
+				foreach($param_first as $k=>$routeR)
 				{
+					$this->routeList[$k]	= $routeR;
+
 					call_user_func_array(array($this,"add"), $routeR);
 				}
 				return $this;

@@ -11,14 +11,16 @@
 
 		if($menuR)
 		{
-			## prepare component controller mapping first.
-			$componentControllerR	= Array(
-									1=>"page/index",
-									2=>"main/index",
-									3=>"activity/index",
-									4=>"member/index",
-									5=>"main/contact"
-											);
+			## prepare list of menu under component.
+			$componentMenu	= Array(
+							1=>Array("page@index"),
+							2=>Array("main@index"),
+							3=>Array("activity@index","activity@index","activity@view"),
+							4=>Array("gallery@albumView","gallery@index","gallery@index_month"),
+							5=>Array("main@contact"),
+							6=>Array("blog@article","blog@view")
+									);
+
 			$menuNo = 0;
 			foreach($menuR as $row)
 			{
@@ -96,7 +98,14 @@
 				$controller	= controller::getCurrentController();
 				$method		= controller::getCurrentMethod();
 
-				$cssActive	= $controller."/".$method == $componentControllerR[$component]?"active":"";
+				## prepare the active menu css.
+				$cm	= $controller."@".$method;
+
+				$cssActive	= "";
+				if(isset($componentMenu[$component]) && in_array($cm,$componentMenu[$component]))
+				{
+					$cssActive	= "active";
+				}
 
 				$dropdownIcon	= isset($childPageR[$pageID]) || isset($componentChildR[$component])?'<span><i class="fa fa-sort-asc"></i></span>':"";
 				echo "<li><a href='$main_url' class='$cssActive'>$menuName $dropdownIcon</a>";
