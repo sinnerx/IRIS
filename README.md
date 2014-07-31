@@ -6,7 +6,6 @@ Development server info
 =============
 Main site : http://p1m.gaia.my/
 
-Dummy site : http://p1m.gaia.my/kampung-meru
 
 Database Schema : http://p1m.gaia.my/monitor/schema
 
@@ -14,10 +13,37 @@ Sample admin login ( http://p1m.gaia.my/dashboard/login )
 
 Root : root@gmail.com / 12345
 
-Site Manager : sitemanager@gmail.com / 12345
+Cluster lead (for semenanjung cluster)
+
+shamsul@nusuara.com
+
+Password : 12345
+
+List of site manager for testing (all in semenanjung cluster)
+
+nurulmaliessa@celcom1cbc.com http://p1m.gaia.my/bukit-batu
+
+azizah@celcom1cbc.com http://p1m.gaia.my/bukit-rokan
+
+sitihafiza@celcom1cbc.com http://p1m.gaia.my/bukit-tongkat
+
+fauziah@celcom1cbc.com http://p1m.gaia.my/felda-bukit-tangga
+
+zakiah@celcom1cbc.com http://p1m.gaia.my/felda-chuping
+
+erma@celcom1cbc.com http://p1m.gaia.my/felda-mata-air
+
+azwary@celcom1cbc.com http://p1m.gaia.my/felda-rimba-mas
+
+nadia@celcom1cbc.com http://p1m.gaia.my/hj-idris
+
+anuarezman@celcom1cbc.com http://p1m.gaia.my/bukit-permai
+
+norizzati@celcom1cbc.com http://p1m.gaia.my/bukit-jalor
+
+Password : 12345
 
 FTP
-
 
 CPANEL
 p1mgaia / gaiacelcom12345%
