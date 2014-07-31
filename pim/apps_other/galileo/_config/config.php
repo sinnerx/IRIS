@@ -14,9 +14,18 @@ $config['domain']['celcom1cbc.com'][]	= Array(
 								);
 
 $config['domain']['dev.celcom1cbc.com'][]	= Array(
-					"asset_url"=>"pi1m.celcom1cbc.com/dev/pim/assets"
+					"asset_url"=>"dev.celcom1cbc.com/pim/assets"
 								);
 
+## production conf.
+$config['domain']['pro.celcom1cbc.com'][]	= Array(
+					"asset_url"=>"pro.celcom1cbc.com/pim/assets"
+								);
+
+$config['domain']['celcom1cbc.com'][]	= Array(
+					"asset_url"=>"celcom1cbc.com/pim/assets"
+								);
+## production conf end.
 return $config;
 
 ?>
