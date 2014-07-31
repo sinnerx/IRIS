@@ -17,7 +17,7 @@ apps::run(ROOT_FOLDER,function($router)
 		}
 
 		## if current domain is localhost and exedra.
-		if(in_array($param['domain_name'], Array("localhost","p1m.gaia.my","celcom1cbc.com","dev.celcom1cbc.com")))
+		if(in_array($param['domain_name'], Array("localhost","p1m.gaia.my","celcom1cbc.com","dev.celcom1cbc.com","pro.celcom1cbc.com")))
 		{
 			## require exedra docs application only in localhost.
 			if($param['domain_name'] == "localhost")
