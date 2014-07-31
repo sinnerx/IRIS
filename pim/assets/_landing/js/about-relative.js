@@ -77,7 +77,7 @@ BRUSHED.slider = function(){
 		thumb_links				:	0,			// Individual thumb links for each slide
 		thumbnail_navigation    :   0,			// Thumbnail navigation
 		slides 					:  	[			// Slideshow Images
-											{image : 'assets/_landing/images/about.jpg', title : '<div class="slide-content"></div>', thumb : '', url : ''}
+											{image : 'pim/assets/_landing/images/about.jpg', title : '<div class="slide-content"></div>', thumb : '', url : ''}
 											  
 									],
 									
