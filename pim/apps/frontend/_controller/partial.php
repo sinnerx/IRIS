@@ -103,10 +103,12 @@ class Controller_Partial
 		$data['state']	= model::load("helper")->state();
 
 		## get site by state.
-		$res_site	= model::load("site/site")->getSiteByState();
+		#$res_site	= model::load("site/site")->getSiteByState();
 
 		## fetch site.
-		$res_site	= db::select("stateID,siteName,siteSlug")->get("site")->result();
+		## select everything except manager siteID.
+		$managerSiteID	= model::load("config")->get("configManagerSiteID");
+		$res_site	= db::select("stateID,siteName,siteSlug")->where("siteID !=",$managerSiteID)->get("site")->result();
 
 		## prepare the records
 		foreach($res_site as $row)
