@@ -55,6 +55,12 @@ ul.front-tab li.resp-tab-active
     text-shadow: 0px 0px 1px #585858;
 }
 
+/* fix some ui bugs, when a lot of texts was dumpted there.*/
+.left-info
+{
+    padding-bottom: 100px;
+}
+
 </style>
 <div class="left-info">
      <div class="front-logo">

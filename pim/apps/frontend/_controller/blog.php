@@ -78,7 +78,7 @@ Class Controller_Blog
 
 		$paginConf['urlFormat']	= $urlFormat;
 		$paginConf['currentPage']	= $page;
-		$paginConf['limit']			= 3;
+		$paginConf['limit']			= 5;
 
 		pagination::setFormat(model::load("template/frontend")->paginationFormat());
 

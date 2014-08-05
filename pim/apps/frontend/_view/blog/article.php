@@ -21,8 +21,19 @@
 	
 }
 
-.dob-month{
-	
+.month-select
+{
+	letter-spacing: 1px;
+	padding:5px;
+	border:0px;
+	cursor: pointer;
+	font-size: 12px;
+}
+
+.dob-months
+{
+	float: right;
+	font-size: 13px;
 }
 </style>
 <script type="text/javascript">
@@ -65,9 +76,9 @@ function changeCategory()
 		echo model::load("template/frontend")
 		->buildBreadCrumbs($breadcrumb);
 		?>
-		<div class="dob clearfix" style="float:right;">
-			<div class='dob-month'>
-				<?php echo form::select("category",$categoryListR,"onchange='changeCategory();'",$currCatID,"[CATEGORY]");?>
+		<div class="dobs clearfix">
+			<div class='dob-months'>
+				Kategori : <?php echo form::select("category",$categoryListR,"class='month-select' onchange='changeCategory();'",$currCatID,"[Pilihan]");?>
 			</div>
 		</div>
 		</h3>
@@ -163,7 +174,7 @@ function changeCategory()
 							else:
 						?>
 	    				<ul>
-	    					<div class="no-result">Tiada blog yang diterbitkan.</div>
+	    					<div class="no-result">Tiada blog pernah diterbitkan.</div>
 						</ul>
 						<?php
 							endif;
