@@ -82,6 +82,7 @@ Class Controller_Main
 		if(form::submitted())
 		{
 			$userIC	= str_replace("-","",input::get('login_userIC'));
+			$userIC	= str_replace(" ", "", $userIC);
 			$pass	= input::get("login_userPassword");
 
 			$rules	= Array(
@@ -148,14 +149,16 @@ Class Controller_Main
 		{
 			## prepare IC.
 			$ic			= str_replace("-","",input::get("userIC"));## remove '-' if got.
+			$ic			= str_replace(" ", "", $ic);
 			$password	= input::get("userPassword");
 
-			$icCheck	= Array(!model::load("user/services")->checkIC($ic),"I.C. ini telah didaftarkan.");
-			$icCheck	= $icCheck[0]?(is_numeric($ic)?Array(true):Array(false,"IC mestilah nombor yang betul")):$icCheck;
+			$icCheck	= Array(!model::load("user/services")->checkIC($ic),"Telah didaftarkan");
+			#$icCheck	= $icCheck[0]?(is_numeric($ic)?Array(true):Array(false,"IC mestilah nombor yang betul")):$icCheck;
+			$icCheck	= $icCheck[0]?((ctype_alnum($ic) || is_numeric($ic)) && !ctype_alpha($ic))?Array(true):Array(false,"Mestilah nombor atau alpha-numeric"):$icCheck;
 		
 			$rules	= Array(
-					"userProfileFullName,userProfileLastName"=>"required:Lapangan ini tidak lengkap",
-					"except:checkPenduduk,checkTerm"=>"required:Lapangan ini diperlukan.",
+					"userProfileFullName,userProfileLastName"=>"required:Maklumat ini diperlukan",
+					"except:checkPenduduk,checkTerm"=>"required:Maklumat ini diperlukan.",
 					"userIC"=>Array(
 							 "callback"=>Array($icCheck[0],$icCheck[1])
 									),

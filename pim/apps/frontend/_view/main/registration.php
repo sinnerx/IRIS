@@ -138,7 +138,10 @@ ul.front-tab li.resp-tab-active
                  <div class="row-check clearfix">
                  <label>
                  <div class="squaredFour">
-                 <input type="checkbox" value="selected" id="squaredFive" name="checkPenduduk" />
+                 <?php
+                    $checkPenduduk  = flash::data("_post.checkPenduduk")?"checked":"";
+                 ?>
+                 <input type="checkbox" value="selected" id="squaredFive" name="checkPenduduk" <?php echo $checkPenduduk;?> />
                  <label for="squaredFive"></label>
                  </div>
                  <?php echo flash::data("checkPenduduk");?>
