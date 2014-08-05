@@ -185,7 +185,7 @@ Class Controller_Main
 
 				input::repopulate();## repopulate previous input into flash data
 				redirect::withFlash(model::load("template/services")->wrap("span-error",$error));
-				redirect::to("","Terdapat kesalahan pada form anda.","error");
+				redirect::to("","Lengkapkan maklumat pendaftaran anda","error");
 			}
 
 			## register.
