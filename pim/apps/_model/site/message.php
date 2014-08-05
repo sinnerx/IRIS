@@ -1,6 +1,6 @@
 <?php
 namespace model\site;
-use db, session, model, pagination;
+use db, session, model, pagination, apps;
 class Message
 {
 	public function getCategoryName($no = null)
@@ -16,7 +16,7 @@ class Message
 
 	public function getSupportEmail()
 	{
-		$supportEmail	= "support@celcom1cbc.com";
+		$supportEmail	= apps::config("supportEmail");
 		return $supportEmail;
 	}
 

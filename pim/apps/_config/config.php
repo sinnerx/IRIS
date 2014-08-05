@@ -8,28 +8,32 @@ $config['model_namespace']	= true;
 $config['domain']['localhost'][]	= Array(
 						"base_url:backend"=>"localhost/digitalgaia/iris/dashboard",
 						"base_url:frontend"=>"localhost/digitalgaia/iris",
-						"asset_url"=>"localhost/digitalgaia/iris/pim/assets"
+						"asset_url"=>"localhost/digitalgaia/iris/pim/assets",
+						"supportEmail"=>"newrehmi@gmail.com"
 										);
 
 ## live dev
 $config['domain']['dev.celcom1cbc.com'][]	= Array(
 						"base_url:backend"=>"dev.celcom1cbc.com/dashboard",
 						"base_url:frontend"=>"dev.celcom1cbc.com",
-						"asset_url"=>"dev.celcom1cbc.com/pim/assets"
+						"asset_url"=>"dev.celcom1cbc.com/pim/assets",
+						"supportEmail"=>"newrehmi@gmail.com"
 										);
 
 ## live pro.
 $config['domain']['pro.celcom1cbc.com'][]	= Array(
 						"base_url:backend"=>"pro.celcom1cbc.com/dashboard",
 						"base_url:frontend"=>"pro.celcom1cbc.com",
-						"asset_url"=>"pro.celcom1cbc.com/pim/assets"
+						"asset_url"=>"pro.celcom1cbc.com/pim/assets",
+						"supportEmail"=>"support@celcom1cbc.com"
 										);
 
 ## live production new url.
 $config['domain']['celcom1cbc.com'][]	= Array(
 						"base_url:backend"=>"celcom1cbc.com/dashboard",
 						"base_url:frontend"=>"celcom1cbc.com",
-						"asset_url"=>"celcom1cbc.com/pim/assets"
+						"asset_url"=>"celcom1cbc.com/pim/assets",
+						"supportEmail"=>"support@celcom1cbc.com"
 										);
 
 $config['domain']['p1m.gaia.my'][]	= Array(
