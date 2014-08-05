@@ -109,6 +109,48 @@ class Controller_Task
 			db::where("pageID",$pageID)->update("page",Array("pagePhoto"=>$row['photoName']));
 		}
 	}
+
+	public function createBlogMenu()
+	{
+		$res_site	= db::get("site")->result();
+
+		echo "<pre>";
+		foreach($res_site as $row)
+		{
+			$menuR	= model::load("site/menu")->getTopMenu($row['siteID']);
+
+			$total	= count($menuR);
+
+			$newMenuR	= Array();
+			$no	= 1;
+			foreach($menuR as $row_menu)
+			{
+				$data['menuName']		= $row_menu['menuName'];
+				$data['componentNo']	= $row_menu['componentNo'];
+				$data['menuRefID']		= $row_menu['menuRefID'];
+				$data['menuNo']			= $no;
+
+				$newMenuR[]	= $data;
+
+				## if menuNo is less than total. create menu for blog.
+				if($total-1 == $no)
+				{
+					$data['menuName']	= "Blog";
+					$data['componentNo'] = 6;
+					$data['menuRefID']	= 0;
+					$data['menuNo']		= $no;
+					$newMenuR[]	= $data;
+					
+					$no++;
+				}
+
+				$no++;
+			}
+
+			## update top menu.
+			model::load("site/menu")->updateTopMenu($row['siteID'],$newMenuR);
+		}
+	}
 }
 
 
