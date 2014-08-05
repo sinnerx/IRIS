@@ -18,8 +18,6 @@
 	</div>
 </div>
 </div><!-- main-wrap -->
-	<script src="<?php echo url::asset("frontend/js/site.js");?>" type="text/javascript"></script>
-	
 	<!-- <script type="text/javascript" src="js/jquery-1.9.0.min.js"></script> -->
 	    <script type="text/javascript" src="<?php echo url::asset("frontend/js/jquery.nivo.slider.js");?>"></script>
 	    <script type="text/javascript">

@@ -94,20 +94,6 @@
 						<div class="no-result">- Tiada artikel terkini - </div>
 					<?php endif; ?>
 				</ul>
-				<!-- <ul> ## original example.
-					<li>
-						<div class="news-title"><a href="#">TVXQ! Live in L.A.  Backstage & Onstage With the K-Pop</a></div>
-						<div class="news-info">October 31 2013, 8:00 AM</div>
-					</li>
-					<li>
-						<div class="news-title"><a href="#">TVXQ! Live in L.A.  Backstage & Onstage With the K-Pop</a></div>
-						<div class="news-info">October 31 2013, 8:00 AM</div>
-					</li>
-					<li>
-						<div class="news-title"><a href="#">TVXQ! Live in L.A.  Backstage & Onstage With the K-Pop</a></div>
-						<div class="news-info">October 31 2013, 8:00 AM</div>
-					</li>
-				</ul> -->
 			</div>
 		</div>
 	</div>
