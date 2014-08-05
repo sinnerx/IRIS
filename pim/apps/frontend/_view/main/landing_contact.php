@@ -41,7 +41,7 @@
     }
     .contact-form table
     {
-      width:400px;
+      width:100%;
     }
     .contact-form table tr td:first-child
     {
@@ -63,7 +63,7 @@
 
     .contact-form input[type=text], .contact-form textarea
     {
-      width: 93%;
+      width:50%;
     }
 
     .contact-form input[type=submit]
@@ -72,6 +72,11 @@
       color:white;
       padding:5px;
       border:0px;
+    }
+
+    .label.label-danger
+    {
+      background: #f15c5c;
     }
 
     </style>
@@ -135,31 +140,34 @@
       kami menerusi borang online di bawah ini. Kami mengalu-alukan 
       sebarang maklum balas daripada anda
       </p>
-      <div class='contact-form'>
-        <table>
-          <tr>
-            <td style="width:80px;">Kategori</td><td id='category-container'>: <?php echo form::radio("siteMessageCategory",$categoryNameR,null,null,"<div style='display:inline;'> {content} </div>");?></td>
-          </tr>
-          <tr>
-            <td>Nama</td><td>: <?php echo form::text("contactName");?></td>
-          </tr>
-          <tr>
-            <td>Email</td><td>: <?php echo form::text("contactEmail");?></td>
-          </tr>
-          <tr>
-            <td>Telefon</td><td>: <?php echo form::text("contactPhoneNo");?></td>
-          </tr>
-          <tr>
-            <td>Tajuk</td><td>: <?php echo form::text("messageSubject");?></td>
-          </tr>
-          <tr>
-            <td>Mesej</td><td>: <?php echo form::textarea("messageContent","style='height:120px;'");?></td>
-          </tr>
-          <tr>
-            <td></td><td><input class='pull-right' type='submit' value='Hantar' /></td>
-          </tr>
-        </table>
-      </div>
+      <form method='post'>
+        <?php echo flash::data();?>
+        <div class='contact-form'>
+          <table>
+            <tr>
+              <td style="width:80px;">Kategori</td><td id='category-container'>: <?php echo form::radio("siteMessageCategory",$categoryNameR,null,null,"<div style='display:inline;'> {content} </div>");?> <?php echo flash::data("siteMessageCategory");?></td>
+            </tr>
+            <tr>
+              <td>Nama</td><td>: <?php echo form::text("contactName");?> <?php echo flash::data("contactName");?></td>
+            </tr>
+            <tr>
+              <td>Email</td><td>: <?php echo form::text("contactEmail");?> <?php echo flash::data("contactEmail");?></td>
+            </tr>
+            <tr>
+              <td>Telefon</td><td>: <?php echo form::text("contactPhoneNo");?> <?php echo flash::data("contactPhoneNo");?></td>
+            </tr>
+            <tr>
+              <td>Tajuk</td><td>: <?php echo form::text("messageSubject");?> <?php echo flash::data("messageSubject");?></td>
+            </tr>
+            <tr>
+              <td>Mesej</td><td>: <?php echo form::textarea("messageContent","style='height:120px;'");?> <?php echo flash::data("messageContent");?></td>
+            </tr>
+            <tr>
+              <td></td><td><input class='pull-right' type='submit' value='Hantar' /></td>
+            </tr>
+          </table>
+        </div>
+      </form>
       </div>
     </div>
             

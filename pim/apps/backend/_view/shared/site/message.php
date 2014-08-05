@@ -54,8 +54,8 @@ List of all messages sent through the contact form on all Pi1Ms
 			$subject	= $row['messageSubject'];
 			$from		= $row['contactName'];
 			$phoneNo	= $row['contactPhoneNo'];
-			$site		= $row['siteName'];
-			$siteUrl	= url::base("site/edit/".$row['siteID']);
+			$site		= $row['siteName']?:"Pi1M Main Landing Page";
+			$siteUrl	= $row['siteName']?url::base("site/edit/".$row['siteID']):"#";
 			$detailUrl	= url::base("site/messageView/$refNo");
 			$date		= date("d F Y, g:i A",strtotime($row['messageCreatedDate']));
 			$category	= $categoryNameR[$row['siteMessageCategory']];	

@@ -14,6 +14,12 @@ class Message
 		return $no?$catNameR[$no]:$catNameR;
 	}
 
+	public function getSupportEmail()
+	{
+		$supportEmail	= "support@celcom1cbc.com";
+		return $supportEmail;
+	}
+
 	public function getPaginatedMessage($siteID = null,$currentPage,$urlFormat = false)
 	{
 		db::from("site_message");
@@ -45,10 +51,18 @@ class Message
 		return db::get()->row();
 	}
 
-	public function createPublicMessage($siteID,$data)
+	public function createPublicMessage($siteID = null,$data)
 	{
-		## get site Email.
-		$siteEmail	= db::select("siteInfoEmail")->where("siteID",$siteID)->get("site_info")->row("siteInfoEmail");
+		## get site Email by site.
+		if($siteID)
+		{
+			$siteEmail	= db::select("siteInfoEmail")->where("siteID",$siteID)->get("site_info")->row("siteInfoEmail");	
+		}
+		## no siteID was given, use support email address. 
+		else
+		{
+			$siteEmail	= $this->getSupportEmail();
+		}
 
 		## create message.
 		db::insert("message",Array(
@@ -96,20 +110,23 @@ class Message
 			$emailList[]	= $siteEmail;
 		}
 
-		## get both manager email.
-		$res_manager	= model::load("site/manager")->getManagersBySite($siteID);
-
-		## if got record.
-		if($res_manager)
+		if($siteID)
 		{
-			foreach($res_manager as $row)
-			{
-				$emailList[]	= $row['userEmail'];
-			}
-		}
+			## get both manager email.
+			$res_manager	= model::load("site/manager")->getManagersBySite($siteID);
 
-		## sender.
-		$emailList[]	= $data['contactEmail'];
+			## if got record.
+			if($res_manager)
+			{
+				foreach($res_manager as $row)
+				{
+					$emailList[]	= $row['userEmail'];
+				}
+			}
+
+			## sender.
+			$emailList[]	= $data['contactEmail'];
+		}
 
 		## mail, if there're an address.
 		if(count($emailList) > 0)

@@ -21,6 +21,30 @@ Class Controller_Main
 		$this->template	= false;
 		$data['categoryNameR']	= model::load("site/message")->getCategoryName();
 
+		if(form::submitted())
+		{
+			## follow main@contact rules.
+			$rules	= Array(
+					"siteMessageCategory"=>"required:Sila pilih kategori.",
+					"contactName,contactPhoneNo,contactEmail,messageSubject,messageContent"=>"required:Sila isikan ruangan ini.",
+					"contactEmail"=>"email:Sila masukkan format alamat emel yang betul.",
+					"contactPhoneNo"=>Array(
+								"callback"=>Array(is_numeric(str_replace("-","",input::get("contactPhoneNo"))),"Sila masukkan nombor telefon yang betul.")
+										)
+							);
+
+			if($error = input::validate($rules))
+			{
+				input::repopulate();
+				redirect::withFlash(model::load("template/services")->wrap("input-error",$error));
+				redirect::to("","<span id='mailmessage' class='msgbox error'>Maklumat tidak lengkap</span>","error");
+			}
+
+			## success and, createPublicMessage nonregarded to any site.
+			$referenceNo	= model::load("site/message")->createPublicMessage(null,input::get());
+			redirect::to("","<span id='mailmessage' class='msgbox success'>Mesej anda telah berjaya dihantar. No. Rujukan : $referenceNo</span>");
+		}
+
 		view::render("main/landing_contact",$data);
 	}
 
