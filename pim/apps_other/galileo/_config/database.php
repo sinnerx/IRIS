@@ -44,6 +44,13 @@ $config['domain']['pro.celcom1cbc.com'][]	= Array(
 				"db_pass"=>"fulkrum@123"
 									);
 
+$config['domain']['www.celcom1cbc.com'][]	= Array(
+				"db_host"=>"ca-dbi-01.cegjaqlxeaxp.ap-southeast-1.rds.amazonaws.com",
+				"db_name"=>"pi1m_pro_01",
+				"db_user"=>"fulkrum",
+				"db_pass"=>"fulkrum@123"
+									);
+
 return $config;
 
 ?>

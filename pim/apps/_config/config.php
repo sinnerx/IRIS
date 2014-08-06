@@ -36,6 +36,13 @@ $config['domain']['celcom1cbc.com'][]	= Array(
 						"supportEmail"=>"support@celcom1cbc.com"
 										);
 
+$config['domain']['www.celcom1cbc.com'][]	= Array(
+						"base_url:backend"=>"www.celcom1cbc.com/dashboard",
+						"base_url:frontend"=>"www.celcom1cbc.com",
+						"asset_url"=>"www.celcom1cbc.com/pim/assets",
+						"supportEmail"=>"support@celcom1cbc.com"
+										);
+
 $config['domain']['p1m.gaia.my'][]	= Array(
 						"base_url:backend"=>"p1m.gaia.my/dashboard",
 						"base_url:frontend"=>"p1m.gaia.my",

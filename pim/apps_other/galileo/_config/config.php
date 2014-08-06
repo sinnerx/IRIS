@@ -25,6 +25,10 @@ $config['domain']['pro.celcom1cbc.com'][]	= Array(
 $config['domain']['celcom1cbc.com'][]	= Array(
 					"asset_url"=>"celcom1cbc.com/pim/assets"
 								);
+
+$config['domain']['www.celcom1cbc.com'][]	= Array(
+					"asset_url"=>"www.celcom1cbc.com/pim/assets"
+								);
 ## production conf end.
 return $config;
 
