@@ -2,3 +2,4 @@ RewriteEngine on
 
 RewriteCond %{REQUEST_URI} !/pim/assets
 RewriteRule ^/? index.php [L]
+Options -Indexes
