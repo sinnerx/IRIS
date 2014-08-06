@@ -41,8 +41,8 @@ class Services
 		if(!$sizeSets)
 			return false;
 
-		$width		= $sizeSets['w'];
-		$height		= $sizeSets['h'];
+		$width		= $sizeSets['w']?:null;
+		$height		= $sizeSets['h']?:null;
 
 		if($type == "site")
 		{
@@ -57,8 +57,10 @@ class Services
 
 		#$cachePathR	= explode("\\",$cachePath);
 		#$newPhotoName	= array_pop($cachePathR);
+		$widthname		= !$width?"":"w$width";
+		$heightname		= !$height?"":"h$height";
 
-		$cachePath	= $this->reCreatePhotoName($cachePath,"-w$width"."h$height");
+		$cachePath	= $this->reCreatePhotoName($cachePath,"-$widthname"."$heightname");
 
 		## check if image already exists in cache, just return the cached one.
 		if(file_exists(path::asset($cachePath)))
@@ -114,6 +116,14 @@ class Services
 							"w"=>700,
 							"h"=>400
 								),
+				"page"=>Array(
+							"w"=>660,
+							"h"=>1000
+							),
+				"page_small"=>Array(
+							"w"=>200,
+							"h"=>500
+							)
 						);
 
 		return !$name?$setsR:$setsR[$name];

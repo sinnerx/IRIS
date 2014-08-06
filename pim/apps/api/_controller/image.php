@@ -1,7 +1,7 @@
 <?php
 class Controller_Image
 {
-	public function get($year,$month,$day,$name,$size)
+	public function get($year,$month = null,$day = null,$name = null,$size = null)
 	{
 		## get trailing.
 		#$trail	= explode("/",request::named("trail"));
@@ -18,8 +18,18 @@ class Controller_Image
 			return false;
 		}*/
 
-		## get image.
-		$photoName	= "$year/$month/$day/$name";
+		## page photo.
+		if(!$day)
+		{
+			$size		= $month;
+			$photoName	= $year;
+		}
+		## site photo.
+		else
+		{
+			## get image.
+			$photoName	= "$year/$month/$day/$name";
+		}
 		$img	= model::load("image/services")->getResizedPhoto($photoName,$size);
 
 		if(!$img)

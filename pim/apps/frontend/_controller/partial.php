@@ -85,10 +85,12 @@ class Controller_Partial
 		$data['row_site']	= $this->row_site;
 		$row_latestalbum	=model::load("image/album")->getSiteLatestAlbum($siteID);
 
-		$data['latestPhotoUrl']	=  model::load("image/services")->getPhotoUrl($row_latestalbum['albumCoverImageName']);
+		#$data['latestPhotoUrl']	=  model::load("image/services")->getPhotoUrl($row_latestalbum['albumCoverImageName']);
+		$data['latestPhotoUrl']	= model::load("api/image")->buildPhotoUrl($row_latestalbum['albumCoverImageName'],"small");
 		if($row_latestalbum)
 		{
 			$data['latestPhotoLink']	= model::load("helper")->buildDateBasedUrl($row_latestalbum['siteAlbumSlug'],$row_latestalbum['albumCreatedDate'],url::base("{site-slug}/galeri"));
+
 		}
 		else
 		{

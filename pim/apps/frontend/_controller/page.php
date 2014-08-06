@@ -45,6 +45,8 @@ Class Controller_Page
 		$data['pageImageUrl']	= $photoName?url::asset("frontend/images/photo/$photoName"):false;*/
 		$data['pageImageUrl']	= $row['pagePhoto']?url::asset("frontend/images/photo/$row[pagePhoto]"):false;
 
+		$data['pageImageUrl']	= model::load("api/image")->buildPhotoUrl($row['pagePhoto'],"page");
+
 		$data['title']		= $row_page['pageType'] == 1?$defaultR[$row_page['pageDefaultType']]['pageDefaultName']:$row_page['pageName'];
 
 		view::render("page/index",$data);

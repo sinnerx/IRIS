@@ -69,6 +69,7 @@ Class Controller_Main
 		$row				= db::get()->row();
 		#$data['photoName']	= model::load("page/page")->getPagePhotoUrl($row['pageID']); migration plan. now uses column pagePhotos
 		$data['photoName']	= $row['pagePhoto'];
+		$data['photoName']	= model::load("api/image")->buildPhotoUrl($row['pagePhoto'],"page_small");
 
 		## repair page text to 90 words.
 		$data['pageText'] = $row['pageTextExcerpt'] == ""?model::load("helper")->purifyHTML(stripslashes($row['pageText']),90):nl2br($row['pageTextExcerpt']);

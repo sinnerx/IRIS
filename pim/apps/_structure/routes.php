@@ -115,6 +115,7 @@ $routes[]	= Array("dashboard/[:controller]/[**:method]",function($param)
 
 ### API Routes ####
 $routes[]	= Array("api/photo/[:year]/[:month]/[:day]/[:photo-name]/[:size]","controller=api:image@get","{year},{month},{day},{photo-name},{size}");
+$routes[]	= Array("api/photo/[:photo-name]/[:size]","controller=api:image@get","{photo-name},{size}"); ## page photo api.
 
 ### Frontend Route ####
 
