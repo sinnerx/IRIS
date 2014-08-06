@@ -83,10 +83,26 @@ class Services
 		$cachePathS	= path::asset(implode("/",$cachePathR));
 
 		if(!is_dir($cachePathS))
-			mkdir($cachePathS,0755,true);
+		{
+			$mkdir = mkdir($cachePathS,0775,true);
+
+			## failed mkdir.
+			if(!$mkdir)
+			{
+				echo "Error getting image : please inform support. $cachePathS;";die;
+			}
+		}
+
 
 		## save the cache.
-		$img->save(path::asset($cachePath));
+		try{
+			$img->save(path::asset($cachePath));
+		}
+		catch(Exception $e)
+		{
+			echo "Error retrieving image : ".$e->getMessage();
+			die;
+		}
 
 		return $img;
 	}

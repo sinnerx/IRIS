@@ -100,7 +100,14 @@ class Photo extends Services
 
 		## create path if not exists.
 		if(!is_dir($this->getPhotoPath($path)))
-			mkdir($this->getPhotoPath($path),0755,true);
+		{
+			$mkdir = mkdir($this->getPhotoPath($path),0775,true);
+			if(!$mkdir)
+			{
+				echo "Permission problem. please contact support through www.celcom1cbc.com";
+				die;
+			}
+		}
 
 		$finalname	= $path."/".$filename;
 
