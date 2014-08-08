@@ -78,6 +78,11 @@ Class Controller_Main
 		view::render("main/index",$data);
 	}
 
+	public function maintenance()
+	{
+		echo "Sorry we're currently having an urgent maintainance. Login and registration will temporarily be disabled.";die;
+	}
+
 	public function login()
 	{
 		if(form::submitted())

@@ -185,7 +185,7 @@ class User
 					"userEmail"=>$data['userEmail'],
 					"userLevel"=>$level,
 					"userStatus"=>$data['userStatus']?$data['userStatus']:1,
-					"userPremiumStatus"=>$data['userPremiumStatus']?$data['userPremiumStatus']:0,
+					#"userPremiumStatus"=>$data['userPremiumStatus']?$data['userPremiumStatus']:0,
 					"userCreatedDate"=>now(),
 					"userCreatedUser"=>session::get("userID")
 							);
