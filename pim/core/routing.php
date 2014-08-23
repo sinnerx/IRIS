@@ -5,6 +5,13 @@ apps::run(ROOT_FOLDER,function($router)
 {
 	$router->add("domain:all",function($param) use($router)
 	{
+
+		## check announcement today.
+		if($text = model\server::hasAnnouncement(date("Y-m-d")))
+		{
+			model\server::setAnnouncement($text);
+		}
+
 		## db connection.
 		db::connect(apps::config('db_host'),apps::config('db_user'),apps::config('db_pass'),apps::config("db_name"));
 

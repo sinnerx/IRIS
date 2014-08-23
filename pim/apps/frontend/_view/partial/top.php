@@ -94,7 +94,12 @@
 	</div>	
 </div> <!-- Top Header End -->
 <?php if(authData("user.memberStatus") == "inactive"):?>
-<div class='top-message in-active'>
+<div class='top-message in-active' style="margin-bottom:5px;">
 Akaun anda masih belum aktif. Sila buat bayaran RM <?php echo model::load("config")->get("configMemberFee",5);?> kepada pengurus laman di kawasan anda. [<?php echo authData("site.siteName");?>]
+</div>
+<?php endif;?>
+<?php if($msg = model\server::getAnnouncement()):?>
+<div class='top-message in-active'>
+<?php echo $msg;?>
 </div>
 <?php endif;?>
