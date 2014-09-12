@@ -151,6 +151,32 @@ class Controller_Task
 			model::load("site/menu")->updateTopMenu($row['siteID'],$newMenuR);
 		}
 	}
+
+	## migrate temporary user to user table.
+	public function migrateUser($offset)
+	{
+		set_time_limit(4600);
+
+		$res_user	= db::limit(10000,$offset)->get("temp_user")->result();
+		$siteMember	= model::load("site/member");
+
+		$microtime	= microtime(true);
+		foreach($res_user as $row)
+		{
+			$ic	= $row['temp_username'];
+
+			## check user.
+			$check	= db::select("userID")->where("userIC",$ic)->get("user")->row();
+
+			if($check)
+				continue;
+
+			
+			$siteMember->registerByImport($row['temp_CBC_Site'],$ic,$row);
+		}
+
+		echo "Done. Took ".microtime(true)-$microtime."s";
+	}
 }
 
 
