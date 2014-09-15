@@ -494,3 +494,84 @@ temp_user:
 	temp_Gender [varchar]
 	temp_mobile [varchar]
 	temp_cbc_siteRight [varchar]
+
+## module : forum.
+thread:
+	threadID [int]
+	siteID [int]
+	threadCategoryID [int]
+	threadTitle [varchar]
+	threadDescription [text]
+	threadCreatedDate [datetime]
+	threadCreatedUser [int]
+
+thread_post:
+	threadPostID [int]
+	threadID [int]
+	threadPostTitle [varchar]
+	threadPostBody [text]
+	threadPostCreatedUser [int]
+	threadPostCreatedDate [datetime]
+
+thread_category:
+	threadCategoryID [int]
+	threadCategoryLevel [int]		## 1 - first level, 2 = second level.
+	threadCategoryTitle [varchar]
+	threadCategoryDescription [text]
+	threadCategoryCreatedUser [int]
+	threadCategoryCreatedDate [datetime]
+
+## module : video
+video:
+	videoID [int]
+	videoAlbumID [int]
+	videoType [int]			# 1 = youtube
+	videoRefID [varchar]
+	videoName [varchar]
+	videoSlug [varchar]
+	videoOriginalSlug [varchar]
+	videoCreatedDate [datetime]
+	videoCreatedUser [int]
+
+## album for video
+video_album:
+	videoAlbumID [int]
+	siteID [int]
+	videoAlbumName [varchar]
+	videoAlbumSlug [varchar]
+	videoAlbumOriginalSlug [varchar]
+	videoAlbumDescription [text]
+	videoAlbumThumbnail [varchar]
+	videoAlbumCreatedDate [datetime]
+	videoAlbumCreatedUser [int]
+
+## module : file sharing.
+file:
+	fileID [int]
+	filePath [varchar]
+	fileFolderID [int]
+	filePrivacy [int]		## 1 = private, 2 = public
+	fileName [varchar]
+	fileSlug [varchar]
+	fileOriginalSlug [varchar]
+	fileType [varchar]
+	fileSize [int]
+	fileDescription [text]
+	fileCreatedDate [datetime]
+	fileCreatedUser [int]
+
+file_folder:
+	fileFolderID [int]
+	siteID [int]
+	fileFolderPrivacy [int]	## 1 = private, 2 = public
+	fileFolderName [varchar]
+	fileFolderCreatedDate [datetime]
+	fileFolderCreatedUser [int]
+
+comment:
+	commentID [int]
+	commentType [int]
+	commentRefID [int]
+	userID [int]
+	commentBody [text]
+	commentCreatedDate [datetime]

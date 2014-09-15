@@ -23,6 +23,7 @@ class Menu extends Data
 					"Pages"=>"page/index",
 					"Blog" =>Array("List of Articles"=>"site/article","Add Article"=>"site/addArticle"),
 					"Albums"=>Array("Overview"=>Array("image/album","image/albumPhotos")),
+					"Video Gallery"=>Array("Overview"=>"video/album"),
 					"Activities"=>Array(
 									"Overview"=>Array("activity/overview","activity/add","activity/view","activity/edit"),
 									"Events"=>"activity/event",
@@ -30,8 +31,9 @@ class Menu extends Data
 									"Others"=>"activity/other"
 										),
 					"Member's Management"=>Array(
-									"List of Member"=>Array("member/lists")
-												)
+									"List of Member"=>Array("member/lists"),
+									"Change Member Password"=>Array("member/changePassword")
+												),
 							);
 
 		$menu['cl']	= Array(
