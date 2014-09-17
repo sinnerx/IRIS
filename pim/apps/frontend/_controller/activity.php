@@ -140,7 +140,7 @@ class Controller_Activity
 			$data['participationFlagMessage'] = "Pengguna selain dari ahli pi1m tidak dapat membuat penyertaan.";
 		}
 		# a training, and participation have reached maxpax (if only not limited)
-		else if($data['activityType'] == 2 && $data['trainingMaxPax'] != 0 && $data['trainingMaxPax'] >= count($data['participantList']))
+		else if($data['activityType'] == 2 && $data['trainingMaxPax'] != 0 && $data['trainingMaxPax'] <= count($data['participantList']))
 		{
 			$data['participationFlagMessage']	= "Latihan ini telahpun penuh. Tiada penyertaan lagi boleh dibuat.";
 		}
