@@ -528,8 +528,6 @@ video:
 	videoType [int]			# 1 = youtube
 	videoRefID [varchar]
 	videoName [varchar]
-	videoSlug [varchar]
-	videoOriginalSlug [varchar]
 	videoCreatedDate [datetime]
 	videoCreatedUser [int]
 
