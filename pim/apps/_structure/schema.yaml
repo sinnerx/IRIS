@@ -528,6 +528,7 @@ video:
 	videoType [int]			# 1 = youtube
 	videoRefID [varchar]
 	videoName [varchar]
+	videoApprovalStatus [int]	# 0 = pending, 1 = approve , 2 = disapprove
 	videoCreatedDate [datetime]
 	videoCreatedUser [int]
 
