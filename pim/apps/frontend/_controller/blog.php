@@ -32,6 +32,7 @@ Class Controller_Blog
 			$where['articleID IN (SELECT articleID FROM article_tag WHERE articleTagName = ?)'] = Array($val);
 		}
 
+		$type = $type == "category"?"kategori":$type;
 		$urlFormat	= url::base("{site-slug}/blog/$type/$val/?page={page}");
 
 		// view::render("blog/article",$data);

@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "5128a027babef855aab919999b9a15da",
+    "hash": "d1047f136b8efbe4764fd423ab6ad480",
     "packages": [
         {
             "name": "abeautifulsite/simpleimage",
@@ -100,12 +100,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPMailer/PHPMailer.git",
-                "reference": "1522094b825f37a7c7235d863555f3d12e01f677"
+                "reference": "e43b2649175d076e01a695c3897c547d89ca05ed"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPMailer/PHPMailer/zipball/1522094b825f37a7c7235d863555f3d12e01f677",
-                "reference": "1522094b825f37a7c7235d863555f3d12e01f677",
+                "url": "https://api.github.com/repos/PHPMailer/PHPMailer/zipball/e43b2649175d076e01a695c3897c547d89ca05ed",
+                "reference": "e43b2649175d076e01a695c3897c547d89ca05ed",
                 "shasum": ""
             },
             "require": {
@@ -145,7 +145,64 @@
                 }
             ],
             "description": "PHPMailer is a full-featured email creation and transfer class for PHP",
-            "time": "2014-07-09 21:56:40"
+            "time": "2014-09-11 11:06:54"
+        },
+        {
+            "name": "phpoffice/phpexcel",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/PHPOffice/PHPExcel.git",
+                "reference": "e69a5e4d0ffa7fb6f171859e0a04346e580df30b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/PHPOffice/PHPExcel/zipball/e69a5e4d0ffa7fb6f171859e0a04346e580df30b",
+                "reference": "e69a5e4d0ffa7fb6f171859e0a04346e580df30b",
+                "shasum": ""
+            },
+            "require": {
+                "ext-xml": "*",
+                "ext-xmlwriter": "*",
+                "php": ">=5.2.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "PHPExcel": "Classes/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "LGPL"
+            ],
+            "authors": [
+                {
+                    "name": "Maarten Balliauw",
+                    "homepage": "http://blog.maartenballiauw.be"
+                },
+                {
+                    "name": "Mark Baker"
+                },
+                {
+                    "name": "Franck Lefevre",
+                    "homepage": "http://blog.rootslabs.net"
+                },
+                {
+                    "name": "Erik Tilt"
+                }
+            ],
+            "description": "PHPExcel - OpenXML - Read, Create and Write Spreadsheet documents in PHP - Spreadsheet engine",
+            "homepage": "http://phpexcel.codeplex.com",
+            "keywords": [
+                "OpenXML",
+                "excel",
+                "php",
+                "spreadsheet",
+                "xls",
+                "xlsx"
+            ],
+            "time": "2014-03-02 15:22:49"
         }
     ],
     "packages-dev": [
@@ -157,7 +214,8 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "phpmailer/phpmailer": 20,
-        "parsecsv/php-parsecsv": 20
+        "parsecsv/php-parsecsv": 20,
+        "phpoffice/phpexcel": 20
     },
     "platform": [
 
