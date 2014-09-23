@@ -15,7 +15,7 @@ var report = new function()
 	Monthly Activities
 </h3>
 <div class='well well-sm'>
-	Generate C1BC monthly activities report.
+	Generate Pi1M monthly activities report.
 </div>
 <div class='row'>
 	<div class='col-sm-12'>
