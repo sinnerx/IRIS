@@ -30,7 +30,7 @@ class Menu extends Data
 									"Training"=>"activity/training",
 									"Others"=>"activity/other"
 										),
-					"Forum"=>Array("Forum"=>"forum/index"),
+					"Forum"=>Array("Forum Management"=>"forum/index"),
 					"Member's Management"=>Array(
 									"List of Member"=>Array("member/lists"),
 									"Change Member Password"=>Array("member/changePassword")

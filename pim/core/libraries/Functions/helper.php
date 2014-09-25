@@ -138,10 +138,27 @@ function replace_param($name)
 	return $name;
 }
 
-function dateRangeViewer($date,$type = 1)
+function dateRangeViewer($date,$type = 1,$current_lang = "en")
 {
 	$currT	= strtotime(date("Y-m-d H:i:s"));
 	$theT	= strtotime($date);
+
+
+	$lang["en"]	= Array(
+			"hours ago",
+			"minutes ago",
+			"days",
+			"hours"
+					);
+
+	$lang["my"]	= Array(
+			"Jam Lalu",
+			"Minit Lalu",
+			"Hari",
+			"Jam"
+						);
+
+	$lang	= $lang[$current_lang];
 
 	switch($type)
 	{
@@ -157,17 +174,17 @@ function dateRangeViewer($date,$type = 1)
 			{
 				if($hour >= 1)
 				{
-				return "$hour hours ago";
+				return "$hour ".$lang[0];
 				}
 				else
 				{
-				return "$mins minutes ago";
+					return "$mins ".$lang[1];
 				}
 			}
 			else
 			{
 				$sanityDay	= floor($day);
-				return "$sanityDay days, $hour hours, $mins minutes ago";
+				return "$sanityDay $lang[2], $hour $lang[3], $mins $lang[0]";
 			}
 		break;
 	}

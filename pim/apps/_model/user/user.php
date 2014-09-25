@@ -17,6 +17,14 @@ class User
 		return db::get()->result();
 	}
 
+	public function getUsersByID($userID)
+	{
+		db::where("user.userID",$userID);
+		db::join("user_profile","user_profile.userID = user.userID");
+
+		return db::get("user")->result("userID");
+	}
+
 	## abstract get of single record.
 	public function get($userID,$cols = null)
 	{
@@ -272,6 +280,14 @@ class User
 		->join("user_profile","user.userID = user_profile.userID");
 
 		return db::get()->row($column);
+	}
+
+	## change password by userIC.
+	public function changePasswordByIC($userIC,$password)
+	{
+		db::where("userIC",$userIC)->update("user",Array(
+							"userPassword"=>model::load("helper")->hashPassword($password)
+														));
 	}
 }
 

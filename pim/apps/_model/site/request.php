@@ -235,7 +235,9 @@ class Request extends request_correction
 				"article.add"=>"New Article",
 				"article.update"=>"Article Update",
 				"activity.add"=>"New Activity",
-				"activity.update"=>"Activity Update"
+				"activity.update"=>"Activity Update",
+				"video.add"=>"New Video",
+				"forum_category.add"=>"New Forum Category"
 						);
 
 		return !$id?$typeR:$typeR[$id];
@@ -303,6 +305,13 @@ class Request extends request_correction
 				db::join("event","activityType = 1 AND activity.activityID = event.activityID");
 				db::join("training","activityType = 2 AND activity.activityID = training.activityID");
 			break;
+			case "video":
+				db::join("video","video.videoID = siteRequestRefID");
+				db::join("video_album","video.videoAlbumID = video_album.videoAlbumID");
+			break;
+			case "forum_category":
+				db::join("forum_category","forum_category.forumCategoryID = siteRequestRefID");
+			break;
 		}
 
 		return db::get()->row();
@@ -356,6 +365,16 @@ class Request extends request_correction
 			case "activity.update":
 			model::load("activity/activity")->_updateActivity($row['activityID'],$row['activityType'],$data);
 			break;
+
+			## video
+			case "video.add":
+			db::where("videoID",$row['siteRequestRefID'])->update("video",Array("videoApprovalStatus"=>1));
+			break;
+
+			## forum
+			case "forum_category.add":
+			db::where("forumCategoryID",$row['siteRequestRefID'])->update("forum_category",Array("forumCategoryApprovalStatus"=>1));
+			break;
 		}
 	}
 
@@ -377,6 +396,12 @@ class Request extends request_correction
 			break;
 			case "activity.add":
 			db::where("activityID",$row['activityID'])->update("activity",Array("activityApprovalStatus"=>2));
+			break;
+			case "video.add":
+			db::where("videoID",$row['videoID'])->update("video",Array("videoApprovalStatus"=>2));
+			break;
+			case "forum_category.add":
+			db::where('forumCategoryID',$row['forumCategoryID'])->update("forum_category",Array("forumCategoryApprovalStatus"=>2));
 			break;
 		}
 	}
