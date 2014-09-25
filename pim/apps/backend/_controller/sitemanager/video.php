@@ -76,8 +76,9 @@ Class Controller_Video
 
 	public function updateVideo($videoID)
 	{
+		$siteID	= model::load("access/auth")->getAuthData("site","siteID");
 		$data	= input::get();
-		model::load("video/album")->updateVideo($videoID,$data);
+		model::load("video/album")->updateVideo($videoID,$data,$siteID);
 		$response = Array(nl2br($data['videoName']),$data['videoRefID'],$data['videoType'],$videoID);
 
 		return response::json($response);

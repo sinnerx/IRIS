@@ -191,6 +191,10 @@ $routes['forum-thread']		= Array("[:site-slug]/forum/[:category-slug]/[:thread-i
 ## faq
 $routes['main-faq']			= Array("[:site-slug]/soalan-lazim","controller=main@faq");
 
+## video gallery
+$routes[] = Array("[:site-slug]/video","controller=video@album"); 
+$routes[] = Array("[:site-slug]/video/[:video-slug]","controller=video@video_gallery","{video-slug}"); 
+
 ## site page.
 $routes[]	= Array("[:site-slug]/[**:trail]","controller=page@index");
 ########################

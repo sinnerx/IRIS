@@ -138,7 +138,7 @@ Overview of your video albums. You can <a href='javascript:album.addForm.show();
 						</div>
 						<div onclick='album.showDetail(<?php echo $row['videoAlbumID'];?>);'>
 						<?php $data = model::load("video/album")->getVideoAlbumCover($row['videoAlbumID']); ?>
-						<img src='<?php if($data){ ?>http://img.youtube.com/vi/<?php echo $data['videoRefID'];?>/0.jpg<?php }else{ ?>http://localhost/digitalgaia/iris/pim/assets/frontend/images/noimage.png<?php } ?>' width='100%' />
+						<img src='<?php echo model::load("video/album")->buildVideoUrl($data['videoType'],$data['videoRefID']); ?>' width='100%' />
 						</div>
 					</section>
 				</div>

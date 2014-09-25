@@ -27,10 +27,11 @@ class album
 	}
 
 	# alter same slug album.
-	public function slugChecker($slug,$siteID)
+	public function slugChecker($slug,$siteID,$videoAlbumID)
 	{
 		db::from("video_album");
 		db::where("videoAlbumOriginalSlug",$slug);
+		db::where("videoAlbumID != ?",Array($videoAlbumID));
 		db::where("siteID",$siteID);
 		
 		if($result=db::get()->result())
@@ -42,10 +43,11 @@ class album
 	}
 
 	# select videos album by site.
-	public function getVideoAlbums($siteID)
+	public function getVideoAlbums($siteID,$frontend=0)
 	{
 		db::from("video_album");
 		db::where("siteID",$siteID);
+		if($frontend == 1){db::where("siteID",$siteID);}
 
 		return db::get()->result();
 	}
@@ -59,11 +61,36 @@ class album
 		return db::get("video_album")->row();
 	}
 
-	# get list of album(s)
+	# select one video album by slug.
+	public function getOneVideoAlbumBySlug($slug)
+	{
+		db::from("video_album");
+		db::where("videoAlbumSlug",$slug);
+
+		return db::get("video_album")->row();
+	}
+
+	# get list of album(s) by albumID
 	public function getVideos($videoAlbumID,$paginationConf = null)
 	{
 		db::from("video");
 		db::where("videoAlbumID",$videoAlbumID);
+		db::order_by("videoCreatedDate","desc");
+
+		return db::get()->result();
+	}
+
+	# get list of album(s) by slug
+	public function getVideosBySlug($slug,$paginationConf = null)
+	{
+		db::from("video_album");
+		db::where("videoAlbumSlug",$slug);
+
+		$album = db::get("video_album")->row();
+
+		db::from("video");
+		db::where("videoAlbumID",$album['videoAlbumID']);
+		db::where("videoApprovalStatus",1);
 		db::order_by("videoCreatedDate","desc");
 
 		return db::get()->result();
@@ -76,7 +103,7 @@ class album
 				"videoAlbumID"=>$videoAlbumID,
 				"videoType"=>$data['videoType'],
 				"videoRefID"=>$data['videoRefID'],
-				"videoName"=>$data['videoName'],
+				"videoName"=>ucfirst($data['videoName']),
 				"videoApprovalStatus"=>0,
 				"videoCreatedDate"=>now(),
 				"videoCreatedUser"=>session::get("userID")
@@ -90,32 +117,48 @@ class album
 		model::load("site/request")->create('video.add', $siteID, $videoID, Array());
 	}
 
-	public function updateVideo($videoID,$data)
+	public function updateVideo($videoID,$data,$siteID)
 	{
-		db::where("videoID",$videoID);
-		db::update("video",Array(
+		$data = Array(
 						"videoName"=>$data['videoName'],
 						"videoType"=>$data['videoType'],
 						"videoRefID"=>$data['videoRefID']
-								));
+								);
+
+		if(model::load("site/request")->checkRequest("video.add",$siteID,$videoID))
+		{
+			$this->_updateArticle($videoID,$data);
+		}
+		else
+		{
+			model::load("site/request")->create('video.update', $siteID, $videoID, $data);
+		}
+	}
+
+	private function _updateVideo($videoID,$data)
+	{
+		db::where("videoID",$videoID);
+		db::update("video",$data);
 	}
 
 	public function updateAlbum($videoAlbumID,$siteID,$data)
 	{
-		$albumSlug	= $this->slugChecker($data['videoAlbumName'],$siteID);
+		$originalSlug	= model::load("helper")->slugify($data['videoAlbumName']);
+		$albumSlug	= $this->slugChecker($originalSlug,$siteID,$videoAlbumID);
 		db::where("videoAlbumID",$videoAlbumID);
 		db::update("video_album",Array(
 						"videoAlbumName"=>$data['videoAlbumName'],
 						"videoAlbumDescription"=>$data['videoAlbumDescription'],
-						"videoAlbumOriginalSlug"=>$data['videoAlbumName'],
+						"videoAlbumOriginalSlug"=>$originalSlug,
 						"videoAlbumSlug"=>$albumSlug
 								));
 	}
 
-	public function getVideoAlbumCover($videoAlbumID)
+	public function getVideoAlbumCover($videoAlbumID,$frontend=0)
 	{
 		db::from("video");
 		db::where("videoAlbumID",$videoAlbumID);
+		if($frontend == 1){db::where("videoApprovalStatus",1);}
 		db::order_by("videoCreatedDate","desc");
 
 		return db::get("video")->row();
@@ -156,6 +199,32 @@ class album
 		{
 			return false;
 		}
+	}
+
+	public function buildVideoUrl($type = 1,$ref)
+	{
+		if($type == 1)
+		{
+			$url = "http://img.youtube.com/vi/".$ref."/0.jpg";
+		}
+		else
+		{
+			$url = "http://localhost/digitalgaia/iris/pim/assets/frontend/images/noimage.png";
+		}
+		return $url;
+	}
+
+	public function buildEmbedVideoUrl($type = 0,$ref = "")
+	{
+		if($type == 1)
+		{
+			$url = "http://www.youtube.com/embed/".$ref."?autoplay=1";
+		}
+		else if($type == 0)
+		{
+			$url = "http://localhost/digitalgaia/iris/pim/assets/frontend/images/noimage.png";
+		}
+		return $url;
 	}
 }
 

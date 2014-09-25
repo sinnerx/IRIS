@@ -32,6 +32,8 @@ var album	= new function()
 	{
 		var desc = $("#albumDescription_editor #videoAlbumDescription").val();
 		var name = $("#albumDescription_editor #videoAlbumName").val();
+		name = name[0].toUpperCase() + name.substr(1);
+		
 		var data = {videoAlbumDescription:desc,videoAlbumName:name};
 		$.ajax({type:"POST",data:data,url:pim.base_url+"video/updateAlbum/"+this.albumID}).done(function(desc)
 		{
@@ -418,7 +420,7 @@ var album	= new function()
 	<a href='<?php echo url::base("image/album");?>'>Video Album</a> : <?php echo $row['albumName'];?>
 </h3>
 <div>
-	Added at, <?php echo date("j F Y, g:i A",strtotime($row['albumCreatedDate']));?>
+	Added at, <?php echo date("j F Y, g:i A",strtotime($row['videoAlbumCreatedDate']));?>
 </div>
 <div class='row'>
 	<div class='col-sm-6'>
@@ -480,13 +482,40 @@ var album	= new function()
 		<?php
 		foreach($res_video as $row_video):
 		?>
-			<div id='video<?php echo $row_video['videoID'];?>' data-sitevideoid='<?php echo $row_video['videoID'];?>' data-description="<?php echo $row_video['videoName'];?>" data-descriptionclean="<?php echo $row_video['videoName'];?>" data-refID="<?php echo $row_video['videoRefID'] ?>" data-videopath='http://img.youtube.com/vi/<?php echo $row_video['videoRefID'];?>/0.jpg' class='col-sm-3 album-video' style='height:150px;margin-bottom:25px;'>
+			<div id='video<?php echo $row_video['videoID'];?>' data-sitevideoid='<?php echo $row_video['videoID'];?>' data-description="<?php echo $row_video['videoName'];?>" data-descriptionclean="<?php echo $row_video['videoName'];?>" data-refID="<?php echo $row_video['videoRefID'] ?>" data-videopath='<?php echo model::load("video/album")->buildVideoUrl($row_video['videoType'],$row_video['videoRefID']); ?>' class='col-sm-3 album-video' style='height:150px;margin-bottom:25px;<?php if($row_video['videoApprovalStatus'] == 2){ ?>opacity:0.4;<?php } ?>'>
 			<section class='panel panel-default'>
+			<style type="text/css">
+			.pending{
+				color:grey;
+				float:left;
+				position:fixed;
+			}
+			.pending:hover{
+				color:grey;
+			}
+			.approved{
+				color:green;
+				float:left;
+				position:fixed;
+			}
+			.approved:hover{
+				color:green;
+			}
+			.disapproved{
+				color:red;
+				float:left;
+				position:fixed;
+			}
+			.disapproved:hover{
+				color:red;
+			}
+			</style>
+					<a class='fa fa-stop <?php if($row_video['videoApprovalStatus'] == 0){ ?>pending<?php }else if($row_video['videoApprovalStatus'] == 1){ ?>approved<?php }else if($row_video['videoApprovalStatus'] == 2){ ?>disapproved<?php } ?>'></a>
 				<div class='video-panel'>
-					<a href='javascript:album.deleteVideo(<?php echo $row_video['videoID'];?>);' class='i i-cross2 delete-button'></a>
+					<a <?php if($row_video['videoApprovalStatus'] != 2){ ?>href='javascript:album.deleteVideo(<?php echo $row_video['videoID'];?>);'<?php } ?> class='i i-cross2 delete-button'></a>
 				</div>
 			<div class='panel-body' onclick='album.showVideoDetail(<?php echo $row_video['videoID'];?>);' style='padding:3px;'>
-				<img style='width:100%;' id="imgCOver<?= $row_video['videoID'];?>" data-srcbig='http://img.youtube.com/vi/<?php echo $row_video['videoRefID'];?>/0.jpg' data-video="http://www.youtube.com/embed/<?php echo $row_video['videoRefID'];?>?autoplay=1" src='http://img.youtube.com/vi/<?php echo $row_video['videoRefID'];?>/0.jpg' />
+				<img style='width:100%;' id="imgCOver<?php echo $row_video['videoID'];?>" data-srcbig='<?php echo model::load("video/album")->buildVideoUrl($row_video['videoType'],$row_video['videoRefID']); ?>' data-video="<?php echo model::load("video/album")->buildEmbedVideoUrl($row_video['videoType'],$row_video['videoRefID']); ?>" src='<?php echo model::load("video/album")->buildVideoUrl($row_video['videoType'],$row_video['videoRefID']); ?>' />
 			</div>
 			</section>
 			</div>
@@ -506,14 +535,14 @@ var album	= new function()
 			Please select from the list of video.
 			</div>
 			<!-- /trigger ends -->
-			<img style='width:100%;' id='theCoverVideo' src='<?php if(count($res_video) > 0){ ?>http://img.youtube.com/vi/<?php echo $res_video[0]['videoRefID'];?>/0.jpg<?php }else{ ?>http://localhost/digitalgaia/iris/pim/assets/frontend/images/noimage.png<?php } ?>' />
+			<img style='width:100%;' id='theCoverVideo' src='<?php echo model::load("video/album")->buildVideoUrl($res_video[0]['videoType'],$res_video[0]['videoRefID']); ?>' />
 			<div class='album-description'>
 				<span id='albumDescription'><?php echo $row['videoAlbumName'];?></span>
 				<div id='albumDescription_editor'>
 					<label>Album Name</label>
-            	<input type="text" style="width: 100%;margin: 0 0 5px 0;" name="videoAlbumName" id="videoAlbumName" value="<?= $row['videoAlbumName'];?>" /><br/>
+            	<input type="text" style="width: 100%;margin: 0 0 5px 0;" name="videoAlbumName" id="videoAlbumName" value="<?php echo $row['videoAlbumName'];?>" /><br/>
 					<label>Album Description</label>
-				<textarea name="videoAlbumDescription" id="videoAlbumDescription"><?= $row['videoAlbumDescription'];?></textarea>
+				<textarea name="videoAlbumDescription" id="videoAlbumDescription"><?php echo $row['videoAlbumDescription'];?></textarea>
 				<div style="text-align:right;">
 					<input type='submit' class='btn btn-default' onclick='album.cancelEditDescription();' value='Cancel' /> <input type='submit' class='btn btn-primary' onclick='album.editDescription_submit();' value='Update Description' />
 				</div>
