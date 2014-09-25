@@ -564,13 +564,11 @@ Add an activity to your site. All new activities will not be published until the
 			<div class='col-sm-6'>
 				<div class='form-group' style="position:relative;">
 					<label>
-                    <div class="date-button btn btn-primary">
+                    <div href='<?php echo url::base("ajax/activity/datePicker");?>' data-toggle='ajaxModal' class="date-button btn btn-primary">
                     Date
-						<a href='<?php echo url::base("ajax/activity/datePicker");?>' data-toggle='ajaxModal' class='fa fa-calendar'></a>
+						<a href='javascript:void(0);' class='fa fa-calendar'></a>
 						<?php /*echo flash::data("activityDate");*/?>
                         </div>
-
-
 					</label>
 					<span style='text-align:right;position:absolute;right:0px;'>
 						<?php echo form::select("activityAllDateAttendance",Array(1=>"All date required",2=>"Participant may choose date"),"style='padding:4px;border:1px solid #d2d2d2;'",null,"[Date obligation]");?>
