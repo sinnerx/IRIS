@@ -97,6 +97,11 @@ class Controller_Ajax_Request
 											"articlePublishedDate"=>"Published after"
 												);
 
+		$data['colNameR']['forum_category']	= Array(
+											"forumCategoryTitle"=>"Title",
+											"forumCategoryDescription"=>"Description"
+													);
+
 		## date list column.
 		$data['dateTimeListColumn']	= Array(
 							"activityStartDate",

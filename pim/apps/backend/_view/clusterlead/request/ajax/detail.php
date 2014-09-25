@@ -67,6 +67,14 @@
 	{
 		view::render("clusterlead/request/ajax/detail_article.add",Array("row"=>$row_request));
 	}
+	else if($type == "forum_category.add")
+	{
+		view::render("clusterlead/request/ajax/detail_forum_category.add",Array("row"=>$row_request));
+	}
+	else if($type == "video.add")
+	{
+		view::render("clusterlead/request/ajax/detail_video.add",Array("row"=>$row_request));
+	}
 	## other than new page. like page edit, site_info edit.
 	else
 	{
