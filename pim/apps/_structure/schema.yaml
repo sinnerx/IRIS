@@ -580,8 +580,10 @@ file_folder:
 
 comment:
 	commentID [int]
-	commentType [int]
-	commentRefID [int]
+	commentType [varchar]
 	userID [int]
+	commentRefID [int]
 	commentBody [text]
+	commentApprovalStatus [int]	## 0 = pending, 1 = approve, 2 = reject, 3 = deleted
 	commentCreatedDate [datetime]
+	commentUpdatedDate [datetime]
