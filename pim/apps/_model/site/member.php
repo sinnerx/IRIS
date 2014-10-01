@@ -3,6 +3,21 @@ namespace model\site;
 use db, model, pagination, session;
 class Member
 {
+	public function checkMember($siteID,$userIC)
+	{
+		$userCheck	= db::where("userID IN (SELECT userID FROM user WHERE userIC = ?)",Array($userIC));
+
+		if($userCheck)
+		{
+			return $userCheck;
+		}
+
+		## not-found. check at temporary_user
+		$tempCheck	= db::where("temp_username",$userIC)->get("temp_user")->row();
+
+		
+	}
+
 	public function getPaginatedList($siteID,$pgConf = null,$where = null)
 	{
 		if($where)

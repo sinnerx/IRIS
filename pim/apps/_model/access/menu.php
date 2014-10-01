@@ -30,7 +30,9 @@ class Menu extends Data
 									"Training"=>"activity/training",
 									"Others"=>"activity/other"
 										),
-					"Forum"=>Array("Forum Management"=>"forum/index"),
+					"Forum"=>Array(
+							"Forum Management"=>Array("forum/index","forum/addCategory","forum/updateCategory")
+							),
 					"Member's Management"=>Array(
 									"List of Member"=>Array("member/lists"),
 									"Change Member Password"=>Array("member/changePassword")
@@ -66,6 +68,9 @@ class Menu extends Data
 								"Parameters"=>Array("config/index"),
 								"Article Category"=>Array("article/category"),
 											),
+					"Forum"=>Array(
+								"Category"=>Array("forum/category","forum/addCategory","forum/updateCategory")
+									),
 					"Report"=>Array(
 							"Monthly Activities"=>"report/monthlyActivity",
 							"Master Listing"=>"report/masterListing"

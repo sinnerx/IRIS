@@ -38,33 +38,49 @@ echo model::load("template/frontend")->buildBreadCrumbs(Array(
 
 					<!-- POSTS -->
 			<div class="forum-post-comment">
-				<div class="forum-post-comment-count">KOMEN <span>(<?php echo count($res_post);?>)</span></div>
+				<div class="forum-post-comment-count">KOMEN <span>(<?php echo count($res_posts)-1;?>)</span></div>
 				<div class="forum-post-comment-content">
-				<?php if($res_post):?>
+				<?php if($res_posts):?>
 				<ul>
+					<?php
+					$no = 0;
+					foreach($res_posts as $row):
+					$no++;
+					if($no == 1)
+						continue;
+
+					$user	= $res_users[$row['forumThreadPostCreatedUser']];
+					$photoUrl	= model::load("image/services")->getPhotoUrl($user['userProfileAvatarPhoto'],"avatar_icon.jpg");
+					?>
 					<li class="clearfix">
-					<div class="forum-post-comment-avatar"> <img src="members_photo/1538817_10202447454481584_450404680_n.jpg" alt=""/> </div>
+					<div class="forum-post-comment-avatar"> <img src="<?php echo $photoUrl;?>" alt=""/> </div>
 					<div class="forum-post-comment-message">
-					<div class="forum-post-comment-info">Mohd Hafiz
+					<div class="forum-post-comment-info"><?php echo $user['userProfileFullName'];?>
 					<div class="comment-post-date"><i class="fa fa-clock-o"></i>  2 Jam Lalu</div></div>
-					Lorem ipsum dolor sit amet, maiores ornare ac fermentum, imperdiet ut vivamus a, nam lectus at nunc. Quam euismod sem, semper ut potenti pellentesque quisque. In eget sapien sed, sit duis vestibulum ultricies, placerat morbi amet vel, nullam in in lorem vel. In molestie elit dui dictum, praesent nascetur pulvinar sed.
+					<?php echo $row['forumThreadPostBody'];?>
 					</div>
 					</li>
+					<?php endforeach;?>
 				</ul>
 				<?php else:?>
 					<div class='no-comment'>Tiada komen lagi untuk topik ini.</div>
 				<?php endif;?>
 				<!-- NEW POSTS -->
 				<div class="forum-comment-form">
-					<div class="comment-user-avatar"></div>
-					<div class="comment-post-input">
-					<h3><?php echo authData("user.userProfileFullName");?></h3>
-					<div class="comment-text-input">
-					<div class="comment-text-input-arrow"></div>
-					<textarea placeholder='Taipkan komen anda di sini...'></textarea>
-					<input type="submit" value="Hantar" class="bttn-submit">
-					</div>
-					</div>
+					<form method='post'>
+						<?php 
+						$myavatar	= model::load("image/services")->getPhotoUrl(authData("user.userProfileAvatarPhoto"),"avatar_icon.jpg");
+						?>
+						<div class="comment-user-avatar" style="background:url('<?php echo $myavatar;?>');border-radius:100%;"></div>
+						<div class="comment-post-input">
+						<h3><?php echo authData("user.userProfileFullName");?></h3>
+						<div class="comment-text-input">
+						<div class="comment-text-input-arrow"></div>
+						<textarea placeholder='Taipkan komen anda di sini...' name='forumThreadPostBody'></textarea>
+						<input type="submit" value="Hantar" class="bttn-submit">
+						</div>
+						</div>
+					</form>
 				</div>
 				</div>
 			</div>

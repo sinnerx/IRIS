@@ -1,8 +1,8 @@
 <h3 class='m-b-xs text-black'>
-	Add Forum Category
+	Add General Category
 </h3>
 <div class='well well-sm'>
-	Add a new forum category.
+	Add a new general category for forum.
 </div>
 <?php echo flash::data();?>
 <div class='row'>

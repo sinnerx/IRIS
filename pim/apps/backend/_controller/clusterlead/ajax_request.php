@@ -99,7 +99,8 @@ class Controller_Ajax_Request
 
 		$data['colNameR']['forum_category']	= Array(
 											"forumCategoryTitle"=>"Title",
-											"forumCategoryDescription"=>"Description"
+											"forumCategoryDescription"=>"Description",
+											"forumCategoryAccess"=>"Access Level"
 													);
 
 		## date list column.
@@ -136,6 +137,10 @@ class Controller_Ajax_Request
 						{
 							$text	= $text == ""?"< Due to empty, will use unformatted and html stripped text >":$text;
 							return $text;
+						},
+						"forumCategoryAccess"=>function($no)
+						{
+							return model::load("forum/category")->accessLevel($no);
 						}
 								);
 

@@ -529,6 +529,7 @@ forum_category:
 	forumCategoryOriginalSlug [varchar]
 	forumCategoryDescription [text]
 	forumCategoryApprovalStatus [int]
+	forumCategoryAccess [int]			## 1 = any-site-member, 2 = site-specific member.
 	forumCategoryCreatedUser [int]
 	forumCategoryCreatedDate [datetime]
 

@@ -52,7 +52,15 @@
 	color:red;
 }
 </style>
-<h3 class="block-heading">Topik Baru</h3>
+<h3 class="block-heading">
+<?php
+echo model::load("template/frontend")->buildBreadCrumbs(Array(
+                                          Array("Forum",url::base("{site-slug}/forum")),
+                                          Array($row_category['forumCategoryTitle'],url::base("{site-slug}/forum/{category-slug}")),
+                                          Array("BARU")
+                                                            ));
+                                                            ?>
+</h3>
 <div class="block-content clearfix">
 <form method='post'>
 	<div class="page-content">

@@ -237,7 +237,8 @@ class Request extends request_correction
 				"activity.add"=>"New Activity",
 				"activity.update"=>"Activity Update",
 				"video.add"=>"New Video",
-				"forum_category.add"=>"New Forum Category"
+				"forum_category.add"=>"New Forum Category",
+				"forum_category.update"=>"Forum Category Update"
 						);
 
 		return !$id?$typeR:$typeR[$id];
@@ -375,6 +376,9 @@ class Request extends request_correction
 			case "forum_category.add":
 			db::where("forumCategoryID",$row['siteRequestRefID'])->update("forum_category",Array("forumCategoryApprovalStatus"=>1));
 			break;
+			case "forum_category.update":
+			db::where("forumCategoryID",$row['siteRequestRefID'])->update("forum_category",$data);
+			break;
 		}
 	}
 
@@ -453,6 +457,12 @@ class Request extends request_correction
 				$row_ori	= model::load("blog/article")->getArticle($refID);
 				$row_ori['articlePublishedDate']	= date("Y-m-d",strtotime($row_ori['articlePublishedDate']));
 				unset($row_ori['articleUpdatedDate'],$row_ori['articleUpdatedUser']);
+			break;
+			case "video.update":
+				$row_ori	= db::where("videoID",$refID)->get("video")->row();
+			break;
+			case "forum_category.update":
+				$row_ori	= db::where("forumCategoryID",$refID)->get("forum_category")->row();
 			break;
 		}
 

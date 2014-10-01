@@ -62,7 +62,7 @@ class Thread
 		db::insert("forum_thread_post",$data);
 	}
 
-	public function getThreads($categoryID,$selects,$paginationConf = null)
+	public function getThreads($siteID,$categoryID,$selects,$paginationConf = null)
 	{
 		db::select($selects);
 		if(is_array($categoryID) || is_numeric($categoryID))
@@ -74,6 +74,7 @@ class Thread
 		{
 			db::where("forumCategoryID IN (SELECT forumCategoryID FROM forum_category WHERE forumCategorySlug = ?)",Array($categoryID));
 		}
+		db::where("siteID",$siteID);
 		db::order_by("forumThreadID","DESC");
 		db::get("forum_thread");
 

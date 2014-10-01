@@ -13,9 +13,9 @@ class Services
 	}
 
 	## return absolute url for the photo.
-	public function getPhotoUrl($filename)
+	public function getPhotoUrl($filename,$photo_no_image = null)
 	{
-		$filename	= !$filename?$this->photo_no_image:"photo/$filename";
+		$filename	= !$filename?(!$photo_no_image?$this->photo_no_image:$photo_no_image):"photo/$filename";
 
 		return url::asset("frontend/images/".$filename);
 	}

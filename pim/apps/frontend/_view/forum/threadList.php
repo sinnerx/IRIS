@@ -19,7 +19,14 @@
 }
 
 </style>
-<h3 class="block-heading"><?php echo $row_category['forumCategoryTitle'];?></h3>
+<h3 class="block-heading">
+<?php
+echo model::load("template/frontend")->buildBreadCrumbs(Array(
+                                          Array("Forum",url::base("{site-slug}/forum")),
+                                          Array($row_category['forumCategoryTitle'],url::base("{site-slug}/forum/{category-slug}"))
+                                                            ));
+                                                            ?>
+</h3>
 <div class="block-content clearfix">
 	<div class="page-content">
 		<div class="page-description"> 
@@ -27,7 +34,8 @@
 		</div>
 		<div class="page-sub-wrapper forum-page">
 		<div class="forum-header clearfix">
-			<a href="#" class="active-cat">Topic</a> <a href="#" >Kategori</a>
+			<a href="<?php echo url::base("{site-slug}/forum");?>" >Kategori</a>
+			<a href="#" class="active-cat">Topic</a> 
 			<a href='<?php echo url::base("{site-slug}/forum/{category-slug}/topik-baru");?>' class='new-topic-icon'>Buka Topik Baru</a>
 		</div>
 			<?php

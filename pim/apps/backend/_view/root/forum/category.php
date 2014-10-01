@@ -1,35 +1,12 @@
-<h3 class='m-b-xs text-black'>Forum Management</h3>
+<h3 class='m-b-xs text-black'>Forum General Categories</h3>
 <div class='well well-sm'>
-A module to manage your forum. You may create categories, and etc.
+Manage general categories for forum here.
 </div>
-<?php echo flash::data();?>
 <div class='row'>
 	<div class='col-sm-6'>
 		<div class='row-wrapper'>
-		<h3>
-			Latest topic
-		</h3>
-		</div>
-		<div class='table-responsive bg-white'>
-			<table class='table'>
-				<tr>
-					<th>No.</th><th>Thread</th><th>Category</th><th>Time</th>
-				</tr>
-				<?php if($res_latesttopic):?>
-
-
-				<?php else:?>
-				<tr>
-					<td colspan='4' style="text-align:center;">There seems to be no topic at all.</td>
-				</tr>
-				<?php endif;?>
-			</table>
-		</div>
-	</div>
-	<div class='col-sm-6'>
-		<div class='row-wrapper'>
 			<h3>
-				Forum Categories
+				General Categories
 				<button class='badge bg-primary pull-right' type='button' onclick='window.location.href = pim.base_url+"forum/addCategory"'>Add Category</button>
 			</h3>
 		</div>
@@ -39,12 +16,10 @@ A module to manage your forum. You may create categories, and etc.
 				<th width="50">No.</th><th>Category Name</th><th>Access Level</th><th width="56px"></th>
 			</tr>
 			<?php
-			if($res_category_one):
+			if($res_category):
 			## loop the first level.
 			$no	= 1;
-			foreach($res_category_one as $row_cat):
-			$row_requestdata	= $requestData[$row_cat['forumCategoryID']]?:null;
-
+			foreach($res_category as $row_cat):
 			$catName			= $row_requestdata['forumCategoryTitle']?:$row_cat['forumCategoryTitle'];
 			$iconApprovalStatus	= model::load("template/icon")->status($requestData[$row_cat['forumCategoryID']]?4:$row_cat['forumCategoryApprovalStatus']);
 			$accessLevel		= model::load("forum/category")->accessLevel($row_requestdata['forumCategoryAccess']?:$row_cat['forumCategoryAccess']);
@@ -54,19 +29,18 @@ A module to manage your forum. You may create categories, and etc.
 				<td><?php echo $catName;?></td>
 				<td><?php echo $accessLevel;?></td>
 				<td>
-				<a href='<?php echo url::base("forum/updateCategory/$row_cat[forumCategoryID]");?>' class='fa fa-edit'></a>
-				<?php echo $iconApprovalStatus;?></td>
+					<a href='<?php echo url::base("forum/updateCategory/$row_cat[forumCategoryID]");?>' class='fa fa-edit'></a>
+				</td>
 			</tr>
 
 			<?php endforeach;?>
 			<?php else:?>
 			<tr>
 
-				<td colspan="3" style="text-align:center;">This site appear to have to categories at all.</td>
+				<td colspan="3" style="text-align:center;">No general categories yet.</td>
 			</tr>
 			<?php endif;?>
 		</table>
 		</div>
 	</div>
-	
 </div>
