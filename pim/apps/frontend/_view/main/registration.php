@@ -134,8 +134,33 @@ ul.front-tab li.resp-tab-active
                  <?php echo form::select("birthday_year",$yearR,"","","Tahun");?>
                  </div>
                  </div>
+
+                 <!-- GENDER -->
+                 <div style="height:50px;margin-top:10px;">
+                 <div style="width:40%;float:left;">
+                     <label>Jantina <?php echo flash::data("userProfileGender");?></label>
+                     <div class='dob clearfix'>
+                        <div class='dob-year'>
+                            <?php echo form::select("userProfileGender",Array(1=>"Lelaki",2=>"Perempuan"),"","","Jantina");?>
+                        </div>
+                     </div>
+                </div>
+                <div style="width:40%;float:left;">
+                     <!-- OCCUPATION -->
+                     <label>Pekerjaan <?php echo flash::data("userProfileOccupationGroup");?></label>
+                     <div class='dob clearfix'>
+                        <div class='dob-year' style="width: 180px;">
+                            <?php
+                            $occupationR = model::load("helper")->occupationGroup();?>
+                            <?php echo form::select("userProfileOccupationGroup",$occupationR,"style='width:200px;'","","Pekerjaan");?>
+                        </div>
+                     </div>
+                 </div>
+                 </div>
                  <div class="check-agree">
                  <div class="row-check clearfix">
+
+
                  <label>
                  <div class="squaredFour">
                  <?php

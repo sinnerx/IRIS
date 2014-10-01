@@ -58,6 +58,7 @@ user_profile_additional: ## additional info for user.
 	userProfileAdditionalID [int]
 	userID [int]
 	userProfileOccupation [varchar]		##
+	userProfileOccupationGroup [int]	## 1 = student, 2 = housewives, 3 = self-employed, 4 = employed, 5 = non-employed, 6 = retiree
 	userProfileFacebook [varchar]		##
 	userProfileTwitter [varchar]		##
 	userProfileWeb [varchar]			##

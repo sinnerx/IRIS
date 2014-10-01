@@ -223,6 +223,7 @@ class User
 		$data_additional	= Array(
 					"userID"=>$userID,
 					"userProfileOccupation"=>$data['userProfileOccupation'],
+					"userProfileOccupationGroup"=>$data['userProfileOccupationGroup'],
 					"userProfileEducation"=>$data['userProfileEducation'],
 					"userProfileTwitter"=>$data['userProfileTwitter'],
 					"userProfileEcommerce"=>$data['userProfileEcommerce'],

@@ -36,6 +36,20 @@ class Helper
 		return !$no?$state:$state[$no];
 	}
 
+	public function occupationGroup($no = null)
+	{
+		$occR	= Array(
+				1=>"Pelajar",
+				2=>"Suri-rumah",
+				3=>"Kerja sendiri",
+				4=>"Di bawah majikan",
+				5=>"Tidak bekerja",
+				6=>"Bersara"
+						);
+
+		return $no?$occR[$no]:$occR;
+	}
+
 	public function monthYear($type,$firstParam = null,$secondParam = null)
 	{
 		switch($type)

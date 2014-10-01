@@ -164,13 +164,14 @@ Class Controller_Main
 		
 			$rules	= Array(
 					"userProfileFullName,userProfileLastName"=>"required:Maklumat ini diperlukan",
+					"userProfileGender,userProfileOccupationGroup"=>"required:Diperlukan",
 					"except:checkPenduduk,checkTerm"=>"required:Maklumat ini diperlukan.",
 					"userIC"=>Array(
 							 "callback"=>Array($icCheck[0],$icCheck[1])
 									),
 					"userPassword"=>Array(
 							"callback"=>Array((strlen($password) >= 6),"Minimum kata laluan adalah 6 karakter")
-										)
+										),
 							);
 
 			$isOutsider		= input::get("checkPenduduk")?0:1;
@@ -196,12 +197,14 @@ Class Controller_Main
 
 			## register.
 			## prepare
-			$birthdate	= input::get("birthday_year")."-".input::get("birthday_month")."-".input::get("birthday_day");
-			$fullname	= input::get("userProfileFullName");
-			$lastname	= input::get("userProfileLastName");
+			$birthdate			= input::get("birthday_year")."-".input::get("birthday_month")."-".input::get("birthday_day");
+			$fullname			= input::get("userProfileFullName");
+			$lastname			= input::get("userProfileLastName");
+			$gender				= input::get("userProfileGender");
+			$occupationGroup	= input::get("userProfileOccupationGroup");
 
 			## register.
-			model::load("site/member")->register($row_site['siteID'],$ic,$password,$birthdate,$fullname,$lastname,$isOutsider);
+			model::load("site/member")->register($row_site['siteID'],$ic,$password,$birthdate,$fullname,$lastname,$isOutsider,$gender,$occupationGroup);
 
 			## success and redirect.
 			$memberFee	= model::load("config")->get("configMemberFee",5);
