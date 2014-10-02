@@ -109,6 +109,12 @@
 							</div>
 							<?php endif;?>
 						</div>
+
+					<div id="comment-container">
+						<?php controller::load("comment","getComments/".$article['articleID']."/article");?>
+					</div>
+						<?php if(session::get("userID")){controller::load("comment","getForm");} ?>
+
 				</div>
 			</div>
 		</div>

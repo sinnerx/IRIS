@@ -161,6 +161,10 @@ $routes[]	= Array("[:site-slug]/blog/[i:year]/[i:month?]","controller=blog@artic
 $routes[]	= Array("[:site-slug]/blog/tag/[:tag]","controller=blog@articleByTagOrCategory","tag,{tag}");
 $routes[]	= Array("[:site-slug]/blog/kategori/[:category]","controller=blog@articleByTagOrCategory","category,{category}");
 
+## site comments
+$routes[]	= Array("[:site-slug]/comment/addComment","controller=comment@addComment");
+$routes[]	= Array("[:site-slug]/comment/getComments/[:refID]/[:type]","controller=comment@getComments","{refID},{type}");
+
 ## site view an article
 $routes[]	= Array("[:site-slug]/blog/[:year]/[:month]/[:article-slug]","controller=blog@view");
 

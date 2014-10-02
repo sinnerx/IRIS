@@ -403,5 +403,10 @@ echo model::load("template/frontend")
 				</div>
 			</div> */?>
 		</div>
+						<div id="comment-container">
+							<?php controller::load("comment","getComments/".$activityID."/activity");?>
+						</div>
+						<?php if(session::get("userID")){controller::load("comment","getForm");} ?>
+
 	</div>
 </div>

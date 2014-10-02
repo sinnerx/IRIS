@@ -183,5 +183,10 @@ echo model::load("template/frontend")->buildBreadCrumbs(Array(
       </div>
     </div>
   </div>*/?>
+
+          <div id="comment-container">
+            <?php controller::load("comment","getComments/".$row_album['siteAlbumID']."/site_album");?>
+          </div>
+            <?php if(session::get("userID")){controller::load("comment","getForm");} ?>
 </div>
 </div>

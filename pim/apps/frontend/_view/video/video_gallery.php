@@ -262,3 +262,8 @@ No video uploaded.
 
 
 </div>
+
+          <div id="comment-container">
+            <?php controller::load("comment","getComments/".$album['videoAlbumID']."/video_album");?>
+          </div>
+            <?php if(session::get("userID")){controller::load("comment","getForm");} ?>
