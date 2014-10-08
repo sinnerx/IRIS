@@ -15,6 +15,7 @@ class album
 				"videoAlbumName"=>$data['videoAlbumName'],
 				"videoAlbumDescription"=>$data['videoAlbumDescription'],
 				"videoAlbumOriginalSlug"=>$originalSlug,
+				"videoAlbumStatus"=>1,
 				"videoAlbumSlug"=>$albumSlug,
 				"videoAlbumCreatedDate"=>now(),
 				"videoAlbumCreatedUser"=>session::get("userID")
@@ -27,7 +28,7 @@ class album
 	}
 
 	# alter same slug album.
-	public function slugChecker($slug,$siteID,$videoAlbumID)
+	public function slugChecker($slug,$siteID,$videoAlbumID = null)
 	{
 		db::from("video_album");
 		db::where("videoAlbumOriginalSlug",$slug);
@@ -43,11 +44,17 @@ class album
 	}
 
 	# select videos album by site.
-	public function getVideoAlbums($siteID,$frontend=0)
+	public function getVideoAlbums($siteID,$frontend = 0)
 	{
 		db::from("video_album");
 		db::where("siteID",$siteID);
-		if($frontend == 1){db::where("siteID",$siteID);}
+
+		if($frontend == 1)
+		{
+			db::where("videoAlbumStatus",1);
+		}
+
+		db::order_by("videoAlbumCreatedDate","desc");
 
 		return db::get()->result();
 	}
@@ -81,7 +88,7 @@ class album
 	}
 
 	# get list of album(s) by slug
-	public function getVideosBySlug($slug,$paginationConf = null)
+	public function getVideosBySlug($slug,$frontend = 0,$paginationConf = null)
 	{
 		db::from("video_album");
 		db::where("videoAlbumSlug",$slug);
@@ -91,6 +98,12 @@ class album
 		db::from("video");
 		db::where("videoAlbumID",$album['videoAlbumID']);
 		db::where("videoApprovalStatus",1);
+
+		if($frontend == 1)
+		{
+			db::where("videoStatus",1);
+		}
+
 		db::order_by("videoCreatedDate","desc");
 
 		return db::get()->result();
@@ -104,6 +117,7 @@ class album
 				"videoType"=>$data['videoType'],
 				"videoRefID"=>$data['videoRefID'],
 				"videoName"=>ucfirst($data['videoName']),
+				"videoStatus"=>1,
 				"videoApprovalStatus"=>0,
 				"videoCreatedDate"=>now(),
 				"videoCreatedUser"=>session::get("userID")
@@ -164,41 +178,24 @@ class album
 		return db::get("video")->row();
 	}
 
-	public function deleteVideo($videoID)
+	public function disableVideo($videoID)
 	{
-		db::from("video");
 		db::where("videoID",$videoID);
-		db::order_by("videoCreatedDate","desc");
+		db::update("video",Array(
+						"videoStatus"=>0
+								));
 
-		$video = db::get("video")->row();
-
-		if(db::delete("video",Array("videoID"=>$videoID)))
-		{
-			return $this->getVideoAlbumCover($video['videoAlbumID']);
-		}
-		else
-		{
-			return false;
-		}
+		return true;
 	}
 
-	public function deleteAlbum($videoAlbumID)
+	public function disableAlbum($videoAlbumID)
 	{
-		if(db::delete("video",Array("videoAlbumID"=>$videoAlbumID)))
-		{
-			if(db::delete("video_album",Array("videoAlbumID"=>$videoAlbumID)))
-			{
-				return true;
-			}
-			else
-			{
-				return false;
-			}
-		}
-		else
-		{
-			return false;
-		}
+		db::where("videoAlbumID",$videoAlbumID);
+		db::update("video_album",Array(
+						"videoAlbumStatus"=>0
+								));
+
+		return true;
 	}
 
 	public function buildVideoUrl($type = 1,$ref)
@@ -225,6 +222,30 @@ class album
 			$url = "http://localhost/digitalgaia/iris/pim/assets/frontend/images/noimage.png";
 		}
 		return $url;
+	}
+
+	public function updateAlbumStatus($videoAlbumID)
+	{
+		db::where("videoAlbumID",$videoAlbumID);
+		db::update("video_album",Array(
+						"videoAlbumStatus"=>1
+								));
+
+		return true;
+	}
+
+	public function updateVideoStatus($videoID)
+	{
+		db::where("videoID",$videoID);
+		db::update("video",Array(
+						"videoStatus"=>1
+								));
+
+		db::from("video");
+		db::where("videoID",$videoID);
+		$video = db::get("video")->row();
+		
+		return $video['videoAlbumID'];
 	}
 }
 

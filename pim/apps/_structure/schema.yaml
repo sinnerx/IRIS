@@ -543,6 +543,7 @@ video:
 	videoType [int]			# 1 = youtube
 	videoRefID [varchar]
 	videoName [varchar]
+	videoStatus [int]		# 0 = disable, 1 = enable
 	videoApprovalStatus [int]	# 0 = pending, 1 = approve , 2 = disapprove
 	videoCreatedDate [datetime]
 	videoCreatedUser [int]
@@ -553,6 +554,7 @@ video_album:
 	siteID [int]
 	videoAlbumName [varchar]
 	videoAlbumSlug [varchar]
+	videoAlbumStatus [int]		# 0 = disable, 1 = enable
 	videoAlbumOriginalSlug [varchar]
 	videoAlbumDescription [text]
 	videoAlbumThumbnail [varchar]

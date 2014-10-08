@@ -56,43 +56,6 @@ var album	= new function()
 		$("#albumDescription, #albumDescription_editbutton").show();
 	}
 
-	this.updateCoverVideo = function()
-	{
-		if(!$(".album-video")[0])
-		{
-			return alert("Please upload at least one video first");
-		}
-
-		if(this.covervideoEditing)
-		{
-			return false;
-		}
-
-		this.covervideoEditing = true;
-		//assign class
-		$(".album-video").addClass("assigning-covervideo");
-
-		$("#info-box").addClass("bg-primary");
-		$("#info-box").data("temporary",$("#info-box").html()); //save current info in data-temporary first.
-		$("#info-box").html("You may choose the cover video from any of the videos below : <span onclick='album.updateCoverVideo_reset();' class='pull-right' style='cursor:pointer;'>[ Cancel X ]</span>");
-
-		$(".assigning-covervideo").click(function()
-		{
-			var ppath = $(this).data("videopath");
-
-			if($(this).hasClass("deleted-video"))
-			{
-				return alert("This video has been deleted.");
-			}
-
-			if(confirm("Use this as cover video. Are you sure?"))
-			{			
-				album.updateCoverVideo_submit(ppath);
-			}
-
-		});
-	}
-
 	this.updateCoverVideo_submit = function(path)
 	{
 		var data = {"videoName":path};
@@ -116,26 +79,35 @@ var album	= new function()
 		this.covervideoEditing = false;
 	}
 
-	this.deleteVideo	= function(videoID)
+	this.disableVideo	= function(videoID)
 	{
 		// set up
 		if(!pim.func.inArray(videoID,this.deletedList))
 		{
-			if(confirm("Delete this video. Are you sure?"))
+			if(confirm("Disable this video. Are you sure?"))
 			{
-				$("#video"+videoID).addClass("deleted-video").addClass("pending");
-				$.ajax({type:"GET",url:pim.base_url+"video/deleteVideo/"+videoID}).done(function(res)
+				$("#video"+videoID).addClass("deleted-video");
+				$.ajax({type:"GET",url:pim.base_url+"video/disableVideo/"+videoID}).done(function(res)
 				{
 					if(res)
 					{
 						var res = $.parseJSON(res);
 						album.deletedList.push(videoID);
 						$("#videoID"+videoID).removeClass("pending");
-						$("#theCoverVideo").attr("src","http://img.youtube.com/vi/"+res[0]+"/0.jpg");
+						$("#video"+videoID).children().find(".panel-body").prepend('<h4 style="position:absolute;text-align:center;">Click to enable this video</h4>');
+						$("#video"+videoID).children().find(".panel-body").attr("onclick","album.enableVideo("+videoID+");");
 					}
 				});	
 				// add class.
 			}
+		}
+	}
+
+	this.enableVideo = function(videoID)
+	{
+		var r = confirm("Are you sure to enable this video?");
+		if (r == true) {
+			location.href="<?php echo url::base('video/enableVideo/'); ?>"+videoID;
 		}
 	}
 
@@ -305,8 +277,20 @@ var album	= new function()
 	position: absolute;
 	background: white;
 	padding:4px;
-	box-shadow: 3px 3px 5px -2px #5f5f5f;
+	<?php if($row['videoAlbumStatus'] == 1){ ?>box-shadow: 3px 3px 5px -2px #5f5f5f;<?php } ?>
 }
+
+<?php if($row['videoAlbumStatus'] == 0){ ?>
+.album-enable
+{
+	font-size: 15px;
+	position: relative;
+	float: right;
+	background: white;
+	padding:4px;
+	box-shadow: 3px 3px -2px 5px #5f5f5f;
+}
+<?php } ?>
 
 #albumDescription.editing
 {
@@ -417,7 +401,7 @@ var album	= new function()
 }
 </style>
 <h3 class='m-b-xs text-black'>
-	<a href='<?php echo url::base("image/album");?>'>Video Album</a> : <?php echo $row['albumName'];?>
+	<a href='<?php echo url::base("video/album");?>'>Video Album<?php if($row['videoAlbumStatus'] == 0){ ?> (Disable)<?php } ?></a> : <?php echo $row['albumName'];?>
 </h3>
 <div>
 	Added at, <?php echo date("j F Y, g:i A",strtotime($row['videoAlbumCreatedDate']));?>
@@ -438,11 +422,11 @@ var album	= new function()
 					<div class="col-sm-10">              
                         <div class="btn-group m-r">
 							<a data-toggle="dropdown" class="btn btn-sm btn-default dropdown-toggle">
-		                        <span class="dropdown-label">Youtube!&nbsp;</span> 
+		                        <span class="dropdown-label">Youtube&nbsp;</span> 
 		                        <span class="caret"></span>
 		                    </a>
 		                    <ul class="dropdown-menu dropdown-select">
-		                        <li><a href="#"><input type="radio" name="videoType" value="1" checked="">Youtube!</a></li>
+		                        <li><a href="#"><input type="radio" name="videoType" value="1" checked="">Youtube</a></li>
 		                    </ul>
 							<?php echo flash::data("videoType");?>
 	                    </div>
@@ -482,13 +466,13 @@ var album	= new function()
 		<?php
 		foreach($res_video as $row_video):
 		?>
-			<div id='video<?php echo $row_video['videoID'];?>' data-sitevideoid='<?php echo $row_video['videoID'];?>' data-description="<?php echo $row_video['videoName'];?>" data-descriptionclean="<?php echo $row_video['videoName'];?>" data-refID="<?php echo $row_video['videoRefID'] ?>" data-videopath='<?php echo model::load("video/album")->buildVideoUrl($row_video['videoType'],$row_video['videoRefID']); ?>' class='col-sm-3 album-video' style='height:150px;margin-bottom:25px;<?php if($row_video['videoApprovalStatus'] == 2){ ?>opacity:0.4;<?php } ?>'>
+			<div id='video<?php echo $row_video['videoID'];?>' data-sitevideoid='<?php echo $row_video['videoID'];?>' data-description="<?php echo $row_video['videoName'];?>" data-descriptionclean="<?php echo $row_video['videoName'];?>" data-refID="<?php echo $row_video['videoRefID'] ?>" data-videopath='<?php echo model::load("video/album")->buildVideoUrl($row_video['videoType'],$row_video['videoRefID']); ?>' class='col-sm-3 album-video<?php if($row_video['videoStatus'] == 0){ ?> deleted-video<?php } ?>' style='height:150px;margin-bottom:25px;<?php if($row_video['videoApprovalStatus'] == 2){ ?>opacity:0.4;<?php } ?>'>
 			<section class='panel panel-default'>
 			<style type="text/css">
 			.pending{
 				color:grey;
 				float:left;
-				position:fixed;
+				position:absolute;
 			}
 			.pending:hover{
 				color:grey;
@@ -496,7 +480,7 @@ var album	= new function()
 			.approved{
 				color:green;
 				float:left;
-				position:fixed;
+				position:absolute;
 			}
 			.approved:hover{
 				color:green;
@@ -504,7 +488,7 @@ var album	= new function()
 			.disapproved{
 				color:red;
 				float:left;
-				position:fixed;
+				position:absolute;
 			}
 			.disapproved:hover{
 				color:red;
@@ -512,9 +496,10 @@ var album	= new function()
 			</style>
 					<a class='fa fa-stop <?php if($row_video['videoApprovalStatus'] == 0){ ?>pending<?php }else if($row_video['videoApprovalStatus'] == 1){ ?>approved<?php }else if($row_video['videoApprovalStatus'] == 2){ ?>disapproved<?php } ?>'></a>
 				<div class='video-panel'>
-					<a <?php if($row_video['videoApprovalStatus'] != 2){ ?>href='javascript:album.deleteVideo(<?php echo $row_video['videoID'];?>);'<?php } ?> class='i i-cross2 delete-button'></a>
+					<a <?php if($row_video['videoApprovalStatus'] != 2){ ?>href='javascript:album.disableVideo(<?php echo $row_video['videoID'];?>);'<?php } ?> class='i i-cross2 delete-button'></a>
 				</div>
-			<div class='panel-body' onclick='album.showVideoDetail(<?php echo $row_video['videoID'];?>);' style='padding:3px;'>
+			<div class='panel-body' onclick='album.<?php if($row_video['videoStatus'] == 1){ ?>showVideoDetail<?php }else{ ?>enableVideo<?php } ?>(<?php echo $row_video['videoID'];?>);' style='padding:3px;'>
+				<?php if($row_video['videoStatus'] == 0){ ?><h4 style="position:absolute;text-align:center;">Click to enable this video</h4><?php } ?>
 				<img style='width:100%;' id="imgCOver<?php echo $row_video['videoID'];?>" data-srcbig='<?php echo model::load("video/album")->buildVideoUrl($row_video['videoType'],$row_video['videoRefID']); ?>' data-video="<?php echo model::load("video/album")->buildEmbedVideoUrl($row_video['videoType'],$row_video['videoRefID']); ?>" src='<?php echo model::load("video/album")->buildVideoUrl($row_video['videoType'],$row_video['videoRefID']); ?>' />
 			</div>
 			</section>
@@ -531,6 +516,7 @@ var album	= new function()
 			<div class='col-sm-12' id='album-info-wrapper' style="padding:10px;background:white;">
 			<div class='album-cover-video-title'>Album Cover Video <a href='javascript:album.updateCoverVideo();' class='fa fa-edit' title='Change cover video'></a></div>
 			<!-- triggered album.updateCoverVideo(); -->
+			<?php if($row['videoAlbumStatus'] == 0){ ?><div class='album-enable'>Enable Album <a href='<?php echo url::base("video/enableAlbum/".$row['videoAlbumID']);?>' class='fa fa-check-square-o' title='Enable album'></a></div><?php } ?>
 			<div class='coverVideo_updatetext'>
 			Please select from the list of video.
 			</div>

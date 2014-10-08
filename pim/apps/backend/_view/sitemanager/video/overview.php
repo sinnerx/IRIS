@@ -27,11 +27,11 @@ var album	= new function()
 		return; //temporary.
 	}
 
-	this.deleteAlbum	= function(siteAlbumID)
+	this.disableAlbum	= function(siteAlbumID)
 	{
-		if(confirm("Delete this album. Are you sure?"))
+		if(confirm("Disable this album. Are you sure?"))
 		{
-			$.ajax({type:"GET",url:pim.base_url+"video/deleteAlbum/"+siteAlbumID}).done(function(res)
+			$.ajax({type:"GET",url:pim.base_url+"video/disableAlbum/"+siteAlbumID}).done(function(res)
 			{
 				if(res)
 				{
@@ -128,12 +128,12 @@ Overview of your video albums. You can <a href='javascript:album.addForm.show();
 					echo "<div class='row'>";
 				}
 				?>
-				<div id='album<?php echo $row['videoAlbumID'];?>' class='col-sm-2 album-list'>
+				<div id='album<?php echo $row['videoAlbumID'];?>' class='col-sm-2 album-list<?php if($row['videoAlbumStatus'] == 0){ ?> deleted<?php } ?>'>
 					<section class='panel panel-default'>
 						<div class='panel-heading'>
 						<?php echo $row['videoAlbumName'];?>
 						<div class='album-list-buttons'>
-							<a href='javascript:album.deleteAlbum(<?php echo $row['videoAlbumID'];?>);' class='i i-cross2 button-delete'></a>
+							<a href='javascript:album.disableAlbum(<?php echo $row['videoAlbumID'];?>);' class='i i-cross2 button-delete'></a>
 						</div>
 						</div>
 						<div onclick='album.showDetail(<?php echo $row['videoAlbumID'];?>);'>

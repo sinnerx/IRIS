@@ -94,17 +94,45 @@ Class Controller_Video
 		return response::json($response);
 	}
 
-	public function deleteVideo($videoID)
+	public function disableVideo($videoID)
 	{
-		$response = model::load("video/album")->deleteVideo($videoID);
+		$response = model::load("video/album")->disableVideo($videoID);
 
 		return response::json(Array($response['videoRefID']));
 	}
 
-	public function deleteAlbum($videoAlbumID)
+	public function disableAlbum($videoAlbumID)
 	{
-		$response = model::load("video/album")->deleteAlbum($videoAlbumID);
+		$response = model::load("video/album")->disableAlbum($videoAlbumID);
 
 		return $response;
+	}
+
+	public function enableAlbum($videoAlbumID)
+	{
+		$response = model::load("video/album")->updateAlbumStatus($videoAlbumID);
+
+		if($response)
+		{
+			redirect::to("video/albumVideos/".$videoAlbumID,"The album has been enabled. ");
+		}
+		else
+		{
+			redirect::to("video/albumVideos/".$videoAlbumID,"There is an error. ");
+		}
+	}
+
+	public function enableVideo($videoID)
+	{
+		$response = model::load("video/album")->updateVideoStatus($videoID);
+
+		if($response)
+		{
+			redirect::to("video/albumVideos/".$response,"The video has been enabled. ");
+		}
+		else
+		{
+			redirect::to("video/albumVideos/".$response,"There is an error. ");
+		}
 	}
 }
