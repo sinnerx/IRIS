@@ -15,9 +15,22 @@ A module to manage your forum. You may create categories, and etc.
 				<tr>
 					<th>No.</th><th>Thread</th><th>Category</th><th>Time</th>
 				</tr>
-				<?php if($res_latesttopic):?>
-
-
+				<?php
+					$no = 1;
+					if($res_latestthreads):?>
+					<?php foreach($res_latestthreads as $row):?>
+					<?php
+					$name		= $row['forumThreadTitle'];
+					$category	= $res_category_one[$row['forumCategoryID']]['forumCategoryTitle']?:"-";
+					$time		= date("g:i A, d-m-Y",strtotime($row['forumThreadCreatedDate']));
+					?>
+					<tr>
+						<td><?php echo $no++;?>.</td>
+						<td><?php echo $name;?></td>
+						<td><?php echo $category;?></td>
+						<td><?php echo $time;?></td>
+					</tr>
+					<?php endforeach;?>
 				<?php else:?>
 				<tr>
 					<td colspan='4' style="text-align:center;">There seems to be no topic at all.</td>
@@ -47,6 +60,7 @@ A module to manage your forum. You may create categories, and etc.
 
 			$catName			= $row_requestdata['forumCategoryTitle']?:$row_cat['forumCategoryTitle'];
 			$iconApprovalStatus	= model::load("template/icon")->status($requestData[$row_cat['forumCategoryID']]?4:$row_cat['forumCategoryApprovalStatus']);
+			$iconApprovalStatus	= $row_cat['siteID'] == 0?"":$iconApprovalStatus;
 			$accessLevel		= model::load("forum/category")->accessLevel($row_requestdata['forumCategoryAccess']?:$row_cat['forumCategoryAccess']);
 			?>
 			<tr>
@@ -54,7 +68,9 @@ A module to manage your forum. You may create categories, and etc.
 				<td><?php echo $catName;?></td>
 				<td><?php echo $accessLevel;?></td>
 				<td>
+				<?php if($row_cat['siteID'] != 0):?>
 				<a href='<?php echo url::base("forum/updateCategory/$row_cat[forumCategoryID]");?>' class='fa fa-edit'></a>
+				<?php endif;?>
 				<?php echo $iconApprovalStatus;?></td>
 			</tr>
 

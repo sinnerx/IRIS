@@ -53,7 +53,8 @@ class Category
 				db::where($key,$val);
 			}
 		}
-		return db::where('siteID',$siteID)->get("forum_category")->result("forumCategoryID");
+		db::where("siteID",0);
+		return db::or_where('siteID',$siteID)->get("forum_category")->result("forumCategoryID");
 	}
 
 	public function getCategory($categoryID)

@@ -8,6 +8,7 @@ class Controller_Forum
 
 	public function index()
 	{
+		$data['res_latestthreads']	= model::load("forum/thread")->getLatestThreads($this->siteID);
 		$data['res_category_one']	= model::load("forum/category")->getCategories($this->siteID);
 
 		$data['requestData']	= model::load("site/request")->replaceWithRequestData("forum_category.update",array_keys($data['res_category_one']));
