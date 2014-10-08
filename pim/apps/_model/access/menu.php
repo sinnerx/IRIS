@@ -28,7 +28,8 @@ class Menu extends Data
 									"Overview"=>Array("activity/overview","activity/add","activity/view","activity/edit"),
 									"Events"=>"activity/event",
 									"Training"=>"activity/training",
-									"Others"=>"activity/other"
+									"Others"=>"activity/other",
+									"RSVP"=>Array("activity/rsvp"),
 										),
 					"Forum"=>Array(
 							"Forum Management"=>Array("forum/index","forum/addCategory","forum/updateCategory")

@@ -189,10 +189,16 @@ class Db_instance
 			}
 
 			## if key got one. obviously got not prepared first value. so we set as 'IN' operator.
-			if(count(explode(" ",$cond)) == 1)
+			$condR	= explode(" ",$cond,2);
+			if(count($condR) == 1)
 			{
 				## create new condition with question mark for parameterized query.
 				$cond	= "$cond IN (".implode(",",array_fill(0,count($val),"?")).")";
+			}
+			else if(in_array($condR[1],Array("NOT IN","!=")))
+			{
+				$condR[1] = $condR[1] == "!="?"NOT IN":$condR[1];
+				$cond	= "$condR[0] $condR[1] (".implode(",",array_fill(0,count($val),"?")).")";
 			}
 		}
 		else ## is a single value and value isn't array.
@@ -612,7 +618,7 @@ class Db_instance
 				## second level group.
 				else if(is_string($group))
 				{
-					$forgedResult[$row[$id]][$group] = $row;
+					$forgedResult[$row[$id]][$row[$group]] = $row;
 				}
 				else
 				{

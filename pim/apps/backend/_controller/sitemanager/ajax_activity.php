@@ -148,5 +148,67 @@ class Controller_Ajax_Activity
 
 		return response::json($resultR);
 	}
+
+	public function attendees($activityID)
+	{
+		$activity	= model::load("activity/activity");
+		$data['activityID']		= $activityID;
+		$data['row_activity']	= model::load("activity/activity")->getActivity($activityID);
+		$data['requirement']	= $activity->dateObligation($data['row_activity']['activityAllDateAttendance']);
+		$data['res_date']		= $activity->getDate($activityID);
+		$data['res_participant']	= $activity->getParticipant($activityID);
+		$data['res_participant_dates']	= $activity->getActivityUserDate($activityID);
+
+		view::render("sitemanager/activity/ajax/attendees",$data);
+	}
+
+	/*
+	question :
+	- can search non-site member.?
+	- can search in-active member?
+	- can search empty field?
+	*/
+	public function searchParticipant($offset = 0)
+	{
+		$activityID = input::get("activityID");
+		$userR		= model::load("activity/activity")->getParticipant($activityID);
+		$row_activity	= model::load("activity/activity")->getActivity($activityID);
+
+		// db::where("siteID",authData("site.siteID"));
+		$icOrFilename	= input::get("search_value");
+		$addedList		= input::get("added_list");
+
+		$cond_addedlist	= $addedList != ""?"user.userID NOT IN ($addedList) AND ":"";
+
+		$siteID			= authData("site.siteID");
+
+		db::select("user.userID,userIC,userProfileFullName,userProfileLastName,siteMemberStatus,siteID");
+
+		if($userR)
+			db::where("user.userID NOT IN",array_keys($userR));
+
+		db::where($cond_addedlist.' userLevel = 1 AND (user.userIC LIKE ? OR user.userID IN (SELECT userID FROM user_profile WHERE userProfileFullName LIKE ?))',Array("%".$icOrFilename."%","%".$icOrFilename."%"));
+		// db::where('userLevel',1);
+		// db::where("user.userIC LIKE ?",Array("%".$icOrFilename."%"));
+		// db::or_where("user.userID IN (SELECT userID FROM user_profile WHERE userProfileFullName LIKE ?)",Array("%".$icOrFilename."%"));
+		db::join("user_profile","user_profile.userID = user.userID");
+		db::join("site_member","user.userID = site_member.userID");
+		db::order_by("userProfileFullName ASC");
+		db::limit(30,$offset);
+		$res_search = db::get("user")->result("userID");
+
+		return response::json($res_search);
+	}
+
+	public function addParticipantsSave()
+	{
+		$activityID	= input::get("activityID");
+		$userData	= input::get("userData");
+
+		$row_activity	= model::load("activity/activity")->getActivity($activityID);
+
+		## screwed up.
+		model::load("activity/activity")->updateActivityUser($activityID,json_decode($userData,true));
+	}
 }
 ?>

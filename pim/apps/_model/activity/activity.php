@@ -358,13 +358,13 @@ class Activity
 
 	public function getParticipant($activityID)
 	{
-		db::select("userIC,userProfileFullName,user.userID,activityUserCreatedDate");
+		db::select("userIC,userProfileFullName,user.userID,activityUserCreatedDate,activityUserCreatedUser");
 		db::where("activityID",$activityID);
 		db::join("user","user.userID = activity_user.userID");
 		db::join("user_profile","user_profile.userID = activity_user.userID");
 		db::order_by("userProfileFullName","ASC");
 
-		return db::get("activity_user")->result();
+		return db::get("activity_user")->result("userID");
 	}
 
 	public function createLinkWithArticle($activityID,$articleID)
@@ -619,7 +619,7 @@ class Activity
 		db::insert("activity_user_date",Array(
 								"activityUserID"=>$actUserID,
 								"activityUserDateValue"=>$date,
-								"activityUserDateAttendance"=>0,
+								"activityUserDateAttendance"=>1,		## now by default we set to 1 (attend)
 								"activityUserDateCreatedDate"=>now(),
 								"activityUserDateCreatedUser"=>session::get("userID"),
 											));
@@ -656,6 +656,121 @@ class Activity
 					);
 
 		db::insert("activity_user",$data);
+	}
+
+	public function getOccuredActivities($siteID,$paginationConf = null)
+	{
+		db::select("*,activity.*");
+		db::where("siteID",$siteID);
+		db::where("activityStartDate <=",now());
+		db::where("activityApprovalStatus",1);
+
+		db::join("event","activityType = '1' AND activity.activityID = event.activityID");
+		db::join("training","activityType = '2' AND activity.activityID = training.activityID");
+
+		db::order_by("activityStartDate","desc");
+		return db::get("activity")->result();
+	}
+
+	public function getActivityUserDate($activityID)
+	{
+		db::where("activity_user_date.activityUserID IN (SELECT activityUserID FROM activity_user WHERE activityID = ?)",Array($activityID));
+		db::join("activity_user","activity_user.activityUserID = activity_user_date.activityUserID");
+		db::get("activity_user_date");
+
+		return db::result("userID","activityUserDateValue");
+	}
+
+	public function updateActivityUser($activityID,$updatedData)
+	{
+		$row	= $this->getActivity($activityID);
+		$allDate	= $row['activityAllDateAttendance'];
+
+		## 1. if date choosing is optional.
+		if($allDate == 2)
+		{
+			## get user activity and date.
+			$activityUserDate	= $this->getActivityUserDate($activityID);
+
+			foreach($activityUserDate as $userID => $res_activityUserDate)
+			{
+				foreach($res_activityUserDate as $date=>$row)
+				{
+					$activityUserDateID	= $row['activityUserDateID'];
+
+					## check if this exists in activityUserDateData
+					$attendance	= isset($updatedData[$userID]) ? (!in_array($date,$updatedData[$userID])?2:1) : 2;
+
+					$data	= Array(
+						"activityUserDateAttendance"=>$attendance,
+						"activityUserDateUpdatedDate"=>now(),
+						"activityUserDateUpdatedUser"=>session::get("userID")
+										);
+
+					## delete (update to non-attending.)
+					db::where("activityUserDateID",$activityUserDateID)->update("activity_user_date",$data);
+				}
+
+				## Find any new date selected for existing user.
+				foreach($updatedData[$userID] as $date)
+				{
+					if(isset($activityUserDate[$userID]) && !isset($res_activityUserDate[$date]))
+					{
+						## get activityUserID.
+						$activityUserID	= db::where("userID",$userID)->get("activity_user")->row("activityUserID");
+
+						echo 1;
+						die;
+						$this->join($userID,$activityID,$date,$activityUserID);
+
+					}
+				}
+			}
+
+			## if user in updatedData not exists in current user activity list
+			foreach($updatedData as $userID=>$dateR)
+			{
+				if(!isset($activityUserDate[$userID]))
+				{
+					foreach($updatedData[$userID] as $date)
+					{
+						$this->join($userID,$activityID,$date);
+					}
+				}
+			}
+		}
+		## 2. all date required.
+		else
+		{
+			db::where("activityID",$activityID);
+			$result	= db::get("activity_user")->result("userID");
+
+			foreach($result as $userID => $row)
+			{
+				$activityUserID	= $row['activityUserID'];
+				
+				## attendance status.
+				$attendance	= isset($updatedData[$userID]) && $updatedData[$userID] == false ? 2 : 1;
+
+				## update all attending date
+				$data	= Array(
+					"activityUserDateAttendance"=>$attendance,
+					"activityUserDateUpdatedDate"=>now(),
+					"activityUserDateUpdatedUser"=>session::get("userID")
+								);
+
+				db::where("activityUserID",$activityUserID)->update("activity_user_date",$data);
+			}
+
+			## new user
+			foreach($updatedData as $userID=>$val)
+			{
+				if(!isset($activityUserDate[$userID]))
+				{
+					$this->join($userID,$activityID);
+				}
+			}
+		}
 	}
 }
 

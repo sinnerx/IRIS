@@ -219,4 +219,11 @@ class Controller_Activity
 
 		view::render("sitemanager/activity/other",$data);
 	}
+
+	public function rsvp()
+	{
+		$data['res_occured_activity']	= model::load("activity/activity")->getOccuredActivities(authData("site.siteID"));
+
+		view::render("sitemanager/activity/rsvp",$data);
+	}
 }
