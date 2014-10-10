@@ -139,7 +139,11 @@ class Services
 				"page_small"=>Array(
 							"w"=>200,
 							"h"=>500
-							)
+							),
+				"avatar"=>Array(
+							"w"=>100,
+							"h"=>200
+								)
 						);
 
 		return !$name?$setsR:$setsR[$name];

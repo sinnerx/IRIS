@@ -114,6 +114,7 @@ $routes[]	= Array("dashboard/[:controller]/[**:method]",function($param)
 #######################
 
 ### API Routes ####
+$routes['api-image-avatar']	= Array("api/photo/avatar/[**:photo-name]","controller=api:image@get","{photo-name},avatar");
 $routes[]	= Array("api/photo/[:year]/[:month]/[:day]/[:photo-name]/[:size]","controller=api:image@get","{year},{month},{day},{photo-name},{size}");
 $routes[]	= Array("api/photo/[:photo-name]/[:size]","controller=api:image@get","{photo-name},{size}"); ## page photo api.
 
@@ -195,6 +196,9 @@ $routes['forum-thread']		= Array("[:site-slug]/forum/[:category-slug]/[:thread-i
 
 ## faq
 $routes['main-faq']			= Array("[:site-slug]/soalan-lazim","controller=main@faq");
+
+## search
+$routes['search']			= Array("[:site-slug]/carian/[:keyword?]","controller=main@search","{keyword}");
 
 ## video gallery
 $routes[] = Array("[:site-slug]/video","controller=video@album"); 

@@ -333,7 +333,7 @@ echo model::load("template/frontend")
 			
 				<?php
 				foreach($participantList['attending'] as $row):
-				$imgUrl	= model::load("image/services")->getPhotoUrl($row['userProfileAvatarPhoto']);
+				$imgUrl	= model::load("api/image")->buildAvatarUrl($row['userProfileAvatarPhoto']);
 				$userProfileHref	= url::base($row['siteSlug']."/profile/".$row['userID']);
 				?>
 				<li><a href='<?php echo $userProfileHref;?>'><img src="<?php echo $imgUrl;?>" style='height:63px;' alt=""/></a></li>

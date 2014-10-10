@@ -7,10 +7,19 @@ class Image
 	public function buildPhotoUrl($photoName,$size)
 	{
 		if(!$photoName)
-			return model::load("image/services")->getPhotoUrl(null);;
+			return model::load("image/services")->getPhotoUrl(null);
 
 		$baseUrl	= url::getProtocol().apps::config("base_url:frontend");
 		return $baseUrl."/api/photo/$photoName/$size";
+	}
+
+	public function buildAvatarUrl($photoName)
+	{
+		if(!$photoName)
+			return model::load("image/services")->getPhotoUrl(null);
+
+		$baseUrl	= url::getProtocol().apps::config("base_url:frontend");
+		return $baseUrl."/api/photo/avatar/$photoName";
 	}
 }
 
