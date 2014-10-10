@@ -82,6 +82,15 @@ class Thread
 		return is_array($categoryID)?db::result("forumCategoryID",true):db::result("forumThreadID");
 	}
 
+	public function getLatestThreads($siteID)
+	{
+		db::where("siteID",$siteID);
+		db::order_by("forumThreadID","DESC");
+
+		db::limit(10);
+		return db::get("forum_thread")->result();
+	}
+
 	public function getThread($siteID,$categoryID,$threadID)
 	{
 		return db::where("siteID",$siteID)->where("forumCategoryID",$categoryID)->where("forumThreadID",$threadID)->get("forum_thread")->row();
