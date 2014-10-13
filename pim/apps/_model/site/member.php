@@ -3,6 +3,60 @@ namespace model\site;
 use db, model, pagination, session;
 class Member
 {
+	public function getMemberListBySite($cols = "*",$cond = null,$join = null,$limit = null,$order = null,$pageConf = null,$siteID = null)
+	{
+		db::from("site_member");
+		db::join("user_profile","user_profile.userID = site_member.userID");
+		db::join("user","user.userID = site_member.userID");
+		
+		if($siteID)
+		{
+			db::where("siteID",$siteID);
+		}
+
+		if($join)
+		{
+			db::join($join,$join.".userID = site_member.userID");
+		}
+
+		db::select($cols);
+
+		if($cond)
+		{
+			db::where($cond);
+		}
+
+		if($limit)
+		{
+			db::limit($limit);
+		}
+
+		if($order)
+		{
+			db::order_by($order);
+		}
+
+		$num = db::num_rows();
+
+		if($pageConf)
+		{
+			pagination::initiate(Array(
+								"urlFormat"=>$pageConf['urlFormat'],
+								"totalRow"=>$num,
+								"limit"=>$pageConf['limit'],
+								"currentPage"=>$pageConf['currentPage']
+										));
+
+			db::limit($pageConf['limit'],pagination::recordNo()-1);
+		
+			return Array(db::get()->result(),$num);
+		}
+		else
+		{
+			return db::get()->result();
+		}
+	}
+
 	public function checkMember($siteID,$userIC)
 	{
 		$userCheck	= db::where("userID IN (SELECT userID FROM user WHERE userIC = ?)",Array($userIC));

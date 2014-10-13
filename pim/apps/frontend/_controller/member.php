@@ -81,13 +81,15 @@ class Controller_Member
 
 	public function profile_directory()
 	{
-		$data['new_users'] = model::load("user/user")->getListOfUser(null,"user.userLevel = '1' AND user.userID != ".session::get("userID"),"user_profile_additional",10,"user.userCreatedDate DESC",null);
+		$siteID	= authData("current_site.siteID");
+		$data['new_users'] = model::load("site/member")->getMemberListBySite(null,"site_member.userID != ".session::get("userID"),"user_profile_additional",10,"user.userCreatedDate DESC",null,$siteID);
 		
 		view::render("member/profile_directory",$data);
 	}
 
 	public function getUserList($type)
 	{
+		$siteID	= authData("current_site.siteID");
 		$paginConf['urlFormat']	= url::base("{site-slug}/profile/getUserList/$type?page={page}");
 		$data['page'] = $paginConf['currentPage']	= request::get("page",1);
 		$paginConf['limit']			= 6;
@@ -98,20 +100,20 @@ class Controller_Member
 
 		if($type == 'alphabetical')
 		{
-			$response = model::load("user/user")->getListOfUser(null,"user.userLevel = '1' AND user.userID != ".session::get("userID"),"user_profile_additional",null,"user_profile.userProfileFullName ASC",$paginConf);
+			$response = model::load("site/member")->getMemberListBySite(null,"site_member.userID != ".session::get("userID"),"user_profile_additional",null,"user_profile.userProfileFullName ASC",$paginConf,$siteID);
 		}
 		else if($type == 'date')
 		{
-			$response = model::load("user/user")->getListOfUser(null,"user.userLevel = '1' AND user.userID != ".session::get("userID"),"user_profile_additional",null,"user.userCreatedDate ASC",$paginConf);
+			$response = model::load("site/member")->getMemberListBySite(null,"site_member.userID != ".session::get("userID"),"user_profile_additional",null,"user.userCreatedDate ASC",$paginConf,$siteID);
 		}
 		else if($type == 'lastLogin')
 		{
-			$response = model::load("user/user")->getListOfUser(null,"user.userLevel = '1' AND user.userID != ".session::get("userID"),"user_profile_additional",null,"user.userLastLogin DESC",$paginConf);
+			$response = model::load("site/member")->getMemberListBySite(null,"site_member.userID != ".session::get("userID"),"user_profile_additional",null,"user.userLastLogin DESC",$paginConf,$siteID);
 		}
 		else if($type == 'search')
 		{
 			$request	= input::get();
-			$response = model::load("user/user")->getListOfUser(null,"user.userLevel = '1' AND user.userID != ".session::get("userID")." AND user_profile.userProfileFullName LIKE '%".$request['find']."%'","user_profile_additional",null,"user_profile.userProfileFullName ASC",$paginConf);
+			$response = model::load("site/member")->getMemberListBySite(null,"site_member.userID != ".session::get("userID")." AND user_profile.userProfileFullName LIKE '%".$request['find']."%'","user_profile_additional",null,"user_profile.userProfileFullName ASC",$paginConf,$siteID);
 		}
 
 		$data['users'] = $response[0];
