@@ -88,7 +88,7 @@ class Thread
 		db::order_by("forumThreadID","DESC");
 
 		db::limit(10);
-		return db::get("forum_thread")->result();
+		return db::get("forum_thread")->result("forumThreadID");
 	}
 
 	public function getThread($siteID,$categoryID,$threadID)
