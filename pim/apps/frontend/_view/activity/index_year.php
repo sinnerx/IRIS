@@ -75,6 +75,8 @@ Lorem ipsum dolor sit amet, maiores ornare ac fermentum, imperdiet ut vivamus a,
 </div>
 <div class="clr"></div>
 <?php
+$helper	= model::load("helper");
+
 if($res_activity):
 
 ## prepare the left and right side of the month first based on existing activity month.
@@ -115,10 +117,12 @@ foreach($leftR as $m):?>
 				<div class='activity-details-left'>
 					<div class="activity-name"><a href="<?php echo $url;?>"><?php echo $row['activityName'];?></a></div>
 					<div class="activity-time-date">
-					<?php if($row['activityStartDate'] == $row['activityEndDate']):
-					echo date("d F Y",strtotime($row['activityStartDate']));
+					<?php if(date("Y-m-d",strtotime($row['activityStartDate'])) == date("Y-m-d",strtotime($row['activityEndDate']))):
+					// echo date("d F Y",strtotime($row['activityStartDate']));
+					echo $helper->frontendDate($row['activityStartDate']);
 					else:
-					echo date("d F Y",strtotime($row['activityStartDate']))." hingga ".date("d F Y",strtotime($row['activityEndDate']));
+					echo $helper->frontendDate($row['activityStartDate'])." hingga ".$helper->frontendDate($row['activityEndDate']);
+					// echo date("d F Y",strtotime($row['activityStartDate']))." hingga ".date("d F Y",strtotime($row['activityEndDate']));
 					endif;
 					?>
 					</div>
@@ -153,10 +157,10 @@ foreach($rightR as $m):?>
 				<div class='activity-details-left'>
 					<div class="activity-name"><a href="<?php echo $url;?>"><?php echo $row['activityName'];?></a></div>
 					<div class="activity-time-date">
-					<?php if($row['activityStartDate'] == $row['activityEndDate']):
-					echo date("d F Y",strtotime($row['activityStartDate']));
+					<?php if(date("Y-m-d",strtotime($row['activityStartDate'])) == date("Y-m-d",strtotime($row['activityEndDate']))):	
+					echo $helper->frontendDate($row['activityStartDate']);
 					else:
-					echo date("d F Y",strtotime($row['activityStartDate']))." hingga ".date("d F Y",strtotime($row['activityEndDate']));
+					echo $helper->frontendDate($row['activityStartDate'])." hingga ".$helper->frontendDate($row['activityEndDate']);
 					endif;
 					?>
 					</div>

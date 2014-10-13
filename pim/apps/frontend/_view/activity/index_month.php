@@ -113,8 +113,8 @@ echo model::load("template/frontend")
 							<div class="activity-details-left">
 								<div class="activity-name"><a href="<?php echo $url;?>"><?php echo $row['activityName'];?></a></div>
 								<div class="activity-time-date">
-									<?php echo date("d F Y",strtotime($row['activityStartDate']));?> hingga
-									<?php echo date("d F Y",strtotime($row['activityEndDate']));?>
+									<?php echo model::load("helper")->frontendDate($row['activityStartDate']);?> hingga
+									<?php echo model::load("helper")->frontendDate($row['activityEndDate']);?>
 								</div>
 							</div>
 							<div class="activity-join-count">
