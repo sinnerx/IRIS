@@ -413,7 +413,6 @@ var album	= new function()
 		Please key in reference ID of the URL video you desire to insert. 
 		For example: <b>http://www.youtube.com/watch?v=hwAOsnMqbcY</b> by only taking out <b>hwAOsnMqbcY</b> to <b>Video URL ID</b> field.
 		</div>
-		<?php echo flash::data();?>
 		<div class='row'>
 		<form method='post' enctype="multipart/form-data">
 			<div class='col-sm-6'>
@@ -456,10 +455,12 @@ var album	= new function()
 		<div class='well well-sm error-novideo'>
 		This album has no video yet. <a href='javascript:album.addVideo();'>Add?</a>
 		</div>
+		<?php echo flash::data();?>
 		<?php else:?>
 		<div class='well well-sm' id='info-box'>
 		List of all the video for ths album. Or you can <a href='javascript:album.addVideo();'>add</a> more if you want.
 		</div>
+		<?php echo flash::data();?>
 		
 		<div class='row'>
 		<!-- List of video start here -->

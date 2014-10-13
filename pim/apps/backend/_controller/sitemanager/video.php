@@ -68,7 +68,7 @@ Class Controller_Video
 			# add video by album
 			model::load("video/album")->addVideoByAlbum($videoAlbumID,$siteID,$input);
 
-			redirect::to("video/albumVideos/$videoAlbumID#");
+			redirect::to("video/albumVideos/$videoAlbumID#","Video has successfully been added. Video is awaiting approval by the Cluster Lead.");
 		}
 
 		view::render("sitemanager/video/albumVideos",$data);
