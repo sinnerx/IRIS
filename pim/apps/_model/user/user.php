@@ -3,10 +3,16 @@ namespace model\user;
 use db, session, pagination, model;
 class User
 {
-	public function getListOfUser($cols = "*",$cond = null)
+	public function getListOfUser($cols = "*",$cond = null,$join = null,$limit = null,$order = null,$pageConf = null)
 	{
 		db::from("user");
 		db::join("user_profile","user_profile.userID = user.userID");
+		
+		if($join)
+		{
+			db::join($join,$join.".userID = user.userID");
+		}
+
 		db::select($cols);
 
 		if($cond)
@@ -14,7 +20,35 @@ class User
 			db::where($cond);
 		}
 
-		return db::get()->result();
+		if($limit)
+		{
+			db::limit($limit);
+		}
+
+		if($order)
+		{
+			db::order_by($order);
+		}
+
+		$num = db::num_rows();
+
+		if($pageConf)
+		{
+			pagination::initiate(Array(
+								"urlFormat"=>$pageConf['urlFormat'],
+								"totalRow"=>$num,
+								"limit"=>$pageConf['limit'],
+								"currentPage"=>$pageConf['currentPage']
+										));
+
+			db::limit($pageConf['limit'],pagination::recordNo()-1);
+		
+			return Array(db::get()->result(),$num);
+		}
+		else
+		{
+			return db::get()->result();
+		}
 	}
 
 	public function getUsersByID($userID)

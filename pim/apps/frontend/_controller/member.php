@@ -79,6 +79,47 @@ class Controller_Member
 		view::render("member/profile_edit",$row);
 	}
 
+	public function profile_directory()
+	{
+		$data['new_users'] = model::load("user/user")->getListOfUser(null,"user.userLevel = '1' AND user.userID != ".session::get("userID"),"user_profile_additional",10,"user.userCreatedDate DESC",null);
+		
+		view::render("member/profile_directory",$data);
+	}
+
+	public function getUserList($type)
+	{
+		$paginConf['urlFormat']	= url::base("{site-slug}/profile/getUserList/$type?page={page}");
+		$data['page'] = $paginConf['currentPage']	= request::get("page",1);
+		$paginConf['limit']			= 6;
+
+		pagination::setFormat(model::load("template/frontend")->paginationFormat());
+
+		$this->template = false;
+
+		if($type == 'alphabetical')
+		{
+			$response = model::load("user/user")->getListOfUser(null,"user.userLevel = '1' AND user.userID != ".session::get("userID"),"user_profile_additional",null,"user_profile.userProfileFullName ASC",$paginConf);
+		}
+		else if($type == 'date')
+		{
+			$response = model::load("user/user")->getListOfUser(null,"user.userLevel = '1' AND user.userID != ".session::get("userID"),"user_profile_additional",null,"user.userCreatedDate ASC",$paginConf);
+		}
+		else if($type == 'lastLogin')
+		{
+			$response = model::load("user/user")->getListOfUser(null,"user.userLevel = '1' AND user.userID != ".session::get("userID"),"user_profile_additional",null,"user.userLastLogin DESC",$paginConf);
+		}
+		else if($type == 'search')
+		{
+			$request	= input::get();
+			$response = model::load("user/user")->getListOfUser(null,"user.userLevel = '1' AND user.userID != ".session::get("userID")." AND user_profile.userProfileFullName LIKE '%".$request['find']."%'","user_profile_additional",null,"user_profile.userProfileFullName ASC",$paginConf);
+		}
+
+		$data['users'] = $response[0];
+		$data['limit'] = ceil($response[1]/$paginConf['limit']);
+
+		view::render("member/user_list",$data);
+	}
+
 	public function profileUploadAvatar()
 	{
 		$this->template	= false;
