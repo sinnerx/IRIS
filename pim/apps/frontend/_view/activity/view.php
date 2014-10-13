@@ -210,10 +210,12 @@ echo model::load("template/frontend")
 			</div>
 			<div class="event-info-left">
 				<div class="event-time-date">
-				<?php if($activityStartDate == $activityEndDate):?>
-				<?php echo date("d F Y",strtotime($activityStartDate));?>
+				<?php
+				$helper	= model::load("helper");
+				if($activityStartDate == $activityEndDate):?>
+				<?php echo $helper->frontendDate($activityStartDate);?>
 				<?php else:?>
-				<?php echo date("d F Y",strtotime($activityStartDate))." hingga ".date("d F Y",strtotime($activityEndDate));?>
+				<?php echo $helper->frontendDate($activityStartDate)." hingga ".$helper->frontendDate($activityEndDate);?>
 				<?php endif;?>
 				</div>  
 				<div class="event-info-wrap clearfix">
@@ -254,7 +256,8 @@ echo model::load("template/frontend")
 
 									foreach($activityDate as $row)
 									{
-										$date	= date("j M Y",strtotime($row['activityDateValue']));
+										// $date	= date("j M Y",strtotime($row['activityDateValue']));
+										$date	= $helper->frontendDate($row['activityDateValue'],"%d %b %Y");
 										$start	= date("g:i A",strtotime($row['activityDateStartTime']));
 										$end	= date("g:i A",strtotime($row['activityDateEndTime']));
 

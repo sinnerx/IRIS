@@ -227,5 +227,20 @@ class Helper
 
 		return $img;
 	}
+
+	function frontendDate($date,$format = "%d %B %Y")
+	{
+		return strftime($format,strtotime($date));
+	}
+
+	function frontendDatetime($datetime)
+	{
+
+	}
+
+	function frontendTime($time)
+	{
+		return date("g:i A",strtotime($time));
+	}
 }
 ?>
