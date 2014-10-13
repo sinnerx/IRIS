@@ -252,6 +252,313 @@ Class Controller_Main
 		view::render("main/contact_us",$data);
 	}
 
+	public function search($keyword = null)
+	{
+		$this->template = "default";
+
+
+		#$result	= model::load("search")->search($keyword,$module);
+		$typeList	= Array(
+						"blog",
+						"activity",
+						"video",
+						"gallery",
+						"page",
+						"forum"
+							);
+
+		$data['filter']	= $typeList;
+
+		## testdata.
+		$selectedType		= request::get("jenis","all") == "all"?$typeList:explode("-",request::get("jenis"));
+
+		$data['selectedType']	= $selectedType;
+
+		$keyword		= request::get("q","test");
+		$offset			= 0;
+		$limit			= request::get("limit",6);
+		$currentPage	= request::get("page",1);
+
+		## Prepare searching condition and result column
+		foreach($selectedType as $type)
+		{
+			switch($type)
+			{
+				case "blog":
+					$tables['blog']	= "article";
+					$select['blog']	= "articleID,articleText,articleName,articleCreatedDate,articlePublishedDate,articleSlug";
+					$where['blog']['MATCH(articleText) AGAINST (?)'] = Array($keyword);
+					$where['blog']['articleStatus']	= 1;
+					$where['blog']['siteID']		= authData("current_site.siteID");
+
+					## result columns.
+					$resultcolumn['blog']	= Array(
+									'refID' => "articleID",
+									'title'	=> "articleName",
+									'body'	=> "articleText",
+									'date'	=> "articleCreatedDate"
+													);
+
+					$functions['blog']		= Array(
+									"url"	=> Array(
+										"parameter"=>Array("articleSlug","articlePublishedDate"),
+										"callback"=>function($param)
+										{
+											return model::load("helper")->buildDateBasedUrl($param['articleSlug'],$param['articlePublishedDate'],url::base("{site-slug}/blog"));
+										}
+													));
+				break;
+				case "forum":
+					$select['forum']					= "*";
+					$tables['forum']					= "forum_thread_post";
+					$where['forum']['MATCH(forumThreadPostBody) AGAINST (?)'] = Array($keyword);
+					$where['forum']['forum_thread_post.forumThreadID IN (SELECT forumThreadID FROM forum_thread WHERE siteID = ?)'] = Array(authData("current_site.siteID"));
+					$join['forum']['forum_thread']		= "forum_thread.forumThreadID = forum_thread_post.forumThreadID";
+					$join['forum']['forum_category']	= "forum_category.forumCategoryID = forum_thread.forumCategoryID";
+
+					## result columns.
+					$resultcolumn['forum']	= Array(
+									"refID"=>"forumThreadPostID",
+									"title"=>"forumThreadTitle",
+									"body"=>"forumThreadPostBody",
+									"date"=>"forumThreadPostCreatedDate"
+													);
+
+					$functions['forum']		= Array(
+										"url"	=> Array(
+											"parameter"=>Array("forumThreadID","forumCategorySlug"),
+											"callback"=>function($param)
+											{
+												return url::base("{site-slug}/forum/".$param['forumCategorySlug']."/".$param['forumThreadID']);
+											}
+														)
+													);
+				break;
+				case "activity":
+					$select['activity']	= "*";
+					$tables['activity'] = "activity";
+					$select['activity'] = "activityID,activityName,activityDescription";
+					$where['activity']['MATCH(activityName) AGAINST (?) OR MATCH(activityDescription) AGAINST (?)'] 	= Array($keyword,$keyword);
+					$where['activity']['activityApprovalStatus']			= 1;
+
+					## result columns.
+					$resultcolumn['activity']	= Array(
+										"refID"=>"activityID",
+										"title"=>"activityName",
+										"body"=>"activityDescription",
+										"date"=>"activityCreatedDate"
+														);
+
+					$functions['activity']	= Array(
+											"url"=>Array(
+												"parameter"=>Array("activityStartDate","activitySlug"),
+												"callback"=>function($param)
+												{
+													return model::load("helper")->buildDateBasedUrl($param['activitySlug'],$param['activityStartDate'],url::base("{site-slug}/aktiviti"));
+												}
+														)
+													);
+				break;
+				case "video":
+					$select['video']	= "*";
+					$where['video']['MATCH(videoName) AGAINST (?)'] = Array($keyword);
+					$join['video']['video_album']	= "video.videoAlbumID = video_album.videoAlbumID";
+
+					## result columns.
+					$resultcolumn['video']	= Array(
+										"refID"=>"videoAlbumID",
+										"title"=>"videoName",
+										"body"=>"videoAlbumDescription",
+										"date"=>"videoCreatedDate"
+													);
+
+					$functions['video']		= Array(
+										"url"=>Array(
+											"parameter"=>Array("videoAlbumSlug"),
+											"callback"=>function($param)
+											{
+												return url::base("{site-slug}/video/".$param['videoAlbumSlug']);
+											}
+													)
+													);
+
+				break;
+				case "gallery":
+					$select['gallery']	= "*";
+					$tables['gallery']	= "site_album";
+					$where['gallery']['siteAlbumStatus']	= 1;
+					$where['gallery']['siteID']		= authData("current_site.siteID");
+					$where['gallery']['site_album.albumID IN (SELECT albumID FROM album WHERE MATCH(albumDescription) AGAINST (?) OR MATCH(albumName) AGAINST (?))'] = Array($keyword,$keyword);
+					$join['gallery']['album']	= "album.albumID = site_album.albumID";
+
+					## result columns.
+					$resultcolumn['gallery'] = Array(
+										"refID"=>"siteAlbumID",
+										"title"=>"albumName",
+										"body"=>"albumDescription",
+										"date"=>"albumCreatedDate"
+													);
+
+					$functions['gallery']['url']	= Array(
+											"parameter"=>Array("siteAlbumSlug","albumCreatedDate"),
+											"callback"=>function($param)
+											{
+												return model::load("helper")->buildDateBasedUrl($param['siteAlbumSlug'],$param['albumCreatedDate'],url::base("{site-slug}/galeri"));
+											}
+															);
+				break;
+				case "page":
+					$select['page']	= "*";
+					$tables['page']	= "page";
+					$where['page']['MATCH(pageText) AGAINST (?)'] = Array($keyword);
+					$where['page']['siteID']		= authData("current_site.siteID");
+					$join['page']['page_default']	= "page_default.pageDefaultType = page.pageDefaultType";
+
+					## result columns.
+					$resultcolumn['page']	= Array(
+										"refID"=>"pageID",
+										"title"=>"pageDefaultName",
+										"body"=>"pageText",
+										"date"=>"pageCreatedDate",
+										"img"=>Array(
+											"parameter"=>Array("pagePhoto"),
+											"callback"=>function($param)
+											{
+												return model::load("api/image")->buildPhotoUrl($param['pagePhoto'],"page_small");
+											}
+													)
+													);
+
+
+				break;
+			}
+		}
+
+		$total	= 0;
+
+		## type worth to be listed in the current page list.
+		$lookupType = Array();
+		
+		## initial offset.
+		$offset		= $limit*($currentPage-1) + 1;
+		foreach($where as $type=>$res)
+		{
+			foreach($res as $key=>$val)
+			{
+				db::where($key,$val);
+			}
+	
+			$table	= !isset($tables[$type])?$type:$tables[$type];
+
+			## query the total of the current search result.
+			db::select($select[$type]?:"*");
+			$nr	= db::get($table)->num_rows();
+			$total	+= $nr;
+
+			## check if offet is within this total row combined
+			if(/*$offset <= $total && */$nr != 0)
+			{
+				$lookupType[]	= $type;
+				continue;
+				## check if next type is required.
+				if(($offset-1)+$limit > $total)
+				{
+					continue;
+				}
+			}
+			else
+			{
+				continue;
+			}
+
+			break;
+		}
+
+		$data['totalResult']	= $total;
+
+		## -------------------
+		## now only get the record from the selected table.
+		## -------------------
+		$no = 1;
+		$result	= [];
+		$row_no	= 0;
+		$offset	= $offset-1;
+
+		foreach($lookupType as $type)
+		{
+			foreach($where[$type] as $key=>$val)
+			{
+				db::where($key,$val);
+			}
+
+			## join.
+			if($join[$type])
+			{
+				foreach($join[$type] as $table=>$cond)
+				{
+					db::join($table,$cond);
+				}
+			}
+
+			$res	= db::get($tables[$type]?:$type)->result();
+
+			## now prepare result.
+			foreach($res as $row)
+			{
+				if($row_no >= $offset)
+				{
+					if($row_no >= $offset+$limit)
+					{
+						break 2;
+					}
+
+					$row_result	= Array();
+					$row_result['refID']	= $row[$resultcolumn[$type]['refID']];
+					$row_result['type']		= $type;
+
+					$row_result['title']	= $row[$resultcolumn[$type]['title']];
+					$row_result['body']		= model::load("helper")->purifyHTML($row[$resultcolumn[$type]['body']]);
+					$row_result['date']		= date("g:i A, d-F-Y",strtotime($row[$resultcolumn[$type]['date']]));
+
+					if(is_array($resultcolumn[$type]['img']))
+					{
+						$param = Array();
+						foreach($resultcolumn[$type]['img']['parameter'] as $col)
+						{
+							$param[$col]	= $row[$col];
+						}
+
+						$row_result['img']	= $resultcolumn[$type]['img']['callback']($param);
+					}
+
+					## build url.
+					if($functions[$type]['url'])
+					{
+						$param	= Array();
+						foreach($functions[$type]['url']['parameter'] as $col)
+						{
+							$param[$col]	= $row[$col];
+						}
+
+						$row_result['url']	= $functions[$type]['url']['callback']($param);
+					}
+
+
+					$result[]	= $row_result;
+				}
+
+				$row_no++;
+			}
+
+
+			$no++;
+		}
+
+		$data['result']	= $result;
+
+		view::render("main/search",$data);
+	}
+
 
 	## site faq
 	public function faq()

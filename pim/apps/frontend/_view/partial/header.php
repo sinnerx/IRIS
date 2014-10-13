@@ -1,3 +1,25 @@
+<style type="text/css">
+	
+.search-box
+{
+	position: absolute;
+	right:0px;
+	top:-30px;
+}
+
+.search-box input
+{
+	padding:5px;
+	border:1px solid #e8e8e8;
+	border:0px;
+	border-bottom:1px solid black;
+}
+.navigation
+{
+	position: relative;
+}
+
+</style>
 <div class="header">
 	<div class="wrap">
 		<div class="logo">
@@ -5,6 +27,11 @@
 		</div>
 
 		<div class='navigation'>
+			<div class='search-box'>
+			<form method='get' action='<?php echo url::base("{site-slug}/carian");?>'>
+				Carian : <input id='q' name='q' value="<?php echo request::get('q');?>" type='search' />
+			</form>
+			</div>
 		<ul class='nav'>
 		<?php
 		$componentChildR	= model::load("site/menu")->componentChild();
