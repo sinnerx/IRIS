@@ -5,7 +5,7 @@
 	margin-bottom:20px;
 }
 
-.search-container > div
+.search-container > .search-list
 {
 	border-bottom:1px solid #eeeeee;
 	padding-bottom: 20px;
@@ -87,6 +87,24 @@
 
 .search-list-content > div
 {
+}
+
+.frontend-pagination
+{
+	text-align: right;
+}
+
+.frontend-pagination a
+{
+	padding:5px;
+	box-shadow: 0px 0px 3px #7d7d7d;
+	margin-left:10px;
+}
+
+.frontend-pagination a.active
+{
+	background: #009bff;
+	color:white;
 }
 
 </style>
@@ -183,6 +201,9 @@ echo model::load("template/frontend")->buildBreadCrumbs(Array(
 		</div>
 	</div>
 	<?php endforeach;?>
+	<div class='frontend-pagination'>
+		<?php echo pagination::link();?>
+	</div>
 	<?php else:?>
 		<div>
 			Tiada carian dijumpai.

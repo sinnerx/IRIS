@@ -274,9 +274,9 @@ Class Controller_Main
 
 		$data['selectedType']	= $selectedType;
 
-		$keyword		= request::get("q","test");
+		$keyword		= request::get("q");
 		$offset			= 0;
-		$limit			= request::get("limit",6);
+		$limit			= request::get("limit",10);
 		$currentPage	= request::get("page",1);
 
 		## Prepare searching condition and result column
@@ -395,7 +395,7 @@ Class Controller_Main
 					$select['gallery']	= "*";
 					$tables['gallery']	= "site_album";
 					$where['gallery']['siteAlbumStatus']	= 1;
-					$where['gallery']['siteID']		= authData("current_site.siteID");
+					$where['gallery']['site_album.siteID']		= authData("current_site.siteID");
 					$where['gallery']['site_album.albumID IN (SELECT albumID FROM album WHERE MATCH(albumDescription) AGAINST (?) OR MATCH(albumName) AGAINST (?))'] = Array($keyword,$keyword);
 					$join['gallery']['album']	= "album.albumID = site_album.albumID";
 
@@ -404,7 +404,13 @@ Class Controller_Main
 										"refID"=>"siteAlbumID",
 										"title"=>"albumName",
 										"body"=>"albumDescription",
-										"date"=>"albumCreatedDate"
+										"date"=>"albumCreatedDate",
+										"img"=>Array(
+											"parameter"=>Array("albumCoverImageName"),
+											"callback"=>function($param){
+												return model::load("api/image")->buildPhotoUrl($param['albumCoverImageName'],"small");
+											}
+												)
 													);
 
 					$functions['gallery']['url']	= Array(
@@ -561,6 +567,23 @@ Class Controller_Main
 
 			$no++;
 		}
+
+		## ----------
+		## Pagination
+		## ----------
+		pagination::initiate(Array(
+						"totalRow"=>$total,
+						"currentPage"=>$currentPage,
+						"limit"=>$limit,
+						"urlFormat"=>"carian?q=".$keyword.(request::get("jenis")?"&jenis=".request::get("jenis"):"")."&page={page}"
+									));
+
+		pagination::setFormat("html_number_active","<a href='{href}' class='active'>{number}</a>");
+		pagination::setFormat(Array(
+			"html_number_active"=>"<a href='{href}' class='active'>{number}</a>",
+			"html_previous"=>"<a href='{href}'><</a>",
+			"html_next"=>"<a href='{href}'>></a>"
+			));
 
 		$data['result']	= $result;
 
