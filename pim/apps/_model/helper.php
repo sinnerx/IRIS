@@ -1,6 +1,6 @@
 <?php
 namespace model;
-use HTMLPurifier,HTMLPurifier_Config;
+use HTMLPurifier,HTMLPurifier_Config, model;
 class Helper
 {
 	public function slugify($item)
@@ -209,6 +209,23 @@ class Helper
 			$newD[$key]	= isset($data2[$key])?$data2[$key]:$data1[$key];
 		}
 		return $newD;
+	}
+
+	public function getImgFromText($text)
+	{
+		if(strpos($text,'<img') !== false)
+		{
+			$offset	= strpos($text,'<img');
+			$length = (strpos($text,'alt',$offset)-4)-(strpos($text,'src')+2);
+			$start = (strpos($text,'src=')+5);
+			$img	= substr($text,$start,$length);
+		}
+		else
+		{
+			$img 	= model::load("image/services")->getPhotoUrl(null);
+		}
+
+		return $img;
 	}
 }
 ?>

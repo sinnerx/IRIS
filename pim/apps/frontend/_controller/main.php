@@ -296,7 +296,14 @@ Class Controller_Main
 									'refID' => "articleID",
 									'title'	=> "articleName",
 									'body'	=> "articleText",
-									'date'	=> "articleCreatedDate"
+									'date'	=> "articleCreatedDate",
+									'img'	=> Array(
+										"parameter"=>Array("articleText"),
+										"callback"=>function($param)
+										{
+											return model::load("helper")->getImgFromText($param['articleText']);
+										}
+												)
 													);
 
 					$functions['blog']		= Array(
@@ -307,6 +314,7 @@ Class Controller_Main
 											return model::load("helper")->buildDateBasedUrl($param['articleSlug'],$param['articlePublishedDate'],url::base("{site-slug}/blog"));
 										}
 													));
+
 				break;
 				case "forum":
 					$select['forum']					= "*";

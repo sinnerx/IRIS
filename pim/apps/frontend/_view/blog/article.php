@@ -96,7 +96,7 @@ function changeCategory()
 							<li class="clearfix">
 								<div class="featured-image">
 									<?php 
-										if(strpos($row['articleText'],'<img') !== false)
+										/*if(strpos($row['articleText'],'<img') !== false)
 										{
 											$offset	= strpos($row['articleText'],'<img');
 											$length = (strpos($row['articleText'],'alt',$offset)-4)-(strpos($row['articleText'],'src')+2);
@@ -106,7 +106,8 @@ function changeCategory()
 										else
 										{
 											$img 	= model::load("image/services")->getPhotoUrl(null);
-										}
+										}*/
+										$img	= model::load("helper")->getImgFromText($row['articleText']);
 									?>
 									<img src="<?php echo $img;?>" style='height:100%;' alt=""/> 
 								</div>
