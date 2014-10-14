@@ -65,7 +65,7 @@
     <div class="folder">
       <section class="panel">
           <div class="panel-pic">
-              <a href="<?php echo url::base(request::named("site-slug")."/video/".$album['videoAlbumSlug']); ?>"><img src="<?php echo model::load("video/album")->buildVideoUrl($first_vid['videoType'],$first_vid['videoRefID']); ?>" /></a>
+              <a href="<?php echo url::base(request::named("site-slug")."/video/".$album['videoAlbumSlug']); ?>"><img src="<?php if($album['videoAlbumThumbnail']){echo $album['videoAlbumThumbnail'];}else{echo model::load("video/album")->buildVideoUrl($first_vid['videoType'],$first_vid['videoRefID']);} ?>" /></a>
           </div>
           <div class="panel-heading">
               <?php echo $album['videoAlbumName']; ?>
