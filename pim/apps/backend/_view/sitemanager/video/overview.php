@@ -164,6 +164,7 @@ Overview of your video albums. You can <a href='javascript:album.addForm.show();
 		<?php
 		}
 		?>
+		<?php echo pagination::link(); ?>
 		</div>
 		<!-- adding new album form -->
 		<div class='row' id='add-form' style='display:none;'>

@@ -1,6 +1,6 @@
 <?php
 namespace model\video;
-use db, session, model, pagination;
+use db, session, model, pagination, url;
 
 class album
 {
@@ -49,7 +49,7 @@ class album
 	}
 
 	# select videos album by site.
-	public function getVideoAlbums($siteID,$frontend = 0)
+	public function getVideoAlbums($siteID,$page = 1,$frontend = 0)
 	{
 		db::from("video_album");
 		db::where("siteID",$siteID);
@@ -57,9 +57,26 @@ class album
 		if($frontend == 1)
 		{
 			db::where("videoAlbumStatus",1);
+			$url = '';
+		}
+		else
+		{
+			$url = url::base("video/album/{page}");
 		}
 
 		db::order_by("videoAlbumCreatedDate","desc");
+
+		## paginate based on current query built.
+		pagination::setFormat(model::load('template/cssbootstrap')->paginationLink());
+		pagination::initiate(Array(
+				"totalRow"=>db::num_rows(), 
+				"limit"=>12,				
+				"urlFormat"=>$url,
+				"currentPage"=>$page
+		));
+
+		## limit, and offset.
+		db::limit(pagination::get("limit"),pagination::recordNo()-1); 
 
 		return db::get()->result();
 	}
@@ -83,11 +100,23 @@ class album
 	}
 
 	# get list of album(s) by albumID
-	public function getVideos($videoAlbumID)
+	public function getVideos($videoAlbumID,$page = 1)
 	{
 		db::from("video");
 		db::where("videoAlbumID",$videoAlbumID);
 		db::order_by("videoCreatedDate","desc");
+
+		## paginate based on current query built.
+		pagination::setFormat(model::load('template/cssbootstrap')->paginationLink());
+		pagination::initiate(Array(
+				"totalRow"=>db::num_rows(), 
+				"limit"=>8,				
+				"urlFormat"=>url::base("video/albumVideos/$videoAlbumID?page={page}"),
+				"currentPage"=>$page
+		));
+
+		## limit, and offset.
+		db::limit(pagination::get("limit"),pagination::recordNo()-1); 
 
 		return db::get()->result();
 	}

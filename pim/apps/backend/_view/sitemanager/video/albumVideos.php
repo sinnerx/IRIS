@@ -604,3 +604,7 @@ var album	= new function()
 		</div> 
 	</div>
 </div>
+	<?php echo pagination::link();?>
+<script type="text/javascript">
+	$('.pagination').attr('class','pagination pagination-sm m-t-none m-b-none pull-left');
+</script>

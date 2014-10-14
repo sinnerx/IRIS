@@ -1,12 +1,12 @@
 <?php
 Class Controller_Video
 {
-	public function album()
+	public function album($page = 1)
 	{
 		## get siteID.
 		$siteID	= model::load("access/auth")->getAuthData("site","siteID");
 
-		$data['res_album']	= model::load("video/album")->getVideoAlbums($siteID);
+		$data['res_album']	= model::load("video/album")->getVideoAlbums($siteID,$page);
 
 		view::render("sitemanager/video/overview",$data);
 	}
@@ -38,9 +38,10 @@ Class Controller_Video
 
 	public function albumVideos($videoAlbumID)
 	{
+		$page = request::get("page");
 		$siteID				= model::load("access/auth")->getAuthData("site","siteID");
 		$data['row']		= model::load("video/album")->getOneVideoAlbum($videoAlbumID);
-		$data['res_video']	= model::load("video/album")->getVideos($videoAlbumID);
+		$data['res_video']	= model::load("video/album")->getVideos($videoAlbumID,$page);
 
 		if(form::submitted())
 		{
