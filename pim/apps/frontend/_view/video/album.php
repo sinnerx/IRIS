@@ -79,7 +79,6 @@
 
 
 
-
 </div>
 
 
@@ -93,3 +92,7 @@
 
 
 </div>
+<?php echo pagination::link();?>
+<script type="text/javascript">
+  $('.frontend-pagination').attr('style','text-align: center !important;');
+</script>

@@ -57,20 +57,22 @@ class album
 		if($frontend == 1)
 		{
 			db::where("videoAlbumStatus",1);
-			$url = '';
+			$url = url::base("{site-slug}/video?page={page}");
+			$limit = 4;
 		}
 		else
 		{
 			$url = url::base("video/album/{page}");
+			$limit = 12;
 		}
 
 		db::order_by("videoAlbumCreatedDate","desc");
 
 		## paginate based on current query built.
-		pagination::setFormat(model::load('template/cssbootstrap')->paginationLink());
+		pagination::setFormat(model::load('template/frontend')->pagination());
 		pagination::initiate(Array(
 				"totalRow"=>db::num_rows(), 
-				"limit"=>12,				
+				"limit"=>$limit,				
 				"urlFormat"=>$url,
 				"currentPage"=>$page
 		));
