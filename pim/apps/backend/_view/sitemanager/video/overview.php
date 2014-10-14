@@ -119,9 +119,6 @@ Overview of your video albums. You can <a href='javascript:album.addForm.show();
 			$no		= 1;
 			foreach($res_album as $row)
 			{
-				/*$coverimageUrl	= model::load("image/services")->getPhotoUrl($row['albumCoverImageName']);
-				$coverimageUrl	= model::load("api/image")->buildPhotoUrl($row['albumCoverImageName'],"small");*/
-
 				if($no == 1)
 				{
 					$opened	= true;
@@ -137,8 +134,8 @@ Overview of your video albums. You can <a href='javascript:album.addForm.show();
 						</div>
 						</div>
 						<div onclick='album.showDetail(<?php echo $row['videoAlbumID'];?>);'>
-						<?php $data = model::load("video/album")->getVideoAlbumCover($row['videoAlbumID']); ?>
-						<img src='<?php echo model::load("video/album")->buildVideoUrl($data['videoType'],$data['videoRefID']); ?>' width='100%' />
+						<?php if(!$row['videoAlbumThumbnail']){$data = model::load("video/album")->getVideoAlbumCover($row['videoAlbumID']);} ?>
+						<img src='<?php if($row['videoAlbumThumbnail']){echo $row['videoAlbumThumbnail'];}else{echo model::load("video/album")->buildVideoUrl($data['videoType'],$data['videoRefID']);} ?>' width='100%' />
 						</div>
 					</section>
 				</div>

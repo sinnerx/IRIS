@@ -101,6 +101,14 @@ Class Controller_Video
 		return response::json(Array($response['videoRefID']));
 	}
 
+	public function changeCoverVideo($videoAlbumID)
+	{
+		$video = input::get("videoName");
+		model::load("video/album")->changeCoverVideo($videoAlbumID,$video);
+
+		return $video;
+	}
+
 	public function disableAlbum($videoAlbumID)
 	{
 		$response = model::load("video/album")->disableAlbum($videoAlbumID);

@@ -56,10 +56,47 @@ var album	= new function()
 		$("#albumDescription, #albumDescription_editbutton").show();
 	}
 
+	this.updateCoverVideo = function()
+	{
+		if(!$(".album-video")[0])
+		{
+			return alert("Please upload at least one video first");
+		}
+
+		if(this.covervideoEditing)
+		{
+			return false;
+		}
+
+		this.covervideoEditing = true;
+		//assign class
+		$(".album-video").addClass("assigning-covervideo");
+
+		$("#info-box").addClass("bg-primary");
+		$("#info-box").data("temporary",$("#info-box").html()); //save current info in data-temporary first.
+		$("#info-box").html("You may choose the cover video from any of the videos below : <span onclick='album.updateCoverVideo_reset();' class='pull-right' style='cursor:pointer;'>[ Cancel X ]</span>");
+
+		$(".assigning-covervideo").click(function()
+		{
+			var ppath = $(this).data("videopath");
+
+			if($(this).hasClass("deleted-video"))
+			{
+				return alert("This video has been deleted.");
+			}
+
+			if(confirm("Use this as cover video. Are you sure?"))
+			{			
+				album.updateCoverVideo_submit(ppath);
+			}
+
+		});
+	}
+
 	this.updateCoverVideo_submit = function(path)
 	{
 		var data = {"videoName":path};
-		$.ajax({type:"POST",url:pim.base_url+"ajax/gallery/changeCoverVideo/"+this.albumID,data:data}).done(function(res)
+		$.ajax({type:"POST",url:pim.base_url+"video/changeCoverVideo/"+this.albumID,data:data}).done(function(res)
 		{
 			// change source of current video.
 			if(res)
@@ -522,7 +559,7 @@ var album	= new function()
 			Please select from the list of video.
 			</div>
 			<!-- /trigger ends -->
-			<img style='width:100%;' id='theCoverVideo' src='<?php echo model::load("video/album")->buildVideoUrl($res_video[0]['videoType'],$res_video[0]['videoRefID']); ?>' />
+			<img style='width:100%;' id='theCoverVideo' src='<?php if($row['videoAlbumThumbnail']){ echo $row['videoAlbumThumbnail']; }else{echo model::load("video/album")->buildVideoUrl($res_video[0]['videoType'],$res_video[0]['videoRefID']);} ?>' />
 			<div class='album-description'>
 				<span id='albumDescription'><?php echo $row['videoAlbumName'];?></span>
 				<div id='albumDescription_editor'>

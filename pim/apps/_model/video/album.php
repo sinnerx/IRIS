@@ -32,7 +32,12 @@ class album
 	{
 		db::from("video_album");
 		db::where("videoAlbumOriginalSlug",$slug);
-		db::where("videoAlbumID != ?",Array($videoAlbumID));
+
+		if($videoAlbumID)
+		{
+			db::where("videoAlbumID != ?",Array($videoAlbumID));
+		}
+
 		db::where("siteID",$siteID);
 		
 		if($result=db::get()->result())
@@ -78,7 +83,7 @@ class album
 	}
 
 	# get list of album(s) by albumID
-	public function getVideos($videoAlbumID,$paginationConf = null)
+	public function getVideos($videoAlbumID)
 	{
 		db::from("video");
 		db::where("videoAlbumID",$videoAlbumID);
@@ -88,7 +93,7 @@ class album
 	}
 
 	# get list of album(s) by slug
-	public function getVideosBySlug($slug,$frontend = 0,$paginationConf = null)
+	public function getVideosBySlug($slug,$frontend = 0)
 	{
 		db::from("video_album");
 		db::where("videoAlbumSlug",$slug);
@@ -105,7 +110,7 @@ class album
 		}
 
 		db::order_by("videoCreatedDate","desc");
-
+		
 		return db::get()->result();
 	}
 
@@ -246,6 +251,14 @@ class album
 		$video = db::get("video")->row();
 		
 		return $video['videoAlbumID'];
+	}
+
+	public function changeCoverVideo($videoAlbumID,$videoName)
+	{
+		db::where("videoAlbumID",$videoAlbumID);
+		db::update("video_album",Array("videoAlbumThumbnail"=>$videoName));
+
+		return true;
 	}
 }
 
