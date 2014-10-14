@@ -75,6 +75,26 @@ input
 
 /* MCMC Update Ends */
 
+/* TEMPORARY */
+.frontend-pagination
+{
+	text-align: right;
+}
+
+.frontend-pagination a
+{
+	padding:5px;
+	box-shadow: 0px 0px 3px #7d7d7d;
+	margin-left:10px;
+}
+
+.frontend-pagination a.active
+{
+	background: #009bff;
+	color:white;
+}
+
+
 </style>
 <?php controller::load("partial","top");?>
 <?php controller::load("partial","header");?>

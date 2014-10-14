@@ -15,6 +15,16 @@ class Frontend
 		return $format;
 	}
 
+	public function pagination()
+	{
+		return Array(
+			"html_wrapper"=>"<div class='frontend-pagination'>{content}</div>",
+			"html_number_active"=>"<a href='{href}' class='active'>{number}</a>",
+			"html_previous"=>"<a href='{href}'><</a>",
+			"html_next"=>"<a href='{href}'>></a>"
+			);
+	}
+
 	public function buildBreadCrumbs($array)
 	{
 		$breadcrumb	= "<a href='".url::base("{site-slug}")."'>Utama</a>";

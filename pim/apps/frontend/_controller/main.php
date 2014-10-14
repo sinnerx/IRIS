@@ -578,12 +578,7 @@ Class Controller_Main
 						"urlFormat"=>"carian?q=".$keyword.(request::get("jenis")?"&jenis=".request::get("jenis"):"")."&page={page}"
 									));
 
-		pagination::setFormat("html_number_active","<a href='{href}' class='active'>{number}</a>");
-		pagination::setFormat(Array(
-			"html_number_active"=>"<a href='{href}' class='active'>{number}</a>",
-			"html_previous"=>"<a href='{href}'><</a>",
-			"html_next"=>"<a href='{href}'>></a>"
-			));
+		pagination::setFormat(model::load("template/frontend")->pagination());
 
 		$data['result']	= $result;
 
