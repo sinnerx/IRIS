@@ -190,4 +190,11 @@ function dateRangeViewer($date,$type = 1,$current_lang = "en")
 	}
 }
 
+function pre_print_r($txt)
+{
+	echo "<pre>";
+	print_r($txt);
+	echo "</pre>";
+}
+
 ?>

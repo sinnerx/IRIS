@@ -1,3 +1,4 @@
+<script src="<?php echo url::asset("_templates/js/easyResponsiveTabs.js");?>" type="text/javascript"></script>
 <h3 class="block-heading"><a href='.'>PROFIL AHLI</a> <span class="subforum"> > Pemegang kad</span> </h3>
 <div class="block-content clearfix">
     <div class="page-content">
@@ -9,31 +10,45 @@
             $photoUrl   = model::load("image/services")->getPhotoUrl($row['userProfileAvatarPhoto']);
             ?>
             <div class="profile-avatar-member"><img src="<?php echo $photoUrl;?>"></div>
-                <?php /*
-                [USER ACTIVITY]
-                <div class="profile-user-activity" style="opacity:0.2;">
+                <div class="profile-user-activity">
                 <h3>Aktiviti</h3>
                     <div class="profile-activity-list">
                         <ul>
+                            <?php
+                            if($activities)
+                            {
+                                foreach($activities as $userActivity):
+                                $date   = dateRangeViewer($userActivity['row']['userActivityCreatedDate'],1,"my");
+                                    ?>
+                                <li>
+                                    <a href='#'><?php echo $userActivity['text'];?></a>
+                                    <span><?php echo $date;?></span>                                    
+                                </li>
+                                <?php
+                                endforeach;
+                            }
+
+                            ?>
+                            <?php /*
                             <li>
-                                <a href="#">Hashim Meninggalkan Komen di Forum “ Siapa Boleh Bekalkan atap nipah? ”</a>
-                                <span> 2 Minit Lalu </span>
-                                </li>
-                                <li>
-                                <a href="#">Razak mengemaskini profil peribadinya.</a>
-                                <span> 12 Minit Lalu </span>
-                                </li>
-                                <li>
-                                <a href="#">Kamal Meninggalkan Komen di Galeri Foto “Pembukaan Ruangan Baru”.</a>
-                                <span> 2 Jam Lalu </span>
-                                </li>
-                                <li>
-                                <a href="#">Rahman akan hadir ke “ Latihan Asas Etika Email ”.</a>
-                                <span> 15 Jam Lalu </span>
+                            <a href="#">Hashim Meninggalkan Komen di Forum “ Siapa Boleh Bekalkan atap nipah? ”</a>
+                            <span> 2 Minit Lalu </span>
                             </li>
+                            <li>
+                            <a href="#">Razak mengemaskini profil peribadinya.</a>
+                            <span> 12 Minit Lalu </span>
+                            </li>
+                            <li>
+                            <a href="#">Kamal Meninggalkan Komen di Galeri Foto “Pembukaan Ruangan Baru”.</a>
+                            <span> 2 Jam Lalu </span>
+                            </li>
+                            <li>
+                            <a href="#">Rahman akan hadir ke “ Latihan Asas Etika Email ”.</a>
+                            <span> 15 Jam Lalu </span>
+                            </li> */?>
                         </ul>
                     </div>
-                </div>*/?>
+                </div>
             </div>
             <div class="rght-sidebar">
                 <div class="profile-user-info">
@@ -85,14 +100,31 @@
                                 <br>
                                 Lorem ipsum dolor sit amet, maiores ornare ac fermentum, imperdiet ut vivamus a, nam lectus at nunc. Quam euismod sem, semper ut potenti pellentesque quisque. In eget sapien sed, sit duis vestibulum ultricies, placerat morbi amet vel, nullam in in lorem vel. In molestie elit dui dictum, praesent nascetur pulvinar sed, in dolor pede in aliquam, risus nec error quis pharetra. Eros metus quam augue suspendisse, metus rutrum risus erat in.  In ultrices quo ut lectus, etiam vestibulum urna a est, pretium luctus euismod nisl, pellentesque turpis hac ridiculus massa. Venenatis a taciti dolor platea, curabitur lorem platea urna odio.</p> -->
                             </div>
-                            <?php /*
-                            [USER ACTIVITY]
-                            <div style="opacity:0.1;cursor:default;">
+                            <div>
                             <div class="profile-activity-forum">
                             <div class="heading-category">Forum</div>
                             <div class="profile-activity-forum-container">
                             <ul>
-                                <li class="clearfix">
+                                <?php
+                                if($activities_forum)
+                                {
+                                    foreach($activities_forum as $userActivity):?>
+                                    <?php
+                                    $date   = dateRangeViewer($userActivity['row']['userActivityCreatedDate'],1,"my");
+                                    ?>
+                                    <li class="clearfix">
+                                        <i class="fa fa-folder-open"></i>
+                                        <div class="forum-activity-title">
+                                        <a href="#"><?php echo $userActivity['text'];?></a>
+                                        <span><?php echo $date;?></span>
+                                        </div>
+                                    </li>
+                                    <?php
+                                    endforeach;
+                                }
+
+                                ?>
+                                <!-- <li class="clearfix">
                                 <i class="fa fa-folder-open"></i>
                                 <div class="forum-activity-title">
                                 <a href="#">Hashim meninggalkan komen di Forum "Siapa boleh bekalkan atap nipah?"</a>
@@ -112,7 +144,7 @@
                                 <a href="#">Hashim meninggalkan komen di Forum "Siapa boleh bekalkan atap nipah?"</a>
                                 <span>2 Jam Yang Lalu</span>
                                 </div>
-                                </li>
+                                </li> -->
                             </ul>
                             </div>
                             </div>
@@ -130,7 +162,7 @@
                             </ul>
                             </div>
                             </div>
-                            <div class="profile-activity-file">
+                            <!-- <div class="profile-activity-file">
                             <div class="heading-category">Muat Naik Fail</div>
                             <div class="profile-activity-forum-container">
                             <ul>
@@ -143,42 +175,34 @@
                             </li>
                             </ul>
                             </div>
-                            </div>
+                            </div> -->
                             <div class="profile-activity-comment">
                             <div class="heading-category">Komen Terkini</div>
                             <div class="profile-activity-forum-container">
                             <ul>
-                            <li class="clearfix">
-                            <i class="fa fa-comments"></i> 
-                            <div class="forum-activity-title">
-                            <a href="#">Hashim meninggalkan komen di Galeri Foto "Pembukaan Ruangan Baru"
-                            </a>
-                            <span>Minggu Lepas</span>
-                            </div>
-                            </li>
-                            <li class="clearfix">
-                            <i class="fa fa-comments"></i> 
+                            <?php
+                                if($activities_comment)
+                                {
+                                    foreach($activities_comment as $userActivity):?>
+                                    <?php
+                                    $date   = dateRangeViewer($userActivity['row']['userActivityCreatedDate'],1,"my");
+                                    ?>
+                                    <li class="clearfix">
+                                        <i class="fa fa-folder-open"></i>
+                                        <div class="forum-activity-title">
+                                        <a href="#"><?php echo $userActivity['text'];?></a>
+                                        <span><?php echo $date;?></span>
+                                        </div>
+                                    </li>
+                                    <?php
+                                    endforeach;
+                                }
 
-                            <div class="forum-activity-title">
-                            <a href="#">Hashim meninggalkan komen di Galeri Foto "Pembukaan Ruangan Baru"
-                            </a>
-                            <span>Minggu Lepas</span>
-                            </div>
-                            </li>
-
-                            <li class="clearfix">
-                            <i class="fa fa-comments"></i> 
-
-                            <div class="forum-activity-title">
-                            <a href="#">Hashim meninggalkan komen di Galeri Foto "Pembukaan Ruangan Baru"
-                            </a>
-                            <span>Minggu Lepas</span>
-                            </div>
-                            </li>
+                                ?>
                             </ul>
                             </div>
                             </div>
-                            </div> */ ?>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -186,3 +210,26 @@
         </div>
     </div>
 </div>
+
+<script type="text/javascript">
+    var $t = jQuery.noConflict();
+    $t(document).ready(function () {
+        $t('#horizontalTab').easyResponsiveTabs({
+            type: 'default', //Types: default, vertical, accordion           
+            width: 'auto', //auto or any width like 600px
+            fit: true,   // 100% fit in a container
+            closed: 'accordion', // Start closed if in accordion view
+            activate: function(event) { // Callback function if tab is switched
+                var $tab = $t(this);
+                var $info = $t('#tabInfo');
+                var $name = $t('span', $info);
+
+                $name.text($tab.text());
+
+                $info.show();
+            }
+        });
+
+        
+    });
+</script>

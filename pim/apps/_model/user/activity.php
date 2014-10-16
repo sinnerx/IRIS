@@ -1,5 +1,6 @@
 <?php
 namespace model\user;
+use db, model;
 
 /*
 user_activity:
@@ -15,59 +16,191 @@ userActivityCreatedDate [datetime]
 ## a class that log user activities.
 class Activity
 {
-	public function create($userID,$typeAction,$parameter,$refID)
+	public function create($siteID,$userID,$typeAction,$parameter)
 	{
 		list($type,$action)	= explode(".",$typeAction);
 
-		$parameterCheck	= $this->parameterCheck($type,$action,$parameter)
-
 		$data	= Array(
+				"siteID"=>$siteID,
 				"userID"=>$userID,
-				"userActivityType"=>"",
-				"userActivityAction"=>"",
-				"userActivityParameter"=>"",
-				"userActivityRefID"=>"",
+				"userActivityType"=>$type,
+				"userActivityAction"=>$action,
 				"userActivityCreatedDate"=>now()
 						);
+
+		## reqs params.
+		$paramName	= $this->parameterName($typeAction);
+
+		$paramNo	= 1;
+
+		## loop the given paramter. to set the param value sequently.
+		foreach($parameter as $key=>$val)
+		{
+			## immedietly return false.
+			if(!in_array($key,$paramName))
+				return false;
+
+			$data['userActivityParameter'.$paramNo] = $val;
+
+			$paramNo++;
+		}
 
 		db::insert("user_activity",$data);
 	}
 
-	public function getText($type,$action,$parameter)
+	private function _prepareText($txt,$params)
 	{
-		
+		$typeR	= $this->type();
+
+		$newText	= $txt;
+		foreach($params as $key=>$value)
+		{
+			$newText	= str_replace('{'.$key.'}', $value, $newText);
+		}
+
+		return $newText;
 	}
 
-	public function commonParameter()
-	{
-		## stores common parameters and callback.
-		$common	= Array(
-				"user"=>function($userID)
-				{
-					return $userID;
-				},
-				"activity"=>function($activityID)
-				{
-					return $activityID;
-				}
-						);
-
-		return $common;
-	}
-
-	public function type()
+	public function type($typeAction = null)
 	{
 		$typeR	= Array(
-				"comment.add"=>"%user telah membuat komen di %module",
-				"forum.newthread"=>"%user telah membuka topik baru yang bertajuk %threadTitle",
-				"activity.join"=>"%user mendaftar untuk sertai aktiviti %activity",
-				"member.register"=>"seorang pengguna baru %user telah berdaftar di laman ini"
+				"comment.add"=>"{user} meninggalkan komen di {commentType} \"{commentTypeRefName}\"",
+				"forum.newthread"=>"{user} telah membuka topik baru yang bertajuk {threadTitle}",
+				"forum.newpost"=>"{user} meninggalkan komen di forum \"{threadTitle}\"",
+				"activity.join"=>"{user} akan hadir ke \"{activity}\"",
+				"member.register"=>"seorang pengguna baru {user} telah berdaftar di laman ini",
+				"member.edit"=>"{user} mengemaskini profil peribadinya"
 						);
+
+		return $typeAction?$typeR[$typeAction]:$typeR;
 	}
 
-	private function parameterCheck($type,$action,$parameter)
+	private function prepareText($typeAction,$params,$additional)
 	{
+		$userProfile	= $additional['user_profile'];
 
+		switch($typeAction)
+		{
+			## user, module.
+			case "comment.add":
+				$row	= model::load("comment/comment")->getComment($params['commentID']);
+
+				$refNameCol	= Array(
+					"article"=>"articleName",
+					"activity"=>"activityName",
+					"site_album"=>"albumName",
+					"video_album"=>"videoAlbumName"
+								);
+
+				$typeNameR	= Array(
+					"article"=>"blog",
+					"activity"=>"aktiviti",
+					"site_album"=>"galeri photo",
+					"video_album"=>"galeri video"
+									);
+
+				$refName	= $row[$refNameCol[$row['commentType']]];
+
+				$data	= Array("user"=>$userProfile['userProfileFullName'],"commentType"=>$typeNameR[$row['commentType']],"commentTypeRefName"=>$refName);
+			break;
+			## user, threadTitle
+			case "forum.newthread":
+				$row	= db::where("forumThreadID",$params['forumThreadID'])->get("forum_thread")->row();
+				$data	= Array("user"=>$userProfile['userProfileFullName'],"threadTitle"=>$row['forumThreadTitle']);
+			break;
+			case "forum.newpost":
+				db::join("forum_thread","forum_thread.forumThreadID = forum_thread_post.forumThreadID");
+				$row	= db::where("forumThreadPostID",$params['forumThreadPostID'])->get("forum_thread_post")->row();
+
+				$data	= Array("user"=>$userProfile['userProfileFullName'],"threadTitle"=>$row['forumThreadTitle']);
+			break;
+			case "activity.join":
+				db::join("activity","activity.activityID = user_activity.activityID");
+				$row	= db::where("activityUserID",$params['activityUserID'])->get("activity_user")->row();
+
+				$data	= Array("user"=>$row['userProfileFullName'],"activity"=>$row['activityName']);
+			break;
+			case "member.register":
+				$data	= Array("user"=>$userProfile['userProfileFullName']);
+			break;
+			case "member.edit":
+				$data	= Array("user"=>$userProfile['userProfileFullName']);
+			break;
+		}
+
+		$text	= $this->_prepareText($this->type($typeAction),$data);
+		return $text;
+	}
+
+	## Binds parameter with index because the table column for parameter is nameless. (index start from 1.)
+	public function parameterName($typeAction = null,$param = null)
+	{
+		$binds	= Array(
+			"comment.add"=>Array("commentID"),
+			"forum.newthread"=>Array("forumThreadID"),
+			"forum.newpost"=>Array("forumThreadPostID"),
+			"activity.join"=>Array("activityUserID"),
+			"member.register"=>Array("userID")
+						);
+
+		if($param)
+		{
+			$new	= Array();
+			foreach($binds[$typeAction] as $no=>$col)
+			{
+				$new[$col] = $param[$no];
+			}
+
+			return $new;
+		}
+
+		return $typeAction?$binds[$typeAction]:$binds;
+	}
+
+	## return text row.
+	public function getActivities($siteID = null,$userID = null,$type = null)
+	{
+		if($siteID)
+			db::where("siteID",$siteID);
+
+		if($type)
+			db::where("userActivityType",$type);
+
+		if($userID)
+			db::where("userID",$userID);
+
+		db::get("user_activity");
+
+		$res	= db::result("userActivityID");
+
+		## group typeAction.
+		if(!$res)
+			return false;
+
+		## get user data first to ease the query.
+		foreach($res as $row)
+			$userIDr[]	= $row['userID'];
+
+		$res_profile	= db::select("userID","userProfileFullName")->where("userID",$userIDr)->get("user_profile")->result("userID");
+
+		foreach($res as $userActivityID=>$row)
+		{
+			## params
+			$p1	= $row['userActivityParameter1'];
+			$p2	= $row['userActivityParameter2'];
+			$p3 = $row['userActivityParameter3'];
+			$p4 = $row['userActivityParameter4'];
+
+			$typeAction	= $row['userActivityType'].".".$row['userActivityAction'];
+
+			$params	= $this->parameterName($typeAction,Array($p1,$p2,$p3,$p4));
+
+			$text	= $this->prepareText($typeAction,$params,Array("user_profile"=>$res_profile[$row['userID']]));
+
+			$activities[] = Array("text"=>$text,"url"=>"","row"=>$row);
+		}
+
+		return $activities;
 	}
 
 
