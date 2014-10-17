@@ -41,7 +41,7 @@ var comment	= new function()
 	}
 	this.getMore = function(refresh)
 	{
-		if(this.page > 1 && this.page != 0)
+		if(this.page > 1 && this.page != 0 || refresh)
 		{
 			jQuery('#get-older').attr("style","display:block;");
 
@@ -90,7 +90,7 @@ var comment	= new function()
 		});
 	}
 }
-setTimeout(function(){comment.getMore(1)}, 60000);
+setTimeout(function(){comment.getMore(1)}, 300000);
 
 </script>
 <style type="text/css">
