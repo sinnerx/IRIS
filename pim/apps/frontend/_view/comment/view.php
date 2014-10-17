@@ -30,7 +30,7 @@ var comment	= new function()
 		{
 			if(response)
 			{
-				jQuery("#comment-container").append(response);
+				jQuery(".forum-post-comment-content ul").append(response);
 			}
 		});
 		jQuery('#comment-container').animate({"opacity":"1"},"slow");
