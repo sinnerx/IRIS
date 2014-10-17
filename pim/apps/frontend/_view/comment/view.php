@@ -1,3 +1,4 @@
+<link rel="stylesheet" type="text/css" href="<?php echo url::asset("_scale/css/icon.css"); ?>" media="all" />
 <script type="text/javascript">	
 var comment	= new function()
 {
@@ -9,7 +10,7 @@ var comment	= new function()
 		var body = jQuery('#body').val();
 		var data = {commentBody:body,commentType:this.commentType,commentRefID:this.refID};
 
-		jQuery.ajax({type:"POST",data:data,url:"<?php echo url::base('{site-slug}/comment/addComment/');?>"}).done(function(resp)
+		jQuery.ajax({type:"POST",data:data,url:"<?php echo url::base('{site-slug}/comment/addComment');?>?type="+this.commentType+"&refID="+this.refID}).done(function(resp)
 		{
 			if(resp == 'false')
 			{
@@ -17,9 +18,12 @@ var comment	= new function()
 			}
 			else
 			{
+				var response = jQuery.parseJSON(resp);
+
 				jQuery("#comment-alert").attr('style','display:none;');
 				jQuery('#body').val("");
-				comment.get(resp);
+				jQuery(".forum-post-comment-count").html('KOMEN <span>('+response[1]+')</span>');
+				comment.get(response[0]);
 			}
 		});
 	}
@@ -67,6 +71,24 @@ var comment	= new function()
 			jQuery('#comment-container').animate({"opacity":"1"},"slow");
 		}
 	}
+	this.delete = function(obj)
+	{
+		var id = jQuery(obj).data("id");
+
+		jQuery.ajax({type:"GET",url:"<?php echo url::base('{site-slug}/comment/disableComment/'); ?>"+id+"?type="+this.commentType+"&refID="+this.refID}).done(function(response)
+		{
+			if(response)
+			{
+				jQuery(obj).parent().animate({width:'toggle'},350);
+				jQuery(".forum-post-comment-count").html('KOMEN <span>('+response+')</span>');
+			}
+			else
+			{
+				alert("there is an error on delete!!!");
+			}
+
+		});
+	}
 }
 setTimeout(function(){comment.getMore(1)}, 60000);
 
@@ -110,6 +132,11 @@ setTimeout(function(){comment.getMore(1)}, 60000);
 	    background: rgba(0,0,0,.5);
 	    color: rgb(255,255,255);
 	}
+
+	a.i
+	{
+		cursor: pointer;
+	}
 </style>
 					<div class="forum-post-comment">
 						<div class="forum-post-comment-count">KOMEN <span>(<?php echo $count; ?>)</span></div>
@@ -136,6 +163,7 @@ setTimeout(function(){comment.getMore(1)}, 60000);
 					  						</div>
 					  						<?php echo $comment['commentBody']; ?>
 										</div>
+					  					<?php if($comment['userID'] == session::get('userID')){ ?><a data-id="<?php echo $comment['commentID']; ?>" onclick="javascript:comment.delete(this);" class="clearRequest i i-cross2 pull-right"></a><?php } ?>
 									</li>
 									<?php endforeach ?>
 								<?php endif; ?>

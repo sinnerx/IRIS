@@ -51,6 +51,7 @@ class Comment
 		db::select("user_profile.userProfileFullName,user_profile.userProfileAvatarPhoto,comment.*");
 		db::where("commentRefID",$commentRefID);
 		db::where("commentType",$type);
+		db::where("commentApprovalStatus",1);
 		db::join("user_profile","user_profile.userID = comment.userID");
 
 		## pagination.
@@ -76,6 +77,7 @@ class Comment
 	{
 		db::from('comment');
 		db::where('commentID',$commentID);
+		db::where("commentApprovalStatus",1);
 		db::join("user_profile","user_profile.userID = comment.userID");
 
 		return db::get()->row();
@@ -86,6 +88,7 @@ class Comment
 	{
 		db::from("comment");
 		db::select("COUNT(commentID) AS count");
+		db::where("commentApprovalStatus",1);
 		db::where("commentRefID",$commentRefID);
 		db::where("commentType",$type);
 
@@ -107,6 +110,17 @@ class Comment
 		$row	= db::get("comment")->row();
 
 		return $row;
+	}
+
+	# disable comment
+	public function disableComment($commentID)
+	{
+		db::where("commentID",$commentID);
+		db::update("comment",Array(
+						"commentApprovalStatus"=>0
+								));
+
+		return true;
 	}
 }
 

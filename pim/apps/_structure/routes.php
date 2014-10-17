@@ -164,6 +164,7 @@ $routes[]	= Array("[:site-slug]/blog/kategori/[:category]","controller=blog@arti
 
 ## site comments
 $routes[]	= Array("[:site-slug]/comment/addComment","controller=comment@addComment");
+$routes[]	= Array("[:site-slug]/comment/disableComment/[:commentID]","controller=comment@disableComment","{commentID}");
 $routes[]	= Array("[:site-slug]/comment/getComment/[:commentID]","controller=comment@getComment","{commentID}");
 $routes[]	= Array("[:site-slug]/comment/getComments/[:refID]/[:type]","controller=comment@getComments","{refID},{type}");
 

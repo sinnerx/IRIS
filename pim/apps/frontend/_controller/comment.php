@@ -10,11 +10,14 @@ Class Controller_Comment
 	public function addComment()
 	{
 		$data	= input::get();
+		$type = request::get("type");
+		$refID = request::get("refID");
 
 		if($data['commentBody'])
 		{
 			$id 	= model::load("comment/comment")->addComment($data['commentRefID'],session::get("userID"),$data['commentType'],$data);
-			return $id;
+			$count   = model::load("comment/comment")->getCount($refID,$type);
+			return response::json(Array($id,$count));
 		}
 		else
 		{
@@ -72,8 +75,12 @@ Class Controller_Comment
 					echo '</div>
 					  			</div>';
 					echo $comment['commentBody'];
-					echo '</div>
-								</li>';
+					echo '</div>';
+					if($comment['userID'] == session::get('userID'))
+					{ 
+						echo '<a data-id="'.$comment['commentID'].'" onclick="javascript:comment.delete(this);" class="clearRequest i i-cross2 pull-right"></a>';
+					}
+					echo '</li>';
 				}
 			}
 		}
@@ -98,8 +105,26 @@ Class Controller_Comment
 			echo '</div>
 			 		</div>';
 			echo $comment['commentBody'];
-			echo '</div>
-					</li>';
+			echo '</div>';
+			if($comment['userID'] == session::get('userID'))
+			{ 
+				echo '<a data-id="'.$comment['commentID'].'" onclick="javascript:comment.delete(this);" class="clearRequest i i-cross2 pull-right"></a>';
+			}
+			echo '</li>';
+	}
+
+	# disable comment
+	public function disableComment($commentID)
+	{
+		$type = request::get("type");
+		$refID = request::get("refID");
+		$respond = model::load("comment/comment")->disableComment($commentID);
+		$count   = model::load("comment/comment")->getCount($refID,$type);
+
+		if($respond)
+		{
+			return $count;
+		}
 	}
 
 	# get add comment form
