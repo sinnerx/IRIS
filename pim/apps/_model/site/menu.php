@@ -187,7 +187,10 @@ class Menu
 							Array("Forum","forum")
 							#Array("Galeri Video","#"),
 							#Array("Galeri Muat Turun","#")
-								)
+								),
+					"Ruangan Ahli"=>Array(
+							Array("Direktori Ahli","ahli")
+										)
 						)
 				);
 

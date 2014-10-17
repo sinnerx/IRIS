@@ -1,6 +1,6 @@
 <?php
 namespace model\forum;
-use db, session;
+use db, session, model;
 
 /*
 forum_thread:
@@ -46,6 +46,9 @@ class Thread
 		## add post.
 		$this->addPost($threadID,$post);
 
+		## create user activity.
+		model::load("user/activity")->create($siteID,session::get("userID"),"forum.newthread",Array("forumThreadID"=>$threadID));
+
 		return $threadID;
 	}
 
@@ -58,6 +61,12 @@ class Thread
 				"forumThreadPostCreatedUser"=>session::get("userID"),
 				"forumThreadPostCreatedDate"=>now()
 					);
+
+		## create user activity (only if there already exist anothers post to signify it's not a first post.)
+		if(db::where("forumThreadID",$threadID)->get("forum_thread_post")->row())
+		{
+			model::load("user/activity")->create($siteID,session::get("userID"),"forum.newpost",Array("forumThreadPostID"=>db::getLastID("forum_thread_post","forumThreadPostID")));
+		}
 
 		db::insert("forum_thread_post",$data);
 	}

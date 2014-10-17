@@ -68,11 +68,15 @@ user_profile_additional: ## additional info for user.
 
 user_activity:
 	userActivityID [int]
+	siteID [int]
 	userID [int]
 	userActivityTypeCode [varchar(5)]			## 1XX = komen, 2XX = forum, 3XX = activity, 4XX = fail, 5XX = keahlian, 6XX = kemaskini
 	userActivityType [varchar]
 	userActivityAction [varchar]
-	userActivityParameter [varchar]
+	userActivityParameter1 [varchar]
+	userActivityParameter2 [varchar]
+	userActivityParameter3 [varchar]
+	userActivityParameter4 [varchar]
 	userActivityRefID [int]						## 1 reference table.
 	userActivityCreatedDate [datetime]
 
