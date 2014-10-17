@@ -4,9 +4,29 @@ use db, session, model, pagination, url;
 
 class Comment
 {
+	public function commentType()
+	{
+		$typeR	= Array(
+				"activity",
+				"article",
+				"site_album",
+				"video_album"
+						);
+
+		return $typeR;
+	}
+
 	# add comment on a post
 	public function addComment($commentRefID,$userID,$type,$data)
 	{
+		$typeR	= $this->commentType();
+
+		## need to declare in commentType first.
+		if(!in_array($type,$typeR))
+		{
+			return false;
+		}
+
 		$dataComment	= Array(
 				"commentType"=>$type,
 				"userID"=>$userID,
@@ -17,6 +37,9 @@ class Comment
 						);
 
 		db::insert("comment",$dataComment);
+
+		## create user/activity.
+		model::load("user/activity")->create(authData("current_site.siteID"),$userID,"comment.add",Array("commentID"=>db::getLastID("comment","commentID")));
 
 		return db::getLastID("comment","commentID");
 	}
@@ -69,6 +92,21 @@ class Comment
 		$data = db::get("comment")->row();
 
 		return $data['count'];
+	}
+
+	## return comment and all the joined based on it's type.
+	public function getComment2($commentID)
+	{
+		db::where("commentID",$commentID);
+		db::join("activity","comment.commentType = 'activity' AND comment.commentRefID = activity.activityID");
+		db::join("article","comment.commentType = 'article' AND comment.commentRefID = article.articleID");
+		db::join("site_album","comment.commentType = 'site_album' AND comment.commentRefID = site_album.siteAlbumID");
+		db::join("album","comment.commentType = 'site_album' AND site_album.albumID = album.albumID");
+		db::join("video_album","comment.commentType = 'video_album' AND comment.commentRefID = video_album.videoAlbumID");
+
+		$row	= db::get("comment")->row();
+
+		return $row;
 	}
 }
 
