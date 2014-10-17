@@ -91,26 +91,26 @@ Class Controller_Comment
 	{
 		$comment = model::load('comment/comment')->getComment($commentID);
 
-			$photoUrl = model::load("image/services")->getPhotoUrl($comment['userProfileAvatarPhoto']);
-			echo '<li class="clearfix">
-					<div class="forum-post-comment-avatar">
-						<img src="'.$photoUrl.'" alt=""/>
-					</div>
-					<div class="forum-post-comment-message">
-						<div class="forum-post-comment-info">';
-			echo $comment['userProfileFullName'];
-			echo '<div class="comment-post-date">
-		  			<i class="fa fa-clock-o"></i>';
-			echo dateRangeViewer($comment['commentCreatedDate'],1,'my');
-			echo '</div>
-			 		</div>';
-			echo $comment['commentBody'];
-			echo '</div>';
-			if($comment['userID'] == session::get('userID'))
-			{ 
-				echo '<a data-id="'.$comment['commentID'].'" onclick="javascript:comment.delete(this);" class="clearRequest i i-cross2 pull-right"></a>';
-			}
-			echo '</li>';
+		$photoUrl = model::load("image/services")->getPhotoUrl($comment['userProfileAvatarPhoto']);
+		echo '<li class="clearfix">
+				<div class="forum-post-comment-avatar">
+					<img src="'.$photoUrl.'" alt=""/>
+				</div>
+				<div class="forum-post-comment-message">
+					<div class="forum-post-comment-info">';
+		echo $comment['userProfileFullName'];
+		echo '<div class="comment-post-date">
+	  			<i class="fa fa-clock-o"></i>';
+		echo dateRangeViewer($comment['commentCreatedDate'],1,'my');
+		echo '</div>
+		 		</div>';
+		echo $comment['commentBody'];
+		echo '</div>';
+		if($comment['userID'] == session::get('userID'))
+		{ 
+			echo '<a data-id="'.$comment['commentID'].'" onclick="javascript:comment.delete(this);" class="clearRequest i i-cross2 pull-right"></a>';
+		}
+		echo '</li>';
 	}
 
 	# disable comment

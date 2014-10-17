@@ -138,35 +138,38 @@ setTimeout(function(){comment.getMore(1)}, 60000);
 		cursor: pointer;
 	}
 </style>
-					<div class="forum-post-comment">
-						<div class="forum-post-comment-count">KOMEN <span>(<?php echo $count; ?>)</span></div>
-						<?php if($limit != $count && $count != 0 && $count > $limit): ?>
-							<article id="get-older" style="">
-								<input type="checkbox" id="read_more" role="button">
-	    						<label for="read_more" onclick="javascript:comment.getMore();"><span>Read Older Comment</span></label>  
-	    					</article><br/>
-    					<?php endif; ?>
-							<div class="forum-post-comment-content">
-								<ul>
-								<?php if(count($comments) > 0): ?>
-									<?php foreach($comments as $comment): ?>
-									<li class="clearfix">
-										<div class="forum-post-comment-avatar">
-										<?php $photoUrl =  model::load("api/image")->buildAvatarUrl($comment['userProfileAvatarPhoto']); ?>
-											<img src="<?php echo $photoUrl; ?>" alt=""/>
-										</div>
-										<div class="forum-post-comment-message">
-											<div class="forum-post-comment-info">  <?php echo $comment['userProfileFullName']; ?>
-					  							<div class="comment-post-date">
-					  								<i class="fa fa-clock-o"></i>  <?php echo dateRangeViewer($comment['commentCreatedDate'],1,'my'); ?>
-					  							</div>
-					  						</div>
-					  						<?php echo $comment['commentBody']; ?>
-										</div>
-					  					<?php if($comment['userID'] == session::get('userID')){ ?><a data-id="<?php echo $comment['commentID']; ?>" onclick="javascript:comment.delete(this);" class="clearRequest i i-cross2 pull-right"></a><?php } ?>
-									</li>
-									<?php endforeach ?>
-								<?php endif; ?>
-								</ul>
-							</div>
-					</div>
+<div class="forum-post-comment">
+	<div class="forum-post-comment-count">KOMEN <span>(<?php echo $count; ?>)</span></div>
+	<?php if($limit != $count && $count != 0 && $count > $limit): ?>
+	<article id="get-older" style="">
+		<input type="checkbox" id="read_more" role="button">
+	    <label for="read_more" onclick="javascript:comment.getMore();"><span>Read Older Comment</span></label>  
+	</article>
+	<br/>
+    <?php endif; ?>
+	<div class="forum-post-comment-content">
+		<ul>
+		<?php if(count($comments) > 0): ?>
+			<?php foreach($comments as $comment): ?>
+			<li class="clearfix">
+				<div class="forum-post-comment-avatar">
+					<?php $photoUrl =  model::load("api/image")->buildAvatarUrl($comment['userProfileAvatarPhoto']); ?>
+					<img src="<?php echo $photoUrl; ?>" alt=""/>
+				</div>
+				<div class="forum-post-comment-message">
+					<div class="forum-post-comment-info">  <?php echo $comment['userProfileFullName']; ?>
+				  		<div class="comment-post-date">
+				  			<i class="fa fa-clock-o"></i>  <?php echo dateRangeViewer($comment['commentCreatedDate'],1,'my'); ?>
+				  		</div>
+				  	</div>
+				  	<?php echo $comment['commentBody']; ?>
+				</div>
+				<?php if($comment['userID'] == session::get('userID')){ ?>
+					<a data-id="<?php echo $comment['commentID']; ?>" onclick="javascript:comment.delete(this);" class="clearRequest i i-cross2 pull-right"></a>
+				<?php } ?>
+			</li>
+			<?php endforeach ?>
+		<?php endif; ?>
+		</ul>
+	</div>
+</div>
