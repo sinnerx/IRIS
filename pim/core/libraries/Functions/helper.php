@@ -158,6 +158,9 @@ function dateRangeViewer($date,$type = 1,$current_lang = "en")
 			"Jam"
 						);
 
+	$lang['en']['ago']	= "ago";
+	$lang['my']['ago']	= "lalu";
+
 	$lang	= $lang[$current_lang];
 
 	switch($type)
@@ -184,7 +187,8 @@ function dateRangeViewer($date,$type = 1,$current_lang = "en")
 			else
 			{
 				$sanityDay	= floor($day);
-				return "$sanityDay $lang[2], $hour $lang[3], $mins $lang[1]";
+				#return "$sanityDay $lang[2], $hour $lang[3], $mins $lang[1]";
+				return "$sanityDay $lang[2] $lang[ago]";
 			}
 		break;
 	}

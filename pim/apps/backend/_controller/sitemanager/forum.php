@@ -79,6 +79,10 @@ class Controller_Forum
 
 		view::render("sitemanager/forum/updateCategory",$data);
 	}
+
+	public function test()
+	{
+	}
 }
 
 

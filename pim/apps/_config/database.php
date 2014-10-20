@@ -8,6 +8,13 @@ $config['domain']['localhost'][]	= Array(
 				"db_pass"=>""
 						);
 
+$config['domain'][LOCALHOST][]	= Array(
+				"db_host"=>"localhost",
+				"db_name"=>"digitalgaia_iris",
+				"db_user"=>"root",
+				"db_pass"=>""
+						);
+
 $config['domain']['p1m.gaia.my'][]	= Array(
 				"db_host"=>"localhost",
 				"db_name"=>"p1mgaia_iris",

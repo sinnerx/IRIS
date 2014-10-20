@@ -1,5 +1,11 @@
 <script src="<?php echo url::asset("_templates/js/easyResponsiveTabs.js");?>" type="text/javascript"></script>
-<h3 class="block-heading"><a href='.'>PROFIL AHLI</a> <span class="subforum"> > Pemegang kad</span> </h3>
+<h3 class="block-heading"><a href='.'>PROFIL AHLI</a> <span class="subforum"> > Pemegang kad</span> 
+
+<?php if($ownPage):?>
+    <a href='<?php echo url::base("{site-slug}/profile/edit");?>' class='pull-right'><img src='<?php echo url::asset("frontend/images/edit-button.png");?>' /></a>
+    <!-- <a href='<?php echo url::base("{site-slug}/profile/edit");?>' class='fa fa-edit pull-right' style='color:#0062a1;opacity:0.5;'></a> -->
+<?php endif;?>
+</h3>
 <div class="block-content clearfix">
     <div class="page-content">
         <div class="page-description"> 
@@ -29,23 +35,6 @@
                             }
 
                             ?>
-                            <?php /*
-                            <li>
-                            <a href="#">Hashim Meninggalkan Komen di Forum “ Siapa Boleh Bekalkan atap nipah? ”</a>
-                            <span> 2 Minit Lalu </span>
-                            </li>
-                            <li>
-                            <a href="#">Razak mengemaskini profil peribadinya.</a>
-                            <span> 12 Minit Lalu </span>
-                            </li>
-                            <li>
-                            <a href="#">Kamal Meninggalkan Komen di Galeri Foto “Pembukaan Ruangan Baru”.</a>
-                            <span> 2 Jam Lalu </span>
-                            </li>
-                            <li>
-                            <a href="#">Rahman akan hadir ke “ Latihan Asas Etika Email ”.</a>
-                            <span> 15 Jam Lalu </span>
-                            </li> */?>
                         </ul>
                     </div>
                 </div>
@@ -53,13 +42,8 @@
             <div class="rght-sidebar">
                 <div class="profile-user-info">
                 <h3><?php echo $row['userProfileFullName'];?>
-
-                <?php if($ownPage):?>
-                    <a href='<?php echo url::base("{site-slug}/profile/edit");?>' class='pull-right'><img src='<?php echo url::asset("frontend/images/edit-button.png");?>' /></a>
-                    <!-- <a href='<?php echo url::base("{site-slug}/profile/edit");?>' class='fa fa-edit pull-right' style='color:#0062a1;opacity:0.5;'></a> -->
-                <?php endif;?>
                 </h3>
-                <span class="profile-user-occupation"><?php echo model::load("helper")->occupationGroup($row['userProfileOccupationGroup'])?:"-";?></span>
+                <span class="profile-user-occupation"><?php echo $row['userProfileOccupation']?:"-";?></span>
                 <span class="profile-user-location" style='position:relative;top:8px;'><span><?php echo $siteName;?></span><span><a href="#"><i class="fa fa-envelope"></i></a></span></span>
                 <div class="profile-social-media">
                 <ul>
@@ -95,20 +79,15 @@
                                     - Pengguna ini masih tidak punyai maklumat mengenai dirinya lagi -
                                     <?php endif;?>
                                 </p>
-                                <!-- <p>Lorem ipsum dolor sit amet, maiores ornare ac fermentum, imperdiet ut vivamus a, nam lectus at nunc. Quam euismod sem, semper ut potenti pellentesque quisque. In eget sapien sed, sit duis vestibulum ultricies, placerat morbi amet vel, nullam in in lorem vel. In molestie elit dui dictum, praesent nascetur pulvinar sed, in dolor pede in aliquam, risus nec error quis pharetra. Eros metus quam augue suspendisse, metus rutrum risus erat in.  In ultrices quo ut lectus, etiam vestibulum urna a est, pretium luctus euismod nisl, pellentesque turpis hac ridiculus massa. Venenatis a taciti dolor platea, curabitur lorem platea urna odio.<br>
-                                <br>
-                                Lorem ipsum dolor sit amet, maiores ornare ac fermentum, imperdiet ut vivamus a, nam lectus at nunc. Quam euismod sem, semper ut potenti pellentesque quisque. In eget sapien sed, sit duis vestibulum ultricies, placerat morbi amet vel, nullam in in lorem vel. In molestie elit dui dictum, praesent nascetur pulvinar sed, in dolor pede in aliquam, risus nec error quis pharetra. Eros metus quam augue suspendisse, metus rutrum risus erat in.  In ultrices quo ut lectus, etiam vestibulum urna a est, pretium luctus euismod nisl, pellentesque turpis hac ridiculus massa. Venenatis a taciti dolor platea, curabitur lorem platea urna odio.<br>
-                                <br>
-                                Lorem ipsum dolor sit amet, maiores ornare ac fermentum, imperdiet ut vivamus a, nam lectus at nunc. Quam euismod sem, semper ut potenti pellentesque quisque. In eget sapien sed, sit duis vestibulum ultricies, placerat morbi amet vel, nullam in in lorem vel. In molestie elit dui dictum, praesent nascetur pulvinar sed, in dolor pede in aliquam, risus nec error quis pharetra. Eros metus quam augue suspendisse, metus rutrum risus erat in.  In ultrices quo ut lectus, etiam vestibulum urna a est, pretium luctus euismod nisl, pellentesque turpis hac ridiculus massa. Venenatis a taciti dolor platea, curabitur lorem platea urna odio.</p> -->
                             </div>
                             <div>
                             <div class="profile-activity-forum">
                             <div class="heading-category">Forum</div>
                             <div class="profile-activity-forum-container">
-                            <ul>
                                 <?php
                                 if($activities_forum)
                                 {
+                                    echo "<ul>";
                                     foreach($activities_forum as $userActivity):?>
                                     <?php
                                     $date   = dateRangeViewer($userActivity['row']['userActivityCreatedDate'],1,"my");
@@ -122,95 +101,83 @@
                                     </li>
                                     <?php
                                     endforeach;
+                                    echo "</ul>";
+                                }
+                                else
+                                {
+                                    ?>
+                                    <div>
+                                        Tiada aktiviti yang terkini.
+                                    </div>
+                                    <?php
                                 }
 
                                 ?>
-                                <!-- <li class="clearfix">
-                                <i class="fa fa-folder-open"></i>
-                                <div class="forum-activity-title">
-                                <a href="#">Hashim meninggalkan komen di Forum "Siapa boleh bekalkan atap nipah?"</a>
-                                <span>2 Jam Yang Lalu</span>
-                                </div>
-                                </li>
-                                <li class="clearfix">
-                                <i class="fa fa-folder-open"></i>
-                                <div class="forum-activity-title">
-                                <a href="#">Hashim meninggalkan komen di Forum "Siapa boleh bekalkan atap nipah?"</a>
-                                <span>2 Jam Yang Lalu</span>
-                                </div>
-                                </li>
-                                <li class="clearfix">
-                                <i class="fa fa-folder-open"></i>
-                                <div class="forum-activity-title">
-                                <a href="#">Hashim meninggalkan komen di Forum "Siapa boleh bekalkan atap nipah?"</a>
-                                <span>2 Jam Yang Lalu</span>
-                                </div>
-                                </li> -->
                             </ul>
                             </div>
                             </div>
                             <div class="profile-activity-calendar">
-                            <div class="heading-category">Kalendar Aktiviti</div>
-                            <div class="profile-activity-forum-container">
-                            <ul>
-                            <?php
-                            if($activities_activity)
-                            {
-                                foreach($activities_activity as $userActivity):
-                                    ?>
-                                <li class="clearfix">
-                                    <i class="fa fa-calendar"></i>
-                                    <div class="forum-activity-title">
-                                    <a href="#"><?php echo $userActivity['text'];?></a>
-                                    <span><?php echo $date;?></span>
-                                    </div>
-                                </li>
-                                <?php endforeach;
-                            }
-                            ?>
-                            </ul>
-                            </div>
-                            </div>
-                            <!-- <div class="profile-activity-file">
-                            <div class="heading-category">Muat Naik Fail</div>
-                            <div class="profile-activity-forum-container">
-                            <ul>
-                            <li class="clearfix">
-                            <div class="icon-pdf"></div>	
-                            <div class="forum-activity-title">
-                            <a href="#">Brosur Sos Cili Kayu Seribu</a>
-                            <span>3 Hari Lepas</span>
-                            </div>
-                            </li>
-                            </ul>
-                            </div>
-                            </div> -->
-                            <div class="profile-activity-comment">
-                            <div class="heading-category">Komen Terkini</div>
-                            <div class="profile-activity-forum-container">
-                            <ul>
-                            <?php
-                                if($activities_comment)
+                                <div class="heading-category">Kalendar Aktiviti</div>
+                                <div class="profile-activity-forum-container">
+                                <?php
+                                if($activities_activity)
                                 {
-                                    foreach($activities_comment as $userActivity):?>
-                                    <?php
-                                    $date   = dateRangeViewer($userActivity['row']['userActivityCreatedDate'],1,"my");
-                                    ?>
+                                    echo "<ul>";
+                                    foreach($activities_activity as $userActivity):
+                                        ?>
                                     <li class="clearfix">
-                                        <i class="fa fa-folder-open"></i>
+                                        <i class="fa fa-calendar"></i>
                                         <div class="forum-activity-title">
                                         <a href="#"><?php echo $userActivity['text'];?></a>
                                         <span><?php echo $date;?></span>
                                         </div>
                                     </li>
-                                    <?php
-                                    endforeach;
+                                    <?php endforeach;
+                                    echo "</ul>";
                                 }
-
+                                else
+                                {
+                                    ?>
+                                    <div>Tiada aktiviti terkini.</div>
+                                    <?php
+                                }
                                 ?>
-                            </ul>
+                                </div>
                             </div>
-                            </div>
+                            <div class="heading-category">Komen Terkini</div>
+                                <div class="profile-activity-forum-container">
+                                <ul>
+                                <?php
+                                    if($activities_comment)
+                                    {
+                                        echo "<ul>";
+                                        foreach($activities_comment as $userActivity):?>
+                                        <?php
+                                        $date   = dateRangeViewer($userActivity['row']['userActivityCreatedDate'],1,"my");
+                                        ?>
+                                        <li class="clearfix">
+                                            <i class="fa fa-folder-open"></i>
+                                            <div class="forum-activity-title">
+                                            <a href="#"><?php echo $userActivity['text'];?></a>
+                                            <span><?php echo $date;?></span>
+                                            </div>
+                                        </li>
+                                        <?php
+                                        endforeach;
+                                        echo "</ul>";
+                                    }
+                                    else
+                                    {
+                                        ?>
+                                        <div>
+                                            Tiada komen terkini.
+                                        </div>
+                                        <?php
+                                    }
+
+                                    ?>
+                                </ul>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -238,7 +205,5 @@
                 $info.show();
             }
         });
-
-        
     });
 </script>

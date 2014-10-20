@@ -189,7 +189,8 @@ class Menu
 							#Array("Galeri Muat Turun","#")
 								),
 					"Ruangan Ahli"=>Array(
-							Array("Direktori Ahli","ahli")
+							Array("Direktori Ahli","ahli"),
+							Array("Profil Anda","profile")
 										)
 						)
 				);

@@ -3,14 +3,14 @@
 // scripts at frontend/js/site.js
 var calendar = new Calendar("calendar-rght","cal-date","<?php echo url::base('{site-slug}');?>/");
 
-$(document).ready(function()
+jQuery(document).ready(function()
 {
 	calendar.getDate();
 });
 
 </script>
 
-<div id="calendar-rght">
+<div id="calendar-rght" style="background:url(<?php echo url::asset('frontend/images/calendar_bg.png');?>) no-repeat scroll center top rgba(0, 0, 0, 0);">
 	<div class="date" style='display:none;'>24</div>
 	<div class="month clearfix">
 		<div class="month-prev" onclick='calendar.getDate("prev");'></div>

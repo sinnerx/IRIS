@@ -18,6 +18,42 @@
 	</div>
 </div>
 </div><!-- main-wrap -->
+
+<!-- Responsive Code -->
+<div class="sb-slidebar sb-right sb-style-overlay">
+<div class="mobile-navigation-header clearfix"><div class="sb-close menu-close"><i class="fa fa-times"></i></div><div class="menu-name">Menu</div></div>
+	<div class="mobile-navigation-content">
+		<ul>
+		    <li><a href="#">Utama</a></li>
+		    <li><a href="#">Mengenai Kami</a></li>
+		    <li><a href="#">Aktiviti</a></li>
+		    <li>Ruangan Ahli</li>
+		   	 <ul>
+		 		<div>
+				<li class="submenu-heading">Kalendar Aktiviti</li>
+		        <li><a href="#">Aktiviti Akan Datang</a></li>
+		        <li> <a href="#">Aktiviti Lepas</a></li>
+				</div>
+		        <div>
+				<li class="submenu-heading">Galeri Media</li>
+		        <li> <a href="#">Galeri Foto</a></li>
+					<li><a href="#">Galeri Video</a></li>
+		            <li><a href="#">Galeri Muat Turun</a></li>
+				</div>
+			</ul>
+	    </ul>
+    </div>
+</div>
+<!-- Slidebars for responsive top menu -->
+<script src="<?php echo url::asset("frontend/responsive/js/slidebars.js");?>"></script>
+<script>
+	(function($) {
+		$(document).ready(function() {
+			$.slidebars();
+		});
+	}) (jQuery);
+</script>
+<!------>
 	<!-- <script type="text/javascript" src="js/jquery-1.9.0.min.js"></script> -->
 	    <script type="text/javascript" src="<?php echo url::asset("frontend/js/jquery.nivo.slider.js");?>"></script>
 	    <script type="text/javascript">

@@ -24,10 +24,10 @@ class Controller_Member
 			$data['siteName']	= $data['row']['siteName'];
 		}
 
-		$data['activities']		= model::load("user/activity")->getActivities();
-		$data['activities_forum'] = model::load("user/activity")->getActivities(null,$userID,"forum");
-		$data['activities_comment'] = model::load("user/activity")->getActivities(null,$userID,"comment");
-		$data['activities_activity'] = model::load("user/activity")->getActivities(null,$userID,"activity");
+		$data['activities']		= model::load("user/activity")->getActivities(null,$userID,null,null,10);
+		$data['activities_forum'] = model::load("user/activity")->getActivities(null,$userID,"forum",null,3);
+		$data['activities_comment'] = model::load("user/activity")->getActivities(null,$userID,"comment",null,3);
+		$data['activities_activity'] = model::load("user/activity")->getActivities(null,$userID,"activity",null,3);
 
 		$additional		= model::load("user/user")->getAdditional($data['row']['userID']);
 		$data['row']	= array_merge($data['row'],$additional);

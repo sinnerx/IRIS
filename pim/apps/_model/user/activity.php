@@ -192,17 +192,22 @@ class Activity
 	}
 
 	## return text row.
-	public function getActivities($siteID = null,$userID = null,$type = null)
+	public function getActivities($siteID = null,$userID = null,$type = null,$action = null,$limit = null)
 	{
-		
 		if($siteID)
 			db::where("siteID",$siteID);
 
 		if($type)
 			db::where("userActivityType",$type);
 
+		if($action)
+			db::where("userActivityAction",$action);
+
 		if($userID)
 			db::where("userID",$userID);
+
+		if($limit)
+			db::limit($limit);
 
 		db::order_by("userActivityID","DESC");
 		db::get("user_activity");

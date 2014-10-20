@@ -12,6 +12,14 @@ $config['domain']['localhost'][]	= Array(
 						"supportEmail"=>"newrehmi@gmail.com"
 										);
 
+### domain based configuration :
+$config['domain'][LOCALHOST][]	= Array(
+						"base_url:backend"=>LOCALHOST."/digitalgaia/iris/dashboard",
+						"base_url:frontend"=>LOCALHOST."/digitalgaia/iris",
+						"asset_url"=>LOCALHOST."/digitalgaia/iris/pim/assets",
+						"supportEmail"=>"newrehmi@gmail.com"
+										);
+
 ## live dev
 $config['domain']['dev.celcom1cbc.com'][]	= Array(
 						"base_url:backend"=>"dev.celcom1cbc.com/dashboard",

@@ -463,12 +463,29 @@ ul.dropdown{
 	
 }
 
+/** Responsive **/
 .slideshow{
-	height:314px;
-		border-bottom:5px solid #009bff;
+height:314px;
+border-bottom:5px solid #009bff;
+margin: 0 auto;
+width: 990px;
 
+
+}
+
+.navigation-tablet{
+		display:none;
+		
+	}
+
+.area-mobile,
+.mobile-top,
+.logo-mobile{
+	display:none;
 	
 }
+
+/** **/
 
 #calendar-rght{
 	width:279px;

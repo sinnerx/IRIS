@@ -20,7 +20,42 @@ class Controller_Partial
 	### hooked through pre_template. to pass initial data.
 	public function index()
 	{
+		$site			= model::load("site/site");
 		$data['row_site']	= $this->row_site;
+
+		## SECTION : Pi1M LIST
+		$data['stateR']		= model::load("helper")->state();
+		$data['res_site']	= model::load("site/site")->getSiteByState();
+
+		## SECTION : TOP
+		$data['links']	= $site->getLinks($site->getSiteIDBySlug());
+
+		## if logged backend user is logged in.
+		if(session::has("userID"))
+		{
+			$data['username']	= model::load("user/user")->get(session::get("userID"),"userProfileFullName");
+		}
+
+		## SECTION : HEADER
+		$data['siteName']	= $this->row_site['siteName'];
+		$data['menuR']		= model::load("site/menu")->getTopMenu($this->row_site['siteID']);
+		$data['componentR']	= model::load("site/menu")->getComponent($this->row_site['siteID']);
+		$data['user']		= $this->user;
+
+		## SECTION : SLIDESHOW
+		$data['res_slider']		= model::load("site/slider")->getSlider($this->row_site['siteID'],false);
+
+		## SECTION : BOTTOM
+		$siteID = authData('current_site.siteID');
+		$data['articles'] = model::load("blog/article")->getArticlesByCategoryID($siteID,1);
+
+		$data['row_site']	= $this->row_site;
+		$row_latestalbum	=model::load("image/album")->getSiteLatestAlbum($siteID);
+		$data['latestPhotoUrl']	= model::load("api/image")->buildPhotoUrl($row_latestalbum['albumCoverImageName'],"small");
+		if($row_latestalbum)
+			$data['latestPhotoLink']	= model::load("helper")->buildDateBasedUrl($row_latestalbum['siteAlbumSlug'],$row_latestalbum['albumCreatedDate'],url::base("{site-slug}/galeri"));
+		else
+			$data['latestPhotoLink'] 	= null;
 
 		## pass row_site to default template.
 		return $data;
