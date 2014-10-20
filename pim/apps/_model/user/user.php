@@ -144,6 +144,7 @@ class User
 
 		$data	= Array(
 				"userProfileOccupation"=>$data['userProfileOccupation'],
+				"userProfileOccupationGroup"=>$data['userProfileOccupationGroup'],
 				"userProfileFacebook"=>$data['userProfileFacebook'],
 				"userProfileTwitter"=>$data['userProfileTwitter'],
 				"userProfileWeb"=>$data['userProfileWeb'],
