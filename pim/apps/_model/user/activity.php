@@ -16,7 +16,7 @@ userActivityCreatedDate [datetime]
 ## a class that log user activities.
 class Activity
 {
-	public function create($siteID,$userID,$typeAction,$parameter)
+	public function create($siteID,$userID,$typeAction,$parameter = null)
 	{
 		list($type,$action)	= explode(".",$typeAction);
 
@@ -33,7 +33,12 @@ class Activity
 
 		$paramNo	= 1;
 
-		## loop the given paramter. to set the param value sequently.
+		## loop the given paramter. to set the param value sequencely.
+		if(!$parameter && count($paramName) != 0)
+		{
+			return false;
+		}
+
 		foreach($parameter as $key=>$val)
 		{
 			## immedietly return false.
@@ -46,6 +51,32 @@ class Activity
 		}
 
 		db::insert("user_activity",$data);
+	}
+
+	public function hasActivity($siteID,$userID,$typeAction,$param)
+	{
+		$paramLocation	= $this->parameterName($typeAction);
+
+		$data	= Array();
+		if($siteID)
+			$data['siteID']	= $siteID;
+
+		if($userID)
+			$data['userID']	= $userID;
+
+		foreach($param as $key=>$val)
+		{
+			## find location for the key.
+			foreach($paramLocation as $no=>$col)
+			{
+				if($col == $key)
+					$data['userActivityParameter'.($no+1)] = $val;
+			}
+		}
+
+		$result = db::where($data)->get("user_activity")->result();
+
+		return $result?true:false;		
 	}
 
 	private function _prepareText($txt,$params)
@@ -75,6 +106,7 @@ class Activity
 		return $typeAction?$typeR[$typeAction]:$typeR;
 	}
 
+	## prepare text, given the param value.
 	private function prepareText($typeAction,$params,$additional)
 	{
 		$userProfile	= $additional['user_profile'];
@@ -83,7 +115,7 @@ class Activity
 		{
 			## user, module.
 			case "comment.add":
-				$row	= model::load("comment/comment")->getComment($params['commentID']);
+				$row	= model::load("comment/comment")->getComment2($params['commentID']);
 
 				$refNameCol	= Array(
 					"article"=>"articleName",
@@ -115,10 +147,10 @@ class Activity
 				$data	= Array("user"=>$userProfile['userProfileFullName'],"threadTitle"=>$row['forumThreadTitle']);
 			break;
 			case "activity.join":
-				db::join("activity","activity.activityID = user_activity.activityID");
+				db::join("activity","activity.activityID = activity_user.activityID");
 				$row	= db::where("activityUserID",$params['activityUserID'])->get("activity_user")->row();
 
-				$data	= Array("user"=>$row['userProfileFullName'],"activity"=>$row['activityName']);
+				$data	= Array("user"=>$userProfile['userProfileFullName'],"activity"=>$row['activityName']);
 			break;
 			case "member.register":
 				$data	= Array("user"=>$userProfile['userProfileFullName']);
@@ -133,20 +165,22 @@ class Activity
 	}
 
 	## Binds parameter with index because the table column for parameter is nameless. (index start from 1.)
+	## This locator is sensitive, and should never be changed after launched. create a new key, if you want another version.
 	public function parameterName($typeAction = null,$param = null)
 	{
-		$binds	= Array(
+		$paramLocation	= Array(
 			"comment.add"=>Array("commentID"),
 			"forum.newthread"=>Array("forumThreadID"),
 			"forum.newpost"=>Array("forumThreadPostID"),
 			"activity.join"=>Array("activityUserID"),
-			"member.register"=>Array("userID")
+			"member.register"=>Array(),
+			"member.edit"=>Array()
 						);
 
 		if($param)
 		{
 			$new	= Array();
-			foreach($binds[$typeAction] as $no=>$col)
+			foreach($paramLocation[$typeAction] as $no=>$col)
 			{
 				$new[$col] = $param[$no];
 			}
@@ -154,12 +188,13 @@ class Activity
 			return $new;
 		}
 
-		return $typeAction?$binds[$typeAction]:$binds;
+		return $typeAction?$paramLocation[$typeAction]:$paramLocation;
 	}
 
 	## return text row.
 	public function getActivities($siteID = null,$userID = null,$type = null)
 	{
+		
 		if($siteID)
 			db::where("siteID",$siteID);
 
@@ -169,8 +204,8 @@ class Activity
 		if($userID)
 			db::where("userID",$userID);
 
+		db::order_by("userActivityID","DESC");
 		db::get("user_activity");
-
 		$res	= db::result("userActivityID");
 
 		## group typeAction.

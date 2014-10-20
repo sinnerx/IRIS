@@ -559,9 +559,14 @@ class Activity
 			$where['activityUserCreatedDate']	= now();
 			$where['activityUserCreatedUser']	= session::get("userID");
 
+			## create user activity.
+			# question : if manager manually add him as participant, should we create user activity.?
+			# get site from activity.
+			$siteID	= db::select("siteID")->where("activityID",$activityID)->get("activity")->row("siteID");
 			db::insert("activity_user",$where);
 
 			$actUserID	= db::getLastID("activity_user","activityUserID");
+			model::load("user/activity")->create($siteID,$userID,"activity.join",Array("activityUserID"=>$actUserID));
 		}
 
 		## if date wasnt inputted.

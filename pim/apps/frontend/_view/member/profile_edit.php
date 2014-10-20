@@ -213,6 +213,10 @@ $(document).ready(function()
 					<div class='tab-content-additional'>
 						<!-- Start of additional info -->
 						<div class="profile-edit-row clearfix">
+							<label>Kumpulan Kerjaya:</label>
+							<?php echo form::select("userProfileOccupationGroup",model::load("helper")->occupationGroup(),null,$userProfileOccupationGroup);?>
+						</div>
+						<div class="profile-edit-row clearfix">
 							<label>Kerjaya / Pekerjaan:</label>
 							<?php echo form::text("userProfileOccupation",null,$userProfileOccupation);?>
 						</div>

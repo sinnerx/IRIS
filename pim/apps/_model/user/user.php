@@ -121,6 +121,9 @@ class User
 
 		## update user_profile_additional.
 		$this->updateAdditional($userID,$data);
+
+		##
+		model::load("user/activity")->create(null,$userID,"member.edit");
 	}
 
 	public function updateAvatarPhoto($userID,$path)

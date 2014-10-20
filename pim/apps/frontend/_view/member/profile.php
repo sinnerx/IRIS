@@ -55,10 +55,11 @@
                 <h3><?php echo $row['userProfileFullName'];?>
 
                 <?php if($ownPage):?>
-                    <a href='<?php echo url::base("{site-slug}/profile/edit");?>' class='fa fa-edit pull-right' style='color:#0062a1;opacity:0.5;'></a>
+                    <a href='<?php echo url::base("{site-slug}/profile/edit");?>' class='pull-right'><img src='<?php echo url::asset("frontend/images/edit-button.png");?>' /></a>
+                    <!-- <a href='<?php echo url::base("{site-slug}/profile/edit");?>' class='fa fa-edit pull-right' style='color:#0062a1;opacity:0.5;'></a> -->
                 <?php endif;?>
                 </h3>
-                <span class="profile-user-occupation"><?php echo $row['userProfileOccupation']?:"-";?></span>
+                <span class="profile-user-occupation"><?php echo model::load("helper")->occupationGroup($row['userProfileOccupationGroup'])?:"-";?></span>
                 <span class="profile-user-location" style='position:relative;top:8px;'><span><?php echo $siteName;?></span><span><a href="#"><i class="fa fa-envelope"></i></a></span></span>
                 <div class="profile-social-media">
                 <ul>
@@ -152,13 +153,21 @@
                             <div class="heading-category">Kalendar Aktiviti</div>
                             <div class="profile-activity-forum-container">
                             <ul>
-                            <li class="clearfix">
-                            <i class="fa fa-calendar"></i>
-                            <div class="forum-activity-title">
-                            <a href="#">Hashim menghadirkan diri ke "Latihan Asas Etika Emel"</a>
-                            <span>Minggu Lepas</span>
-                            </div>
-                            </li>
+                            <?php
+                            if($activities_activity)
+                            {
+                                foreach($activities_activity as $userActivity):
+                                    ?>
+                                <li class="clearfix">
+                                    <i class="fa fa-calendar"></i>
+                                    <div class="forum-activity-title">
+                                    <a href="#"><?php echo $userActivity['text'];?></a>
+                                    <span><?php echo $date;?></span>
+                                    </div>
+                                </li>
+                                <?php endforeach;
+                            }
+                            ?>
                             </ul>
                             </div>
                             </div>

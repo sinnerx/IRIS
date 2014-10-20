@@ -27,6 +27,7 @@ class Controller_Member
 		$data['activities']		= model::load("user/activity")->getActivities();
 		$data['activities_forum'] = model::load("user/activity")->getActivities(null,$userID,"forum");
 		$data['activities_comment'] = model::load("user/activity")->getActivities(null,$userID,"comment");
+		$data['activities_activity'] = model::load("user/activity")->getActivities(null,$userID,"activity");
 
 		$additional		= model::load("user/user")->getAdditional($data['row']['userID']);
 		$data['row']	= array_merge($data['row'],$additional);
