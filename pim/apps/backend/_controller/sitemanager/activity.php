@@ -140,8 +140,6 @@ class Controller_Activity
 				redirect::withFlash(model::load("template/services")->wrap("input-error",$error));
 				redirect::to("","Please correct the error highlighted.","error");
 			}
-			echo apps::environment();
-			echo 1;die;
 
 			$data	= input::get();
 
