@@ -148,14 +148,16 @@ function dateRangeViewer($date,$type = 1,$current_lang = "en")
 			"hours ago",
 			"minutes ago",
 			"days",
-			"hours"
+			"hours",
+			"seconds"
 					);
 
 	$lang["my"]	= Array(
-			"Jam Lalu",
-			"Minit Lalu",
-			"Hari",
-			"Jam"
+			"jam lalu",
+			"minit lalu",
+			"hari",
+			"jam",
+			"saat"
 						);
 
 	$lang['en']['ago']	= "ago";
@@ -169,9 +171,9 @@ function dateRangeViewer($date,$type = 1,$current_lang = "en")
 			//get day.
 			$day	= ($currT-$theT)/86400;
 			
-			$hour	= round((($currT-$theT)%86400)/3600);
-			
-			$mins	= round((($currT-$theT)%1440)/60);
+			$hour	= floor((($currT-$theT)%86400)/3600);
+
+			$mins	= floor((($currT-$theT)%3600)/60);
 
 			if($day < 1)
 			{
@@ -181,7 +183,14 @@ function dateRangeViewer($date,$type = 1,$current_lang = "en")
 				}
 				else
 				{
-					return "$mins ".$lang[1];
+					if($currT-$theT < 60)
+					{
+						return $currT-$theT." $lang[4] $lang[ago]";
+					}
+					else
+					{
+						return "$mins ".$lang[1];
+					}
 				}
 			}
 			else

@@ -183,15 +183,18 @@ class Menu
 				4=>Array(
 					"Galeri Media"=>Array(
 							Array("Galeri Foto","galeri"),
-							Array("Galeri Video","video"),
-							Array("Forum","forum")
+							Array("Galeri Video","video")
 							#Array("Galeri Video","#"),
 							#Array("Galeri Muat Turun","#")
 								),
 					"Ruangan Ahli"=>Array(
 							Array("Direktori Ahli","ahli"),
 							Array("Profil Anda","profile")
-										)
+										),
+					"Forum"=>Array(
+							Array("Terkini","forum#terkini"),
+							Array("Kategori","forum#kategori")
+								)
 						)
 				);
 

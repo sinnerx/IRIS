@@ -738,10 +738,13 @@ Akaun anda masih belum aktif. Sila buat bayaran RM <?php echo model::load("confi
 				{
 					if(isset($childPageR[$pageID]))
 					{
+						$mobileMenu	.= "<ul>";
+
 						echo "<div>";
 						echo '<div class="nav-column"><div class="menu-block">';
 						echo "<ul class='clearfix'>";
 						echo "<h3>$menuName</h3>";
+
 						$no	= 1;
 						foreach($childPageR[$pageID] as $row)
 						{
@@ -750,12 +753,17 @@ Akaun anda masih belum aktif. Sila buat bayaran RM <?php echo model::load("confi
 								echo $firstmenu;
 							}
 							echo "<li><a href='".$row[0]."'>$row[1]</a></li>";
+
+							$mobileMenu	.= "<li><a href='$row[0]'>$row[1]</a></li>";
+
 							$no++;
 						}
 
 						echo "</ul>";
 						echo "</div></div>";
 						echo "</div>";
+
+						$mobileMenu	.= "</ul>";
 					}
 				}
 
@@ -764,30 +772,60 @@ Akaun anda masih belum aktif. Sila buat bayaran RM <?php echo model::load("confi
 				{
 					$mobileMenu .= "<ul>";
 
+					$columnlimit	= ceil(count($componentChildR[$component]) / 2);
+
 					echo "<div>";
-					echo '<div class="nav-column"><div class="menu-block">';
-					echo "<ul class='clearfix'>";
+					#echo '<div class="nav-column">';
+					
 					$no	= 1;
+					$colno = 1;
+					$blockno	= 1;
 					foreach($componentChildR[$component] as $headername=>$rowR)
 					{
+						if(!isset($submenuBuffer[$colno]))
+						{
+							$submenuBuffer[$colno] = "";
+						}
+
+						$submenuBuffer[$colno] .= "<div class='menu-block'>";
+						$submenuBuffer[$colno] .= "<ul class='clearfix'>";
+
 						$mobileMenu .= "<div>";
 						$mobileMenu .= "<li class='submenu-heading'>".$headername."</li>";
 
-						echo "<h3>$headername</h3>";
+						$submenuBuffer[$colno] .= "<h3>$headername</h3>";
 						foreach($rowR as $row)
 						{
 							$href	= $row[1] == "#"?"#":url::base("{site-slug}/".$row[1]);
-							echo "<li><a href='$href'>$row[0]</a></li>";
+							$submenuBuffer[$colno] .= "<li><a href='$href'>$row[0]</a></li>";
 
 							$mobileMenu	.= "<li><a href='$href'>$row[0]</a></li>";
 							$no++;
 						}
+
+						$submenuBuffer[$colno] .= "</ul>";
+						$submenuBuffer[$colno] .= "</div>";
+
+						if($blockno >= $columnlimit)
+						{
+							$colno++;
+						}
+
+						$blockno++;
 					}
 
-					$mobileMenu	.= "</ul>";
+					## print the buffer.
+					foreach($submenuBuffer as $colno=>$buffer)
+					{
+						echo "<div class='nav-column'>";
+						echo $buffer;
+						echo "</div>";
+					}
 
-					echo "</ul>";
-					echo "</div></div>";
+
+					$mobileMenu	.= "</ul>";
+					
+					#echo "</div>";
 					echo "</div>";
 				}
 
