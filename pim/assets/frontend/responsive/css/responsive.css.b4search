@@ -5,6 +5,8 @@ and (min-width : 1025px){
 	max-height:314px;
 	overflow: hidden;
 }
+
+
 	
 }
 @media only screen 
@@ -644,13 +646,6 @@ input.reset-bttn{
 input.submit-bttn{
 	margin-right:0px !important;
 	
-}
-
-/** Search Page Result **/
-
-.search-form div input.search-area {
- 
-    width: 52%;
 }
 
 }
@@ -1625,19 +1620,6 @@ input.reset-bttn{
 input.submit-bttn{
 	margin-right:0px !important;
 	
-}
-
-
-/** Search **/
-.search-top{
-	display:none;
-	
-}
-
-/** Search Page Result **/
-.search-form div input.search-area {
-  
-    width: 52%;
 }
 
 
@@ -2762,118 +2744,5 @@ input.submit-bttn{
 }
 
 
-/** Search **/
-.search-top{
-	height: 23px;
-    position: relative;
-    top: 0;
-    width: 93%;
-	-webkit-border-radius: 3px;
--moz-border-radius: 3px;
-border-radius: 3px;
-padding:10px;
-margin-bottom:20px;
-	
 }
-
-.search-top-input{
-	
-	-webkit-border-radius: 3px;
--moz-border-radius: 3px;
-border-radius: 3px;
-}
-
-input.submit-search{
-	-webkit-border-radius: 3px;
--moz-border-radius: 3px;
-border-radius: 3px;
-	
-}
-
-/** Search Result Page **/
-.search-form div input.search-area {
-  
-    width: 84%;
-	text-align:center;
-}
-
-.search-submit {
-  
-    width: 100%;
-	margin-top:5px;
-}
-
-.search-submit input {
-  
-    width: 100%;
-	margin-left:0px;
-}
-
-.search-top-form b {
-    display: block;
-    float: left;
-    margin-bottom: 5px;
-    margin-right: 10px;
-    padding-top: 7px;
-    text-align: center;
-    width: 100%;
-}
-
-.search-bottom-form b {
-    display: inline-block;
-    margin-bottom: 10px;
-    margin-right: 0;
-    text-align: center;
-    width: 100%;
-}
-
-.search-bottom-form{
-	text-align:center;
-	
-	
-}
-h3.search-result-count {
-    color: #009bff;
-    text-align: center;
-}
-
-.search-list {
-    margin-bottom: 20px;
-    text-align: justify;
-}
-
-
-
-.search-list-content img{
-	width:100% !important;
-	height:auto;
-	
-}
-	.search-list-content > div:nth-child(1)
-	{
-		display:inline-table;
-		width:100%;
-			font-family:Arial;
-		font-size:12px;
-		color:#666666;
-		margin-bottom:10px;
-		margin-top:10px;
-	}
-
-	.search-list-content > div:nth-child(2)
-	{
-		display:inline-table;
-		padding:10px 0px;
-		padding-top:0px;
-		padding-left:0px;
-		vertical-align:top;
-		font-family:Arial;
-		font-size:12px;
-		color:#666666;
-		padding-left:0px;
-		width:100%;
-	}
-
-}
-
 

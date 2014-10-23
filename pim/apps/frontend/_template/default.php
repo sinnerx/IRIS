@@ -365,7 +365,7 @@ display:block !important;
 /*temporary*/
 input
 {
-	color:#727272 !important;
+	/*color:#727272 !important;*/
 }
 .announcement-linked
 {
@@ -501,7 +501,6 @@ input
 {
 	position: relative;
 }
-
 </style>
 <?php
 #========================================
@@ -624,11 +623,6 @@ Akaun anda masih belum aktif. Sila buat bayaran RM <?php echo model::load("confi
 		<!-- -->
 
 		<div class='navigation'>
-			<div class='search-box'>
-			<form method='get' action='<?php echo url::base("{site-slug}/carian");?>'>
-				Carian : <input id='q' name='q' value="<?php echo request::get('q');?>" type='search' />
-			</form>
-			</div>
 		<ul class='nav'>
 		<?php
 		$componentChildR	= model::load("site/menu")->componentChild();
@@ -881,6 +875,12 @@ Akaun anda masih belum aktif. Sila buat bayaran RM <?php echo model::load("confi
 		</div>
 		<!-- Right container -->
 		<div class="rght-container">
+			<div class="search-top">
+				<form method='get' action='<?php echo url::base("{site-slug}/carian");?>'>
+				<input type="text" class="search-top-input" name='q' id='q' value="<?php echo request::get('q');?>" placeholder='Carian'>
+				<input type="submit" class="submit-search" value="Cari">
+				</form>
+			</div>
 			<?php controller::load("partial","calendar");?>
 		</div>
 	<div class="clr"></div>
