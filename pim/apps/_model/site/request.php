@@ -237,6 +237,7 @@ class Request extends request_correction
 				"activity.add"=>"New Activity",
 				"activity.update"=>"Activity Update",
 				"video.add"=>"New Video",
+				"video.update"=>"Update Video",
 				"forum_category.add"=>"New Forum Category",
 				"forum_category.update"=>"Forum Category Update"
 						);
