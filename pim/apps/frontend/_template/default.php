@@ -56,7 +56,7 @@
 	</div>
 	<?php endif;?>
 	<div class="area-mobile-wrap">
-		<select>
+		<select onchange="window.location.href = '<?php echo url::base();?>/'+this.value;">
 			<option selected="selected">Ke Pi1M Lain</option>
 			<?php
 			foreach($stateR as $stateID => $stateName)
@@ -64,7 +64,7 @@
 				if($res_site[$stateID]):?>
 				<option disabled><?php echo $stateName;?></option>
 				<?php foreach($res_site[$stateID] as $row):?>
-				<option><?php echo $row['siteName'];?></option>
+				<option value='<?php echo $row['siteSlug'];?>'><?php echo $row['siteName'];?></option>
 				<?php endforeach;?>
 				<?php endif;?>
 			<?php
