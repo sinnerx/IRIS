@@ -72,17 +72,28 @@ select
 #avatar-upload-button
 {
 	position: absolute;
-	bottom:0px;
+	top:10px;
 	display: block;
 	height:53px;
 	width: 100%;
 }
 #avatar-upload-button .upload-button
 {
-	padding:10px;
 	background: #009bff;
 	color:white;
 	display: none;
+}
+
+#avatar-upload-button label
+{
+	padding:5px;
+	display: block;
+	cursor: pointer;
+}
+
+#avatar-upload-button label:hover
+{
+	background: #0062a1;
 }
 
 </style>
@@ -106,6 +117,11 @@ var profile	= new function()
 		this.show = function()
 		{
 			$(".upload-button").show();
+		}
+
+		this.hide = function()
+		{
+			$(".upload-button").hide();
 		}
 
 		this.go	= function()
@@ -139,10 +155,11 @@ $(document).ready(function()
 			<?php $photoUrl	= $userProfileAvatarPhoto?model::load("image/services")->getPhotoUrl($userProfileAvatarPhoto):null;
 			$backgroundUrl	= $photoUrl?";background:url('$photoUrl')":"";
 			?>
-				<div class="profile-avatar-upload" style="background-size:200px<?php echo $backgroundUrl;?>;background-color:black;">
-					<a href='javascript:profile.upload.show();' id='avatar-upload-button'>
+				<div class="profile-avatar-upload" style="background-size:200px<?php echo $backgroundUrl;?>;" onmouseover='profile.upload.show();' onmouseout='profile.upload.hide();'>
+					<a id='avatar-upload-button'>
 						<div class='upload-button'>
-							<input type='file' id='avatarPhoto' name='avatarPhoto' onchange='profile.upload.go();' />
+							<input type='file' id='avatarPhoto' style="display:none;" value="Tukar Foto" name='avatarPhoto' onchange='profile.upload.go();' />
+							<label for="avatarPhoto">Tukar Foto</label>
 						</div>
 					</a>
 				</div>
@@ -202,7 +219,14 @@ $(document).ready(function()
 							</div>
 						</div>
 						<div class="profile-edit-row clearfix">
-							<label>Tempat Lahir :</label>
+							<?php for($i = 1;$i<=31;$i++) $dayR[$i] = $i;?>
+							<label>Tarikh Lahir</label>
+							<?php echo form::select("userProfileDOBday",$dayR,"style='display:inline;'",$DOBday,"[PILIH HARI]");?>
+							<?php echo form::select("userProfileDOBmonth",model::load("helper")->monthYear("month"),"style='display:inline;'",$DOBmonth,"[PILIH BULAN]");?>
+							<?php echo form::select("userProfileDOByear",model::load("helper")->monthYear("year",1970,date("Y")),"style='display:inline;'",$DOByear,"[PILIH TAHUN]");?>
+						</div>
+						<div class="profile-edit-row clearfix">
+							<label>Tempat Lahir</label>
 							<?php echo form::text("userProfilePOB","placeholder='Tempat Lahir'",$userProfilePOB);?>
 						</div>
 						<div class="profile-edit-row clearfix">
