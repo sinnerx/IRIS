@@ -23,40 +23,37 @@ echo model::load("template/frontend")->buildBreadCrumbs(Array(
 			<div class="forum-post clearfix">
 				<div class="forum-foto-user-avatar">
 					<?php
-					$photoUrl   = model::load("image/services")->getPhotoUrl($res_users[$res_posts[0]['forumThreadPostCreatedUser']]['userProfileAvatarPhoto']);?>
+					$photoUrl   = model::load("image/services")->getPhotoUrl($res_users[$firstPost['forumThreadPostCreatedUser']]['userProfileAvatarPhoto']);?>
 					<img src="<?php echo $photoUrl;?>" alt=""/></div>
 				<div class="forum-post-content">
 				<div class="forum-post-header">
 				<div class="forum-post-title"><?php echo $row_thread['forumThreadTitle'];?></div>
-				<div class="forum-post-info">Oleh:<a href="#"> <?php echo $res_users[$res_posts[0]['forumThreadPostCreatedUser']]['userProfileFullName'];?></a>,  <?php echo dateRangeViewer($res_posts[0]['forumThreadPostCreatedDate'],1,"my");?>,  dalam  <a href="#"><?php echo $row_category['forumCategoryTitle'];?></a>.</div>
+				<div class="forum-post-info">Oleh:<a href="#"> <?php echo $res_users[$firstPost['forumThreadPostCreatedUser']]['userProfileFullName'];?></a>,  <?php echo dateRangeViewer($firstPost['forumThreadPostCreatedDate'],1,"my");?>,  dalam  <a href="#"><?php echo $row_category['forumCategoryTitle'];?></a>.</div>
 				</div>
 				<div class="forum-post-details">
-				<?php echo $res_posts[0]['forumThreadPostBody'];?>
+				<?php echo $firstPost['forumThreadPostBody'];?>
 				</div>
 				</div>
 			</div>
 
 					<!-- POSTS -->
 			<div class="forum-post-comment">
-				<div class="forum-post-comment-count">KOMEN <span>(<?php echo count($res_posts)-1;?>)</span></div>
+				<div class="forum-post-comment-count">KOMEN <span>(<?php echo count($res_posts);?>)</span></div>
 				<div class="forum-post-comment-content">
 				<?php if($res_posts):?>
 				<ul>
 					<?php
 					$no = 0;
 					foreach($res_posts as $row):
-					$no++;
-					if($no == 1)
-						continue;
-
 					$user	= $res_users[$row['forumThreadPostCreatedUser']];
 					$photoUrl	= model::load("image/services")->getPhotoUrl($user['userProfileAvatarPhoto'],"avatar_icon.jpg");
+					$date		= dateRangeViewer($row['forumThreadPostCreatedDate'],1,"my");
 					?>
 					<li class="clearfix">
 					<div class="forum-post-comment-avatar"> <img src="<?php echo $photoUrl;?>" alt=""/> </div>
 					<div class="forum-post-comment-message">
 					<div class="forum-post-comment-info"><?php echo $user['userProfileFullName'];?>
-					<div class="comment-post-date"><i class="fa fa-clock-o"></i>  2 Jam Lalu</div></div>
+					<div class="comment-post-date"><i class="fa fa-clock-o"></i><?php echo $date;?></div></div>
 					<?php echo $row['forumThreadPostBody'];?>
 					</div>
 					</li>
@@ -66,6 +63,7 @@ echo model::load("template/frontend")->buildBreadCrumbs(Array(
 					<div class='no-comment'>Tiada komen lagi untuk topik ini.</div>
 				<?php endif;?>
 				<!-- NEW POSTS -->
+				<?php echo pagination::link();?>
 				<div class="forum-comment-form">
 					<form method='post'>
 						<?php 

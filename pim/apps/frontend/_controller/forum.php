@@ -84,7 +84,11 @@ class Controller_Forum
 		## get thread.
 		$data['row_thread']	= model::load("forum/thread")->getThread(authData("current_site.siteID"),$data['row_category']['forumCategoryID'],$threadID);
 
-		$data['res_posts']	= model::load("forum/thread")->getPosts($threadID);
+		$pgConf['currentPage']	= request::get("page",1);
+		$pgConf['urlFormat']	= url::base(url::createByRoute("forum-thread")."?page={page}");
+		$pgConf['limit']		= 10;
+
+		$data['res_posts']	= model::load("forum/thread")->getPosts($threadID,$pgConf);
 
 		if(form::submitted())
 		{
@@ -95,12 +99,17 @@ class Controller_Forum
 			redirect::to("");
 		}
 
+		$data['firstPost']	= model::load("forum/thread")->getFirstPost($threadID);
+		
 		## get users.
 		$userIDR	= Array();
+		$userIDR[]	= $data['firstPost']['forumThreadPostCreatedUser'];
 		foreach($data['res_posts'] as $row)
 		{
 			$userIDR[]	= $row['forumThreadPostCreatedUser'];
 		}
+
+
 		$data['res_users']	= model::load("user/user")->getUsersByID($userIDR);
 
 		view::render("forum/viewThread",$data);

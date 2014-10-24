@@ -25,8 +25,7 @@
                             {
                                 foreach($activities as $row_ua):
                                 $date   = dateRangeViewer($row_ua['row']['userActivityCreatedDate'],1,"my");
-                                $row    = $row_ua['row'];
-                                $href   = url::createByRoute("api-redirect-useractivity",Array("type"=>$row['userActivityType'],"userActivityID"=>$row['userActivityID']),true);
+                                $href   = url::createByRoute("api-redirect-useractivity",Array("type"=>$row_ua['row']['userActivityType'],"userActivityID"=>$row_ua['row']['userActivityID']),true);
                                     ?>
                                 <li>
                                     <a href='<?php echo $href;?>'><?php echo $row_ua['text'];?></a>

@@ -144,9 +144,11 @@ Lorem ipsum dolor sit amet, maiores ornare ac fermentum, imperdiet ut vivamus a,
 						<div id="member_scroller1" class="member_scroller">
 							<div class="member_scroller_mask" style="height:232px !important;">
 								<ul>
-									<?php foreach ($new_users as $user): ?>
+									<?php foreach ($new_users as $user): 
+									$userProfileHref	= $user['userID']?url::createByRoute("profile",Array("userID"=>$user['userID']),true):"#";
+									?>
 									<li>
-										<a href="#" title="<?php echo $user['userProfileFullName']; ?>">
+										<a href="<?php echo $userProfileHref;?>" title="<?php echo $user['userProfileFullName']; ?>">
 											<?php if($user['userPremiumStatus'] == 1){ ?><div class="member-status">Pemegang Kad</div><?php } ?>
 											<img src="<?php echo model::load("api/image")->buildAvatarUrl($user['userProfileAvatarPhoto']); ?>" width="60" height="60" alt="title"/>
 										</a>

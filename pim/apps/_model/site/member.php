@@ -124,6 +124,9 @@ class Member
 
 		## add.
 		$this->add($row_user['userID'],$siteID,0,$isOutsider);
+
+		## create user activity.
+		model::load("user/activity")->create($siteID,$row_user['userID'],"member.register");
 	}
 
 	public function registerByImport($siteRefID,$ic,$data)
@@ -295,6 +298,9 @@ class Member
 	{
 		if(!$siteSlug)
 			$siteSlug = db::where("siteID IN (SELECT siteID FROM site_member WHERE userID = ?)",Array($userID))->get("site")->row("siteSlug");
+
+		if(!$siteSlug)
+			return false;
 
 		return url::createByRoute("profile",Array(
 			"site-slug"=>$siteSlug,

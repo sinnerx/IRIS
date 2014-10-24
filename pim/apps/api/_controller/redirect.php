@@ -9,4 +9,21 @@ class Controller_Redirect
 		redirect::to($link);
 
 	}
+
+	public function general($type)
+	{
+		switch($type)
+		{
+			case "profile":
+			$userID	= request::get("user");
+
+			$link = model::load("site/member")->createProfileLink($userID);
+
+			if(!$link)
+				redirect::to("404");
+
+			redirect::to($link);
+			break;
+		}
+	}
 }

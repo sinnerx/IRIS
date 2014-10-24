@@ -99,7 +99,7 @@ class Activity
 				"forum.newthread"=>"{user} telah membuka topik baru yang bertajuk {threadTitle}",
 				"forum.newpost"=>"{user} meninggalkan komen di forum \"{threadTitle}\"",
 				"activity.join"=>"{user} akan hadir ke \"{activity}\"",
-				"member.register"=>"seorang pengguna baru {user} telah berdaftar di laman ini",
+				"member.register"=>"Seorang pengguna baru {user} telah berdaftar di laman ini",
 				"member.edit"=>"{user} mengemaskini profil peribadinya"
 						);
 

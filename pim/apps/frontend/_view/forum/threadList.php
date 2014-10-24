@@ -47,12 +47,14 @@ echo model::load("template/frontend")->buildBreadCrumbs(Array(
 			$date	= dateRangeViewer($row['forumThreadCreatedDate'],1,"my");
 			$url	= url::base("{site-slug}/forum/{category-slug}/".$row['forumThreadID']);
 			$photoUrl   = model::load("image/services")->getPhotoUrl($res_users[$row['forumThreadCreatedUser']]['userProfileAvatarPhoto']);
+
+			$profileHref	= url::createByRoute('api-redirect-general',Array('type'=>'profile'),true)."?user=".$row['forumThreadCreatedUser'];
 			?>
 			<li class="clearfix">
 			<div class="forum-user-avatar"><img src="<?php echo $photoUrl;?>" alt=""/></div>
 				<div class="forum-category-details">
 				  <div class="forum-category-title"><a href="<?php echo $url;?>"><?php echo $row['forumThreadTitle'];?></a></div>
-				  <div class="forum-category-info"> Oleh:  <a href="#"><?php echo $name;?></a>, <?php echo $date;?>, dalam <a href="#"><?php echo $row_category['forumCategoryTitle'];?></a></div>
+				  <div class="forum-category-info"> Oleh:  <a href="<?php echo $profileHref;?>"><?php echo $name;?></a>, <?php echo $date;?>, dalam <a href="#"><?php echo $row_category['forumCategoryTitle'];?></a></div>
 				</div>
 				<div class="forum-topic-count">
 					<div class="count"><?php echo count($res_posts[$row['forumThreadID']])-1;?></div>

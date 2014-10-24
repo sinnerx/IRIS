@@ -1,7 +1,10 @@
 <?php if(count($users) > 0): ?>
-	<?php foreach($users as $user): ?>
+	<?php foreach($users as $user): 
+
+	$profileHref	= $user['userID']?url::createByRoute("profile",Array("userID"=>$user['userID']),true):"#";
+	?>
 	<li>
-		<a href="#">
+		<a href="<?php echo $profileHref;?>">
 			<?php if($user['userPremiumStatus'] == 1): ?><div class="member-status">Pemegang Kad</div><?php endif; ?>
 			<img src="<?php echo model::load("api/image")->buildAvatarUrl($user['userProfileAvatarPhoto']); ?>" width="60" height="60" alt="title"/>
 		</a>

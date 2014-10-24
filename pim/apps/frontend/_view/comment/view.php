@@ -150,14 +150,17 @@ setTimeout(function(){comment.getMore(1)}, 300000);
 	<div class="forum-post-comment-content">
 		<ul>
 		<?php if(count($comments) > 0): ?>
-			<?php foreach($comments as $comment): ?>
+			<?php foreach($comments as $comment):
+
+			$profileHref	= url::createByRoute("api-redirect-general",Array("type"=>"profile"),true)."?user=".$comment['userID'];
+			?>
 			<li class="clearfix">
 				<div class="forum-post-comment-avatar">
 					<?php $photoUrl =  model::load("api/image")->buildAvatarUrl($comment['userProfileAvatarPhoto']); ?>
 					<img src="<?php echo $photoUrl; ?>" alt=""/>
 				</div>
 				<div class="forum-post-comment-message">
-					<div class="forum-post-comment-info">  <?php echo $comment['userProfileFullName']; ?>
+					<div class="forum-post-comment-info">  <a href='<?php echo $profileHref;?>'><?php echo $comment['userProfileFullName']; ?></a>
 				  		<div class="comment-post-date">
 				  			<i class="fa fa-clock-o"></i>  <?php echo dateRangeViewer($comment['commentCreatedDate'],1,'my'); ?>
 				  		</div>
