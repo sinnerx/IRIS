@@ -506,6 +506,25 @@ class Article
 		db::limit(3);
 		return db::get()->result();
 	}
+
+	public function createArticleLink($articleSlug,$date = null,$siteSlug = null)
+	{
+		if(is_numeric($articleSlug))
+		{
+			$row			= db::where("articleID",$articleSlug)->get("article")->row();
+			$date			= $row['articlePublishedDate'];
+			$siteSlug		= db::where("siteID",$row['siteID'])->get('site')->row("siteSlug");
+			$articleSlug	= $row['articleSlug'];
+		}
+
+		list($year,$month)	= explode("-",date("Y-m",strtotime($date)));
+		return url::createByRoute("article-view",Array(
+			"site-slug"=>$siteSlug,
+			"year"=>$year,
+			"month"=>$month,
+			"article-slug"=>$articleSlug
+			));
+	}
 }
 
 

@@ -1,6 +1,6 @@
 <?php
 namespace model\forum;
-use db, session, model;
+use db, session, model, url;
 
 /*
 forum_thread:
@@ -116,6 +116,26 @@ class Thread
 	{
 		db::where("forumThreadID",$threadIDs);
 		return db::get("forum_thread_post")->result("forumThreadID",true);
+	}
+
+	public function createThreadLink($threadID,$forumCategorySlug = null,$siteSlug = null)
+	{
+		if(is_numeric($threadID))
+		{
+			db::where("forumThreadID",$threadID);
+			db::join("forum_category","forum_category.forumCategoryID = forum_thread.forumCategoryID");
+			db::join("site","site.siteID = forum_thread.siteID");
+			$row	= db::get("forum_thread")->row();
+
+			$forumCategorySlug	= $row['forumCategorySlug'];
+			$siteSlug			= $row['siteSlug'];
+		}
+
+		return url::createByRoute("forum-thread",Array(
+			"site-slug"=>$siteSlug,
+			"category-slug"=>$forumCategorySlug,
+			"thread-id"=>$threadID
+			),true);
 	}
 }
 

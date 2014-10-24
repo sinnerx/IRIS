@@ -1,6 +1,6 @@
 <?php
 namespace model\site;
-use db, model, pagination, session;
+use db, model, pagination, session, url;
 class Member
 {
 	public function getMemberListBySite($cols = "*",$cond = null,$join = null,$limit = null,$order = null,$pageConf = null,$siteID = null)
@@ -289,6 +289,17 @@ class Member
 			db::where("temp_password",$userPassword);
 
 		return db::where("temp_username",$userIC)->get("temp_user")->row();
+	}
+
+	public function createProfileLink($userID,$siteSlug = null)
+	{
+		if(!$siteSlug)
+			$siteSlug = db::where("siteID IN (SELECT siteID FROM site_member WHERE userID = ?)",Array($userID))->get("site")->row("siteSlug");
+
+		return url::createByRoute("profile",Array(
+			"site-slug"=>$siteSlug,
+			"userID"=>$userID
+			),true);
 	}
 }
 

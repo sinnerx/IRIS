@@ -117,6 +117,7 @@ $routes[]	= Array("dashboard/[:controller]/[**:method]",function($param)
 $routes['api-image-avatar']	= Array("api/photo/avatar/[**:photo-name]","controller=api:image@get","{photo-name},avatar");
 $routes[]	= Array("api/photo/[:year]/[:month]/[:day]/[:photo-name]/[:size]","controller=api:image@get","{year},{month},{day},{photo-name},{size}");
 $routes[]	= Array("api/photo/[:photo-name]/[:size]","controller=api:image@get","{photo-name},{size}"); ## page photo api.
+$routes['api-redirect-useractivity']	= Array("api/redirect/user-activity/[:type]/[:userActivityID]","controller=api:redirect@userActivity","{type},{userActivityID}");
 
 ### Frontend Route ####
 
@@ -149,7 +150,7 @@ $routes[]	= Array("[:site-slug]/aktiviti/[:year]/[:month]/[:activity-slug]","con
 
 ## old routes for activity.
 $routes[]	= Array("[:site-slug]/activity/[:year?]/[:month?]","controller=activity@index");
-$routes[]	= Array("[:site-slug]/activity/[:year]/[:month]/[:activity-slug]","controller=activity@view/{activity-slug}");
+$routes['activity-view']	= Array("[:site-slug]/activity/[:year]/[:month]/[:activity-slug]","controller=activity@view/{activity-slug}");
 ## /old routes
 
 ## site contact-us
@@ -169,7 +170,7 @@ $routes[]	= Array("[:site-slug]/comment/getComment/[:commentID]","controller=com
 $routes[]	= Array("[:site-slug]/comment/getComments/[:refID]/[:type]","controller=comment@getComments","{refID},{type}");
 
 ## site view an article
-$routes[]	= Array("[:site-slug]/blog/[:year]/[:month]/[:article-slug]","controller=blog@view");
+$routes['article-view']	= Array("[:site-slug]/blog/[:year]/[:month]/[:article-slug]","controller=blog@view");
 
 ## site members
 $routes[]	= Array("[:site-slug]/members","controller=member@index");
@@ -179,7 +180,7 @@ $routes[]	= Array("[:site-slug]/ahli","controller=member@profile_directory");
 $routes[]	= Array("[:site-slug]/profile/getUserList/[:type]","controller=member@getUserList","{type}");
 $routes[]	= Array("[:site-slug]/profile/edit","controller=member@profile_edit");
 $routes[]	= Array("[:site-slug]/profile/uploadAvatar","controller=member@profileUploadAvatar");
-$routes[]	= Array("[:site-slug]/profile/[i:userID?]","controller=member@profile","{userID}");
+$routes['profile']	= Array("[:site-slug]/profile/[i:userID?]","controller=member@profile","{userID}");
 
 ## ajax request.
 $routes[]	= Array("[:site-slug]/ajax/[:controller]/[**:method]","controller=ajax/ajax_{controller}@{method}");
@@ -205,7 +206,7 @@ $routes['search']			= Array("[:site-slug]/carian/[:keyword?]","controller=main@s
 
 ## video gallery
 $routes[] = Array("[:site-slug]/video","controller=video@album"); 
-$routes[] = Array("[:site-slug]/video/[:video-slug]","controller=video@video_gallery","{video-slug}"); 
+$routes['video-album-view'] = Array("[:site-slug]/video/[:video-slug]","controller=video@video_gallery","{video-slug}"); 
 
 ## site page.
 $routes[]	= Array("[:site-slug]/[**:trail]","controller=page@index");

@@ -1,6 +1,6 @@
 <?php
 namespace model\activity;
-use model, db, session, pagination;
+use model, db, session, pagination, url;
 class Activity
 {
 	public function type($no = null)
@@ -776,6 +776,26 @@ class Activity
 				}
 			}
 		}
+	}
+	
+	public function createActivityLink($activitySlug,$date = null,$siteSlug = null)
+	{
+		if(is_numeric($activitySlug))
+		{
+			$row			= db::where("activityID",$activitySlug)->get("activity")->row();
+			$activitySlug	= $row['activitySlug'];
+			$siteSlug		= db::where("siteID",$row['siteID'])->get("site")->row("siteSlug");
+
+			$date			= $row['activityStartDate'];
+		}
+		list($year,$month)	= explode("-",date("Y-m",strtotime($date)));
+		$link	= url::createByRoute(	"activity-view",Array(
+										"site-slug"=>$siteSlug,
+										"activity-slug"=>$activitySlug,
+										"year"=>$year,
+										"month"=>$month),true);
+
+		return $link;
 	}
 }
 

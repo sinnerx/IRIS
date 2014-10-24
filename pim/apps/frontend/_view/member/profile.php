@@ -23,11 +23,13 @@
                             <?php
                             if($activities)
                             {
-                                foreach($activities as $userActivity):
-                                $date   = dateRangeViewer($userActivity['row']['userActivityCreatedDate'],1,"my");
+                                foreach($activities as $row_ua):
+                                $date   = dateRangeViewer($row_ua['row']['userActivityCreatedDate'],1,"my");
+                                $row    = $row_ua['row'];
+                                $href   = url::createByRoute("api-redirect-useractivity",Array("type"=>$row['userActivityType'],"userActivityID"=>$row['userActivityID']),true);
                                     ?>
                                 <li>
-                                    <a href='#'><?php echo $userActivity['text'];?></a>
+                                    <a href='<?php echo $href;?>'><?php echo $row_ua['text'];?></a>
                                     <span><?php echo $date;?></span>                                    
                                 </li>
                                 <?php
@@ -88,14 +90,15 @@
                                 if($activities_forum)
                                 {
                                     echo "<ul>";
-                                    foreach($activities_forum as $userActivity):?>
+                                    foreach($activities_forum as $row_ua):?>
                                     <?php
-                                    $date   = dateRangeViewer($userActivity['row']['userActivityCreatedDate'],1,"my");
+                                    $href   = url::createByRoute("api-redirect-useractivity",Array("type"=>$row_ua['row']['userActivityType'],"userActivityID"=>$row_ua['row']['userActivityID']),true);
+                                    $date   = dateRangeViewer($row_ua['row']['userActivityCreatedDate'],1,"my");
                                     ?>
                                     <li class="clearfix">
                                         <i class="fa fa-folder-open"></i>
                                         <div class="forum-activity-title">
-                                        <a href="#"><?php echo $userActivity['text'];?></a>
+                                        <a href="<?php echo $href;?>"><?php echo $row_ua['text'];?></a>
                                         <span><?php echo $date;?></span>
                                         </div>
                                     </li>
@@ -123,12 +126,13 @@
                                 if($activities_activity)
                                 {
                                     echo "<ul>";
-                                    foreach($activities_activity as $userActivity):
+                                    foreach($activities_activity as $row_ua):
+                                    $href   = url::createByRoute("api-redirect-useractivity",Array("type"=>$row_ua['row']['userActivityType'],"userActivityID"=>$row_ua['row']['userActivityID']),true);
                                         ?>
                                     <li class="clearfix">
                                         <i class="fa fa-calendar"></i>
                                         <div class="forum-activity-title">
-                                        <a href="#"><?php echo $userActivity['text'];?></a>
+                                        <a href="<?php echo $href;?>"><?php echo $row_ua['text'];?></a>
                                         <span><?php echo $date;?></span>
                                         </div>
                                     </li>
@@ -151,14 +155,15 @@
                                     if($activities_comment)
                                     {
                                         echo "<ul>";
-                                        foreach($activities_comment as $userActivity):?>
+                                        foreach($activities_comment as $row_ua):?>
                                         <?php
-                                        $date   = dateRangeViewer($userActivity['row']['userActivityCreatedDate'],1,"my");
+                                        $href   = url::createByRoute("api-redirect-useractivity",Array("type"=>$row_ua['row']['userActivityType'],"userActivityID"=>$row_ua['row']['userActivityID']),true);
+                                        $date   = dateRangeViewer($row_ua['row']['userActivityCreatedDate'],1,"my");
                                         ?>
                                         <li class="clearfix">
                                             <i class="fa fa-folder-open"></i>
                                             <div class="forum-activity-title">
-                                            <a href="#"><?php echo $userActivity['text'];?></a>
+                                            <a href="<?php echo $href;?>"><?php echo $row_ua['text'];?></a>
                                             <span><?php echo $date;?></span>
                                             </div>
                                         </li>

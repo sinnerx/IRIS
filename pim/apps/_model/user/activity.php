@@ -243,5 +243,45 @@ class Activity
 		return $activities;
 	}
 
+	public function getFrontendLink($type,$userActivityID)
+	{
+		db::where("userActivityType",$type);
+		db::where("userActivityID",$userActivityID);
 
+		$row	= db::get("user_activity")->row();
+
+		if(!$row)
+			return false;
+
+		$params	= $this->parameterName($row['userActivityType'].".".$row['userActivityAction'],Array(
+			$row['userActivityParameter1'],
+			$row['userActivityParameter2'],
+			$row['userActivityParameter3'],
+			$row['userActivityParameter4']
+			));
+
+		switch($row['userActivityType'].".".$row['userActivityAction'])
+		{
+			case "comment.add":
+			$link	= model::load("comment/comment")->getCommentReferenceLink($params['commentID']);
+			break;
+			case "forum.newthread":
+			$link	= model::load("forum/thread")->createThreadLink($params['forumThreadID']);
+			break;
+			case "forum.newpost":
+			$link	= model::load("forum/thread")->createThreadLink(db::where("forumThreadPostID",$params['forumThreadPostID'])->get("forum_thread_post")->row("forumThreadID"));
+			break;
+			case "activity.join":
+			$link	= model::load("activity/activity")->createActivityLink(db::where("activityUserID",$params['activityUserID'])->get("activity_user")->row("activityID"));
+			break;
+			case "member.register":
+			$link	= model::load("site/member")->createProfileLink($row['userID']);
+			break;
+			case "member.edit":
+			$link	= model::load("site/member")->createProfileLink($row['userID']);
+			break;
+		}
+
+		return $link;
+	}
 }

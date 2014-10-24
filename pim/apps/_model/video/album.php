@@ -294,6 +294,21 @@ class album
 
 		return true;
 	}
+
+	public function createVideoAlbumLink($videoAlbumSlug,$siteSlug = null)
+	{
+		if(is_numeric($videoAlbumSlug))
+		{
+			$row	= db::where("videoAlbumID",$videoAlbumSlug)->get("video_album")->row();
+			$videoAlbumSlug	= $row['videoAlbumSlug'];
+			$siteSlug		= db::select("siteSlug")->where("siteID",$row['siteID'])->get("site")->row("siteSlug");
+		}
+
+		return url::createByRoute("video-album-view",Array(
+			"site-slug"=>$siteSlug,
+			"video-slug"=>$videoAlbumSlug
+			),true);
+	}
 }
 
 

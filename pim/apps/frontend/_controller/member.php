@@ -24,13 +24,19 @@ class Controller_Member
 			$data['siteName']	= $data['row']['siteName'];
 		}
 
-		$data['activities']		= model::load("user/activity")->getActivities(null,$userID,null,null,10);
-		$data['activities_forum'] = model::load("user/activity")->getActivities(null,$userID,"forum",null,3);
-		$data['activities_comment'] = model::load("user/activity")->getActivities(null,$userID,"comment",null,3);
-		$data['activities_activity'] = model::load("user/activity")->getActivities(null,$userID,"activity",null,3);
+		## save
+		$userID	= $data['row']['userID'];
 
-		$additional		= model::load("user/user")->getAdditional($data['row']['userID']);
-		$data['row']	= array_merge($data['row'],$additional);
+		$userActivity	= model::load("user/activity");
+
+		$data['activities']				= $userActivity->getActivities(null,$userID,null,null,10);
+		$data['activities_forum'] 		= $userActivity->getActivities(null,$userID,"forum",null,3);
+		$data['activities_comment'] 	= $userActivity->getActivities(null,$userID,"comment",null,3);
+		$data['activities_activity'] 	= $userActivity->getActivities(null,$userID,"activity",null,3);
+
+		$additional				= model::load("user/user")->getAdditional($data['row']['userID']);
+		$data['row']			= array_merge($data['row'],$additional);
+		$data['userActivity']	= $userActivity;
 
 		view::render("member/profile",$data);
 	}
@@ -51,10 +57,14 @@ class Controller_Member
 		## merge both row.
 		$row	= array_merge($row,$additional);
 
+		## Birthdate.
+		list($row['DOByear'],$row['DOBmonth'],$row['DOBday'])	= explode("-",$row['userProfileDOB']);
+
 		if(form::submitted())
 		{
 			$rules	= Array(
-					"userProfileFullName,userProfileLastName"=>"required:Maklumat ini diperlukan"
+					"userProfileFullName,userProfileLastName"=>"required:Maklumat ini diperlukan",
+					"userProfileDOBday,userPRofileDOBmonth,userProfileDOByear"=>"required:Maklumat ini diperlukan"
 							);
 
 			if(input::get("userEmail") != "")
@@ -76,7 +86,12 @@ class Controller_Member
 			## ok.
 			$userID	= session::get("userID");
 
-			model::load("user/user")->fullUpdate($userID,input::get());
+			$data	= input::get();
+
+			## build date of birth.
+			$data['userProfileDOB']	= $data['userProfileDOByear']."-".$data['userProfileDOBmonth']."-".$data['userProfileDOBday'];
+
+			model::load("user/user")->fullUpdate($userID,$data);
 
 			redirect::to("","<div class='msgbox success'>Maklumat anda telah berjaya dikemaskini.</div>");
 		}

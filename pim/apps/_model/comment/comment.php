@@ -122,6 +122,28 @@ class Comment
 
 		return true;
 	}
+
+	public function getCommentReferenceLink($commentID)
+	{
+		$row	= db::where("commentID",$commentID)->get("comment")->row();
+		$type	= $row['commentType'];
+
+		switch($type)
+		{
+			case "activity":
+			return model::load("activity/activity")->createActivityLink($row['commentRefID']);
+			break;
+			case "article":
+			return model::load("blog/article")->createArticleLink($row['commentRefID']);
+			break;
+			case "site_album":
+			return model::load("image/album")->createSiteAlbumLink($row['commentRefID']);
+			break;
+			case "video_album":
+			return model::load("video/album")->createVideoAlbumLink($row['commentRefID']);
+			break;
+		}
+	}
 }
 
 ?>
