@@ -212,9 +212,9 @@ var album	= new function()
 			if(res)
 			{
 				var res = $.parseJSON(res);
-				$("#video-description textarea").html(res[0]);
-				$("#video-description input").html(res[1]);
-				$("#video-description select").val(res[2]);
+				$("#videoDescription_editor textarea").val(res[0]);
+				$("#videoDescription_editor input").val(res[1]);
+				$("#videoDescription_editor select").val(res[2]);
 				$("#video-image-wrapper embed").remove();
 				$("#video-image-wrapper").append('<embed src="http://www.youtube.com/embed/'+res[1]+'?autoplay=1" style="width:100%;height:250px;" scale="aspect" controller="true">');
 				$("#imgCOver"+res[3]).attr("data-srcbig","http://img.youtube.com/vi/"+res[1]+"/0.jpg");
@@ -222,6 +222,11 @@ var album	= new function()
 				$("#imgCOver"+res[3]).attr("src","http://img.youtube.com/vi/"+res[1]+"/0.jpg");
 				$("#video-description span").html(res[0]);
 				$("#video"+album.currVideoID).data("description",res[0]);
+				$("#video"+res[3]).attr("data-refid",res[1]);
+				$("#video"+res[3]).attr("data-videopath","http://img.youtube.com/vi/"+res[1]+"/0.jpg");
+				$("#video"+res[3]).find("img").data("video","http://www.youtube.com/embed/"+res[1]+"?autoplay=1");
+				$("#video"+res[3]).children("section").children("a").remove();
+				$("#video"+res[3]).children("section").prepend("<a class='fa fa-stop update-pending'></a>");
 
 				// reset.
 				album.editVideoDescription_cancel();
@@ -501,11 +506,6 @@ var album	= new function()
 		
 		<div class='row'>
 		<!-- List of video start here -->
-		<?php
-		foreach($res_video as $row_video):
-		?>
-			<div id='video<?php echo $row_video['videoID'];?>' data-sitevideoid='<?php echo $row_video['videoID'];?>' data-description="<?php echo $row_video['videoName'];?>" data-descriptionclean="<?php echo $row_video['videoName'];?>" data-refID="<?php echo $row_video['videoRefID'] ?>" data-videopath='<?php echo model::load("video/album")->buildVideoUrl($row_video['videoType'],$row_video['videoRefID']); ?>' class='col-sm-3 album-video<?php if($row_video['videoStatus'] == 0){ ?> deleted-video<?php } ?>' style='height:150px;margin-bottom:25px;<?php if($row_video['videoApprovalStatus'] == 2){ ?>opacity:0.4;<?php } ?>'>
-			<section class='panel panel-default'>
 			<style type="text/css">
 			.pending{
 				color:grey;
@@ -531,16 +531,35 @@ var album	= new function()
 			.disapproved:hover{
 				color:red;
 			}
+			.update-pending{
+				color:blue;
+				float:left;
+				position:absolute;
+			}
+			.update-pending:hover{
+				color:blue;
+			}
 			</style>
-					<a class='fa fa-stop <?php if($row_video['videoApprovalStatus'] == 0){ ?>pending<?php }else if($row_video['videoApprovalStatus'] == 1){ ?>approved<?php }else if($row_video['videoApprovalStatus'] == 2){ ?>disapproved<?php } ?>'></a>
-				<div class='video-panel'>
-					<a <?php if($row_video['videoApprovalStatus'] != 2){ ?>href='javascript:album.disableVideo(<?php echo $row_video['videoID'];?>);'<?php } ?> class='i i-cross2 delete-button'></a>
-				</div>
-			<div class='panel-body' onclick='album.<?php if($row_video['videoStatus'] == 1){ ?>showVideoDetail<?php }else{ ?>enableVideo<?php } ?>(<?php echo $row_video['videoID'];?>);' style='padding:3px;'>
-				<?php if($row_video['videoStatus'] == 0){ ?><h4 style="position:absolute;text-align:center;">Click to enable this video</h4><?php } ?>
-				<img style='width:100%;' id="imgCOver<?php echo $row_video['videoID'];?>" data-srcbig='<?php echo model::load("video/album")->buildVideoUrl($row_video['videoType'],$row_video['videoRefID']); ?>' data-video="<?php echo model::load("video/album")->buildEmbedVideoUrl($row_video['videoType'],$row_video['videoRefID']); ?>" src='<?php echo model::load("video/album")->buildVideoUrl($row_video['videoType'],$row_video['videoRefID']); ?>' />
-			</div>
-			</section>
+		<?php
+		$requestdata = model::load('site/request')->replaceWithRequestData('video.update', array_keys($res_video));
+
+		foreach($res_video as $row_video):
+
+		if(isset($requestdata[$row_video['videoID']])){
+			$row_video = array_merge($row_video,$requestdata[$row_video['videoID']]);
+		}
+		?>
+			<div id='video<?php echo $row_video['videoID'];?>' data-sitevideoid='<?php echo $row_video['videoID'];?>' data-description="<?php echo $row_video['videoName'];?>" data-descriptionclean="<?php echo $row_video['videoName'];?>" data-refID="<?php echo $row_video['videoRefID'] ?>" data-videopath='<?php echo model::load("video/album")->buildVideoUrl($row_video['videoType'],$row_video['videoRefID']); ?>' class='col-sm-3 album-video<?php if($row_video['videoStatus'] == 0){ ?> deleted-video<?php } ?>' style='height:150px;margin-bottom:25px;<?php if($row_video['videoApprovalStatus'] == 2){ ?>opacity:0.4;<?php } ?>'>
+				<section class='panel panel-default'>
+					<a class='fa fa-stop <?php if($row_video['videoApprovalStatus'] == 0){ ?>pending<?php }else if($row_video['videoApprovalStatus'] == 1){ ?>approved<?php }else if($row_video['videoApprovalStatus'] == 2){ ?>disapproved<?php }else if($row_video['videoApprovalStatus'] == 3){ ?>update-pending<?php } ?>'></a>
+					<div class='video-panel'>
+						<a <?php if($row_video['videoApprovalStatus'] != 2){ ?>href='javascript:album.disableVideo(<?php echo $row_video['videoID'];?>);'<?php } ?> class='i i-cross2 delete-button'></a>
+					</div>
+					<div class='panel-body' onclick='album.<?php if($row_video['videoStatus'] == 1){ ?>showVideoDetail<?php }else{ ?>enableVideo<?php } ?>(<?php echo $row_video['videoID'];?>);' style='padding:3px;'>
+						<?php if($row_video['videoStatus'] == 0){ ?><h4 style="position:absolute;text-align:center;">Click to enable this video</h4><?php } ?>
+						<img style='width:100%;' id="imgCOver<?php echo $row_video['videoID'];?>" data-srcbig='<?php echo model::load("video/album")->buildVideoUrl($row_video['videoType'],$row_video['videoRefID']); ?>' data-video="<?php echo model::load("video/album")->buildEmbedVideoUrl($row_video['videoType'],$row_video['videoRefID']); ?>" src='<?php echo model::load("video/album")->buildVideoUrl($row_video['videoType'],$row_video['videoRefID']); ?>' />
+					</div>
+				</section>
 			</div>
 		<?php endforeach;?>
 		</div>

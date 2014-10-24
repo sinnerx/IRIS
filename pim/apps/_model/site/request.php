@@ -372,6 +372,9 @@ class Request extends request_correction
 			case "video.add":
 			db::where("videoID",$row['siteRequestRefID'])->update("video",Array("videoApprovalStatus"=>1));
 			break;
+			case "video.update":
+			db::where("videoID",$row['siteRequestRefID'])->update("video",$data);
+			break;
 
 			## forum
 			case "forum_category.add":

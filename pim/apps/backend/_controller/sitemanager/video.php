@@ -79,8 +79,16 @@ Class Controller_Video
 	{
 		$siteID	= model::load("access/auth")->getAuthData("site","siteID");
 		$data	= input::get();
+
+		# check refID for the video
+		if($data['videoRefID'])
+		{
+			parse_str( parse_url( $data['videoRefID'], PHP_URL_QUERY ), $my_array_of_vars );
+			$data['videoRefID'] = $my_array_of_vars['v']?$my_array_of_vars['v']:$data['videoRefID'];
+		}
+
 		model::load("video/album")->updateVideo($videoID,$data,$siteID);
-		$response = Array(nl2br($data['videoName']),$data['videoRefID'],$data['videoType'],$videoID);
+		$response = Array($data['videoName'],$data['videoRefID'],$data['videoType'],$videoID);
 
 		return response::json($response);
 	}

@@ -122,7 +122,7 @@ class album
 		## limit, and offset.
 		db::limit(pagination::get("limit"),pagination::recordNo()-1); 
 
-		return db::get()->result();
+		return db::get()->result("videoID");
 	}
 
 	# get list of album(s) by slug
@@ -179,11 +179,12 @@ class album
 
 		if(model::load("site/request")->checkRequest("video.add",$siteID,$videoID))
 		{
-			$this->_updateArticle($videoID,$data);
+			$this->_updateVideo($videoID,$data);
 		}
 		else
 		{
 			model::load("site/request")->create('video.update', $siteID, $videoID, $data);
+			$this->_updateVideo($videoID,Array("videoApprovalStatus"=>3));
 		}
 	}
 
