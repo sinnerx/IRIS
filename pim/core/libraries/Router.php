@@ -254,6 +254,22 @@ class router
 		return call_user_func($callback,$this->paramListR,$this->base_path);
 	}
 
+	public function findRouteByName($name)
+	{
+		foreach($this->routeList as $routeName=>$data)
+		{
+			if($name == $routeName)
+			{
+				if($data[0] != 404)
+				{
+					return $data;
+				}
+			}
+		}
+
+		return false;
+	}
+
 	## Main routes dispatchment function.
 	public function dispatch($base_path	= Null)
 	{

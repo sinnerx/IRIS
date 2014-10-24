@@ -107,6 +107,46 @@ class Url
 		$curr_apps	= apps::getCurrent("current_apps");
 		return self::getProtocol().self::asset()."/$curr_apps".($path?"/".$path:"");
 	}
+
+	public static function createByRoute($routeName,$param = Array(),$withBase = false)
+	{
+		$routeData	= apps::getGlobal("router")->findRouteByName($routeName);
+		$uri		= $routeData[0];
+
+		$newUriR	= Array();
+		foreach(explode("/",$uri) as $segment)
+		{
+			if($segment[0] == "[" && $segment[strlen($segment)-1] == "]")
+			{
+				$segment	= trim($segment,"[**i:?]");
+
+				if(isset($param[$segment]))
+				{
+					$segment	= $param[$segment];
+				}
+				## check in named parameter.
+				else if(in_array($segment,array_keys(request::named())))
+				{
+					$segment	= request::named($segment);
+				}
+				## else, if it's optional set it to empty.
+				else if($segment[strlen($segment)-2] == "?")
+				{
+					$segment	= "";
+				}
+				else
+				{
+					## push and error.
+					error::set("URL_Forge","Not enough parameter. parameter : $segment");
+				}
+			}
+
+			$newUriR[]	= $segment;
+		}
+
+		$uri	= trim(implode("/",$newUriR),"/");
+		return $withBase?url::base($uri):$uri;
+	}
 }
 
 
