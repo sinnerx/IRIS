@@ -175,7 +175,7 @@ var album	= new function()
 				$("#video-image-wrapper").append('<embed src="'+vid+'" style="width:100%;height:250px;" scale="aspect" controller="true">');
 				$("#video-description span").html(desc);
 				$("#videoDescription_editor textarea").html($("#video"+siteVideoID).data("descriptionclean"));
-				$("#videoDescription_editor #videoRefID").attr('value',$("#video"+siteVideoID).data("refid"));
+				$("#videoDescription_editor #videoRefID").val($("#video"+siteVideoID).data("refid"));
 				$("#video-description a").click(function()
 				{
 					album.editVideoDescription(siteVideoID);
@@ -547,6 +547,7 @@ var album	= new function()
 
 		if(isset($requestdata[$row_video['videoID']])){
 			$row_video = array_merge($row_video,$requestdata[$row_video['videoID']]);
+			$row_video = array_merge($row_video,array("videoApprovalStatus" => 3));
 		}
 		?>
 			<div id='video<?php echo $row_video['videoID'];?>' data-sitevideoid='<?php echo $row_video['videoID'];?>' data-description="<?php echo $row_video['videoName'];?>" data-descriptionclean="<?php echo $row_video['videoName'];?>" data-refID="<?php echo $row_video['videoRefID'] ?>" data-videopath='<?php echo model::load("video/album")->buildVideoUrl($row_video['videoType'],$row_video['videoRefID']); ?>' class='col-sm-3 album-video<?php if($row_video['videoStatus'] == 0){ ?> deleted-video<?php } ?>' style='height:150px;margin-bottom:25px;<?php if($row_video['videoApprovalStatus'] == 2){ ?>opacity:0.4;<?php } ?>'>
@@ -609,13 +610,13 @@ var album	= new function()
 		<span></span>
 		<a class='fa fa-edit' href='#' style='position:absolute;bottom:5px;right:5px;'></a>
 		<div id='videoDescription_editor'>
-					<label>Video Type</label><br/>
+			<label>Video Type</label><br/>
 			<select style="width: 100%;margin: 0 0 5px 0;" name="videoType" id="videoType">
 				<option value="1">Youtube !</option>
 			</select><br/>
-					<label>Video Ref ID</label>
+			<label>Video Ref ID</label>
             <input type="text" style="width: 100%;margin: 0 0 5px 0;" name="videoRefID" id="videoRefID" /><br/>
-					<label>Video Description</label>
+			<label>Video Description</label>
 			<textarea name="videoName" id="videoName"></textarea>
 			<div style="text-align:right;">
 				<input type='submit' class='btn btn-default' onclick='album.editVideoDescription_cancel();' value='Cancel' /> <input type='submit' class='btn btn-primary' onclick='album.editVideoDescription_submit();' value='Update Name' />

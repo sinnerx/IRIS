@@ -174,7 +174,8 @@ class album
 		$data = Array(
 						"videoName"=>$data['videoName'],
 						"videoType"=>$data['videoType'],
-						"videoRefID"=>$data['videoRefID']
+						"videoRefID"=>$data['videoRefID'],
+						"videoApprovalStatus"=>1
 								);
 
 		if(model::load("site/request")->checkRequest("video.add",$siteID,$videoID))
@@ -184,7 +185,6 @@ class album
 		else
 		{
 			model::load("site/request")->create('video.update', $siteID, $videoID, $data);
-			$this->_updateVideo($videoID,Array("videoApprovalStatus"=>3));
 		}
 	}
 
