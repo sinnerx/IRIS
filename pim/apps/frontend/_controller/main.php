@@ -287,7 +287,7 @@ Class Controller_Main
 				case "blog":
 					$tables['blog']	= "article";
 					$select['blog']	= "articleID,articleText,articleName,articleCreatedDate,articlePublishedDate,articleSlug";
-					$where['blog']['MATCH(articleText) AGAINST (?)'] = Array($keyword);
+					$where['blog']['MATCH(articleText) AGAINST (?) or MATCH(articleName) AGAINST (?)'] = Array($keyword,$keyword);
 					$where['blog']['articleStatus']	= 1;
 					$where['blog']['siteID']		= authData("current_site.siteID");
 

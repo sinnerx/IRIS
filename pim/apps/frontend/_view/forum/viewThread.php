@@ -56,7 +56,7 @@ echo model::load("template/frontend")->buildBreadCrumbs(Array(
 
 					<!-- POSTS -->
 			<div class="forum-post-comment">
-				<div class="forum-post-comment-count">KOMEN <span>(<?php echo count($res_posts);?>)</span></div>
+				<div class="forum-post-comment-count">RESPON <span>(<?php echo count($res_posts);?>)</span></div>
 				<div class="forum-post-comment-content">
 				<?php if($res_posts):?>
 				<ul>
@@ -78,7 +78,7 @@ echo model::load("template/frontend")->buildBreadCrumbs(Array(
 					<?php endforeach;?>
 				</ul>
 				<?php else:?>
-					<div class='no-comment'>Tiada komen lagi untuk topik ini.</div>
+					<div class='no-comment'>Tiada respon lagi untuk topik ini.</div>
 				<?php endif;?>
 				<!-- NEW POSTS -->
 				<?php echo pagination::link();?>

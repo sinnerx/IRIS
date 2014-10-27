@@ -1,3 +1,26 @@
+<!-- refer http://www.ericmmartin.com/projects/simplemodal/ for docs -->
+<script type="text/javascript" src='<?php echo url::asset("frontend/js/jquery.simplemodal.1.4.4.min.js");?>'></script>
+<link rel="stylesheet" type="text/css" href="<?php echo url::asset("frontend/css/simplemodal-basic.css");?>">
+<script type="text/javascript">
+	
+var pim_modal = new function($)
+{
+	this.show = function(type,content)
+	{
+		switch(type)
+		{
+			case "container":
+			content = $(content).html();
+			break;
+		}
+
+		$.modal(content,{
+			position:[100]
+		});
+	}
+}(jQuery);
+
+</script>
 <style type="text/css">
 	
 select
@@ -96,6 +119,37 @@ select
 	background: #0062a1;
 }
 
+/* Modal box styles */
+.simplemodal-container
+{
+	background: white;
+	border:0px;
+}
+
+#simplemodal-container a.modalCloseImg {
+	background:url(<?php echo url::asset('frontend/images/simplemodal-x.png');?>) no-repeat; /* adjust url as required */
+	width:25px;
+	height:29px;
+	display:inline;
+	z-index:3200;
+	position:absolute;
+	top:-15px;
+	right:-18px;
+	cursor:pointer;
+}
+
+.content-panduan-container ul
+{
+	padding:0px;
+	padding-left:15px;
+}
+
+.content-panduan-container ul li
+{
+	padding:5px;
+	border-bottom: 1px solid #eaeaea;
+}
+
 </style>
 <script type="text/javascript" src='<?php echo url::asset("backend/js/pim.js");?>'></script>
 <script type="text/javascript">
@@ -144,6 +198,18 @@ $(document).ready(function()
 });
 
 </script>
+<div style="display:none;" class='content-panduan'>
+	<div class='content-panduan-container'>
+	<h3>Panduan Menulis Artikel Pengenalan</h3>
+	<ul>
+		<li>Pastikan menulis dalam tulisan yang boleh difahami.</li>
+		<li>Ia haruslah tentang diri anda, dan apa yang anda mahu pengguna lain tahu tentang anda.</li>
+		<li>Tidak menyakiti pengguna lain.</li>
+		<li>Sebaiknya tulis dalam tatabahasa yang betul.</li>
+		<li><b>Tips</b> : Boleh ceritakan tentang diri anda seperti tempat tinggal, minat, cita-cita, pekerjaan dan sebagainya.</li>
+	</ul>
+	</div>
+</div>
 <h3 class="block-heading"><a href='./'>PROFIL AHLI</a><span class="subforum"> > KEMASKINI PROFIL</span></h3>
 <form method='post'>
 <div class="block-content clearfix">
@@ -265,7 +331,7 @@ $(document).ready(function()
 							<?php echo form::text("userProfileEcommerce","class='name icn-lft'",$userProfileEcommerce);?>
 						</div>
 						<div class="profile-edit-row clearfix">
-							<label>Artikel Pengenalan:</label> <a href="#" class="panduan">Panduan</a>
+							<label>Artikel Pengenalan:</label> <a href="javascript:pim_modal.show('container','.content-panduan');" class="panduan">Panduan</a>
 							<?php echo form::textarea("userProfileIntroductional",null,$userProfileIntroductional);?>
 						</div>
 					</div>
