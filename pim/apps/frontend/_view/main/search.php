@@ -84,11 +84,12 @@ echo model::load("template/frontend")->buildBreadCrumbs(Array(
 			<div class="search-bottom-form clearfix">
 				<b>Jenis :</b>
 					<?php
+					$typeR	= model::load("localization/frontend")->getText("user_activity");
 					foreach($filter as $type):?>
 					<?php
 					$checked	= in_array($type, $selectedType)?"checked":"";
 					?>
-						<label><input class='search-filter-type' value='<?php echo $type;?>' type='checkbox' <?php echo $checked;?> /> <?php echo $type;?></label>
+						<label><input class='search-filter-type' value='<?php echo $type;?>' type='checkbox' <?php echo $checked;?> /> <?php echo ucwords($typeR[$type]?:$type);?></label>
 					<?php
 					endforeach;
 					?>
@@ -139,7 +140,7 @@ echo model::load("template/frontend")->buildBreadCrumbs(Array(
 			<span class='search-list-title'><a href='<?php echo $row['url'];?>'><?php echo $row['title'];?></a></span>
 		</div>
 		<div class='search-list-body'>
-			<div class='search-list-date'><?php echo ucwords($row['type']);?> ditulis pada <?php echo $row['date'];?></div>
+			<div class='search-list-date'><?php echo ucwords($typeR[$row['type']]?:$row['type']);?> ditulis pada <?php echo $row['date'];?></div>
 			<div class='search-list-content'>
 			<?php if($row['img']):?>
 			<div>

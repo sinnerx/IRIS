@@ -235,12 +235,12 @@ class Helper
 
 	function frontendDatetime($datetime)
 	{
-
+		return $this->frontendTime($datetime).", ".$this->frontendDate($datetime);
 	}
 
 	function frontendTime($time)
 	{
-		return date("g:i A",strtotime($time));
+		return date("g:i a",strtotime($time));
 	}
 }
 ?>

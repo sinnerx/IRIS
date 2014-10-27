@@ -532,7 +532,7 @@ Class Controller_Main
 
 					$row_result['title']	= $row[$resultcolumn[$type]['title']];
 					$row_result['body']		= model::load("helper")->purifyHTML($row[$resultcolumn[$type]['body']]);
-					$row_result['date']		= date("g:i A, d-F-Y",strtotime($row[$resultcolumn[$type]['date']]));
+					$row_result['date']		= model::load("helper")->frontendDatetime($row[$resultcolumn[$type]['date']]);
 
 					if(is_array($resultcolumn[$type]['img']))
 					{
