@@ -3,10 +3,9 @@
 	if($res_forum_category):?>
 	<?php 
 	foreach($res_forum_category as $row):
-
 	if($row['forumCategoryAccess'] == 2 && !authData('current_site.isMember'))
 		continue;
-
+	
 	$title				= $row['forumCategoryTitle'];
 	$desc				= $row['forumCategoryDescription'];
 	$latestTopic	= "";
@@ -46,8 +45,8 @@
 	<?php
 	endforeach;
 	else:?>
-	
-
+	<div style="padding-bottom:10px;">
+		Tiada kategori lagi untuk paparan.
+	</div>
 	<?php endif;?>
-	
 </ul>

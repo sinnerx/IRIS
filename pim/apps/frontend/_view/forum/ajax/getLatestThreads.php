@@ -1,3 +1,4 @@
+<?php if($res_threads):?>
 <ul>
 <?php foreach($res_threads as $row):
 $photoUrl   = model::load("image/services")->getPhotoUrl($res_users[$row['forumThreadCreatedUser']]['userProfileAvatarPhoto']);
@@ -16,8 +17,13 @@ $profileUrl	= url::base(url::createByRoute("profile",Array("userID"=>$row['forum
 	</div>
 	<div class="forum-topic-count">
 		<div class="count"><?php echo count($res_posts[$row['forumThreadID']])-1;?></div>
-		<div class="count-label">komen</div>
+		<div class="count-label">respon</div>
 	</div>
 </li>
 <?php endforeach;?>
 </ul>
+<?php else:?>
+<div style="padding-bottom:10px;">
+	Tiada topik lagi untuk forum ini.
+</div>
+<?php endif;?>

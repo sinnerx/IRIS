@@ -34,7 +34,7 @@ echo model::load("template/frontend")->buildBreadCrumbs(Array(
 		</div>
 		<div class="page-sub-wrapper forum-page">
 		<div class="forum-header clearfix">
-			<a href="<?php echo url::base("{site-slug}/forum");?>" >Kategori</a>
+			<a href="<?php echo url::base("{site-slug}/forum#kategori");?>" >Kategori</a>
 			<a href="#" class="active-cat">Topic</a> 
 			<a href='<?php echo url::base("{site-slug}/forum/{category-slug}/topik-baru");?>' class='new-topic-icon'>Buka Topik Baru</a>
 		</div>
@@ -58,7 +58,7 @@ echo model::load("template/frontend")->buildBreadCrumbs(Array(
 				</div>
 				<div class="forum-topic-count">
 					<div class="count"><?php echo count($res_posts[$row['forumThreadID']])-1;?></div>
-					<div class="count-label">komen</div>
+					<div class="count-label">respon</div>
 				</div>
 			</li>
 			<?php endforeach;?>

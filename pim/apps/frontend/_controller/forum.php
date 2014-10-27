@@ -19,6 +19,7 @@ class Controller_Forum
 	public function index()
 	{
 		$where['forumCategoryApprovalStatus'] = 1;
+		$where['forumCategoryAccess !='] = 2;
 		$data['res_forum_category']	= model::load("forum/category")->getCategories(Array(authData("current_site.siteID"),0),$where);
 
 		if($data['res_forum_category'])
@@ -56,6 +57,7 @@ class Controller_Forum
 	{
 		$data['row_category']	= $categorySlug?$this->row_category:db::where("forumCategoryID",input::get("forumCategoryID"))->get("forum_category")->row();
 		$where['forumCategoryApprovalStatus']	= 1;
+		$where['forumCategoryAccess !='] = 2;
 		$res_category	= model::load("forum/category")->getCategories(Array(authData("current_site.siteID"),0),$where);
 
 		## cat.

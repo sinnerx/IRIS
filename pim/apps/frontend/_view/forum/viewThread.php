@@ -72,7 +72,7 @@ echo model::load("template/frontend")->buildBreadCrumbs(Array(
 					<div class="forum-post-comment-message">
 					<div class="forum-post-comment-info"><?php echo $user['userProfileFullName'];?>
 					<div class="comment-post-date"><i class="fa fa-clock-o"></i><?php echo $date;?></div></div>
-					<?php echo $row['forumThreadPostBody'];?>
+					<?php echo nl2br($row['forumThreadPostBody']);?>
 					</div>
 					</li>
 					<?php endforeach;?>

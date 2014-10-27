@@ -34,6 +34,12 @@ class Controller_Ajax_Forum
 	public function getCategories()
 	{
 		$where['forumCategoryApprovalStatus'] = 1;
+
+		if(!authData('current_site.isMember'))
+		{
+			$where['forumCategoryAccess !=']  = 2;
+		}
+
 		$data['res_forum_category']	= model::load("forum/category")->getCategories(Array(authData("current_site.siteID"),0),$where);
 
 		if($data['res_forum_category'])
