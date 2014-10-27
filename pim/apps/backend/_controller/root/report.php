@@ -20,7 +20,7 @@ class Controller_Report
 		$filename	= "Monthly USP Project Update - ".date("F",strtotime("2014-$month-01"))." $year";
 
 		$excel	= new \PHPExcel;
-		$ExcelHelper	= new model\report\PHPExcelHelper($excel,$filename.".xlsx");
+		$ExcelHelper	= new model\report\PHPExcelHelper($excel,$filename.".xls");
 
 		## the main working sheet.
 		$sheet	= $excel->getActiveSheet();
@@ -168,7 +168,7 @@ class Controller_Report
 
 		## initiate both helper and php excel.
 		$excel	= new \PHPExcel;
-		$ExcelHelper	= new model\report\PHPExcelHelper($excel,$filename.".xlsx");
+		$ExcelHelper	= new model\report\PHPExcelHelper($excel,$filename.".xls");
 
 		## the main working sheet.
 		$sheet	= $excel->getActiveSheet();
