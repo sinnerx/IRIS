@@ -19,13 +19,13 @@ jQuery(document).ready(function()
 	</div>
 	<div class='cal-day'>
 		<ul>
-			<li><div>AHA</div></li>
 			<li><div>ISN</div></li>
 			<li><div>SEL</div></li>
 			<li><div>RAB</div></li>
 			<li><div>KHA</div></li>
 			<li><div>JUM</div></li>
 			<li><div>SAB</div></li>
+			<li><div>AHA</div></li>
 		</ul>
 	</div>
 	<div class='cal-date-container' style="position:relative;z-index:-1;">

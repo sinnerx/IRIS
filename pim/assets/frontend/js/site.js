@@ -142,7 +142,10 @@ var Calendar	= function(id,dateListID,base_url)
 
 		//get first date. of the calendar.
 		var theDate	= new Date(year,month,1);
-		var theDate	= new Date(year,month,1-theDate.getDay());
+
+		//var theDate	= new Date(year,month,1-theDate.getDay());
+		// so now calendar start by monday.
+		var theDate	= new Date(year,month,1-theDate.getDay()+1);
 
 		//loop.
 		var cond	= true;
