@@ -118,6 +118,7 @@ class Url
 		{
 			if($segment[0] == "[" && $segment[strlen($segment)-1] == "]")
 			{
+				$ori_segment=$segment;
 				$segment	= trim($segment,"[**i:?]");
 
 				if(isset($param[$segment]))
@@ -130,7 +131,7 @@ class Url
 					$segment	= request::named($segment);
 				}
 				## else, if it's optional set it to empty.
-				else if($segment[strlen($segment)-2] == "?")
+				else if($ori_segment[strlen($ori_segment)-2] == "?")
 				{
 					$segment	= "";
 				}

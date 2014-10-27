@@ -271,7 +271,7 @@ $(document).ready(function()
 					</div>
 				</div>
 				<div class="profile-edit-row clearfix">
-					<input type="reset" class="reset-bttn" value="Batal"> 
+					<input type="reset" class="reset-bttn" value="Batal" onclick='window.location.href = "<?php echo url::createByRoute('profile',Array(),true);?>";' > 
 					<input type="submit" class="submit-bttn" value="Simpan">
 				</div>
 			</div>
