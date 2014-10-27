@@ -635,7 +635,7 @@ Akaun anda masih belum aktif. Sila buat bayaran RM <?php echo model::load("confi
 							1=>Array("page@index"),
 							2=>Array("main@index"),
 							3=>Array("activity@index","activity@index","activity@view"),
-							4=>Array("gallery@albumView","gallery@index","gallery@index_month"),
+							4=>Array("gallery","gallery","gallery","forum","video","member"),
 							5=>Array("main@contact"),
 							6=>Array("blog@article","blog@view")
 									);
@@ -717,7 +717,7 @@ Akaun anda masih belum aktif. Sila buat bayaran RM <?php echo model::load("confi
 				$cm	= $controller."@".$method;
 
 				$cssActive	= "";
-				if(isset($componentMenu[$component]) && in_array($cm,$componentMenu[$component]))
+				if(isset($componentMenu[$component]) && (in_array($cm,$componentMenu[$component]) || in_array($controller,$componentMenu[$component])))
 					$cssActive	= "active";
 
 				$dropdownIcon	= isset($childPageR[$pageID]) || isset($componentChildR[$component])?'<span><i class="fa fa-sort-asc"></i></span>':"";

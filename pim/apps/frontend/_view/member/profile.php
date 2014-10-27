@@ -23,6 +23,7 @@
                             <?php
                             if($activities)
                             {
+                                echo "<ul>";
                                 foreach($activities as $row_ua):
                                 $date   = dateRangeViewer($row_ua['row']['userActivityCreatedDate'],1,"my");
                                 $href   = url::createByRoute("api-redirect-useractivity",Array("type"=>$row_ua['row']['userActivityType'],"userActivityID"=>$row_ua['row']['userActivityID']),true);
@@ -33,10 +34,16 @@
                                 </li>
                                 <?php
                                 endforeach;
+                                echo "</ul>";
+                            }
+                            else
+                            {?>
+                            <?php
                             }
 
                             ?>
-                        </ul>
+
+                        
                     </div>
                 </div>
             </div>
