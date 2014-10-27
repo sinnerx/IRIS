@@ -1,6 +1,6 @@
 <?php
 namespace model\forum;
-use db, session, model, url;
+use db, session, model, url, pagination;
 
 /*
 forum_thread:
@@ -105,10 +105,35 @@ class Thread
 		return db::where("siteID",$siteID)->where("forumCategoryID",$categoryID)->where("forumThreadID",$threadID)->get("forum_thread")->row();
 	}
 
-	public function getPosts($threadID)
+	public function getPosts($threadID,$paginationConf = null)
 	{
 		db::where("forumThreadID",$threadID);
-		return db::get("forum_thread_post")->result();
+		db::from("forum_thread_post");
+
+		if($paginationConf)
+		{
+			if(db::num_rows() == 1)
+			{
+				$res = db::get()->result();
+				return Array();
+			}
+
+			$totalRow	= db::num_rows()-1;
+
+			pagination::setFormat(model::load("template/frontend")->pagination());
+			pagination::initiate(Array(
+				"currentPage"=>$paginationConf['currentPage'],
+				"urlFormat"=>$paginationConf['urlFormat'],
+				"totalRow"=>$totalRow,
+				"limit"=>$paginationConf['limit'],
+				));
+
+			$offset	= pagination::recordNo();
+
+			db::limit($paginationConf['limit'],$offset);
+		}
+
+		return db::get()->result();
 	}
 
 	## grouped by forumThreadID
@@ -136,6 +161,11 @@ class Thread
 			"category-slug"=>$forumCategorySlug,
 			"thread-id"=>$threadID
 			),true);
+	}
+
+	public function getFirstPost($threadID)
+	{
+		return db::where("forumThreadID",$threadID)->get("forum_thread_post")->row();
 	}
 }
 
