@@ -52,6 +52,24 @@
 	color:red;
 }
 </style>
+<script type="text/javascript">
+	
+function wordcount()
+{
+	var maxlength	= 6000;
+	var text	= jQuery("#forumThreadPostBody").val();
+
+	if(text.length > maxlength)
+	{
+		alert("Telah melebihi jumlah perkataan.");
+		jQuery("#forumThreadPostBody").val(text.substring(0,maxlength));
+	}
+
+
+	jQuery(".char-count").html(jQuery("#forumThreadPostBody").val().length);
+}
+
+</script>
 <h3 class="block-heading">
 <?php
 echo model::load("template/frontend")->buildBreadCrumbs(Array(
@@ -75,7 +93,8 @@ echo model::load("template/frontend")->buildBreadCrumbs(Array(
 			</div>
 			<div class='new-topic-body'>
 			<div class='new-topic-label'>Isi Kandungan <?php echo flash::data("forumThreadPostBody");?></div>
-				<?php echo form::textarea("forumThreadPostBody");?>
+				<?php echo form::textarea("forumThreadPostBody","onkeyup='wordcount();'");?>
+				<div style="position:absolute;font-size:0.9em;">Jumlah karakter : <span class='char-count'>0</span>/6000</div>
 			</div>
 		</div>
 		<div class="new-topic-footer">

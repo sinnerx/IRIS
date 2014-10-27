@@ -7,6 +7,24 @@
 }
 
 </style>
+<script type="text/javascript">
+	
+function wordcount()
+{
+	var maxlength	= 6000;
+	var text	= jQuery("#forumThreadPostBody").val();
+
+	if(text.length > maxlength)
+	{
+		alert("Telah melebihi jumlah perkataan.");
+		jQuery("#forumThreadPostBody").val(text.substring(0,maxlength));
+	}
+
+
+	jQuery(".char-count").html(jQuery("#forumThreadPostBody").val().length);
+}
+
+</script>
 <h3 class="block-heading"><?php
 echo model::load("template/frontend")->buildBreadCrumbs(Array(
                                           Array("Forum",url::base("{site-slug}/forum")),
@@ -72,10 +90,11 @@ echo model::load("template/frontend")->buildBreadCrumbs(Array(
 						<div class="comment-user-avatar" style="background:url('<?php echo $myavatar;?>');border-radius:100%;"></div>
 						<div class="comment-post-input">
 						<h3><?php echo authData("user.userProfileFullName");?></h3>
-						<div class="comment-text-input">
+						<div class="comment-text-input" style="position:relative;">
 						<div class="comment-text-input-arrow"></div>
-						<textarea placeholder='Taipkan komen anda di sini...' name='forumThreadPostBody'></textarea>
-						<input type="submit" value="Hantar" class="bttn-submit">
+							<textarea placeholder='Taipkan komen anda di sini...' name='forumThreadPostBody' id='forumThreadPostBody' onkeyup='wordcount();'></textarea>
+							<div style="width:300px;font-size:0.9em;">Jumlah karakter : <span class='char-count'>0</span>/6000</div>
+							<input type="submit" value="Hantar" class="bttn-submit">
 						</div>
 						</div>
 					</form>
