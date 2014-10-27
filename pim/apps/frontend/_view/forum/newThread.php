@@ -52,6 +52,51 @@
 	color:red;
 }
 </style>
+<h3 class="block-heading">
+<?php
+$breadCrumbs[]	= Array("Forum",url::base("{site-slug}/forum"));
+if($withoutCategory)
+{
+	$breadCrumbs[]	= Array("TOPIK BARU");
+}
+else
+{
+	$breadCrumbs[]	= Array($row_category['forumCategoryTitle'],url::base("{site-slug}/forum/{category-slug}"));
+	$breadCrumbs[]	= Array("BARU");
+}
+
+
+echo model::load("template/frontend")->buildBreadCrumbs($breadCrumbs);
+                                                            ?>
+</h3>
+<div class="block-content clearfix">
+<form method='post'>
+	<div class="page-content">
+		<div class="page-description">
+			Buka topik baru tentang <u><?php echo $row_category['forumCategoryTitle'];?></u>
+		</div>
+		<?php echo flash::data();?>
+		<div class='new-topic-wrapper'>
+			<div class='new-topic-label'>Tajuk <?php echo flash::data("forumThreadTitle");?></div>
+			<div class="new-topic-title">
+				<?php echo form::text("forumThreadTitle");?>
+			</div>
+			<div class='new-topic-label'>Kategori <?php echo flash::data("forumCategoryID");?></div>
+			<div class='new-topic-category-body'>
+				<?php echo form::select("forumCategoryID",$categories,!$withoutCategory?"disabled":"",$row_category['forumCategoryID']);?>
+			</div>
+			<div class='new-topic-body'>
+			<div class='new-topic-label'>Isi Kandungan <?php echo flash::data("forumThreadPostBody");?></div>
+				<?php echo form::textarea("forumThreadPostBody","onkeyup='wordcount();'");?>
+				<div style="position:absolute;font-size:0.9em;">Jumlah karakter : <span class='char-count'>0</span>/6000</div>
+			</div>
+		</div>
+		<div class="new-topic-footer">
+		<input type="submit" value='Buka Topik Baru'>
+		</div>
+	</div>
+</form>
+</div>
 <script type="text/javascript">
 	
 function wordcount()
@@ -69,37 +114,5 @@ function wordcount()
 	jQuery(".char-count").html(jQuery("#forumThreadPostBody").val().length);
 }
 
+wordcount();
 </script>
-<h3 class="block-heading">
-<?php
-echo model::load("template/frontend")->buildBreadCrumbs(Array(
-                                          Array("Forum",url::base("{site-slug}/forum")),
-                                          Array($row_category['forumCategoryTitle'],url::base("{site-slug}/forum/{category-slug}")),
-                                          Array("BARU")
-                                                            ));
-                                                            ?>
-</h3>
-<div class="block-content clearfix">
-<form method='post'>
-	<div class="page-content">
-		<div class="page-description">
-			Buka topik baru tentang <u><?php echo $row_category['forumCategoryTitle'];?></u>
-		</div>
-		<?php echo flash::data();?>
-		<div class='new-topic-wrapper'>
-			<div class='new-topic-label'>Tajuk <?php echo flash::data("forumThreadTitle");?></div>
-			<div class="new-topic-title">
-				<?php echo form::text("forumThreadTitle");?>
-			</div>
-			<div class='new-topic-body'>
-			<div class='new-topic-label'>Isi Kandungan <?php echo flash::data("forumThreadPostBody");?></div>
-				<?php echo form::textarea("forumThreadPostBody","onkeyup='wordcount();'");?>
-				<div style="position:absolute;font-size:0.9em;">Jumlah karakter : <span class='char-count'>0</span>/6000</div>
-			</div>
-		</div>
-		<div class="new-topic-footer">
-		<input type="submit" value='Buka Topik Baru'>
-		</div>
-	</div>
-</form>
-</div> 

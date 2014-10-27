@@ -193,10 +193,11 @@ $routes['gallery-view']		= Array("[:site-slug]/galeri/[:year]/[:month]/id/[i:sit
 $routes['gallery-view2']	= Array("[:site-slug]/galeri/[:year]/[:month]/[:sitealbum-slug]","controller=gallery@albumView","{sitealbum-slug},{year},{month}");
 
 ## forum
-$routes['forum-index']		= Array("[:site-slug]/forum","controller=forum@index");
-$routes['forum-threads']	= Array("[:site-slug]/forum/[:category-slug]","controller=forum@threadList","{category-slug}");
-$routes['forum-new-thread']	= Array("[:site-slug]/forum/[:category-slug]/topik-baru","controller=forum@newThread","{category-slug}");
-$routes['forum-thread']		= Array("[:site-slug]/forum/[:category-slug]/[:thread-id]","controller=forum@viewThread","{category-slug},{thread-id}");
+$routes['forum-index']			= Array("[:site-slug]/forum","controller=forum@index");
+$routes['forum-new-thread1']	= Array("[:site-slug]/forum/topik-baru","controller=forum@newThread");
+$routes['forum-threads']		= Array("[:site-slug]/forum/[:category-slug]","controller=forum@threadList","{category-slug}");
+$routes['forum-new-thread2']	= Array("[:site-slug]/forum/[:category-slug]/topik-baru","controller=forum@newThread","{category-slug}");
+$routes['forum-thread']			= Array("[:site-slug]/forum/[:category-slug]/[:thread-id]","controller=forum@viewThread","{category-slug},{thread-id}");
 
 
 ## faq

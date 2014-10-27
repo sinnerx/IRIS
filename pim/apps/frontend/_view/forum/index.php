@@ -1,3 +1,24 @@
+<style type="text/css">
+	
+.no-topic
+{
+	padding:20px 0 0 0px;
+
+}
+
+.new-topic-icon
+{
+	background:#c64f4f;
+	color:white !important;
+	float:right !important;
+}
+
+.new-topic-icon:hover
+{
+	background: #c64f4f !important;
+}
+
+</style>
 <script type="text/javascript" src='<?php echo url::asset("frontend/js/grapnel.js");?>'></script>
 <script type="text/javascript">
 // use Grapnel js. simple router.
@@ -42,13 +63,14 @@ echo model::load("template/frontend")->buildBreadCrumbs(Array(
 </h3>
 <div class="block-content clearfix">
 	<div class="page-content">
-		<div class="page-description"> 
-		Lorem ipsum dolor sit amet, maiores ornare ac fermentum, imperdiet ut vivamus a, nam lectus at nunc. Quam euismod sem, semper ut potenti pellentesque quisque. In eget sapien sed, sit duis vestibulum ultricies, placerat morbi amet vel, nullam in in lorem vel. In molestie elit dui dictum, praesent nascetur pulvinar sed, in dolor pede in aliquam, risus nec error quis pharetra. Eros metus quam augue suspendisse, metus rutrum risus erat in.  In ultrices quo ut lectus, etiam vestibulum urna a est, pretium luctus euismod nisl, pellentesque turpis hac ridiculus massa. Venenatis a taciti dolor platea, curabitur lorem platea urna odio.
+		<div class="page-description">
+		Forum perbincangan bersama ahli-ahli laman ini.
 		</div>
 		<div class="page-sub-wrapper forum-page">
 		<div class="forum-header clearfix">
 		<a href="#terkini">Topik Terkini</a>
 		<a href="#kategori" class="active-cat">Kategori</a>
+		<a href='<?php echo url::createByRoute("forum-new-thread1",null,true);?>' class='new-topic-icon'>Buka Topik Baru</a>
 		</div>
 			<div class="forum-container category">
 			</div>

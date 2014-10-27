@@ -52,15 +52,28 @@ class Controller_Forum
 		view::render("forum/threadList",$data);
 	}
 
-	public function newThread($categorySlug)
+	public function newThread($categorySlug = null)
 	{
-		$data['row_category']	= $this->row_category;
+		$data['row_category']	= $categorySlug?$this->row_category:db::where("forumCategoryID",input::get("forumCategoryID"))->get("forum_category")->row();
+		$where['forumCategoryApprovalStatus']	= 1;
+		$res_category	= model::load("forum/category")->getCategories(Array(authData("current_site.siteID"),0),$where);
+
+		## cat.
+		$data['withoutCategory']	= !$categorySlug?true:false;
+
+		foreach($res_category as $row)
+			$data['categories'][$row['forumCategoryID']] = $row['forumCategoryTitle'];
 
 		if(form::submitted())
 		{
 			$rules	= Array(
 					"forumThreadTitle,forumThreadPostBody"=>"required:Ruangan ini diperlukan."
 							);
+
+			if(!$categorySlug)
+			{
+				$rules['forumCategoryID']	= "required:Ruangan ini diperlukan.";
+			}
 
 			if($error = input::validate($rules))
 			{
