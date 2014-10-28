@@ -519,6 +519,7 @@ forum_thread:
 	forumCategoryID [int]
 	forumThreadTitle [varchar]
 	forumThreadDescription [text]
+	forumThreadStatus [int] ## 0 = locked, 1 = active.
 	forumThreadCreatedDate [datetime]
 	forumThreadCreatedUser [int]
 
@@ -527,6 +528,7 @@ forum_thread_post:
 	forumThreadID [int]
 	forumThreadPostTitle [varchar]
 	forumThreadPostBody [text]
+	forumThreadPostStatus [int]		## 0 = deleted, 1 = active.
 	forumThreadPostCreatedUser [int]
 	forumThreadPostCreatedDate [datetime]
 

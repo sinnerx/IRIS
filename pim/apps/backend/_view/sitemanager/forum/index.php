@@ -4,7 +4,7 @@ A module to manage your forum. You may create categories, and etc.
 </div>
 <?php echo flash::data();?>
 <div class='row'>
-	<div class='col-sm-6'>
+	<div class='col-sm-6 pull-right'>
 		<div class='row-wrapper'>
 		<h3>
 			Latest topic
@@ -39,7 +39,7 @@ A module to manage your forum. You may create categories, and etc.
 			</table>
 		</div>
 	</div>
-	<div class='col-sm-6'>
+	<div class='col-sm-6 pull-left'>
 		<div class='row-wrapper'>
 			<h3>
 				Forum Categories
@@ -49,7 +49,7 @@ A module to manage your forum. You may create categories, and etc.
 		<div class='table-responsive bg-white'>
 		<table class='table'>
 			<tr>
-				<th width="50">No.</th><th>Category Name</th><th>Access Level</th><th width="56px"></th>
+				<th width="50">No.</th><th>Category Name</th><th>Access Level</th><th width="80px"></th>
 			</tr>
 			<?php
 			if($res_category_one):
@@ -68,6 +68,7 @@ A module to manage your forum. You may create categories, and etc.
 				<td><?php echo $catName;?></td>
 				<td><?php echo $accessLevel;?></td>
 				<td>
+				<a href='<?php echo url::base("forum/category/$row_cat[forumCategoryID]");?>' class='fa fa-bars'></a>
 				<?php if($row_cat['siteID'] != 0):?>
 				<a href='<?php echo url::base("forum/updateCategory/$row_cat[forumCategoryID]");?>' class='fa fa-edit'></a>
 				<?php endif;?>

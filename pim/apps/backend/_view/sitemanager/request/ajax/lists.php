@@ -31,9 +31,12 @@
 					$clearrequestIcon = in_array($row['siteRequestStatus'],Array(1,2))?"<a href='$clearHref' class='clearRequest i i-cross2 pull-right'></a>":"";
 
 					## if got correction, show icon to see detail.
-					$correctionDetailIcon = $row['siteRequestCorrectionFlag'] == 1?"<a data-toggle='ajaxModal' href='".url::base("ajax/request/correctionDetail/".$row['siteRequestID'])."' class='fa fa-wrench pull-left'></a>":"";
+					$correctionDetailIcon = $row['siteRequestCorrectionFlag'] == 1?"<a class='fa fa-wrench pull-left'></a>":"";
 
-					echo "<tr><td>".$no++.".</td><td>$type <span class='badge bg-$color'>$status$correctionDetailIcon</span></td><td>$clearrequestIcon</td>";
+					$correctionIcon		= $row['siteRequestCorrectionFlag'] == 1?"<span class='fa fa-wrench pull-left'></span>":"";
+					$correctionLabel	= $row['siteRequestCorrectionFlag'] == 1?"<a href='".url::base("ajax/request/correctionDetail/".$row['siteRequestID'])."' data-toggle='ajaxModal' class='badge bg-$color'>$correctionIcon$status</a>":"<span class='badge bg-$color'>$status</span>";
+
+					echo "<tr><td>".$no++.".</td><td>$type $correctionLabel</td><td>$clearrequestIcon</td>";
 				}
 			}
 			else

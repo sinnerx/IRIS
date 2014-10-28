@@ -32,7 +32,7 @@ class Menu extends Data
 									"RSVP"=>Array("activity/rsvp"),
 										),
 					"Forum"=>Array(
-							"Forum Management"=>Array("forum/index","forum/addCategory","forum/updateCategory")
+							"Forum Management"=>Array("forum/index","forum/addCategory","forum/updateCategory","forum/category","forum/thread")
 							),
 					"Member's Management"=>Array(
 									"List of Member"=>Array("member/lists"),

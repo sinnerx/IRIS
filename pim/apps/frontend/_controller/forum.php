@@ -57,7 +57,10 @@ class Controller_Forum
 	{
 		$data['row_category']	= $categorySlug?$this->row_category:db::where("forumCategoryID",input::get("forumCategoryID"))->get("forum_category")->row();
 		$where['forumCategoryApprovalStatus']	= 1;
-		$where['forumCategoryAccess !='] = 2;
+		if(!authData('current_site.isMember'))
+		{
+			$where['forumCategoryAccess !='] = 2;
+		}
 		$res_category	= model::load("forum/category")->getCategories(Array(authData("current_site.siteID"),0),$where);
 
 		## cat.
@@ -85,8 +88,7 @@ class Controller_Forum
 			}
 
 			$threadID	= model::load("forum/thread")->createNew(authData("current_site.siteID"),$data['row_category']['forumCategoryID'],input::get("forumThreadTitle"),input::get("forumThreadPostBody"));
-
-			redirect::to("{site-slug}/forum/{category-slug}/$threadID");
+			redirect::to("{site-slug}/forum/".$data['row_category']['forumCategorySlug']."/$threadID");
 		}
 
 		view::render("forum/newThread",$data);

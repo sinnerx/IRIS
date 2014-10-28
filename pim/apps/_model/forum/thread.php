@@ -37,7 +37,8 @@ class Thread
 				"forumCategoryID"=>$categoryID,
 				"forumThreadTitle"=>$title,
 				"forumThreadCreatedDate"=>now(),
-				"forumThreadCreatedUser"=>session::get("userID")
+				"forumThreadCreatedUser"=>session::get("userID"),
+				"forumThreadStatus"=>1
 						);
 
 		db::insert("forum_thread",$data);
@@ -71,7 +72,7 @@ class Thread
 		db::insert("forum_thread_post",$data);
 	}
 
-	public function getThreads($siteID,$categoryID,$selects,$paginationConf = null)
+	public function getThreads($siteID = null,$categoryID,$selects,$paginationConf = null)
 	{
 		db::select($selects);
 		if(is_array($categoryID) || is_numeric($categoryID))
@@ -83,7 +84,12 @@ class Thread
 		{
 			db::where("forumCategoryID IN (SELECT forumCategoryID FROM forum_category WHERE forumCategorySlug = ?)",Array($categoryID));
 		}
-		db::where("siteID",$siteID);
+
+		if($siteID)
+			db::where("siteID",$siteID);
+
+		db::where("forumThreadStatus",1);
+
 		db::order_by("forumThreadID","DESC");
 		db::get("forum_thread");
 
@@ -91,18 +97,47 @@ class Thread
 		return is_array($categoryID)?db::result("forumCategoryID",true):db::result("forumThreadID");
 	}
 
-	public function getLatestThreads($siteID)
+	public function getThreadsByCategory($categoryID,$paginationConf)
+	{
+		db::where("forumCategoryID",$categoryID);
+		db::from("forum_thread");
+
+		if($paginationConf)
+		{
+			pagination::initiate(Array(
+				"currentPage"=>$paginationConf['currentPage'],
+				"urlFormat"=>$paginationConf['urlFormat'],
+				"totalRow"=>db::num_rows(),
+				"limit"=>$paginationConf['limit'],
+				));
+
+			db::limit($paginationConf['limit'],pagination::recordNo()-1);
+		}
+
+		db::get();
+		return is_array($categoryID)?db::result("forumCategoryID",true):db::result("forumThreadID");
+	}
+
+	public function getLatestThreads($siteID,$status = 1)
 	{
 		db::where("siteID",$siteID);
+		if($status)
+			db::where("forumThreadStatus",$status);
+
 		db::order_by("forumThreadID","DESC");
 
 		db::limit(10);
 		return db::get("forum_thread")->result("forumThreadID");
 	}
 
-	public function getThread($siteID,$categoryID,$threadID)
+	public function getThread($siteID = null,$categoryID = null,$threadID)
 	{
-		return db::where("siteID",$siteID)->where("forumCategoryID",$categoryID)->where("forumThreadID",$threadID)->get("forum_thread")->row();
+		if($siteID) db::where("forum_thread.siteID",$siteID);
+		if($categoryID) db::where("forum_thread.forumCategoryID",$categoryID);
+
+		db::join("forum_category","forum_category.forumCategoryID = forum_thread.forumCategoryID");
+
+		return db::where("forumThreadID",$threadID)->get("forum_thread")->row();
 	}
 
 	public function getPosts($threadID,$paginationConf = null)
@@ -166,6 +201,12 @@ class Thread
 	public function getFirstPost($threadID)
 	{
 		return db::where("forumThreadID",$threadID)->get("forum_thread_post")->row();
+	}
+
+	public function changeCategory($threadID,$categoryID)
+	{
+		db::where("forumThreadID",$threadID);
+		db::update("forum_thread",Array("forumCategoryID"=>$categoryID));
 	}
 }
 

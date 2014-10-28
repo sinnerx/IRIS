@@ -16,16 +16,20 @@ class Controller_Ajax_Forum
 			$data['res_posts']		= model::load("forum/thread")->getPostsByThreads(array_keys($data['res_threads']));
 			
 			$userIDR	= Array();
+			$catIDR		= Array();
 			foreach($data['res_threads'] as $row_thread)
 			{
-				$userIDR[]	= $row_thread['forumThreadCreatedUser'];
-				$catIDR[]	= $row_thread['forumCategoryID'];
+				if(!in_array($row_thread['forumThreadCreatedUser'], $userIDR))
+					$userIDR[]	= $row_thread['forumThreadCreatedUser'];
+				
+				if(!in_array($row_thread['forumCategoryID'],$catIDR))
+					$catIDR[]	= $row_thread['forumCategoryID'];
 			}
 
 			$data['res_users']	= model::load("user/user")->getUsersByID($userIDR);
 			
 			## categories.
-			$data['res_categories']	= model::load("forum/category")->getCategories(authData("current_site.siteID"),Array("forumCategoryID"=>$catIDR));
+			$data['res_categories']	= model::load("forum/category")->getCategories(Array(authData("current_site.siteID"),0),Array("forumCategoryID"=>$catIDR));
 		}
 
 		view::render("forum/ajax/getLatestThreads",$data);
