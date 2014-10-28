@@ -33,7 +33,7 @@ This P1M have no configuration records yet. Everything is set to default. <a hre
 <div class='table-responsive'>
 	<table class='table'>
 		<tr>
-			<td style="width:200px;">News Category ID<br>
+			<td style="width:200px;">News Category ID
 
 			</td>
 			<td>: <?php echo $row_conf['configNewsCategoryID']?:"Default (first category in category list)";?> <a href='javascript:config.change("configNewsCategoryID");' class='fa fa-edit'></a>

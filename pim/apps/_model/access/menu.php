@@ -69,6 +69,9 @@ class Menu extends Data
 								"Parameters"=>Array("config/index"),
 								"Article Category"=>Array("article/category"),
 											),
+					"Activities"=>Array(
+							"Training"=>Array("activity/training","activity/trainingTypeAdd","activity/trainingTypeEdit")
+						),
 					"Forum"=>Array(
 								"Category"=>Array("forum/category","forum/addCategory","forum/updateCategory")
 									),
