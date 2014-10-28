@@ -1,6 +1,7 @@
 <!-- refer http://www.ericmmartin.com/projects/simplemodal/ for docs -->
 <script type="text/javascript" src='<?php echo url::asset("frontend/js/jquery.simplemodal.1.4.4.min.js");?>'></script>
 <link rel="stylesheet" type="text/css" href="<?php echo url::asset("frontend/css/simplemodal-basic.css");?>">
+<script type="text/javascript" src='<?php echo url::asset("frontend/js/grapnel.js");?>'></script>
 <script type="text/javascript">
 	
 var pim_modal = new function($)
@@ -32,6 +33,7 @@ select
 .tab
 {
 	margin-bottom:20px;
+	font-size:1.1em;
 }
 .tab > span
 {
@@ -43,7 +45,14 @@ select
 .tab .tab-active
 {
 	font-weight: bold;
-	color:#0074c1;
+	color:#414141;
+	font-size:1.2em;
+	text-shadow: 0px 0px 3px #a3a3a3;
+}
+
+.tab a
+{
+	color:black;
 }
 
 .tab-content-main, .tab-content-additional
@@ -154,14 +163,17 @@ select
 <script type="text/javascript" src='<?php echo url::asset("backend/js/pim.js");?>'></script>
 <script type="text/javascript">
 var pim	= new pim({base_url:"<?php echo url::base('{site-slug}');?>"});
+var router = new Grapnel();
 function selectTab(tab)
 {
 	var $	= jQuery;
 	$(".profile-edit-form > div").hide();
 	$(".tab-content-"+tab).show();
-	$(".tab > span").removeClass("tab-active");
+	$(".tab > a").removeClass("tab-active");
 	$(".tab-"+tab).addClass("tab-active");
 }
+
+
 
 var profile	= new function()
 {
@@ -194,7 +206,15 @@ var profile	= new function()
 
 $(document).ready(function()
 {
-	selectTab("main");
+	router.get(":tab",function(reqs)
+	{
+		selectTab(reqs.params.tab);
+	});
+
+	if(window.location.hash == "")
+	{
+		window.location.hash = "main";
+	}
 });
 
 </script>
@@ -235,12 +255,12 @@ $(document).ready(function()
 					<a href="#" class="bttn-ornge"><i class="fa fa-user"></i> Tukar Maklumat Log Masuk</a> <a href="#" class="bttn-ornge"><i class="fa fa-book"></i> Panduan Mengisi Butiran</a> <a href="#" class="bttn-fb"> <i class="fa fa-facebook"></i> Pindah Maklumat Dari Facebook Anda</a>
 				</div> -->
 				<div class='tab'>
-					<span class='tab-main' onclick='selectTab("main");'>
-					Maklumat Utama
-					</span> | 
-					<span class='tab-additional' onclick='selectTab("additional");'>
-					Maklumat Tambahan
-					</span>
+					<a class='tab-main' href='#main' style="padding-right:15px;">
+					MAKLUMAT UTAMA
+					</a>
+					<a class='tab-additional' href='#additional'>
+					MAKLUMAT TAMBAHAN
+					</a>
 				</div>
 				<?php echo flash::data();?>
 				<div class="profile-edit-form" style='margin-top:10px;'>
