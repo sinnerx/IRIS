@@ -47,12 +47,16 @@ select
 	font-weight: bold;
 	color:#414141;
 	font-size:1.2em;
-	text-shadow: 0px 0px 3px #a3a3a3;
+	text-shadow: 0px 0px 10px #a3a3a3 !important;
 }
 
 .tab a
 {
-	color:black;
+	color:#009bff;
+}
+.tab a:hover
+{
+	text-shadow:0px 0px 10px #bfbfbf;
 }
 
 .tab-content-main, .tab-content-additional

@@ -48,11 +48,21 @@ input
     min-height:850px;
 }
 
+ul.front-tab li
+{
+    color:#009bff !important;
+}
+
 ul.front-tab li.resp-tab-active
 {
     font-weight: bold !important;
     color:#555555 !important;
     text-shadow: 0px 0px 1px #585858;
+}
+
+ul.front-tab li:hover
+{
+    text-shadow: 0px 0px 20px #888888;
 }
 
 /* fix some ui bugs, when a lot of texts was dumpted there.*/
