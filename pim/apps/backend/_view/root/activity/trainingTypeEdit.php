@@ -20,10 +20,20 @@ Add a new type of training. Be warned that changing the type will also affect ho
 					<?php echo form::text("trainingTypeName","class='form-control' placeholder='For example ICT training'",$row['trainingTypeName']);?>
 					<?php echo flash::data('trainingTypeName');?>
 					</div>
-					<div class='col-sm-3'>
-					<input type='submit' class='btn btn-primary' />
+				</div>
+				<label style="padding-top:10px;">Description</label>
+					<div class='row'>
+						<div class='col-sm-9'>
+						<?php
+						echo form::textarea("trainingTypeDescription","class='form-control' placeholder='Describte this type.'",$row['trainingTypeDescription']);
+						?>
+						</div>
 					</div>
 				</div>
+				<div class='row'>
+					<div class='col-sm-3'>
+						<input type='submit' class='btn btn-primary' />
+					</div>
 				</div>
 			</div>
 		</section>

@@ -175,6 +175,7 @@ training:
 training_type:
 	trainingTypeID [int]
 	trainingTypeName [varchar]
+	trainingTypeDescription [text]
 	trainingTypeStatus [int]	## 0 inactive, 1 = active.
 	trainingTypeCreatedDate [datetime]
 	trainingTypeCreatedUser [int]

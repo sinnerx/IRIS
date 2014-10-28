@@ -47,21 +47,23 @@ class Training
 		return db::get("training_type")->result();
 	}
 
-	public function addType($name)
+	public function addType($name,$desc)
 	{
 		db::insert("training_type",Array(
 			"trainingTypeName"=>$name,
+			"trainingTypeDescription"=>$desc,
 			"trainingTypeStatus"=>1,
 			"trainingTypeCreatedDate"=>now(),
 			"trainingTypeCreatedUser"=>session::get("userID")
 			));
 	}
 
-	public function updateType($trainingTypeID,$name)
+	public function updateType($trainingTypeID,$name,$desc)
 	{
 		db::where("trainingTypeID",$trainingTypeID);
 		db::update("training_type",Array(
 			"trainingTypeName"=>$name,
+			"trainingTypeDescription"=>$desc,
 			"trainingTypeUpdatedUser"=>session::get("userID"),
 			"trainingTypeUpdatedDate"=>now()
 			));

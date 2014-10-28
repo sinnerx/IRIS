@@ -11,19 +11,29 @@ Add a new type of training.
 		<section class="panel panel-default">
 			<div class="panel-body">
 				<div class="form-group">
-				<label>Type of training</label>
-				<div class='row'>
-					<div class='col-sm-9'>
-					<?php
-					$readOnly	= $siteName?"readonly='true'":"";
-					?>
-					<?php echo form::text("trainingTypeName","class='form-control' placeholder='For example ICT training'");?>
-					<?php echo flash::data('trainingTypeName');?>
+					<label>Type of training</label>
+					<div class='row'>
+						<div class='col-sm-9'>
+						<?php
+						$readOnly	= $siteName?"readonly='true'":"";
+						?>
+						<?php echo form::text("trainingTypeName","class='form-control' placeholder='For example ICT training'");?>
+						<?php echo flash::data('trainingTypeName');?>
+						</div>
 					</div>
-					<div class='col-sm-3'>
-					<input type='submit' class='btn btn-primary' />
+					<label style="padding-top:10px;">Description</label>
+					<div class='row'>
+						<div class='col-sm-9'>
+						<?php
+						echo form::textarea("trainingTypeDescription","class='form-control' placeholder='Describte this type.'");
+						?>
+						</div>
 					</div>
 				</div>
+				<div class='row'>
+					<div class='col-sm-9'>
+					<input type='submit' class='btn btn-primary pull-right' />
+					</div>
 				</div>
 			</div>
 		</section>

@@ -26,7 +26,7 @@ class Controller_Activity
 				redirect::to("activity/trainingTypeAdd","Terdapat masalah di sini","error");
 			}
 
-			model::load("activity/training")->addType(input::get("trainingTypeName"));
+			model::load("activity/training")->addType(input::get("trainingTypeName"),input::get("trainingTypeDescription"));
 
 			redirect::to("activity/training","New type of training has been added.");
 		}
@@ -51,7 +51,7 @@ class Controller_Activity
 				redirect::to("activity/trainingTypeEdit/$id","Terdapat masalah di sini","error");
 			}
 
-			$training->updateType($id,input::get("trainingTypeName"));
+			$training->updateType($id,input::get("trainingTypeName"),input::get("trainingTypeDescription"));
 
 			redirect::to("activity/training","Updated.");
 		}
