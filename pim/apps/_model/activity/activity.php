@@ -512,6 +512,7 @@ class Activity
 		{
 			db::select("user.*,userProfileAvatarPhoto");
 			db::where("activityID",$activityID);
+			db::where("activityUserID IN (SELECT activityUserID FROM activity_user_date WHERE activityUserDateAttendance = ?)",Array(1));
 			db::join("user","activity_user.userID = user.userID");
 			db::join("user_profile","user_profile.userID = activity_user.userID");
 
@@ -534,6 +535,7 @@ class Activity
 		{
 			db::select("userID,activityID");
 			db::where("activityID",$activityID);
+			db::where("activityUserID IN (SELECT activityUserID FROM activity_user_date WHERE activityUserDateAttendance = ?)",Array(1));
 			
 			## return while grouped with activityID.
 			return db::get("activity_user")->result("activityID",true);
