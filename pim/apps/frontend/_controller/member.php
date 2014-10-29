@@ -1,10 +1,20 @@
 <?php
 class Controller_Member
 {
+	public function __construct()
+	{
+		if(!authData("user") && !in_array(controller::getCurrentMethod(),Array("profile")))
+			redirect::to("{site-slug}");
+	}
+
 	public function profile($userID = null)
 	{
-		if(session::get("userLevel") != 1 && !$userID)
+		## logged in as backend member.
+		if(authData("user") && session::get("userLevel") != 1 && !$userID)
 			redirect::to("dashboard/user/profile");
+		else if(!authData("user") && !$userID)
+			redirect::to("{site-slug}");
+
 
 		if(!$userID)
 		{
@@ -72,7 +82,7 @@ class Controller_Member
 				$rules['userEmail']	= 
 				Array(
 			"email:Sila masukkan format email yang betul.",
-			"callback"=>Array(!model::load("user/services")->checkEmail(input::get("userEmail"),$row['userID']),"Email already exists.")
+			"callback"=>Array(!model::load("user/services")->checkEmail(input::get("userEmail"),$row['userID']),"Email telah wujud.")
 					);
 			}
 

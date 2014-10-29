@@ -177,7 +177,6 @@ function selectTab(tab)
 	$(".tab-content-"+tab).show();
 	$(".tab > a").removeClass("tab-active");
 	$(".tab-"+tab).addClass("tab-active");
-	jQuery("#userProfileIntroductional").cleditor();
 }
 
 
@@ -215,6 +214,9 @@ $(document).ready(function()
 {
 	router.get(":tab",function(reqs)
 	{
+		jQuery(".tab-content-main, .tab-content-additional").show();
+	jQuery("#userProfileIntroductional").cleditor();
+	jQuery(".tab-content-main, .tab-content-additional").hide();
 		selectTab(reqs.params.tab);
 	});
 
@@ -222,6 +224,9 @@ $(document).ready(function()
 	{
 		window.location.hash = "main";
 	}
+
+
+	
 });
 
 </script>
@@ -316,7 +321,7 @@ $(document).ready(function()
 							<label>Tarikh Lahir</label>
 							<?php echo form::select("userProfileDOBday",$dayR,"style='display:inline;'",$DOBday,"[PILIH HARI]");?>
 							<?php echo form::select("userProfileDOBmonth",model::load("helper")->monthYear("month"),"style='display:inline;'",$DOBmonth,"[PILIH BULAN]");?>
-							<?php echo form::select("userProfileDOByear",model::load("helper")->monthYear("year",1970,date("Y")),"style='display:inline;'",$DOByear,"[PILIH TAHUN]");?>
+							<?php echo form::select("userProfileDOByear",model::load("helper")->monthYear("year",1925,date("Y")),"style='display:inline;'",$DOByear,"[PILIH TAHUN]");?>
 						</div>
 						<div class="profile-edit-row clearfix">
 							<label>Tempat Lahir</label>
