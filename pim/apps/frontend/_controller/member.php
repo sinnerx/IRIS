@@ -161,7 +161,7 @@ class Controller_Member
 			$file	= input::file("avatarPhoto");
 
 			## if not jpg, png or gif.
-			if(!$file->isExt("jpg,png,gif"))
+			if(!$file->isExt("jpg,png,gif,jpeg"))
 			{
 				echo "<script type='text/javascript'>";
 				echo "alert('Please choose jpg, png, or gif only');";
