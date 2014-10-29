@@ -170,13 +170,21 @@ select
 <script type="text/javascript">
 var pim	= new pim({base_url:"<?php echo url::base('{site-slug}');?>"});
 var router = new Grapnel();
-function selectTab(tab)
+function selectTab(tab,das)
 {
 	var $	= jQuery;
 	$(".profile-edit-form > div").hide();
 	$(".tab-content-"+tab).show();
 	$(".tab > a").removeClass("tab-active");
 	$(".tab-"+tab).addClass("tab-active");
+	
+	if(!$(".cleditorGroup")[0])
+	{
+		if($(".tab-additional").hasClass("tab-active"))
+		{
+			jQuery("#userProfileIntroductional").cleditor().refresh();
+		}
+	}
 }
 
 
@@ -210,20 +218,11 @@ var profile	= new function()
 	}
 };
 
-router.get(":tab",function(reqs)
-{
-	jQuery(".tab-content-main, .tab-content-additional").show();
-	jQuery("#userProfileIntroductional").cleditor();
-	jQuery(".tab-content-main, .tab-content-additional").hide();
-	selectTab(reqs.params.tab);
-});
-
 $(document).ready(function()
 {
 	if(window.location.hash == "")
 	{
 		window.location.hash = "main";
-		selectTab("main");
 	}
 	else
 	{
@@ -379,3 +378,14 @@ $(document).ready(function()
 	</div>
 </div>
 </form>
+<script type="text/javascript">
+	
+router.get(":tab",function(reqs)
+{
+	// jQuery(".tab-content-main, .tab-content-additional").show();
+	// jQuery("#userProfileIntroductional").cleditor();
+	// jQuery(".tab-content-main, .tab-content-additional").hide();
+	selectTab(reqs.params.tab);
+});
+
+</script>
