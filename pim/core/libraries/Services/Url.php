@@ -148,6 +148,12 @@ class Url
 		$uri	= trim(implode("/",$newUriR),"/");
 		return $withBase?url::base($uri):$uri;
 	}
+
+	## alias for self::createByROute
+	public static function route($routeName,$param = Array(),$withBase = false)
+	{
+		return self::createByRoute($routeName,$param,$withBase);
+	}
 }
 
 

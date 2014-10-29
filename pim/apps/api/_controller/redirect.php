@@ -26,4 +26,15 @@ class Controller_Redirect
 			break;
 		}
 	}
+
+	public function link()
+	{
+		$link	= request::get("link");
+		
+		## if no protocol provided.
+		if(strpos($link, "http") !== 0 && strpos($link, "https") !== 0)
+			$link = "http://$link";
+
+		redirect::to("$link");
+	}
 }

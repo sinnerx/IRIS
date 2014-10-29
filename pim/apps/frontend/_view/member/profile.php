@@ -57,16 +57,16 @@
                 <ul>
                     <?php 
                     if($row['userProfileFacebook']):?>
-                        <li><a target="_blank" href="<?php echo $row['userProfileFacebook'];?>"><i class="fa fa-facebook"></i></a></li>
+                        <li><a target="_blank" href="<?php echo url::route("api-redirect-link",null,true)."?link=".$row['userProfileFacebook'];?>"><i class="fa fa-facebook"></i></a></li>
                     <?php endif;
                     if($row['userProfileTwitter']):?>
-                        <li><a target="_blank" href="<?php echo $row['userProfileTwitter'];?>" class="light-blue"><i class="fa fa-twitter"></i></a></li>
+                        <li><a target="_blank" href="<?php echo url::route("api-redirect-link",null,true)."?link=".$row['userProfileTwitter'];?>" class="light-blue"><i class="fa fa-twitter"></i></a></li>
                     <?php endif;
                     if($row['userProfileWeb']):?>
-                        <li><a target="_blank" href="<?php echo $row['userProfileWeb'];?>"><i class="fa fa-link"></i></a></li>
+                        <li><a target="_blank" href="<?php echo url::route("api-redirect-link",null,true)."?link=".$row['userProfileWeb'];?>"><i class="fa fa-link"></i></a></li>
                     <?php endif;
                     if($row['userProfileEcommerce']):?>
-                        <li><a target="_blank" href="<?php echo $row['userProfileEcommerce'];?>" class="light-blue"><i class="fa fa-shopping-cart"></i></a></li>
+                        <li><a target="_blank" href="<?php echo url::route("api-redirect-link",null,true)."?link=".$row['userProfileEcommerce'];?>" class="light-blue"><i class="fa fa-shopping-cart"></i></a></li>
                     <?php endif;?>
                 </ul>
                 </div>
