@@ -52,7 +52,7 @@
                 <h3><?php echo $row['userProfileFullName'];?>
                 </h3>
                 <span class="profile-user-occupation"><?php echo $row['userProfileOccupation']?:"-";?></span>
-                <span class="profile-user-location" style='position:relative;top:8px;'><span><?php echo $siteName;?></span><span><a href="#"><i class="fa fa-envelope"></i></a></span></span>
+                <span class="profile-user-location" style='position:relative;top:8px;'><span><?php echo $siteName;?></span><span><?php if($row['userEmail'] != ""):?><a href="mailto:<?php echo $row['userEmail'];?>"><i class="fa fa-envelope"></i></a><?php endif;?></span></span>
                 <div class="profile-social-media">
                 <ul>
                     <?php 
@@ -134,6 +134,7 @@
                                     echo "<ul>";
                                     foreach($activities_activity as $row_ua):
                                     $href   = url::createByRoute("api-redirect-useractivity",Array("type"=>$row_ua['row']['userActivityType'],"userActivityID"=>$row_ua['row']['userActivityID']),true);
+                                    $date   = dateRangeViewer($row_ua['row']['userActivityCreatedDate'],1,"my");
                                         ?>
                                     <li class="clearfix">
                                         <i class="fa fa-calendar"></i>
