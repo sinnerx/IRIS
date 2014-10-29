@@ -81,10 +81,10 @@
                             <div>
                                 <p>
                                     <?php
-                                    if($row['userProfileIntroductional'] != ""):
+                                    if(strip_tags($row['userProfileIntroductional']) != ""):
                                     echo nl2br($row['userProfileIntroductional']);?>
                                     <?php else:?>
-                                    - Pengguna ini masih tidak punyai maklumat mengenai dirinya lagi -
+                                    Pengguna ini masih tidak punyai maklumat mengenai dirinya lagi
                                     <?php endif;?>
                                 </p>
                             </div>

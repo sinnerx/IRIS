@@ -210,23 +210,25 @@ var profile	= new function()
 	}
 };
 
-$(document).ready(function()
+router.get(":tab",function(reqs)
 {
-	router.get(":tab",function(reqs)
-	{
-		jQuery(".tab-content-main, .tab-content-additional").show();
+	jQuery(".tab-content-main, .tab-content-additional").show();
 	jQuery("#userProfileIntroductional").cleditor();
 	jQuery(".tab-content-main, .tab-content-additional").hide();
-		selectTab(reqs.params.tab);
-	});
+	selectTab(reqs.params.tab);
+});
 
+$(document).ready(function()
+{
 	if(window.location.hash == "")
 	{
 		window.location.hash = "main";
+		selectTab("main");
 	}
-
-
-	
+	else
+	{
+		selectTab(window.location.hash.split("#").join(""));
+	}
 });
 
 </script>
@@ -328,8 +330,8 @@ $(document).ready(function()
 							<?php echo form::text("userProfilePOB","placeholder='Tempat Lahir'",$userProfilePOB);?>
 						</div>
 						<div class="profile-edit-row clearfix">
-							<label>Artikel Pengenalan:</label> <a href="javascript:pim_modal.show('container','.content-panduan');" class="panduan">Panduan</a>
-							<?php echo form::textarea("userProfileIntroductional",null,$userProfileIntroductional);?>
+							<label>Alamat Bersurat</label>
+							<?php echo form::textarea("userProfileMailingAddress",null,$userProfileMailingAddress);?>
 						</div>
 					</div>
 					<div class='tab-content-additional'>
@@ -363,8 +365,8 @@ $(document).ready(function()
 							<?php echo form::text("userProfileEcommerce","class='name icn-lft'",$userProfileEcommerce);?>
 						</div>
 						<div class="profile-edit-row clearfix">
-							<label>Alamat Bersurat</label>
-							<?php echo form::textarea("userProfileMailingAddress",null,$userProfileMailingAddress);?>
+							<label>Artikel Pengenalan:</label> <a href="javascript:pim_modal.show('container','.content-panduan');" class="panduan">Panduan</a>
+							<?php echo form::textarea("userProfileIntroductional",null,$userProfileIntroductional);?>
 						</div>
 					</div>
 				</div>
