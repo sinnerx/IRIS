@@ -64,7 +64,7 @@ class Controller_Member
 		{
 			$rules	= Array(
 					"userProfileFullName,userProfileLastName"=>"required:Maklumat ini diperlukan",
-					"userProfileDOBday,userPRofileDOBmonth,userProfileDOByear"=>"required:Maklumat ini diperlukan"
+					"userProfileDOBday,userProfileDOBmonth,userProfileDOByear"=>"required:Maklumat ini diperlukan"
 							);
 
 			if(input::get("userEmail") != "")

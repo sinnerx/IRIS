@@ -49,7 +49,7 @@ echo model::load("template/frontend")->buildBreadCrumbs(Array(
 				<div class="forum-post-info">Oleh:<a href="#"> <?php echo $res_users[$firstPost['forumThreadPostCreatedUser']]['userProfileFullName'];?></a>,  <?php echo dateRangeViewer($firstPost['forumThreadPostCreatedDate'],1,"my");?>,  dalam  <a href="#"><?php echo $row_category['forumCategoryTitle'];?></a>.</div>
 				</div>
 				<div class="forum-post-details">
-				<?php echo $firstPost['forumThreadPostBody'];?>
+				<?php echo nl2br($firstPost['forumThreadPostBody']);?>
 				</div>
 				</div>
 			</div>

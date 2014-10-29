@@ -1,6 +1,8 @@
 <!-- refer http://www.ericmmartin.com/projects/simplemodal/ for docs -->
 <script type="text/javascript" src='<?php echo url::asset("frontend/js/jquery.simplemodal.1.4.4.min.js");?>'></script>
 <link rel="stylesheet" type="text/css" href="<?php echo url::asset("frontend/css/simplemodal-basic.css");?>">
+<link rel="stylesheet" type="text/css" href="<?php echo url::asset("frontend/tools/CLEditor/jquery.cleditor.css");?>" >
+<script type="text/javascript" src='<?php echo url::asset("frontend/tools/CLEditor/jquery.cleditor.min.js");?>'></script>
 <script type="text/javascript" src='<?php echo url::asset("frontend/js/grapnel.js");?>'></script>
 <script type="text/javascript">
 	
@@ -175,6 +177,7 @@ function selectTab(tab)
 	$(".tab-content-"+tab).show();
 	$(".tab > a").removeClass("tab-active");
 	$(".tab-"+tab).addClass("tab-active");
+	jQuery("#userProfileIntroductional").cleditor();
 }
 
 
@@ -320,8 +323,8 @@ $(document).ready(function()
 							<?php echo form::text("userProfilePOB","placeholder='Tempat Lahir'",$userProfilePOB);?>
 						</div>
 						<div class="profile-edit-row clearfix">
-							<label>Alamat Bersurat</label>
-							<?php echo form::textarea("userProfileMailingAddress",null,$userProfileMailingAddress);?>
+							<label>Artikel Pengenalan:</label> <a href="javascript:pim_modal.show('container','.content-panduan');" class="panduan">Panduan</a>
+							<?php echo form::textarea("userProfileIntroductional",null,$userProfileIntroductional);?>
 						</div>
 					</div>
 					<div class='tab-content-additional'>
@@ -355,8 +358,8 @@ $(document).ready(function()
 							<?php echo form::text("userProfileEcommerce","class='name icn-lft'",$userProfileEcommerce);?>
 						</div>
 						<div class="profile-edit-row clearfix">
-							<label>Artikel Pengenalan:</label> <a href="javascript:pim_modal.show('container','.content-panduan');" class="panduan">Panduan</a>
-							<?php echo form::textarea("userProfileIntroductional",null,$userProfileIntroductional);?>
+							<label>Alamat Bersurat</label>
+							<?php echo form::textarea("userProfileMailingAddress",null,$userProfileMailingAddress);?>
 						</div>
 					</div>
 				</div>
