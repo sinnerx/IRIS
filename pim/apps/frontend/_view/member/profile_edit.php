@@ -182,7 +182,7 @@ function selectTab(tab,das)
 	{
 		if($(".tab-additional").hasClass("tab-active"))
 		{
-			jQuery("#userProfileIntroductional").cleditor().refresh();
+			jQuery("#userProfileIntroductional").cleditor();
 		}
 	}
 }
