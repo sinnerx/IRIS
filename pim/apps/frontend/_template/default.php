@@ -13,11 +13,23 @@
 	<!-- <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet"> -->
 	<link rel="stylesheet" type="text/css" href="<?php echo url::asset("_scale/css/font-awesome.min.css");?>">
 	<!-- <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script> -->
-	<script type="text/javascript" src='<?php echo url::asset("_scale/js/jquery.min.js");?>'></script>
+	<!-- <script type="text/javascript" src='<?php echo url::asset("_scale/js/jquery.min.js");?>'></script> -->
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 	<script src="<?php echo url::asset("frontend/js/jquery.ticker.js");?>" type="text/javascript"></script>
 	<link href="<?php echo url::asset("_landing/css/jquery.mCustomScrollbar.css");?>" rel="stylesheet" type="text/css" /> <!-- used by partial/top -->
 	<script src="<?php echo url::asset("_landing/js/jquery.mCustomScrollbar.concat.min.js");?>"></script> <!-- used by partial/top -->
 	<script src="<?php echo url::asset("frontend/js/site.js");?>" type="text/javascript"></script>
+	<script type="text/javascript" src="https://code.jquery.com/ui/1.8.24/jquery-ui.min.js"></script>
+	<script type="text/javascript">
+		
+	jQuery(function() {  
+	        jQuery("#accordion").accordion({
+				active: false,
+			collapsible: true	
+			});  
+	    });
+
+	</script>
 
 	<!-- Responsive Code -->
 	<style type="text/css">
@@ -501,6 +513,115 @@ input
 {
 	position: relative;
 }
+
+/* Accordion */
+ #accordion {  
+    width: 280px;  
+    margin: 20px auto;
+	margin-left:0px;    }
+
+    #accordion .ui-accordion-content {  
+    width: 100%;  
+    background-color: #f3f3f3;  
+    color: #777;  
+    font-size: 10pt;  
+    line-height: 16pt;  
+}  
+
+    #accordion .ui-accordion-content > * {  
+        margin: 0;  
+        padding: 20px;  
+    }  
+	
+	#accordion .ui-accordion-content a {  
+    color: #777;  
+	} 
+
+#accordion .ui-accordion-header {  
+    background-color: #ccc;  
+    margin: 0px;  
+} 
+
+
+    #accordion .ui-accordion-header a {  
+        color: #fff;  
+        line-height: 42px;  
+        display: block;  
+        font-size: 12pt;  
+        width: 100%;  
+        text-indent: 10px;  
+    }  
+	
+	
+	
+	
+	    #accordion .ui-accordion-header {  
+        background-color: #009bff;  
+    }  
+	
+	
+	div#accordion i{ 
+	margin-right:10px;
+	
+	
+	}
+	
+	#accordion .ui-state-active{
+		background:#0062a1 !important;
+		
+	}
+
+
+    #accordion .ui-accordion-header a {  
+        text-shadow: 1px 1px 0px rgba(0,0,0,0.2);  
+        text-shadow: 1px 1px 0px rgba(0,0,0,0.2);  
+        
+        border-left: 1px solid rgba(0, 0, 0, .2);  
+        border-bottom: 1px solid rgba(0, 0, 0, .2);  
+        border-top: 1px solid rgba(250, 250, 250, .2);  
+    }  
+	
+	
+	
+	
+	    #accordion .ui-accordion-content {  
+					border-bottom:3px solid #e5e5e5;  
+					
+    }  
+	
+	.normalBox h1{
+		margin-top:0px;
+		font-size:15px;
+		
+	}
+	
+	
+	
+	.normalBox a{
+		color:#009bff;
+		font-size:14px;
+		margin-bottom:5px;
+		  -webkit-transition: all 0.3s ease-out;
+   -moz-transition: all 0.3s ease-out;
+   -ms-transition: all 0.3s ease-out;
+   -o-transition: all 0.3s ease-out;
+   transition: all 0.3s ease-out;
+		
+	}
+	
+	.normalBox a:hover{
+		color:#666;
+		
+		
+	}
+	
+	i.fa-angle-double-down{
+		 float: right;
+    margin-top: 15px;
+    margin-right: 20px !important;
+		
+	}
+
 </style>
 <?php
 #========================================
@@ -882,6 +1003,59 @@ Akaun anda masih belum aktif. Sila buat bayaran RM <?php echo model::load("confi
 				</form>
 			</div>
 			<?php controller::load("partial","calendar");?>
+			<?php if(controller::getCurrentControllerMethod() == "main@index"):?>
+			<!-- Right Accordion -->
+			<div id="accordion">  
+			<h3><a href="#"><i class="fa fa-clock-o"></i>Waktu Operasi Pi1M<i class="fa fa-angle-double-down"></i></a></h3>  
+			<div>  
+			<div class="blueBoxContent">
+			<strong>Dibuka setiap hari</strong>
+			<div class="bluehilite">
+			<?php if(in_array(authData("current_site.stateID"),Array(12,13))):?>
+			8.00 pagi - 5.00 petang
+			<?php else:?>
+			9.00 pagi - 6.00 petang
+			<?php endif;?>
+			</div>
+			(kecuali cuti umum)<br><br>
+
+			<strong>Yuran keahlian:</strong><br> 
+			<div class="bluehilite">RM5.00</div>
+			(tertakluk kepada terma dan syarat)<br><br>
+
+			<strong>Caj Penggunaan:</strong><br> 
+			<div class="bluehilite">RM1.00 sejam (ahli)<br>
+			RM2.00 sejam (bukan ahli)</div> 
+			</div>
+			</div>  
+			<h3><a href="#"><i class="fa fa-print"></i> Perkhidmatan Lain<i class="fa fa-angle-double-down"></i></a> </h3>  
+			<div>  
+			<div class="blueBoxContent">
+			<strong>Pencetak dan Fotokopi (hitam/putih)</strong><br>
+			<div class="bluehilite">RM0.20</div> setiap mukasurat<br><br>
+
+			<strong>Pencetak dan Fotokopi (warna)</strong><br>
+			<div class="bluehilite">RM1.00</div> setiap mukasurat<br><br>
+
+			<strong>Pengimbas</strong><br>
+			<div class="bluehilite">RM0.20</div> setiap mukasurat<br><br>
+			</div> 
+			</div>  
+
+			</div>
+
+			<div class="normalBox">
+			<h1>Capaian Pantas</h1>
+			<a href="#">Universal Service Provision</a><br> 
+			<a href="#">Suruhanjaya Komunikasi dan Multimedia</a><br>
+			<a href="#">Kementerian Komunikasi dan Multimedia</a><br>
+			<a href="#">Service Provider Website</a><br>
+			<a href="#">Other Related Website</a> 
+			</div>
+			<!-- Right Accordion, end -->
+			<?php endif;?>
+
+			</div>
 		</div>
 	<div class="clr"></div>
 		<!-- Announcement -->
@@ -1125,6 +1299,7 @@ Akaun anda masih belum aktif. Sila buat bayaran RM <?php echo model::load("confi
 </script>
 <!------>
 	<!-- <script type="text/javascript" src="js/jquery-1.9.0.min.js"></script> -->
+		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.21/jquery-ui.min.js"></script>
 	    <script type="text/javascript" src="<?php echo url::asset("frontend/js/jquery.nivo.slider.js");?>"></script>
 	    <script type="text/javascript">
 		var $s = jQuery.noConflict();

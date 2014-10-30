@@ -39,15 +39,18 @@ var participants = new function()
 	this.add = function()
 	{
 		var tdR	= "";
+		// optional date.
 		if(this.allDate == 2)
 		{
 			for(var i = 0;i<this.totalDate;i++)
 			{
 				// set checked for current date.
 				var checked = this.currentDate == $("#date"+(i+1)).attr("data-date")?"checked":"";
-				tdR += "<td><input type='checkbox' "+checked+" /></td>";
+				var disabled = $("#date"+(i+1)).attr("data-date") > this.currentDate?"onclick='return participants.error(\"not-happened\")'":"";
+				tdR += "<td><input type='checkbox' "+checked+" "+disabled+" /></td>";
 			}
 		}
+		// all date required.
 		else
 		{
 			var checked = "";
@@ -284,13 +287,25 @@ var participants = new function()
 	{
 		$("#saveButton").hide();
 	}
+
+	this.error = function(code)
+	{
+		var codes = {
+			"not-happened": "Unable to mark this because it's not happening yet.\nCurrent date : "+this.currentDate
+		};
+		alert(codes[code]);
+		return false;
+	}
 }
 
 $(document).ready(function()
 {
 	$(".participant-table input").click(function()
 	{
-		participants.showSave();
+		if(!$(this).attr("onclick"))
+		{
+			participants.showSave();
+		}
 	});
 });
 
@@ -432,6 +447,9 @@ $(document).ready(function()
 						if($row_activity['activityAllDateAttendance'] == 2):
 						foreach($res_date as $row_date):
 						$date	= $row_date['activityDateValue'];
+
+						## disable for not yet the date (if this is to change, change the javascript too).
+						$disabled = $date > now()?"onclick='return participants.error(\"not-happened\");'":"";
 
 						## attending check.
 						$checked	= "";

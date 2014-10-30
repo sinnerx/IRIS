@@ -628,6 +628,11 @@ class Controller
 		return self::$currentMethod;
 	}
 
+	public static function getCurrentControllerMethod()
+	{
+		return self::$currentController."@".self::$currentMethod;
+	}
+
 	public static function getLastController()
 	{
 		return self::$lastController;
