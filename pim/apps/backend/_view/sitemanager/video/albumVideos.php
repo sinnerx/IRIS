@@ -1,3 +1,4 @@
+<script type="text/javascript" src='<?php echo url::asset("frontend/js/grapnel.js");?>'></script>
 <script type="text/javascript">
 	
 var album	= new function()
@@ -242,6 +243,8 @@ var album	= new function()
 
 	pim.uriHash.addCallback({addVideo:this.addVideo});
 }
+
+
 
 </script>
 <style type="text/css">
@@ -627,4 +630,15 @@ var album	= new function()
 	<?php echo pagination::link();?>
 <script type="text/javascript">
 	$('.pagination').attr('class','pagination pagination-sm m-t-none m-b-none pull-left');
+</script>
+
+<script type="text/javascript">
+	
+
+var Router = new Grapnel();
+Router.get(":videoID",function(reqs)
+{
+	album.showVideoDetail(reqs.params.videoID);
+});
+	
 </script>

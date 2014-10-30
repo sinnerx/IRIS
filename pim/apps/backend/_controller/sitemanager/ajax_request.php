@@ -64,6 +64,10 @@ class Controller_Ajax_Request
 			case "forum_category":
 			$data['urlToSubject']	= url::base("forum/updateCategory/".$row_request['siteRequestRefID']);
 			break;
+			case "video":
+			$albumID	= db::select("videoAlbumID")->where("videoID",$row_request['siteRequestRefID'])->get("video")->row("videoAlbumID");
+			$data['urlToSubject']	= url::base("video/albumVideos/$albumID#".$row_request['siteRequestRefID']);
+			break;
 		}
 	
 		$data['row_request']	= $row_request;		
