@@ -204,11 +204,20 @@ class Controller_Ajax_Activity
 	{
 		$activityID	= input::get("activityID");
 		$userData	= input::get("userData");
+		$deleted	= input::get("deletedUser");
 
 		$row_activity	= model::load("activity/activity")->getActivity($activityID);
 
 		## screwed up.
 		model::load("activity/activity")->updateActivityUser($activityID,json_decode($userData,true));
+
+		if(count(json_decode($deleted,true) > 0))
+		{
+			foreach(json_decode($deleted,true) as $userID)
+			{
+				model::load("activity/activity")->permanentDeleteParticipant($activityID,$userID);
+			}
+		}
 	}
 }
 ?>

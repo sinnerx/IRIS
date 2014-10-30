@@ -367,6 +367,15 @@ class Activity
 		return db::get("activity_user")->result("userID");
 	}
 
+	public function permanentDeleteParticipant($activityID,$userID)
+	{
+		$row_au = db::where("activityID",$activityID)->where("userID",$userID)->get("activity_user")->row();
+
+		## delete activity_user_date.
+		db::where("activityUserID",$row_au['activityUserID'])->delete("activity_user_date");
+		db::where("activityUserID",$row_au['activityUserID'])->delete("activity_user");
+	}
+
 	public function createLinkWithArticle($activityID,$articleID)
 	{
 		## check if already linked.
@@ -719,17 +728,18 @@ class Activity
 				}
 
 				## Find any new date selected for existing user.
-				foreach($updatedData[$userID] as $date)
+				if(isset($updatedData[$userID]))
 				{
-					if(isset($activityUserDate[$userID]) && !isset($res_activityUserDate[$date]))
+					foreach($updatedData[$userID] as $date)
 					{
-						## get activityUserID.
-						$activityUserID	= db::where("userID",$userID)->get("activity_user")->row("activityUserID");
+						if(isset($activityUserDate[$userID]) && !isset($res_activityUserDate[$date]))
+						{
+							## get activityUserID.
+							$activityUserID	= db::where("userID",$userID)->get("activity_user")->row("activityUserID");
 
-						echo 1;
-						die;
-						$this->join($userID,$activityID,$date,$activityUserID);
+							$this->join($userID,$activityID,$date,$activityUserID);
 
+						}
 					}
 				}
 			}
