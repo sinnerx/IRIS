@@ -244,6 +244,14 @@ class album
 		return true;
 	}
 
+	public function deleteAlbum($videoAlbumID)
+	{
+		db::delete("video",Array("videoAlbumID"=>$videoAlbumID));
+		db::delete("video_album",Array("videoAlbumID"=>$videoAlbumID));
+
+		return true;
+	}
+
 	public function buildVideoUrl($type = 1,$ref)
 	{
 		if($type == 1)

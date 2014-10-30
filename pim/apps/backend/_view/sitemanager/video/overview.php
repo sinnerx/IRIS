@@ -35,7 +35,23 @@ var album	= new function()
 			{
 				if(res)
 				{
-					$("#album"+siteAlbumID).addClass("deleted");
+					$("#album"+siteAlbumID).children().find(".album-list-buttons a").attr('href','javascript:album.deleteAlbum('+siteAlbumID+');');
+					$("#album"+siteAlbumID).addClass("disabled");
+				}
+			});
+		}
+	}
+
+	this.deleteAlbum	= function(siteAlbumID)
+	{
+		if(confirm("Delete this album and its content permenantly. Are you sure?"))
+		{
+			$.ajax({type:"GET",url:pim.base_url+"video/deleteAlbum/"+siteAlbumID}).done(function(res)
+			{
+				if(res)
+				{
+					$("#album"+siteAlbumID).remove();
+					location.href="<?php echo url::base('video/album/'); ?>";
 				}
 			});
 		}
@@ -62,7 +78,7 @@ var album	= new function()
 {
 	padding:0px;
 }
-.album-list.deleted
+.album-list.disabled
 {
 	opacity: 0.3;
 }
@@ -125,12 +141,12 @@ Overview of your video albums. You can <a href='javascript:album.addForm.show();
 					echo "<div class='row'>";
 				}
 				?>
-				<div id='album<?php echo $row['videoAlbumID'];?>' class='col-sm-2 album-list<?php if($row['videoAlbumStatus'] == 0){ ?> deleted<?php } ?>'>
+				<div id='album<?php echo $row['videoAlbumID'];?>' class='col-sm-2 album-list<?php if($row['videoAlbumStatus'] == 0){ ?> disabled<?php } ?>'>
 					<section class='panel panel-default'>
 						<div class='panel-heading'>
 						<?php echo $row['videoAlbumName'];?>
 						<div class='album-list-buttons'>
-							<a href='javascript:album.disableAlbum(<?php echo $row['videoAlbumID'];?>);' class='i i-cross2 button-delete'></a>
+							<a href='javascript:album.<?php if($row['videoAlbumStatus'] == 0){ ?>deleteAlbum<?php }else{ ?>disableAlbum<?php } ?>(<?php echo $row['videoAlbumID'];?>);' class='i i-cross2 button-delete'></a>
 						</div>
 						</div>
 						<div onclick='album.showDetail(<?php echo $row['videoAlbumID'];?>);'>

@@ -132,6 +132,13 @@ Class Controller_Video
 		return $response;
 	}
 
+	public function deleteAlbum($videoAlbumID)
+	{
+		$response = model::load("video/album")->deleteAlbum($videoAlbumID);
+
+		return $response;
+	}
+
 	public function enableAlbum($videoAlbumID)
 	{
 		$response = model::load("video/album")->updateAlbumStatus($videoAlbumID);
