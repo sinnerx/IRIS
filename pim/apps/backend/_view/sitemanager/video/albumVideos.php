@@ -134,7 +134,6 @@ var album	= new function()
 						$("#videoID"+videoID).removeClass("pending");
 						$("#video"+videoID).children().find(".panel-body").prepend('<h4 style="position:absolute;text-align:center;">Click to enable this video</h4>');
 						$("#video"+videoID).children().find(".panel-body").attr("onclick","album.enableVideo("+videoID+");");
-						$("#video"+videoID).children().find(".video-panel").attr('style','position:relative;');
 						$("#video"+videoID).children().find(".video-panel a").attr('href','javascript:album.deleteVideo('+videoID+');');
 					}
 				});	
@@ -286,6 +285,7 @@ var album	= new function()
 	position: absolute;
 	right:0px;top:0px;
 	background: white;
+	z-index:100;
 }
 
 .detail-button
@@ -467,7 +467,7 @@ var album	= new function()
 }
 </style>
 <h3 class='m-b-xs text-black'>
-	<a href='<?php echo url::base("video/album");?>'>Video Album<?php if($row['videoAlbumStatus'] == 0){ ?> (Disable)<?php } ?></a> : <?php echo $row['albumName'];?>
+	<a href='<?php echo url::base("video/album");?>'>Video Album<?php if($row['videoAlbumStatus'] == 0){ ?> (Disable)<?php } ?></a> : <?php echo $row['videoAlbumName']; ?>
 </h3>
 <div>
 	Added at, <?php echo date("j F Y, g:i A",strtotime($row['videoAlbumCreatedDate']));?>
@@ -577,7 +577,7 @@ var album	= new function()
 			<div id='video<?php echo $row_video['videoID'];?>' data-sitevideoid='<?php echo $row_video['videoID'];?>' data-description="<?php echo $row_video['videoName'];?>" data-descriptionclean="<?php echo $row_video['videoName'];?>" data-refID="<?php echo $row_video['videoRefID'] ?>" data-videopath='<?php echo model::load("video/album")->buildVideoUrl($row_video['videoType'],$row_video['videoRefID']); ?>' class='col-sm-3 album-video<?php if($row_video['videoStatus'] == 0){ ?> disable-video<?php } ?>' style='height:150px;margin-bottom:25px;<?php if($row_video['videoApprovalStatus'] == 2){ ?>opacity:0.4;<?php } ?>'>
 				<section class='panel panel-default'>
 					<a class='fa fa-stop <?php if($row_video['videoApprovalStatus'] == 0){ ?>pending<?php }else if($row_video['videoApprovalStatus'] == 1){ ?>approved<?php }else if($row_video['videoApprovalStatus'] == 2){ ?>disapproved<?php }else if($row_video['videoApprovalStatus'] == 3){ ?>update-pending<?php } ?>'></a>
-					<div <?php if($row_video['videoStatus'] == 0){ ?>style="position:relative;"<?php } ?> class='video-panel'>
+					<div class='video-panel'>
 						<a href='javascript:album.<?php if($row_video['videoStatus'] == 0){ ?>deleteVideo<?php }else{ ?>disableVideo<?php } ?>(<?php echo $row_video['videoID'];?>);' class='i i-cross2 delete-button'></a>
 					</div>
 					<div class='panel-body' onclick='album.<?php if($row_video['videoStatus'] == 1){ ?>showVideoDetail<?php }else{ ?>enableVideo<?php } ?>(<?php echo $row_video['videoID'];?>);' style='padding:3px;'>
@@ -657,7 +657,7 @@ var album	= new function()
 	
 
 var Router = new Grapnel();
-Router.get(":videoID",function(reqs)
+Router.get("video/:videoID",function(reqs)
 {
 	album.showVideoDetail(reqs.params.videoID);
 });

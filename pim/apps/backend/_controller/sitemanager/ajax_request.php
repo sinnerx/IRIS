@@ -66,7 +66,7 @@ class Controller_Ajax_Request
 			break;
 			case "video":
 			$albumID	= db::select("videoAlbumID")->where("videoID",$row_request['siteRequestRefID'])->get("video")->row("videoAlbumID");
-			$data['urlToSubject']	= url::base("video/albumVideos/$albumID#".$row_request['siteRequestRefID']);
+			$data['urlToSubject']	= url::base("video/albumVideos/$albumID#video/".$row_request['siteRequestRefID']);
 			break;
 		}
 	
