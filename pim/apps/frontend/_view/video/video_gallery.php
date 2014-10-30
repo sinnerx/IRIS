@@ -13,7 +13,7 @@
         <script type="text/javascript" src="<?php echo url::asset("frontend/video/js/new/froogaloop.js"); ?>"></script>
         <script type="text/javascript" src="http://www.youtube.com/player_api"></script>
         <script type="text/javascript" src="<?php echo url::asset("frontend/video/js/new/jquery.apPlaylistManager.min.js"); ?>"></script>
-        <script type="text/javascript" src="<?php echo url::asset("frontend/video/js/new/jquery.apYoutubePlayer.min.js"); ?>"></script>
+        <script type="text/javascript" src="<?php echo url::asset("frontend/video/js/new/jquery.apYoutubePlayer.min.js?v=1"); ?>"></script>
         <script type="text/javascript" src="<?php echo url::asset("frontend/video/js/new/jquery.apVimeoPlayer.min.js"); ?>"></script>
         <script type="text/javascript" src="<?php echo url::asset("frontend/video/js/new/jquery.func.js"); ?>"></script>
         <script type="text/javascript" src="<?php echo url::asset("frontend/video/js/new/jquery.videoGallery.min.js"); ?>"></script>
