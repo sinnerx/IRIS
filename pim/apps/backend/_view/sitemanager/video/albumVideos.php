@@ -124,7 +124,7 @@ var album	= new function()
 		{
 			if(confirm("Disable this video. Are you sure?"))
 			{
-				$("#video"+videoID).addClass("deleted-video");
+				$("#video"+videoID).addClass("disable-video");
 				$.ajax({type:"GET",url:pim.base_url+"video/disableVideo/"+videoID}).done(function(res)
 				{
 					if(res)
@@ -134,10 +134,27 @@ var album	= new function()
 						$("#videoID"+videoID).removeClass("pending");
 						$("#video"+videoID).children().find(".panel-body").prepend('<h4 style="position:absolute;text-align:center;">Click to enable this video</h4>');
 						$("#video"+videoID).children().find(".panel-body").attr("onclick","album.enableVideo("+videoID+");");
+						$("#video"+videoID).children().find(".video-panel").attr('style','position:relative;');
+						$("#video"+videoID).children().find(".video-panel a").attr('href','javascript:album.deleteVideo('+videoID+');');
 					}
 				});	
 				// add class.
 			}
+		}
+	}
+
+	this.deleteVideo	= function(videoID)
+	{
+		if(confirm("Delete this video permenantly. Are you sure?"))
+		{
+			$.ajax({type:"GET",url:pim.base_url+"video/deleteVideo/"+videoID}).done(function(res)
+			{
+				if(res)
+				{
+					$("#video"+videoID).remove();
+				}
+			});	
+			// add class.
 		}
 	}
 
@@ -248,7 +265,11 @@ var album	= new function()
 
 </script>
 <style type="text/css">
-	
+.disable-video img
+{
+	opacity: 0.3;
+}
+
 .panel
 {
 	padding:0px;
@@ -553,11 +574,11 @@ var album	= new function()
 			$row_video = array_merge($row_video,array("videoApprovalStatus" => 3));
 		}
 		?>
-			<div id='video<?php echo $row_video['videoID'];?>' data-sitevideoid='<?php echo $row_video['videoID'];?>' data-description="<?php echo $row_video['videoName'];?>" data-descriptionclean="<?php echo $row_video['videoName'];?>" data-refID="<?php echo $row_video['videoRefID'] ?>" data-videopath='<?php echo model::load("video/album")->buildVideoUrl($row_video['videoType'],$row_video['videoRefID']); ?>' class='col-sm-3 album-video<?php if($row_video['videoStatus'] == 0){ ?> deleted-video<?php } ?>' style='height:150px;margin-bottom:25px;<?php if($row_video['videoApprovalStatus'] == 2){ ?>opacity:0.4;<?php } ?>'>
+			<div id='video<?php echo $row_video['videoID'];?>' data-sitevideoid='<?php echo $row_video['videoID'];?>' data-description="<?php echo $row_video['videoName'];?>" data-descriptionclean="<?php echo $row_video['videoName'];?>" data-refID="<?php echo $row_video['videoRefID'] ?>" data-videopath='<?php echo model::load("video/album")->buildVideoUrl($row_video['videoType'],$row_video['videoRefID']); ?>' class='col-sm-3 album-video<?php if($row_video['videoStatus'] == 0){ ?> disable-video<?php } ?>' style='height:150px;margin-bottom:25px;<?php if($row_video['videoApprovalStatus'] == 2){ ?>opacity:0.4;<?php } ?>'>
 				<section class='panel panel-default'>
 					<a class='fa fa-stop <?php if($row_video['videoApprovalStatus'] == 0){ ?>pending<?php }else if($row_video['videoApprovalStatus'] == 1){ ?>approved<?php }else if($row_video['videoApprovalStatus'] == 2){ ?>disapproved<?php }else if($row_video['videoApprovalStatus'] == 3){ ?>update-pending<?php } ?>'></a>
-					<div class='video-panel'>
-						<a <?php if($row_video['videoApprovalStatus'] != 2){ ?>href='javascript:album.disableVideo(<?php echo $row_video['videoID'];?>);'<?php } ?> class='i i-cross2 delete-button'></a>
+					<div <?php if($row_video['videoStatus'] == 0){ ?>style="position:relative;"<?php } ?> class='video-panel'>
+						<a href='javascript:album.<?php if($row_video['videoStatus'] == 0){ ?>deleteVideo<?php }else{ ?>disableVideo<?php } ?>(<?php echo $row_video['videoID'];?>);' class='i i-cross2 delete-button'></a>
 					</div>
 					<div class='panel-body' onclick='album.<?php if($row_video['videoStatus'] == 1){ ?>showVideoDetail<?php }else{ ?>enableVideo<?php } ?>(<?php echo $row_video['videoID'];?>);' style='padding:3px;'>
 						<?php if($row_video['videoStatus'] == 0){ ?><h4 style="position:absolute;text-align:center;">Click to enable this video</h4><?php } ?>

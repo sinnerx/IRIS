@@ -110,6 +110,13 @@ Class Controller_Video
 		return response::json(Array($response['videoRefID']));
 	}
 
+	public function deleteVideo($videoID)
+	{
+		$response = model::load("video/album")->deleteVideo($videoID);
+
+		return $response;
+	}
+
 	public function changeCoverVideo($videoAlbumID)
 	{
 		$video = input::get("videoName");

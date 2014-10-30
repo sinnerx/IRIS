@@ -227,6 +227,13 @@ class album
 		return true;
 	}
 
+	public function deleteVideo($videoID)
+	{
+		db::delete("video",Array("videoID"=>$videoID));
+
+		return true;
+	}
+
 	public function disableAlbum($videoAlbumID)
 	{
 		db::where("videoAlbumID",$videoAlbumID);
