@@ -157,10 +157,12 @@ class Controller_Report
 		$ExcelHelper->execute();
 	}
 
-	public function generateMasterListing($month = 5)
+	public function generateMasterListing($month,$year,$totalMonth = 12)
 	{
-		$endDate	= date("Y-m-d");
-		$startDate	= date("Y-m-d",strtotime("-$month months",strtotime($endDate)));
+		// $endDate	= date("Y-m-d");
+		$endDate	= "$year-$month-".date("t",strtotime("$year-$month-01"))." 23:59:59";
+		// $startDate	= date("Y-m-d",strtotime("-$month months",strtotime($endDate)));
+		$startDate	= date("Y-m-d",strtotime("-$totalMonth month",strtotime("+1 day",strtotime($endDate))));
 
 		$data = model::load("report/report")->getMasterListing($startDate,$endDate);
 
@@ -181,7 +183,7 @@ class Controller_Report
 		$sheet->getRowDimension(5)->setRowHeight(20);
 
 		#2 date.
-		$sheet->setCellValue("A2","DATE : ".date("j F Y",strtotime($startDate))." - ".date("j F Y",strtotime($endDate))." ($month Months)");
+		$sheet->setCellValue("A2","DATE : ".date("j F Y",strtotime($startDate))." - ".date("j F Y",strtotime($endDate)));
 		$sheet->getStyle("A2")->getFont()->setSize(16);
 		$sheet->getRowDimension(2)->setRowHeight(22);
 

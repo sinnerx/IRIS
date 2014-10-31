@@ -62,13 +62,14 @@ Class Controller_Comment
 				foreach($comments as $comment)
 				{
 					$photoUrl = model::load("image/services")->getPhotoUrl($comment['userProfileAvatarPhoto']);
+					$href	= url::route("api-redirect-general",Array("type"=>"profile"),true)."?user=".$comment['userID'];
 					echo '<li class="clearfix">
 								<div class="forum-post-comment-avatar">
 									<img src="'.$photoUrl.'" alt=""/>
 								</div>
 								<div class="forum-post-comment-message">
 									<div class="forum-post-comment-info">';
-					echo $comment['userProfileFullName'];
+					echo "<a href='$href'>$comment[userProfileFullName]</a>";
 					echo '<div class="comment-post-date">
 					  			<i class="fa fa-clock-o"></i>';
 					echo dateRangeViewer($comment['commentCreatedDate'],1,'my');
@@ -90,7 +91,7 @@ Class Controller_Comment
 	public function getComment($commentID)
 	{
 		$comment = model::load('comment/comment')->getComment($commentID);
-
+		$href	= url::route("api-redirect-general",Array("type"=>"profile"),true)."?user=".$comment['userID'];
 		$photoUrl = model::load("image/services")->getPhotoUrl($comment['userProfileAvatarPhoto']);
 		echo '<li class="clearfix">
 				<div class="forum-post-comment-avatar">
@@ -98,7 +99,8 @@ Class Controller_Comment
 				</div>
 				<div class="forum-post-comment-message">
 					<div class="forum-post-comment-info">';
-		echo $comment['userProfileFullName'];
+
+		echo "<a href='$href'>$comment[userProfileFullName]</a>";
 		echo '<div class="comment-post-date">
 	  			<i class="fa fa-clock-o"></i>';
 		echo dateRangeViewer($comment['commentCreatedDate'],1,'my');

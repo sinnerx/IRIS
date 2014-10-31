@@ -88,6 +88,8 @@ class Report
 
 		## total registered member.
 		db::select("userID,siteID");
+		## user registered in between the date.
+		db::where("userID IN (SELECT userID FROM user WHERE userCreatedDate >= ? AND userCreatedDate <= ?)",Array($dateStart,$dateEnd));
 		$registeredR	= db::get("site_member")->result("siteID",true);
 
 
@@ -96,10 +98,12 @@ class Report
 		$stateR	= model::load("helper")->state();
 		foreach($siteR as $siteID=>$row)
 		{
+			## select only user whose attend (activityUserDateAttendance =1) events by the given date.
 			db::select("*");
 			db::from("user");
-			db::where("user.userID IN (SELECT userID FROM activity_user WHERE activityID IN (SELECT activityID FROM activity WHERE siteID = '$siteID' AND activityStartDate > '$dateStart' AND activityEndDate < '$dateEnd'))");
+			db::where("user.userID IN (SELECT userID FROM activity_user WHERE activityID IN (SELECT activityID FROM activity WHERE siteID = ? AND activityStartDate > ? AND activityEndDate < ?) AND activityUserID IN (SELECT activityUserID FROM activity_user_date WHERE activityUserDateAttendance = ?))",Array($siteID,$dateStart,$dateEnd,1));
 			db::join("user_profile","user.userID = user_profile.userID");
+			db::join("user_profile_additional","user.userID = user_profile_additional.userID");
 			$userR		= db::get()->result("userID");
 
 			## total registered.
@@ -138,14 +142,15 @@ class Report
 									"over55"	=>0
 												);
 
-			## occupataion.
+			## occupataion : order should be correlated with helper::occupationGroup
 			$data['occupation'][$siteID] = Array(
 									"students" 		=>0,
 									"housewives" 	=>0,
 									"self-employed"	=>0,
 									"employed"		=>0,
 									"not-employed"	=>0,
-									"retiree"		=>0
+									"retiree"		=>0,
+									"no-group"		=>0
 												);
 
 			if($userR)
@@ -193,7 +198,25 @@ class Report
 						$data['ageRange'][$siteID]['over55']++;
 					}
 
+					## map oocupationGroup with the key set above.
+					$occupationGroupMap = Array(
+						1=>"students",
+						2=>"housewives",
+						3=>"self-employed",
+						4=>"employed",
+						5=>"not-employed",
+						6=>"retiree"
+						);
 
+					if(isset($occupationGroupMap[$row_user['userProfileOccupationGroup']]))
+					{
+						$data['occupation'][$siteID][$occupationGroupMap[$row_user['userProfileOccupationGroup']]]++;
+					}
+					## save it as ungrouped, yet.
+					else
+					{
+						$data['occupation'][$siteID]['no-group']++;
+					}
 				}
 
 			}
