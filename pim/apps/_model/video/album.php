@@ -260,7 +260,7 @@ class album
 		}
 		else
 		{
-			$url = "http://localhost/digitalgaia/iris/pim/assets/frontend/images/noimage.png";
+			$url = url::asset("frontend/images/noimage.png");
 		}
 		return $url;
 	}
