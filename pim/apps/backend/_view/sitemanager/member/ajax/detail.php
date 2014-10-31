@@ -25,6 +25,13 @@
 	{
 		margin-bottom: 20px;
 	}
+
+	#introductional-container img
+	{
+		max-width: 100%;
+	}
+
+
 </style>
 <script type="text/javascript">
 
@@ -124,7 +131,9 @@ function confirmation(){
 								<table class='table'>
 									<tr>
 										<th>Occupation</th>
-										<td colspan="3"><?php echo $user['userProfileOccupation']?:"-";?></td>
+										<td><?php echo $user['userProfileOccupation']?:"-";?></td>
+										<th>Group</th>
+										<td><?php echo model::load("helper")->occupationGroup($user['userProfileOccupationGroup']);?></td>
 									</tr>
 									<tr>
 										<th>Facebook</th>
@@ -138,13 +147,15 @@ function confirmation(){
 										<th>E-Commerce Address</th>
 										<td><?php echo $user['userProfileEcommerce']?:"-";?></td>
 									</tr>
-									<tr>
-										<th>Introductional</th>
-										<td colspan="3"><?php echo $user['userProfileIntroductional']?:"-";?></td>
-									</tr>
 								</table>
 							</div>
 						</div>
+					</div>
+					<div class='userdetail-subtitle'>
+					Introduction Text
+					</div>
+					<div id='introductional-container' style="padding:5px;">
+						<?php echo $user['userProfileIntroductional']?:"-";?>
 					</div>
 				</div>
 				<div class='ajxgal-photos'> <!-- no album photo -->

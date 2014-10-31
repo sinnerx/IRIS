@@ -1,3 +1,11 @@
+<style type="text/css">
+    
+.resp-tabs-container img
+{
+    max-width:100%;
+}
+
+</style>
 <script src="<?php echo url::asset("_templates/js/easyResponsiveTabs.js");?>" type="text/javascript"></script>
 <h3 class="block-heading"><a href='.'>PROFIL AHLI</a> <span class="subforum"> > Pemegang kad</span> 
 
