@@ -39,6 +39,10 @@ echo model::load("template/frontend")->buildBreadCrumbs(Array(
 		</div>
 		<div class="page-sub-wrapper forum-page">
 			<div class="forum-post clearfix">
+			<?php
+			$userHref	=  url::route("api-redirect-general",Array("type"=>"profile"),true)."?user=".$firstPost['forumThreadPostCreatedUser'];
+
+			?>
 				<div class="forum-foto-user-avatar">
 					<?php
 					$photoUrl   = model::load("image/services")->getPhotoUrl($res_users[$firstPost['forumThreadPostCreatedUser']]['userProfileAvatarPhoto']);?>
@@ -46,7 +50,7 @@ echo model::load("template/frontend")->buildBreadCrumbs(Array(
 				<div class="forum-post-content">
 				<div class="forum-post-header">
 				<div class="forum-post-title"><?php echo $row_thread['forumThreadTitle'];?></div>
-				<div class="forum-post-info">Oleh:<a href="#"> <?php echo $res_users[$firstPost['forumThreadPostCreatedUser']]['userProfileFullName'];?></a>,  <?php echo dateRangeViewer($firstPost['forumThreadPostCreatedDate'],1,"my");?>,  dalam  <a href="#"><?php echo $row_category['forumCategoryTitle'];?></a>.</div>
+				<div class="forum-post-info">Oleh:<a href="<?php echo $userHref;?>"> <?php echo $res_users[$firstPost['forumThreadPostCreatedUser']]['userProfileFullName'];?></a>,  <?php echo dateRangeViewer($firstPost['forumThreadPostCreatedDate'],1,"my");?>,  dalam  <a href="#"><?php echo $row_category['forumCategoryTitle'];?></a>.</div>
 				</div>
 				<div class="forum-post-details">
 				<?php echo nl2br($firstPost['forumThreadPostBody']);?>
@@ -66,11 +70,12 @@ echo model::load("template/frontend")->buildBreadCrumbs(Array(
 					$user	= $res_users[$row['forumThreadPostCreatedUser']];
 					$photoUrl	= model::load("image/services")->getPhotoUrl($user['userProfileAvatarPhoto'],"avatar_icon.jpg");
 					$date		= dateRangeViewer($row['forumThreadPostCreatedDate'],1,"my");
+					$href		= url::route("api-redirect-general",Array("type"=>"profile"),true)."?user=".$user['userID'];
 					?>
 					<li class="clearfix">
 					<div class="forum-post-comment-avatar"> <img src="<?php echo $photoUrl;?>" alt=""/> </div>
 					<div class="forum-post-comment-message">
-					<div class="forum-post-comment-info"><?php echo $user['userProfileFullName'];?>
+					<div class="forum-post-comment-info"><a href='<?php echo $href;?>'><?php echo $user['userProfileFullName'];?></a>
 					<div class="comment-post-date"><i class="fa fa-clock-o"></i><?php echo $date;?></div></div>
 					<?php echo nl2br($row['forumThreadPostBody']);?>
 					</div>
