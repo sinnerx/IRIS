@@ -106,6 +106,14 @@ activity:
 	activityUpdatedUser [int]
 	activityUpdatedDate [datetime]
 	activityAllDateAttendance [int]	## all-date compulsory. 1 = ya, 2 = free to choose.
+	activityAttendanceMarked [int]	## 0 = unmarked, 1 = marked.
+
+activity_attendance_mark:
+	activityAttendanceMarkID [int]
+	activityID [int]
+	userID [int]	## marked by.
+	activityAttendanceMarkCreatedUser [int]
+	activityAttendanceMarkCreatedDate [datetime]
 
 activity_budget:			## incomplete.
 	activityBudgedID [int]
