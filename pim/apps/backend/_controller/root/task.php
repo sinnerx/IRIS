@@ -177,6 +177,44 @@ class Controller_Task
 
 		echo "Done. Took ".microtime(true)-$microtime."s";
 	}
+
+	public function occupation()
+	{
+		$this->template	= "default";
+
+		if(form::submitted())
+		{
+			foreach(input::get() as $key=>$val)
+			{
+				if(strpos($key, "user") === 0)
+				{
+					if(input::get($key) == "") continue;
+
+					$userID	= str_replace("user", "", $key);
+
+					db::where("userID",$userID);
+					db::update("user_profile_additional",Array("userProfileOccupationGroup"=>input::get($key)));
+				}
+			}
+
+			redirect::to("");
+		}
+
+		if(request::get("site"))
+		{
+			db::where("user.userID IN (SELECT userID FROM site_member WHERE siteID = ?)",Array(request::get("site")));
+		}
+		
+		## get user with no occupation group.
+		db::from("user");
+		db::where("user.userID IN (SELECT userID FROM user_profile_additional WHERE userProfileOccupationGroup IS NULL AND userProfileOccupation != '')");
+		db::join("user_profile_additional","user_profile_additional.userID = user.userID");
+		$data['total']	= db::num_rows();
+		db::limit(100);
+		$data['res']	= db::get()->result();
+
+		view::render("root/task/occupationGroupUpdate",$data);
+	}
 }
 
 
