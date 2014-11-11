@@ -588,6 +588,7 @@ video_album:
 ## module : file sharing.
 file:
 	fileID [int]
+	siteID [int]
 	filePath [varchar]
 	fileFolderID [int]
 	filePrivacy [int]		## 1 = private, 2 = public
@@ -595,18 +596,33 @@ file:
 	fileSlug [varchar]
 	fileOriginalSlug [varchar]
 	fileType [varchar]
+	fileExt [varchar]
 	fileSize [int]
 	fileDescription [text]
+	fileStatus [int]		## 1 = active, 2 = deleted.
 	fileCreatedDate [datetime]
 	fileCreatedUser [int]
+	fileUpdatedDate [datetime]
+	fileUpdatedUser [int]
 
 file_folder:
 	fileFolderID [int]
 	siteID [int]
+	fileFolderParentID [int]
 	fileFolderPrivacy [int]	## 1 = private, 2 = public
 	fileFolderName [varchar]
+	fileFolderStatus [int]			## 1 = active, 2 = deleted.
 	fileFolderCreatedDate [datetime]
 	fileFolderCreatedUser [int]
+	fileFolderUpdatedDate [datetime]
+	fileFolderUpdatedUser [int]
+
+file_download:
+	fileDownloadID [int]
+	fileID [int]
+	userID [int]
+	fileDownloadCreatedDate [datetime]
+	fileDownloadCreatedUser [int]
 
 comment:
 	commentID [int]

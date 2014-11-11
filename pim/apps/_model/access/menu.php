@@ -34,6 +34,9 @@ class Menu extends Data
 					"Forum"=>Array(
 							"Forum Management"=>Array("forum/index","forum/addCategory","forum/updateCategory","forum/category","forum/thread")
 							),
+					"File Manager"=>Array(
+							"File Manager"=>Array("file/index")
+						),
 					"Member's Management"=>Array(
 									"List of Member"=>Array("member/lists"),
 									"Change Member Password"=>Array("member/changePassword")

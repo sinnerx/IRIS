@@ -552,7 +552,7 @@ class Controller
 			return $reflection->invokeArgs(new $controller(), $paramR);
 		}
 
-		if(count($paramR) > $reflection->getNumberOfParameters())
+		if(count($paramR) > $reflection->getNumberOfParameters() && !$controller->parameterNumberSkipValidation)
 		{
 			error::set("Controller initiation : param numbers ","Method [$method] Recieved more than available parameter number.");
 			return;
