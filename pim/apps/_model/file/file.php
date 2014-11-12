@@ -21,17 +21,31 @@ file:
 */
 class File
 {
-	public function getFiles($siteID,$folderID)
+	public function getFiles($siteID,$folderID,$privacy = Array(1,2,3))
 	{
 		db::where("siteID",$siteID);
 		db::where("fileStatus",1);
+		db::where("filePrivacy",$privacy);
+
 		return db::where("fileFolderID",$folderID)->get("file")->result();
 	}
 
 	public function getFile($siteID,$fileID)
 	{
 		db::where("siteID",$siteID)->where("fileID",$fileID);
+		db::join("user_profile","user_profile.userID = file.fileCreatedUser");
 		return db::get("file")->row();
+	}
+
+	public function getLatestFiles($siteID,$privacy = Array(1,2,3),$limit = 3)
+	{
+		db::where("siteID",$siteID);
+		db::where("fileStatus",1);
+		db::where("filePrivacy",$privacy);
+		db::order_by("fileCreatedDate","desc");
+		db::limit($limit);
+
+		return db::get("file")->result();
 	}
 
 	public function addFile($siteID,$folderID,$data)
@@ -70,6 +84,14 @@ class File
 
 		##
 		db::delete("file",Array("siteID"=>$siteID,"fileID"=>$id));
+	}
 
+	public function updateHasFiles($folderID)
+	{
+		while($folderID != 0)
+		{
+			## find if current folder has files.
+			// db::where("fileFolderhasFiles",1);
+		}
 	}
 }

@@ -9,7 +9,7 @@ var filemanager	= new function()
 	this.openFolder = function(folders)
 	{
 		this.currFolder	= folders;
-		$("#fileFolderID").val(this.currFolder); // at add new file form.
+		$(".fileFolderID").val(this.currFolder); // at both add new folder and file form.
 		var folders	= folders?folders:"";
 		var url = pim.base_url+"ajax/file/openFolder/"+folders;
 		$.ajax({type:"GET",url:url}).done(function(result)
@@ -18,7 +18,13 @@ var filemanager	= new function()
 		});
 	}
 
-	this.newFolder = function()
+	this.closeAddNewFile	= function()
+	{
+		$("#col-new-file").hide();
+		window.location.hash = this.currFolder;
+	}
+
+	/*this.newFolder = function()
 	{
 		var folderID	= this.currFolder;
 		var data	= {
@@ -40,7 +46,7 @@ var filemanager	= new function()
 			console.log("success");
 			window.location.hash = filemanager.currFolder;
 		});
-	}
+	}*/
 
 	this.deleteFile = function(type,id)
 	{
@@ -62,14 +68,6 @@ var filemanager	= new function()
 			return false;
 		}
 		window.location.href = pim.base_url+"ajax/file/download/"+fileID;
-	}
-
-	this.newFile = function(folders)
-	{
-		/*$.ajax({type:"POST",url:pim.base_url+"ajax/file/addFile/"+folders}).done(function()
-		{
-
-		});*/
 	}
 
 }();
@@ -123,17 +121,21 @@ Manage and share you site files.
 		<section class="panel panel-default" id='panel-new-folder'>
 			<header class="panel-heading font-bold">Add New Folder</header>
 			<div class="panel-body">
-				<form role="form">
+				<form role="form" method="post">
+					<input type='hidden' name='fileFolderID' id='fileFolderID' class='fileFolderID' />
+					<input type='hidden' name='type' value='folder' />
 					<div class="form-group">
 					<label>Name</label>
 						<?php echo form::text("fileFolderName","class='form-control'");?>
+						<?php echo flash::data("fileFolderName");?>
 					</div>
 					<div class="form-group">
 					<label>Privacy</label>
 						<?php echo form::select("fileFolderPrivacy",Array(1=>"Open for all",2=>"Only for site member",3=>"Only me"),"class='form-control'",1);?>
+						<?php echo flash::data("fileFolderPrivacy");?>
 					</div>
-					<button type="button" class="btn btn-sm btn-default" onclick='filemanager.newFolder();'>Submit</button>
-					<button type="button" class="btn btn-sm btn-default">Cancel</button>
+					<button type="submit" class="btn btn-sm btn-default">Submit</button>
+					<button type="button" class="btn btn-sm btn-default" onclick="filemanager.closeAddNewFile();">Cancel</button>
 				</form>
 			</div>
 		</section>
@@ -142,7 +144,8 @@ Manage and share you site files.
 			<header class="panel-heading font-bold">Add New File</header>
 			<div class="panel-body">
 				<form role="form" method='post' enctype="multipart/form-data">
-					<input type='hidden' name='fileFolderID' id='fileFolderID' />
+					<input type='hidden' name='type' value='file' />
+					<input type='hidden' name='fileFolderID' id='fileFolderID' class='fileFolderID' />
 					<div class="form-group">
 					<label>File</label>
 						<?php echo form::file("fileUpload");?>
@@ -159,7 +162,7 @@ Manage and share you site files.
 						<?php echo flash::data("fileDescription");?>
 					</div>
 					<button type="submit" class="btn btn-sm btn-default">Submit</button>
-					<button type="button" class="btn btn-sm btn-default">Cancel</button>
+					<button type="button" class="btn btn-sm btn-default" onclick='filemanager.closeAddNewFile();'>Cancel</button>
 				</form>
 			</div>
 		</section>

@@ -5,7 +5,7 @@ use db, model, session;
 class Folder
 {
 	## return both folder and files.
-	public function openFolder($siteID,$folderID = 0)
+	public function openFolder($siteID,$folderID = 0,$privacy = Array(1,2,3))
 	{
 		$result['header']	= Array();
 		$result['folders']	= Array();
@@ -48,8 +48,9 @@ class Folder
 		{
 			db::where("fileFolderStatus",1);
 			db::where("fileFolderParentID",$folderID);
-			$result['folders']	= db::where("siteID",$siteID)->get("file_folder")->result();
-			$result['files']	= model::load("file/file")->getFiles($siteID,$folderID);	
+			db::where("fileFolderPrivacy",$privacy);
+			$result['folders']	= db::where("siteID",$siteID)->get("file_folder")->result('fileFolderID');
+			$result['files']	= model::load("file/file")->getFiles($siteID,$folderID,$privacy);	
 		}
 
 		// var_dump($result);
@@ -104,6 +105,39 @@ class Folder
 	public function removeFolder($siteID,$folderID)
 	{
 		db::where("siteID",$siteID)->where("fileFolderID",$folderID)->update("file_folder",Array("fileFolderStatus"=>2));
+	}
+
+	## get total folder/files inside a folder.
+	## return total files or folder for all the given folders.
+	public function getTotalFiles($siteID,$folderIDs,$privacy = Array(1,2,3))
+	{
+		$folderIDs	= !is_array($folderIDs)?Array($folderIDs):$folderIDs;
+
+		## files.
+		db::select("fileID,fileFolderID");
+		db::where("siteID",$siteID);
+		db::where("fileFolderID",$folderIDs);
+		db::where("filePrivacy",$privacy);
+
+		$res_file = db::get("file")->result("fileFolderID",true);
+
+		$result['files']	= Array();
+		foreach($folderIDs as $folderID)
+			$result['files'][$folderID]	= !isset($res_file[$folderID])?0:count($res_file[$folderID]);
+
+		## folders
+		db::select("fileFolderID,fileFolderParentID");
+		db::where("siteID",$siteID);
+		db::where("fileFolderParentID",$folderIDs);
+		db::where("fileFolderPrivacy",$privacy);
+
+		$res_folders	= db::get("file_folder")->result("fileFolderParentID",true);
+
+		$result['folders']	= Array();
+		foreach($folderIDs as $folderID)
+			$result['folders'][$folderID]	= !isset($res_folders[$folderID])?0:count($res_folders[$folderID]);
+
+		return $result;
 	}
 }
 

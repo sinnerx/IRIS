@@ -1,0 +1,435 @@
+.gallery-folder{
+	margin-top:40px;
+	
+}
+
+
+.gallery-files{
+	
+	margin-top:40px;
+	
+}
+
+
+
+
+
+.gallery-files ul{
+	margin:0px;
+	padding:0px;
+	list-style:none;
+	
+}
+
+.gallery-files ul li{
+	width:122px;
+	display:inline-table;
+	margin-right:50px;
+	margin-bottom:30px;
+	
+}
+
+.gallery-files ul li:nth-child(4n+4){
+	margin-right:0px;
+	
+}
+
+.download-gallery-heading{
+    color: #009bff;
+    font-family: "Lato",sans-serif;
+    font-size: 35px;
+    font-weight: lighter;
+
+    text-transform: uppercase;
+	margin-bottom:40px;
+}
+
+
+a.upload-new-button{
+background:#009bff !important;
+font-family: 'Lato', sans-serif !important;
+font-weight:lighter !important;
+
+
+font-size:12px !important;
+color:#FFF !important;
+-webkit-border-radius: 3px !important;
+-moz-border-radius: 3px !important;
+border-radius: 3px !important;
+font-weight:bold !important;
+padding:10px 15px !important;
+
+text-decoration:none;
+
+  -webkit-transition: all 0.3s ease-out;
+   -moz-transition: all 0.3s ease-out;
+   -ms-transition: all 0.3s ease-out;
+   -o-transition: all 0.3s ease-out;
+   transition: all 0.3s ease-out;
+text-transform:uppercase;
+text-align:center;
+
+float:right;
+border:none !important;
+cursor:pointer !important;
+border-bottom:3px solid #0062a1 !important;
+margin-right:10px;
+
+}
+
+a.upload-new-button:hover{
+	background:#0062a1 !important;
+	border-bottom:3px solid #009bff !important;
+
+	
+}
+
+.upload-new-button i{
+	margin-left:10px;
+	
+	
+}
+
+
+.download-folder{
+	margin-bottom:50px;
+	
+}
+
+
+.download-folder ul{
+	margin:0px;
+	padding:0px;
+	list-style:none;
+	
+}
+
+.download-folder ul li{
+	width:122px;
+	display:inline-table;
+	margin-right:50px;
+	margin-bottom:30px;
+	
+}
+
+.download-folder ul li:nth-child(4n+4){
+	margin-right:0px;
+	
+}
+
+
+.folder-icon{
+	background:url(../images/folder_icon.png) no-repeat top center;
+	width:122px;
+	height:97px;
+	position:relative;
+
+	
+}
+
+#file-count{
+	position:absolute;
+	bottom:10px;
+	right:10px;
+	color:#FFF;
+	font-size:20px;
+	
+}
+#file-count i{
+	
+	padding-top:3px;
+	
+}
+#file-count span{
+	
+	-webkit-border-radius: 100%;
+-moz-border-radius: 100%;
+border-radius: 100%;
+ background: none repeat scroll 0 0 #fff;
+
+    color: #009bff;
+    display: inline-block;
+    font-size: 12px;
+    font-weight: bold;
+    height: 20px;
+    line-height: 20px;
+    padding: 3px;
+    text-align: center;
+    width: 20px;
+	
+}
+
+
+.folder-name{
+ color: #009bff;
+    font-family: "Lato",sans-serif;
+    font-size: 18px;
+    font-weight: lighter;
+
+    text-transform: uppercase;
+	text-align:center;
+	margin-top:20px;
+	margin-bottom:5px;
+	line-height:15px;
+}
+
+
+.folder-name a{
+ color: #009bff;
+   -webkit-transition: all 0.3s ease-out;
+   -moz-transition: all 0.3s ease-out;
+   -ms-transition: all 0.3s ease-out;
+   -o-transition: all 0.3s ease-out;
+   transition: all 0.3s ease-out;
+   text-decoration:none;
+
+ 
+}
+
+
+.folder-name a:hover{
+ color: #f2970e;
+ 
+}
+.folder-info{
+	color:#929292;
+	font-size:12px;
+	font-family:Arial;
+	text-align:center;
+}
+
+.file-icon-wrap{
+	width:48px;
+	margin:auto;
+	height:63px;
+	
+}
+
+.file-icon{
+	text-align:center;
+	
+}
+
+
+
+
+.download-file-image{
+float:left;
+width:135px;
+height:200px;
+margin-right:25px;
+
+}
+
+.download-file-image > img{
+	width:100%;
+	height:auto;
+	
+}
+.download-file{
+margin-top:60px;
+
+}
+
+.download-file-content{
+width:480px;
+float:left;
+
+}
+.download-file-title{
+color:#009bff;
+font-size:30px;
+font-family: 'Lato', sans-serif;
+font-weight:lighter;
+margin-bottom:10px;
+
+}
+
+
+
+.download-file-info{
+margin-bottom:25px;
+margin-top:25px;
+
+}
+
+
+.download-file-info{
+font-family:Arial;
+font-size:11px;
+color:#929292;
+
+}
+
+.download-file-info a{
+color:#009bff;
+text-decoration:none;
+}
+
+
+.download-file-info a:hover{
+text-decoration:underline;
+
+}
+
+.download-file-details{
+color:#666666;
+font-size:12px;
+font-family:Arial;
+
+}
+
+.download-file-header {
+    margin-top: -8px;
+}
+
+
+
+.heading-folder-file{
+	margin-bottom:0px !important;
+	
+}
+.gallery-folder-name{
+	font-size:30px;
+font-family: 'Lato', sans-serif;
+font-weight:lighter;
+color:#595959;
+text-transform:uppercase;
+margin-top:-8px;
+letter-spacing:-2px;
+	
+}
+
+
+.file-name{
+	margin-bottom:20px;
+	
+}
+
+
+.file-name-file{
+	margin-bottom:20px;
+}
+.file-name label{
+	font-family:Arial;
+	font-weight:bold;
+	font-size:20px;
+	color:#000;
+	text-transform:uppercase;
+	display:block;
+	margin-bottom:5px;
+	
+	
+	
+}
+
+
+.file-name-file label{
+	font-family:Arial;
+	font-weight:bold;
+	font-size:20px;
+	color:#000;
+	text-transform:uppercase;
+	display:block;
+	margin-bottom:5px;
+	
+	
+	
+}
+
+
+.file-name input{
+background: none repeat scroll 0 0 #fff;
+    border: 1px solid #dae4eb;
+    color: #666666;
+    font-family: Arial;
+    font-size: 12px;
+    padding: 7px 13px;
+    width: 92%;	
+}
+
+.file-name-file input{
+background: none repeat scroll 0 0 #fff;
+    border: 1px solid #dae4eb;
+    color: #666666;
+    font-family: Arial;
+    font-size: 12px;
+    padding: 7px 13px;
+    width: 66%;
+	float:left;	
+}
+
+
+#fileToUpload{
+	
+}
+.folder-list{
+	overflow:hidden;
+	width:96%;
+	background:url(../images/drop_down_icon.jpg) no-repeat top right;
+	    border: 1px solid #dae4eb;
+	height:28px;
+	border-right:none;
+	
+}
+
+.file-name  select{
+	background: none;
+
+    color: #666666;
+    font-family: Arial;
+    font-size: 12px;
+    padding: 7px 13px;
+	border:none;
+    width: 120%;
+	
+}
+
+
+input.upload-file{
+	width:193px;
+	height:35px;
+	background:url(../images/upload_button.jpg) no-repeat top center;
+	cursor:pointer;
+	border:none;
+	text-indent:-99999px;
+	margin-top:0px;
+	float:right;
+}
+
+.upload-file-bttn{
+	background:#009bff !important;
+font-family: 'Lato', sans-serif !important;
+font-weight:lighter !important;
+
+
+font-size:12px !important;
+color:#FFF !important;
+-webkit-border-radius: 3px !important;
+-moz-border-radius: 3px !important;
+border-radius: 3px !important;
+font-weight:bold !important;
+padding:10px 15px !important;
+
+text-decoration:none;
+
+  -webkit-transition: all 0.3s ease-out;
+   -moz-transition: all 0.3s ease-out;
+   -ms-transition: all 0.3s ease-out;
+   -o-transition: all 0.3s ease-out;
+   transition: all 0.3s ease-out;
+text-transform:uppercase;
+text-align:center;
+width:30% !important;
+
+border:none !important;
+cursor:pointer !important;
+border-bottom:3px solid #0062a1 !important;
+}
+
+.upload-wrapper{
+	margin-top:40px
+	
+	
+	
+}

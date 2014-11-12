@@ -152,6 +152,9 @@ Class Auth
 			$this->authData['current_site']['isMember']	= true;
 		}
 
+		## user role.
+		
+
 		return $row_site;
 	}
 

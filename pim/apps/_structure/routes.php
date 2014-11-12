@@ -131,7 +131,6 @@ $routes[]	= Array("hubungi-kami","controller=main@landing_contact");
 ## Rss
 $routes['rss-blog']	= Array("[:site-slug]/blog/rss","controller=blog@rss");
 
-
 ## error page
 $routes[]	= Array("[:site-slug]/404","controller=error@index");
 
@@ -160,6 +159,10 @@ $routes['activity-view']	= Array("[:site-slug]/activity/[:year]/[:month]/[:activ
 
 ## site contact-us
 $routes['main-contact']	= Array("[:site-slug]/hubungi-kami","controller=main@contact");
+
+## Files
+$routes['file-index']	= Array("[:site-slug]/fail","controller=file@index");
+$routes['file-view']	= Array("[:site-slug]/fail","controller=file@view");
 
 ## site blog [articleList]
 $routes[]	= Array("[:site-slug]/blog","controller=blog@article");

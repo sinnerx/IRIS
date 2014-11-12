@@ -612,6 +612,7 @@ file_folder:
 	fileFolderPrivacy [int]	## 1 = private, 2 = public
 	fileFolderName [varchar]
 	fileFolderStatus [int]			## 1 = active, 2 = deleted.
+	fileFolderHasFiles [int]		## 0 = empty, 1 = has files.
 	fileFolderCreatedDate [datetime]
 	fileFolderCreatedUser [int]
 	fileFolderUpdatedDate [datetime]

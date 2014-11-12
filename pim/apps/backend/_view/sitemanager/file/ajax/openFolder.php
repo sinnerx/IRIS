@@ -54,25 +54,38 @@
 <div class='panel-body'>
 	<table class='folder-table'>
 	<?php if(count($files) + count($folders) != 0):?>
+	<?php
+	$templateIcon	= model::load("template/icon");?>
 	<tr>
 		<th>Name</th>
 		<th style="text-align:center;">Type</th>
-		<th width="48px;"></th>
+		<th width="76px;"></th>
 	</tr>
 	<?php endif;?>
 	<?php foreach($folders as $row):?>
+	<?php
+	## privacy.
+	$privacyIcon	= $templateIcon->privacy($row['fileFolderPrivacy']);
+
+	?>
 	<tr id='folder-<?php echo $row[fileFolderID];?>' data-fileName='<?php echo $row['fileFolderName'];?>'>
 		<td>
-			<span class='fa fa-folder' style='color:#ead05e;'></span> <a href='#<?php echo $row['fileFolderID'];?>'><?php echo $row['fileFolderName'];?></a>
+			<span class='fa fa-folder' style='color:#ead05e;'></span> 
+			<a href='#<?php echo $row['fileFolderID'];?>'><?php echo $row['fileFolderName'];?></a>
 		</td>
 		<td style='text-align:center;'>File Folders</td>
 		<td>
 			<a href='javascript:filemanager.deleteFile("folder",<?php echo $row[fileFolderID];?>);' class='i i-cross2'></a>
+			<?php echo $privacyIcon;?>
 		</td>
 	</tr>
 	<?php endforeach; ?>
 
 	<?php foreach($files as $row):?>
+	<?php
+	## privacy.
+	$privacyIcon	= $templateIcon->privacy($row['filePrivacy']);
+	?>
 	<tr id='file-<?php echo $row[fileID];?>' data-fileName='<?php echo $row['fileName'];?>'>
 		<td>
 			<span class='fa fa-file-o'></span> <?php echo $row['fileName'];?>
@@ -81,6 +94,7 @@
 		<td>
 			<a href='javascript:filemanager.downloadFile(<?php echo $row[fileID];?>);' class='fa fa-download'></a>
 			<a href='javascript:filemanager.deleteFile("file",<?php echo $row[fileID];?>);' class='i i-cross2'></a>
+			<?php echo $privacyIcon;?>
 		</td>
 	</tr>
 	<?php endforeach;?>
