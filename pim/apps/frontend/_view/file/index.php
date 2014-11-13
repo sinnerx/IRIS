@@ -9,10 +9,6 @@ var file = new function($)
   {
     $("#latest-file").hide();
     $(".page-description").show();
-    if(folder == 0)
-    {
-      $("#latest-file").show();
-    }
 
     // $(".page-description").show();
     var folder = folder?folder:this.currFolder;
@@ -20,7 +16,11 @@ var file = new function($)
     var url = this.base_url+"ajax/file/openFolder/"+folder;
     $.ajax({type:"GET",url:url}).done(function(result)
     {
-      $(".download-folder").html(result);
+      $(".download-folder").fadeIn().html(result);
+      if(file.currFolder == 0)
+      {
+        $("#latest-file").show();
+      }
     });
   }
 

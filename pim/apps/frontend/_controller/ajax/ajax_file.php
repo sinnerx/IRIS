@@ -60,6 +60,8 @@ class Controller_Ajax_File
 
 		$path	= path::files("site_files/".authData("current_site.siteID")."/".$id);
 
+		model::load("file/file")->download($id);
+
 		header("Content-Disposition: attachment; filename=\"$file_name\"");
 		echo readfile($path);
 	}

@@ -27,7 +27,20 @@ class File
 		db::where("fileStatus",1);
 		db::where("filePrivacy",$privacy);
 
-		return db::where("fileFolderID",$folderID)->get("file")->result();
+		return db::where("fileFolderID",$folderID)->get("file")->result("fileID");
+	}
+
+	public function getTotalDownload($files)
+	{
+		db::where("fileID",$files);
+		$res	= db::get("file_download")->result("fileID",true);
+
+		foreach($files as $fID)
+		{
+			$total[$fID]	= isset($res[$fID])?count($res[$fID]):0;
+		}
+
+		return $total;
 	}
 
 	public function getFile($siteID,$fileID)
@@ -120,5 +133,16 @@ class File
 		db::update("file",Array("filePrivacy"=>$privacy,"fileUpdatedDate"=>now()));
 
 		return $privacy;
+	}
+
+	public function download($fileID)
+	{
+		## just create a download point.
+		db::insert("file_download",Array(
+			"fileID"=>$fileID,
+			"userID"=>session::get("userID"),
+			"fileDownloadCreatedDate"=>now(),
+			"fileDownloadCreatedUser"=>session::get("userID")
+			));
 	}
 }

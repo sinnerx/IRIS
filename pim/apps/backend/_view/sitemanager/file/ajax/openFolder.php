@@ -95,7 +95,7 @@
 	?>
 	<tr id='file-<?php echo $row[fileID];?>' data-fileName='<?php echo $row['fileName'];?>'>
 		<td>
-			<span class='fa fa-file-o'></span> <?php echo $row['fileName'];?>
+			<span class='fa fa-file-o'></span> <?php echo $row['fileName'];?> (<?php echo $totalDownloads[$row[fileID]];?> download)
 		</td>
 		<td style='text-align:center;'><?php echo $row['fileType'];?></td>
 		<td>

@@ -7,6 +7,12 @@ class Controller_Ajax_File
 	{
 		$files		= model::load("file/folder")->openFolder(authData("site.siteID"),$folderId);
 		$files['fileFolderID']	= $folderId;
+
+		if($files['files'])
+		{
+			$files['totalDownloads']	= model::load("file/file")->getTotalDownload(array_keys($files['files']));
+		}
+
 		view::render("sitemanager/file/ajax/openFolder",$files);
 	}
 
