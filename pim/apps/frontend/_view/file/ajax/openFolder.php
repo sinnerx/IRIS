@@ -17,6 +17,8 @@ endif;
 	color:#009bff;
 }
 </style>
+<div class="download-folder">
+
 <!-- <a href="#" class="upload-new-button">Muat Naik Fail Baru <i class="fa fa-plus-circle"></i></a> -->
 <div class="download-gallery-heading" style="font-size:25px;">
 <?php echo implode(" > ",$newHeaders);?>
@@ -58,3 +60,4 @@ foreach($folders as $row):?>
 	Folder kosong.
 </div>
 <?php endif;?>
+</div>

@@ -118,6 +118,7 @@ class Folder
 		db::where("siteID",$siteID);
 		db::where("fileFolderID",$folderIDs);
 		db::where("filePrivacy",$privacy);
+		db::where("fileStatus",1);
 
 		$res_file = db::get("file")->result("fileFolderID",true);
 
@@ -130,6 +131,7 @@ class Folder
 		db::where("siteID",$siteID);
 		db::where("fileFolderParentID",$folderIDs);
 		db::where("fileFolderPrivacy",$privacy);
+		db::where("fileFolderStatus",1);
 
 		$res_folders	= db::get("file_folder")->result("fileFolderParentID",true);
 

@@ -1,6 +1,6 @@
 <?php
 namespace model\file;
-use db, session, path;
+use db, session, path, url;
 /*
 file:
 	fileID [int]
@@ -144,5 +144,16 @@ class File
 			"fileDownloadCreatedDate"=>now(),
 			"fileDownloadCreatedUser"=>session::get("userID")
 			));
+	}
+
+	public function createFileLink($fileID)
+	{
+		db::select("fileID,siteSlug,fileFolderID");
+		db::where("fileID",$fileID);
+		db::join("site","site.siteID = file.siteID");
+
+		$row	= db::get("file")->row();
+
+		return url::createByRoute("file-index",Array("site-slug"=>$row['siteSlug']),true)."#$row[fileFolderID]/$row[fileID]";
 	}
 }

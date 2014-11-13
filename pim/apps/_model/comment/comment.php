@@ -10,7 +10,8 @@ class Comment
 				"activity",
 				"article",
 				"site_album",
-				"video_album"
+				"video_album",
+				"file"
 						);
 
 		return $typeR;
@@ -106,6 +107,7 @@ class Comment
 		db::join("site_album","comment.commentType = 'site_album' AND comment.commentRefID = site_album.siteAlbumID");
 		db::join("album","comment.commentType = 'site_album' AND site_album.albumID = album.albumID");
 		db::join("video_album","comment.commentType = 'video_album' AND comment.commentRefID = video_album.videoAlbumID");
+		db::join("file","comment.commentType = 'file' AND comment.commentRefID = file.fileID");
 
 		$row	= db::get("comment")->row();
 
@@ -141,6 +143,9 @@ class Comment
 			break;
 			case "video_album":
 			return model::load("video/album")->createVideoAlbumLink($row['commentRefID']);
+			break;
+			case "file":
+			return model::load("file/file")->createFileLink($row['commentRefID']);
 			break;
 		}
 	}

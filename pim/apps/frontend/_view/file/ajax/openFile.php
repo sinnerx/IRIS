@@ -48,7 +48,7 @@ echo implode(" > ",$newHeaders);
 </div>
 
 <div id="comment-container">
-	<?php controller::load("comment","getComments/".$activityID."/file");?>
+	<?php controller::load("comment","getComments/".$fileID."/file");?>
 </div>
 <?php if(session::get("userID")){controller::load("comment","getForm");} ?>
 

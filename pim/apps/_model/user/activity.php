@@ -121,14 +121,16 @@ class Activity
 					"article"=>"articleName",
 					"activity"=>"activityName",
 					"site_album"=>"albumName",
-					"video_album"=>"videoAlbumName"
+					"video_album"=>"videoAlbumName",
+					"file"=>"fileName",
 								);
 
 				$typeNameR	= Array(
 					"article"=>"blog",
 					"activity"=>"aktiviti",
 					"site_album"=>"galeri photo",
-					"video_album"=>"galeri video"
+					"video_album"=>"galeri video",
+					"file"=>"Fail"
 									);
 
 				$refName	= $row[$refNameCol[$row['commentType']]];

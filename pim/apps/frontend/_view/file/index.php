@@ -16,7 +16,7 @@ var file = new function($)
     var url = this.base_url+"ajax/file/openFolder/"+folder;
     $.ajax({type:"GET",url:url}).done(function(result)
     {
-      $(".download-folder").fadeIn().html(result);
+      $(".gallery-folder").fadeIn().html(result);
       if(file.currFolder == 0)
       {
         $("#latest-file").show();
@@ -32,7 +32,7 @@ var file = new function($)
     // $(".page-description").hide();
     $.ajax({type:"GET",url:this.base_url+"ajax/file/openFile/"+file}).done(function(result)
     {
-      $(".download-folder").html(result);
+      $(".gallery-folder").html(result);
     });
   }
 }(jQuery);
@@ -74,66 +74,6 @@ echo model::load("template/frontend")
       </div>
       <div class="page-download">
       <div class="gallery-folder">
-        <div class="download-folder">
-          <ul>
-            <li>
-              <div class="folder-icon">
-              <div id="file-count"><i class="fa fa-user"></i> <span>02</span></div>
-              </div>
-              <div class="folder-name"><a href="#">Lorem Ipsum Dolor</a></div>
-              <div class="folder-info">1 Sub-Folder, 2 Fail</div>
-            </li>
-            <!-- <li>
-            <div class="folder-icon">
-            <div id="file-count"><i class="fa fa-user"></i> <span>02</span></div>
-            </div>
-            <div class="folder-name"><a href="#">Lorem Ipsum Dolor</a></div>
-            <div class="folder-info">1 Sub-Folder, 2 Fail</div>
-            </li>
-            <li>
-            <div class="folder-icon">
-            <div id="file-count"><i class="fa fa-user"></i> <span>02</span></div>
-            </div>
-            <div class="folder-name"><a href="#">Lorem Ipsum Dolor</a></div>
-            <div class="folder-info">1 Sub-Folder, 2 Fail</div>
-            </li>
-            <li>
-            <div class="folder-icon">
-            <div id="file-count"><i class="fa fa-user"></i> <span>102</span></div>
-            </div>
-            <div class="folder-name"><a href="#">Lorem Ipsum Dolor</a></div>
-            <div class="folder-info">1 Sub-Folder, 2 Fail</div>
-            </li>
-            <li>
-            <div class="folder-icon">
-            <div id="file-count"><i class="fa fa-user"></i> <span>05</span></div>
-            </div>
-            <div class="folder-name"><a href="#">Lorem Ipsum Dolor</a></div>
-            <div class="folder-info">1 Sub-Folder, 2 Fail</div>
-            </li>
-            <li>
-            <div class="folder-icon">
-            <div id="file-count"><i class="fa fa-user"></i> <span>02</span></div>
-            </div>
-            <div class="folder-name"><a href="#">Lorem Ipsum Dolor</a></div>
-            <div class="folder-info">1 Sub-Folder, 2 Fail</div>
-            </li>
-            <li>
-            <div class="folder-icon">
-            <div id="file-count"><i class="fa fa-user"></i> <span>10</span></div>
-            </div>
-            <div class="folder-name"><a href="#">Lorem Ipsum Dolor</a></div>
-            <div class="folder-info">1 Sub-Folder, 2 Fail</div>
-            </li>
-            <li>
-            <div class="folder-icon">
-            <div id="file-count"><i class="fa fa-user"></i> <span>00</span></div>
-            </div>
-            <div class="folder-name"><a href="#">Lorem Ipsum Dolor</a></div>
-            <div class="folder-info">1 Sub-Folder, 2 Fail</div>
-            </li> -->
-          </ul>
-        </div>
         </div>
         <div class="gallery-files" id='latest-file'>
         <div class="download-gallery-heading">Fail Terkini</div>
@@ -158,38 +98,6 @@ echo model::load("template/frontend")
         <?php
         endif;
         ?>
-         <!-- 
-          <li>
-            <div class="file-icon">
-            <div class="file-icon-wrap"><img src="<?php echo url::asset("frontend/images/pdf_icons.png");?>" width="48" height="63"  alt=""/></div>
-            </div>
-            <div class="folder-name"><a href="#">Panduan Media Sosial</a></div>
-            <div class="folder-info">PDF</div>
-          </li>
-
-          <li>
-            <div class="file-icon">
-            <div class="file-icon-wrap"><img src="images/pdf_icons.png" width="48" height="63"  alt=""/></div>
-            </div>
-            <div class="folder-name"><a href="#">Agenda Mensyuarat 2014</a></div>
-            <div class="folder-info">PDF</div>
-          </li>
-          <li>
-            <div class="file-icon">
-            <div class="file-icon-wrap"><img src="images/doc_icon.png" width="48" height="63"  alt=""/></div>
-            </div>
-            <div class="folder-name"><a href="#">Surat Sokongan Majikan</a></div>
-            <div class="folder-info">DOC</div>
-          </li>
-          <li>
-            <div class="file-icon">
-              <div class="file-icon-wrap">
-                <img src="images/pdf_icons.png" width="48" height="63"  alt=""/>
-              </div>
-            </div>
-            <div class="folder-name"><a href="#">Nota Kelas Komputer En Mazlan</a></div>
-            <div class="folder-info">PDF</div>
-          </li> -->
         </ul>
         </div>
       </div>
