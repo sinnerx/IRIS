@@ -65,7 +65,7 @@
 	<tr>
 		<th>Name</th>
 		<th style="text-align:center;">Type</th>
-		<th width="76px;"></th>
+		<th width="76px;"><input type='checkbox' class='pull-right files_main_checkbox' style="position:relative;right:5px;" onclick='filemanager.checkall();' /></th>
 	</tr>
 	<?php endif;?>
 	<?php foreach($folders as $row):?>
@@ -83,7 +83,7 @@
 		<td>
 			<a href='javascript:filemanager.deleteFile("folder",<?php echo $row[fileFolderID];?>);' class='i i-cross2'></a>
 			<a id='privacy-folder-icon<?php echo $row[fileFolderID];?>' href='javascript:filemanager.updatePrivacy("folder",<?php echo $row[fileFolderID];?>);'><?php echo $privacyIcon;?></a>
-			<input type='checkbox' />
+			<input type='checkbox' class='files_selection' value='folder_<?php echo $row[fileFolderID];?>' />
 		</td>
 	</tr>
 	<?php endforeach; ?>
@@ -102,7 +102,7 @@
 			<a href='javascript:filemanager.downloadFile(<?php echo $row[fileID];?>);' class='fa fa-download'></a>
 			<a href='javascript:filemanager.deleteFile("file",<?php echo $row[fileID];?>);' class='i i-cross2'></a>
 			<a id='privacy-file-icon<?php echo $row[fileID];?>' href='javascript:filemanager.updatePrivacy("file",<?php echo $row[fileID];?>,<?php echo $nextPrivacyMap[$row['filePrivacy']];?>);'><?php echo $privacyIcon;?></a>
-			<input type='checkbox' />
+			<input type='checkbox' class='files_selection' value='file_<?php echo $row[fileID];?>' />
 		</td>
 	</tr>
 	<?php endforeach;?>
@@ -113,7 +113,8 @@
 	<?php else:?>
 	<tr>
 		<td colspan="3">
-			<?php echo form::select("actionAll",Array("delete"=>"Delete Selected","Privacy"=>"Set Privacy"),"class='form-control pull-right' style='width:200px;'",null,"[On Selection]");?>
+		<?php echo form::select("privacy",Array(1=>"Open for all",2=>"Only site member",3=>"Only me"),"onchange='filemanager.actionOnSelected(\"set-privacy\",true);' class='form-control pull-right' style='width:150px;display:none;'",null,"[Privacy]");?>
+			<?php echo form::select("actionAll",Array("delete"=>"Delete Selected","set-privacy"=>"Set Privacy"),"onchange='filemanager.actionOnSelected(this.value);' class='form-control pull-right' style='width:200px;'",null,"[On Selection]");?>
 		</td>
 	</tr>
 	<?php endif;?>

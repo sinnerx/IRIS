@@ -55,6 +55,65 @@ var filemanager	= new function()
 		window.location.href = pim.base_url+"ajax/file/download/"+fileID;
 	}
 
+	this.checkall	= function()
+	{
+		var main = $(".files_main_checkbox")[0].checked;
+		$(".files_selection").each(function()
+		{
+			if(main)
+			{
+				this.checked = true;
+			}
+			else
+			{
+				this.checked = false;
+			}
+		});
+	}
+
+	this.actionOnSelected = function(action,next)
+	{
+		// get all selected.
+		var val	= [];
+		$(".files_selection").each(function()
+		{
+			if(this.checked)
+			{
+				val.push($(this).val());
+			}
+		});
+
+		if(val.length > 0)
+		{
+			var data	= {data:JSON.stringify(val)};
+			switch(action)
+			{
+				case "delete":
+				if(!confirm("Delete the selected file(s)? Are you sure!?"))
+				{
+					return false;
+				}
+				break;
+				case "set-privacy":
+				if(!next)
+				{
+					return $("#privacy").show();
+				}
+				else
+				{
+					data['privacy'] = $("#privacy").val();
+				}
+				
+				break;
+			}
+
+			$.ajax({type:"POST",data:data,url:pim.base_url+"ajax/file/selectedAction/"+action}).done(function(res)
+			{
+				filemanager.openFolder(filemanager.currFolder);
+			});
+		}
+	}
+
 }();
 
 $(document).ready(function()

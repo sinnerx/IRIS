@@ -42,20 +42,21 @@ class Controller_Ajax_File
 		}
 	}
 
-	public function updatePrivacy($type,$id)
+	public function updatePrivacy($type,$id,$privacy = null)
 	{
 		$siteID	= authData("site.siteID");
 
 		switch($type)
 		{
 			case "folder":
-			$privacy = model::load("file/folder")->updatePrivacy($siteID,$id);
+			$privacy = model::load("file/folder")->updatePrivacy($siteID,$id,$privacy);
 			break;
 			case "file":
-			$privacy = model::load("file/file")->updatePrivacy($siteID,$id);
+			$privacy = model::load("file/file")->updatePrivacy($siteID,$id,$privacy);
 			break;
 		}
 
+		## return privacy.
 		echo model::load("template/icon")->privacy($privacy);
 	}
 
@@ -69,5 +70,25 @@ class Controller_Ajax_File
 
 		header("Content-Disposition: attachment; filename=\"$file_name\"");
 		echo readfile($path);
+	}
+
+	public function selectedAction($action)
+	{
+		$data	= json_decode(input::get("data"));
+
+		foreach($data as $fileAction)
+		{
+			list($type,$id) = explode("_",$fileAction);
+
+			switch($action)
+			{
+				case "delete":
+				$this->deleteFile($type,$id);
+				break;
+				case "set-privacy":
+				$this->updatePrivacy($type,$id,input::get("privacy"));
+				break;
+			}
+		}
 	}
 }
