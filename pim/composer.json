@@ -3,6 +3,7 @@
 		"phpmailer/phpmailer": "dev-master",
 		"abeautifulsite/simpleimage": "2.5.3",
 		"parsecsv/php-parsecsv": "dev-master",
-		"phpoffice/phpexcel": "dev-master"
+		"phpoffice/phpexcel": "dev-master",
+		"suin/php-rss-writer": "1.3"
 	}
 }

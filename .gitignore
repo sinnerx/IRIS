@@ -6,7 +6,7 @@ pim/assets/frontend/images/siteImage/*
 pim/assets/frontend/images/slider/*
 pim/assets/frontend/images/photo/*
 pim/vendor/*
-!pim/vendor/composer
+pim/composer.lock
 pim_sta
 pim/logs/access.txt
 pim/php.ini
