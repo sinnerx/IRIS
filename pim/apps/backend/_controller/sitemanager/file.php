@@ -63,7 +63,15 @@ class Controller_File
 
 		$data	= input::get();
 		$data['fileType']	= $file->get("type");
-		$data['fileName']	= $file->get("name");
+
+		## use file name.
+		if($data['fileName'] == "")
+		{
+			$fn	= explode(".",$file->get("name"));
+			array_pop($fn);
+			$data['fileName']	= implode(".",$fn);
+		}
+
 		$data['fileSize']	= $file->get("size");
 		$data['fileExt']	= $file->get("ext");
 

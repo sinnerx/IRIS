@@ -8,6 +8,7 @@ var file = new function($)
   this.openFolder = function(folder)
   {
     $("#latest-file").hide();
+    $(".page-description").show();
     if(folder == 0)
     {
       $("#latest-file").show();
@@ -25,6 +26,7 @@ var file = new function($)
 
   this.openFile = function(folder,file)
   {
+    $(".page-description").hide();
     $("#latest-file").hide();
     //hide page-desc
     // $(".page-description").hide();
@@ -67,8 +69,8 @@ echo model::load("template/frontend")
 </h3>
   <div class="block-content clearfix">
     <div class="page-content">
-      <div class="page-description"> 
-      Lorem ipsum dolor sit amet, maiores ornare ac fermentum, imperdiet ut vivamus a, nam lectus at nunc. Quam euismod sem, semper ut potenti pellentesque quisque. In eget sapien sed, sit duis vestibulum ultricies, placerat morbi amet vel, nullam in in lorem vel. In molestie elit dui dictum, praesent nascetur pulvinar sed, in dolor pede in aliquam, risus nec error quis pharetra. Eros metus quam augue suspendisse, metus rutrum risus erat in.  In ultrices quo ut lectus, etiam vestibulum urna a est, pretium luctus euismod nisl, pellentesque turpis hac ridiculus massa. Venenatis a taciti dolor platea, curabitur lorem platea urna odio.
+      <div class="page-description">
+      Fail-fail yang membolehkan anda memuat turun.
       </div>
       <div class="page-download">
       <div class="gallery-folder">

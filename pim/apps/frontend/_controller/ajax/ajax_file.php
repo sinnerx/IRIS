@@ -33,8 +33,9 @@ class Controller_Ajax_File
 	{
 		$row	= model::load("file/file")->getFile($this->siteID,$file);
 
-		$typeBasedImage		= url::asset("frontend/images/pdf_icons.png");
-		$row['image_url']	= in_array($row['fileExt'],Array("jpg","jpeg","png","bmp"))?url::base("{site-slug}/ajax/file/image/$file"):$typeBaseImage;
+		// $typeBasedImage		= url::asset("frontend/images/pdf_icons.png");
+		$typeBasedImage		= model::load("file/file")->getTypeBasedIcon($row['fileExt']);
+		$row['image_url']	= in_array($row['fileExt'],Array("jpg","jpeg","png","bmp"))?url::base("{site-slug}/ajax/file/image/$file"):$typeBasedImage;
 
 		$row['header']	= model::load("file/folder")->findParents($row['fileFolderID']);
 		view::render("file/ajax/openFile",$row);
@@ -55,7 +56,7 @@ class Controller_Ajax_File
 	{
 		$row	= model::load("file/file")->getFile(authData("current_site.siteID"),$id);
 
-		$file_name	= $row['fileName'];
+		$file_name	= $row['fileName'].".".$row['fileExt'];
 
 		$path	= path::files("site_files/".authData("current_site.siteID")."/".$id);
 

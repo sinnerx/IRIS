@@ -42,11 +42,28 @@ class Controller_Ajax_File
 		}
 	}
 
+	public function updatePrivacy($type,$id)
+	{
+		$siteID	= authData("site.siteID");
+
+		switch($type)
+		{
+			case "folder":
+			$privacy = model::load("file/folder")->updatePrivacy($siteID,$id);
+			break;
+			case "file":
+			$privacy = model::load("file/file")->updatePrivacy($siteID,$id);
+			break;
+		}
+
+		echo model::load("template/icon")->privacy($privacy);
+	}
+
 	public function download($id)
 	{
 		$row	= model::load("file/file")->getFile(authData("site.siteID"),$id);
 
-		$file_name	= $row['fileName'];
+		$file_name	= $row['fileName'].".".$row['fileExt'];
 
 		$path	= path::files("site_files/".authData("site.siteID")."/".$id);
 

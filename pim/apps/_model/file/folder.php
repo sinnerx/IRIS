@@ -139,6 +139,22 @@ class Folder
 
 		return $result;
 	}
+
+	## lebih kurang macam update privacy untuk file.
+	public function updatePrivacy($siteID,$id,$privacy = null)
+	{
+		if(!$privacy)
+		{
+			$nextPrivacyMap	= Array(1=>2,2=>3,3=>1);
+			$privacy	= db::select("fileFolderPrivacy")->where("siteID",$siteID)->where("fileFolderID",$id)->get("file_folder")->row("fileFolderPrivacy");
+			$privacy	= $nextPrivacyMap[$privacy];
+		}
+
+		db::where("siteID",$siteID)->where("fileFolderID",$id);
+		db::update("file_folder",Array("fileFolderPrivacy"=>$privacy,"fileFolderUpdatedDate"=>now()));
+
+		return $privacy;
+	}
 }
 
 

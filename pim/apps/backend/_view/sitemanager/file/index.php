@@ -24,29 +24,14 @@ var filemanager	= new function()
 		window.location.hash = this.currFolder;
 	}
 
-	/*this.newFolder = function()
+	this.updatePrivacy	 = function(type,id)
 	{
-		var folderID	= this.currFolder;
-		var data	= {
-			fileFolderParentID:folderID,
-			fileFolderName:$("#fileFolderName").val(),
-			fileFolderPrivacy:$("#fileFolderPrivacy").val()
-		};
-
-		$.ajax({type:"POST",data:data,url:pim.base_url+"ajax/file/newFolder/"+folderID}).done(function(res)
+		$.ajax({type:"GET",url:pim.base_url+"ajax/file/updatePrivacy/"+type+"/"+id}).done(function(span)
 		{
-			var res	= $.parseJSON(res);
-
-			if(res['error'])
-			{
-				return alert(res['error']);
-			}
-
-			$("#col-new-file #panel-new-file, #col-new-file #panel-new-folder").hide();
-			console.log("success");
-			window.location.hash = filemanager.currFolder;
+			// re-update uglily. :D
+			$("#privacy-"+type+"-icon"+id).html(span);
 		});
-	}*/
+	}
 
 	this.deleteFile = function(type,id)
 	{
@@ -150,6 +135,11 @@ Manage and share you site files.
 					<label>File</label>
 						<?php echo form::file("fileUpload");?>
 						<?php echo flash::data("fileUpload");?>
+					</div>
+					<div class="form-group">
+					<label>Name</label>
+						<?php echo form::text("fileName","class='form-control' placeholder='Leave empty to use original name'");?>
+						<?php echo flash::data("fileName");?>
 					</div>
 					<div class="form-group">
 					<label>Privacy</label>

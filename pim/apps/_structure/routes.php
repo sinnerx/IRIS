@@ -129,7 +129,7 @@ $routes[]	= Array("mengenai-kami","controller=main@landing_about");
 $routes[]	= Array("hubungi-kami","controller=main@landing_contact");
 
 ## Rss
-$routes['rss-blog']	= Array("[:site-slug]/blog/rss","controller=blog@rss");
+$routes['rss-blog']	= Array("[:site-slug]/blog/rss/[:category?]","controller=blog@rss","{category}");
 
 ## error page
 $routes[]	= Array("[:site-slug]/404","controller=error@index");

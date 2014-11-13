@@ -25,6 +25,11 @@
 	width: 100%;
 }
 
+.folder-table input[type=checkbox]
+{
+	position: relative;
+	top:2px;
+}
 
 
 </style>
@@ -40,6 +45,7 @@
 <div class='panel-header'>
 	<a href='#' style="font-size:1em;">/ Root</a>
 	<?php
+	$nextPrivacyMap	= Array(1=>2,2=>3,3=>1);
 	if($header):
 		echo " > ";
 		foreach($header as $row):
@@ -76,7 +82,8 @@
 		<td style='text-align:center;'>File Folders</td>
 		<td>
 			<a href='javascript:filemanager.deleteFile("folder",<?php echo $row[fileFolderID];?>);' class='i i-cross2'></a>
-			<?php echo $privacyIcon;?>
+			<a id='privacy-folder-icon<?php echo $row[fileFolderID];?>' href='javascript:filemanager.updatePrivacy("folder",<?php echo $row[fileFolderID];?>);'><?php echo $privacyIcon;?></a>
+			<input type='checkbox' />
 		</td>
 	</tr>
 	<?php endforeach; ?>
@@ -94,13 +101,20 @@
 		<td>
 			<a href='javascript:filemanager.downloadFile(<?php echo $row[fileID];?>);' class='fa fa-download'></a>
 			<a href='javascript:filemanager.deleteFile("file",<?php echo $row[fileID];?>);' class='i i-cross2'></a>
-			<?php echo $privacyIcon;?>
+			<a id='privacy-file-icon<?php echo $row[fileID];?>' href='javascript:filemanager.updatePrivacy("file",<?php echo $row[fileID];?>,<?php echo $nextPrivacyMap[$row['filePrivacy']];?>);'><?php echo $privacyIcon;?></a>
+			<input type='checkbox' />
 		</td>
 	</tr>
 	<?php endforeach;?>
 	<?php if(count($files) + count($folders) == 0):?>
 	<tr>
 		<td colspan="3" style='text-align:center;'>Empty Folders</td>
+	</tr>
+	<?php else:?>
+	<tr>
+		<td colspan="3">
+			<?php echo form::select("actionAll",Array("delete"=>"Delete Selected","Privacy"=>"Set Privacy"),"class='form-control pull-right' style='width:200px;'",null,"[On Selection]");?>
+		</td>
 	</tr>
 	<?php endif;?>
 	</table>

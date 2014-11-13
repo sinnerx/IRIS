@@ -86,12 +86,39 @@ class File
 		db::delete("file",Array("siteID"=>$siteID,"fileID"=>$id));
 	}
 
-	public function updateHasFiles($folderID)
+	public function getTypeBasedIcon($type)
 	{
-		while($folderID != 0)
+		$lists	= Array(
+			Array("pdf","pdf_icons.png"),
+			Array("doc,docx,txt"=>"doc_icon.png")
+						);
+
+		$default	= "doc_icon.png";
+
+		foreach($lists as $row)
 		{
-			## find if current folder has files.
-			// db::where("fileFolderhasFiles",1);
+			if(in_array($type,explode(",",$row[0])))
+			{
+				return \url::asset("frontend/images/$row[1]");
+			}
 		}
+
+		## not found just return default.
+		return \url::asset("frontend/images/$default");
+	}
+
+	public function updatePrivacy($siteID,$id,$privacy = null)
+	{
+		if(!$privacy)
+		{
+			$nextPrivacyMap	= Array(1=>2,2=>3,3=>1);
+			$privacy	= db::select("filePrivacy")->where("siteID",$siteID)->where("fileID",$id)->get("file")->row("filePrivacy");
+			$privacy	= $nextPrivacyMap[$privacy];
+		}
+
+		db::where("siteID",$siteID)->where("fileID",$id);
+		db::update("file",Array("filePrivacy"=>$privacy,"fileUpdatedDate"=>now()));
+
+		return $privacy;
 	}
 }

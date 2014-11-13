@@ -28,16 +28,14 @@ echo model::load("template/frontend")
 </h3>
 <div class="block-content clearfix">
 <div class="page-content">
-<div class="page-description"> 
-Lorem ipsum dolor sit amet, maiores ornare ac fermentum, imperdiet ut vivamus a, nam lectus at nunc. Quam euismod sem, semper ut potenti pellentesque quisque. In eget sapien sed, sit duis vestibulum ultricies, placerat morbi amet vel, nullam in in lorem vel. In molestie elit dui dictum, praesent nascetur pulvinar sed, in dolor pede in aliquam, risus nec error quis pharetra. Eros metus quam augue suspendisse, metus rutrum risus erat in.  In ultrices quo ut lectus, etiam vestibulum urna a est, pretium luctus euismod nisl, pellentesque turpis hac ridiculus massa. Venenatis a taciti dolor platea, curabitur lorem platea urna odio.
-</div>
+<div class="page-description"></div>
 <div class="page-sub-wrapper calendar-page clearfix">
 <div class="activity-type-desc">
 <div class="select-activity-type">
 <?php echo form::select("activityType",$typeR,"class='dropdown' onchange='window.location.href = \"?t=\"+this.value;' tabindex='9' data-settings='".'{"wrapperClass":"flat-type"}'."'",request::get("t"),"[SEMUA]");?>
 </div>
 <div class="calendar-heading-month"><?php echo $typeLabel;?></div>
-<div class="calendar-type-info">Lorem ipsum dolor sit amet, maiores ornare ac fermentum, imperdiet ut vivamus a, nam lectus at nunc. Quam euismod sem, semper ut potenti pellentesque quisque. In eget sapien sed, sit duis vestibulum ultricies, placerat morbi amet vel, nullam in in lorem vel. In molestie elit dui dictum.</div>
+<div class="calendar-type-info"></div>
 </div>
 <div class="clr"></div>
 <div class="activity-year-select">
