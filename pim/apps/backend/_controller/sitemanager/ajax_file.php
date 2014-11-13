@@ -75,7 +75,7 @@ class Controller_Ajax_File
 		$path	= path::files("site_files/".authData("site.siteID")."/".$id);
 
 		header("Content-Disposition: attachment; filename=\"$file_name\"");
-		echo readfile($path);
+		readfile($path);
 	}
 
 	public function selectedAction($action)

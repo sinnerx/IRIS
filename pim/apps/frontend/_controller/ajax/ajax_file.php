@@ -49,7 +49,7 @@ class Controller_Ajax_File
 
 		header("Content-Type: $row[fileType]");
 		// header("Content-Length: " . filesize($name));
-		echo readfile($path);
+		readfile($path);
 	}
 
 	public function downloadFile($id)
@@ -63,7 +63,7 @@ class Controller_Ajax_File
 		model::load("file/file")->download($id);
 
 		header("Content-Disposition: attachment; filename=\"$file_name\"");
-		echo readfile($path);
+		readfile($path);die;
 	}
 }
 
