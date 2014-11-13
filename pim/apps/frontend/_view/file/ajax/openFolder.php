@@ -39,6 +39,8 @@ foreach($folders as $row):?>
 </li>
 <?php $no++;?>
 <?php endforeach;?>
+<?php endif; ## for if folders?>
+<?php if($files):?>
 <?php foreach($files as $row):?>
 <li>
 	<div class="file-icon">
@@ -48,7 +50,7 @@ foreach($folders as $row):?>
 	<div class="folder-info"><?php echo strtoupper($row['fileType']);?></div>
 </li>
 <?php endforeach;?>
-<?php endif;?>
+<?php endif;## for if($files)?>
 </ul>
 
 <?php if(count($files) + count($folders) == 0):?>
