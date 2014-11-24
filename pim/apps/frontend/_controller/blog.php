@@ -125,5 +125,50 @@ Class Controller_Blog
 
 		view::render("blog/view",$data);
 	}
+
+	public function rss($categoryID = null)
+	{
+		$siteID	= authData("current_site.siteID");
+
+		if($categoryID)
+		{
+			$data = model::load("blog/rss")->getArticlesByCategory($siteID,$categoryID);
+		}
+		else
+		{
+			$data = model::load("blog/rss")->getAllArticle($siteID);
+		}
+
+		$feed = new \Suin\RSSWriter\Feed();
+
+		$channel = new \Suin\RSSWriter\Channel();
+		$channel
+		    ->title("All blogs")
+		    ->description("Site Blogs list")
+		    ->url(url::base("{site-slug}"))
+		    ->appendTo($feed);
+
+		foreach ($data as $blog) {
+			// RSS item
+			$item = new \Suin\RSSWriter\Item();
+			$item
+			    ->title($blog['articleName'])
+			    ->description($blog['articleText'])
+			    ->url(url::base("{site-slug}/blog/".$blog['articleSlug']))
+			    ->appendTo($channel);
+		}
+
+		// Podcast item
+		/*$item = new \Suin\RSSWriter\Item();
+		$item
+		    ->title("Some Podcast Entry")
+		    ->description("<div>Podcast body</div>")
+		    ->url('http://podcast.example.com/2012/08/21/podcast-entry/')
+		    ->enclosure('http://link-to-audio-file.com/2013/08/21/podcast.mp3', 4889, 'audio/mpeg')
+		    ->appendTo($channel);*/
+
+		header("Content-type: text/xml");
+		echo $feed;
+	}
 }
 ?>
