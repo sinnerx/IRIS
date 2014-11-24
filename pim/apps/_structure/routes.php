@@ -17,6 +17,8 @@ $routes[]	= Array(function()
 	### Hook frontend pre controller with auth controller.
 	controller::hook("frontend:pre_controller",function()
 	{
+		## set default template to default_facade.
+		template::set(session::has("template")?session::get("template"):"default_facade");
 		controller::load("auth","index");
 	});
 

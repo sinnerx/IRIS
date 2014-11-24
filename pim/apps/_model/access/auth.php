@@ -86,6 +86,9 @@ Class Auth
 
 	public function login($userID,$userLevel)
 	{
+		## set template.
+		session::set("template","default");
+
 		## set session : userLevel and userID
 		session::set("userLevel",$userLevel);
 		session::set("userID",$userID);

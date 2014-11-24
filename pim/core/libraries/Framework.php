@@ -808,7 +808,7 @@ class Template
 {
 	## a flag whether a template has been loaded or not.
 	static $loaded 		= false;
-	static $template	= null;
+	static $template	= "default";
 
 	## Used in main template.
 	public static function showContent()
@@ -841,7 +841,7 @@ class Template
 		$apps		= apps::getCurrent();
 		$template	= controller::$instance[controller::getCurrentController()]->template;
 		#$template	= self::$template === false?false:(isset($template)?$template:"default");
-		$template	= self::$template === false?(isset($template)?$template:false):(isset($template)?$template:"default");
+		$template	= self::$template === false?(isset($template)?$template:false):(isset($template)?$template:self::$template);
 		
 		## set this flag to true. mean, can't run this function again.
 		self::$loaded	= true;

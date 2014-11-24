@@ -23,6 +23,11 @@
 	padding-top:0px;
 	font-size:0.9em;
 }
+.container .content
+{
+	width:inherit;
+	height: inherit;
+}
 
 </style>
 <h3 class="block-heading">SOALAN LAZIM</h3>

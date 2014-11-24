@@ -1,7 +1,6 @@
 <?php
 Class Controller_Page
 {
-	var $template	= "default";
 	public function index()
 	{
 		$trail	= request::named("trail");

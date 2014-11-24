@@ -10,7 +10,7 @@ jQuery(document).ready(function()
 
 </script>
 
-<div id="calendar-rght" style="background:url(<?php echo url::asset('frontend/images/calendar_bg.png');?>) no-repeat scroll center top rgba(0, 0, 0, 0);">
+<div id="calendar-rght">
 	<div class="date" style='display:none;'>24</div>
 	<div class="month clearfix">
 		<div class="month-prev" onclick='calendar.getDate("prev");'></div>

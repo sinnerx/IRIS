@@ -254,7 +254,7 @@ Class Controller_Main
 
 	public function search($keyword = null)
 	{
-		$this->template = "default";
+		// $this->template = "default";
 
 
 		#$result	= model::load("search")->search($keyword,$module);
