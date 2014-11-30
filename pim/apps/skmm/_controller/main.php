@@ -20,7 +20,7 @@ class Controller_Main
 	public function gallery()
 	{
 		$siteID	= authData("current_site.siteID");
-		db::where('siteID',$siteID);
+		db::where('site_album.siteID',$siteID);
 		db::join("album","album.albumID = site_album.albumID");
 		$data['albums']	= db::get("site_album")->result("siteAlbumID");
 
