@@ -18,7 +18,7 @@ $routes[]	= Array(function()
 	controller::hook("frontend:pre_controller",function()
 	{
 		## set default template to default_facade.
-		template::set(session::has("template")?session::get("template"):"default_facade");
+		template::set(session::has("template")?session::get("template"):"default_skmm");
 		controller::load("auth","index");
 	});
 
@@ -114,6 +114,29 @@ $routes[]	= Array("dashboard/[:controller]/[**:method]",function($param)
 });
 
 #######################
+
+### SKMM Temporary route ###
+### Hook frontend pre controller with auth controller.
+controller::hook("skmm:pre_controller",function()
+{
+	## set default template to default_facade.
+	controller::load("frontend:auth","index");
+});
+
+### Hook pre_template (frontend) with index
+controller::hook("skmm:pre_template",function()
+{
+	return controller::load("frontend:partial","index");
+});
+
+## site landing page
+$routes[]	= Array("[:site-slug]","controller=skmm:main@index");
+$routes[] 	= Array("[:site-slug]/mengenai-kami","controller=skmm:main@about");
+$routes[]	= Array("[:site-slug]/aktiviti","controller=skmm:main@activity");
+$routes[]	= Array("[:site-slug]/galeri","controller=skmm:main@gallery");
+$routes[]	= Array("[:site-slug]/faq","controller=skmm:main@faq");
+$routes[]	= Array("[:site-slug]/hubungi-kami","controller=skmm:main@contact");
+### SKMM Temporary route ends
 
 ### API Routes ####
 $routes['api-image-avatar']	= Array("api/photo/avatar/[**:photo-name]","controller=api:image@get","{photo-name},avatar");
