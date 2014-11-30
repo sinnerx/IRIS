@@ -131,7 +131,7 @@
         ?>
 
         <?php endif; ## ?>
-        <div style='min-height:450px;' id="news<?php echo $no;?>">
+        <div style='min-height:450px;<?php if($no == 1):?>width:670px;<?php endif;?>' id="news<?php echo $no;?>" >
         <?php template::showContent();?>
         </div>
         

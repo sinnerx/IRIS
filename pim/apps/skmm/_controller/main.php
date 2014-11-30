@@ -82,7 +82,7 @@ class Controller_Main
 	## partial.
 	public function latestActivity()
 	{
-		db::where("activityApprovalStatus",0);
+		db::where("activityApprovalStatus",1);
 		db::limit(5)->order_by("activityID","desc");
 		$data['res_activity']	= db::where("siteID",authData("current_site.siteID"))->get("activity")->result();
 		view::render("latestActivity",$data);
