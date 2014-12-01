@@ -9,7 +9,7 @@ $articleID	= $row['articleID'];
 <p><?php echo model::load("helper")->purifyHTML($row['articleText']);?> <a href="<?php echo url::base("{site-slug}/blog/$articleID");?>">read more</a></p> 
 </div>
 <?php endforeach;?>
-<a href="#">lagi berita & aktiviti</a>
+<a href="<?php echo url::base("{site-slug}/blog");?>">lagi berita & aktiviti</a>
 <?php else:?>
 Tiada berita terkini
 <?php endif;?>
