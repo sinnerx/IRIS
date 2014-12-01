@@ -115,6 +115,24 @@ $routes[]	= Array("dashboard/[:controller]/[**:method]",function($param)
 
 #######################
 
+
+
+### API Routes ####
+$routes['api-image-avatar']	= Array("api/photo/avatar/[**:photo-name]","controller=api:image@get","{photo-name},avatar");
+$routes[]	= Array("api/photo/[:size]/[:year]/[:month]/[:day]/[:photo-name]","controller=api:image@get","{year},{month},{day},{photo-name},{size}");
+$routes[]	= Array("api/photo/[:year]/[:month]/[:day]/[:photo-name]/[:size]","controller=api:image@get","{year},{month},{day},{photo-name},{size}");
+$routes[]	= Array("api/photo/[:photo-name]/[:size]","controller=api:image@get","{photo-name},{size}"); ## page photo api.
+$routes['api-redirect-useractivity']	= Array("api/redirect/user-activity/[:type]/[:userActivityID]","controller=api:redirect@userActivity","{type},{userActivityID}");
+$routes['api-redirect-link']			= Array("api/redirect/link","controller=api:redirect@link");
+$routes['api-redirect-general']			= Array("api/redirect/[:type]","controller=api:redirect@general","{type}");
+
+### Frontend Route ####
+
+## root. will direct to main.
+$routes[]	= Array("","controller=main@landing");
+$routes[]	= Array("mengenai-kami","controller=main@landing_about");
+$routes[]	= Array("hubungi-kami","controller=main@landing_contact");
+
 ### SKMM Temporary route ###
 ### Hook frontend pre controller with auth controller.
 if(!session::has("template")):
@@ -141,22 +159,6 @@ if(!session::has("template")):
 	$routes[]	= Array("[:site-slug]/hubungi-kami","controller=skmm:main@contact");
 	### SKMM Temporary route ends
 endif;
-
-### API Routes ####
-$routes['api-image-avatar']	= Array("api/photo/avatar/[**:photo-name]","controller=api:image@get","{photo-name},avatar");
-$routes[]	= Array("api/photo/[:size]/[:year]/[:month]/[:day]/[:photo-name]","controller=api:image@get","{year},{month},{day},{photo-name},{size}");
-$routes[]	= Array("api/photo/[:year]/[:month]/[:day]/[:photo-name]/[:size]","controller=api:image@get","{year},{month},{day},{photo-name},{size}");
-$routes[]	= Array("api/photo/[:photo-name]/[:size]","controller=api:image@get","{photo-name},{size}"); ## page photo api.
-$routes['api-redirect-useractivity']	= Array("api/redirect/user-activity/[:type]/[:userActivityID]","controller=api:redirect@userActivity","{type},{userActivityID}");
-$routes['api-redirect-link']			= Array("api/redirect/link","controller=api:redirect@link");
-$routes['api-redirect-general']			= Array("api/redirect/[:type]","controller=api:redirect@general","{type}");
-
-### Frontend Route ####
-
-## root. will direct to main.
-$routes[]	= Array("","controller=main@landing");
-$routes[]	= Array("mengenai-kami","controller=main@landing_about");
-$routes[]	= Array("hubungi-kami","controller=main@landing_contact");
 
 ## Rss
 $routes['rss-blog']	= Array("[:site-slug]/blog/rss/[:category?]","controller=blog@rss","{category}");
