@@ -1,7 +1,8 @@
+<link href="<?php echo url::asset("skmm/css/colorbox.css");?>" rel="stylesheet" type="text/css">
 <script src="<?php echo url::asset("skmm/js/jquery.colorbox.js");?>"></script>
 <script>
     $(document).ready(function(){
-        $('a.gallery').colorbox({rel:'gal'});
+        $('a.gallery').colorbox({rel:'gal',current:'Gambar {current} dari {total}', imgError:'Gambar gagal diperlihatkan'});
     });
 </script>
 
@@ -12,10 +13,11 @@
     <?php if(isset($photos[$row_album['siteAlbumID']])):?>
     <div class="galleryTitle"><?php echo $row_album['albumName'];?> | <?php echo date("d F Y",strtotime($row_album['albumCreatedDate']));?></div>
         <?php foreach($photos[$row_album['siteAlbumID']] as $row_photo):
-        $href   = model::load("api/image")->buildPhotoUrl($row_photo['photoName'],"small");;
+        $href   = model::load("api/image")->buildPhotoUrl($row_photo['photoName'],"small");
+        $hrefBig    = model::load("api/image")->buildPhotoUrl($row_photo['photoName'],"big");
         $title  = "";
         ?>
-        <!-- <a class="gallery" title="PI1M Kg Sg Masin" rel="gal"> --><img src="<?php echo $href;?>" style='height:100px;width:100px;'><!-- </a> -->
+        <a class="gallery" href='<?php echo $hrefBig;?>' rel="gal"><img src="<?php echo $href;?>" style='height:100px;width:100px;'></a>
 
         <?php endforeach;?>
     <?php endif;?>

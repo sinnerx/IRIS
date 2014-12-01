@@ -5,12 +5,18 @@
           <th scope="col" width="100px">Tarikh</th>
           <th scope="col">Aktiviti</th>
         </tr>
+        <?php if($res_training):?>
         <?php foreach($res_training as $row_training):?>
         <tr>
           <td><?php echo date("d F Y",strtotime($row_training['activityStartDate']));?></td>
           <td><?php echo $row_training['activityName'];?></td>
         </tr>
         <?php endforeach;?>
+        <?php else:?>
+          <tr>
+            <td colspan="2">Tiada aktiviti terkini</td>
+          </tr>
+        <?php endif;?>
          <!--  <tr>
             <th scope="col" width="100px">Tarikh</th>
             <th scope="col">Aktiviti</th>
@@ -65,12 +71,19 @@
             <th scope="col" width="100px">Tarikh</th>
             <th scope="col">Aktiviti</th>
           </tr>
+          <?php if($res_event):?>
           <?php foreach($res_event as $row_event):?>
           <tr>
             <td><?php echo date("d F Y",strtotime($row_event['activityStartDate']));?></td>
             <td><?php echo $row_event['activityName'];?></td>
           </tr>
           <?php endforeach;?>
+          <?php else:?>
+          <tr>
+            <td colspan="2">Tiada aktiviti terkini</td>
+          </tr>
+          <?php endif;?>
+
           <!-- <tr>
             <td>15 Apr 2014</td>
             <td>Hari Terbuka PI1M</td>

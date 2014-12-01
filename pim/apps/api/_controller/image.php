@@ -36,5 +36,6 @@ class Controller_Image
 			return false;
 
 		$img->output();
+		die;
 	}
 }

@@ -43,7 +43,11 @@
                 <li><a href="<?php echo url::base("{site-slug}/galeri");?>">Galeri</a></li>
                 <li><a href="<?php echo url::base("{site-slug}/faq");?>">Soalan Lazim</a></li>
                 <li><a href="<?php echo url::base("{site-slug}/hubungi-kami");?>">Hubungi Kami</a></li>
-                <div class="socialIcon"><a href="#" target="_blank"><img src="<?php echo url::asset("skmm/images/fb-icon.png");?>" width="24" height="24" alt="facebook"></a></div>
+                <div class="socialIcon">
+                <?php if($siteInfoFacebookUrl != ""):?>
+                    <a href="<?php echo url::createByRoute("api-redirect-link",Array(),true)."?link=$siteInfoFacebookUrl";?>" target="_blank"><img src="<?php echo url::asset("skmm/images/fb-icon.png");?>" width="24" height="24" alt="facebook"></a>
+                <?php endif;?>
+                </div>
             </ul>
             <div class="clear"></div>
     </div>
@@ -103,14 +107,16 @@
             <div class="flexslider">
             <ul class="slides">
              <?php
-            foreach($res_slider as $row):
+             if($res_slider):?>
+            <?php foreach($res_slider as $row):
                 $url    = url::asset("frontend/images/slider/".$row['siteSliderImage']);
                 $href   = $row['siteSliderLink'];
                 ?>
             <li>
               <img src="<?php echo $url;?>" />
             </li>
-            <?php endforeach;?>   
+            <?php endforeach;?>
+            <?php endif;?>   
                 <!-- <li>
                   <img src="<?php echo url::asset("skmm/images/slide1.jpg");?>" />
                 </li>

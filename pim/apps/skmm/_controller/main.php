@@ -3,7 +3,12 @@ class Controller_Main
 {
 	public function index()
 	{
-		$data['res_article']	= db::where("siteID",authData("current_site.siteID"))->limit(10)->order_by("articleID","desc")->get("article")->result();
+		$data['res_article']	= db::where("siteID",authData("current_site.siteID"))->limit(10)->order_by("articleID","desc")->get("article")->result("articleID");
+
+		if($data['res_article'])
+		{
+			$data['res_category']	= db::where("articleID",array_keys($data['res_article']))->join("category","category.categoryID = article_category.categoryID")->get("article_category")->result("articleID");
+		}
 
 		view::render("index",$data);
 	}
@@ -15,6 +20,26 @@ class Controller_Main
 		$data['row']	= $page[0];
 
 		view::render("about",$data);
+	}
+
+	public function blog($id)
+	{
+		$data	= db::where("articleID",$id)->get("article")->row();
+		$data['categoryName']	= db::where("categoryID IN (SELECT categoryID FROM article_category WHERE articleID = ?)",Array($id))->get("category")->row("categoryName");
+
+		view::render("blog",$data);
+	}
+
+	public function blog_latest()
+	{
+		$data['res_article']	= db::where("siteID",authData("current_site.siteID"))->limit(10)->order_by("articleID","desc")->get("article")->result("articleID");
+
+		if($data['res_article'])
+		{
+			$data['res_category']	= db::where("articleID",array_keys($data['res_article']))->join("category","category.categoryID = article_category.categoryID")->get("article_category")->result("articleID");
+		}
+
+		view::render("blog_latest",$data);
 	}
 
 	public function gallery()

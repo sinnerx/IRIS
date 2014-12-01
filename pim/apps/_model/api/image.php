@@ -10,7 +10,7 @@ class Image
 			return model::load("image/services")->getPhotoUrl(null);
 
 		$baseUrl	= url::getProtocol().apps::config("base_url:frontend");
-		return $baseUrl."/api/photo/$photoName/$size";
+		return $baseUrl."/api/photo/$size/$photoName";
 	}
 
 	public function buildAvatarUrl($photoName)

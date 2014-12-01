@@ -1,10 +1,12 @@
 <h1>Berita & Aktiviti Terkini</h1>
 <?php if($res_article):?>
-<?php foreach($res_article as $row):?>
+<?php foreach($res_article as $row):
+$articleID	= $row['articleID'];
+?>
 <div class="newsContent">
-<h1><a href="#"><?php echo $row['articleName'];?></a></h1>
-<span><?php echo date("d F Y",strtotime($row['articlePublishedDate']));?> | Berita Semasa</span>
-<p><?php echo model::load("helper")->purifyHTML($row['articleText']);?> <a href="#">read more</a></p> 
+<h1><a href="<?php echo url::base("{site-slug}/blog/$articleID");?>"><?php echo $row['articleName'];?></a></h1>
+<span><?php echo date("d F Y",strtotime($row['articlePublishedDate']));?> | <?php echo $res_category[$row['articleID']]['categoryName'];?></span>
+<p><?php echo model::load("helper")->purifyHTML($row['articleText']);?> <a href="<?php echo url::base("{site-slug}/blog/$articleID");?>">read more</a></p> 
 </div>
 <?php endforeach;?>
 <a href="#">lagi berita & aktiviti</a>

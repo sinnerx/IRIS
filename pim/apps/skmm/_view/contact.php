@@ -45,7 +45,7 @@ $longitude	= authData("current_site.siteInfoLongitude");
 <?php endif;?>
 
 <p>Anda boleh menghubungi kami dengan mengisi borang berikut:</p>
-<form class="white-pink" method='post'>
+<form class="white-pink" id='the-form' method='post'>
 <h1>Borang Maklumbalas</h1>
 <?php echo flash::data();?>
 <div class="white-pink-left">
@@ -67,18 +67,19 @@ $longitude	= authData("current_site.siteInfoLongitude");
 <label>Mesej <?php echo flash::data("messageContent");?></label> 
 <?php echo form::textarea("messageContent","placeholder='Taip mesej anda di sini' tabindex='5'");?>
 
-<label><input type='submit' class='button' value='Hantar' /></label>
+<!-- <label><input type='submit' class='button' value='Hantar' /></label> -->
+<label><a href="#" onclick='$("#the-form").submit();' class="button">Hantar</a></label>
 </div>
 
 <div class="white-pink-right"> 
 <p><strong>Pusat Internet 1Malaysia</strong><br>
-<?php echo nl2br($siteInfoAddress);?>
-<p><strong>Koordinat GPS:</strong> <?php echo $siteInfoLatitude;?>, <?php echo $siteInfoLongitude;?></p>  
+<?php echo $siteInfoAddress == ""?"-":nl2br($siteInfoAddress);?>
+<p><strong>Koordinat GPS:</strong> <?php if($siteInfoLatitude != "" && $siteInfoLongitude != ""):?><?php echo $siteInfoLatitude;?>, <?php echo $siteInfoLongitude;?><?php else:?> - <?php endif;?></p>  
 <p><strong>Pengurus:</strong> <?php echo $siteManagers[0]['userProfileFullName'];?><br>
 <strong>Pen. Pengurus:</strong> <?php echo $siteManagers[1]['userProfileFullName'];?><br><br>
-<strong>Tel:</strong> <?php echo $siteInfoPhone;?><br>
+<strong>Tel:</strong> <?php echo $siteInfoPhone?:"-";?><br>
 <!-- <strong>Fax:</strong> +603 6048 1074</p> -->
-<p><strong>Email:</strong> <a href="#"><?php echo $siteInfoEmail;?></a></p>
+<p><strong>Email:</strong> <a href="#"><?php echo $siteInfoEmail?:"-";?></a></p>
 </div>
 <div class="clear"></div>
 </form>
