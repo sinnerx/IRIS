@@ -94,9 +94,9 @@
             
             <div class="normalBox">
             <h1>Capaian Pantas</h1>
-            <a href="#">Universal Service Provision</a><br> 
-            <a href="#">Suruhanjaya Komunikasi dan Multimedia</a><br>
-            <a href="#">Kementerian Komunikasi dan Multimedia</a><br>
+            <a href="http://www.skmm.gov.my/Resources/eForm/Universal-Service-Provision.aspx">Universal Service Provision</a><br> 
+            <a href="http://www.skmm.gov.my/">Suruhanjaya Komunikasi dan Multimedia</a><br>
+            <a href="http://www.kkmm.gov.my/index.php?lang=ms">Kementerian Komunikasi dan Multimedia</a><br>
             <a href="#">Service Provider Website</a><br>
             <a href="#">Other Related Website</a> 
             </div>   

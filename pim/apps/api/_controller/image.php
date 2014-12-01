@@ -21,8 +21,8 @@ class Controller_Image
 		## page photo.
 		if(!$day)
 		{
-			$size		= $month;
-			$photoName	= $year;
+			$size		= $year;
+			$photoName	= $month;
 		}
 		## site photo.
 		else
