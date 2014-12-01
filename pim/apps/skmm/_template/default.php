@@ -44,8 +44,8 @@
                 <li><a href="<?php echo url::base("{site-slug}/faq");?>">Soalan Lazim</a></li>
                 <li><a href="<?php echo url::base("{site-slug}/hubungi-kami");?>">Hubungi Kami</a></li>
                 <div class="socialIcon">
-                <?php if($siteInfoFacebookUrl != ""):?>
-                    <a href="<?php echo url::createByRoute("api-redirect-link",Array(),true)."?link=$siteInfoFacebookUrl";?>" target="_blank"><img src="<?php echo url::asset("skmm/images/fb-icon.png");?>" width="24" height="24" alt="facebook"></a>
+                <?php if($links['siteInfoFacebookUrl'] != ""):?>
+                    <a href="<?php echo url::createByRoute("api-redirect-link",Array(),true)."?link=$links[siteInfoFacebookUrl]";?>" target="_blank"><img src="<?php echo url::asset("skmm/images/fb-icon.png");?>" width="24" height="24" alt="facebook"></a>
                 <?php endif;?>
                 </div>
             </ul>
