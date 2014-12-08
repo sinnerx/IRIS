@@ -47,7 +47,7 @@ class Controller_Partial
 
 		## SECTION : BOTTOM
 		$siteID = authData('current_site.siteID');
-		$data['articles'] = model::load("blog/article")->getArticlesByCategoryID($siteID,1);
+		$data['articles'] = model::load("blog/article")->getArticlesByCategoryID($siteID,model::load("config")->get("configNewsCategoryID"));
 
 		$data['row_site']	= $this->row_site;
 		$row_latestalbum	=model::load("image/album")->getSiteLatestAlbum($siteID);

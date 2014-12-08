@@ -67,10 +67,12 @@ A module to manage your forum. You may create categories, and etc.
 				<td><?php echo $no++;?>.</td>
 				<td><?php echo $catName;?></td>
 				<td><?php echo $accessLevel;?></td>
-				<td>
-				<a href='<?php echo url::base("forum/category/$row_cat[forumCategoryID]");?>' class='fa fa-bars'></a>
-				<?php if($row_cat['siteID'] != 0):?>
-				<a href='<?php echo url::base("forum/updateCategory/$row_cat[forumCategoryID]");?>' class='fa fa-edit'></a>
+				<td style="text-align:right;">
+					<?php if($row_cat['forumCategoryApprovalStatus'] != 2):?>
+					<a href='<?php echo url::base("forum/category/$row_cat[forumCategoryID]");?>' class='fa fa-bars'></a>
+					<?php if($row_cat['siteID'] != 0):?>
+					<a href='<?php echo url::base("forum/updateCategory/$row_cat[forumCategoryID]");?>' class='fa fa-edit'></a>
+					<?php endif;?>
 				<?php endif;?>
 				<?php echo $iconApprovalStatus;?></td>
 			</tr>
