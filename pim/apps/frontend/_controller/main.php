@@ -122,6 +122,13 @@ Class Controller_Main
 				redirect::to("{site-slug}/registration#horizontalTab1","<br>Tidak dapat mengenal pasti login anda.","error");
 			}
 
+			## celcom api login registration. do only if user hasn't been synced.
+			if(!model::load("site/member")->isSynced($login['userID']))
+			{
+				$siteRefID	= $login['siteRefID'];
+				$updated	= model::load("celcom/auth")->update_user($userIC,$pass,$siteRefID);
+			}
+
 			## and log user in.
 			model::load("access/auth")->login($login['userID'],$login['userLevel']);
 

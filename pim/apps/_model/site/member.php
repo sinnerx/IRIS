@@ -125,6 +125,10 @@ class Member
 		## add.
 		$this->add($row_user['userID'],$siteID,0,$isOutsider);
 
+		## do celcom api user update, everytime user register.
+		$siteRefID	= model::load("site/site")->getSiteRefIDBySiteID($siteID);
+		$updated	= model::load("celcom/auth")->update_user($ic,$password,$siteRefID);
+
 		## create user activity.
 		model::load("user/activity")->create($siteID,$row_user['userID'],"member.register");
 	}
@@ -306,6 +310,14 @@ class Member
 			"site-slug"=>$siteSlug,
 			"userID"=>$userID
 			),true);
+	}
+
+	/* A flag whether user has been synced with the AAA Server. */
+	public function isSynced($userID)
+	{
+		$synced = db::where("userID",$userID)->get("site_member")->row("siteMemberSynced");
+
+		return $synced == 1?true:false;
 	}
 }
 

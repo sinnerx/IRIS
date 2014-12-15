@@ -59,6 +59,10 @@ class Controller_Member
 				redirect::to("member/changePassword","Please complete the field.","error");
 			}
 
+			## do celcom api user update.
+			$siteRefID	= $login['siteRefID'];				
+			$updated	= model::load("celcom/auth")->update_user($ic,$password,$siteRefID);
+
 			## change password.
 			model::load("user/user")->changePasswordByIC(input::get("userIC"),input::get("userPassword"));
 

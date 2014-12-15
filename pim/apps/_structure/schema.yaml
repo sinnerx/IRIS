@@ -227,6 +227,7 @@ site_member:
 	siteMemberStatus [int]			## 0 = in-active, 1 = active.	// activation require payment.
 	siteMemberOutsider [int]		## 1 = yes, 0 = no.
 	siteMemberImported [int]		##  0 = no (new registration), 1 = yes.
+	siteMemberSynced [int]			## 0 = no, 1 = yes. flag whether user has been synced or not.
 
 site_slider:
 	siteSliderID [int]
@@ -477,7 +478,7 @@ token_resetpass:
 	tokenResetpassID [int]
 	tokenID [int]
 	userID [int]
-	tokenResetpassStatus [int] ## 0 = in-active, 1 = active (after user has accessed the link), 2 = reset success. 
+	tokenResetpassStatus [int] ## 0 = in-active, 1 = active (after user has accessed the link), 2 = reset success.
 
 log_login:
 	logLoginID [int]

@@ -1,11 +1,11 @@
-/*@import url(http://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic);*/
-/*@import url(http://fonts.googleapis.com/css?family=Open+Sans:400italic,600italic,700italic,400,300,600,700);*/
+@import url(http://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic);
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:400italic,600italic,700italic,400,300,600,700);
 
-/*@import url(http://fonts.googleapis.com/css?family=Roboto+Condensed:700);*/
+@import url(http://fonts.googleapis.com/css?family=Roboto+Condensed:700);
 BODY{
 padding:0px;
 margin:0px;
-font-family: Arial,Helvetica,sans-serif;
+font-family: 'Lato', sans-serif;
 font-weight:lighter;
 
 }
@@ -413,7 +413,7 @@ margin-top:20px;
 padding-top:30px;
 min-width:430px;
 padding-left:83px;
-margin-left:-35px;
+/*margin-left:-35px;*/
 
 }
 
@@ -508,7 +508,6 @@ z-index:99;
 line-height:110px;
 font-size:80px;
 text-align:center;
-text-shadow: -1px -1px 0px rgba(0,0,0,0.5);
 color:#FFF;
 
 }
@@ -535,7 +534,7 @@ width:230px;
 color:#FFF;
 font-size:20px;
 text-align:center;
-text-shadow: -1px -1px 0px rgba(0,0,0,0.5);
+
 }
 
 
@@ -629,15 +628,14 @@ padding:0px;
 margin-top:27px;
 margin-bottom:27px;
 text-transform:uppercase;
-font-family: Arial,Helvetica,sans-serif;
-font-weight:bold;
+font-family: 'adelle_basic_rgbold';
+font-weight:lighter;
 
 }
 
 h3.block-heading span{
 color:#747474;
 font-size:18px;
-font-weight:lighter;
 
 
 }
@@ -711,7 +709,7 @@ color:#000;
 font-size:14px;
 text-transform:uppercase;
 text-align:center;
-font-family: Arial,Helvetica,sans-serif;
+font-family: 'Open Sans', sans-serif;
 font-weight:bold;
 letter-spacing:-1px;
 border-right:1px solid #e8e8e8;
@@ -750,8 +748,8 @@ height:69px;
 
 
 h3.bottom-heading{
-font-family:Arial,Helvetica,sans-serif;
-font-weight:bold;
+font-family: 'adelle_basic_rgbold';
+font-weight:lighter;
 font-size:30px;
 color:#ef4f91;
 letter-spacing:-1px;
@@ -3279,7 +3277,7 @@ z-index:999;
 	margin-right: auto;
 	position: absolute;
 
-	width: 210px;
+	width: 100px;
 	height: 50px;
 	
 	z-index: 20;
@@ -3294,12 +3292,17 @@ z-index:999;
 }
 #show_button a,
 #hide_button a {
- color: #f2970e;
+color: #f2970e;
     display: block;
-    font-size: 11px;
-    font-weight: bold;
-    line-height: 40px;
+    line-height: 50px;
+    display: block;
     text-align: left;
+	font-weight:bold;
+  /* edit 'ke pi1m lain'*/
+  font-size: 0.7em;
+  position: relative;
+  top: -9px;
+  font-weight: bold;
 }
 
 
@@ -3312,7 +3315,7 @@ z-index:999;
 #show_button a i,
 #hide_button a i {
 	float:right;
-	margin-top:13px;
+	margin-top:18px;
 	
 	
 }
@@ -6336,7 +6339,6 @@ display: block;
     font-weight: bold;
     height: 53px;
     padding: 8px 0 2px 20px;
-	text-shadow: -1px -1px 0px rgba(0,0,0,0.5);
 }
 
 
@@ -6350,7 +6352,6 @@ display: block;
     font-weight: bold;
     height: 30px;
     padding: 8px 0 2px 20px;
-	text-shadow: -1px -1px 0px rgba(0,0,0,0.5);
 }
 
 

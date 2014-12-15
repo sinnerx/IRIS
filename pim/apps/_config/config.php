@@ -3,9 +3,11 @@ $config	= Array();
 $config['current_env']	= "dev";
 $config['default_apps']	= "frontend";
 $config['model_namespace']	= true;
+$config['frontend_template_default']	= "default";
 
 ### domain based configuration :
 $config['domain']['localhost'][]	= Array(
+						"env"=>"dev",
 						"base_url:backend"=>"localhost/digitalgaia/iris/dashboard",
 						"base_url:frontend"=>"localhost/digitalgaia/iris",
 						"asset_url"=>"localhost/digitalgaia/iris/pim/assets",
@@ -14,6 +16,7 @@ $config['domain']['localhost'][]	= Array(
 
 ### domain based configuration :
 $config['domain'][LOCALHOST][]	= Array(
+						"env"=>"dev",
 						"base_url:backend"=>LOCALHOST."/digitalgaia/iris/dashboard",
 						"base_url:frontend"=>LOCALHOST."/digitalgaia/iris",
 						"asset_url"=>LOCALHOST."/digitalgaia/iris/pim/assets",
@@ -22,6 +25,7 @@ $config['domain'][LOCALHOST][]	= Array(
 
 ## live dev
 $config['domain']['dev.celcom1cbc.com'][]	= Array(
+						"env"=>"dev",
 						"base_url:backend"=>"dev.celcom1cbc.com/dashboard",
 						"base_url:frontend"=>"dev.celcom1cbc.com",
 						"asset_url"=>"dev.celcom1cbc.com/pim/assets",
@@ -32,6 +36,7 @@ $config['domain']['dev.celcom1cbc.com'][]	= Array(
 
 ## live pro.
 $config['domain']['pro.celcom1cbc.com'][]	= Array(
+						"env"=>"pro",
 						"base_url:backend"=>"pro.celcom1cbc.com/dashboard",
 						"base_url:frontend"=>"pro.celcom1cbc.com",
 						"asset_url"=>"pro.celcom1cbc.com/pim/assets",
@@ -42,6 +47,7 @@ $config['domain']['pro.celcom1cbc.com'][]	= Array(
 
 ## live production new url.
 $config['domain']['celcom1cbc.com'][]	= Array(
+						"env"=>"pro",
 						"base_url:backend"=>"celcom1cbc.com/dashboard",
 						"base_url:frontend"=>"celcom1cbc.com",
 						"asset_url"=>"celcom1cbc.com/pim/assets",
@@ -51,6 +57,7 @@ $config['domain']['celcom1cbc.com'][]	= Array(
 										);
 
 $config['domain']['www.celcom1cbc.com'][]	= Array(
+						"env"=>"pro",
 						"base_url:backend"=>"www.celcom1cbc.com/dashboard",
 						"base_url:frontend"=>"www.celcom1cbc.com",
 						"asset_url"=>"www.celcom1cbc.com/pim/assets",

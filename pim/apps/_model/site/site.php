@@ -399,6 +399,16 @@ class Site
 
 	}
 
+	public function getSiteRefIDBySiteID($siteID)
+	{
+		return db::where("siteID",$siteID)->get("site")->row("siteRefID");
+	}
+
+	public function getSiteRefIDByUserID($userID)
+	{
+		return db::where("siteID IN (SELECT siteID FROM site_member WHERE userID = ?)",Array($row['userID']))->get("site")->row("siteRefID");
+	}
+
 	## generate a new siteID, if there null siteRefID still unappended, will return false.
 	public function getNewSiteID()
 	{

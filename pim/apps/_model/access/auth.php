@@ -54,6 +54,10 @@ Class Auth
 			return false;
 		}
 
+		## attach site_id to the returned record.
+		$siteRefID	= model::load("site/site")->getSiteRefIDByUserID($row['userID']);
+		$row['siteRefID']	= $siteRefID;
+
 		return $row;
 	}
 
@@ -86,8 +90,8 @@ Class Auth
 
 	public function login($userID,$userLevel)
 	{
-		## set template.
-		session::set("template","default");
+		## set frontend template.
+		session::set("template_frontend",\apps::config("frontend_template_default"));
 
 		## set session : userLevel and userID
 		session::set("userLevel",$userLevel);
