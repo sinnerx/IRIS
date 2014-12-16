@@ -18,9 +18,33 @@
 </script>
 </head>
 
+
+<style type="text/css">
+
+    #header
+    {
+        position: relative;
+    }
+    #login
+    {
+        position: absolute;
+        right: 0;
+        top : -14px;
+        font-size: 12px;
+        
+        margin-right:10px;
+    }
+
+    </style>
+
+
 <body>
     <div id="header">
+         <div id="login">
+          <a href="<?php echo url::base("{site-slug}/registration#horizontalTab1");?>" style="color: #fda319;">Login</a>│<a href="<?php echo url::base("{site-slug}/registration#horizontalTab2");?>"style="color: #fda319;">Register</a>
+          </div>
         <div id="splogo">
+           
         <img src="<?php echo url::asset("frontend_facade/images/celcom_top.jpg");?>" alt="TM">
         </div>
         <div id="siteLogo">
