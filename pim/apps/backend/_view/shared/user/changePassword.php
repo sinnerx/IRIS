@@ -19,7 +19,7 @@ You can change your password here.
 		<div class="panel-body">
 			<label>2. Confirm Password</label>
 			<?php echo form::password("passwordConfirm","class='form-control' placeholder='Please write your password again'");?>
-			<?php echo flash::data("userPassword");?>
+			<?php echo flash::data("passwordConfirm");?>
 		</div>
 		<div class='row'>
 		<div class='col-sm-12'>
