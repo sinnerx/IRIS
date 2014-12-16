@@ -1,0 +1,23 @@
+get from _POST
+input::get();
+
+get from _POST['testitem']
+input::get('testitem');
+
+
+
+## input validation.
+$rules = Array(
+	'_all'=>'required:This is all required.',
+	"myInput"=>Array("callback"=>Array(false,"this will not surpass the validation"))
+				);
+$error = input::validate($rules);
+
+## if has error.
+if($error)
+{
+	## basically set a flashing data. with the current input.
+	input::repopulate();
+	redirect::withFlash($error);
+	redirect::to("some/url");
+}

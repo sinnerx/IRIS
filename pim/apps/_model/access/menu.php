@@ -21,7 +21,9 @@ class Menu extends Data
 									#"Transaction"=>"account/transaction"
 											),
 					"Pages"=>"page/index",
-					"Blog" =>Array("List of Articles"=>"site/article","Add Article"=>"site/addArticle"),
+					"Blog" =>Array(
+							"List of Articles"=>Array("site/article","site/editArticle"),
+							"Add Article"=>"site/addArticle"),
 					"Albums"=>Array("Overview"=>Array("image/album","image/albumPhotos")),
 					"Video Gallery"=>Array("Overview"=>"video/album"),
 					"Activities"=>Array(

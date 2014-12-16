@@ -661,6 +661,11 @@ class Db_instance
 		return $this->sql;
 	}
 
+	public function lastQuery()
+	{
+		return $this->getLastSQL();
+	}
+
 	public function getLastID($table,$column,$row = false)
 	{
 		if(!$row)
