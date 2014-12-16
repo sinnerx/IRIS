@@ -501,7 +501,7 @@ Class Controller_Main
 		## now only get the record from the selected table.
 		## -------------------
 		$no = 1;
-		$result	= [];
+		$result	= Array();
 		$row_no	= 0;
 		$offset	= $offset-1;
 
