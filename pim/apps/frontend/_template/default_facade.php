@@ -568,7 +568,7 @@ if($annList){?>
 <div class="footer">
 <div class="wrap clearfix">
 <div class="copyright">
-Hakcipta Terpelihara © 2013 <a href="#">Pusat Internet 1 Malaysia</a>. All Rights Reserved
+Hakcipta Terpelihara © 2013 <a href="#">Pusat Internet 1 Malaysia</a>. 
 <ul class="clearfix">
 <li><a href="#">Utama</a></li>   <li> <a href="#">  Mengenai Kami</a>   </li>  <li>  <a href="#">   Hubungi Kami</a></li><li>  <a href="#">   Pautan</a></li>
 </ul>

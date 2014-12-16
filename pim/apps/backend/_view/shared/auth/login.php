@@ -246,6 +246,6 @@ function resetPassword()
   </div>
 </div>
 <div class="footer">
-Hakcipta Terpelihara © 2013 Pusat Internet 1 Malaysia. All Rights Reserved</div>
+Hakcipta Terpelihara © 2013 Pusat Internet 1 Malaysia.</div>
 
 </body></html>
