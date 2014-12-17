@@ -149,8 +149,8 @@ class Url
 		return $withBase?url::base($uri):$uri;
 	}
 
-	## alias for self::createByROute
-	public static function route($routeName,$param = Array(),$withBase = false)
+	## alias for self::createByROute but this function set default $withBase as true.
+	public static function route($routeName,$param = Array(),$withBase = true)
 	{
 		return self::createByRoute($routeName,$param,$withBase);
 	}

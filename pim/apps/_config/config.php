@@ -3,7 +3,7 @@ $config	= Array();
 $config['current_env']	= "dev";
 $config['default_apps']	= "frontend";
 $config['model_namespace']	= true;
-$config['frontend_template_default']	= "default";
+$config['frontend_template_default']	= "default_facade";
 
 ### domain based configuration :
 $config['domain']['localhost'][]	= Array(

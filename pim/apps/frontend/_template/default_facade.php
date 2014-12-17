@@ -97,14 +97,19 @@ var $c = jQuery.noConflict();
   </div>
   </div>
 <div class="main-wrap">
-<div class="top-header">
-<div class="wrap clearfix">
-<div class="user-setting">
-<a href="<?php echo url::base("{site-slug}/registration#horizontalTab1");?>" class="rgstr-button">Login</a>
-<a href="<?php echo url::base("{site-slug}/registration#horizontalTab2");?>" class="rgstr-button">Register</a>
-</div>
-</div>
-</div>
+  <div class="top-header">
+    <div class="wrap clearfix">
+      <div class="user-setting">
+      <?php if(!$username):?>
+        <a href="<?php echo url::base("{site-slug}/registration#horizontalTab2");?>" class="rgstr-button">Register</a>
+        <a href="<?php echo url::base("{site-slug}/registration#horizontalTab1");?>" class="rgstr-button">Login</a>
+      <?php else:?>
+        <div style="font-size:13px;">Selamat datang, <a href='<?php echo url::route("profile");?>'><?php echo $username;?></a>
+        <a class='fa fa-power-off' href='<?php echo url::route("logout");?>'></a></div>
+      <?php endif;?>
+      </div>
+    </div>
+  </div>
 <div class="header">
 <div class="wrap">
 <div class="logo">
@@ -570,7 +575,9 @@ if($annList){?>
 <div class="copyright">
 Hakcipta Terpelihara © 2013 <a href="#">Pusat Internet 1 Malaysia</a>. 
 <ul class="clearfix">
-<li><a href="#">Utama</a></li>   <li> <a href="#">  Mengenai Kami</a>   </li>  <li>  <a href="#">   Hubungi Kami</a></li><li>  <a href="#">   Pautan</a></li>
+  <li><a href="<?php echo url::base("{site-slug}");?>">Utama</a></li>
+  <li><a href="<?php echo url::base("{site-slug}/mengenai-kami");?>">Mengenai Kami</a></li>
+  <li><a href="<?php echo url::base("{site-slug}/hubungi-kami");?>">Hubungi Kami</a></li>
 </ul>
 </div>
 </div>

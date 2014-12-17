@@ -176,8 +176,8 @@ $routes['main-index']	= Array("[:site-slug]","controller=main@index");
 $routes[]	= Array("[:site-slug]/registration","controller=main@registration");
 
 ## site login and logout
-$routes[]	= Array("[:site-slug]/login","controller=main@login");
-$routes[]	= Array("[:site-slug]/logout","controller=main@logout");
+$routes[]			= Array("[:site-slug]/login","controller=main@login");
+$routes['logout']	= Array("[:site-slug]/logout","controller=main@logout");
 
 ## site activity
 #$routes[]	= Array("[:site-slug]/activity","controller=activity@index");
