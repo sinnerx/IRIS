@@ -41,6 +41,7 @@ class Db_instance
 	private $whereR		= Array();
 	private $limit		= "";
 	private $joinR		= Array();
+	private $groupBy	= null;
 	public $db			= Null;
 	private $result		= Null;
 	private $sql		= Null;
@@ -232,6 +233,23 @@ class Db_instance
 		$this->whereR[]		= $pre_delimiter."(".$cond.")";
 	}
 
+	public function group_by($col, $order = Null)
+	{
+		$this->groupBy = null;
+
+		$this->clearResult();
+
+		if(is_array($col))
+			$col = implode(", ", $col);
+
+		$this->groupBy = $col;
+
+		if($order)
+			$this->groupBy .= ' '.$order;
+
+		return $this;
+	}
+
 	public function order_by($col,$type = Null)
 	{
 		$this->clearResult();
@@ -289,8 +307,9 @@ class Db_instance
 		$order_by	= count($this->orderbyR) == 0?"":"ORDER BY ".implode(", ",$this->orderbyR);
 		$limit		= $this->limit;
 		$join		= count($this->joinR) == 0?"":implode(" ",$this->joinR);
+		$group_by	= $this->groupBy == null?"":"GROUP BY ".$this->groupBy;
 
-		$this->sql	= "SELECT $columns FROM $table $join $where $order_by $limit";
+		$this->sql	= "SELECT $columns FROM $table $join $where $group_by $order_by $limit";
 
 		return $this->sql;
 	}
@@ -696,6 +715,7 @@ class Db_instance
 		$this->joinR	=
 		$this->orderbyR	= Array();
 		$this->limit	= "";
+		$this->groupBy	= null;
 	}
 
 	## clear result. ran in every query selection builder
