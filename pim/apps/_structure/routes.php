@@ -125,6 +125,7 @@ $routes[]	= Array("api/photo/[:photo-name]/[:size]","controller=api:image@get","
 $routes['api-redirect-useractivity']	= Array("api/redirect/user-activity/[:type]/[:userActivityID]","controller=api:redirect@userActivity","{type},{userActivityID}");
 $routes['api-redirect-link']			= Array("api/redirect/link","controller=api:redirect@link");
 $routes['api-redirect-general']			= Array("api/redirect/[:type]","controller=api:redirect@general","{type}");
+$routes['api-download-ga'] = Array('api/downloadga', 'controller=api:cronjob@downloadga');
 
 ### Frontend Route ####
 

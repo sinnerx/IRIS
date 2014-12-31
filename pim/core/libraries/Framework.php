@@ -54,6 +54,7 @@ class Apps
 		self::loadFunctionLibrary('helper');
 		self::register_autoload_path(refine_path(dirname(__FILE__)."/Services"));		## register services autoload path.
 		self::register_autoload_path(self::$root."apps/_");								## register any class that loaded, without the use of model() class;
+		self::register_autoload_path(self::$root."apps/_library/");
 
 		self::setGlobal("router",$router); 						## save router instance
 		self::initConfig();										## initiate /apps folder config.
