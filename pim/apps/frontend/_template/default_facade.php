@@ -21,6 +21,14 @@ var $c = jQuery.noConflict();
 		});  
     });  
 </script>
+<style type="text/css">
+  
+.fa_border {
+  
+  border-left: 0px solid rgb(252, 236, 208)  !important;
+}
+</style>
+
 </head>
 <body>
 <div id="toppanel">
@@ -99,7 +107,26 @@ var $c = jQuery.noConflict();
 <div class="main-wrap">
   <div class="top-header">
     <div class="wrap clearfix">
+<div class="social-network clearfix" style="padding-left: 250px;height:30px;">
+    <ul>
+      <?php 
+      if($links['siteInfoFacebookUrl']):?>
+      <li class="fa_border"><a target='_blank' href='//<?php echo str_replace(Array("http://","https://"), "", $links['siteInfoFacebookUrl']);?>' class="fa fa-facebook" style="color:#f29746"></a></li>
+      <?php endif;
+      if($links['siteInfoTwitterUrl']):?>
+      <li><a target='_blank' href='//<?php echo str_replace(Array("http://","https://"), "", $links['siteInfoTwitterUrl']);?>' class="fa fa-twitter" style="color:#f29746"></a></li>
+      <?php endif;
+      if($links['siteInfoEmail']):?>
+      <li><a href='mailto:<?php echo $links['siteInfoEmail'];?>' class="fa fa-envelope" style="color:#f29746"></a></li>
+      <?php endif;?>
+      <li class="fa_border"><a target='_blank' href='<?php echo url::base("{site-slug}/blog/rss");?>' class="fa fa-rss" style="color:#f29746"></a></li>
+      
+    </ul>
+  </div>
+
+
       <div class="user-setting">
+
       <?php if(!$username):?>
         <a href="<?php echo url::base("{site-slug}/registration#horizontalTab2");?>" class="rgstr-button">Register</a>
         <a href="<?php echo url::base("{site-slug}/registration#horizontalTab1");?>" class="rgstr-button">Login</a>
@@ -571,6 +598,22 @@ if($annList){?>
 </div>
 </div>
 <div class="footer">
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  //ga('create', 'UA-58096979-1', 'auto');
+  ga('create', 'UA-58096979-1', {'cookieDomain': 'none'});
+  ga('send', 'pageview');
+
+
+</script>
+
+  
 <div class="wrap clearfix">
 <div class="copyright">
 Hakcipta Terpelihara © 2013 <a href="#">Pusat Internet 1 Malaysia</a>. 
