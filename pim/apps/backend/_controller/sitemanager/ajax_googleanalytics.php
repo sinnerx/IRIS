@@ -34,23 +34,49 @@ class Controller_Ajax_Googleanalytics
 	
 
 		$data2["chart"] = array("type" => "line"); 
-		$data2["title"] = array("text" => " User Visit"); 
+		$data2["title"] = array("text" => " Page Views"); 
 		$data2["credits"] = array("enabled" => false); 
 		$data2["navigation"] = array("buttonOptions" => array("align" => "right")); 
 		$data2["series"] = array("data" => array()); 
 		$data2["xAxis"] = array("categories" => array()); 
 
-		foreach($reportG as $rowX)
+
+
+		foreach($reportG as $no=>$rowX)
 		{
+			$date = date("Y-m-d", strtotime($rowX['gaReportDate']));
 
- 			$categoryArray[] = $rowX['gaReportDate'];
- 			$seriesArray[] = $rowX['views']; 
-
+			$reps[$date][] = $rowX;
 		}
+
+		$categoryArray = array();
+		$seriesArray = array();
+
+		$i = 0;
+		for($date = $start; $date <= $end;)
+		{
+			$categoryArray[] = $date;
+			$totalUsers = 0;
+			if(isset($reps[$date]))
+			{
+				foreach($reps[$date] as $rowX)
+				{
+					$totalUsers += $rowX['gaReportSitePageViews'];
+				}
+			}
+
+			$seriesArray[] = $totalUsers;
+			$date = date("Y-m-d", strtotime("+1 day", strtotime($date)));
+		$i++;
+		}
+
 
 		$data2["series"] = array(array("name" => "Visits","data" => $seriesArray)); 
 		$data2["xAxis"] = array("categories" => $categoryArray); 
-		$data2["yAxis"] = array("title" => array("text" => "User"),"allowDecimals" => false); 
+		if ( $i >= 5) {
+		$data2["xAxis"] = array("labels" => array("enabled" => false));
+		}
+		$data2["yAxis"] = array("title" => array("text" => "Views"),"allowDecimals" => false, "min" => 0); 
 
 					$data['data2'] = $data2;
 					$data['data1'] = $data1;

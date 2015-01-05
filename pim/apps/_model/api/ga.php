@@ -32,14 +32,18 @@ class Ga
 			$siteSlug =  $this->getSegment("slug",$result->getPagePath());
 			$siteID = db::where("siteSlug", $siteSlug)->get("site")->row('siteID');
 
+			if ($siteID != null){
+
+
 			db::insert("ga_report", array(
 				'siteID'=> $siteID,
 				'gaReportDate'=> $date,
-				'gaReportSiteSlug'=> $siteSlug),
+				'gaReportSiteSlug'=> $siteSlug,
 				'gaReportSitePage'=> $this->getSegment("page",$result->getPagePath()),
 				'gaReportSitePageViews'=> $result->getPageviews(),
 				'gaReportSiteUsers'=> $result->getusers(),
 				));
+			}
 		}
 	}
 
@@ -47,7 +51,7 @@ class Ga
 
 	
 
-		list($segment1, $segment2, $segment3, $segment4, $segment5) = explode("/", $path);
+		list($segment1, $segment2, $segment3, $segment4, $segment5) = split("/", $path);
 
 
 
@@ -63,7 +67,7 @@ class Ga
 				
 
 					if ($segment2 == "digitalgaia") {	$path = $segment5;	} else {	$path = $segment3;	}
-
+					if ($path == NULL) { $path = '';}
 
 				break;
 			}

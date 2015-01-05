@@ -36,7 +36,7 @@ $('#container').highcharts(options)
       <tr>
         <th width='15px'>No.</th>
         <th width="300px">Page</th>
-        <th>Views</th>
+        <th>Page Views</th>
        
       </tr>
      
@@ -45,10 +45,16 @@ $('#container').highcharts(options)
       $no = 1;
       foreach($data['data3'] as $row)
       {   
+
+
        ?>
       <tr <?php echo $opacity;?>>
         <td><?php echo $no++;?></td>
-        <td><?php echo $row['page'];?></td>
+        <td><?php 
+
+ if ($row['page'] == "") { $page = "(Laman Utama)"; } else { $page = $row['page'];}
+
+        echo $page; ?></td>
         <td><?php echo $row['views'];?></td>
        
         <td>

@@ -57,6 +57,8 @@ Class Controller_GoogleAnalytics
 		$reportG	= model::load("googleanalytics/report")->getGoogleReport($siteID,$start,$end);
 		$reportP	= model::load("googleanalytics/report")->getGooglePage($siteID,$start,$end);
 
+
+
 		$data2["chart"] = array("type" => "line"); 
 		$data2["title"] = array("text" => " User Visit"); 
 		$data2["credits"] = array("enabled" => false); 
@@ -64,17 +66,43 @@ Class Controller_GoogleAnalytics
 		$data2["series"] = array("data" => array()); 
 		$data2["xAxis"] = array("categories" => array()); 
 
-		foreach($reportG as $rowX)
+		foreach($reportG as $no=>$rowX)
+		{
+			$date = date("Y-m-d", strtotime($rowX['gaReportDate']));
+
+			$reps[$date][] = $rowX;
+		}
+
+		$categoryArray = array();
+		$seriesArray = array();
+
+		$i = 0;
+		for($date = $start; $date <= $end;)
 		{
 
- 			$categoryArray[] = $rowX['gaReportDate'];
- 			$seriesArray[] = $rowX['users']; 
+			$categoryArray[] = $date;
+			$totalUsers = 0;
+			if(isset($reps[$date]))
+			{
+				foreach($reps[$date] as $rowX)
+				{
+					$totalUsers += $rowX['gaReportSiteUsers'];
+				}
+			}
 
+			$seriesArray[] = $totalUsers;
+			$date = date("Y-m-d", strtotime("+1 day", strtotime($date)));
+		$i++;
 		}
 
 		$data2["series"] = array(array("name" => "Visits","data" => $seriesArray)); 
 		$data2["xAxis"] = array("categories" => $categoryArray); 
-		$data2["yAxis"] = array("title" => array("text" => "User"),"allowDecimals" => false); 
+		
+		if ( $i >= 5) {
+		$data2["xAxis"] = array("labels" => array("enabled" => false));
+		}
+		
+		$data2["yAxis"] = array("title" => array("text" => "User"),"allowDecimals" => false, "min" => 0); 
 }
 
 		## param for non-root..

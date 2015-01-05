@@ -8,11 +8,10 @@ class Report
 	{
 
 
-		db::select("*, SUM(`gaReportSiteUsers`) as users");
+		db::select("*");
 		db::where('siteID',$siteID);
 		db::where('gaReportDate >=',$start);
 		db::where('gaReportDate <=',$end);
-		db::group_by('gaReportDate');
 		$result = db::get('ga_report')->result();
 
 		return $result;
@@ -32,6 +31,9 @@ class Report
 
 		$result = db::get('ga_report')->result();
 
+echo $this->getLastSQL;
+
+
 		return $result;
 	}
 
@@ -40,12 +42,12 @@ class Report
 	public function getGoogleViewPage($siteID,$page,$start,$end)
 	{
 
-		db::select("gaReportDate, gaReportSitePage, SUM(`gaReportSitePageViews`) as views");
+		db::select("*");
 		db::where('siteID',$siteID);
 		db::where('gaReportSitePage',$page);
 		db::where('gaReportDate >=',$start);
 		db::where('gaReportDate <=',$end);
-		db::group_by('gaReportDate');
+	//	db::group_by('gaReportDate');
 		$result = db::get('ga_report')->result();
 
 
