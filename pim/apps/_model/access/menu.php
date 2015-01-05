@@ -88,7 +88,8 @@ class Menu extends Data
 									),
 					"Report"=>Array(
 							"Monthly Activities"=>"report/monthlyActivity",
-							"Master Listing"=>"report/masterListing"
+							"Master Listing"=>"report/masterListing",
+							"Google Analytics"=>"googleanalytics/report"
 									),
 					/*"Activities"=>"activity/index",
 					"Reports"=>"reports/index"*/

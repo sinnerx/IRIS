@@ -12,52 +12,40 @@ Class Controller_GoogleAnalytics
 
 
 
-	public function test($siteID = null)
+	public function report($siteID = null, $start = null, $end = null)
 	{
-		
-		$start = input::get("startDate");
-		$end = input::get("endDate");
-
+		if(form::submitted())
+		{
+			$start = input::get("startDate");
+			$end = input::get("endDate");
+			$siteID = input::get('siteID');
+			return redirect::to("googleanalytics/report/$siteID/$start/$end");
+		}
 
 		if ($end == "") {	$end = date('Y-m-d');	} 
-			 
 		if ($start == "") {	$start = date('Y-m-d',(strtotime ( '-5 day' , strtotime (date('Y-m-d')) ) )); }
-
+		$data['siteID'] = $siteID ? $siteID : "";
 
 		$site	= model::load("site/site");
 		$data1['stateR']	= model::load("helper")->state();
 
-		## root only.
-		if($siteID)
-		{
-			## Access:roleCheck
-			if(!model::load("access/services")->roleCheck("siteEditRoot"))
-			{
-				redirect::to("../404","Only root is permitted.");
-			}
+		## get site based on manager.
+		$data1['row']	= $site->getSiteByManager();
+		$data1['startDate']	= $start;
+		$data1['endDate']	= $end;
 
-			$data1['row']	= $site->getSite($siteID);
-		}
-		else
-		{
-			## role for site manager check.
-			if(!model::load("access/services")->roleCheck("siteEdit"))
-			{
-				redirect::to("../404","Can be accessed by site manager only.");
-			}
-
-			## get site based on manager.
-			$data1['row']	= $site->getSiteByManager();
-			$data1['startDate']	= $start;
-			$data1['endDate']	= $end;
-
-			$siteID	= authData('site.siteID');
-			$slug = $data1['row']['siteSlug'];
+		// $siteID	= $data1['row']['siteID'];
+		// $slug = $data1['row']['siteSlug'];
 				
 		$reportG	= model::load("googleanalytics/report")->getGoogleReport($siteID,$start,$end);
 		$reportP	= model::load("googleanalytics/report")->getGooglePage($siteID,$start,$end);
 
+		$sites = model::load("site/site")->getAllSite();
 
+		foreach($sites as $row)
+		{
+			$data['sites'][$row['siteID']] = $row['siteName'];
+		}
 
 		$data2["chart"] = array("type" => "line"); 
 		$data2["title"] = array("text" => " User Visit"); 
@@ -103,16 +91,15 @@ Class Controller_GoogleAnalytics
 		}
 		
 		$data2["yAxis"] = array("title" => array("text" => "User"),"allowDecimals" => false, "min" => 0); 
-}
 
 		## param for non-root..
-		$data['disabled']	= model::load("access/services")->roleCheck("siteEditRoot")?"":"disabled";
+		//$data['disabled']	= model::load("access/services")->roleCheck("siteEditRoot")?"":"disabled";
 
-					$data['data3'] = $reportP;
-					$data['data2'] = $data2;
-					$data['data1'] = $data1;
+		$data['data3'] = $reportP;
+		$data['data2'] = $data2;
+		$data['data1'] = $data1;
 
-		view::render("sitemanager/googleanalytics/report",$data);
+		view::render("root/report/gaReport",$data);
 		
 	}
 

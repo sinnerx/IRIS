@@ -28,10 +28,11 @@ class Report
 		db::where('gaReportDate <=',$end);
 		db::group_by('gaReportSitePage');
 		db::order_by('views',DESC);
+		db::limit(10);
 
 		$result = db::get('ga_report')->result();
 
-echo $this->getLastSQL;
+
 
 
 		return $result;
@@ -68,6 +69,11 @@ echo $this->getLastSQL;
 
 		return $row;
 	}
+
+
+
+
+
 
 
 }

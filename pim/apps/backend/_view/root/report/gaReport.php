@@ -60,7 +60,7 @@ $('#container').highcharts(options)
         <td>
           <center>
        
-          <a href="<?php echo url::base('ajax/googleanalytics/detail'); ?>?page=<?php echo $row['page']; ?>&start=<?php echo $data['data1']['startDate']; ?>&end=<?php echo $data['data1']['endDate']; ?>" data-toggle="ajaxModal">
+          <a href="<?php echo url::base('ajax/googleanalytics/detail'); ?>?siteID=<?php echo $siteID; ?>&page=<?php echo $row['page']; ?>&start=<?php echo $data['data1']['startDate']; ?>&end=<?php echo $data['data1']['endDate']; ?>" data-toggle="ajaxModal">
             <i class="fa fa-external-link"></i>
           </a>
           </center>
@@ -81,9 +81,10 @@ $('#container').highcharts(options)
       <table class='table'>
         <tr>
           <td width="150px">Site
-          <?php echo flash::data("siteSlug");?>      
+          <?php echo flash::data("siteID");?>      
           </td>
-          <td><?php echo form::text("siteSlug","size='40' $disabled class='form-control'",$data['data1']['row']['siteSlug']);?></td>  
+          <td>
+            <?php echo form::select("siteID",$sites,null, $siteID);?>
         </tr>
 
          <tr>
