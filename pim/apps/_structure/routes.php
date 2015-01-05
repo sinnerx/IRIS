@@ -151,6 +151,7 @@ if(!session::has("template_frontend")):
 
 	## site landing page
 	$routes[]	= Array("[:site-slug]/blog","controller=skmm:main@blog_latest");
+	$routes['rss-blog']	= Array("[:site-slug]/blog/rss/[:category?]","controller=blog@rss","{category}");
 	$routes[]	= Array("[:site-slug]/blog/[:id]","controller=skmm:main@blog","{id}");
 	$routes[]	= Array("[:site-slug]","controller=skmm:main@index");
 	$routes[] 	= Array("[:site-slug]/mengenai-kami","controller=skmm:main@about");

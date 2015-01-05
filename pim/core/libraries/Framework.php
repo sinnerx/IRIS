@@ -54,7 +54,7 @@ class Apps
 		self::loadFunctionLibrary('helper');
 		self::register_autoload_path(refine_path(dirname(__FILE__)."/Services"));		## register services autoload path.
 		self::register_autoload_path(self::$root."apps/_");								## register any class that loaded, without the use of model() class;
-		self::register_autoload_path(self::$root."apps/_library/");
+		self::register_autoload_path(self::$root."apps/_library/", true);
 
 		self::setGlobal("router",$router); 						## save router instance
 		self::initConfig();										## initiate /apps folder config.
@@ -78,9 +78,9 @@ class Apps
 		return self::$root.($apps_other !== false?$apps_other:self::$apps_folder);
 	}
 
-	public static function register_autoload_path($dir)
+	public static function register_autoload_path($dir, $lowercase = false)
 	{
-		spl_autoload_register(function($class) use ($dir)
+		spl_autoload_register(function($class) use ($dir, $lowercase)
 		{
 			## get last charater from dir.
 			$lastDirChar	= $dir[strlen($dir)-1];
@@ -91,7 +91,7 @@ class Apps
 			$path	= $dir.$class.".php";
 
 			## only for folder with _, in easy word, with model one.
-			if($lastDirChar == "_")
+			if($lastDirChar == "_" || $lowercase)
 			{
 				$path	= refine_path(strtolower($path));
 			}
