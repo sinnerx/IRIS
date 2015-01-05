@@ -21,25 +21,25 @@ Password : 12345
 
 List of site manager for testing (all in semenanjung cluster)
 
-nurulmaliessa@celcom1cbc.com http://p1m.gaia.my/bukit-batu
+nurulmaliessa@celcom1cbc.com http://dev.celcom1cbc.com/bukit-batu
 
-azizah@celcom1cbc.com http://p1m.gaia.my/bukit-rokan
+azizah@celcom1cbc.com http://dev.celcom1cbc.com/bukit-rokan
 
-sitihafiza@celcom1cbc.com http://p1m.gaia.my/bukit-tongkat
+sitihafiza@celcom1cbc.com http://dev.celcom1cbc.com/bukit-tongkat
 
-fauziah@celcom1cbc.com http://p1m.gaia.my/felda-bukit-tangga
+fauziah@celcom1cbc.com http://dev.celcom1cbc.com/felda-bukit-tangga
 
-zakiah@celcom1cbc.com http://p1m.gaia.my/felda-chuping
+zakiah@celcom1cbc.com http://dev.celcom1cbc.com/felda-chuping
 
-erma@celcom1cbc.com http://p1m.gaia.my/felda-mata-air
+erma@celcom1cbc.com http://dev.celcom1cbc.com/felda-mata-air
 
-azwary@celcom1cbc.com http://p1m.gaia.my/felda-rimba-mas
+azwary@celcom1cbc.com http://dev.celcom1cbc.com/felda-rimba-mas
 
-nadia@celcom1cbc.com http://p1m.gaia.my/hj-idris
+nadia@celcom1cbc.com http://dev.celcom1cbc.com/hj-idris
 
-anuarezman@celcom1cbc.com http://p1m.gaia.my/bukit-permai
+anuarezman@celcom1cbc.com http://dev.celcom1cbc.com/bukit-permai
 
-norizzati@celcom1cbc.com http://p1m.gaia.my/bukit-jalor
+norizzati@celcom1cbc.com http://dev.celcom1cbc.com/bukit-jalor
 
 Password : 12345
 
