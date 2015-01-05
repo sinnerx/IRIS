@@ -635,3 +635,12 @@ comment:
 	commentApprovalStatus [int]	## 0 = pending, 1 = approve, 2 = reject, 3 = deleted
 	commentCreatedDate [datetime]
 	commentUpdatedDate [datetime]
+
+ga_report:
+	gaReportID [int]
+	siteID [int]
+	gaReportDate [datetime]
+	gaReportSiteSlug [varchar]
+	gaReportSitePage [varchar]
+	gaReportSitePageViews [int]
+	gaReportSiteUsers [int]

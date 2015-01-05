@@ -43,7 +43,13 @@ class Menu extends Data
 									"List of Member"=>Array("member/lists"),
 									"Change Member Password"=>Array("member/changePassword")
 												),
+							
+					"Report "=>Array(
+									
+									"Google Analytics"=>Array("googleanalytics/test")
+												),
 							);
+					
 
 		$menu['cl']	= Array(
 					"Overview"=>Array(
