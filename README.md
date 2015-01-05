@@ -19,6 +19,10 @@ shamsul@nusuara.com
 
 Password : 12345
 
+Test Member (for felda-bukit-batu)
+user : 890910105115
+pass : 123456
+
 List of site manager for testing (all in semenanjung cluster)
 
 nurulmaliessa@celcom1cbc.com http://p1m.gaia.my/bukit-batu
