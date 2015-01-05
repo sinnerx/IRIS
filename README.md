@@ -21,7 +21,7 @@ Password : 12345
 
 List of site manager for testing (all in semenanjung cluster)
 
-nurulmaliessa@celcom1cbc.com http://dev.celcom1cbc.com/bukit-batu
+nurulmaliessa@celcom1cbc.com http://dev.celcom1cbc.com/felda-bukit-batu
 
 azizah@celcom1cbc.com http://dev.celcom1cbc.com/bukit-rokan
 
