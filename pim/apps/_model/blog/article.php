@@ -1,6 +1,6 @@
 <?php
 namespace model\blog;
-use db, session, model, pagination, url;
+use db, session, model, pagination, url, request as reqs;
 
 class Article
 {
@@ -346,11 +346,12 @@ class Article
 
 	public function getArticleIDBySlug($slug = null, $year = null, $month = null)
 	{
-		$slug	= !$slug?reqs::named("site-slug"):$slug;
-
 		$slug	= trim($slug);
 		db::from("article");
-		db::where("articleSlug = '".$slug."' AND YEAR(articlePublishedDate) = '".$year."' AND MONTH(articlePublishedDate) = '".$month."'");
+		// db::where("articleSlug = '".$slug."' AND YEAR(articlePublishedDate) = '".$year."' AND MONTH(articlePublishedDate) = '".$month."'");
+		db::where('articleSlug', $slug);
+		db::where('YEAR(articlePublishedDate)', $year);
+		db::where('MONTH(articlePublishedDate)', $month);
 		$articleID	= db::get()->row('articleID');
 
 		return $articleID?$articleID:false;

@@ -30,6 +30,12 @@ class Controller_Main
 		view::render("blog",$data);
 	}
 
+	public function blogSlug($year, $month, $slug)
+	{
+		$articleID	= model::load("blog/article")->getArticleIDBySlug($slug, $year, $month);
+		return $this->blog($articleID);
+	}
+
 	public function blog_latest()
 	{
 		$data['res_article']	= db::where("siteID",authData("current_site.siteID"))->limit(10)->order_by("articleID","desc")->get("article")->result("articleID");

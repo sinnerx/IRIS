@@ -151,10 +151,12 @@ Class Controller_Blog
 		foreach ($data as $blog) {
 			// RSS item
 			$item = new \Suin\RSSWriter\Item();
+			$year = date("Y", strtotime($blog['articlePublishedDate']));
+			$month = date("m", strtotime($blog['articlePublishedDate']));
 			$item
 			    ->title($blog['articleName'])
 			    ->description($blog['articleText'])
-			    ->url(url::base("{site-slug}/blog/".$blog['articleSlug']))
+			    ->url(url::base("{site-slug}/blog/$year/$month/".$blog['articleSlug']))
 			    ->appendTo($channel);
 		}
 
