@@ -77,7 +77,14 @@ apps::run(ROOT_FOLDER,function($router)
 		});
 
 		## main dispatch.
-		$router->dispatch();
+		try
+		{
+			$router->dispatch();
+		}
+		catch(\Exception $e)
+		{
+			require_once "exceptionHandler.php";
+		}
 	});
 },$argv);
 
