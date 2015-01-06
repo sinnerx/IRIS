@@ -19,7 +19,7 @@ List of member registered in for site.
 			<div class="col-sm-3 pull-right">
 				<form method="get" id="formSearch"><!-- search form -->
 					<div class="input-group">
-					<input class="input-sm form-control" name="search" placeholder="Search : by IC or by name" value='<?php echo request::get("search");?>' type="text">
+					<input class="input-sm form-control" name="search" placeholder="Search : by IC or by first name" value='<?php echo request::get("search");?>' type="text">
 						<span class="input-group-btn">
 							<button class="btn btn-sm btn-default" type="button" onclick="$('#formSearch').submit();">Go!</button>
 						</span>
@@ -32,7 +32,8 @@ List of member registered in for site.
 		<table class='table'>
 			<tr>
 				<th width='15px'>No.</th>
-				<th width="300px">Name</th>
+				<th width="300px">First Name</th>
+				<th width="199px">Last Name</th>
 				<th>Email</th>
 				<th>I.C.</th>
 				<th width='200px'>Date registered</th>
@@ -57,7 +58,8 @@ List of member registered in for site.
 			?>
 			<tr <?php echo $opacity;?>>
 				<td><?php echo $no++;?></td>
-				<td><?php echo $row['userProfileFullName']." ".$row['userProfileLastName']." $isOutsider";?></td>
+				<td><?php echo $row['userProfileFullName'];?></td>
+				<td><?php echo $row['userProfileLastName']." $isOutsider";?></td>
 				<td><?php echo $row['userEmail'];?></td>
 				<td><?php echo $row['userIC'];?></td>
 				<td><?php echo date("j F Y, g:i A",strtotime($row['userCreatedDate']));?></td>
