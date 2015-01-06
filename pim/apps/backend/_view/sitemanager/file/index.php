@@ -49,12 +49,14 @@ var filemanager	= new function()
 	this.addFolder = function()
 	{
 		var folderID = $("#folder-container #currentFileFolderID").val();
+		window.location.href = "#"+folderID+"/add/foldera"; //this one solve the firefox-grapnel fix, not sure why but it works!
 		window.location.href = "#"+folderID+"/add/folder";
 	}
 
 	this.addFile = function()
 	{
 		var folderID = $("#folder-container #currentFileFolderID").val();
+		window.location.href = "#"+folderID+"/add/filea";
 		window.location.href = "#"+folderID+"/add/file";
 	}
 
