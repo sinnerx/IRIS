@@ -33,15 +33,7 @@
 
 
 </style>
-<div style="position:absolute;top:0px;right:0px;padding:15px;">
-	<div class="input-group-btn" style="display:inline;">
-		<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">Add Files <span class="caret"></span></button>
-		<ul class="dropdown-menu pull-right">
-		<li><a href="#<?php echo $fileFolderID;?>/add/folder">Folder</a></li>
-		<li><a href="#<?php echo $fileFolderID;?>/add/file">File</a></li>
-		</ul>
-	</div>
-</div>
+<input type='hidden' id='currentFileFolderID' value='<?php echo $fileFolderID;?>' />
 <div class='panel-header'>
 	<a href='#' style="font-size:1em;">/ Root</a>
 	<?php

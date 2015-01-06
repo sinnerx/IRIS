@@ -46,6 +46,18 @@ var filemanager	= new function()
 		});
 	}
 
+	this.addFolder = function()
+	{
+		var folderID = $("#folder-container #currentFileFolderID").val();
+		window.location.href = "#"+folderID+"/add/folder";
+	}
+
+	this.addFile = function()
+	{
+		var folderID = $("#folder-container #currentFileFolderID").val();
+		window.location.href = "#"+folderID+"/add/file";
+	}
+
 	this.downloadFile = function(fileID)
 	{
 		if(!confirm("Download this file?"))
@@ -158,6 +170,15 @@ Manage and share you site files.
 	<div class='col-sm-8'>
 		<!-- Ajax loaded container. -->
 		<div class='panel panel-default' style="position:relative;">
+			<div style="position:absolute;top:0px;right:0px;padding:15px;">
+				<div class="input-group-btn" style="display:inline;">
+					<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">Add Files <span class="caret"></span></button>
+					<ul class="dropdown-menu pull-right">
+					<li><a href="javascript:filemanager.addFolder();">Folder</a></li>
+					<li><a href="javascript:filemanager.addFile();">File</a></li>
+					</ul>
+				</div>
+			</div>
 			<div id='folder-container'></div>
 		</div>
 	</div>
