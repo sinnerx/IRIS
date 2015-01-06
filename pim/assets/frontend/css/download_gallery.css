@@ -104,12 +104,21 @@ a.upload-new-button:hover{
 	
 }
 
+/* #203
 .download-folder ul li{
 	width:122px;
 	display:inline-table;
 	margin-right:50px;
 	margin-bottom:30px;
 	
+}*/
+
+.download-folder ul li {
+	display: inline-table;
+	margin-bottom: 30px;
+	margin-right: 50px;
+	max-width: 122px !important;
+	vertical-align: top;
 }
 
 .download-folder ul li:nth-child(4n+4){
@@ -160,6 +169,7 @@ border-radius: 100%;
 }
 
 
+/* #203
 .folder-name{
  color: #009bff;
     font-family: "Lato",sans-serif;
@@ -171,6 +181,20 @@ border-radius: 100%;
 	margin-top:20px;
 	margin-bottom:5px;
 	line-height:15px;
+}*/
+
+.folder-name {
+	color: #009bff;
+	font-family: "Lato",sans-serif;
+	font-size: 18px;
+	font-weight: lighter;
+	line-height: 15px;
+	margin-bottom: 5px;
+	margin-top: 20px;
+	text-align: center;
+	text-transform: uppercase;
+	width: 122px;
+	word-wrap: break-word;
 }
 
 
@@ -191,11 +215,21 @@ border-radius: 100%;
  color: #f2970e;
  
 }
+/* #203
 .folder-info{
 	color:#929292;
 	font-size:12px;
 	font-family:Arial;
 	text-align:center;
+}*/
+
+.folder-info {
+color: #929292;
+font-family: Arial;
+font-size: 12px;
+text-align: center;
+width: 122px;
+word-wrap: break-word;
 }
 
 .file-icon-wrap{
