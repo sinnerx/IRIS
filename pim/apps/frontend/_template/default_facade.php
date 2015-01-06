@@ -23,9 +23,14 @@ var $c = jQuery.noConflict();
 </script>
 <style type="text/css">
   
-.fa_border {
+/*.fa_border {
   
   border-left: 0px solid rgb(252, 236, 208)  !important;
+}*/
+
+.social-network ul li
+{
+  border:0px;
 }
 </style>
 
@@ -111,7 +116,7 @@ var $c = jQuery.noConflict();
     <ul>
       <?php 
       if($links['siteInfoFacebookUrl']):?>
-      <li class="fa_border"><a target='_blank' href='//<?php echo str_replace(Array("http://","https://"), "", $links['siteInfoFacebookUrl']);?>' class="fa fa-facebook" style="color:#f29746"></a></li>
+      <li><a target='_blank' href='//<?php echo str_replace(Array("http://","https://"), "", $links['siteInfoFacebookUrl']);?>' class="fa fa-facebook" style="color:#f29746"></a></li>
       <?php endif;
       if($links['siteInfoTwitterUrl']):?>
       <li><a target='_blank' href='//<?php echo str_replace(Array("http://","https://"), "", $links['siteInfoTwitterUrl']);?>' class="fa fa-twitter" style="color:#f29746"></a></li>
@@ -119,7 +124,7 @@ var $c = jQuery.noConflict();
       if($links['siteInfoEmail']):?>
       <li><a href='mailto:<?php echo $links['siteInfoEmail'];?>' class="fa fa-envelope" style="color:#f29746"></a></li>
       <?php endif;?>
-      <li class="fa_border"><a target='_blank' href='<?php echo url::base("{site-slug}/blog/rss");?>' class="fa fa-rss" style="color:#f29746"></a></li>
+      <li><a target='_blank' href='<?php echo url::base("{site-slug}/blog/rss");?>' class="fa fa-rss" style="color:#f29746"></a></li>
       
     </ul>
   </div>
