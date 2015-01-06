@@ -49,7 +49,7 @@ foreach($folders as $row):?>
 	<div class="file-icon-wrap"><img src="<?php echo url::asset("frontend/images/pdf_icons.png");?>" width="48" height="63"  alt=""/></div>
 	</div>
 	<div class="folder-name"><a onclick='window.location.hash = "<?php echo "$fileFolderID/$row[fileID]";?>";' href="javascript:void(0);"><?php echo $row['fileName'];?></a></div>
-	<div class="folder-info"><?php echo strtoupper($row['fileType']);?></div>
+	<div class="folder-info"><?php echo isset($fileTypes[$row['fileExt']]) ? $fileTypes[$row['fileExt']] : "";?></div>
 </li>
 <?php endforeach;?>
 <?php endif;## for if($files)?>

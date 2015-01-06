@@ -6,6 +6,20 @@ class Controller_Ajax_File
 	public function __construct()
 	{
 		$this->siteID	= authData("current_site.siteID");
+
+		$this->fileTypes = array(
+			'xls'=> 'Excel',
+			'xlsx'=> 'Excel',
+			'ppt'=> 'Powerpoint',
+			'pptx'=> 'Powerpoint',
+			'pdf'=> 'PDF',
+			'jpg'=> 'Gambar',
+			'jpeg'=> 'Gambar',
+			'png'=> 'Gambar',
+			'gif'=> 'Gambar',
+			'doc'=> 'Dokumen',
+			'docx'=> 'Dokumen'
+			);
 	}
 
 	public function openFolder($folderID = 0)
@@ -26,6 +40,8 @@ class Controller_Ajax_File
 		// echo "<pre>";
 		// print_r($files);
 		$files['fileFolderID']	= $folderID;
+		$files['fileTypes'] = $this->fileTypes;
+
 		view::render("file/ajax/openFolder",$files);
 	}
 
