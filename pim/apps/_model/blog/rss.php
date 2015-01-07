@@ -9,7 +9,7 @@ class Rss
 	{
 		db::from("article");
 		db::where("siteID = ? OR siteID = ?",array($siteID,0));
-		db::where("articleApprovedStatus", 1);
+		db::where("articleStatus", 1);
 		db::order_by("articlePublishedDate DESC, articleID DESC");
 
 		$data = db::get()->result("articleID");
