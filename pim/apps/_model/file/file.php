@@ -156,4 +156,24 @@ class File
 
 		return url::createByRoute("file-index",Array("site-slug"=>$row['siteSlug']),true)."#$row[fileFolderID]/$row[fileID]";
 	}
+
+	// return file type based on extension.
+	public function fileTypes($ext = null)
+	{
+		$types = array(
+			'xls'=> 'Excel',
+			'xlsx'=> 'Excel',
+			'ppt'=> 'Powerpoint',
+			'pptx'=> 'Powerpoint',
+			'pdf'=> 'PDF',
+			'jpg'=> 'Gambar',
+			'jpeg'=> 'Gambar',
+			'png'=> 'Gambar',
+			'gif'=> 'Gambar',
+			'doc'=> 'Dokumen',
+			'docx'=> 'Dokumen'
+			);
+
+		return $exe ? $types[$ext] : $types;
+	}
 }

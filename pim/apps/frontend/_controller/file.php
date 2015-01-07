@@ -6,6 +6,8 @@ class Controller_File
 		## build extra condition for privacy.
 		$privacy	= Array(1);
 
+		$data['types'] = model::load("file/file")->fileTypes();
+
 		if(authData("current_site.isMember"))
 			$privacy[]	= 2;
 

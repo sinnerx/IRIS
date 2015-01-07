@@ -7,19 +7,7 @@ class Controller_Ajax_File
 	{
 		$this->siteID	= authData("current_site.siteID");
 
-		$this->fileTypes = array(
-			'xls'=> 'Excel',
-			'xlsx'=> 'Excel',
-			'ppt'=> 'Powerpoint',
-			'pptx'=> 'Powerpoint',
-			'pdf'=> 'PDF',
-			'jpg'=> 'Gambar',
-			'jpeg'=> 'Gambar',
-			'png'=> 'Gambar',
-			'gif'=> 'Gambar',
-			'doc'=> 'Dokumen',
-			'docx'=> 'Dokumen'
-			);
+		$this->fileTypes = model::load("file/file")->fileTypes();
 	}
 
 	public function openFolder($folderID = 0)

@@ -88,7 +88,7 @@ echo model::load("template/frontend")
           <div class="folder-name">
             <a href="#<?php echo "$row[fileFolderID]/$row[fileID]";?>"><?php echo $row['fileName'];?></a>
           </div>
-          <div class="folder-info"><?php echo $row['fileType'];?></div>
+          <div class="folder-info"><?php echo $types[$row['fileExt']];?></div>
         </li>
 
         <?php

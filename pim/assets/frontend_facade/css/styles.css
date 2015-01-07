@@ -1007,12 +1007,20 @@ font-weight:bold;
 }
 
 
+/* #208
 .theme-default .nivoSlider {
 position:relative;
 background:#fff url(../images/loading.gif) no-repeat 50% 50%;
   
 
+}*/
+
+.theme-default .nivoSlider {
+background: url("../images/loading.gif") no-repeat scroll 50% 50% #fff;
+overflow: hidden;
+position: relative;
 }
+
 .theme-default .nivoSlider img {
 position:absolute;
 top:0px;
