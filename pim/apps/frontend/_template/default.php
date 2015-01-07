@@ -62,8 +62,8 @@
 	if(!$username):?>
 	<div class="mobile-cp">
 		<ul>
-		<li><a href="<?php echo url::base("{site-slug}/registration#horizontalTab1");?>">Login</a></li>
-		<li><a href="<?php echo url::base("{site-slug}/registration#horizontalTab2");?>">Register</a></li>
+		<li><a href="<?php echo url::base("{site-slug}/registration#horizontalTab1");?>">Log Masuk</a></li>
+		<li><a href="<?php echo url::base("{site-slug}/registration#horizontalTab2");?>">Daftar</a></li>
 		</ul>
 	</div>
 	<?php endif;?>

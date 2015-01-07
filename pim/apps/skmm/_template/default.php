@@ -46,7 +46,7 @@
 <body>
     <div id="header">
          <div id="login">
-          <a href="<?php echo url::base("{site-slug}/registration#horizontalTab1");?>" style="color: #fda319;">Login</a>│<a href="<?php echo url::base("{site-slug}/registration#horizontalTab2");?>"style="color: #fda319;">Register</a>
+          <a href="<?php echo url::base("{site-slug}/registration#horizontalTab1");?>" style="color: #fda319;">Log Masuk</a> │ <a href="<?php echo url::base("{site-slug}/registration#horizontalTab2");?>"style="color: #fda319;">Daftar</a>
           </div>
         <div id="splogo">
            
