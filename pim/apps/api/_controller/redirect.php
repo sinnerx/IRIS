@@ -37,4 +37,33 @@ class Controller_Redirect
 
 		redirect::to("$link");
 	}
+
+	/**
+	 * A proxy from facebook, to help redirect to localhost based link.
+	 */
+	public function fbProxified()
+	{
+		$gets = array();
+
+		// rebuild _get from fb.
+		foreach(request::get() as $key=>$val)
+		{
+			// rebuild.
+			if($key == "link")
+			{
+				$redirectUrl = base64_decode($val);
+			}
+			else
+			{
+				$gets[] = $key."=".$val;
+			}
+		}
+
+		$parsedUrl = parse_url($redirectUrl);
+
+		// rebuild!
+		$redirectUrl = $redirectUrl. (isset($parsedUrl['query']) ? "&" : "?"). implode("&", $gets);
+
+		redirect::to($redirectUrl);
+	}
 }

@@ -13,3 +13,4 @@ pim/php.ini
 pim/assets/frontend/images/cache/*
 pim/apps/_files/release2
 pim/server/announcement.json
+*.old

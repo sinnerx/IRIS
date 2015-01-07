@@ -122,6 +122,7 @@ $routes[]	= Array("dashboard/[:controller]/[**:method]",function($param)
 $routes[]	= Array("api/photo/[:size]/[:year]/[:month]/[:day]/[:photo-name]","controller=api:image@get","{year},{month},{day},{photo-name},{size}");
 $routes[]	= Array("api/photo/[:year]/[:month]/[:day]/[:photo-name]/[:size]","controller=api:image@get","{year},{month},{day},{photo-name},{size}");
 $routes[]	= Array("api/photo/[:photo-name]/[:size]","controller=api:image@get","{photo-name},{size}"); ## page photo api.
+$routes['api-redirect-fb-proxified']	= Array('api/redirect-fb', 'controller=api:redirect@fbProxified');
 $routes['api-redirect-useractivity']	= Array("api/redirect/user-activity/[:type]/[:userActivityID]","controller=api:redirect@userActivity","{type},{userActivityID}");
 $routes['api-redirect-link']			= Array("api/redirect/link","controller=api:redirect@link");
 $routes['api-redirect-general']			= Array("api/redirect/[:type]","controller=api:redirect@general","{type}");
