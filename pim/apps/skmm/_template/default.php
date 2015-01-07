@@ -46,9 +46,9 @@
 <body>
     <div id="header">
          <div id="login">
-          <a href="<?php echo url::base("{site-slug}/registration#horizontalTab1");?>" style="color: #fda319;">Log Masuk</a> │ <a href="<?php echo url::base("{site-slug}/registration#horizontalTab2");?>"style="color: #fda319;">Daftar</a>
+          <a href="<?php echo url::base("{site-slug}/registration#horizontalTab1");?>" style="color: #fda319;">Log Masuk</a> <span style='font-size:0.8em;color:#fdcf84;'>│</span> <a href="<?php echo url::base("{site-slug}/registration#horizontalTab2");?>"style="color: #fda319;">Daftar</a>
           </div>
-        <div id="splogo">
+        <div id="splogo" style="position:relative;top:10px;">
            
         <img src="<?php echo url::asset("frontend_facade/images/celcom_top.jpg");?>" alt="TM">
         </div>
