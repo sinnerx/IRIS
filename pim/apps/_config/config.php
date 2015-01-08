@@ -11,7 +11,9 @@ $config['domain']['localhost'][]	= Array(
 						"base_url:backend"=>"localhost/digitalgaia/iris/dashboard",
 						"base_url:frontend"=>"localhost/digitalgaia/iris",
 						"asset_url"=>"localhost/digitalgaia/iris/pim/assets",
-						"supportEmail"=>"newrehmi@gmail.com"
+						"supportEmail"=>"newrehmi@gmail.com",
+						"fbAppID"=>"772269416161222",
+						"fbAppSecret"=>"d404c0343d16f5b70c22d120d1ab94c8",
 										);
 
 ### domain based configuration :
@@ -20,7 +22,9 @@ $config['domain'][LOCALHOST][]	= Array(
 						"base_url:backend"=>LOCALHOST."/digitalgaia/iris/dashboard",
 						"base_url:frontend"=>LOCALHOST."/digitalgaia/iris",
 						"asset_url"=>LOCALHOST."/digitalgaia/iris/pim/assets",
-						"supportEmail"=>"newrehmi@gmail.com"
+						"supportEmail"=>"newrehmi@gmail.com",
+						"fbAppID"=>"772269416161222",
+						"fbAppSecret"=>"d404c0343d16f5b70c22d120d1ab94c8",
 										);
 
 ## live dev
