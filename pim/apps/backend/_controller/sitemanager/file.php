@@ -44,6 +44,18 @@ class Controller_File
 
 	private function addFile()
 	{
+		// max size
+		$maxsize = 5000000;
+
+		$exts = array("xls","xlsx",
+				"doc","docx","ppt","pptx",
+				"pps","ppsx","odt","pdf",
+				"png","jpeg","jpg","bmp",
+				"zip","rar","mp3","m4a",
+				"ogg","wav","mp4","m4v",
+				"mov","wmv","avi","mpg",
+				"ogv","3gp","3g2");
+
 		$file	= input::file("fileUpload");
 			
 		$rules	= Array(
@@ -64,6 +76,16 @@ class Controller_File
 
 		$data	= input::get();
 		$data['fileType']	= $file->get("type");
+
+		if(!$file->isExt($exts))
+		{
+			redirect::to("","List of allowed file extension : ". implode(", ", $exts), "error");
+		}
+
+		if($file->get('size') > $maxsize)
+		{
+			redirect::to("", "File size cannot be bigger than ". ($maxsize/1000) . "kb ", "error");
+		}
 
 		## use file name.
 		if($data['fileName'] == "")
