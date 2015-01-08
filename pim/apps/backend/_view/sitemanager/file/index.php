@@ -6,8 +6,20 @@ var router	= new Grapnel;
 var filemanager	= new function()
 {
 	this.currFolder	= 0;
+	this.folderIsOpened = false;
+
+	this.getCurrentLevel = function()
+	{
+		return $("#currentLevel").val();
+	}
+
 	this.openFolder = function(folders)
 	{
+		$("#col-new-file #panel-new-file, #col-new-file #panel-new-folder").hide();
+		$("#js-error").hide();
+
+		this.folderIsOpened = true;
+
 		this.currFolder	= folders;
 		$(".fileFolderID").val(this.currFolder); // at both add new folder and file form.
 		var folders	= folders?folders:"";
@@ -134,8 +146,25 @@ $(document).ready(function()
 {
 	router.add(":id/add/:type",function(req)
 	{
+		if(!filemanager.folderIsOpened)
+		{
+			filemanager.openFolder(req.params.id);
+		}
+
+		$("#js-error").hide();
 		$("#col-new-file").show();
 		$("#col-new-file #panel-new-file, #col-new-file #panel-new-folder").hide();
+
+		if(req.params.type == "folder")
+		{
+			if(filemanager.getCurrentLevel() >= 4)
+			{
+				// alert("Can't create any more folder beyond this level");
+				$("#js-error").show().html("Can't create any more folder beyond this level");
+				return;
+			}
+		}
+
 		switch(req.params.type)
 		{
 			case "file":
@@ -146,10 +175,10 @@ $(document).ready(function()
 			break;
 		}
 	});
-	router.add("*",function(req)
+
+	router.add(":id?",function(req)
 	{
-		var folder	= req.params[0];
-		folder 		= !folder?0:folder.split("/")[0];
+		folder = req.params.id;
 		filemanager.openFolder(folder);
 	});
 })
@@ -168,6 +197,7 @@ $(document).ready(function()
 Manage and share you site files.
 </div>
 <?php echo flash::data();?>
+<div class="alert alert-danger" id='js-error' style="display:none;"></div>
 <div class='row'>
 	<div class='col-sm-8'>
 		<!-- Ajax loaded container. -->
