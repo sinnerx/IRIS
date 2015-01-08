@@ -1,9 +1,11 @@
 <?php
 namespace model\socialmedia\facebook;
-use apps, session;
+use apps, session, model;
 
 /**
  * A core class for dealing with facebook. uses Facebook PHP SDK 4
+ * methods : 
+ * initiate, request, getPage (socialmedia/facebook/page), getPages
  */
 
 class Facebook
@@ -19,6 +21,9 @@ class Facebook
 	 */
 	public function __construct($redirectUrl = null, array $scope = null)
 	{
+		// statically get site id.
+		$this->siteId = authData('site.siteID');
+
 		if($scope)
 			$this->addScope($scope);
 
@@ -53,7 +58,7 @@ class Facebook
 	}
 
 	/**
-	 * Main initiation method for facebook.
+	 * Main initiation method for facebook (use user token by default)
 	 * @param array scopes (add additional scopes to the default or existing one stored in session)
 	 */
 	public function initiate(array $scopes = array())
@@ -66,14 +71,14 @@ class Facebook
 		if(count($scopes) > 0)
 			$this->addScope($scopes);
 
-		if(session::has('facebook.accessToken'))
+		if(session::has('facebook.token.user'))
 		{
-			$session = new \Facebook\FacebookSession(session::get('facebook.accessToken'));
+			$session = new \Facebook\FacebookSession(session::get('facebook.token.user'));
 
 			// de-valid the current accessToken, and create a new one.
 			if(!$this->checkPermission($this->scope, true))
 			{
-				session::destroy('facebook.accessToken');
+				session::destroy('facebook.token');
 				return $this->initiate();
 			}
 
@@ -90,6 +95,10 @@ class Facebook
 			{
 				return false;
 			}
+			catch(\Exception $e)
+			{
+				return false;
+			}
 
 			if(!$session)
 				return false;
@@ -100,21 +109,11 @@ class Facebook
 				return false;
 
 			// save token, and permissions
-			session::set("facebook.accessToken", $session->getToken());
+			session::set("facebook.token.user", $session->getToken());
 			session::set("facebook.scope", $this->getPermissions(true));
 		}
 
 		return $session;
-	}
-
-	private function createRedirectLoginHelper($redirectUrl)
-	{
-		$helper = new \Facebook\FacebookRedirectLoginHelper($redirectUrl);
-		
-		// save the helper.
-		$this->helper = $helper;
-
-		return $helper;
 	}
 
 	/**
@@ -208,14 +207,54 @@ class Facebook
 		return $logoutUrl;
 	}
 
+	public function getPage($pageId)
+	{
+		if(!$pageId)
+		{
+			$siteId = $this->siteId;
+			$pageId = model::load('site/site')->getFacebookPageId($siteId);
+		}
+
+		if(!$pageId)
+			return false;
+
+		return model::load("socialmedia/facebook/page", $this, $pageId);
+	}
+
+	/**
+	 * /me/accounts
+	 */
+	public function getPages()
+	{
+		$data = $this->request('GET', '/me/accounts')->getGraphObject()->asArray();
+		$pages = $data['data'];
+
+		return $pages;
+	}
+
 	/**
 	 * return \Facebook\FacebookResponse
 	 * https://developers.facebook.com/docs/php/FacebookResponse/4.0.0
 	 */
-	public function request($method, $path, $params = null)
+	public function request($method, $path, $params = null, $token = null)
 	{
-		$request = new \Facebook\FacebookRequest($this->session, $method, $path, $params);
+		if($token)
+			$session = new \Facebook\FacebookSession($token);
+		else
+			$session = $this->session;
+
+		$request = new \Facebook\FacebookRequest($session, $method, $path, $params);
 		return $request->execute();
+	}
+
+	private function createRedirectLoginHelper($redirectUrl)
+	{
+		$helper = new \Facebook\FacebookRedirectLoginHelper($redirectUrl);
+		
+		// save the helper.
+		$this->helper = $helper;
+
+		return $helper;
 	}
 }
 

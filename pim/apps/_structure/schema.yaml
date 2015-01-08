@@ -217,6 +217,7 @@ site_info:
 	siteInfoFax [varchar]
 	siteInfoTwitterUrl [varchar]
 	siteInfoFacebookUrl [varchar]
+	siteInfoFacebookPageId [varchar]
 	siteInfoEmail [varchar]
 	siteInfoImage [varchar]
 
