@@ -39,6 +39,11 @@ class Url
 		return implode("/",$newP);
 	}
 
+	public static function current()
+	{
+		return self::getProtocol().$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'];
+	}
+
 	public static function base($path = Null,$withquery = null)
 	{
 		if(strpos($path, '{current-uri}') !== false)
