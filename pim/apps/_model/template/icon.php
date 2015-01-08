@@ -22,7 +22,7 @@ class Icon
 		$title	= $title?"title='$title'":"";
 		$arr[1]	= "<span class='fa fa-stop' style='color:#93e05f;' title='Open for all'></span>";
 		$arr[2]	= "<span class='fa fa-stop' style='color:#7577c8;' title='Open for site member only'></span>";
-		$arr[3]	= "<span class='fa fa-stop' style='color:#aaaaaa;' title='Only me'></span>";
+		$arr[3]	= "<span class='fa fa-stop' style='color:#aaaaaa;' title='Only site manager'></span>";
 
 		return $arr[$no];
 	}

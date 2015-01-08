@@ -228,7 +228,7 @@ Manage and share you site files.
 					</div>
 					<div class="form-group">
 					<label>Privacy</label>
-						<?php echo form::select("fileFolderPrivacy",Array(1=>"Open for all",2=>"Only for site member",3=>"Only me"),"class='form-control'",1);?>
+						<?php echo form::select("fileFolderPrivacy",Array(1=>"Open for all",2=>"Only for site member",3=>"Only site manager"),"class='form-control'",1);?>
 						<?php echo flash::data("fileFolderPrivacy");?>
 					</div>
 					<button type="submit" class="btn btn-sm btn-default">Submit</button>
@@ -255,7 +255,7 @@ Manage and share you site files.
 					</div>
 					<div class="form-group">
 					<label>Privacy</label>
-						<?php echo form::select("filePrivacy",Array(1=>"Open for all",2=>"Only for site member",3=>"Only me"),"class='form-control'",1);?>
+						<?php echo form::select("filePrivacy",Array(1=>"Open for all",2=>"Only for site member",3=>"Only site manager"),"class='form-control'",1);?>
 						<?php echo flash::data("filePrivacy");?>
 					</div>
 					<div class="form-group">
