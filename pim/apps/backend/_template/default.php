@@ -74,6 +74,11 @@
 {
   display:inline;
 }
+
+.slimScrollBar
+{
+  background: white !important;
+}
   
 </style>
 <body class="">
