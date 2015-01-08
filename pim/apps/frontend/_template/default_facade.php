@@ -28,6 +28,21 @@ var $c = jQuery.noConflict();
   border-left: 0px solid rgb(252, 236, 208)  !important;
 }*/
 
+.top-message
+{
+  padding:3px 6px 3px 6px;
+  line-height:normal;
+  width:100%;
+  text-align:center;
+}
+
+.top-message.in-active
+{
+  background: #9d3939;
+  box-shadow: 0px 3px 5px #820000;
+  color:white;
+}
+
 .social-network ul li
 {
   border:0px;
@@ -130,7 +145,7 @@ var $c = jQuery.noConflict();
   </div>
 
 
-      <div class="user-setting">
+      <div class="user-setting" style="position:relative;top:5px;">
 
       <?php if(!$username):?>
         <a href="<?php echo url::base("{site-slug}/registration#horizontalTab2");?>" class="rgstr-button">Register</a>
@@ -142,6 +157,11 @@ var $c = jQuery.noConflict();
       </div>
     </div>
   </div>
+  <?php if(authData("user.memberStatus") == "inactive"):?>
+  <div class='top-message in-active' style="margin-bottom:5px;position:relative;top:15px;">
+  Akaun anda masih belum aktif. Sila buat bayaran RM <?php echo model::load("config")->get("configMemberFee",5);?> kepada pengurus laman di kawasan anda. [<?php echo authData("site.siteName");?>]
+  </div>
+  <?php endif;?>
 <div class="header">
 <div class="wrap">
 <div class="logo">
