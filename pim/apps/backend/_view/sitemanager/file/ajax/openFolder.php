@@ -40,12 +40,15 @@
 	$nextPrivacyMap	= Array(1=>2,2=>3,3=>1);
 	if($header):
 		echo " > ";
+		$level = 1;
 		foreach($header as $row):
 
 		$headers[]	= "<a href='#$row[fileFolderID]'>$row[fileFolderName]</a>";
 
+		$level++;
 		endforeach;
 		echo implode(" > ",array_reverse($headers));
+		echo form::hidden('currentLevel', null, $level);
 	endif;
 	?>
 </div>
