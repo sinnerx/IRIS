@@ -632,7 +632,7 @@ if($annList){?>
   })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
   //ga('create', 'UA-58096979-1', 'auto');
-  ga('create', 'UA-58096979-1', {'cookieDomain': 'none'});
+  ga('create', '<?php echo model::load("api/ga")->gaid; ?>', {'cookieDomain': 'none'});
   ga('send', 'pageview');
 
 

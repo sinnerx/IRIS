@@ -5,9 +5,10 @@ use db,gapi;
 // google analytic class
 class Ga
 {
-	private $email = "hello@digitalgaia.com";
+	public $email = "hello@digitalgaia.com";
 	private $password = "fireinth";
-	private $profileid = "95746416";
+	public $profileid = "95746416";
+	public $gaid = "UA-58096979-1";
 
 	public function downloadReport($startDate, $endDate)
 	{

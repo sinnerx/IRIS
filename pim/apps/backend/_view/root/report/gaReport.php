@@ -80,7 +80,19 @@ $('#container').highcharts(options)
     <div class='table-responsive'>
       <table class='table'>
         <tr>
-          <td width="150px">Site
+
+
+          <td width="200px">Google Analytics Manager <?php echo model::load("api/ga")->email; ?>
+          </td>
+          <td>
+          <div class="doc-buttons">
+             <a href="https://www.google.com/analytics/web/#report/visitors-overview/" target="_blank" class="btn btn-s-md btn-default">Go</a>                             </div>    
+          </div>
+        </td>
+
+      </tr>
+        <tr>
+          <td>Site
           <?php echo flash::data("siteID");?>      
           </td>
           <td>
@@ -88,7 +100,7 @@ $('#container').highcharts(options)
         </tr>
 
          <tr>
-          <td width="150px">Start
+          <td>Start
           
           </td>
           <td><?php echo form::text("startDate", "size = '40' data-date-format='yyyy-mm-dd' class='form-control datepicker-input' ",$data['data1']['startDate']);?></td>  
@@ -98,7 +110,7 @@ $('#container').highcharts(options)
 
         
          <tr>
-          <td width="150px">End
+          <td>End
 
           </td>
           <td><?php echo form::text("endDate", "size ='40' data-date-format='yyyy-mm-dd'  class='form-control datepicker-input'",$data['data1']['endDate']);?></td>  
@@ -108,6 +120,12 @@ $('#container').highcharts(options)
 
       </table>
       <?php echo form::submit("Submit","class='btn btn-primary'");?>
+
+    
+
+
+
+
     </div>
   </div>
   </div>

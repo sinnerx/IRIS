@@ -74,7 +74,7 @@ class Controller_Ajax_Googleanalytics
 		$data2["series"] = array(array("name" => "Visits","data" => $seriesArray)); 
 		$data2["xAxis"] = array("categories" => $categoryArray); 
 		if ( $i >= 5) {
-		$data2["xAxis"] = array("labels" => array("enabled" => false));
+		$data2["xAxis"]["labels"]["enabled"] = false;
 		}
 		$data2["yAxis"] = array("title" => array("text" => "Views"),"allowDecimals" => false, "min" => 0); 
 
