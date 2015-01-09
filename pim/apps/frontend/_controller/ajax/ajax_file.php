@@ -18,7 +18,7 @@ class Controller_Ajax_File
 		if(authData("current_site.isMember"))
 			$privacy[]	= 2;
 
-		$files	= model::load("file/folder")->openFolder($this->siteID,$folderID,$privacy);
+		$files	= model::load("file/folder")->openFolder(array(0, $this->siteID),$folderID,$privacy);
 
 		if($files['folders'])
 		{
