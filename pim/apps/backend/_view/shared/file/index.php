@@ -51,7 +51,7 @@ var filemanager	= new function()
 		{
 			return false;
 		}
-		var url	= pim.base_url+"ajax/file/deleteFile/"+type+"/"+id;
+		var url	= pim.base_url+"ajax/shared/file/deleteFile/"+type+"/"+id;
 		$.ajax({type:"GET",url:url}).done(function(result)
 		{
 			filemanager.openFolder(filemanager.currFolder);

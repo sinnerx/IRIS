@@ -53,6 +53,7 @@ class Controller_File
 			}
 
 			$folderID	= input::get("fileFolderID");
+			$folderID = $folderID == "" ? 0 : $folderID;
 			model::load("file/folder")->addFolder($this->siteID ,$folderID,input::get());
 
 			// return response::json(Array("succes"=>"success"));
