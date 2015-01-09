@@ -47,7 +47,7 @@ foreach($folders as $row):?>
 <li>
 	<div class="file-icon">
 	<div class="file-icon-wrap">
-	<div class="xfile-icon xfile-icon-lg" data-type="<?php echo $row['fileExt'];?>" style="position:relative;top:-10px;"></div>
+	<div class="xfile-icon xfile-icon-lg" data-type="<?php echo $row['fileExt'];?>" style="margin-top:10px;"></div>
 	</div>
 	</div>
 	<div class="folder-name"><a onclick='window.location.hash = "<?php echo "$fileFolderID/$row[fileID]";?>";' href="javascript:void(0);"><?php echo $row['fileName'];?></a></div>
