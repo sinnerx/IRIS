@@ -18,7 +18,7 @@ class Controller_Ajax_File
 			$files['totalDownloads']	= model::load("file/file")->getTotalDownload(array_keys($files['files']));
 		}
 
-		view::render("sitemanager/file/ajax/openFolder",$files);
+		view::render("shared/file/ajax/openFolder",$files);
 	}
 
 	public function newFolder($folderID = 0)
