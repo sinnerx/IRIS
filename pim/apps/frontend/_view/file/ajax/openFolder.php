@@ -27,10 +27,12 @@ endif;
 <?php if($folders):?>
 <?php 
 $no = 1;
-foreach($folders as $row):?>
+foreach($folders as $row):
+$totalF = $totalFiles['folders'][$row['fileFolderID']]+$totalFiles['files'][$row['fileFolderID']];
+	?>
 <li>
 	<div class="folder-icon">
-	<div id="file-count"><i class="fa fa-user"></i> <span><?php echo $no;?></span></div>
+	<div id="file-count"><i class="fa fa-file-text-o" style='position:relative;right:-15px;top:-10px;'></i> <span><?php echo $totalF;?></span></div>
 	</div>
 	<div class="folder-name"><a onclick='window.location.hash = "<?php echo $row['fileFolderID'];?>"' href='javascript:void(0);'><?php echo $row['fileFolderName'];?></a></div>
 	<div class="folder-info">
