@@ -46,7 +46,9 @@ foreach($folders as $row):?>
 <?php foreach($files as $row):?>
 <li>
 	<div class="file-icon">
-	<div class="file-icon-wrap"><img src="<?php echo url::asset("frontend/images/pdf_icons.png");?>" width="48" height="63"  alt=""/></div>
+	<div class="file-icon-wrap">
+	<div class="xfile-icon xfile-icon-lg" data-type="<?php echo $row['fileExt'];?>" style="position:relative;top:-10px;"></div>
+	</div>
 	</div>
 	<div class="folder-name"><a onclick='window.location.hash = "<?php echo "$fileFolderID/$row[fileID]";?>";' href="javascript:void(0);"><?php echo $row['fileName'];?></a></div>
 	<div class="folder-info"><?php echo isset($fileTypes[$row['fileExt']]) ? $fileTypes[$row['fileExt']] : "";?></div>
