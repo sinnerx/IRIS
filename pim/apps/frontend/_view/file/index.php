@@ -84,7 +84,9 @@ echo model::load("template/frontend")
         foreach($latestFiles as $row):?>
         <li>
           <div class="file-icon">
-            <div class="file-icon-wrap"><img src="<?php echo url::asset("frontend/images/pdf_icons.png");?>" width="48" height="63"  alt=""/></div>
+            <div class="file-icon-wrap">
+              <div class="xfile-icon xfile-icon-lg" data-type="<?php echo $row['fileExt'];?>" style="margin-top:10px;"></div>
+            </div>
           </div>
           <div class="folder-name">
             <a href="#<?php echo "$row[fileFolderID]/$row[fileID]";?>"><?php echo $row['fileName'];?></a>
