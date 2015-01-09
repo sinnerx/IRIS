@@ -32,7 +32,12 @@ echo implode(" > ",$newHeaders);
 <!-- <div class="page-sub-wrapper forum-page"> -->
 <div class="download-file clearfix">
 <div class="download-file-image">
+	<?php if(!in_array($fileExt, array("jpg", "jpeg", "png", "bmp"))):?>
+	<div class="xfile-icon xfile-icon-pi1m" data-type="<?php echo $fileExt;?>" style="position:relative;top:-10px;"></div>
+	<?php else:?>
 	<img src="<?php echo $image_url;?>" width="500" height="751"  alt=""/>
+	<?php endif;?>
+
 	<a href="<?php echo url::base("{site-slug}/ajax/file/downloadFile/$fileID");?>" class="upload-new-button">Muat Turun</a>
 </div>
 <div class="download-file-content">

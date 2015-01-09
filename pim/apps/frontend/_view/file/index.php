@@ -1,4 +1,5 @@
 <script type="text/javascript" src='<?php echo url::asset("frontend/js/grapnel.js");?>'></script>
+<link rel="stylesheet" type="text/css" href="<?php echo url::asset("frontend/css/fileicon.css");?>">
 <script type="text/javascript">
   
 var file = new function($)
