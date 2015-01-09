@@ -249,6 +249,10 @@ Manage and share you site files.
 						<?php echo flash::data("fileUpload");?>
 					</div>
 					<div class="form-group">
+					<label>Size Limit</label>
+					<div><?php echo $maxSize;?></div>
+					</div>
+					<div class="form-group">
 					<label>Name</label>
 						<?php echo form::text("fileName","class='form-control' placeholder='Leave empty to use original name'");?>
 						<?php echo flash::data("fileName");?>

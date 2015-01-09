@@ -4,10 +4,23 @@ class Controller_File
 	public function __construct()
 	{
 		$this->siteID = authData('user.userLevel') != 99 ? authData('site.siteID') : 0;
+		$this->maxsize = 5000000;
 	}
 
 	public function index()
 	{
+		$serverFileMaxSize = ini_get("upload_max_filesize");
+		$serverFileMaxSize = substr($serverFileMaxSize, 0, strlen($serverFileMaxSize)-1) * 1000000;
+
+		if($serverFileMaxSize < $this->maxsize)
+		{
+			$data['maxSize'] = ($serverFileMaxSize/1000000)."MB (Server setting)";
+		}
+		else
+		{
+			$data['maxSize'] = ($this->maxsize/1000000)."MB";
+		}
+
 		if(form::submitted())
 		{
 			if(input::get("type") == "file")
@@ -20,7 +33,7 @@ class Controller_File
 			}
 		}
 
-		view::render("shared/file/index");
+		view::render("shared/file/index", $data);
 	}
 
 	public function addFolder($folderID = 0)
@@ -50,7 +63,7 @@ class Controller_File
 	private function addFile()
 	{
 		// max size
-		$maxsize = 5000000;
+		$maxsize = $this->maxsize;
 
 		$exts = array("xls","xlsx",
 				"doc","docx","ppt","pptx",
