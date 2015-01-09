@@ -23,7 +23,7 @@ var filemanager	= new function()
 		this.currFolder	= folders;
 		$(".fileFolderID").val(this.currFolder); // at both add new folder and file form.
 		var folders	= folders?folders:"";
-		var url = pim.base_url+"ajax/file/openFolder/"+folders;
+		var url = pim.base_url+"ajax/shared/file/openFolder/"+folders;
 		$.ajax({type:"GET",url:url}).done(function(result)
 		{
 			$("#folder-container").html(result);
@@ -38,7 +38,7 @@ var filemanager	= new function()
 
 	this.updatePrivacy	 = function(type,id)
 	{
-		$.ajax({type:"GET",url:pim.base_url+"ajax/file/updatePrivacy/"+type+"/"+id}).done(function(span)
+		$.ajax({type:"GET",url:pim.base_url+"ajax/shared/file/updatePrivacy/"+type+"/"+id}).done(function(span)
 		{
 			// re-update uglily. :D
 			$("#privacy-"+type+"-icon"+id).html(span);
@@ -78,7 +78,7 @@ var filemanager	= new function()
 		{
 			return false;
 		}
-		window.location.href = pim.base_url+"ajax/file/download/"+fileID;
+		window.location.href = pim.base_url+"ajax/shared/file/download/"+fileID;
 	}
 
 	this.checkall	= function()
@@ -133,7 +133,7 @@ var filemanager	= new function()
 				break;
 			}
 
-			$.ajax({type:"POST",data:data,url:pim.base_url+"ajax/file/selectedAction/"+action}).done(function(res)
+			$.ajax({type:"POST",data:data,url:pim.base_url+"ajax/shared/file/selectedAction/"+action}).done(function(res)
 			{
 				filemanager.openFolder(filemanager.currFolder);
 			});

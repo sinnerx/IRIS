@@ -86,6 +86,9 @@ class Menu extends Data
 					"Forum"=>Array(
 								"Category"=>Array("forum/category","forum/addCategory","forum/updateCategory")
 									),
+					"File Manager"=>Array(
+							"File Manager"=>Array("file/index")
+						),
 					"Report"=>Array(
 							"Monthly Activities"=>"report/monthlyActivity",
 							"Master Listing"=>"report/masterListing",

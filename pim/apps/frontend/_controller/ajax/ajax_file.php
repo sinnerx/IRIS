@@ -22,7 +22,7 @@ class Controller_Ajax_File
 
 		if($files['folders'])
 		{
-			$files['totalFiles']	= model::load("file/folder")->getTotalFiles(authData("current_site.siteID"),array_keys($files['folders']),$privacy);
+			$files['totalFiles']	= model::load("file/folder")->getTotalFiles(array(0, authData("current_site.siteID")),array_keys($files['folders']),$privacy);
 		}
 
 		// echo "<pre>";
@@ -35,21 +35,20 @@ class Controller_Ajax_File
 
 	public function openFile($file)
 	{
-		$row	= model::load("file/file")->getFile($this->siteID,$file);
+		$row	= model::load("file/file")->getFile(array(0, $this->siteID),$file);
 
 		// $typeBasedImage		= url::asset("frontend/images/pdf_icons.png");
 		$typeBasedImage		= model::load("file/file")->getTypeBasedIcon($row['fileExt']);
 		$row['image_url']	= in_array($row['fileExt'],Array("jpg","jpeg","png","bmp"))?url::base("{site-slug}/ajax/file/image/$file"):$typeBasedImage;
-
 		$row['header']	= model::load("file/folder")->findParents($row['fileFolderID']);
 		view::render("file/ajax/openFile",$row);
 	}
 
 	public function image($fileID)
 	{
-		$row	= model::load("file/file")->getFile(authData("current_site.siteID"),$fileID);
+		$row	= model::load("file/file")->getFile(array(0, authData("current_site.siteID")),$fileID);
 
-		$path	= path::files("site_files/".authData("current_site.siteID")."/".$fileID);
+		$path	= path::files("site_files/".$row['siteID']."/".$fileID);
 
 		header("Content-Type: $row[fileType]");
 		// header("Content-Length: " . filesize($name));
@@ -58,11 +57,11 @@ class Controller_Ajax_File
 
 	public function downloadFile($id)
 	{
-		$row	= model::load("file/file")->getFile(authData("current_site.siteID"),$id);
+		$row	= model::load("file/file")->getFile(array(0, authData("current_site.siteID")),$id);
 
 		$file_name	= $row['fileName'].".".$row['fileExt'];
 
-		$path	= path::files("site_files/".authData("current_site.siteID")."/".$id);
+		$path	= path::files("site_files/".$row['siteID']."/".$id);
 
 		model::load("file/file")->download($id);
 

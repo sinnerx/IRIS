@@ -11,7 +11,7 @@ class Controller_File
 		if(authData("current_site.isMember"))
 			$privacy[]	= 2;
 
-		$data['latestFiles']	= model::load("file/file")->getLatestFiles(authData("current_site.siteID"), $privacy);
+		$data['latestFiles']	= model::load("file/file")->getLatestFiles(array(0, authData("current_site.siteID")), $privacy);
 
 		view::render("file/index",$data);
 	}

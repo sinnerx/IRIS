@@ -1,6 +1,11 @@
 <?php
 class Controller_File
 {
+	public function __construct()
+	{
+		$this->siteID = authData('user.userLevel') != 99 ? authData('site.siteID') : 0;
+	}
+
 	public function index()
 	{
 		if(form::submitted())
@@ -15,7 +20,7 @@ class Controller_File
 			}
 		}
 
-		view::render("sitemanager/file/index");
+		view::render("shared/file/index");
 	}
 
 	public function addFolder($folderID = 0)
@@ -35,7 +40,7 @@ class Controller_File
 			}
 
 			$folderID	= input::get("fileFolderID");
-			model::load("file/folder")->addFolder(authData("site.siteID"),$folderID,input::get());
+			model::load("file/folder")->addFolder($this->siteID ,$folderID,input::get());
 
 			// return response::json(Array("succes"=>"success"));
 			redirect::to("","Added new folder.");
@@ -98,8 +103,8 @@ class Controller_File
 		$data['fileSize']	= $file->get("size");
 		$data['fileExt']	= $file->get("ext");
 
-		$fileID	= model::load("file/file")->addFile(authData("site.siteID"),$data['fileFolderID'],$data);
-		$path	= path::files("site_files/".authData("site.siteID"));
+		$fileID	= model::load("file/file")->addFile($this->siteID,$data['fileFolderID'],$data);
+		$path	= path::files("site_files/".$this->siteID);
 
 		if(!is_dir($path))
 		{

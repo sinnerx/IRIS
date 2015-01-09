@@ -3,9 +3,14 @@ class Controller_Ajax_File
 {
 	var $parameterNumberSkipValidation	= true;
 
+	public function __construct()
+	{
+		$this->siteID = authData('user.userLevel') != 99 ? authData('site.siteID') : 0;
+	}
+
 	public function openFolder($folderId = 0)
 	{
-		$files		= model::load("file/folder")->openFolder(authData("site.siteID"),$folderId);
+		$files		= model::load("file/folder")->openFolder($this->siteID,$folderId);
 		$files['fileFolderID']	= $folderId;
 
 		if($files['files'])
@@ -29,7 +34,7 @@ class Controller_Ajax_File
 				return response::json(Array("error"=>"Name and privacy are required"));
 			}
 
-			model::load("file/folder")->addFolder(authData("site.siteID"),$folderID,input::get());
+			model::load("file/folder")->addFolder($this->siteID,$folderID,input::get());
 
 			return response::json(Array("succes"=>"success"));
 		}
@@ -40,17 +45,17 @@ class Controller_Ajax_File
 		switch($type)
 		{
 			case "folder":
-			model::load("file/folder")->removeFolder(authData("site.siteID"),$id);
+			model::load("file/folder")->removeFolder($this->siteID, $id);
 			break;
 			case "file":
-			model::load("file/file")->removeFile(authData("site.siteID"),$id);
+			model::load("file/file")->removeFile($this->siteID, $id);
 			break;
 		}
 	}
 
 	public function updatePrivacy($type,$id,$privacy = null)
 	{
-		$siteID	= authData("site.siteID");
+		$siteID	= $this->siteID;
 
 		switch($type)
 		{
@@ -68,11 +73,11 @@ class Controller_Ajax_File
 
 	public function download($id)
 	{
-		$row	= model::load("file/file")->getFile(authData("site.siteID"),$id);
+		$row	= model::load("file/file")->getFile($this->siteID, $id);
 
 		$file_name	= $row['fileName'].".".$row['fileExt'];
 
-		$path	= path::files("site_files/".authData("site.siteID")."/".$id);
+		$path	= path::files("site_files/".$this->siteID."/".$id);
 
 		header("Content-Disposition: attachment; filename=\"$file_name\"");
 		readfile($path);
