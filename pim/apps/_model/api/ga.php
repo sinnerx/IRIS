@@ -5,19 +5,23 @@ use db,gapi;
 // google analytic class
 class Ga
 {
-	public $email = "hello@digitalgaia.com";
-	private $password = "fireinth";
-	public $profileid = "95746416";
-	public $gaid = "UA-58096979-1";
+	// shown email.
+	public $email = "";
+
+	// auth email
+	private $authEmail = "support@digitalgaia.com";
+	private $password = "Random12345%";
+	public $profileid = "96215040";
+	public $gaid = "UA-58456563-1";
 
 	public function downloadReport($startDate, $endDate)
 	{
-		$email 		= $this->email;
+		$email 		= $this->authEmail;
 		$password 	= $this->password;
 		$profileid 	= $this->profileid;
 
 		// apps/_library/gapi.php
-		$ga = new gapi($email, $password);
+		$ga = new gapi($authEmail, $password);
 
 		$reportTypes = array('pageviews','users');
 
