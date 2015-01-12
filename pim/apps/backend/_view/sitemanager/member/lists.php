@@ -36,6 +36,7 @@ List of member registered in for site.
 				<th width="199px">Last Name</th>
 				<th>Email</th>
 				<th>I.C.</th>
+				<th style="text-align:center;">KTW Synced</th>
 				<th width='200px'>Date registered</th>
 				<th width='65px'></th>
 			</tr>
@@ -62,6 +63,7 @@ List of member registered in for site.
 				<td><?php echo $row['userProfileLastName']." $isOutsider";?></td>
 				<td><?php echo $row['userEmail'];?></td>
 				<td><?php echo $row['userIC'];?></td>
+				<td style="text-align:center;"><?php echo $row['siteMemberSynced'] == 1? '<span class="fa fa-check" style="color:#6ba631;"></span>': 'Not yet';?></td>
 				<td><?php echo date("j F Y, g:i A",strtotime($row['userCreatedDate']));?></td>
 				<td>
 					<center>

@@ -1,6 +1,6 @@
 <?php
 namespace model\celcom;
-use apps;
+use apps, db;
 class Auth
 {
 	private function encryptlink($p)
@@ -18,7 +18,6 @@ class Auth
 	public function update_user($username, $password, $site_nid, $action = null)
 	{
 		## temporary return until we have a clear go.
-		return;
 		$action		= !$action?(apps::config("env") == "dev"?"test":"update"):$action;
 
 		$p = array();
@@ -36,7 +35,7 @@ class Auth
 
 		$reply=file_get_contents($link);
 
-		if($reply == "OK")
+		if($reply == "OK" || (apps::config("env") == "dev" && $reply != ""))
 		{
 			## update the synced for this user, everytime this function was called.
 			$userID	= db::select("userID")->where("userIC",$username)->get("user")->row("userID");
