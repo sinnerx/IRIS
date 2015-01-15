@@ -32,6 +32,24 @@
 }
 
 </style>
+
+<script type="text/javascript">
+
+function buttonCheck()
+{
+	
+		if(!confirm("Are you sure want to post this article on facebook page."))
+		{
+			return false;
+		}
+	
+
+	return true;
+}
+
+</script>
+
+
 <h3 class="m-b-xs text-black">
 <a href='info'>My Blog Posts</a>
 </h3>
@@ -48,8 +66,8 @@ List of all your approved and pending blog articles.
 			<th class="th-sortable" data-toggle="class">Title
 			</th>
 			<th>Tag(s)</th>
-			<th>Date to be Published</th>
-			<th colspan="2"></th>
+			<th>Date to be Published</th>			
+			<th colspan="3"></th>
 		</tr>
 	</thead>
 	<tbody>
@@ -97,9 +115,13 @@ List of all your approved and pending blog articles.
 			</td>
 			<td><?php echo date("d-m-Y",strtotime($row['articlePublishedDate']));?></td>
 			<td width="29">
-			
-			<a><?php echo model::load('template/icon')->status($row['articleStatus']); ?></a>
+				<a><?php echo model::load('template/icon')->status($row['articleStatus']); ?></a>
 			</td>
+			<?php  if (authData('site.siteInfoFacebookPageId') != ""  ) { ?>
+			<td width="29">
+				<a class="fa fa-facebook-square" style="color:#44609d;" onclick ='return buttonCheck();' href="<?php echo url::base('facebook/getArticleInfo');?>?articleID=<?php echo $row['articleID']; ?>"></a>
+			</td>
+			<? } ?>			
 			<td width="29"><?php if($row['articleStatus'] != 2):?>
 				<a href='<?php echo url::base("site/editArticle/".$row['articleID']);?>' class='fa fa-edit'></a>
 			<?php endif; ?></td>

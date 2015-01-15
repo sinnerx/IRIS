@@ -16,6 +16,7 @@ class Menu extends Data
 					"Site Management"=>Array(
 									"Information"=>Array("site/edit"),
 									"Slider"=>Array("site/slider","site/slider_add","site/slider_edit"),
+									"Facebook"=>"facebook/checkPageId",
 									"Announcement"=>Array("site/announcement","site/editAnnouncement"),
 									"Site Menu"=>"menu/index",
 									#"Transaction"=>"account/transaction"

@@ -430,6 +430,24 @@ class Site
 	{
 		return db::get("site")->result();
 	}
+
+
+public function getFacebookPageId($siteID)
+	{
+
+			db::where("siteID",$siteID);
+			return db::get("site_info")->row("siteInfoFacebookPageId");
+	}
+
+
+	public function setFacebookPageId($id,$pageId)
+	{
+
+			db::where("siteID",$id);
+		
+			db::update("site_info",Array("siteInfoFacebookPageId"=>$pageId));
+		
+	}
 }
 
 ?>

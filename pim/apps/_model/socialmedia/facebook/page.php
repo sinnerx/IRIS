@@ -26,7 +26,7 @@ class Page
 	 */
 	public function postToWall(array $data)
 	{
-		return $this->request('POST', '/me/feed', $data);
+		return $this->request('POST', 'feed', $data);
 	}
 
 	/**
@@ -36,9 +36,10 @@ class Page
 	 * @param string path
 	 * @param array params
 	 */
-	public function request($method, $path, $params = array())
+	public function request($method, $path = null, $params = array())
 	{
-		return $this->facebook->request($method, '/me/'.trim($path, '/'), $params, $this->token);
+		$path = $path? '/me/'.trim($path, '/') : "/me";
+		return $this->facebook->request($method, $path, $params, $this->token);
 	}
 
 	/**

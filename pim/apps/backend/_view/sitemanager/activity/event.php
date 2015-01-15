@@ -4,6 +4,22 @@ Activity : Event
 <div class='well well-sm'>
 List of event activities of your site.
 </div>
+<script type="text/javascript">
+
+function buttonCheck()
+{
+	
+		if(!confirm("Are you sure want to post this event on facebook page."))
+		{
+			return false;
+		}
+	
+
+	return true;
+}
+
+</script>
+<?php echo flash::data();?>
 <section class='panel panel-default'>
 		<div class='row'>
 		<a style="position:relative;right:10px;" href='<?php echo url::base("activity/add#event");?>' class='btn btn-primary pull-right'>Add New Event</a>
@@ -16,7 +32,7 @@ List of event activities of your site.
 				<th width="10%">Type</th>
 				<th>Participation</th>
 				<th colspan="2" width="20%" style='text-align:center;'>Date</th>
-				<th width='80px'></th>
+				<th width='100px'></th>
 			</tr>
 			<?php 
 			if($res_event):
@@ -50,6 +66,7 @@ List of event activities of your site.
 					<td><b>To</b> <?php echo date("d/m/Y",strtotime($endDate));?></td>
 					<?php endif;?>
 				<td><?php echo $statusIcon;?>
+				<a class="fa fa-facebook-square" style="color:#44609d;" onclick ='return buttonCheck();' href="<?php echo url::base('facebook/getActivityInfo');?>?activityID=<?php echo $activityID; ?>&activityType=event"></a>
 				<?php if($status != 2):?>
 					<a href='<?php echo url::base("activity/view/event/$activityID");?>' class='fa fa-search'></a>
 					<a href='<?php echo url::base("activity/edit/$activityID");?>' class='fa fa-edit'></a>

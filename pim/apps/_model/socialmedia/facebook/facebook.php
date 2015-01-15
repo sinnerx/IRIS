@@ -207,7 +207,7 @@ class Facebook
 		return $logoutUrl;
 	}
 
-	public function getPage($pageId)
+	public function getPage($pageId = null)
 	{
 		if(!$pageId)
 		{
