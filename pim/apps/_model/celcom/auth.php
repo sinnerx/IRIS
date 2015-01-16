@@ -35,7 +35,7 @@ class Auth
 
 		$reply=file_get_contents($link);
 
-		if($reply == "OK" || (apps::config("env") == "dev" && $reply != ""))
+		if(trim($reply) == "OK" || (apps::config("env") == "dev" && $reply != ""))
 		{
 			## update the synced for this user, everytime this function was called.
 			$userID	= db::select("userID")->where("userIC",$username)->get("user")->row("userID");
