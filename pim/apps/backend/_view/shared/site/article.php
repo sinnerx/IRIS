@@ -121,7 +121,7 @@ List of all your approved and pending blog articles.
 			<td width="29">
 				<a class="fa fa-facebook-square" style="color:#44609d;" onclick ='return buttonCheck();' href="<?php echo url::base('facebook/getArticleInfo');?>?articleID=<?php echo $row['articleID']; ?>"></a>
 			</td>
-			<? } ?>			
+			<?php } ?>			
 			<td width="29"><?php if($row['articleStatus'] != 2):?>
 				<a href='<?php echo url::base("site/editArticle/".$row['articleID']);?>' class='fa fa-edit'></a>
 			<?php endif; ?></td>
