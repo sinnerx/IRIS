@@ -653,18 +653,23 @@ class Controller
 class Model
 {
 	static $loadedModel	= Array();
+
 	public static function load($model)
 	{
 		$args	= func_get_args();
 
-		## if already got the model just reuse it.
+		## if already got the model just reuse it. except if tempNew is true.
 		if(isset(self::$loadedModel[$model]))
 		{
 			return self::$loadedModel[$model];
 		}
 
-		## else, just create new instance.
+		return self::create($model, $args);
+	}
 
+	public static function create($model, $args = array())
+	{
+		## else, just create new instance.
 		if(!self::_require($model))
 		{
 			return false;
@@ -748,6 +753,12 @@ class Model
 		}
 
 		return true;
+	}
+
+	// feels like implementing orm.
+	public static function orm($model, $param2 = null)
+	{
+		return new \Orm($model, $param2);
 	}
 }
 
@@ -885,6 +896,7 @@ class Template
 class Error
 {
 	private static $errorList	= Array();
+	public static $throwExceptionDisable = false;
 
 	public static function set($name,$val)
 	{
@@ -896,7 +908,14 @@ class Error
 
 		$track				= controller::$loadedListR;
 
-		self::$errorList[$name." ($current)"][]	= Array("message"=>$val,"at"=>$track[count($track)-1],"track"=>$track);
+		// let us now use exception.
+		if(is_array($val))
+			$val = print_r($val, true);
+
+		if(!self::$throwExceptionDisable)
+			throw new Exception("<br>[".$name." ($current)]<br>$val <br>at ".$track[count($track)-1]."<br>Track : <br> - ".implode("<br> - ",$track));
+		
+		// self::$errorList[$name." ($current)"][]	= Array("message"=>$val,"at"=>$track[count($track)-1],"track"=>$track);
 	}
 
 	public static function getErrorParam($type)
