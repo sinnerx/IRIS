@@ -645,3 +645,13 @@ ga_report:
 	gaReportSitePage [varchar]
 	gaReportSitePageViews [int]
 	gaReportSiteUsers [int]
+
+site_newsletter:
+	siteNewsletterID [int]
+	siteID [int]
+	mailChimpListID [varchar]
+	mailChimpCampaignID [varchar]
+	siteNewsletterEdited [int]
+	siteNewsletterSubject [varchar]
+	siteNewsletterTemplate [text]
+	siteNewsletterUpdatedDate [datetime]

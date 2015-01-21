@@ -1,8 +1,63 @@
 <?php
 namespace model\site;
 use db, model, session, request as reqs;
-class Site
+class Site extends \Origami
 {
+	/**
+	 * Orm information.
+	 */
+	protected $table = "site";
+	protected $primary = "siteID";
+
+	## ORM : site_info
+	public function info()
+	{
+		return $this->getOne(array('site_info', 'siteInfoID'), 'siteID');
+	}
+
+	## ORM : site_newsletter.
+	public function getSiteNewsletter()
+	{
+		$siteNL = $this->getOne('site/newsletter', 'siteID');
+		if(!$siteNL)
+		{
+			$siteNL = model::orm('site/newsletter')
+			->create()
+			->set('siteID', $this->siteID)
+			->save();
+		}
+
+		$siteNL->initiate();
+
+		return $siteNL;
+	}
+
+	## ORM : Get site's latest articles
+	public function getLatestArticles()
+	{
+		$latestArticles = model::orm('blog/article')->
+		limit(3)->
+		order_by('articleID', 'desc')->
+		where('siteID', $this->siteID)->
+		where('articleStatus', 1)->
+		execute();
+
+		return $latestArticles;
+	}
+
+	## ORM : get site's latest activities
+	public function getLatestActivities()
+	{
+		$latestActivities = model::orm('activity/activity')
+		->where('siteID', $this->siteID)
+		->where('activityApprovalStatus', 1)
+		->order_by('activityID', 'desc')
+		->limit(3)
+		->execute();
+
+		return $latestActivities;
+	}
+
 	## update table site_info only.
 	public function updateSiteInfo($id,$data)
 	{
@@ -432,7 +487,7 @@ class Site
 	}
 
 
-public function getFacebookPageId($siteID)
+	public function getFacebookPageId($siteID)
 	{
 
 			db::where("siteID",$siteID);
@@ -447,6 +502,22 @@ public function getFacebookPageId($siteID)
 		
 			db::update("site_info",Array("siteInfoFacebookPageId"=>$pageId));
 		
+	}
+
+	public function getNewsletter($siteID)
+	{
+		$newsletter = db::select('mailChimpListID')->where('siteID', $siteID)->get('site_newsletter')->row();
+
+		if(!$newsletter)
+		{
+			db::insert('site_newsletter', array(
+				'siteID'=>$siteID
+				));
+
+			$newsletter = db::getLastID('site_newsletter', 'siteNewsletterID', true);
+		}
+
+		return $newsletter;
 	}
 }
 

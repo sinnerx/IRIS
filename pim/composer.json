@@ -4,6 +4,7 @@
 		"abeautifulsite/simpleimage": "2.5.3",
 		"parsecsv/php-parsecsv": "dev-master",
 		"phpoffice/phpexcel": "dev-master",
-		"suin/php-rss-writer": "1.3"
+		"suin/php-rss-writer": "1.3",
+		"mailchimp/mailchimp": "2.0.6"
 	}
 }

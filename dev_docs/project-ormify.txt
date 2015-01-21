@@ -1,0 +1,7 @@
+IRIS is secretly undergone a project called, ormify. this project basically silently switching to fully using ORM.
+
+few entity already created : 
+- site/site
+- site/newsletter
+- activity/activity
+- blog/article

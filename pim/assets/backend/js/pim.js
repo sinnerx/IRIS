@@ -52,6 +52,35 @@ var pim = function(conf)
 		});
 	}
 
+	this.loader = new function()
+	{
+		this.selector = "#main-content-wrapper";
+
+		$(document).ajaxComplete(function()
+		{
+			pim.loader.stop();
+	    });
+
+		this.start = function(selector)
+		{
+			this.selector = selector ? selector : this.selector;
+			$(selector).addClass("animated fadeOut");
+		}
+
+		this.stop = function()
+		{
+			var selector = this.selector;
+			
+			$(selector).removeClass("fadeOut").addClass("fadeIn flipInX");
+			setTimeout(function()
+			{
+				//remove class after 500ms
+				$(selector).removeClass("fadeIn flipInX");
+			},500);
+
+		}
+	}
+
 	this.ajax	= new function()
 	{
 		this.urlify	= function(selector,container,attrName)

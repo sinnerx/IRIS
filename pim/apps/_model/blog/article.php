@@ -1,9 +1,41 @@
 <?php
 namespace model\blog;
-use db, session, model, pagination, url, request as reqs;
+use db, session, model, pagination, url, request as reqs, apps;
 
-class Article
+class Article extends \Origami
 {
+	protected $table = "article";
+	protected $primary = "articleID";
+
+	/**
+	 * ORM : Simplify article text
+	 */
+	public function getSimplifiedText($length = 100)
+	{
+		$stripped = strip_tags($this->articleText);
+		return substr($stripped, 0, $length);
+	}
+
+	/**
+	 * ORM : get frontend link for $this article.
+	 */
+	public function getFrontendLink()
+	{
+		$siteSlug = $this->getSite()->siteSlug;
+		$base_url = 'http://'.apps::config('base_url:frontend').'/'.$siteSlug.'/blog';
+		$url = model::load("helper")->buildDateBasedUrl($this->articleSlug, $this->articlePublishedDate, $base_url);
+
+		return $url;
+	}
+
+	/**
+	 * ORM : Get site
+	 */
+	public function getSite()
+	{
+		return $this->getOne('site/site', 'siteID');
+	}
+
 	# return an array of article list
 	public function getArticleList($siteID,$frontend = false,$page = 1)
 	{

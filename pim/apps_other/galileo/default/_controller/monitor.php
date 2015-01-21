@@ -16,6 +16,7 @@ Class Controller_Monitor
 	## execute ?db_update actually, from other apps.
 	public function update()
 	{
+		error::$throwExceptionDisable = true;
 		## redirect back to schema using js.
 		echo "<script type='text/javascript'>window.location.href = 'schema';</script>";
 

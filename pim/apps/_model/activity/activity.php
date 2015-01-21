@@ -1,8 +1,11 @@
 <?php
 namespace model\activity;
 use model, db, session, pagination, url;
-class Activity
+class Activity extends \Origami
 {
+	protected $table = 'activity';
+	protected $primary = 'activityID';
+
 	public function type($no = null)
 	{
 		$arr	= Array(

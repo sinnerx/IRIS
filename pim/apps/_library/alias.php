@@ -19,4 +19,20 @@ function authData($params = null)
 	return model::load("access/auth")->getAuthData($param1,$param2);
 }
 
+function orm($model, $param2 = null)
+{
+	return model::orm($model, $param2);
+}
+
+// return site entity
+// for now it will dual query.
+function site()
+{
+	$siteID = authData('site.siteID');
+	if(!$siteID)
+		return false;
+
+	return orm('site/site')->find($siteID);
+}
+
 ?>

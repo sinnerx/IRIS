@@ -21,6 +21,10 @@ class Menu extends Data
 									"Site Menu"=>"menu/index",
 									#"Transaction"=>"account/transaction"
 											),
+					"Newsletter"=>Array(
+						"Template"=>"newsletter/template",
+						"Subscribers"=>"newsletter/subscribers"
+						),
 					"Pages"=>"page/index",
 					"Blog" =>Array(
 							"List of Articles"=>Array("site/article","site/editArticle"),
@@ -68,7 +72,8 @@ class Menu extends Data
 							#"Manager"=>Array("manager/lists","manager/add","manager/edit"),
 							"General Slider"=>Array("site/slider","site/slider_edit"),
 							"Cluster"=>Array("cluster/lists","cluster/assign"),
-							"Message"=>Array("site/message","site/messageView")
+							"Message"=>Array("site/message","site/messageView"),
+							"Newsletter"=>"newsletter/index"
 									),/*
 					"Cluster"=>Array(
 							"Cluster List"=>Array("cluster/lists"),
