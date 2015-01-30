@@ -168,7 +168,6 @@ Class Controller_Main
 			$icCheck	= Array(!model::load("user/services")->checkIC($ic),"Telah didaftarkan");
 			#$icCheck	= $icCheck[0]?(is_numeric($ic)?Array(true):Array(false,"IC mestilah nombor yang betul")):$icCheck;
 			$icCheck	= $icCheck[0]?((ctype_alnum($ic) || is_numeric($ic)) && !ctype_alpha($ic))?Array(true):Array(false,"Mestilah nombor atau alpha-numeric"):$icCheck;
-		
 			$rules	= Array(
 					"userProfileFullName,userProfileLastName"=>"required:Maklumat ini diperlukan",
 					"userProfileGender,userProfileOccupationGroup"=>"required:Diperlukan",
@@ -179,6 +178,9 @@ Class Controller_Main
 					"userPassword"=>Array(
 							"callback"=>Array((strlen($password) >= 6),"Minimum kata laluan adalah 6 karakter")
 										),
+					'userPassword,userPasswordConfirm'=> array(
+							'callback'=>Array(input::get('userPassword') == input::get('userPasswordConfirm'), 'Kata laluan tidak sama!')
+						)
 							);
 
 			$isOutsider		= input::get("checkPenduduk")?0:1;

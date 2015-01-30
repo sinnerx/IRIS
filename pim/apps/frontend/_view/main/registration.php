@@ -45,7 +45,7 @@ input
 }
 .main-container
 {
-    min-height:850px;
+    min-height:900px;
 }
 
 ul.front-tab li
@@ -120,7 +120,8 @@ ul.front-tab li:hover
                  
                  <label>KATA LALUAN <?php echo flash::data("userPassword");?></label>
                  <?php echo form::password("userPassword","class='name password-login' placeholder='Kata Laluan Anda'");?>
-                 
+                 <label>ULANG KATA LALUAN <?php echo flash::data("userPasswordConfirm");?></label>
+                 <?php echo form::password("userPasswordConfirm","class='name password-login' placeholder='Kata Laluan Anda'");?>
                  <label>Tarikh Lahir <?php echo flash::data("birthday_month",flash::data("birthday_day"),flash::data("birthday_year"));?></label>
                  <div class="dob clearfix">
                  <div class="dob-month">
