@@ -25,7 +25,7 @@ class Controller_Cronjob
 
 	}
 
-	public function blastNotification()
+	public function blastNewsletter()
 	{
 		$result = model::orm('site/site')->execute();
 

@@ -127,7 +127,7 @@ $routes['api-redirect-useractivity']	= Array("api/redirect/user-activity/[:type]
 $routes['api-redirect-link']			= Array("api/redirect/link","controller=api:redirect@link");
 $routes['api-redirect-general']			= Array("api/redirect/[:type]","controller=api:redirect@general","{type}");
 $routes['api-download-ga'] = Array('api/downloadga', 'controller=api:cronjob@downloadga');
-$routes['api-notification'] = Array('api/blastnotification', 'controller=api:cronjob@blastNotification');
+$routes['api-notification'] = Array('api/blastnewsletter', 'controller=api:cronjob@blastNewsletter');
 
 ### Frontend Route ####
 
