@@ -1,8 +1,14 @@
 <?php
 namespace model\site;
 use db, model, pagination, session, url;
-class Member
+class Member extends \Origami
 {
+	/**
+	 * ORM information
+	 */
+	protected $table = "site_member";
+	protected $primary = "siteMemberID";
+
 	public function getMemberListBySite($cols = "*",$cond = null,$join = null,$limit = null,$order = null,$pageConf = null,$siteID = null)
 	{
 		db::from("site_member");

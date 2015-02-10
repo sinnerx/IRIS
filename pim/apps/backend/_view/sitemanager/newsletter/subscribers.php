@@ -1,10 +1,11 @@
 <h3 class='m-b-xs text-black'>Subscribers</h3>
 <div class='well well-sm'>
-List of subscribers to your mailing lists.
+List of subscribers to your mailing lists. <?php if($subscribers):?><a href='<?php echo url::base('newsletter/syncSubscriber');?>' class='label label-primary'>Sync</a><?php endif;?>
 </div>
 <?php echo flash::data();?>
 <div class="row">
 	<div class="col-sm-6">
+		<?php if($subscribers):?>
 		<div class='table-responsive'>
 			<table class='table'>
 				<tr>
@@ -20,9 +21,16 @@ List of subscribers to your mailing lists.
 				<?php $no++;?>
 				<?php endforeach;?>
 				<?php else:?>
-
+					<tr>
+						<td colspan="2">No email(s) subscribed to this list yet.</td>
+					</tr>
 				<?php endif;?>
 			</table>
 		</div>
+		<?php else:?>
+		<div>
+			This site hasn't been connected to any mailchimp list ID yet. Please contact the superadmin.
+		</div>
+		<?php endif;?>
 	</div>
 </div>

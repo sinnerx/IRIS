@@ -5,7 +5,6 @@ apps::run(ROOT_FOLDER,function($router)
 {
 	$router->add("domain:all",function($param) use($router)
 	{
-
 		## check announcement today.
 		if($text = model\server::hasAnnouncement(date("Y-m-d")))
 		{
@@ -42,6 +41,13 @@ apps::run(ROOT_FOLDER,function($router)
 					require_once "../../php_scripts/gitpull.php";
 				});
 			}
+
+			## custom per request
+			# 1. webmail
+			$router->add('webmail', function()
+			{
+				header('location:http://celcom1cbc.com/webmail');
+			});
 
 			## require main routes;
 			$router->add("apps/_structure/routes.php");

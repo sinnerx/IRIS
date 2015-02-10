@@ -58,6 +58,21 @@ class Site extends \Origami
 		return $latestActivities;
 	}
 
+	/**
+	 * ORM : Get all members that has mail.
+	 * @return \site\member
+	 */
+	public function getMailedMembers()
+	{
+		$members = model::orm("site/member")
+		->where('siteID', $this->siteID)
+		->where('site_member.userID IN (SELECT userID FROM user WHERE userEmail != "")')
+		->join('user', 'user.userID = site_member.userID')
+		->execute();
+
+		return $members;
+	}
+
 	## update table site_info only.
 	public function updateSiteInfo($id,$data)
 	{

@@ -655,3 +655,11 @@ site_newsletter:
 	siteNewsletterSubject [varchar]
 	siteNewsletterTemplate [text]
 	siteNewsletterUpdatedDate [datetime]
+
+site_newsletter_push:
+	siteNewsletterPushID [int]
+	siteNewsletterPushStatus [int] ## 0 = pending, 1 = success
+	siteNewsletterPushSameContent [int] ## serialized list of site that use the same content
+	siteNewsletterPushEmpty [int] ## serialized list of not pushed content due to an empty subject/message
+	siteNewsletterPushTotalSite [int] ## serialized list of total site
+	siteNewsletterPushDate [datetime]

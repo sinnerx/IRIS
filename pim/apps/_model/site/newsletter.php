@@ -2,6 +2,9 @@
 namespace model\site;
 use model;
 
+/**
+ * Fully used as ORM.
+ */
 class Newsletter extends \Origami
 {
 	protected $table = "site_newsletter";
@@ -25,6 +28,10 @@ class Newsletter extends \Origami
 	public function mail($prod = false)
 	{
 		$newsletter = $this->newsletter;
+
+		// don't do anything if subject or newsletter is empty.
+		if($this->siteNewsletterSubject == '' || $this->siteNewsletterTemplate == '')
+			return false;
 
 		if($this->siteNewsletterEdited == 1 || $this->mailChimpCampaignID == '')
 		{
@@ -65,6 +72,25 @@ class Newsletter extends \Origami
 		$updateCount = $response['update_count'];
 
 		return $this;
+	}
+
+	/**
+	 * Sync this site members into mailchimps
+	 */
+	public function syncSubscribers()
+	{
+		$members = $this->getSite()->getMailedMembers();
+
+		$mails = array();
+		foreach($members as $member)
+		{
+			$mails[] = $member->userEmail;
+		}
+
+		if(count($mails) > 0)
+		{
+			$this->addSubscriber($mails);
+		}
 	}
 
 	public function getSubscribers()

@@ -106,7 +106,7 @@ $(document).ready(function()
 Newsletter
 </h3>
 <div class='well well-sm'>
-Configure the template of your newsletter.
+Configure the template of your newsletter. This newsletter would be sent by our system <u>weekly</u>. An email with empty subject or body will not be sent.
 </div>
 <?php echo flash::data();?>
 <form method='post'>

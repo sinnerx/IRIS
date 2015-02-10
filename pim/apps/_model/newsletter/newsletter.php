@@ -7,11 +7,14 @@ use apps, db, model;
  */
 class Newsletter
 {
-	private $apiKey = "befd0314e7e5820f454e52f707bfbcea-us9";
+	// private $apiKey = "befd0314e7e5820f454e52f707bfbcea-us9";
+	private $apiKey = "2c0c8f692e8b49dd52f5946e0a14c91b-us10";
 
 	// app info
-	private $clientID = "431097412016";
-	private $clientSecret = "f34f516c319ec8fe4d80b0d4d8d5fb4e";
+	// private $clientID = "431097412016";
+	private $clientID = "581101117935";
+	// private $clientSecret = "f34f516c319ec8fe4d80b0d4d8d5fb4e";
+	private $clientSecret = "b413b5e7df485ffee09a93f7e6f73fb7";
 
 	// mailChimpListID
 	public $listId = null;

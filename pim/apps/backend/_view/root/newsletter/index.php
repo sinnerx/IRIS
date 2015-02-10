@@ -100,6 +100,7 @@ List of site integrated with mailchimp.
 			<thead>
 				<tr>
 					<th>Mailchimp List ID</th>
+					<th>Name</th>
 					<th width="60px">Status</th>
 					<th></th>
 				</tr>
@@ -114,6 +115,7 @@ List of site integrated with mailchimp.
 			?>
 			<tr class='mailchimp<?php echo $id;?>'>
 				<td><?php echo $id;?></td>
+				<td><?php echo $row['name'];?></td>
 				<td><?php echo $status;?>
 				<?php if($status == "used"):?>
 				<?php endif;?>

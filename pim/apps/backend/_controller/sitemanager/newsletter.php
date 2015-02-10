@@ -31,11 +31,17 @@ class Controller_Newsletter
 	{
 		$siteNL = site()->getSiteNewsletter();
 
-		// $siteNL->addSubscriber(array('newrehmi@gmail.com', 'rahimie@digitalgaia.com', 'azrul@digitalgaia.com', 'ifa@digitalgaia.com'));
-
-		$data['subscribers'] = $siteNL->getSubscribers();
+		$data['subscribers'] = $siteNL->isConnected() ? $siteNL->getSubscribers() : false;
 
 		view::render("sitemanager/newsletter/subscribers", $data);
+	}
+
+	public function syncSubscriber()
+	{
+		$siteNL = site()->getSiteNewsletter();
+		$siteNL->syncSubscribers();
+
+		redirect::to('newsletter/subscribers', 'Site mails synced.');
 	}
 
 	public function trySend()
@@ -47,6 +53,7 @@ class Controller_Newsletter
 		if(!$siteNL->isConnected())
 			return;
 
+		// will send to rahimie@digitalgaia.com
 		$siteNL->mail(false);
 	}
 }
