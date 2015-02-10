@@ -38,6 +38,11 @@ class Origami
 
 		$primaryCol = $this->primary;
 
+		if(isset($data[$primaryCol]))
+		{
+			unset($data[$primaryCol]);
+		}
+
 		if(!$this->modelData['isNew'])
 		{
 			db::where($primaryCol, $this->$primaryCol)->update($this->table, $data);
