@@ -55,7 +55,7 @@
 		{
 			echo "<div class='row'><div class='col-sm-12 state-name'>$stateName</div></div>";
 
-			echo "<div class='row'>";
+			echo "<div class='row' style='margin-bottom:20px;'>";
 			foreach($res_site[$stateID] as $row)
 			{
 				$siteID	= $row['siteID'];

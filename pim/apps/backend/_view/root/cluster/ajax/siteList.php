@@ -26,6 +26,12 @@
 	<h4><?php echo $clusterName;?> : List of site</h4>
 	</div>
 	<div class='panel-body' id='site-add'>
+	<p>
+		List of existing site(s) assigned to this cluster.
+		<?php if($res_site):?>
+		<a href='#' onclick='cluster.getAddForm(<?php echo $clusterID;?>);' class='label label-primary'>Add more site.</a>
+		<?php endif;?>
+	</p>
 	<div class='row'><div class='col-sm-12' style='padding-left:20px;padding-right:20px;'>
 		<?php
 		if($res_site):
