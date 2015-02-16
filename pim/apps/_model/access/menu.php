@@ -22,6 +22,7 @@ class Menu extends Data
 									#"Transaction"=>"account/transaction"
 											),
 					"Newsletter"=>Array(
+						"Push"=>"newsletter/push",
 						"Template"=>"newsletter/template",
 						"Subscribers"=>"newsletter/subscribers"
 						),
