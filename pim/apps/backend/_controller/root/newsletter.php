@@ -5,6 +5,15 @@ class Controller_Newsletter
 	{
 		db::from('site');
 
+		if($siteID = request::get('disconnect'))
+		{
+			$site = model::orm('site/site')->find($siteID);
+
+			$site->getSiteNewsletter()->unlink();
+
+			redirect::to('newsletter/index');
+		}
+
 		// pagination::initiate(Array(
 						// "totalRow"=>db::num_rows(),
 						// "currentPage"=>$page,

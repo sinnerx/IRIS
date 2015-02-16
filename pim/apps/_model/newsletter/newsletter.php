@@ -77,17 +77,19 @@ class Newsletter
 		return $this->mc->campaigns->create('regular', $options, $content);
 	}
 
+	public function sendTestCampaign($id, array $emails)
+	{
+		$campaigns = $this->mc->campaigns;
+		return $campaigns->sendTest($id, $emails);
+	}
+
 	/**
 	 * Send the campaign.
 	 */
-	public function sendCampaign($id, $prod = false)
+	public function sendCampaign($id)
 	{
 		$campaigns = $this->mc->campaigns;
-
-		if(!$prod)
-			return $campaigns->sendTest($id, array('rahimie@digitalgaia.com'));
-		else
-			return $campaigns->send($id);
+		return $campaigns->send($id);
 	}
 
 	public function addSubscriber(array $arrays, $listId = null)

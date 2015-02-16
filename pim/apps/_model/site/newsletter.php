@@ -1,6 +1,6 @@
 <?php
 namespace model\site;
-use model;
+use model, session, db;
 
 /**
  * Fully used as ORM.
@@ -19,32 +19,70 @@ class Newsletter extends \Origami
 		$this->newsletter->setListID($this->mailChimpListID);
 	}
 
-	## ORM : relation - get site
+	/**
+	 * Unset mailChimpListID
+	 */
+	public function unlink()
+	{
+		$this->mailChimpListID = '';
+		$this->save();
+	}
+
+	/**
+	 * Get site.
+	 */
 	public function getSite()
 	{
 		return $this->getOne('site/site', 'siteID');
 	}
 
-	public function mail($prod = false)
+	/**
+	 * Get latest \site\newsletter\send
+	 */
+	public function getLatestMailpush()
 	{
-		$newsletter = $this->newsletter;
+		return model::orm('site/newsletter/mailpush')->where('siteID', $this->siteID)->order_by('siteNewsletterMailpushID', 'desc')->execute();
+	}
 
-		// don't do anything if subject or newsletter is empty.
-		if($this->siteNewsletterSubject == '' || $this->siteNewsletterTemplate == '')
-			return false;
+	/**
+	 * Check if newsletter has been sent for the date.
+	 */
+	public function hasSend($date)
+	{
+		$res = db::where('siteID', $this->siteID)->where("date(siteNewsletterSendDate)", $date)->result()->execute();
 
+		return $res ? true : false;
+	}
+
+	protected function prepareNewsletter()
+	{
 		if($this->siteNewsletterEdited == 1 || $this->mailChimpCampaignID == '')
 		{
 			if($this->mailChimpCampaignID == '')
 			{
-				$detail = $newsletter->createCampaign('newrehmi@gmail.com', 'remi', $this->siteNewsletterSubject, $this->prepareTemplate());
+				$detail = $this->newsletter->createCampaign('newrehmi@gmail.com', 'remi', $this->siteNewsletterSubject, $this->prepareTemplate());
 				$cID = $detail['id'];
 			}
 			// just update the campaign.
 			else
 			{
-				$detail = $newsletter->mc->campaigns->update($this->mailChimpCampaignID, 'content', array('html'=> $this->prepareTemplate()));
-				$cID = $detail['data']['id'];
+				try
+				{
+					$campaigns = $this->newsletter->mc->campaigns;
+
+					$detail = $campaigns->update($this->mailChimpCampaignID, 'options', array('subject'=> $this->siteNewsletterSubject, 'title'=> $this->siteNewsletterSubject));
+					$detail = $campaigns->update($this->mailChimpCampaignID, 'content', array('html'=> $this->prepareTemplate()));
+					
+					$cID = $detail['data']['id'];
+				}
+				catch(\Exception $e)
+				{
+					$this->mailChimpCampaignID = '';
+					$this->save();
+
+					// recursive, and recreate campaign.
+					return $this->prepareNewsletter();
+				}
 			}
 
 			$this->siteNewsletterEdited = 0;
@@ -53,11 +91,55 @@ class Newsletter extends \Origami
 			$this->mailChimpCampaignID = $cID;
 			$this->save();
 		}
-		
-		$cID = $this->mailChimpCampaignID;
+	}
+
+	// has been pushed for the day.
+	public function hasAlreadyPushed()
+	{
+		$res = db::where('siteID', $this->siteID)
+		->where('date(siteNewsletterMailpushDate)', date("Y-m-d"))
+		->get('site_newsletter_mailpush')->result();
+
+		return $res ? true : false;
+	}
+
+	public function mailTest(array $emails)
+	{
+		if($this->siteNewsletterSubject == '' || $this->siteNewsletterTemplate == '')
+			return false;
+
+		$this->prepareNewsletter();
 
 		// send campaign using test parameter.
-		$response = $newsletter->sendCampaign($cID, $prod);
+		$response = $this->newsletter->sendTestCampaign($this->mailChimpCampaignID, $emails);
+	}
+
+	public function mail($singleSend = false)
+	{
+		$newsletter = $this->newsletter;
+
+		// don't do anything if subject or newsletter is empty.
+		if($this->siteNewsletterSubject == '' || $this->siteNewsletterTemplate == '')
+			return false;
+
+		$this->prepareNewsletter();
+		
+		if($singleSend === true)
+		{
+			// create a new site_newsletter_mailpush.
+			$mailpush = model::orm('site/newsletter/mailpush')->create();
+			$mailpush->siteID = $this->siteID;
+
+			// create the history.
+			$mailpush->siteNewsletterMailpushSubject = $this->siteNewsletterSubject;
+			$mailpush->siteNewsletterMailpushTemplate = $this->siteNewsletterTemplate;
+			$mailpush->siteNewsletterMailpushDate = date('Y-m-d H:i:s');
+			$mailpush->siteNewsletterMailpushUser = session::get('userID');
+			$mailpush->save();
+		}
+
+		// send campaign using test parameter.
+		$response = $newsletter->sendCampaign($this->mailChimpCampaignID);
 	}
 
 	public function addSubscriber(array $emails)
@@ -129,8 +211,10 @@ class Newsletter extends \Origami
 					$activities .= '<div>'.$desc.'</div>';
 					$activities .= '<div>From '.$start.' to '.$end. '</div>';
 				}
-
-
+			}
+			else
+			{
+				$activities .= '<div>- No latest activities available. -</div>';
 			}
 
 			$template = str_replace('{site.activities}', $activities, $template);
@@ -159,7 +243,7 @@ class Newsletter extends \Origami
 			}
 			else
 			{
-				$articles .= "We're sorry but we don't have any latest article just yet.";
+				$articles .= "- We're sorry but we don't have any latest article. -";
 			}
 
 			$template = str_replace('{site.articles}', $articles, $template);

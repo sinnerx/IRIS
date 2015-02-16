@@ -54,7 +54,16 @@ class Controller_Newsletter
 			return;
 
 		// will send to rahimie@digitalgaia.com
-		$siteNL->mail(false);
+		$siteNL->mailTest(array('rahimie@digitalgaia.com'));
+	}
+
+	public function push()
+	{
+		$data['siteNL'] = site()->getSiteNewsletter();
+		$data['mailpushes'] = $data['siteNL']->getLatestMailpush();
+		$data['email'] = authData('user.userEmail');
+
+		view::render('sitemanager/newsletter/push', $data);
 	}
 }
 

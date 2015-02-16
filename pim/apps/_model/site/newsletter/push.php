@@ -7,7 +7,6 @@ class Push extends \Origami
 	protected $table = 'site_newsletter_push';
 	protected $primary = 'siteNewsletterPushID';
 
-
 	/**
 	 * Non ORM method.
 	 * @return boolean whether newsletters has been pushed or not on the given date.

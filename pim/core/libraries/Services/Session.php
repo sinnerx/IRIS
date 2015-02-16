@@ -72,7 +72,7 @@ class Session
 		$nameR	= explode(".",$name);
 		if(count($nameR) == 1) return isset($_SESSION[$name]);
 
-		$array	= $_SESSION[$nameR[0]];
+		$array	= isset($_SESSION[$nameR[0]]) ? $_SESSION[$nameR[0]] : array();
 		foreach($nameR as $no=>$key)
 		{
 			if($no == 0)continue;

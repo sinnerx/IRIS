@@ -25,10 +25,47 @@ class Controller_Ajax_Newsletter
 
 		$template = input::get('template');
 
-		$siteNL->siteNewsletterTemplate = $siteNL->prepareTemplate($template);
+		// $siteNL->siteNewsletterTemplate = $siteNL->prepareTemplate($template);
 
-		$siteNL->mail(false);
+		$siteNL->mailTest(array('newrehmi@gmail.com'));
 
-		echo 'Test Mail sent!';die;
+		echo 'Newsletter successfully send this test to your email!';die;
+	}
+
+	/**
+	 * This function already disabled. Because everytime we want to test, we'll need to set up a new campaign, which isn't good practice.
+	 */
+	public function mailPush()
+	{
+		$siteNL = site()->getSiteNewsletter();
+
+		if(!$siteNL->isConnected())
+		{
+			echo 'Site not yet connected!';die;
+		}
+
+		$template = input::get('template');
+
+		// $siteNL->siteNewsletterTemplate = $siteNL->prepareTemplate($template);
+
+		// if has already pushed for today.
+		if($siteNL->hasAlreadyPushed())
+		{
+
+			echo 'Newsletter has already pushed for today';die;
+		}
+
+		// do a single send.
+		$siteNL->mail(true);
+
+		echo 'Newsletter successfully blasted.';die;
+	}
+
+	public function preview()
+	{
+		$siteNL = site()->getSiteNewsletter();
+
+		$data['siteNL'] = $siteNL;
+		view::render('sitemanager/newsletter/ajax/preview', $data);
 	}
 }

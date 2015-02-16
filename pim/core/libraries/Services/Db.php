@@ -41,6 +41,7 @@ class Db_instance
 	private $whereR		= Array();
 	private $limit		= "";
 	private $joinR		= Array();
+	private $orderbyR 	= Array();
 	private $groupBy	= null;
 	public $db			= Null;
 	private $result		= Null;

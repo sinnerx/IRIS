@@ -27,6 +27,9 @@ class Controller_Cronjob
 
 	public function blastNewsletter()
 	{
+		// no one should have access yet for now
+		die;
+
 		$result = model::orm('site/site')->execute();
 
 		$time = microtime(true);
@@ -68,7 +71,7 @@ class Controller_Cronjob
 				}
 
 				$total['totalsite']++;
-				$site->getSiteNewsletter()->mail(true);
+				$site->getSiteNewsletter()->mail();
 			}
 		}
 

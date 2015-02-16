@@ -12,6 +12,14 @@ var newsletter = new function()
 		$('.site'+siteID).addClass('selected');
 	};
 
+	this.disconnect = function(siteID)
+	{
+		if(!confirm('Are you sure?'))
+			return false;
+		
+		window.location.href = '?disconnect='+siteID;
+	}
+
 	this.select = function(mailChimpListID)
 	{
 		var siteID = this.siteID;
@@ -25,6 +33,7 @@ var newsletter = new function()
 		$.ajax({type:"GET", url:url}).done(function(txt)
 		{
 			newsletter.update(siteID, mailChimpListID);
+
 		});
 	};
 
@@ -33,10 +42,16 @@ var newsletter = new function()
 		$(".site"+siteID).removeClass("selected");
 		$("#mailChimpLists").hide();
 		$(".mailchimp"+mailChimpListID).remove();
-
 		$(".site"+siteID+" #connectionStatus").html(mailChimpListID);
+
+		$(".site"+siteID+" input").removeClass('btn-primary')
+		.addClass('btn-danger')
+		.attr('onclick', 'newsletter.disconnect('+siteID+');')
+		.val('Disconnect');
 	};
 };
+
+
 
 </script>
 <style type="text/css">
@@ -81,7 +96,11 @@ List of site integrated with mailchimp.
 					<td><?php echo $row_site['siteName'];?></td>
 					<td id='connectionStatus'><?php echo $connected ? $row_newsletter['mailChimpListID'] : 'Not-connected';?></td>
 					<td>
+						<?php if(!$connected):?>
 						<input type='button' onclick='newsletter.connect(<?php echo $row_site['siteID'];?>);' class='btn btn-primary' value='Connect' style="padding:3px;font-size:13px;" />
+						<?php else:?>
+						<input type='button' onclick='newsletter.disconnect(<?php echo $row_site['siteID'];?>);' class='btn btn-danger' value='Disconnect' style="padding:3px;font-size:13px;" />
+						<?php endif;?>
 					</td>
 				</tr>
 				<?php endforeach;?>

@@ -26,9 +26,11 @@ function orm($model, $param2 = null)
 
 // return site entity
 // for now it will dual query.
-function site()
+function site($siteID = null)
 {
-	$siteID = authData('site.siteID');
+	// use the given siteID, if it's not passed.
+	$siteID = !$siteID ? authData('site.siteID') : $siteID;
+
 	if(!$siteID)
 		return false;
 

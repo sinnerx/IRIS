@@ -54,7 +54,7 @@ class Apps
 		self::loadFunctionLibrary('helper');
 		self::register_autoload_path(refine_path(dirname(__FILE__)."/Services"));		## register services autoload path.
 		self::register_autoload_path(self::$root."apps/_");								## register any class that loaded, without the use of model() class;
-		self::register_autoload_path(self::$root."apps/_library/", true);
+		self::register_autoload_path(self::$root."apps/_library/");
 
 		self::setGlobal("router",$router); 						## save router instance
 		self::initConfig();										## initiate /apps folder config.
@@ -95,6 +95,8 @@ class Apps
 			{
 				$path	= refine_path(strtolower($path));
 			}
+
+			$path = refine_path($path);
 
 			if(file_exists($path))
 			{
@@ -163,7 +165,7 @@ class Apps
 			return self::$apps_config;
 		}
 		$currentEnv	= self::$apps_config['current_env'];
-		return self::$apps_config[$conf];
+		return isset(self::$apps_config[$conf]) ? self::$apps_config[$conf] : null;
 	}
 
 	## Save ##
@@ -419,7 +421,7 @@ class Controller
 		}
 
 		## check if apps was passed along.
-		list($controller,$chosenApps)		= array_reverse(explode(":",$controller));
+		@list($controller,$chosenApps)		= array_reverse(explode(":",$controller));
 
 		## if passed with the string format, prepare the params by exploding with commas notation first.
 		if(is_string($paramR))
@@ -851,7 +853,7 @@ class Template
 	public static function load()
 	{
 		$apps		= apps::getCurrent();
-		$template	= controller::$instance[controller::getCurrentController()]->template;
+		$template	= @controller::$instance[controller::getCurrentController()]->template;
 		#$template	= self::$template === false?false:(isset($template)?$template:"default");
 		$template	= self::$template === false?(isset($template)?$template:false):(isset($template)?$template:self::$template);
 		

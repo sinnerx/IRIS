@@ -1,10 +1,15 @@
 <?php
 require_once "libraries/Framework.php";
-
 apps::run(ROOT_FOLDER,function($router)
 {
 	$router->add("domain:all",function($param) use($router)
 	{
+		if(apps::config('env') == 'dev')
+		{
+			error_reporting(E_ALL & ~E_NOTICE);
+			ini_set('display_errors', 'on');
+		}
+
 		## check announcement today.
 		if($text = model\server::hasAnnouncement(date("Y-m-d")))
 		{

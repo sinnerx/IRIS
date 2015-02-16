@@ -1,6 +1,6 @@
 <h3 class='m-b-xs text-black'>Subscribers</h3>
 <div class='well well-sm'>
-List of subscribers to your mailing lists. <?php if($subscribers):?><a href='<?php echo url::base('newsletter/syncSubscriber');?>' class='label label-primary'>Sync</a><?php endif;?>
+List of subscribers on your mailing lists. <?php if($subscribers):?><a href='<?php echo url::base('newsletter/syncSubscriber');?>' class='label label-primary'>Sync</a><?php endif;?>
 </div>
 <?php echo flash::data();?>
 <div class="row">
