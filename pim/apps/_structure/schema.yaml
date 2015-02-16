@@ -656,7 +656,15 @@ site_newsletter:
 	siteNewsletterTemplate [text]
 	siteNewsletterUpdatedDate [datetime]
 
-site_newsletter_push:
+site_newsletter_mailpush: ## newsletter single push record.
+	siteNewsletterMailpushID [int]
+	siteID [int]
+	siteNewsletterMailpushSubject [varchar]
+	siteNewsletterMailpushTemplate [text]
+	siteNewsletterMailpushDate [datetime]
+	siteNewsletterMailpushUser [int]
+
+site_newsletter_push: ## newsletter cron total push
 	siteNewsletterPushID [int]
 	siteNewsletterPushStatus [int] ## 0 = pending, 1 = success
 	siteNewsletterPushSameContent [int] ## serialized list of site that use the same content
