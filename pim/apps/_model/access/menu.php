@@ -51,7 +51,8 @@ class Menu extends Data
 							
 					"Report "=>Array(
 									
-									"Google Analytics"=>Array("googleanalytics/test")
+									"Google Analytics"=>Array("googleanalytics/test"),
+									"Monthly Activity Report"=>Array("report/activityReport")
 												),
 							);
 					

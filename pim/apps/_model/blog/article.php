@@ -389,6 +389,54 @@ class Article extends \Origami
 		return $articleID?$articleID:false;
 	}
 
+
+#	list all available activity report for that site,year and month
+	public function getReportBySiteID($siteID = null, $year = null, $month = null, $articleID = null)
+	{
+			
+
+		db::from("article");		
+
+
+if ($articleID) {
+
+		db::where('article.articleID', $articleID);
+
+}	else {
+
+
+		db::where('article.siteID', $siteID);
+		db::where('YEAR(articlePublishedDate)', $year);
+		db::where('MONTH(articlePublishedDate)', $month);
+}
+
+		
+		db::join("activity_article","article.articleID = activity_article.articleID");
+		db::join("activity","activity_article.activityID = activity.activityID");
+		
+
+		return db::get()->result();
+		
+	}
+
+#	get single report
+	public function getReportByActivityID($siteID = null, $year = null, $month = null)
+	{
+			
+
+		db::from("article");		
+		db::where('article.siteID', $siteID);
+		db::where('YEAR(articlePublishedDate)', $year);
+		db::where('MONTH(articlePublishedDate)', $month);
+		db::join("activity_article","article.articleID = activity_article.articleID");
+		db::join("activity","activity_article.activityID = activity.activityID");
+		
+
+		return db::get()->result();
+		
+	}
+
+
 	#updating an article
 	public function updateArticle($articleID,$data)
 	{
