@@ -102,9 +102,6 @@ $routes[]	= Array("dashboard/[:controller]/[**:method]",function($param)
 
 	#controller::init("backend:".$param['controller'],$param['method']); ## commented for a while.
 	## if the controller is shared, then load the general controller.
-	if(request::isAjax())
-		template::set(false);
-	
 	if(model::load("access/data")->sharedController($param['controller'],$param['method'],$level))
 	{
 		return controller::init("backend:shared/".$param['controller'],$param['method']);

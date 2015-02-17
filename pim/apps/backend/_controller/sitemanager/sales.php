@@ -53,12 +53,17 @@ Class Controller_Sales
 
 	public function edit($id)
 	{
+		if(request::isAjax())
+			$this->template = false;
+
 		$data['sales'] = model::orm('sales/sales')->find($id);
 
 		if(form::submitted())
 		{
 			if(input::get('salesTotal') == '' || input::get('salesType') == '')
+			{
 				redirect::to(null, 'Please complete the sales update information', 'error');
+			}
 
 			$data['sales']->salesTotal = input::get('salesTotal');
 			$data['sales']->salesType = input::get('salesType');

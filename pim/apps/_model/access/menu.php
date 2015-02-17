@@ -19,7 +19,7 @@ class Menu extends Data
 									"Facebook"=>"facebook/checkPageId",
 									"Announcement"=>Array("site/announcement","site/editAnnouncement"),
 									"Site Menu"=>"menu/index",
-									"Sales"=>"sales/add",
+									"Sales"=>array("sales/add", "sales/edit"),
 									#"Transaction"=>"account/transaction"
 											),
 					"Newsletter"=>Array(
