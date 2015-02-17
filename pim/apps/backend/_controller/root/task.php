@@ -60,6 +60,51 @@ class Controller_Task
 		return str_getcsv(file_get_contents($file),"\n");
 	}
 
+	public function tryz()
+	{
+		$folderpath = path::files('reportGeneration/monthlyActivities/'.time(true));
+
+		if(!is_dir($folderpath))
+			mkdir($folderpath);
+
+		/*foreach($activiesreport as $r)
+		{
+			// save.
+		}*/
+
+
+		// Zipping Operation
+		$path = opendir($folderpath);
+
+		$filename = 'myfilelah.zip';
+		$zippath = path::files('reportGeneration/monthlyActivities/tmp/'.$filename);
+
+		$myzip = new ZipArchive;
+
+		$myzip->open($zippath, ZIPARCHIVE::CREATE);
+		
+		while($file = readdir($path))
+		{
+			if(in_array($file, array('.', '..')))
+				continue;
+
+			$filepath = refine_path($folderpath.'/'.$file);
+
+			if(!file_exists($filepath))
+				continue;
+
+			$myzip->addFile($filepath);
+		}
+
+		$myzip->close();
+
+		header('Content-Type: application/zip');
+		header('Content-disposition: attachment; filename="'.$filename.'"');
+		header('Content-Length: ' . filesize($zippath));
+		readfile($filename);
+		die;
+	}
+
 	## controller to uploadUser.
 	public function uploadUser()
 	{
