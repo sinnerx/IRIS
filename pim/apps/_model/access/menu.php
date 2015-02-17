@@ -19,6 +19,7 @@ class Menu extends Data
 									"Facebook"=>"facebook/checkPageId",
 									"Announcement"=>Array("site/announcement","site/editAnnouncement"),
 									"Site Menu"=>"menu/index",
+									"Sales"=>"sales/add",
 									#"Transaction"=>"account/transaction"
 											),
 					"Newsletter"=>Array(
@@ -98,9 +99,10 @@ class Menu extends Data
 							"File Manager"=>Array("file/index")
 						),
 					"Report"=>Array(
-							"Monthly Activities"=>"report/monthlyActivity",
+							"Monthly USP Project"=>"report/monthlyActivity",
 							"Master Listing"=>"report/masterListing",
-							"Google Analytics"=>"googleanalytics/report"
+							"Google Analytics"=>"googleanalytics/report",
+							"Monthly Activity Report"=>"report/getallActivityReport"
 									),
 					/*"Activities"=>"activity/index",
 					"Reports"=>"reports/index"*/
