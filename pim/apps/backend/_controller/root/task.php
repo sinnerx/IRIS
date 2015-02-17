@@ -62,7 +62,7 @@ class Controller_Task
 
 	public function tryz()
 	{
-		$folderpath = path::files('reportGeneration/monthlyActivities/'.time(true));
+		$folderpath = path::files('reportGeneration/monthlyActivities/test');
 
 		if(!is_dir($folderpath))
 			mkdir($folderpath);
@@ -101,7 +101,7 @@ class Controller_Task
 		header('Content-Type: application/zip');
 		header('Content-disposition: attachment; filename="'.$filename.'"');
 		header('Content-Length: ' . filesize($zippath));
-		readfile($filename);
+		readfile($zippath);
 		die;
 	}
 

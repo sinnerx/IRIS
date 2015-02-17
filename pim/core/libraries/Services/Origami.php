@@ -127,6 +127,16 @@ class Origami
 		return $this;
 	}
 
+	public function delete()
+	{
+		$primary = $this->getPrimary();
+		db::delete($this->getTable(), array(
+			$primary => $this->get($primary)
+			));
+
+		return $this;
+	}
+
 	public function get($key)
 	{
 		return $this->$key;

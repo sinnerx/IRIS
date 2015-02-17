@@ -419,23 +419,65 @@ if ($articleID) {
 		
 	}
 
-#	get all available activity reprot for that year and month
-	public function getAllSiteReport($year = null, $month = null)
+	/**
+	 * get all available activity reprot for that year and month
+	 * @param int year
+	 * @param int month
+	 * @return array of result
+	 */
+	public function getAllSiteReport($year, $month)
 	{
-			
-
-		db::from("activity_article");		
+		db::from("activity_article");
 
 		db::join("activity","activity_article.activityID = activity.activityID");
 		db::join("article","activity_article.articleID = article.articleID");
-			
+		
+		db::where('activity_article.articleID IN (SELECT articleID FROM article WHERE articleStatus = ?)', array(1));
 		db::where('activity.activityType',1);
-		db::where('YEAR(activity.activityStartDate)', $year);
-		db::where('MONTH(activity.activityStartDate)', $month);
+		db::where('year(activity.activityStartDate)', $year);
+		db::where('month(activity.activityStartDate)', $month);
 		
 
 		return db::get()->result();
-		
+	}
+
+	/**
+	 * Get all of approval pending report for the given year/month.
+	 * @return int
+	 */
+	public function getTotalApprovalPendingReport($year, $month)
+	{
+		db::from('activity_article');
+		db::where('articleID IN (SELECT articleID FROM article WHERE articleStatus = ?)', array(0));
+		db::where('activityID IN (SELECT activityID FROM activity WHERE month(activityStartDate) = ? AND year(activityStartDate) = ?)', array($month, $year));
+		return db::get()->num_rows();
+	}
+
+	/**
+	 * Get total of non recent report.
+	 * @return int
+	 */
+	public function getTotalOfNonrecentReport($year, $month)
+	{
+		db::from('activity_article');
+		db::where('activityID IN (SELECT activityID FROM activity WHERE month(activityStartDate) = ? AND year(activityStartDate) = ?)', array($month, $year));
+
+		// check if there's existing unapproved site request for article.
+		$result = db::get()->result('articleID');
+
+		if(count($result) > 0)
+		{
+			// get list of article id.
+			$articleIds = array_keys($result);
+			db::where('siteRequestType', 'article.update');
+			db::where('siteRequestRefID', $articleIds);
+			db::where('siteRequestStatus', 0);
+			db::get('site_request');
+
+			return db::num_rows();
+		}
+
+		return 0;
 	}
 
 #	get single report

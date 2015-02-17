@@ -92,6 +92,18 @@ class Orm
 		return true;
 	}
 
+	public function paginate(array $config)
+	{
+		db::$instance->from($this->tableName);
+		$config['totalRow'] = db::$instance->num_rows();
+		pagination::initiate($config);
+
+		if(isset($config['limit']))
+			db::$instance->limit($config['limit'], pagination::recordNo() - 1);
+		
+		return $this;
+	}
+
 	public function execute()
 	{
 		$table = $this->tableName;

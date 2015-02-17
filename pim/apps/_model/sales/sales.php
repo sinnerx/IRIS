@@ -3,17 +3,26 @@
 namespace model\sales;
 use db, session;
 
-class sales {
+class sales extends \Origami
+{
+	protected $table = 'sales';
+	protected $primary = 'salesID';
 
-/*	protected $table = 'sales';
-	protected $primary = 'salesID';*/
+	/**
+	 * ORM : get type name.
+	 */
+	public function getTypeName()
+	{
+		return $this->type($this->salesType);
+	}
 
 	public function type($id = null)
 	{
 		$types = array(
 			1=> 'Top-up',
 			2=> 'Printing',
-			3=> 'Pc');
+			3=> 'Pc',
+			99=> 'Others');
 
 		return !$id ? $types : $types[$id];
 	}

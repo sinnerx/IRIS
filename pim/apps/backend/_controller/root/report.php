@@ -391,15 +391,12 @@ class Controller_Report
 	# gett all activity report -- root 
 	public function getallActivityReport($year = null,$month = null)
 	{
+		$data['year'] = $year = $year ? : date("Y");
+		$data['month'] = $month = $month ? : date("n");
 
-	
-		if ($year == null) {
-
-			$year = request::get('year',date("Y"));
-			$month = request::get('month',date("n"));		
-		}
-
-
+		// check for non approved report.
+		$data['totalApprovalPendingReport'] = model::load("blog/article")->getTotalApprovalPendingReport($year, $month);
+		$data['totalNonrecentReport'] = model::load('blog/article')->getTotalOfNonrecentReport($year, $month);
 
 		view::render("root/report/activityReport",$data);
 	}
@@ -411,149 +408,138 @@ class Controller_Report
 	# all site report by month and year
 	public function generateAllActivityReport($year = null,$month = null)
 	{
-
-		if ($year == null) {
-
+		if($year == null)
+		{
 			$year = request::get('year',date("Y"));
 			$month = request::get('month',date("n"));		
 		}
-		
-		
-		$reports	= model::load("blog/article")->getAllSiteReport($year,$month);
-		if  (count($reports) == 0) {
 
-			redirect::to("report/getallActivityReport","Report Not Available","error");
+		$reports	= model::load("blog/article")->getAllSiteReport($year,$month);
+
+		if(count($reports) == 0)
+		{
+			redirect::to("report/getallActivityReport/$year/$month","Report Not Available","error");
 		}
 
 		$folderpath = path::files('reportGeneration/monthlyActivities/'.time(true));
 
-				if(!is_dir($folderpath))
-				mkdir($folderpath);
+		if(!is_dir($folderpath))
+		mkdir($folderpath);
 
 		foreach($reports as $no=>$report)
 		{
+		 	$dt = new DateTime($report['activityStartDate']);
+			$date = $dt->format('dmY');
+			$articleName =	$report['articleName'];
+			$articleID = $report['articleID'];
+			$articleText = $report['articleText'];
+			$siteID = $report['siteID'];
+
+
+
+			$siteInfo = model::load("site/site")->getSite($siteID);
+			$siteName = $siteInfo['siteName'];
 		
-			 	$dt = new DateTime($report['activityStartDate']);
-				$date = $dt->format('dmY');
-				$articleName =	$report['articleName'];
-				$articleID = $report['articleID'];
-				$articleText = $report['articleText'];
-				$siteID = $report['siteID'];
+			$fileName = $siteName." - ".$date." - ".$articleName;
+	
 
 	
 
-				$siteInfo = model::load("site/site")->getSite($siteID);
-				$siteName = $siteInfo['siteName'];
+			$word	= new \PhpOffice\PhpWord\PhpWord();
 			
-				$fileName = $siteName." - ".$date." - ".$articleName;
-		
-
-		
-
-				$word	= new \PhpOffice\PhpWord\PhpWord();
-				
-		
-				$monthNo = substr($date, 2, 2);  
-				$monthNo = (int)$monthNo;
-				$yearNo = substr($date, 4, 4);  
-		
- 				$monthEvent =	model::load("helper")->monthYear("month",$monthNo);
-				
-				$title = "LAPORAN AKTIVITI PI1M ".$siteName." ".$monthEvent." ".$yearNo;
+	
+			$monthNo = substr($date, 2, 2);  
+			$monthNo = (int)$monthNo;
+			$yearNo = substr($date, 4, 4);  
+	
+				$monthEvent =	model::load("helper")->monthYear("month",$monthNo);
+			
+			$title = "LAPORAN AKTIVITI PI1M ".$siteName." ".$monthEvent." ".$yearNo;
+	
 		
 			
+			$word->addTitleStyle('rStyle', array('bold' => true,  'size' => 11, 'allCaps' => true),array('align' => 'center'));
+	
+    		$section = $word->addSection();		
+			$section->addTitle(htmlspecialchars($title), 'rStyle');
+	
+	
+								
+	
+			$doc = new DOMDocument();
+			$html = $articleText;	
+			$finalArray = explode('</p>', $html);
+			$lastValue = count($finalArray);
+	
+			foreach ($finalArray as $key => $value) {		
+			
+				@$doc->loadHTML($finalArray[$key]);
+				$tags = $doc->getElementsByTagName('img');
+			
+					if ($tags->length == 0) {
+			  
+						if ($key == ($lastValue-1))
+						{
+							$finalHtml= $finalArray[$key];
+							\PhpOffice\PhpWord\Shared\Html::addHtml($section, $finalHtml);
+						}
+						else
+						{
+							$finalHtml= $finalArray[$key]."</p>";	
+							\PhpOffice\PhpWord\Shared\Html::addHtml($section, $finalHtml);
+						}
+					}
+					else 
+					{
+						if ($key != ($lastValue-1)){
+							foreach ($tags as $tag) {
 				
-				$word->addTitleStyle('rStyle', array('bold' => true,  'size' => 11, 'allCaps' => true),array('align' => 'center'));
-		
-        		$section = $word->addSection();		
-				$section->addTitle(htmlspecialchars($title), 'rStyle');
-		
-		
-									
-		
-				$doc = new DOMDocument();
-				$html = $articleText;	
-				$finalArray = explode('</p>', $html);
-				$lastValue = count($finalArray);
-		
-				foreach ($finalArray as $key => $value) {		
-				
-					@$doc->loadHTML($finalArray[$key]);
-					$tags = $doc->getElementsByTagName('img');
-				
-						if ($tags->length == 0) {
-				  
-							if ($key == ($lastValue-1)){
-								$finalHtml= $finalArray[$key];
-								\PhpOffice\PhpWord\Shared\Html::addHtml($section, $finalHtml);
-				  
-							} else {
-				
-								$finalHtml= $finalArray[$key]."</p>";	
-								\PhpOffice\PhpWord\Shared\Html::addHtml($section, $finalHtml);
-								 
+			       				$imageLink = $tag->getAttribute('src');
+			       				
+			       				$section->addImage($imageLink);
 							}
-							
-				
-						}  else {
-				
-							if ($key != ($lastValue-1)){
-								foreach ($tags as $tag) {
-					
-				       				$imageLink = $tag->getAttribute('src');
-				       				
-				       				$section->addImage($imageLink);
-				       	
-								}
-							}				
-					
-						}		
-				}
+						}				
+					}
+			}
 
-	
 			$writer = \PhpOffice\PhpWord\IOFactory::createWriter($word, 'Word2007');
 			$writer->save($folderpath.'/'.$fileName.'.docx');
+		}
 
-			}
+		$path = opendir($folderpath);
 
+		$zipfilename = 'MONTHLY ACTIVITES REPORT '.$month."-".$year.'.zip';
+		$zippath = path::files('reportGeneration/monthlyActivities/tmp/'.$zipfilename);
 
-			$path = opendir($folderpath);
+		$myzip = new ZipArchive;
 
+		$myzip->open($zippath, ZIPARCHIVE::CREATE);
+		
+		while($file = readdir($path))
+		{
+			if(in_array($file, array('.', '..')))
+				continue;
 
-			$zipfilename = 'MONTHLY ACTIVITES REPORT '.$month."-".$year.'.zip';
-			$zippath = path::files('reportGeneration/monthlyActivities/tmp/'.$zipfilename);
-	
-			$myzip = new ZipArchive;
-	
-			$myzip->open($zippath, ZIPARCHIVE::CREATE);
-			
-			while($file = readdir($path))
+			$filepath = refine_path($folderpath.'/'.$file);
+
+			if(!file_exists($filepath))
 			{
-				if(in_array($file, array('.', '..')))
-					continue;
-	
-				$filepath = refine_path($folderpath.'/'.$file);
-	
-				if(!file_exists($filepath))
-				{
-					
-					continue;
-				}
-
-
-
-				$myzip->addFile($folderpath.'/'.$file,$file);
+				
+				continue;
 			}
-	
-			$myzip->close();
 
-			header('Content-Type: application/zip');
-			header('Content-disposition: attachment; filename="'.$zipfilename.'"');
-			header('Content-Length: ' . filesize($zippath));
-			readfile($zippath);
-			die;
-                     
-     	
+
+
+			$myzip->addFile($folderpath.'/'.$file,$file);
+		}
+
+		$myzip->close();
+
+		header('Content-Type: application/zip');
+		header('Content-disposition: attachment; filename="'.$zipfilename.'"');
+		header('Content-Length: ' . filesize($zippath));
+		readfile($zippath);
+		die;
 	}
 }
 
