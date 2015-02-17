@@ -6,19 +6,22 @@ var report = new function()
 	{
 		var year	= $("#year").val();
 		var month	= $("#month").val();
-		window.location.href = pim.base_url+"report/generateMonthlyActivity/"+year+"/"+month;
+		window.location.href = pim.base_url+"report/generateAllActivityReport/"+year+"/"+month;
 	}
 }
 
 </script>
 <h3 class='m-b-xs text-black'>
-	Monthly USP Project
+	Monthly Activities
 </h3>
 <div class='well well-sm'>
-	Generate Pi1M monthly USP project report.
+	Generate Pi1M monthly activities report.
 </div>
+
+<?php echo flash::data();?>
+
 <div class='row'>
-	<div class='col-sm-12'>
+	<div class='col-sm-6'>
 		<div class='table-responsive bg-white'>
 			<table class='table'>
 				<tr>
@@ -28,9 +31,19 @@ var report = new function()
 					<td>Year</td><td>: <?php echo form::select("year",model::load("helper")->monthYear("year"),null,date("Y"));?></td>
 				</tr>
 				<tr>
-					<td>Generate report</td><td>: <input type='button' class='btn btn-primary' onclick='report.generate();' value='GENERATE' /></td>
+					 <td>Generate report</td><td>: <input type='button' class='btn btn-primary' onclick='report.generate();' value='GENERATE' /></td> 
+					
 				</tr>
+
 			</table>
+
+
+	
+
+
+
+
+		
 		</div>
 	</div>
 </div>

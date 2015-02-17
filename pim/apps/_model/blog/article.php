@@ -419,6 +419,25 @@ if ($articleID) {
 		
 	}
 
+#	get all available activity reprot for that year and month
+	public function getAllSiteReport($year = null, $month = null)
+	{
+			
+
+		db::from("activity_article");		
+
+		db::join("activity","activity_article.activityID = activity.activityID");
+		db::join("article","activity_article.articleID = article.articleID");
+			
+		db::where('activity.activityType',1);
+		db::where('YEAR(activity.activityStartDate)', $year);
+		db::where('MONTH(activity.activityStartDate)', $month);
+		
+
+		return db::get()->result();
+		
+	}
+
 #	get single report
 	public function getReportByActivityID($siteID = null, $year = null, $month = null)
 	{
@@ -426,10 +445,13 @@ if ($articleID) {
 
 		db::from("article");		
 		db::where('article.siteID', $siteID);
-		db::where('YEAR(articlePublishedDate)', $year);
-		db::where('MONTH(articlePublishedDate)', $month);
+	
 		db::join("activity_article","article.articleID = activity_article.articleID");
 		db::join("activity","activity_article.activityID = activity.activityID");
+
+
+		db::where('YEAR(activity.activityStartDate)', $year);
+		db::where('MONTH(activity.activityStartDate)', $month);
 		
 
 		return db::get()->result();
