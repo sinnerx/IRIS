@@ -99,8 +99,8 @@ Dashboard overview
 
 			<div class='col-lg-6' >
 
-				<?php echo form::select("month",model::load("helper")->monthYear("month"),null,date("m"));?>
-				<?php echo form::select("year",model::load("helper")->monthYear("year"),null,date("Y"));?>
+				<?php echo form::select("month",model::load("helper")->monthYear("month"),null,$month);?>
+				<?php echo form::select("year",model::load("helper")->monthYear("year"),null,$year);?>
 				<input type='button' class='btn btn-primary' onclick='report.generate();' value='SUBMIT' />
 
 			</div>

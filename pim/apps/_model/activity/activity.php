@@ -155,13 +155,22 @@ class Activity extends \Origami
 	}
 
 	## get entrepreneurship training
-	public function getEntrepreneurshipBySlug($siteID,$year,$month)
+	public function getEntrepreneurshipBySlug($siteID,$month,$year)
 	{
 
+		
+	
+
+		
 		db::where("siteID",$siteID);
+		db::where("training_type.trainingTypeName = 'Entrepreneurship'");
+		db::where("year(activityStartDate)",$year);
+		db::where("month(activityStartDate)",$month);
+
+
 		db::join("training","activity.activityID = training.activityID");
 		db::join("training_type","training.trainingType = training_type.trainingTypeID ");
-		db::where("training_type.trainingTypeName like ?","Entrepreneurship");
+
 
 		return db::get("activity")->result();
 	}

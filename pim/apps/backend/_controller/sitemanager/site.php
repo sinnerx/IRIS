@@ -3,13 +3,13 @@ Class Controller_Site
 {
 	public function overview($year = null,$month = null)
 	{
-	
+		$year = $year ? : date("Y");
+		$month = $month ? : date("m");
 
-		if ($year == null) {
+		$data['year'] = $year;
+		$data['month'] = $month;
 
-			$year = request::get('year',date("Y"));
-			$month = request::get('month',date("n"));		
-		}
+
 
 		$siteID	= authData('site.siteID');
 
@@ -105,6 +105,7 @@ Class Controller_Site
 
 
 			$entClass = model::load("activity/activity")->getEntrepreneurshipBySlug($siteID,$month,$year);
+
 			$totalClass = count($entClass);
 
 
@@ -147,7 +148,7 @@ Class Controller_Site
 				$entProgram['done'] = 1;
 			} else {
 				
-				if ($totalSale == "0") {
+				if ($totalSale == "") {
 					$entProgram['total'] = 0;		
 				}	else {
 					$entProgram['total'] = $totalSale;		
