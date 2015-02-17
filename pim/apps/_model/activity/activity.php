@@ -93,6 +93,81 @@ class Activity extends \Origami
 		return db::get("activity")->result($groupBy,$secondGroupBy);
 	}
 
+
+
+	## getActivityIDPerSlug
+	public function getActivityIDListPerSlug($siteID,$year = null,$month = null,$type = null,$groupBy = null)
+	{
+		db::where("siteID",$siteID);
+		db::where("activityApprovalStatus",1); # approved.
+
+		## if got type parameter.
+		if($type)
+		{
+			db::where("activityType",$type);
+		}
+
+		if($year)
+		{
+			//select month for later grouping..
+			db::select("*,activity.*,month(activityStartDate) as month, day(activityStartDate) as day");
+			db::where("year(activityStartDate)",$year);
+		}
+
+	/*	if($groupBy === null)
+		{
+			if($month)
+			{
+				$groupBy	= "activityType";
+				$secondGroupBy = true;
+			}
+			else
+			{
+				$groupBy		= "month";
+				$secondGroupBy	= true;
+			}
+		}
+		else if($groupBy === false)
+		{
+			$groupBy		= "activityID";
+			$secondGroupBy	= null;
+		}
+		else
+		{
+			## set.
+			$secondGroupBy = true;
+		}*/
+
+		if($month)
+		{
+			db::where("month(activityStartDate)",$month);
+		}
+		
+
+		db::order_by("activityStartDate","desc");
+		db::join("event","activityType = '1' AND activity.activityID = event.activityID");
+		db::join("training","activityType = '2' AND activity.activityID = training.activityID");
+		//db::join("user_profile","user_profile.userID = activity.activityCreatedUser");
+		db::join("activity_date","activity_date.activityID = activity.activityID");
+
+		## return and grouped type key.
+		return db::get("activity")->result();
+	}
+
+	## get entrepreneurship training
+	public function getEntrepreneurshipBySlug($siteID,$year,$month)
+	{
+
+		db::where("siteID",$siteID);
+		db::join("training","activity.activityID = training.activityID");
+		db::join("training_type","training.trainingType = training_type.trainingTypeID ");
+		db::where("training_type.trainingTypeName like ?","Entrepreneurship");
+
+		return db::get("activity")->result();
+	}
+
+
+
 	## get activity.
 	public function getActivityBySlug($siteID,$activitySlug,$year,$month)
 	{
@@ -109,6 +184,11 @@ class Activity extends \Origami
 
 		return db::get("activity")->row();
 	}
+
+
+
+
+
 
 	public function getActivity($activityID,$col = null)
 	{
