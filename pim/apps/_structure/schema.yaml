@@ -671,3 +671,12 @@ site_newsletter_push: ## newsletter cron total push
 	siteNewsletterPushEmpty [int] ## serialized list of not pushed content due to an empty subject/message
 	siteNewsletterPushTotalSite [int] ## serialized list of total site
 	siteNewsletterPushDate [datetime]
+
+sales: ## site sales every month
+	salesID [int]
+	siteID [int]
+	salesCreatedDate [datetime]
+	salesCreatedUser [int]
+	salesTotal [float]
+	salesRemark [text]
+	salesType [int]
