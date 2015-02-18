@@ -5,11 +5,8 @@ class Controller_Report
 	{
 
 	
-		if ($year == null) {
-
-			$year = request::get('year',date("Y"));
-			$month = request::get('month',date("n"));		
-		}
+		$data['year'] = $year = $year ? : date("Y");
+		$data['month'] = $month = $month ? : date("n");
 
 
 		$siteID	  = authData('site.siteID');
@@ -51,7 +48,7 @@ class Controller_Report
 		$fileName = $siteName." - ".$date." - ".$articleName;
 
 		$word	= new \PhpOffice\PhpWord\PhpWord();
-		$WordHelper	= new model\report\PHPWordHelper($word,$fileName.".doc");
+		$WordHelper	= new model\report\PHPWordHelper($word,$fileName.".docx");
 
 		$monthNo = substr($date, 2, 2);  
 		$monthNo = (int)$monthNo;
@@ -59,8 +56,6 @@ class Controller_Report
 
  		$monthEvent =	model::load("helper")->monthYear("month",$monthNo);
 		
-
-
 		$title = "LAPORAN AKTIVITI PI1M ".$siteName." ".$monthEvent." ".$yearNo;
 
 	

@@ -8,6 +8,10 @@ var report = new function()
 		var month	= $("#month").val();
 		window.location.href = pim.base_url+"report/activityReport/"+year+"/"+month;
 	}
+	this.updateDate = function()
+	{
+		window.location.href = pim.base_url+"report/activityReport/"+$("#year").val()+"/"+$("#month").val();
+	}
 }
 
 </script>
@@ -21,11 +25,11 @@ var report = new function()
 	<div class='col-sm-6'>
 		<div class='table-responsive bg-white'>
 			<table class='table'>
-				<tr>
-					<td width="150px">Month</td><td>: <?php echo form::select("month",model::load("helper")->monthYear("month"),null,date("m"));?></td>
+					<tr>
+					<td width="150px">Month</td><td>: <?php echo form::select("month",model::load("helper")->monthYear("month"),'onchange="report.updateDate();"', $month);?></td>
 				</tr>
 				<tr>
-					<td>Year</td><td>: <?php echo form::select("year",model::load("helper")->monthYear("year"),null,date("Y"));?></td>
+					<td>Year</td><td>: <?php echo form::select("year",model::load("helper")->monthYear("year"),'onchange="report.updateDate();"', $year);?></td>
 				</tr>
 				<tr>
 					 <td></td><td>: <input type='button' class='btn btn-primary' onclick='report.generate();' value='SUBMIT' /></td> 

@@ -79,6 +79,11 @@ var report = new function()
 		var month	= $("#month").val();
 		window.location.href = pim.base_url+"site/overview/"+year+"/"+month;
 	}
+
+		this.updateDate = function()
+	{
+		window.location.href = pim.base_url+"site/overview/"+$("#year").val()+"/"+$("#month").val();
+	}
 }
 
 </script>	
@@ -97,12 +102,12 @@ Dashboard overview
 			<div class='col-lg-6' >
 			</div>	
 
-			<div class='col-lg-6' >
-
-				<?php echo form::select("month",model::load("helper")->monthYear("month"),null,$month);?>
-				<?php echo form::select("year",model::load("helper")->monthYear("year"),null,$year);?>
-				<input type='button' class='btn btn-primary' onclick='report.generate();' value='SUBMIT' />
-
+			<div class='col-lg-6'>
+			<div style="float:right">
+				<?php echo form::select("month",model::load("helper")->monthYear("month"),'onchange="report.updateDate();"',$month);?>
+				<?php echo form::select("year",model::load("helper")->monthYear("year"),'onchange="report.updateDate();"',$year);?>
+				<!-- <input type='button' class='btn btn-primary' onclick='report.generate();' value='SUBMIT' /> -->
+			</div>	
 			</div>
 		</div>
 	</div>

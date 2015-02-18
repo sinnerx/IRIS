@@ -3,13 +3,8 @@ Class Controller_Site
 {
 	public function overview($year = null,$month = null)
 	{
-		$year = $year ? : date("Y");
-		$month = $month ? : date("m");
-
-		$data['year'] = $year;
-		$data['month'] = $month;
-
-
+		$data['year'] = $year = $year ? : date("Y");
+		$data['month'] = $month = $month ? : date("n");
 
 		$siteID	= authData('site.siteID');
 
