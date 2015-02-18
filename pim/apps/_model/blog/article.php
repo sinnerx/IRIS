@@ -406,8 +406,9 @@ if ($articleID) {
 
 
 		db::where('article.siteID', $siteID);
-		db::where('YEAR(articlePublishedDate)', $year);
-		db::where('MONTH(articlePublishedDate)', $month);
+		db::where('activity.activityType', 1);
+		db::where('YEAR(activity.activityStartDate)', $year);
+		db::where('MONTH(activity.activityStartDate)', $month);
 }
 
 		
