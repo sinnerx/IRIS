@@ -44,9 +44,17 @@ This site is not yet connected.
 	<div class="panel panel-default">
 		<p>Blast newsletter to this site's subscribers. You may test a mail send, so you can see how your email would looks like before blasting to subscribers.</p>
 		<div class="panel-body">
-			<input type='button' class='btn btn-primary' value='Preview' data-toggle='ajaxModal' href='<?php echo url::base('ajax/newsletter/preview');?>' />
-			<input type='button' class='btn btn-primary' onclick='newsletter.sendTest();' value='Test Send to <?php echo $email;?>' />
-			<input type='button' class='btn btn-success pull-right' onclick='newsletter.send();' value='Blast' />
+			<div class="row" style="padding-bottom:10px;">
+				<div class='col-sm-10'>
+					<input type='button' class='btn btn-primary' value='Preview' data-toggle='ajaxModal' href='<?php echo url::base('ajax/newsletter/preview');?>' />
+					<input type='button' class='btn btn-primary' onclick='newsletter.sendTest();' value='Test Send to <?php echo $email;?>' />
+				</div>
+			</div>
+			<div class='row'>
+				<div class='col-sm-2'>
+					<input type='button' class='btn btn-success' onclick='newsletter.send();' value='Blast' />
+				</div>
+			</div>
 		</div>
 	</div>
 	</div>
