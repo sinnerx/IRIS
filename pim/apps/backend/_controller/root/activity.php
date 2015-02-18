@@ -58,6 +58,16 @@ class Controller_Activity
 
 		view::render("root/activity/trainingTypeEdit",$data);
 	}
+
+	public function trainingTypeDelete($id)
+	{
+		$trainingType = model::orm('activity/training/type')->find($id);
+
+		// actually just set the status to 0.
+		$trainingType->deactivate();
+
+		redirect::to('activity/training', 'This training has been deleted.');
+	}
 }
 
 
