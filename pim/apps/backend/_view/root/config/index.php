@@ -43,6 +43,7 @@ This P1M have no configuration records yet. Everything is set to default. <a hre
 			</span>
 			</td>
 		</tr>
+		<?php if(false):?>
 		<tr>
 			<td>Site menu</td>
 			<td>: <?php echo model::load("config")->allSiteMenu($row_conf['configAllSiteMenu']?:1);?> <a href='javascript:config.change("configAllSiteMenu");' class='fa fa-edit'></a>
@@ -51,6 +52,7 @@ This P1M have no configuration records yet. Everything is set to default. <a hre
 			Site top menu standards
 			</td>
 		</tr>
+		<?php endif;?>
 		<tr>
 			<td>Site member's fee (RM)</td>
 			<td>: <?php echo $row_conf['configMemberFee'];?> <a href='javascript:config.change("configMemberFee");' class='fa fa-edit'></a>
@@ -60,6 +62,7 @@ This P1M have no configuration records yet. Everything is set to default. <a hre
 			</span>
 			</td>
 		</tr>
+		<?php if(false):?>
 		<tr>
 			<td>Pim Manager Site</td>
 			<td>: <?php echo $configManagerSiteName;?> <a href='javascript:config.change("configManagerSiteID");' class='fa fa-edit'></a>
@@ -69,6 +72,7 @@ This P1M have no configuration records yet. Everything is set to default. <a hre
 			</span>
 			</td>
 		</tr>
+		<?php endif;?>
 	</table>
 </div>
 </section>

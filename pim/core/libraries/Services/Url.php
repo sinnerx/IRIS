@@ -93,12 +93,12 @@ class Url
 		return self::base($path);
 	}
 
-		### will ignore config['base_url'], relative path by calculated url.
-		private function base_relative($path = null)
-		{
-			$test	= self::getProtocol().$_SERVER['HTTP_HOST']."/".apps::getGlobal("router")->getBasePath();
-			return concat_path($test,$path);
-		}
+	### will ignore config['base_url'], relative path by calculated url.
+	private static function base_relative($path = null)
+	{
+		$test	= self::getProtocol().$_SERVER['HTTP_HOST']."/".apps::getGlobal("router")->getBasePath();
+		return concat_path($test,$path);
+	}
 
 	## return config:asset_url 
 	public static function asset($path = Null)
