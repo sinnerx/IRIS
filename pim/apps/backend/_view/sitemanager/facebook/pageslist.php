@@ -8,7 +8,6 @@ Select pages to connect
 	<form method='post'>
 	<div class="row">
 	<div class='col-sm-6'>
-	
 		<table class='table'>
 			<tr>
 				<th width='15px'>No.</th>				
@@ -20,7 +19,7 @@ Select pages to connect
 				
 			</tr>
 		<?php 	$i = 1;
-
+			if(isset($data['pages']) && count($data['pages']) > 0):
 			foreach($data['pages'] as $row)
 			{
 
@@ -46,7 +45,12 @@ Select pages to connect
 				<td></td>	<?php } ?>					
 			</tr>
 			
-	<?php 	}	?>
+	<?php 	}
+			else:?>
+			<tr>
+				<td colspan="6">You don't have any facebook page at all.</td>
+			</tr>
+			<?php endif; ?>
 
 		</table>
 	</div>
