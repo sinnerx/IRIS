@@ -5,6 +5,11 @@ var site = new function()
 	var context	= this;
 	this.overview = new function()
 	{
+		this.updateDate = function()
+		{
+			window.location.href = pim.base_url+"site/overview/"+$("#year").val()+"/"+$("#month").val();
+		}
+
 		this.getRequestList	= function(href)
 		{
 			$.ajax({type:"GET",url:href}).done(function(txt)
@@ -58,36 +63,10 @@ var site = new function()
 			});
 		}
 	};
-
-
-
-
-	});
-
-
 }
 
 
 </script>
-<script type="text/javascript">
-	
-var report = new function()
-{
-	this.generate = function()
-	{
-		var year	= $("#year").val();
-		var month	= $("#month").val();
-		window.location.href = pim.base_url+"site/overview/"+year+"/"+month;
-	}
-
-		this.updateDate = function()
-	{
-		window.location.href = pim.base_url+"site/overview/"+$("#year").val()+"/"+$("#month").val();
-	}
-}
-
-</script>	
-
 <h3 class='m-b-xs text-black'>
 Overview
 </h3>
@@ -104,8 +83,8 @@ Dashboard overview
 
 			<div class='col-lg-6'>
 			<div style="float:right">
-				<?php echo form::select("month",model::load("helper")->monthYear("month"),'onchange="report.updateDate();"',$month);?>
-				<?php echo form::select("year",model::load("helper")->monthYear("year"),'onchange="report.updateDate();"',$year);?>
+				<?php echo form::select("month",model::load("helper")->monthYear("month"),'onchange="site.overview.updateDate();"',$month);?>
+				<?php echo form::select("year",model::load("helper")->monthYear("year"),'onchange="site.overview.updateDate();"',$year);?>
 				<!-- <input type='button' class='btn btn-primary' onclick='report.generate();' value='SUBMIT' /> -->
 			</div>	
 			</div>
