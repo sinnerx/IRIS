@@ -15,7 +15,6 @@ Class Controller_Site
 		$test	= model::load("blog/article")->getReportBySiteID($siteID,$year,$month);
 		$totalEvent  = count($test);
 
-
 		$event['maxEvent'] = 2;
 		
 			if ($totalEvent >= $event['maxEvent']) {
@@ -35,32 +34,29 @@ Class Controller_Site
 
 		//---------------------------------------------------------------------------
 		## user login
-		
-		$all = model::load("site/member")->getMemberListBySite($cols,null,null,null,null,null,$siteID);		
-		$all = count($all);
+		$active = db::where('month(logLoginCreatedDate) = ? AND year(logLoginCreatedDate) = ?', array($month, $year))
+		->where('userID IN (SELECT userID FROM site_member WHERE siteID = ?)', array($siteID))
+		->group_by('userID')->get('log_login')->num_rows();
+		$all = db::where('siteID', $siteID)->get('site_member')->num_rows();
 		
 			$cond =	Array(			
 				"year(userLastLogin)"=>$year,
 				"month(userLastLogin)"=>$month			
 					);
 
-		$active = model::load("site/member")->getMemberListBySite($cols,$cond,$join,$limit,$order,$pageConf,$siteID);		
-		$active = count($active);
-
 		$target = ($active/$all)*100;
 
-		if ($target >= 60) { 
+		if ($target >= 60)
+		{ 
 			$login['done'] = 1;	
 		}
 
 		$target = round((float)$target) . '%';
 		$login['target'] = $target;
-		
 
 		$data['login'] = $login;
 
 		//---------------------------------------------------------------------------
-
 		## training hour
 
 		$activitySlug = 2;
@@ -68,96 +64,90 @@ Class Controller_Site
 		$activityID = model::load("activity/activity")->getActivityIDListPerSlug($siteID,$year,$month,2,$groupBy);
 
 		foreach($activityID as $no=>$row)
-			{
-				$totalTime = 0;
+		{
+			$totalTime = 0;
 
- 				$start_time = strtotime($row['activityDateStartTime']); 	
- 				$end_time = strtotime($row['activityDateEndTime']);
+				$start_time = strtotime($row['activityDateStartTime']); 	
+				$end_time = strtotime($row['activityDateEndTime']);
 
-				$totalTime = $end_time - $start_time;
-				$totalTime1 = $totalTime1 + $totalTime;				
-			 	
-			}
+			$totalTime = $end_time - $start_time;
+			$totalTime1 = $totalTime1 + $totalTime;				
+		}
 
-			$trainingHour = floor($totalTime1/3600);
-			$training['maxHour'] = 48;
+		$trainingHour = floor($totalTime1/3600);
+		$training['maxHour'] = 48;
 
-			if ($trainingHour >= $training['maxHour']) { 
-				$training['done'] = 1;	
-				$training['hour'] = 48;	
-			} else {
+		if($trainingHour >= $training['maxHour'])
+		{ 
+			$training['done'] = 1;	
+			$training['hour'] = 48;	
+		}
+		else
+		{
+			$training['hour'] = $trainingHour;
+		}
 
-					$training['hour'] = $trainingHour;
-				
-			}
-
-			$data['training'] = $training;			
+		$data['training'] = $training;			
 			  
-
-
 		//--------------------------------------------------------------------
 		##  getEntrepreneurshipBySlug
 
+		$entClass = model::load("activity/activity")->getEntrepreneurshipBySlug($siteID,$month,$year);
 
-			$entClass = model::load("activity/activity")->getEntrepreneurshipBySlug($siteID,$month,$year);
-
-			$totalClass = count($entClass);
+		$totalClass = count($entClass);
 
 
-			$entClass['maxClass'] = 1;
+		$entClass['maxClass'] = 1;
 
-		
 
-			if ($totalClass >= $entClass['maxClass']) {
-				$entClass['totalEvent'] = $entClass['maxClass'];	
-				$entClass['done'] = 1;
-			} else {
-				
-				if ($totalClass == "") {
-					$entClass['totalEvent'] = 0;		
-				}	else {
-					$entClass['totalEvent'] = $totalClass;		
-				}
 
+		if ($totalClass >= $entClass['maxClass']) {
+			$entClass['totalEvent'] = $entClass['maxClass'];	
+			$entClass['done'] = 1;
+		}
+		else
+		{
+			if ($totalClass == "")
+			{
+				$entClass['totalEvent'] = 0;		
 			}
-			
-			$data['entClass'] = $entClass;
+			else
+			{
+				$entClass['totalEvent'] = $totalClass;		
+			}
+		}
+		
+		$data['entClass'] = $entClass;
 
 		//--------------------------------------------------------------------
 		##  get sales
+		$sales = model::load("sales/sales")->getSales($siteID,$month,$year);
 
-
-			$sales = model::load("sales/sales")->getSales($siteID,$month,$year);
-
-			$totalSale = $sales[0][totalSale];
-			
-			
-
-
-			$entProgram['maxSale'] = 300;
-
+		$totalSale = $sales[0][totalSale];
+		
 		
 
-			if ($totalSale >= $entProgram['maxSale']) {
-				$entProgram['total'] = $entProgram['maxSale'];	
-				$entProgram['done'] = 1;
-			} else {
-				
-				if ($totalSale == "") {
-					$entProgram['total'] = 0;		
-				}	else {
-					$entProgram['total'] = $totalSale;		
-				}
 
+		$entProgram['maxSale'] = 300;
+
+	
+
+		if ($totalSale >= $entProgram['maxSale']) {
+			$entProgram['total'] = $entProgram['maxSale'];	
+			$entProgram['done'] = 1;
+		} else {
+			
+			if ($totalSale == "") {
+				$entProgram['total'] = 0;		
+			}	else {
+				$entProgram['total'] = $totalSale;		
 			}
-			
-			$data['entProgram'] = $entProgram;
 
+		}
+		
+		$data['entProgram'] = $entProgram;
 
-
-
-			//--------------------------------------------------------------------
-			
+		//--------------------------------------------------------------------
 
 		view::render("sitemanager/site/overview",$data);
 	}
