@@ -30,7 +30,7 @@ class Newsletter
 
 		$rebuilt = array();
 
-		if($response['total'] == 1)
+		if($response['total'] > 0)
 		{
 			foreach($response['data'] as $row)
 			{
