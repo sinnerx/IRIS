@@ -27,6 +27,13 @@ class Redirect
 		}
 	}
 
+	public static function toRoute($route)
+	{
+		$url = url::route($route);
+
+		return self::to($url);
+	}
+
 	## an alias to flash::set()
 	public static function withFlash($data,$msg = null)
 	{

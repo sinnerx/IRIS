@@ -100,7 +100,7 @@ class Orm
 
 		if(isset($config['limit']))
 			db::$instance->limit($config['limit'], pagination::recordNo() - 1);
-		
+
 		return $this;
 	}
 

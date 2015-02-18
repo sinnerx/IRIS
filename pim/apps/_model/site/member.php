@@ -9,6 +9,36 @@ class Member extends \Origami
 	protected $table = "site_member";
 	protected $primary = "siteMemberID";
 
+	/**
+	 * ORM : Member is active.
+	 */
+	public function isActivated()
+	{
+		return $this->siteMemberStatus == 1;
+	}
+
+	/**
+	 * ORM : Access
+	 */
+	public function hasAccessTo($accessName, $parameters = array())
+	{
+		switch($accessName)
+		{
+			// by default, all site/member has access to forum, except site-specific (2) category. (which require paid member)
+			case "forum":
+				if($parameters['forumCategoryAccess'] == 2)
+				{
+					if($this->isActivated())
+						return true;
+					else
+						return false;
+				}
+
+				return true;
+			break;
+		}
+	}
+
 	public function getMemberListBySite($cols = "*",$cond = null,$join = null,$limit = null,$order = null,$pageConf = null,$siteID = null)
 	{
 		db::from("site_member");

@@ -36,6 +36,14 @@ class Controller_Forum
 		$data['row_category']	= $this->row_category;
 		$data['res_threads']	= model::load("forum/thread")->getThreads(authData("current_site.siteID"),$data['row_category']['forumCategoryID'],"*");
 
+		/**
+		 * By orm checks.
+		 */
+		if(!member()->hasAccessTo('forum', array('forumCategoryAccess'=> $this->row_category['forumCategoryAccess'])))
+		{
+			flash::set('message', 'Anda tiada akses untuk forum ini. Sila buat bayaran keahlian terlebih dahulu.');
+			redirect::toRoute('frontend-error');
+		}
 
 		if($data['res_threads'])
 		{

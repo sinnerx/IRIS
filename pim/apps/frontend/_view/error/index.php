@@ -13,6 +13,10 @@ echo model::load("template/frontend")
 	{
 		echo "Anda tiada akses ke page ini, sila login dahulu.";
 	}
+	else if(flash::has('message'))
+	{
+		echo flash::data('message');
+	}
 	else
 	{
 		echo "Tidak dapat menjumpai page yang anda cari.";

@@ -37,4 +37,21 @@ function site($siteID = null)
 	return orm('site/site')->find($siteID);
 }
 
+/**
+ * Return site/member entity, of the current authdata.
+ * Should only be used by frontend.
+ * @return model/site/member
+ */
+function member()
+{
+	$userID = authData('user.userID');
+
+	$user = orm('site/member')->where('userID', $userID)->execute();
+
+	if(count($user) == 0)
+		return false;
+	foreach($user as $row)
+		return $row;
+}
+
 ?>

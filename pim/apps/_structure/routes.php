@@ -169,7 +169,7 @@ endif;
 $routes['rss-blog']	= Array("[:site-slug]/blog/rss/[:category?]","controller=blog@rss","{category}");
 
 ## error page
-$routes[]	= Array("[:site-slug]/404","controller=error@index");
+$routes['frontend-error']	= Array("[:site-slug]/404","controller=error@index");
 
 ## site test uri
 $routes[]	= Array("[:site-slug]/test/[:controller]/[**:method]","controller={controller}@{@method}");
