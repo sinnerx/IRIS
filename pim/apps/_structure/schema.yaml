@@ -681,4 +681,15 @@ sales: ## site sales every month
 	salesUpdatedUser [int]
 	salesTotal [float]
 	salesRemark [text]
-	salesType [int]
+
+sales_product:
+	salesProductID [int]
+	salesID [int]
+	productID [int]
+	salesProductTotal [int]
+
+product:
+	productID [int]
+	productName [varchar]
+	productDescription [text]
+	productPrice [float]

@@ -4,19 +4,24 @@ Class Controller_Sales
 	public function add($month = null, $year = null, $page = 1)
 	{
 		$siteID	= authData('site.siteID');
-	
+		
 		if(form::submitted())
 		{
-			$salesIncome = input::get("salesIncome");
-			$remark 	 = input::get("remark");
-			$salesType 	 = input::get("salesType");
+			$salesProducts = input::get();
 
-			if($salesIncome == '' || $salesType == '')
-				return redirect::to(null, 'Please complete the sales information', 'error');
+			$sales = model::orm('sales/sales')->create();
+			$sales->siteID = $siteID;
+			$sales->salesCreatedDate = now();
+			$sales->salesCreatedUser = session::get('userID');
+			$sales->salesRemark = '';
+			$sales->save();
+		
+			foreach ($salesProducts as $productID => $quantity) {
+				# code...
+				$sales->addProduct($productID, $quantity);
+			}
 
-			//save db
-			model::load('sales/sales')->addSales($salesIncome,$salesType,$remark);
-
+			
 			redirect::to(null, 'Added new sales!', 'success');
 		}
 
@@ -24,6 +29,7 @@ Class Controller_Sales
 		$year = $data['year'] = $year ? : date('Y');
 
 		$data['types'] = model::load('sales/sales')->type();
+
 
 		// get monthly sales. return array of model/sales/sales
 		pagination::setFormat(model::load("template/cssbootstrap")->paginationLink());
@@ -75,6 +81,8 @@ Class Controller_Sales
 
 		view::render('sitemanager/sales/edit', $data);
 	}
+
+
 
 
 }
