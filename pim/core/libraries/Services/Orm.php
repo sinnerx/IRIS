@@ -122,7 +122,7 @@ class Orm
 
 		$result = $dbResult->result($primary);
 
-		$collection = array();
+		$collection = new Origamis();
 
 		foreach($result as $id=>$row)
 		{

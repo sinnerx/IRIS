@@ -191,8 +191,7 @@ class Origami
 		$collection = $model->where($foreignTable.'.'.$ref, $this->$ref)->execute();
 
 		if($type == 'one')
-			foreach($collection as $obj)
-				return $obj;
+			return $collection->getFirst();
 		else
 			return $collection;
 	}
