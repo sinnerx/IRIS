@@ -12,7 +12,7 @@ List of all registered users, site managers and cluster leads.
 		<div class="col-sm-3 pull-right">
 		<form method="get" id='formSearch'>
 		<div class="input-group">
-		  <input type="text" class="input-sm form-control" name='search' placeholder="Search">
+		  <?php echo form::text('search', 'placeholder="Search" class="input-sm form-control"', request::get('search'));?>
 		  <span class="input-group-btn">
 		    <button class="btn btn-sm btn-default" onclick='$("#formSearch").submit();' type="button">Go!</button>
 		  </span>
@@ -38,25 +38,35 @@ List of all registered users, site managers and cluster leads.
 		</thead>
 		<tbody>
 		<?php
-		if($res_user):
+		if($users->count() > 0):
 			$no	= pagination::recordNo();
-			foreach($res_user as $row):
-				$userID	= $row['userID'];
-				$name	= $row['userProfileFullName'];
-				$ic		= $row['userIC'];
-				$email	= $row['userEmail'];
-				$level	= $userLevelR[$row['userLevel']];
+			foreach($users as $user):
+				$userID	= $user->userID;
+				$name	= $user->userProfileFullName;
+				$ic		= $user->userIC;
+				$email	= $user->userEmail;
+				$level	= $user->getLevelName();
 
 				$detailIcon	= "<a class='fa fa-user' href='".url::base("user/detail/$userID")."'></a>";
 				$editIcon	= "<a class='fa fa-edit' href='".url::base("user/edit/$userID")."'></a>";
+				$deleteIcon = '<a onclick="return confirm(\'Are you really sure?\');" class="i i-cross2" href="'.url::base('user/delete/'.$userID).'"></a>';
 				#$resetIcon	= "<a onclick='return confirm(\"Are you sure you want to reset this user password.?\");' class='fa fa-key'  href='".url::base("user/resetPassword/$userID")."'></a>";
 				$resetIcon	= "";
 
-				echo "<tr><td>$no.</td><td>$name</td><td>$ic</td><td>$email</td><td>$level</td><td>$resetIcon $editIcon</td></tr>";
+				echo "<tr><td>$no.</td><td>$name</td><td>$ic</td><td>$email</td><td>$level</td><td>$resetIcon $editIcon $deleteIcon</td></tr>";
 				$no++;
 			endforeach;
-		else:
-		echo "<tr><td colspan='5' align='center'>No user added yet.</td></tr>";
+		else:?>
+		<tr>
+			<td align="center" colspan="5">
+				<?php if(request::get('search')):?>
+					No user found with the search query.
+				<?php else:?>
+					No user added yet.
+				<?php endif;?>
+			</td>
+		</tr>
+		<?php
 		endif;
 		?>
 		</tbody>

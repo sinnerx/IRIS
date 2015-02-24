@@ -1,8 +1,105 @@
 <?php
 namespace model\user;
 use db, session, pagination, model;
-class User
+
+class User extends \Origami
 {
+	protected $table = 'user';
+	protected $primary = 'userID';
+
+	/**
+	 * ORM : Delete user, set flag as deleted.
+	 */
+	public function delete()
+	{
+		$this->userStatus = 3;
+		$this->save();
+	}
+
+	/**
+	 * ORM : Get userProfile.
+	 */
+	public function getProfile()
+	{
+		// get user_profile anonymously.
+		return $this->getOne(array('user_profile', 'userProfileID'), 'userID');
+	}
+
+	/**
+	 * ORM : Get site manager (only with status == 1)
+	 */
+	public function getSiteManager()
+	{
+		return $this->withQuery(function($db)
+		{
+			$db->where('siteManagerStatus', 1);
+		})->getOne('site/manager', 'userID');
+	}
+
+	/**
+	 * ORM : Get it's clusterleads record.
+	 * @return \Origamis
+	 */
+	public function getClusterLeads()
+	{
+		return $this->withQuery(function($db)
+		{
+			$db->where('clusterLeadStatus', 1);
+		})->getMany(array('cluster_lead', 'clusterLeadID'), 'userID');
+	}
+
+	/**
+	 * ORM : Get user level label
+	 * @return string
+	 */
+	public function getLevelName()
+	{
+		return $this->levelLabel($this->userLevel);
+	}
+
+	/**
+	 * ORM : Get users level 2, that is not yet a manager.
+	 * @return \Origamis
+	 */
+	public function getAvailableManagers()
+	{
+		return model::orm('user/user')
+		->where('userLevel', 2)
+		->where('userStatus', 1)
+		->where('userID NOT IN (SELECT userID FROM site_manager WHERE siteManagerStatus = 1)')
+		->execute();
+	}
+
+	/**
+	 * ORM : Get available clusterlead with the given clusterID as exception.
+	 * @return \Origamis
+	 */
+	public function getAvailableClusterleads($clusterID)
+	{
+		return model::orm('user/user')
+		->where('userLevel', 3)
+		->where('userStatus', 1)
+		->where('userID NOT IN (SELECT userID FROM cluster_lead WHERE clusterLeadStatus = 1 AND clusterID = ?)', array($clusterID))
+		->execute();
+	}
+
+	/**
+	 * User is level 2 and, is still site manager of some site.
+	 * @return boolean.
+	 */
+	public function isManager()
+	{
+		if($this->userLevel == 2)
+		{
+			$siteManager = $this->getSiteManager();
+
+			if($siteManager)
+				return true;
+		}
+
+		return false;
+	}
+
 	public function getListOfUser($cols = "*",$cond = null)
 	{
 		db::from("user");
@@ -243,6 +340,41 @@ class User
 
 		## return user record.
 		return $this->get($userID);
+	}
+
+	/**
+	 * ORM : return \Origamis.
+	 * @return \Origamis
+	 */
+	public function getUsers($where = null, $pagination = null)
+	{
+		$users = model::orm('user/user')
+		->select('user_profile.*, user.*')
+		->where('userStatus', 1)
+		->join('user_profile', 'user_profile.userID = user.userID');
+
+		if($where)
+		{
+			$where	= !is_array($where)?Array($where):$where;
+			foreach($where as $wher)
+				$users = $users->where($wher);
+		}
+
+		if($pagination)
+		{
+			$totalRows = db::from('user')->num_rows();
+			
+			pagination::initiate(Array(
+				"totalRow"=>$totalRows,
+				"currentPage"=>$pagination['currentPage'],
+				"urlFormat"=>$pagination['urlFormat']
+								));
+			
+			$users = $users->limit(pagination::get('limit'), pagination::recordNo()-1);
+		}
+
+
+		return $users->execute();
 	}
 
 	## return list of paginated, format : []

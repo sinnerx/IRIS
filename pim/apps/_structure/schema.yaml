@@ -12,7 +12,7 @@ user:
 	userPassword [varchar]
 	userEmail [varchar]
 	userLevel [varchar]			## 1 = members (M), 2 = site manager (SM), 3 = cluster lead (CL), 4 = operation manager (OM), 99 = root admin (R)
-	userStatus [int]			## 0 = inactive, 1 = active
+	userStatus [int]			## 0 = inactive, 1 = active, 3 = deleted
 	userCreatedDate [datetime]
 	userCreatedUser [int]
 	userLastLogin [datetime]

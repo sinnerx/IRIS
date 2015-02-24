@@ -205,13 +205,13 @@ class Controller_Site
 			redirect::to("site/index",'Site manager has been assigned to '.$data['row']['siteName']);
 		}
 
-		## get available manager.
-		$row_user		= model::load("site/manager")->getAvailableManager("user.userID,userProfileFullName,userEmail");
+		// get available managers.
+		$users = model::load('user/user')->getAvailableManagers();
 
-		## create array for select/
-		foreach($row_user as $row)
+		foreach($users as $user)
 		{
-			$data['userR'][$row['userID']] = $row['userProfileFullName']." (".$row['userEmail'].")";
+			$userProfile = $user->getProfile();
+			$data['userR'][$user->userID] = $userProfile->userProfileFullName.' ('.$user->userEmail.')';
 		}
 
 		view::render("root/site/assignManager",$data);

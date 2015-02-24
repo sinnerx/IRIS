@@ -1,8 +1,28 @@
 <?php
 namespace model\site;
 use db, model;
-class Manager
+class Manager extends \Origami
 {
+	protected $table = 'site_manager';
+	protected $primary = 'siteManagerID';
+
+	/**
+	 * ORM : get site
+	 */
+	public function getSite()
+	{
+		return $this->getOne('site/site', 'siteID');
+	}
+
+	/**
+	 * ORM : deactivate this record.
+	 */
+	public function deactivate()
+	{
+		$this->siteManagerStatus = 0;
+		$this->save();
+	}
+
 	## if siteID is array, will group into siteID as key, else, wont use. both return result.
 	public function getManagersBySite($siteID)
 	{

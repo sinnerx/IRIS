@@ -15,6 +15,17 @@ class Origamis extends ArrayIterator
 		foreach($this as $orm)
 			return $orm;
 	}
+
+	public function toList($key, $column)
+	{
+		$new = array();
+
+		if($this->count() > 0)
+			foreach($this as $origami)
+				$new[$origami->$key] = $origami->$column;
+
+		return $new;
+	}
 }
 
 

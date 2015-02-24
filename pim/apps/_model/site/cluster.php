@@ -1,8 +1,16 @@
 <?php
 namespace model\site;
 use db, session;
-class Cluster
+
+/**
+ * This is supposedly object for cluster/cluster (but since it was placed here, i'll just use this class here.)
+ */
+
+class Cluster extends \Origami
 {
+	protected $table = 'cluster';
+	protected $primary = 'clusterID';
+
 	public function lists()
 	{
 		db::select("cluster.*");

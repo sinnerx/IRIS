@@ -51,27 +51,24 @@ class Controller_Cluster
 				redirect::to("","Got some error in your form eh.?","error");
 			}
 
-			$result	= $cluster->assignLead($clusterID,$userID);
+			$result	= $cluster->assignLead($clusterID, $userID);
 
 			redirect::to("cluster/lists","New cluster lead has been assigned.");
 		}
 
 		## get user and cluster.
-		$res_user			= $cluster->getAvailableClusterLead($data['clusterID']);
-		$res_cluster		= $cluster->lists();
+		$users = model::load('user/user')->getAvailableClusterLeads($data['clusterID']);
+		$clusters = model::orm('site/cluster')->execute();
 
-		## prepare list of clusterID=>clusterName.
-		$data['clusterR']	= Array();
-		foreach($res_cluster as $row)
-		{
-			$data['clusterR'][$row['clusterID']]	= $row['clusterName'];
-		}
+		## prepare list of clusterID=>clusterName
+		$data['clusterR']	= $clusters->toList('clusterID', 'clusterName');
 
 		## prepare list of userID=>email (userProfileFullName)
 		$data['userR']		= Array();
-		foreach($res_user as $row)
+		foreach($users as $user)
 		{
-			$data['userR'][$row['userID']]	= $row['userProfileFullName']." (".$row['userEmail'].")";
+			$profile = $user->getProfile();
+			$data['userR'][$user->userID] = $profile->userProfileFullName.' ('.$user->userEmail.')';
 		}
 
 		view::render("root/cluster/assign",$data);

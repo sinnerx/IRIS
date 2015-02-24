@@ -24,7 +24,9 @@ class Controller_User
 		}
 
 		## get paginated user list.
-		$data['res_user']	= model::load("user/user")->getPaginatedList($page,url::base("user/lists/{page}"),$where);
+		$data['users']	= model::load("user/user")->getUsers($where,
+			array('currentPage'=> $page,
+				  'urlFormat'=> url::base("user/lists/{page}")));
 
 		view::render("root/user/lists",$data);
 	}
@@ -87,6 +89,64 @@ class Controller_User
 		}
 
 		view::render("root/user/add",$data);
+	}
+
+	public function delete($userID, $param = null)
+	{
+		$user = model::orm("user/user")->find($userID);
+
+		$profile = $user->getProfile();
+
+		$name = $profile->userProfileFullName.' '.$profile->userProfileLastName;
+
+		// check if he's still site manager of some site. and warm about it.
+		$siteManager = $user->getSiteManager();
+
+		if($siteManager)
+		{
+			if($param != 'override')
+			{
+				$siteName = $siteManager->getSite()->siteName;
+				$url = url::base('user/delete/'.$userID.'/override');
+				redirect::to('user/lists', 'This user ('.$name.') is still a manager of site ('.$siteName.'), do you truly want to unlink and delete him? <a class="label label-danger" href="'.$url.'">Yes. Delete</a>', 'error');
+			}
+			else
+			{
+				// deactivate sitemanager.
+				$siteManager->deactivate();
+			}
+		}
+
+		// check if he's still cluster lead of some clusters, and warn about it.
+		$clusterleads = $user->getClusterLeads();
+
+		if($clusterleads->count() > 0)
+		{
+			if($param != 'override')
+			{
+				foreach($clusterleads as $clusterlead)
+				{
+					$clusters[] = $clusterlead->getOne('site/cluster', 'clusterID')->clusterName;
+				}
+
+				$url = url::base('user/delete/'.$userID.'/override');
+				redirect::to('user/lists', 'This user ('.$name.') is still a lead for cluster(s) <b>'.implode(', ',$clusters).'</b>. Do you truly want to unlink and delete him? <a class="label label-danger" href="'.$url.'">Yes. Delete</a>', 'error');
+			}
+			else
+			{
+				// set status manually since he has no model to do this.
+				foreach($clusterleads as $clusterlead)
+				{
+					$clusterlead->clusterLeadStatus = 0;
+					$clusterlead->save();
+				}
+			}
+		}
+
+		// delete this user (actually it just set it status to 3)
+		$user->delete();
+
+		redirect::to('user/lists', 'User <u>'.$name.'</u> has been deleted.');
 	}
 
 	public function edit($userID)

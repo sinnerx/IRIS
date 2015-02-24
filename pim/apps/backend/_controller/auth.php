@@ -153,17 +153,22 @@ Class Controller_Auth
 					redirect::to("","Wrong log-in detail.","error");
 				}
 
-				
 				## if site manager
 				if($backendLoginCheck['userLevel'] == 2)
 				{
+					if($backendLoginCheck['userStatus'] == 3)
+					{
+						input::repopulate();
+						redirect::to('', 'Your account has been disabled', 'error');
+					}
+
 					$site	= $site->getSiteByManager($backendLoginCheck['userID']);
 
 					## and he didn't have any site yet.
 					if(!$site)
 					{
 						input::repopulate();
-						redirect::to("","You haven't been registered to any site yet.");
+						redirect::to("","You haven't been registered to any site yet.", 'error');
 					}
 				}
 

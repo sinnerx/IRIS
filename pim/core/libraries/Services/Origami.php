@@ -8,6 +8,7 @@ class Origami
 	protected $primary;
 	protected $prefix;
 	protected $exception = array();
+	protected $relationCaches = array();
 
 	public $modelData = array(
 		'name'=> null,
@@ -166,6 +167,16 @@ class Origami
 	}
 
 	/**
+	 * Relational function
+	 */
+	public function withQuery($callback)
+	{
+		$callback(db::$instance);
+
+		return $this;
+	}
+
+	/**
 	 * @return \Origami
 	 */
 	public function getOne($model, $ref)
@@ -174,15 +185,29 @@ class Origami
 	}
 
 	/**
-	 * @return array
+	 * @return \Origamis
 	 */
 	public function getMany($model, $ref)
 	{
 		return $this->relate($model, $ref, 'many');
 	}
 
+	/**
+	 * Relate with other origami.
+	 * @param mixed.
+	 *	- string (model name)
+	 *  - array (create origami anonymously : first is table name, second is it's primary key)
+	 * @param string foreign key
+	 * @param string type of relation
+	 * @return mixed. if relation type is one, return model object, else return \Origamis
+	 */
 	public function relate($model, $ref, $type)
 	{
+		$modelKey = is_array($model) ? serialize($model) : $model;
+
+		if(isset($this->relationCaches[$type][$modelKey][$ref]))
+			return $this->relationCaches[$type][$modelKey][$ref];
+
 		$primary = $this->primary;
 
 		$model = model::orm($model);
