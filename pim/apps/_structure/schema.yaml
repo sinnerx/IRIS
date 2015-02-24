@@ -251,7 +251,9 @@ site_message:	## a message from public
 	siteMessageReadStatus [int]
 	siteMessageReadUser [int]
 	siteMessageStatus [int]		## 1 = active, 2 = closed.
-	siteMessageCreatedUser [int]		## if public (1), will use table contact. if members, will use table member.
+	siteMessageRemark [text]
+	siteMessageCreatedUser [int] ## if public (1), will use table contact. if members, will use table member.
+	siteMessageUpdatedUser [int]
 
 contact:
 	contactID [int]

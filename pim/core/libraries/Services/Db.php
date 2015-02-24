@@ -341,6 +341,17 @@ class Db_instance
 		return $this;
 	}
 
+	/**
+	 * Build the query through the given closure, with the passed instance of db. 
+	 * @param \Callback callback
+	 */
+	public function prepare($callback)
+	{
+		$callback($this);
+
+		return $this;
+	}
+
 	## Custom SQL Execution
 	public function query($sql,$bindParam = false)
 	{

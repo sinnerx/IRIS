@@ -43,7 +43,7 @@ List of all messages sent through the contact form on all Pi1Ms
 	<div class="table-responsive">
 	<table class='table'>
 		<tr>
-			<th width='100px'>Ref. No.</th><th>Subject</th><th>Kategori</th><th>From</th><th>Phone No.</th><th>Site</th><td>Date</td><th width='24px'></th>
+			<th width='100px'>Ref. No.</th><th>Subject</th><th>Kategori</th><th>From</th><th>Phone No.</th><th>Site</th><td>Date</td><th width='60px'></th>
 		</tr>
 		<?php
 		if($res_message):
@@ -58,7 +58,14 @@ List of all messages sent through the contact form on all Pi1Ms
 			$siteUrl	= $row['siteName']?url::base("site/edit/".$row['siteID']):"#";
 			$detailUrl	= url::base("site/messageView/$refNo");
 			$date		= date("d F Y, g:i A",strtotime($row['messageCreatedDate']));
-			$category	= $categoryNameR[$row['siteMessageCategory']];	
+			$category	= $categoryNameR[$row['siteMessageCategory']];
+
+			$icon = '';
+
+			if($row['siteMessageStatus'] == 2)
+			{
+				$icon = '<span title="This message has been marked as closed" class="fa fa-check-circle text-success"></span>';
+			}
 
 			echo "<tr>";
 			echo "<td>$refNo</td>";
@@ -68,7 +75,7 @@ List of all messages sent through the contact form on all Pi1Ms
 			echo "<td>$phoneNo</td>";
 			echo "<td><a href='$siteUrl'>$site</a></td>";
 			echo "<td>$date</td>";
-			echo "<td><a class='fa fa-search' href='$detailUrl'></a></td>";
+			echo "<td><a class='fa fa-search' href='$detailUrl'></a> $icon</td>";
 			echo "</tr>";
 		}
 

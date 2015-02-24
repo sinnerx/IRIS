@@ -28,8 +28,8 @@ class Data
 					"manager/edit"=>Array("r","sm"),
 					"user/profile"=>Array("r","sm","cl"),
 					"user/changePassword"=>Array("r","sm","cl"),
-					"site/message"=>Array("r","sm","cl"),
-					"site/messageView"=>Array("r","sm","cl"),
+					"site/message"=>Array("r"/*,"sm"*/,"cl"),
+					"site/messageView"=>Array("r"/*,"sm"*/,"cl"),
 					"file/index"=>Array("r", "sm"),
 					"file/addFolder"=>Array("r", "sm"),
 					"file/addFile"=>Array("r", "sm")

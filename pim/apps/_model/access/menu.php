@@ -20,6 +20,7 @@ class Menu extends Data
 									"Announcement"=>Array("site/announcement","site/editAnnouncement"),
 									"Site Menu"=>"menu/index",
 									"Sales"=>array("sales/add", "sales/edit"),
+									'Message'=> array('site/message', 'site/messageView')
 									#"Transaction"=>"account/transaction"
 											),
 					"Newsletter"=>Array(

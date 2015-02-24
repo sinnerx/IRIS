@@ -151,4 +151,57 @@ Class Controller_Site
 
 		view::render("sitemanager/site/overview",$data);
 	}
+
+	public function message($page = 1)
+	{
+		$messages = model::orm('site/message')
+		->where('site_message.siteID', site()->siteID)
+		->prepare(function($db)
+		{
+			if($category = request::get('category'))
+				$db->where('siteMessageCategory', $category);
+		})
+		->paginate(array(
+			'currentPage'=>$page,
+			'urlFormat'=>url::base('site/message/{page}'),
+			'limit'=>10
+			))
+		->order_by('siteMessageStatus', 'asc')
+		->order_by('messageCreatedDate', 'desc')
+		->execute();
+
+		$data['categoryNames'] = model::load('site/message')->getCategoryName();
+		$data['messages'] = $messages;
+
+		view::render('sitemanager/site/message', $data);
+	}
+
+	public function messageView($encryptedSiteMessageID)
+	{
+		$siteMessageID = model::load('site/message')->encryptID($encryptedSiteMessageID, 'decrypt');
+		$siteMessage = model::orm('site/message')->find($siteMessageID);
+
+		// read this message as soon as user open this submodule.
+		$siteMessage->read();
+
+		$data['message'] = $siteMessage;
+
+		view::render('sitemanager/site/messageView', $data);
+	}
+
+	public function messageClose($siteMessageID)
+	{
+		$this->template = false;
+
+		$data['siteMessageID'] = $siteMessageID;
+
+		if(form::submitted())
+		{
+			model::orm('site/message')->find($siteMessageID)->close(input::get('siteMessageRemark'));
+
+			redirect::to('site/message', 'Message has been marked as closed.');
+		}
+
+		view::render('sitemanager/site/messageClose', $data);
+	}
 }

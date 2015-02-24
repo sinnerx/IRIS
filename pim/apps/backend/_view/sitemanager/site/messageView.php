@@ -1,5 +1,5 @@
 <h3 class="m-b-xs text-black">
-Public message : <?php echo $referenceNo;?>
+Public message : <?php echo $message->getEncryptedID();?>
 </h3>
 <div class='well well-sm'>
 Message detail
@@ -9,19 +9,21 @@ Message detail
 <div class='col-sm-7'>
 	<section class='panel panel-default'>
 		<div class='panel-heading'>
-		Subject : <?php echo $row['messageSubject'];?><div class='pull-right badge badge-primary'><?php echo $category;?></div>
+		Subject : <?php echo $message->messageSubject;?><div class='pull-right badge badge-primary'><?php echo $message->getCategory();?></div>
 		</div>
 		<div class='panel-body' style='min-height:135px;'>
-		<?php echo $row['messageContent'];?>
+		<?php echo $message->messageContent;?>
 		</div>
 		<div class='panel-footer' style="text-align:right;">
-			<?php if($row['siteMessageStatus'] == 2):?>
+			<?php if($message->siteMessageStatus != 2):?>
+				<label><a href='<?php echo url::base('site/messageClose/'.$message->siteMessageID);?>' data-toggle='ajaxModal' class='text-primary'>Mark as closed</a></label>
+			<?php else: // message has been marked as closed?>
 				<div class='row'>
 					<div class='col-sm-8' style="text-align:left;">
-						<?php if($row['siteMessageRemark'] != ''):?>
+						<?php if($message->siteMessageRemark != ''):?>
 						<label>Remark</label>
 						<div style="text-align:left;">
-							<?php echo $row['siteMessageRemark'];?>
+							<?php echo $message->siteMessageRemark;?>
 						</div>
 						<?php endif;?>
 					</div>
@@ -41,13 +43,13 @@ Message detail
 		<div class='panel-body table-responsive'>
 		<table class='table'>
 			<tr>
-				<td width='100px'>Name</td><td>: <?php echo $row['contactName'];?></td>
+				<td width='100px'>Name</td><td>: <?php echo $message->contactName;?></td>
 			</tr>
 			<tr>
-				<td>Email</td><td>: <?php echo $row['contactEmail'];?></td>
+				<td>Email</td><td>: <?php echo $message->contactEmail;?></td>
 			</tr>
 			<tr>
-				<td>Phone No.</td><td>: <?php echo $row['contactPhoneNo'];?></td>
+				<td>Phone No.</td><td>: <?php echo $message->contactPhoneNo;?></td>
 			</tr>
 		</table>
 		</div>

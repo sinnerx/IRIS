@@ -112,8 +112,20 @@ class Orm
 
 		if($join = $this->model->getJoin())
 		{
-			foreach($join as $foreignTable=>$foreignID)
+			foreach($join as $foreignTable=>$args)
 			{
+				if(is_array($args))
+				{
+					$localID = isset($args['local']) ? $args['local'] : $primary;
+					$foreignID = $args['foreign'];
+				}
+				else
+				{
+					$localID = $primary;
+					$foreignID = $args; 
+				}
+
+
 				db::join($foreignTable, $table.'.'.$primary.' = '.$foreignTable.'.'.$foreignID);
 			}
 		}

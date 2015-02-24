@@ -1,8 +1,62 @@
 <?php
 namespace model\site;
 use db, session, model, pagination, apps;
-class Message
+class Message extends \Origami
 {
+	protected $table = 'site_message';
+	protected $primary = 'siteMessageID';
+	protected $join = array(
+		'message'=> array('local'=>'messageID', 'foreign'=> 'messageID'),
+		'contact'=> array('local'=>'siteMessageCreatedUser', 'foreign'=> 'contactID'),
+		'site'=> array('local'=> 'siteID', 'foreign'=> 'siteID')
+		);
+
+	/**
+	 * ORM : Get encrypted ID
+	 * @return string
+	 */
+	public function getEncryptedID()
+	{
+		return $this->encryptID($this->siteMessageID);
+	}
+
+	/**
+	 * ORM : Get category name.
+	 * @return string
+	 */
+	public function getCategory()
+	{
+		return $this->getCategoryName($this->siteMessageCategory);
+	}
+
+	/**
+	 * ORM : Read the message by current user.
+	 * @return void
+	 */
+	public function read()
+	{
+		if($this->siteMessageReadStatus == 0)
+		{
+			$this->siteMessageReadStatus = 1;
+			$this->siteMessageReadUser = session::get('userID');
+			$this->save();
+		}
+	}
+
+	/**
+	 * ORM : Close the message. AKA set message status to 2.
+	 * @return void
+	 */
+	public function close($remark = null)
+	{
+		if($remark)
+			$this->siteMessageRemark = $remark;
+		
+		$this->siteMessageStatus = 2;
+		$this->siteMessageUpdatedUser = session::get('userID');
+		$this->save();
+	}
+
 	public function getCategoryName($no = null)
 	{
 		$catNameR	= Array(
