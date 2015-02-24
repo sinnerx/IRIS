@@ -677,6 +677,7 @@ sales: ## site sales every month
 	siteID [int]
 	salesCreatedDate [datetime]
 	salesCreatedUser [int]
+	salesDate [datetime]
 	salesUpdatedDate [datetime]
 	salesUpdatedUser [int]
 	salesTotal [float]
