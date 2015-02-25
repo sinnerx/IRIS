@@ -206,13 +206,11 @@ Class Controller_Site
 	}
 
 
-		public function kpiMonthly()
+		public function kpiMonthly($currentyear)
 	{
 
 		$siteID	= authData('site.siteID');
-		$year = date("Y");
-
-
+		$year = $currentyear;
 
 		if(request::isAjax())
 			$this->template = false;
