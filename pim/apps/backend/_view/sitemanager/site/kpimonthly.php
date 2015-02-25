@@ -3,7 +3,7 @@
 		<div class="modal-header">
 			<button type="button" class="close" data-dismiss="modal"><i class="fa fa-times"></i></button>
 			<h4 class="modal-title"><!-- ☮ -->
-			<span><!-- <span class='fa fa-dollar'></span> --> Monthly KPI view</span>
+			<span>Yearly KPI view  <?php echo $year?></span>
 			</h4>
 		</div>
 		<?php echo flash::data();?>
@@ -40,8 +40,8 @@
                           	<td><?php echo $totalEvent; ?></td>
                           	<td><?php echo $totalClass; ?></td>
                           	<td><?php echo $totalProgram; ?></td>
-                          	<td><?php echo $totalTraining; ?></td>
-                          	<td><?php echo $totalLogin; ?></td>
+                          	<td><?php echo $totalTraining; ?></td> 
+                          	<td><?php echo number_format((($totalLogin/1200)*100),2); ?>%</td>
                         </tr>               
                   		
 

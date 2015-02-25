@@ -256,11 +256,15 @@ Class Controller_Site
 				$data[$m]['entreclass'] = $totalClass;
 				##  entreprogram
 				$sales = model::load("sales/sales")->getSales($siteID,$m,$year);		
-				$totalSale = $sales[0][totalSale];			
+				$totalSale = $sales[0][totalSale];	
+				//if ($totalSale == "") { $totalSale ="0"; }		
 				$data[$m]['entreprogram'] = $totalSale;
 
     		 }
-   
+
+    		 $data['data'] = $data;
+    		 $data['year'] = $year;
+
 		
 		view::render('sitemanager/site/kpimonthly', $data);
 	}
