@@ -1,3 +1,5 @@
+<link rel="stylesheet" href="<?php echo url::asset("_scale/js/datepicker/datepicker.css"); ?>" type="text/css" />
+<script type="text/javascript" src="<?php echo url::asset("_scale/js/datepicker/bootstrap-datepicker.js"); ?>"></script><h3 class="m-b-xs text-black">
 <script type="text/javascript">
 	
 var sales = new function()
@@ -9,16 +11,47 @@ var sales = new function()
 	}
 }
 
+$(document).ready(function()
+{
+	 var cdate = new Date();
+
+	$("#selectDate").on("changeDate", function(ev)
+	{
+
+		var date = new Date(ev.date);
+	
+
+		 if (cdate.valueOf() < date.valueOf()){
+
+			alert("Selected date cannot be greater than current date");
+
+			rt = cdate.getFullYear()+"-"+(cdate.getMonth()+1)+"-"+cdate.getDate();
+	    	window.location.href = pim.base_url+"sales/add/"+rt;
+
+		} else {
+
+			rt = date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate();
+	    	window.location.href = pim.base_url+"sales/add/"+rt;
+		
+
+		}
+
+
+	    
+	});
+})
+
+
 </script>
 <h3 class='m-b-xs text-black'>
 	Sales
 </h3>
 <div class='well well-sm'>
-	Sales record for the month. Please update daily.
+	Daily sales record.
 </div>
 <?php echo flash::data();?>
 <div class='row'>
-	<div class='col-sm-7'>
+	<div class='col-sm-12'>
 		<div class='table-responsive bg-white'>		
 			<form method="post">
 				<table class='table'>
@@ -27,34 +60,61 @@ var sales = new function()
 					 <tr>
 
 					<?php foreach($types as $row=>$no):?>
-
+						
 						<td><?php echo $no[productName]?></td>
 					
 					 <?php endforeach;?>
-
+					 	<td></td>
+						<td>
+					   	<div class="col-sm-9"><?php echo form::text("selectDate","class='input-sm input-s datepicker-input form-control' date-date-format='dd-mm-yyyy'",date('d-m-Y', strtotime($todayDate)));?></div>
+						</td>
 					</tr>
+
+
+					<?php if($todaySales->count() > 0):?>
+					<?php
+						$todaySales = $todaySales->getFirst();
+						$products = $todaySales->getProducts();
+					?>
+
 					 <tr>
+						<?php foreach($products as $salesProduct):?>
+							
+							<?php if($salesProduct->productID == "1"):  ?>							
+							<td>RM <?php echo form::text($salesProduct->productID,"class='form-control' style='width:60%;display:inline;'",$salesProduct->salesProductQuantity);  ?></td>
+							<?php else:?>		
+							<td><?php echo form::text($salesProduct->productID,"class='form-control' style='width:60%;display:inline;'",$salesProduct->salesProductQuantity);  ?> Unit</td>
+							<?php endif;?>
 
-					<?php foreach($types as $row=>$no):?>
-
-						<td><?php  echo form::text($no[productID],null,"0");  ?></td>
-					
-					 <?php endforeach;?>
-
+						<?php endforeach;?>
+						 	<td><input type='submit' class='btn btn-primary'  value='SUBMIT' /></td> 
+						 	
 					</tr>
 
+					<?php else:?>
+					 <tr>
+						<?php foreach($types as $row=>$no):?>
+							
 
+							<?php if($no[productID] == "1"):  ?>
+							<td>RM <?php echo form::text($no[productID],"class='form-control' style='width:60%;display:inline;'","0");  ?></td>
+							<?php else:?>
+							<td><?php echo form::text($no[productID],"class='form-control' style='width:60%;display:inline;'","0");  ?> Unit</td>
+							<?php endif;?>								
 
-				
-				<tr>
-						 <td><input type='submit' class='btn btn-primary'  value='SUBMIT' /></td> 
-						
-					</tr> 
+						 <?php endforeach;?>
+						 	<td><input type='submit' class='btn btn-primary'  value='SUBMIT' /></td> 
+						 	<td></td>
+					</tr>
+					<?php endif;?>
+					<!-- <tr>
+						 <td><input type='submit' class='btn btn-primary'  value='SUBMIT' /></td> 						
+					</tr>  -->
 				</table>
             </form>  
 		</div>
 	</div>
-	<div class="col-sm-5">
+	<!-- <div class="col-sm-5">
 		<h4>Latest Sales Records 
 		<span class='pull-right' style='font-size:12px;'>
 			Month/year : 
@@ -94,5 +154,5 @@ var sales = new function()
 			</table>
 			<?php echo pagination::link();?>
 		</div>
-	</div>
+	</div> -->
 </div>

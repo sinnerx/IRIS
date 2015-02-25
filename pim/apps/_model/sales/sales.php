@@ -27,6 +27,15 @@ class sales extends \Origami
 	}
 
 	/**
+	 * ORM : get sales products
+	 * @return \Origamis
+	 */
+	public function getProducts()
+	{
+		return $this->getMany('sales/product', 'salesID');
+	}
+
+	/**
 	 * ORM : Add sales product
 	 * @return total (quantity * productPrice)
 	 */
@@ -80,8 +89,8 @@ class sales extends \Origami
 		db::select("sum(salesTotal) as totalSale");
 		db::where("siteID",$siteID);
 		
-		db::where("month(salesCreatedDate)",$month);
-		db::where("year(salesCreatedDate)",$year);
+		db::where("month(salesDate)",$month);
+		db::where("year(salesDate)",$year);
 
 
 		return db::get("sales")->result();

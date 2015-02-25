@@ -1,35 +1,59 @@
 <?php
 Class Controller_Sales
 {
-	public function add($month = null, $year = null, $page = 1)
+	public function add($todayDate = null)
 	{
 		$siteID	= authData('site.siteID');
+
+
+		$data['todayDate'] = $todayDate = $todayDate ? :  date('Y-m-d');
+		//$todayDate = date('Y-m-d');
+		$data['todaySales'] = model::orm('sales/sales')->where('date(salesDate)', $todayDate)->execute();
+
+
 		
 		if(form::submitted())
 		{
 			$salesProducts = input::get();
+			
 
-			$sales = model::orm('sales/sales')->create();
-			$sales->siteID = $siteID;
-			$sales->salesCreatedDate = now();
-			$sales->salesCreatedUser = session::get('userID');
-			$sales->salesRemark = '';
-			$sales->save();
-		
+			if($data['todaySales']->count() > 0)
+			{
+				$sales = $data['todaySales']->getFirst();
+
+				db::delete('sales_product', array('salesID'=> $sales->salesID));
+				$sales->salesTotal = 0;
+				$sales->save();
+			}
+			else
+			{
+				$sales = model::orm('sales/sales')->create();
+				$sales->siteID = $siteID;
+				$sales->salesCreatedDate = now();
+				$sales->salesDate = $todayDate;
+				$sales->salesCreatedUser = session::get('userID');
+				$sales->salesRemark = '';
+				$sales->save();
+			}
+
 			foreach ($salesProducts as $productID => $quantity) {
 				# code...
-				$sales->addProduct($productID, $quantity);
+
+				if ($productID != "selectDate") {
+
+					$sales->addProduct($productID, $quantity);	
+				}
+
+				
 			}
 
 			
 			redirect::to(null, 'Added new sales!', 'success');
 		}
-
-		$month = $data['month'] = $month ? : date('n');
-		$year = $data['year'] = $year ? : date('Y');
-
+		
 		$data['types'] = model::load('sales/sales')->type();
-
+/*		$month = $data['month'] = $month ? : date('n');
+		$year = $data['year'] = $year ? : date('Y');
 
 		// get monthly sales. return array of model/sales/sales
 		pagination::setFormat(model::load("template/cssbootstrap")->paginationLink());
@@ -43,7 +67,7 @@ Class Controller_Sales
 			'currentPage'=>$page,
 			'urlFormat'=>url::base('sales/add/'.$month.'/'.$year.'/{page}')
 			))
-		->execute();
+		->execute();*/
 
 		view::render("sitemanager/sales/add", $data);
 	}
