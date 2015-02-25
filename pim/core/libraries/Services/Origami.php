@@ -131,14 +131,15 @@ class Origami
 	public function delete()
 	{
 		$primary = $this->getPrimary();
+
 		db::delete($this->getTable(), array(
-			$primary => $this->get($primary)
+			$primary => $this->getAttribute($primary)
 			));
 
 		return $this;
 	}
 
-	public function get($key)
+	public function getAttribute($key)
 	{
 		return $this->$key;
 	}

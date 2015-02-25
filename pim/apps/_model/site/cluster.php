@@ -1,6 +1,6 @@
 <?php
 namespace model\site;
-use db, session;
+use db, session, model;
 
 /**
  * This is supposedly object for cluster/cluster (but since it was placed here, i'll just use this class here.)
@@ -10,6 +10,24 @@ class Cluster extends \Origami
 {
 	protected $table = 'cluster';
 	protected $primary = 'clusterID';
+
+	/**
+	 * Get sites.
+	 * @return \Origamis of model\site\site
+	 */
+	public function getSites()
+	{
+		return model::orm('site/site')->where('siteID IN (SELECT siteID FROM cluster_site WHERE clusterID = ?)', array($this->clusterID))->execute();
+	}
+
+	/**
+	 * Remove site assignments.
+	 * @param array siteIDs list of optional site id.
+	 */
+	public function clearAssignments(array $siteIDs = array())
+	{
+		db::delete('cluster_site', array('clusterID' => $this->clusterID));
+	}
 
 	public function lists()
 	{

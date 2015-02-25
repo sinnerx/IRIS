@@ -131,7 +131,7 @@ Listing the groups of Pi1M sites for administration purpose. Every cluster must 
 			<th width="20">No.</th>
 			<th width='30%'>Cluster Name</th>
 			<th class='site-col'>Cluster Lead</th>
-			<th width="60px"></th>
+			<th width="80px"></th>
 		</tr>
 	</thead>
 	<tbody>
@@ -159,8 +159,9 @@ Listing the groups of Pi1M sites for administration purpose. Every cluster must 
 
 			$assignUrl	= url::base("cluster/assign?clusterID=$clusterID");
 			$assignIcon	= "<a href='$assignUrl' class='fa fa-user'></a>";
+			$deleteUrl = url::base('cluster/delete/'.$clusterID);
 
-			echo "<tr><td>$no.</td><td>$name</td><td>$userEmail</td><td>$assignIcon <a href='#' onclick='cluster.show($clusterID);' class='fa fa-list' title='List of monitored site'></a></td></tr>";
+			echo "<tr><td>$no.</td><td>$name</td><td>$userEmail</td><td>$assignIcon <a href='#' onclick='cluster.show($clusterID);' class='fa fa-list' title='List of monitored site'></a> <a href='$deleteUrl' onclick='return confirm(\"Delete this cluster. Are you sure?\");' class='i i-cross2'></a></td></tr>";
 			$no++;
 		endforeach;
 	else:

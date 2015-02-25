@@ -87,6 +87,38 @@ class Controller_Cluster
 		redirect::to("cluster/lists","A user has been un-assigned from the cluster.");
 	}
 
+	/**
+	 * Delete cluster
+	 */
+	public function delete($id, $override = null)
+	{
+		$cluster = model::orm('site/cluster')->find($id);
+
+		$name = $cluster->clusterName;
+
+		$sites = $cluster->getSites();
+
+		if($sites->count() > 0)
+		{
+			$deleteUrl = url::base('cluster/delete/'.$id.'/override');
+
+			if($override != 'override')
+			{
+				redirect::to('cluster/lists', 'There are still '.$sites->count().' sites assigned under this cluster. Deleting this will unassign all of those site. Are you sure? <a class="label label-danger" href="'.$deleteUrl.'">Yes. Delete</a>', 'error');
+			}
+			else
+			{
+				// unassign all sites.
+				$cluster->clearAssignments();
+			}
+		}
+
+		// delete cluster.
+		$cluster->delete();
+
+		redirect::to('cluster/lists', 'Cluster '.$name.' has been deleted.');
+	}
+
 	/*public function leadLists($page = 1)
 	{
 		db::from("user");
