@@ -257,7 +257,7 @@ Class Controller_Site
 				##  entreprogram
 				$sales = model::load("sales/sales")->getSales($siteID,$m,$year);		
 				$totalSale = $sales[0][totalSale];	
-				//if ($totalSale == "") { $totalSale ="0"; }		
+				if ($totalSale == "") { $totalSale ="0"; }		
 				$data[$m]['entreprogram'] = $totalSale;
 
     		 }
