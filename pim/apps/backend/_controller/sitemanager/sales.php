@@ -5,17 +5,13 @@ Class Controller_Sales
 	{
 		$siteID	= authData('site.siteID');
 
-
 		$data['todayDate'] = $todayDate = $todayDate ? :  date('Y-m-d');
 		//$todayDate = date('Y-m-d');
 		$data['todaySales'] = model::orm('sales/sales')->where('date(salesDate)', $todayDate)->execute();
-
-
 		
 		if(form::submitted())
 		{
 			$salesProducts = input::get();
-			
 
 			if($data['todaySales']->count() > 0)
 			{
@@ -24,6 +20,8 @@ Class Controller_Sales
 				db::delete('sales_product', array('salesID'=> $sales->salesID));
 				$sales->salesTotal = 0;
 				$sales->save();
+
+				$message = 'Sales information updated.';
 			}
 			else
 			{
@@ -34,6 +32,8 @@ Class Controller_Sales
 				$sales->salesCreatedUser = session::get('userID');
 				$sales->salesRemark = '';
 				$sales->save();
+
+				$message = 'New sales added!';
 			}
 
 			foreach ($salesProducts as $productID => $quantity) {
@@ -43,12 +43,9 @@ Class Controller_Sales
 
 					$sales->addProduct($productID, $quantity);	
 				}
-
-				
 			}
-
 			
-			redirect::to(null, 'Added new sales!', 'success');
+			redirect::to(null, $message, 'success');
 		}
 		
 		$data['types'] = model::load('sales/sales')->type();

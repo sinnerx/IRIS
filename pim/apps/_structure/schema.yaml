@@ -690,6 +690,7 @@ sales_product:
 	salesID [int]
 	productID [int]
 	salesProductTotal [int]
+	salesProductQuantity [int]
 
 product:
 	productID [int]

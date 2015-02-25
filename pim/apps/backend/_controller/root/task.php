@@ -105,6 +105,22 @@ class Controller_Task
 		die;
 	}
 
+	public function createProducts()
+	{
+		$products = array(
+			'Easy Reload' => 1,
+			'Reload Coupon RM 10' => 10,
+			'Reload Coupon RM 30' => 30,
+			'Starter Pack RM 8.50' => 8.5
+			);
+
+		foreach($products as $name=>$price)
+			db::insert('product', array(
+				'productPrice' => $price,
+				'productName' => $name
+				));
+	}
+
 	## controller to uploadUser.
 	public function uploadUser()
 	{
