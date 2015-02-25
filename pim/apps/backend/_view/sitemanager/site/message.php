@@ -34,7 +34,7 @@ List of all messages sent through the contact form on all Pi1Ms
 		<div class='col-sm-2'>
 			<div class='input-group'><?php echo form::text("search","class='input-sm form-control' style='text-transform:uppercase;' placeholder='Reference No.'");?>
 			<span class='input-group-btn'>
-			<button class='btn btn-sm btn-default' type='button' onclick=''>Go!</button>
+			<button class='btn btn-sm btn-default' type='submit' onclick=''>Go!</button>
 			</span>
 			</div>
 		</div>
@@ -64,7 +64,7 @@ List of all messages sent through the contact form on all Pi1Ms
 				if($message->siteMessageStatus != 2)
 				{
 					$url = url::base('site/messageClose/'.$message->siteMessageID);
-					$icon = '<a href="'.$url.'" data-toggle="ajaxModal" title="Mark this as solved?" class="fa fa-question-circle text-primary"></a>';
+					$icon = '<a href="'.$url.'" data-toggle="ajaxModal" title="Mark this as closed?" class="fa fa-circle-o text-success"></a>';
 				}
 				else
 				{

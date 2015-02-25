@@ -16,7 +16,7 @@ Message detail
 		</div>
 		<div class='panel-footer' style="text-align:right;">
 			<?php if($message->siteMessageStatus != 2):?>
-				<label><a href='<?php echo url::base('site/messageClose/'.$message->siteMessageID);?>' data-toggle='ajaxModal' class='text-primary'>Mark as closed</a></label>
+				<label><a href='<?php echo url::base('site/messageClose/'.$message->siteMessageID);?>' data-toggle='ajaxModal' class='text-success'><span class='fa fa-circle-o'></span> Mark as closed</a></label>
 			<?php else: // message has been marked as closed?>
 				<div class='row'>
 					<div class='col-sm-8' style="text-align:left;">

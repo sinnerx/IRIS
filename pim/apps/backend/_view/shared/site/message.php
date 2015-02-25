@@ -66,6 +66,10 @@ List of all messages sent through the contact form on all Pi1Ms
 			{
 				$icon = '<span title="This message has been marked as closed" class="fa fa-check-circle text-success"></span>';
 			}
+			else
+			{
+				$icon = '<span title="Pending for site manager attention" class="fa fa-exclamation-circle"></span>';
+			}
 
 			echo "<tr>";
 			echo "<td>$refNo</td>";
