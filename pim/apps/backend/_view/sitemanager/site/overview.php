@@ -81,11 +81,11 @@ Dashboard overview
 			<div class='col-lg-6' >
 			</div>	
 
-			<div class='col-lg-6'>
+			<div class='col-lg-6'>			
 			<div style="float:right">
+				<a href='<?php echo url::base("site/kpiMonthly");?>'  class='fa fa-external-link' data-toggle='ajaxModal' style="color:green;"> KPI monthly view</a>				
 				<?php echo form::select("month",model::load("helper")->monthYear("month"),'onchange="site.overview.updateDate();"',$month);?>
-				<?php echo form::select("year",model::load("helper")->monthYear("year"),'onchange="site.overview.updateDate();"',$year);?>
-				<!-- <input type='button' class='btn btn-primary' onclick='report.generate();' value='SUBMIT' /> -->
+				<?php echo form::select("year",model::load("helper")->monthYear("year"),'onchange="site.overview.updateDate();"',$year);?>			
 			</div>	
 			</div>
 		</div>

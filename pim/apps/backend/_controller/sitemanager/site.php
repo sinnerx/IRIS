@@ -204,4 +204,66 @@ Class Controller_Site
 
 		view::render('sitemanager/site/messageClose', $data);
 	}
+
+
+		public function kpiMonthly()
+	{
+
+		$siteID	= authData('site.siteID');
+		$year = date("Y");
+
+
+
+		if(request::isAjax())
+			$this->template = false;
+
+			for ($m=1; $m<=12; $m++) {
+	    
+	    		$monthName = date('F', mktime(0,0,0,$m, 1, $year)); 		
+				## month
+     			$data[$m]['monthName'] = $monthName;
+				## event
+				$test	= model::load("blog/article")->getReportBySiteID($siteID,$year,$m);
+				$data[$m]['event'] = count($test);
+				## login
+				$active = db::where('month(logLoginCreatedDate) = ? AND year(logLoginCreatedDate) = ?', array($m, $year))
+						->where('userID IN (SELECT userID FROM site_member WHERE siteID = ?)', array($siteID))
+						->group_by('userID')->get('log_login')->num_rows();
+				$all 	= db::where('siteID', $siteID)->get('site_member')->num_rows();
+		
+				$cond =	Array(			
+							"year(userLastLogin)"=>$year,
+							"month(userLastLogin)"=>$month			
+						);
+
+				$target = ($active/$all)*100;
+				$target = round((float)$target) . '%';
+				$data[$m]['login'] = $target;
+				## training
+				$activityID = model::load("activity/activity")->getActivityIDListPerSlug($siteID,$year,$m,2,$groupBy);		 
+					$totalTime1 = 0;
+					foreach($activityID as $no=>$row)
+					{
+						$start_time = strtotime($row['activityDateStartTime']); 	
+						$end_time = strtotime($row['activityDateEndTime']);
+						$totalTime = $end_time - $start_time;
+						$totalTime1 = $totalTime1 + $totalTime;				
+					}
+					$trainingHour = floor($totalTime1/3600);
+				
+				$data[$m]['training'] = $trainingHour;						 
+				##  entreclass
+				$entClass = model::load("activity/activity")->getEntrepreneurshipBySlug($siteID,$m,$year);		
+				$totalClass = count($entClass);
+				$data[$m]['entreclass'] = $totalClass;
+				##  entreprogram
+				$sales = model::load("sales/sales")->getSales($siteID,$m,$year);		
+				$totalSale = $sales[0][totalSale];			
+				$data[$m]['entreprogram'] = $totalSale;
+
+    		 }
+   
+		
+		view::render('sitemanager/site/kpimonthly', $data);
+	}
 }
