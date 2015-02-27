@@ -108,8 +108,7 @@ Listing the groups of Pi1M sites for administration purpose. Every cluster must 
 	</div>
 	<div class='col-sm-6 pull-left'>
 	<div class='row' id='addForm'>
-		<div class='col-sm-3'>
-		<button type='button' class='class="btn btn-sm btn-bg btn-default pull-left'><a onclick='$("#clusterAddForm").slideToggle();' href='#'>Add Cluster +</a></button>
+		<div class='col-sm-3'><a class='btn btn-primary' onclick='$("#clusterAddForm").slideToggle();' href='#'>Add Cluster +</a>
 		</div>
 		<div class='col-sm-6' style='display:none;' id='clusterAddForm'>
 			<form method="post">
