@@ -33,9 +33,9 @@
 	{
 		var r = confirm("Are you sure to select this activity?");
     	if (r == true) {
-			document.getElementById('activityID').value = element.getElementsByTagName('input')['activityID'].value;
-			document.getElementById('activityArticleType').value = element.getElementsByTagName('input')['activityArticleType'].value;
-			document.getElementById('activity').innerHTML = '<i class="fa fa-link"></i> '+element.getElementsByTagName('input')['activityName'].value+' &nbsp;&nbsp;&nbsp;<a><i style="cursor: pointer;" onclick="removeActivity();" class="fa fa-times text-danger text"></i></a>&nbsp;&nbsp;&nbsp;<span class="caret"></span>';
+			document.getElementById('activityID').value = $(element).find('#previous_activityID').val();
+			document.getElementById('activityArticleType').value = $(element).find('#previous_activityArticleType').val();
+			document.getElementById('activity').innerHTML = '<i class="fa fa-link"></i> '+$(element).find('#previous_activityName').val()+' &nbsp;&nbsp;&nbsp;<a><i style="cursor: pointer;" onclick="removeActivity();" class="fa fa-times text-danger text"></i></a>&nbsp;&nbsp;&nbsp;<span class="caret"></span>';
         	return true;
     	} else {
         	window.event.cancelBubble = true;
@@ -77,9 +77,9 @@
 										<td style="text-align:center;vertical-align:middle;"><?php echo $row['activityName']; ?></td>
 										<td style="text-align:center;vertical-align:middle;"><?php echo '<b>From</b>&nbsp;&nbsp;&nbsp;'.date('jS-M-Y',strtotime($row['activityStartDate'])); ?></td>
 										<td style="text-align:center;vertical-align:middle;"><?php echo '<b>To</b>&nbsp;&nbsp;&nbsp;'.date('jS-M-Y',strtotime($row['activityEndDate'])); ?></td>
-										<input type="hidden" name="activityID" value="<?php echo $row['activityID']; ?>" />
-										<input type="hidden" name="activityArticleType" value="<?php if($ref == 1): ?>2<?php else: ?>1<?php endif; ?>" />
-										<input type="hidden" name="activityName" value="<?php echo $row['activityName']; ?>" />
+										<input type="hidden" name="activityID" id='previous_activityID' value="<?php echo $row['activityID']; ?>" />
+										<input type="hidden" name="activityArticleType" id='previous_activityArticleType' value="<?php if($ref == 1): ?>2<?php else: ?>1<?php endif; ?>" />
+										<input type="hidden" name="activityName" id='previous_activityName' value="<?php echo $row['activityName']; ?>" />
 									</tr>
 									<?php
 											$count++;
