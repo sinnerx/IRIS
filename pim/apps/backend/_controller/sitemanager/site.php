@@ -18,7 +18,7 @@ Class Controller_Site
 		$event['maxEvent'] = 2;
 		
 			if ($totalEvent >= $event['maxEvent']) {
-				$event['totalEvent'] = $event['maxEvent'];	
+				$event['totalEvent'] = $totalEvent;	
 				$event['done'] = 1;
 			} else {
 				
@@ -80,7 +80,7 @@ Class Controller_Site
 		if($trainingHour >= $training['maxHour'])
 		{ 
 			$training['done'] = 1;	
-			$training['hour'] = 48;	
+			$training['hour'] = $trainingHour;	
 		}
 		else
 		{
@@ -102,7 +102,7 @@ Class Controller_Site
 
 
 		if ($totalClass >= $entClass['maxClass']) {
-			$entClass['totalEvent'] = $entClass['maxClass'];	
+			$entClass['totalEvent'] = $totalClass;	
 			$entClass['done'] = 1;
 		}
 		else
@@ -133,7 +133,7 @@ Class Controller_Site
 	
 
 		if ($totalSale >= $entProgram['maxSale']) {
-			$entProgram['total'] = $entProgram['maxSale'];	
+			$entProgram['total'] = $totalSale;	
 			$entProgram['done'] = 1;
 		} else {
 			
