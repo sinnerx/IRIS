@@ -25,7 +25,7 @@ class Ga
 
 		$reportTypes = array('pageviews','users');
 
-		$ga->requestReportData($profileid, array('dateHour', 'pagePath'), $reportTypes, 'dateHour', null, $startDate, $endDate);
+		$ga->requestReportData($profileid, array('dateHour', 'pagePath'), $reportTypes, 'dateHour', null, $startDate, $endDate, 1, 1000);
 
 
 		foreach($ga->getResults() as $result)
