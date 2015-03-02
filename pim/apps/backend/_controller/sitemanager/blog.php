@@ -16,7 +16,7 @@ class Controller_Blog
 	{
 		$facebook = model::load("socialmedia/facebook/facebook")->setRedirectUrl(url::base('blog/getPageId'));
 
-		if(!$facebook->initiate(array('manage_pages', 'publish_actions')))
+		if(!$facebook->initiate(array('manage_pages'/*, 'publish_actions'*/)))
 			redirect::to($facebook->getLoginUrl());
 
 		$pages = $facebook->getPages();
