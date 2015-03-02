@@ -56,7 +56,7 @@ class Ga
 
 	
 
-		list($segment1, $segment2, $segment3, $segment4, $segment5) = split("/", $path);
+		list($segment1, $segment2, $segment3, $segment4, $segment5) = explode("/", $path);
 
 
 
