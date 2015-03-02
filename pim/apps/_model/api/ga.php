@@ -21,7 +21,7 @@ class Ga
 		$profileid 	= $this->profileid;
 
 		// apps/_library/gapi.php
-		$ga = new gapi($authEmail, $password);
+		$ga = new gapi($email, $password);
 
 		$reportTypes = array('pageviews','users');
 
