@@ -60,7 +60,10 @@ class Newsletter extends \Origami
 		{
 			if($this->mailChimpCampaignID == '')
 			{
-				$detail = $this->newsletter->createCampaign('newrehmi@gmail.com', 'remi', $this->siteNewsletterSubject, $this->prepareTemplate());
+				$email = authData('user.userEmail');
+				$name = authData('user.userProfileFullName');
+
+				$detail = $this->newsletter->createCampaign($email, $name, $this->siteNewsletterSubject, $this->prepareTemplate());
 				$cID = $detail['id'];
 			}
 			// just update the campaign.
