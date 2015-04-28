@@ -208,6 +208,7 @@ class album
 		if($siteAlbumID)
 		{
 			db::select("photoID,siteAlbumID");
+			db::where('sitePhotoStatus', 1);
 			db::where("siteAlbumID",$siteAlbumID);
 
 			$res	= db::get("site_photo")->result("siteAlbumID",true);

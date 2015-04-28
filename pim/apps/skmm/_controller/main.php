@@ -58,6 +58,7 @@ class Controller_Main
 		## get all related photos.
 		if($data['albums']):
 		db::where("siteAlbumID",array_keys($data['albums']));
+		db::where('sitePhotoStatus', 1);
 		db::join("photo","photo.photoID = site_photo.photoID");
 		$data['photos']	= db::get("site_photo")->result("siteAlbumID",true);
 		endif;
