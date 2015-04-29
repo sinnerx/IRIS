@@ -568,10 +568,16 @@ if ($articleID) {
 		if(model::load("site/request")->checkRequest("article.add",$data['siteID'],$articleID)){
 			$this->_updateArticle($articleID,$data,true);
 		}else{
+
+			$originalSlug = model::load('helper')->slugify($data['articleName']);
+			$articleSlug = $this->slugChecker($originalSlug,$data['articlePublishedDate']);
+			$data['articleSlug'] = $articleSlug;
+
 			unset($data['articleTags']);
 			unset($data['category']);
 			unset($data['activityID']);
 			unset($data['activityArticleType']);
+
 			model::load("site/request")->create('article.update', $data['siteID'], $articleID, $data);
 		}
 
