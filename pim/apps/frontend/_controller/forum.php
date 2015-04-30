@@ -39,10 +39,13 @@ class Controller_Forum
 		/**
 		 * By orm checks.
 		 */
-		if(!member()->hasAccessTo('forum', array('forumCategoryAccess'=> $this->row_category['forumCategoryAccess'])))
-		{
-			flash::set('message', 'Anda tiada akses untuk forum ini. Sila buat bayaran keahlian terlebih dahulu.');
-			redirect::toRoute('frontend-error');
+
+		if (authData('user.userLevel') == 1){
+			if(!member()->hasAccessTo('forum', array('forumCategoryAccess'=> $this->row_category['forumCategoryAccess'])))
+			{
+				flash::set('message', 'Anda tiada akses untuk forum ini. Sila buat bayaran keahlian terlebih dahulu.');
+				redirect::toRoute('frontend-error');
+			}
 		}
 
 		if($data['res_threads'])
