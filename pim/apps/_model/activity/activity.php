@@ -365,7 +365,7 @@ class Activity extends \Origami
 			case 1: # event.
 				$data_event	= Array(
 						"activityID"=>$activityID,
-						"eventType"=>1,
+						"eventType"=>$data['eventType'],
 						"eventCreatedUser"=>session::get("userID"),
 						"eventCreatedDate"=>now()
 									);
