@@ -310,7 +310,7 @@ class Site extends \Origami
 
 		### comp 3 ### activity
 		$data_menu	= Array(
-					"menuName"=>"Activiti",
+					"menuName"=>"Aktiviti",
 					"menuType"=>1,
 					"menuNo"=>3
 							);
@@ -324,11 +324,19 @@ class Site extends \Origami
 							);
 		$menu->create($siteID,4,$data_menu);
 
+		### comp 6 ### blog.
+		$data_menu	= Array(
+					"menuName"=>"Blog",
+					"menuType"=>1,
+					"menuNo"=>5
+							);
+		$menu->create($siteID,6,$data_menu);
+
 		### comp 5 ### contact us.
 		$data_menu	= Array(
 					"menuName"=>"Hubungi Kami",
 					"menuType"=>1,
-					"menuNo"=>5
+					"menuNo"=>6
 							);
 		$menu->create($siteID,5,$data_menu);
 
