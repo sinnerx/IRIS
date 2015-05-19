@@ -31,6 +31,14 @@
         	relative_urls: false,
         	remove_script_host: false,
         	setup : function(ed) {
+        		ed.on('keyup', function(e)
+        		{
+        			if(e.keyCode == 46 || e.keyCode == 8)
+        			{
+        				ed.selection.setContent('');
+        			}
+        		});
+
         		// Add a custom button
 		        ed.addButton('mybutton', {
 				title : 'Insert/edit Photo',
@@ -72,8 +80,7 @@
 				endif;
 			endforeach; 
 			?>
-
-		})
+		});
 </script>
 <h3 class="m-b-xs text-black">
 <a href='info'>Edit Article</a>
