@@ -16,16 +16,19 @@ List of member registered in for site.
 <section class='panel panel-default'>
 	<div class='panel-heading'>
 		<div class="row">
-			<div class="col-sm-3 pull-right">
-				<form method="get" id="formSearch"><!-- search form -->
-					<div class="input-group">
-					<input class="input-sm form-control" name="search" placeholder="Search : by IC or by first name" value='<?php echo request::get("search");?>' type="text">
-						<span class="input-group-btn">
-							<button class="btn btn-sm btn-default" type="button" onclick="$('#formSearch').submit();">Go!</button>
-						</span>
-					</div>
-				</form>
-			</div>
+			<form method="get" id="formSearch"><!-- search form -->
+				<div class="col-sm-3 pull-right">
+						<div class="input-group">
+						<input class="input-sm form-control" name="search" placeholder="Search : by IC or by first name" value='<?php echo request::get("search");?>' type="text">
+							<span class="input-group-btn">
+								<button class="btn btn-sm btn-default" type="button" onclick="$('#formSearch').submit();">Go!</button>
+							</span>
+						</div>
+				</div>
+				<div class='col-sm-3 pull-right' style="text-align: right; padding-right:10px; position: relative; top: 2px;">
+					<label style="font-weight:normal; font-size: 1em;">Search all pi1m sites <input style="position:relative; top: 2px;" type='checkbox' name='searchAllSites' <?php if(request::get('searchAllSites') && request::get('search')):?> checked <?php endif;?> /></label>
+				</div>
+			</form>
 		</div>
 	</div>
 	<div class='table-responsive'>
@@ -42,13 +45,15 @@ List of member registered in for site.
 			</tr>
 			<?php if(!$user):?>
 			<tr>
-				<td style="text-align:center;" colspan="3">This site has no member yet.</td>
+				<td style="text-align:center;" colspan="3">No member was found.</td>
 			</tr>
 			<?php else:?>
 			<?php
 			$no	= pagination::recordNo();
 			foreach($user as $row)
 			{
+				$siteID = $row['siteID'];
+				$isSiteMember = $siteID == authData('site.siteID');
 				$active		= $row['siteMemberStatus'] == 1?"active":"";
 				$opacity	= $row['siteMemberStatus'] == 0?"style='opacity:0.5;'":"";
 				$href		= ($row['siteMemberStatus'] == 1?"deactivate":"activate")."?".$row['userID'];
@@ -59,7 +64,7 @@ List of member registered in for site.
 			?>
 			<tr <?php echo $opacity;?>>
 				<td><?php echo $no++;?></td>
-				<td><?php echo $row['userProfileFullName'];?></td>
+				<td><?php echo $row['userProfileFullName'];?> <?php if(!$isSiteMember):?><span class='label label-primary'><?php echo $row['siteName'];?></span><?php endif;?></td>
 				<td><?php echo $row['userProfileLastName']." $isOutsider";?></td>
 				<td><?php echo $row['userEmail'];?></td>
 				<td><?php echo $row['userIC'];?></td>
@@ -72,7 +77,7 @@ List of member registered in for site.
 						<i class="fa fa-square text"></i>
 					</a>
 	                <a href="<?php echo url::base('ajax/member/detail'); ?>?userID=<?php echo $row['userID']; ?>" data-toggle="ajaxModal">
-						<i class="fa fa-external-link"></i>
+						<i class="fa fa-user"></i>
 					</a>
 					</center>
 				</td>

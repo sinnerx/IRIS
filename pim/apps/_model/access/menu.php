@@ -28,13 +28,13 @@ class Menu extends Data
 						"Template"=>"newsletter/template",
 						"Subscribers"=>"newsletter/subscribers"
 						),
-					"Billing"=>Array(
+					/*"Billing"=>Array(
 						"Input Form"=>"billing/add",
 						"Edit Form"=>"billing/edit",
 						"Daily Cash Process"=>"billing/dailyCashProcess",
 						"Daily Journal"=>"billing/dailyJournal",
 						"Transaction Journal"=>"billing/transactionJournal"
-						),
+						),*/
 					"Pages"=>"page/index",
 					"Blog" =>Array(
 							"List of Articles"=>Array("site/article","site/editArticle"),
@@ -97,13 +97,13 @@ class Menu extends Data
 								"Parameters"=>Array("config/index"),
 								"Article Category"=>Array("article/category"),
 											),
-					"Billing"=>Array(
+					/*"Billing"=>Array(
 							"Input Form"=>"billing/add",
 							"Edit Form"=>"billing/edit",
 							"Daily Cash Process"=>"billing/dailyCashProcess",
 							"Daily Journal"=>"billing/dailyJournal",
 							"Transaction Journal"=>"billing/transactionJournal"
-						),
+						),*/
 					"Activities"=>Array(
 							"Training"=>Array("activity/training","activity/trainingTypeAdd","activity/trainingTypeEdit")
 						),

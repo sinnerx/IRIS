@@ -23,6 +23,11 @@ class Controller_Member
 			{
 				$where['site_member.userID IN (SELECT userID FROM user_profile WHERE userProfileFullName LIKE ?)']	= Array("%".request::get("search")."%");
 			}
+
+			if(request::get('searchAllSites'))
+			{
+				db::join('site', 'site.siteID = site_member.siteID');
+			}
 		}
 
 		$data['user'] = model::load('site/member')->getPaginatedList(
@@ -30,8 +35,7 @@ class Controller_Member
 			Array(
 				'urlFormat'=>url::base("member/lists/{page}"),
 				'currentPage'=>$page
-			),$where
-		);
+			),$where, (request::get('search') && request::get('searchAllSites')) ? false : true);
 
 		view::render("sitemanager/member/lists",$data);
 	}

@@ -108,7 +108,7 @@ class Member extends \Origami
 		
 	}
 
-	public function getPaginatedList($siteID,$pgConf = null,$where = null)
+	public function getPaginatedList($siteID,$pgConf = null,$where = null, $siteSearch = true)
 	{
 		if($where)
 		{
@@ -119,7 +119,9 @@ class Member extends \Origami
 		}
 
 		//echo '<pre>';print_r($pgConf);die;
-		db::where("siteID",$siteID);
+		if($siteSearch)
+			db::where("siteID",$siteID);
+		
 		db::from("site_member");
 
 		if($pgConf)
@@ -251,7 +253,10 @@ class Member extends \Origami
 	public function getUserMemberDetail($userID=null,$siteID=null){
 		//echo '<pre>';print_r($pgConf);die;
 		db::select("site_member.*,user_profile.*,user_profile_additional.*,user.*");
-		db::where("site_member.siteID",$siteID);
+
+		if($siteID)
+			db::where("site_member.siteID",$siteID);
+		
 		db::where("site_member.userID",$userID);
 		db::from("site_member");
 		db::join("site","site.siteID = site_member.siteID");

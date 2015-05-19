@@ -54,7 +54,8 @@ function confirmation(){
 			<span><span class='fa fa-user'></span> Member Information</span>
 			<span>: <?php echo ucwords($user['userProfileFullName']." ".$user['userProfileLastName']); ?></span>
 			<?php if($user['siteMemberStatus'] != 1):?>
-			<a href='?toggle=<?php echo $user['userID'];?>' onclick='return confirmation();' class='label label-primary pull-right' style='position:relative;right:10px;' >Approve Membership</a>
+			<?php if(authData('site.siteID') == $user['siteID']):?>
+			<a href='?toggle=<?php echo $user['userID'];?>' onclick='return confirmation();' class='label label-primary pull-right' style='position:relative;right:10px;' >Approve Membership</a><?php endif;?>
 			<?php endif;?>
 			</h4>
 		</div>
@@ -133,7 +134,7 @@ function confirmation(){
 										<th>Occupation</th>
 										<td><?php echo $user['userProfileOccupation']?:"-";?></td>
 										<th>Group</th>
-										<td><?php echo model::load("helper")->occupationGroup($user['userProfileOccupationGroup']);?></td>
+										<td><?php echo $user['userProfileOccupationGroup'] ? model::load("helper")->occupationGroup($user['userProfileOccupationGroup']) : '-';?></td>
 									</tr>
 									<tr>
 										<th>Facebook</th>
