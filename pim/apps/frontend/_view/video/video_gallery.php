@@ -1,49 +1,101 @@
+ <!-- Video Script Youtube 3 Api -->
+        
+        <link rel="stylesheet" type="text/css" href="<?php echo url::asset("frontend/video/css/api3.1/jquery.jscrollpane.css"); ?>" media="all" />
+  
+        
+    <link rel="stylesheet" type="text/css" href="<?php echo url::asset("frontend/video/css/api3.1/videoGallery_buttons.css"); ?>">
+    <!--[if lte IE 8 ]><link rel="stylesheet" type="text/css" href="<?php echo url::asset("frontend/video/css/api3.1/ie_below_9.css"); ?>" /><![endif]-->
+        
+        
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+        <script type="text/javascript" src="<?php echo url::asset("frontend/video/js/api3.1/jquery.address.js"); ?>"></script><!-- deeplink -->
+        <script type="text/javascript" src="<?php echo url::asset("frontend/video/js/api3.1/jquery.mousewheel.min.js"); ?>"></script><!-- scroll -->
+        <script type="text/javascript" src="<?php echo url::asset("frontend/video/js/api3.1/jquery.jscrollpane.min.js"); ?>"></script><!-- scroll -->
+        <script type="text/javascript" src="<?php echo url::asset("frontend/video/js/api3.1/froogaloop2.min.js"); ?>"></script><!-- vimeo -->
+        <script type="text/javascript" src="<?php echo url::asset("frontend/video/js/api3.1/jquery.dotdotdot-1.5.1.js"); ?>"></script><!-- description shortener -->
+        <script type="text/javascript" src="<?php echo url::asset("frontend/video/js/api3.1/jquery.aprvp.min.js"); ?>"></script>
+        <script type="text/javascript">
+        
+      var hap_players = [];    
+      jQuery(document).ready(function($) {
+        
+        /* SETTINGS */
+        var rvp_settings = {
+          /* mediaId: unique string for player identification (if multiple player instances were used, then strings need to be different!) */
+          mediaId:'player1',
+          /* useDeeplink: true, false */
+          useDeeplink:false,
+          /*activePlaylist: Active playlist to start with. If no deeplink is used, enter element 'id' attribute, or if deeplink is used enter (data-address) deeplink string like 'playlist1'.  */
+          activePlaylist:'playlist11a',
+          /*activeItem: Active video to start with. Enter number, -1 = no video loaded, 0 = first video, 1 = second video etc */
+          activeItem:0,
+          /* GENERAL SETTINGS */
+          /*defaultVolume: 0-1 */
+          defaultVolume:0.5,
+          /*autoPlay: true/false (defaults to false on mobile)*/
+          autoPlay:true,
+          /*randomPlay: true/false */
+          randomPlay:false,
+          /* loopingOn: on playlist end rewind to beginning (last item in playlist) */
+          loopingOn: true,
+          /*autoAdvanceToNextVideo: true/false (use this to loop video) */
+          autoAdvanceToNextVideo:true,
+          /*autoOpenDescription: true/false  */
+          autoOpenDescription:false,
+          usePlaylist:true,
+          useControls:true,
+          /*autoHideControls: auto hide player controls on mouse out: true/false. Defaults to false on mobile. */
+          autoHideControls:false,
+          /*controlsTimeout: time after which controls and playlist hides in fullscreen if screen is inactive, in miliseconds. */
+          controlsTimeout:3000,
+          /*playlistOrientation: vertical/horizontal  */
+          playlistOrientation:'vertical',
+          /*scrollType: scroll/buttons  */
+          scrollType:'buttons',
+          
+          /* YOUTUBE SETTINGS */
+          ytAppId:'AIzaSyAaGolNQ4zfeAuxF7b_02sHHFvNs3Hs-1o',/* youtube api key: https://developers.google.com/youtube/registering_an_application */
+          ytTheme:'dark',
+          ytShowinfo:true,
+          
+          /*playlistList: dom element which holds list of playlists */
+          playlistList:'#playlist_list',
+          
+          /* showControlsInAdvert: true/false (show controls while video advert plays)  */
+          showControlsInAdvert:true,
+          /* disableSeekbarInAdvert: true/false (disable seekbar while video advert plays)  */
+          disableSeekbarInAdvert:true,
+          /* showSkipButtonInAdvert: true/false (show skip button while video advert plays)  */
+          showSkipButtonInAdvert:true,
+          advertSkipBtnText:'SKIP AD >',
+          advertSkipVideoText:'You can skip to video in',
+          
+          logoPath: '',
+            logoPosition: 'tl',/* tl, tr, bl, br */
+            logoXOffset: 5,
+            logoYOffset: 5,
+            logoUrl: '',
+            logoTarget: '_blank',
+          
+          useShare: false,
+          /*fsAppId: facebook application id (if you use facebook share, https://developers.facebook.com/apps) */
+          fsAppId:''
+        };
+        
+        hap_players[0] = $('#mainWrapper').aprvp(rvp_settings);
+        initDemo($);
+      });
+      
+      
+        </script>
+    
+ <!-- End YT3 API video Script-->
  <!-- Video Script -->
-        
-        <link rel="stylesheet" type="text/css" href="<?php echo url::asset("frontend/video/css/jquery.jscrollpane.css"); ?>" media="all" />
-		<link rel="stylesheet" type="text/css" href="<?php echo url::asset("frontend/video/css/video.css"); ?>" />
-		<!--[if lte IE 8 ]><link rel="stylesheet" type="text/css" href="css/ie_below_9.css" /><![endif]-->
-        
-        <script type="text/javascript" src="<?php echo url::asset("frontend/video/js/new/swfobject.js"); ?>"></script>
-        <script type="text/javascript" src="<?php echo url::asset("frontend/video/js/new/jquery.dotdotdot-1.5.1.js"); ?>"></script>
-        <script type="text/javascript" src="<?php echo url::asset("frontend/video/js/new/jquery.address.js"); ?>"></script>
-        <script type="text/javascript" src="<?php echo url::asset("frontend/video/js/new/jquery.easing.1.3.js"); ?>"></script>
-        <script type="text/javascript" src="<?php echo url::asset("frontend/video/js/new/jquery.mousewheel.min.js"); ?>"></script>
-        <script type="text/javascript" src="<?php echo url::asset("frontend/video/js/new/jquery.jscrollpane.min.js"); ?>"></script>
-        <script type="text/javascript" src="<?php echo url::asset("frontend/video/js/new/froogaloop.js"); ?>"></script>
-        <script type="text/javascript" src="http://www.youtube.com/player_api"></script>
-        <script type="text/javascript" src="<?php echo url::asset("frontend/video/js/new/jquery.apPlaylistManager.min.js"); ?>"></script>
-        <script type="text/javascript" src="<?php echo url::asset("frontend/video/js/new/jquery.apYoutubePlayer.min.js?v=1"); ?>"></script>
-        <script type="text/javascript" src="<?php echo url::asset("frontend/video/js/new/jquery.apVimeoPlayer.min.js"); ?>"></script>
-        <script type="text/javascript" src="<?php echo url::asset("frontend/video/js/new/jquery.func.js"); ?>"></script>
-        <script type="text/javascript" src="<?php echo url::asset("frontend/video/js/new/jquery.videoGallery.min.js"); ?>"></script>
+    
+     
         <script type="text/javascript">
 		
-			// FLASH EMBED PART
-			var flashvars = {};
-			var params = {};
-			var attributes = {};
-			attributes.id = "flashPreview";
-			params.quality = "high";
-			params.scale = "noscale";
-			params.salign = "tl";
-			params.wmode = "transparent";
-			params.bgcolor = "#111";
-			params.devicefont = "false";
-			params.allowfullscreen = "true";
-			params.allowscriptaccess = "always";
-			swfobject.embedSWF("preview.swf", "flashPreview", "100%", "100%", "9.0.0", "expressInstall.swf", flashvars, params, attributes);
-			
-			//functions called from flash
-			var jsReady = false;//for flash/js communication
-			function flashVideoEnd() {jQuery.fn.videoGallery.flashVideoEnd();}
-			function flashVideoStart() {jQuery.fn.videoGallery.flashVideoStart();}
-			function dataUpdateFlash(bl,bt,t,d) {jQuery.fn.videoGallery.dataUpdateFlash(bl,bt,t,d);}
-			function flashVideoPause() {jQuery.fn.videoGallery.flashVideoPause();}
-			function flashVideoResume() {jQuery.fn.videoGallery.flashVideoResume();}
-			function flashMainPreviewOff() {jQuery.fn.videoGallery.flashMainPreviewOff();}
-			function flashResizeControls() {jQuery.fn.videoGallery.flashResizeControls();}
-			function isReady() {return jsReady;}
+		
 			
 			jQuery(document).ready(function($) {
 				jsReady = true;
@@ -126,102 +178,45 @@
                               <?php if(count($video_rows)>0){ ?>
 
 <div class="page-sub-wrapper video-page clearfix">
-
-      <div id="componentWrapper">
-  
-			 <!-- inner wrapper for the whole player -->
-    		 <div class="componentInnerWrapper">
-
-                 <!-- holds player -->
-                 <div class="playerHolder">
-                 
-                     <!-- video holders -->
-                     <div class="mediaHolder"></div>
-                     
-                     <!-- flash embed part --> 
-                     <div id="flashPreview">
-                         <a href="http://www.adobe.com/go/getflashplayer">
-                            <img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" />
-                         </a>
-                     </div>
-                     
-                     <!-- preview image --> 
-                 	 <div class="mediaPreview"></div>
-                     
-                     <div class="playerControls">
-                 
-                          <div class="player_playControl"><img src='<?php echo url::asset("frontend/video/data/icons/play.png"); ?>' width='12' height='14' alt=''/></div>
-                            
-                          <div class="player_progress">
-                              <!-- seekbar background -->
-                              <div class="progress_bg"></div>
-                              <div class="load_level"></div>
-                              <div class="progress_level"></div>
-                          </div>
-                         
-                          <div class="player_mediaTime">00:00 | 00:00</div>
-                          
-                          <div class="player_volume"><img src='<?php echo url::asset("frontend/video/data/icons/volume.png"); ?>' width='13' height='14' alt=''/></div>
-                          <div class="volume_seekbar">
-                             <!-- volume background -->
-                             <div class="volume_bg"></div>
-                             <div class="volume_level"></div>
-                          </div>
-                          
-                          <div class="player_fullscreen"><img src='<?php echo url::asset("frontend/video/data/icons/fullscreen_enter.png"); ?>' width='12' height='12' alt=''/></div>
-                          
-                          <div class="player_volume_tooltip">
-                              <div class="player_volume_tooltip_value">0</div>
-                          </div>
-                          
-                          <div class="player_progress_tooltip">
-                              <div class="player_progress_tooltip_value">0:00 | 0:00</div>
-                          </div>
-                          
-                     </div>
-                     
-                     
-                     <div class="youtubeHolder"></div>	
-                     <div class="vimeoHolder"></div>
-                     
-                     <div class="mediaPreloader"></div>
-                     
-                     <div class="bigPlay"><img src='<?php echo url::asset("frontend/video/data/icons/big_play.png"); ?>' width='76' height='76' alt=''/></div>
-                 </div>
-                   
-                 <!-- holds playlist -->  
-                 <div class="playlistHolder">
-                
-                     <div class="componentPlaylist">
-                     
-                         <!-- playlist_inner: container for scroll -->
-                         <div class="playlist_inner">
-                         
-                      
-                              <ul id='mix1' data-address="mix1"> 
-                                <?php foreach ($video_rows as $row) { ?>
-                                <li data-title="<?php echo $row['videoName'] ?>" data-address="youtube_single1" data-type='youtube_single' data-path="http://gdata.youtube.com/feeds/api/videos/<?php echo $row['videoRefID']; ?>?v=2&amp;format=5&amp;alt=jsonc" ></li>
-                                <?php } ?>
-                              </ul>
-                             
-                           
-                       
-                         </div>
-                     </div>
-                 </div>
-             </div>  
-        </div>
+<!-- start componentWrapper -->
+   
+      
+      
+  <!-- end componentWrapper-->    
+   
         
         
-       
+  <!-- start mainwrapper -->
+
+   <div id="mainWrapper"></div>
+        
+        <div id="playlist_list">
+
+            
+             
+             
            
+              <?php      
+                 $videoref = array();
+                 foreach ($video_rows as $row) { 
+                 $videoref[] = $row['videoRefID'];
+                  }
+                
+              ?>
+
+              
+              
+              <div id='playlist11a' data-address="playlist11a">
+                
+                 <div class="playlistNonSelected" data-address="youtube_single" data-type="youtube_single_list" data-path="<?php echo rtrim(implode(',',  $videoref), ',');
+?>"></div>
+              </div>
+              
+              </div>
         
-        
-      
-      
-      
-      
-</div>
+
+  <!-- end mainwrapper-->
+</div> 
                               <?php }else{ ?>
 <div class="page-description"> 
 No video uploaded.

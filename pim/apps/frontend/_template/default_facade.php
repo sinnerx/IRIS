@@ -48,7 +48,72 @@ var $c = jQuery.noConflict();
   border:0px;
 }
 </style>
+<!-- from footer script-->
+<!-- Google CDN jQuery with fallback to local -->
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="js/minified/jquery-1.9.1.min.js"%3E%3C/script%3E'))</script>
+  <!-- custom scrollbars plugin -->
+  <script src="<?php echo url::asset("_landing/js/jquery.mCustomScrollbar.concat.min.js");?>"></script>
+  <script>
+    (function($){
+      $(window).load(function(){
+      
+        $("#content_7").mCustomScrollbar({
+          scrollButtons:{
+            enable:true
+          },
+           advanced:{  
+        updateOnBrowserResize:true,   
+        updateOnContentResize:true   
+      },
+          theme:"light-thin"
+          
+        });
+      
+      });
+    })(jQuery);
+  </script>
+<!-- <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script> -->
 
+ <!--<script type="text/javascript" src="js/jquery-1.9.0.min.js"></script>-->
+    <script type="text/javascript" src="<?php echo url::asset("frontend/js/jquery.nivo.slider.js");?>"></script>
+    <script type="text/javascript">
+  var $s = jQuery.noConflict();
+    $s(window).load(function() {
+    $s('#slider').nivoSlider();
+    
+    });
+    </script>
+    <!-- jQuery if needed -->
+    <!--<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>-->
+    <script type="text/javascript">
+      function DropDown(el) {
+        this.dd = el;
+        this.initEvents();
+      }
+      DropDown.prototype = {
+        initEvents : function() {
+          var obj = this;
+
+          obj.dd.on('click', function(event){
+            $(this).toggleClass('active');
+            event.stopPropagation();
+          }); 
+        }
+      }
+
+      $(function() {
+
+        var dd = new DropDown( $('#dd') );
+
+        $(document).click(function() {
+          // all dropdowns
+          $('.wrapper-dropdown-2').removeClass('active');
+        });
+
+      });
+
+    </script>
 </head>
 <body>
 <div id="toppanel">
@@ -641,7 +706,7 @@ if($annList){?>
   
 <div class="wrap clearfix">
 <div class="copyright">
-Hakcipta Terpelihara © 2013 <a href="#">Pusat Internet 1 Malaysia</a>. 
+Hakcipta Terpelihara © <?php echo date("Y"); ?> <a href="#">Pusat Internet 1 Malaysia</a>. 
 <ul class="clearfix">
   <li><a href="<?php echo url::base("{site-slug}");?>">Utama</a></li>
   <li><a href="<?php echo url::base("{site-slug}/mengenai-kami");?>">Mengenai Kami</a></li>
@@ -651,70 +716,7 @@ Hakcipta Terpelihara © 2013 <a href="#">Pusat Internet 1 Malaysia</a>.
 </div>
 </div>
 </div>
-<!-- Google CDN jQuery with fallback to local -->
-	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-	<script>!window.jQuery && document.write(unescape('%3Cscript src="js/minified/jquery-1.9.1.min.js"%3E%3C/script%3E'))</script>
-	<!-- custom scrollbars plugin -->
-	<script src="<?php echo url::asset("_landing/js/jquery.mCustomScrollbar.concat.min.js");?>"></script>
-	<script>
-		(function($){
-			$(window).load(function(){
-			
-				$("#content_7").mCustomScrollbar({
-					scrollButtons:{
-						enable:true
-					},
-					 advanced:{  
-        updateOnBrowserResize:true,   
-        updateOnContentResize:true   
-      },
-					theme:"light-thin"
-					
-				});
-			
-			});
-		})(jQuery);
-	</script>
-<!-- <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script> -->
+<!-- footer script-->
 
- <!--<script type="text/javascript" src="js/jquery-1.9.0.min.js"></script>-->
-    <script type="text/javascript" src="<?php echo url::asset("frontend/js/jquery.nivo.slider.js");?>"></script>
-    <script type="text/javascript">
-	var $s = jQuery.noConflict();
-    $s(window).load(function() {
-    $s('#slider').nivoSlider();
-		
-    });
-    </script>
-    <!-- jQuery if needed -->
-		<!--<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>-->
-		<script type="text/javascript">
-			function DropDown(el) {
-				this.dd = el;
-				this.initEvents();
-			}
-			DropDown.prototype = {
-				initEvents : function() {
-					var obj = this;
-
-					obj.dd.on('click', function(event){
-						$(this).toggleClass('active');
-						event.stopPropagation();
-					});	
-				}
-			}
-
-			$(function() {
-
-				var dd = new DropDown( $('#dd') );
-
-				$(document).click(function() {
-					// all dropdowns
-					$('.wrapper-dropdown-2').removeClass('active');
-				});
-
-			});
-
-		</script>
     </body>
 </html>
