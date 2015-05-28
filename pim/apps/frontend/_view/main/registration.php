@@ -1,7 +1,7 @@
 <script type="text/javascript">
      var $t = jQuery.noConflict();
     $t(document).ready(function () {
-        $t('#horizontalTab').easyResponsiveTabs({
+        $t('#act').easyResponsiveTabs({
             type: 'default', //Types: default, vertical, accordion           
             width: 'auto', //auto or any width like 600px
             fit: true,   // 100% fit in a container
@@ -88,7 +88,7 @@ ul.front-tab li:hover
 </div>
 
 <div class="login-register-block">
-     <div id="horizontalTab">
+     <div id="act">
           <ul class="resp-tabs-list front-tab">
           <li>Log Masuk</li>
           <li>Daftar Akaun Baru</li>
