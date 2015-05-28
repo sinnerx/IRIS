@@ -8,6 +8,16 @@ class User extends \Origami
 	protected $primary = 'userID';
 
 	/**
+	 * List of level constants.
+	 */
+	const LEVEL_MEMBER = 1;
+	const LEVEL_SITEMANAGER = 2;
+	const LEVEL_CLUSTERLEAD = 3;
+	const LEVEL_OPERATIONMANAGER = 4;
+	const LEVEL_FINANCIALCONTROLLER = 5;
+	const LEVEL_ROOT = 99;
+
+	/**
 	 * ORM : Delete user, set flag as deleted.
 	 */
 	public function delete()
@@ -64,7 +74,7 @@ class User extends \Origami
 	public function getAvailableManagers()
 	{
 		return model::orm('user/user')
-		->where('userLevel', 2)
+		->where('userLevel', self::LEVEL_SITEMANAGER)
 		->where('userStatus', 1)
 		->where('userID NOT IN (SELECT userID FROM site_manager WHERE siteManagerStatus = 1)')
 		->execute();
@@ -77,7 +87,7 @@ class User extends \Origami
 	public function getAvailableClusterleads($clusterID)
 	{
 		return model::orm('user/user')
-		->where('userLevel', 3)
+		->where('userLevel', self::LEVEL_CLUSTERLEAD)
 		->where('userStatus', 1)
 		->where('userID NOT IN (SELECT userID FROM cluster_lead WHERE clusterLeadStatus = 1 AND clusterID = ?)', array($clusterID))
 		->execute();
@@ -89,7 +99,7 @@ class User extends \Origami
 	 */
 	public function isManager()
 	{
-		if($this->userLevel == 2)
+		if($this->userLevel == self::LEVEL_SITEMANAGER)
 		{
 			$siteManager = $this->getSiteManager();
 
@@ -161,11 +171,11 @@ class User extends \Origami
 	public function levelLabel($no = null)
 	{
 		$arr	= Array(
-				1=>"Members",
-				2=>"Site Manager",
-				3=>"Cluster Lead",
-				4=>"Operation Manager",
-				99=>"Root Admin"
+				self::LEVEL_MEMBER => "Members",
+				self::LEVEL_SITEMANAGER => "Site Manager",
+				self::LEVEL_CLUSTERLEAD => "Cluster Lead",
+				self::LEVEL_OPERATIONMANAGER=>"Operation Manager",
+				self::LEVEL_ROOT => "Root Admin"
 						);
 
 		return !$no?$arr:$arr[$no];
@@ -267,7 +277,7 @@ class User extends \Origami
 		$data_user	= Array(
 					"userIC"=>$userIC,
 					// "userPremiumStatus"=>0,
-					"userLevel"=>1,
+					"userLevel"=> self::LEVEL_MEMBER,
 					"userStatus"=>1,
 					"userPassword"=>model::load("helper")->hashPassword($data['userPassword'])
 							);
