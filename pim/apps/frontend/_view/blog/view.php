@@ -1,3 +1,12 @@
+<?php 
+ function parseLinks($text) {
+    $text = preg_replace('/(?<!http:\/\/|https:\/\/|\"|=|\'|\'>|\">)(www\..*?)(\s|\Z|\.\Z|\.\s|\<|\>|,)/i',"<a href=\"http://$1\">$1</a>$2",$text);
+    $text = preg_replace('/(?<!\"|=|\'|\'>|\">|site:)(https?:\/\/(www){0,1}.*?)(\s|\Z|\.\Z|\.\s|\<|\>|,)/i',"<a href=\"$1\">$1</a>$3",$text);
+    return $text;
+}
+
+
+?>
 <link rel="stylesheet" href="<?php echo url::asset("frontend/css/blog.css"); ?>" type="text/css" />
 <div class="lft-container">
 	<div class="top-heading">
@@ -85,7 +94,7 @@
 										$length = strpos(substr($article['articleText'],$start),'/>')+2;
 									}
 								?>
-								<?php echo $article['articleText']; ?>
+								<?php echo parseLinks($article['articleText']); ?>
 							</div>
 							<?php if($articleTags || $activity[0]['activityID']):?>
 							<div class="blog-additional-info">
