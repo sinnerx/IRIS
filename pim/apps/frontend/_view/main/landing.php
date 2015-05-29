@@ -46,7 +46,7 @@
 
 	
   </div>
-<div class="span3">
+<div class="span4">
 
 <div id="block_navigation">
 	<?php controller::load("partial","landing_menu");?>
