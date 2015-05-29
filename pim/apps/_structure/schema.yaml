@@ -697,3 +697,63 @@ product:
 	productName [varchar]
 	productDescription [text]
 	productPrice [float]
+
+billing_item:
+	billingItemID [int]
+	billingItemHotkey [varchar]
+	billingItemName [varchar]
+	billingItemDescription [text]
+	billingItemPrice [float]
+	billingItemUnit [int]
+	billingItemQuantity [int]
+	billingItemTaxDisabled [int]
+	billingItemDescriptionDisabled [int]
+	billingItemPriceDisabled [int]
+	billingItemUnitDisabled [int]
+	billingItemQuantityDisabled [int]
+	billingItemCreatedDate [datetime]
+
+billing_transaction:
+	billingTransactionID [int]
+	siteID [int]
+	userID [int]
+	billingItemID [int]
+	billingTransactionQuantity [int]
+	billingTransactionUnit [int] ## unit or hours
+	billingTransactionTotal [float]
+	billingTransactionBalance [float]
+	billingTransactionDescription [text]
+	billingTransactionDate [datetime]
+	billingTransactionCreatedDate [datetime]
+	billingTransactionUpdatedDate [datetime]  ## backdated
+	billingTransactionStatus [int]  ##  1 = active 0 = deleted
+
+billing_log:
+	billingLogID [int]
+	billingLogType [varchar] ## add, 
+	userID [int]
+	billingTransactionID [int]
+	billingLogContent [text] ## changes
+	billingLogCreatedDate [datetime]
+
+billing_verification:
+	billingVerificationID [int]
+	userID [int]
+	siteID [int]
+	billingTransactionDate [date]
+	billingVerificationDate [datetime]
+
+billing_approval:
+	billingApprovalID [int]
+	siteID [int]
+	month [int]
+	year [int]
+	billingApprovalCreatedDate [datetime]
+
+billing_approval_level:	
+	billingApprovalLevelID [int]
+	billingApprovalID [int]
+	userLevel [int]
+	userID [int]
+	billingApprovalLevelStatus [int]
+	billingApprovalLevelCreatedDate [datetime]

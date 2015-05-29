@@ -32,7 +32,19 @@ class Data
 					"site/messageView"=>Array("r"/*,"sm"*/,"cl"),
 					"file/index"=>Array("r", "sm"),
 					"file/addFolder"=>Array("r", "sm"),
-					"file/addFile"=>Array("r", "sm")
+					"file/addFile"=>Array("r", "sm"),
+					"billing/add"=>Array("r", "sm"),
+					"billing/addItem"=>Array("r", "sm"),
+					"billing/editItem"=>Array("r", "sm"),
+					"billing/addTransaction"=>Array("r", "sm"),
+					"billing/edit"=>Array("r", "sm"),
+					"billing/dailyCashProcess"=>Array("r", "cl", "sm"),
+					"billing/dailyJournal"=>Array("r", "sm"),
+					"billing/transactionJournal"=>Array("r", "sm"),
+					"billing/editForm"=>Array("r", "sm"),
+					"billing/delete"=>Array("r", "sm"),
+					"billing/settlement"=>Array("r", "sm")
+
 							);
 
 		if($level && isset($access["$controller/$method"]))

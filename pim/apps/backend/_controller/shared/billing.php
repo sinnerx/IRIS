@@ -1,0 +1,531 @@
+<?php
+Class Controller_Billing
+{
+	public function add()
+	{
+		$siteID = request::get("siteID");
+		$todayDate = request::get("selectDate");
+		//$todayDate = date('Y-m-d', strtotime($todayDate)); 
+		$data['todayDate'] = $todayDate = $todayDate ? :  date('Y-m-d H:i');
+
+		$month = date('n',strtotime($todayDate));
+		
+		$data['item'] = model::load('billing/billing')->getItem();
+		$data['list'] = model::load('billing/billing')->getList($siteID);
+		$totalBalanceDebit = model::load('billing/process')->getBalanceDebit($siteID,date('n',strtotime($todayDate)),date('Y',strtotime($todayDate)));
+		$totalBalanceCredit = model::load('billing/process')->getBalanceCredit($siteID,date('n',strtotime($todayDate)),date('Y',strtotime($todayDate)));
+		
+		$previousBalanceDebit = model::load('billing/process')->getBalanceDebit($siteID,$month-1,date('Y',strtotime($todayDate)));
+		$previousBalanceCredit = model::load('billing/process')->getBalanceCredit($siteID,$month-1,date('Y',strtotime($todayDate)));
+
+		$previousBalance = $previousBalanceDebit['balance'] + $previousBalanceCredit['balance'];
+		$data['totalBalance'] = $totalBalanceDebit['balance'] + $totalBalanceCredit['balance'] + $previousBalance;
+
+		if (request::get("itemID") != ""){
+
+			$item = model::orm('billing/billing')->where('billingItemID', request::get("itemID"))->execute();
+			$data['itemSelect'] = $item->getFirst();			
+		}
+
+		db::from("site");
+		db::order_by("siteName","ASC");
+		
+		$res_site = db::get()->result();
+
+		foreach($res_site as $row)
+		{
+			$data['siteList'][$row['siteID']]	= $row['siteName'];
+		}
+
+		view::render("shared/billing/add", $data);
+	}
+
+
+	public function addItem()
+	{		
+		$this->template = false;
+		if(form::submitted())
+		{
+			$data['billingItemHotkey'] = model::orm('billing/billing')->where('billingItemHotkey', input::get('hotKey'))->execute();
+
+			if($data['billingItemHotkey']->count() > 0)
+			{
+				$billing = $data['billingItemHotkey']->getFirst();
+
+				$data_site = input::get();
+
+				$item = model::load("billing/billing");
+				$item->updateItemInfo($billing->billingItemID,$data_site);
+
+				$message = 'Item information updated.';
+			}
+			else
+			{
+				$billing = model::orm('billing/billing')->create();
+				$billing->billingItemHotkey = input::get('hotKey');
+				$billing->billingItemName = input::get('itemName');
+				$billing->billingItemDescription = input::get('description');
+				$billing->billingItemPrice = input::get('price');
+				$billing->billingItemUnit = 1;
+				$billing->billingItemQuantity = 1;
+				$billing->billingItemTaxDisabled = input::get('taxDisabled');
+				$billing->billingItemDescriptionDisabled = input::get('descriptionDisabled');
+				$billing->billingItemPriceDisabled = input::get('priceDisabled');
+				$billing->billingItemUnitDisabled = input::get('unitDisabled');
+				$billing->billingItemQuantityDisabled = input::get('quantityDisabled');
+				$billing->billingItemCreatedDate = now();
+				$billing->save();	
+
+				$message = 'New Item added!';
+			}	
+
+			redirect::to('billing/add', $message, 'success');
+		}		
+		view::render("shared/billing/addItem", $data);
+	}
+	
+	public function editItem($id)
+	{	
+		$this->template = false;
+		$billing = model::orm('billing/billing')->find($id);
+
+		if(form::submitted())
+		{
+
+			$billing->billingItemHotkey = input::get('hotKey');
+			$billing->billingItemName = input::get('itemName');
+			$billing->billingItemDescription = input::get('description');
+			$billing->billingItemPrice = input::get('price');
+			$billing->billingItemUnit = 1;
+			$billing->billingItemQuantity = 1;
+			$billing->billingItemTaxDisabled = input::get('taxDisabled');
+			$billing->billingItemDescriptionDisabled = input::get('descriptionDisabled');
+			$billing->billingItemPriceDisabled = input::get('priceDisabled');
+			$billing->billingItemUnitDisabled = input::get('unitDisabled');
+			$billing->billingItemQuantityDisabled = input::get('quantityDisabled');
+			$billing->billingItemCreatedDate = now();
+			$billing->save();
+
+			$message = 'Item Updated!';
+
+			redirect::to('billing/add', $message, 'success');
+		}
+		$data['item'] = $billing;
+		view::render("shared/billing/editItem", $data);
+	}
+	
+	public function addTransaction($id)
+	{	
+		$todayDate = input::get('selectDate');
+		$data['todayDate'] = $todayDate = $todayDate ? :  date('Y-m-d H:i');
+
+		if (authData('site.siteID') == ""){ 
+
+			$siteID = input::get('siteID');
+
+		} else {
+
+			$siteID = authData('site.siteID');	
+		}
+
+		if(form::submitted())
+		{
+			if ($siteID == ""){
+
+				$message = 'Please Select Site.';
+				redirect::to('billing/add', $message, 'error');
+			}
+		}
+
+			$checkBalance = model::load('billing/billing')->getList($siteID,1);
+			$lastBalance = $checkBalance[0][billingTransactionBalance];
+
+			$getTransactionID = model::load('billing/billing')->addTransaction($siteID,$id,input::get(),$lastBalance);			
+
+			$log = model::orm('billing/log')->create();
+			$log->billingLogType = "Add New Transaction";
+			$log->userID = authData('user.userID');
+			$log->billingTransactionID = $getTransactionID['billingTransactionID'];
+			$log->billingLogContent = serialize(array(
+
+											"itemID"=>$getTransactionID['billingItemID'],
+											"quantity"=>$getTransactionID['billingTransactionQuantity'],
+											"unit"=>$getTransactionID['billingTransactionUnit'],
+											"total"=>$getTransactionID['billingTransactionTotal']
+
+										));
+			$log->billingLogCreatedDate = now();
+			$log->save();	
+
+			db::from("site");
+			db::order_by("siteName","ASC");
+		
+			$res_site = db::get()->result();
+
+		foreach($res_site as $row)
+		{
+			$data['siteList'][$row['siteID']]	= $row['siteName'];
+		}
+						
+			$data['item'] = model::load('billing/billing')->getItem();
+			$data['list'] = model::load('billing/billing')->getList($siteID);
+		
+		view::render("shared/billing/add", $data);
+	}
+
+	public function edit()
+	{	
+		$todayDate = request::get("selectDate");
+		$data['todayDate'] = $todayDate = $todayDate ? :  date('Y-m-d');	
+		
+		db::from("site");
+		db::order_by("siteName","ASC");
+		
+		$res_site = db::get()->result();
+
+		foreach($res_site as $row)
+		{
+			$data['siteList'][$row['siteID']]	= $row['siteName'];
+		}
+
+		$allItem = model::load('billing/billing')->getItem();
+
+		foreach($allItem as $row)
+		{
+			$data['itemList'][$row['billingItemID']]	= $row['billingItemHotkey']."  ".$row['billingItemName'];
+		}
+
+		$siteID = request::get("siteID") ? : authData('site.siteID');	
+		$itemID = request::get("itemID"); 
+		$selectDate = request::get("selectDate");
+				
+		if ($siteID != ""){
+
+			$data['list'] = model::load('billing/billing')->getAllList($siteID,$itemID,$selectDate);	
+		}
+
+		$checkVerify = model::orm('billing/verify')->where('billingTransactionDate',  date('Y-m-d', strtotime($selectDate)))->execute();
+		
+		if($checkVerify->count() > 0){
+
+			$data['verified'] = 1;
+		}
+
+		view::render("shared/billing/edit", $data);
+	}
+
+	public function settlement($transactionDate)
+	{	
+		
+		$data['todayDate'] = $transactionDate;
+		
+		$siteID =  authData('site.siteID');	
+		$userID =  authData('user.userID');
+
+		$verify = model::orm('billing/verify')->create();
+				$verify->userID = authData('user.userID');
+				$verify->siteID = authData('site.siteID');	
+				$verify->billingTransactionDate = date('Y-m-d', strtotime($transactionDate));
+				$verify->billingVerificationDate = now();
+				$verify->save();
+		$data['verified'] = 1;		
+
+		$allItem = model::load('billing/billing')->getItem();
+
+		foreach($allItem as $row)
+		{
+			$data['itemList'][$row['billingItemID']]	= $row['billingItemHotkey']."  ".$row['billingItemName'];
+		}
+	
+		$data['list'] = model::load('billing/billing')->getAllList($siteID,$itemID,$transactionDate);	
+			//redirect::to('billing/edit', $message, 'success');
+
+		
+		view::render("shared/billing/edit", $data);
+	}
+
+
+	public function editForm($itemID,$transactionID)
+	{	
+		$this->template = false;
+
+		$billing = model::orm('billing/journal')->find($transactionID);
+
+		if(form::submitted())
+		{
+
+			$log = model::orm('billing/log')->create();
+			$log->billingLogType = "Edit Transaction";
+			$log->userID = authData('user.userID');
+			$log->billingTransactionID = $transactionID;
+			$log->billingLogContent = serialize(array(
+
+					"itemID"=>$billing->billingItemID." to ".input::get('itemID'),
+					"quantity"=>$billing->billingTransactionQuantity." to ".input::get('quantity'),
+					"unit"=>$billing->billingTransactionUnit." to ".input::get('unit'),
+					"total"=>$billing->billingTransactionTotal." to ".input::get('total')
+
+										));
+			$log->billingLogCreatedDate = now();
+			$log->save();	
+
+			$billing->billingItemID = input::get('itemID');
+			$billing->billingTransactionQuantity = input::get('quantity');
+			$billing->billingTransactionUnit = input::get('unit');
+			$billing->billingTransactionTotal = input::get('total');
+			$billing->billingTransactionDescription = input::get('description');
+			$billing->billingTransactionUpdatedDate = now();
+			$billing->save();
+	
+			$message = 'Transaction Updated!';
+
+			redirect::to('billing/edit', $message, 'success');
+		}
+
+		$billing = model::orm('billing/journal')->find($transactionID);
+		$allItem = model::load('billing/billing')->getItem();
+
+		foreach($allItem as $row)
+		{
+			$data['itemList'][$row['billingItemID']] = $row['billingItemHotkey']."  ".$row['billingItemName'];
+		}
+
+		$data['item'] = $billing;
+		$data['itemID'] = $itemID; 
+		
+		view::render("shared/billing/editForm", $data);
+	}
+
+
+
+	public function delete()
+	{	
+		$this->template = false;
+		$transactionID = request::get("transactionId");
+		$billing = model::orm('billing/journal')->find($transactionID);
+
+		$billing->billingTransactionStatus = 0;
+		$billing->save();
+		
+		$message = 'Transaction Updated!';
+		
+		redirect::to('billing/edit', $message, 'success');
+	}
+
+	public function dailyCashProcess($id = null)
+	{		
+		$data['siteID'] = $siteID = request::get("siteID") ? : authData('site.siteID');	
+		
+		$selectMonth = request::get("selectMonth");
+		$selectYear = request::get("selectYear");
+
+		$data['selectYear'] = $selectYear = $selectYear ? : date("Y");
+		$data['selectMonth'] = $selectMonth = $selectMonth ? : date("n");
+		
+		if ($siteID != ""){
+
+		$approval = model::load('billing/approval')->getApproval($siteID, $selectMonth, $selectYear);
+
+			if ($approval->getApprovalStatus(2) == 1){		
+				$data['checked'] = 1;
+				
+			}
+
+			if ($approval->getApprovalStatus(3) == 1){		
+				$data['approved'] = 1;
+			}
+		}	
+
+		/*if ($approval->getApprovalStatus(5) == 1){
+			
+			$data['checked'] = 1;
+		}		*/
+	
+
+		if(form::submitted())
+		{				
+			if (authData('user.userLevel') == 2){
+				$id = authData('site.siteID'); 
+			}
+			
+			$approval = model::load('billing/approval')->getApproval($id, $selectMonth, $selectYear);
+
+			if (authData('user.userLevel') == 2)	{
+				$approval->check();	
+				$data['checked'] = 1;
+
+			} else {
+				
+				if (input::get("submit") == 1){
+					
+					$approval->approve(authData('user.userLevel'));		
+					$data['approved'] = 1;
+				} else {
+
+					$approval->reject(authData('user.userLevel'));
+				}
+
+				
+			} 
+
+		 }	
+				
+
+
+		db::from("site");
+		db::order_by("siteName","ASC");
+		
+		$res_site = db::get()->result();
+
+		foreach($res_site as $row)
+		{
+			$data['siteList'][$row['siteID']]	= $row['siteName'];
+		}
+		
+		if ($siteID != ""){
+		
+			$getClusterID = model::load('site/cluster')->getClusterID($siteID);
+			$closingTime = model::load('site/cluster')->getTime($getClusterID[0][clusterID]);
+
+			$balanceDebit = model::load('billing/process')->getBalanceDebit($siteID,$selectMonth-1,$selectYear);
+			$balanceCredit = model::load('billing/process')->getBalanceCredit($siteID,$selectMonth-1,$selectYear);
+
+			$data['balance'] = $balanceDebit['balance'] - $balanceCredit['balance'];
+
+			$dateList = model::load('billing/process')->getdateList($siteID,$selectMonth,$selectYear);		
+
+		 	foreach($dateList as $key1 => $row)
+			{
+
+				$checkDate = date('Y-m-d', strtotime($row['billingTransactionDate'])); 
+				$checkdateList = model::load('billing/process')->getList($siteID,$checkDate);
+
+					foreach($checkdateList as $key2 => $cashProcess) {
+
+						$getHour = date("H", strtotime($row['billingTransactionDate'])); 	
+
+						if ($getHour > $closingTime){ 
+							$pcType = "Night";
+						} else {
+							$pcType = "Day";
+						}
+
+						$availableData[$checkDate][$cashProcess['billingItemName']] =  Array(
+			
+							"date"=>$checkDate,
+							"pcType"=>$pcType,
+							"itemName"=>$cashProcess['billingItemName'],
+							"desc"=>$cashProcess['billingTransactionDescription'],
+							"quantity"=>$cashProcess['quantity'],
+							"unit"=>$cashProcess['unit'],
+							"total"=>$cashProcess['total'],			
+						);
+					}	
+					
+				$data['transferList'] = model::load('billing/process')->getTransferList($siteID,$checkDate);
+
+						$availableDate[$checkDate] = array (
+								$checkDate,
+						);
+			}
+
+			$totalList = model::load('billing/process')->getListTotal($siteID,$selectMonth,$selectYear);
+
+			foreach($totalList as $key3 => $row)
+			{
+
+				$list[$row['transactionDate']] =  Array(
+			
+					"date"=>$row['transactionDate'],				
+					"total"=>$row['total'],
+				
+						);					
+			}
+			
+			$data['list'] = $availableData;
+			$data['totallist'] = $list;
+			$data['availableDate'] = $availableDate;
+		}
+
+		$start_date = "01-".$selectMonth."-".$selectYear;
+		$start_time = strtotime($start_date);
+
+		$end_time = strtotime("+1 month", $start_time);
+
+		for($i=$start_time; $i<$end_time; $i+=86400)
+		{
+   			$datelist[] = date('Y-m-d', $i);
+		}
+
+			$data['alldate'] = $datelist;	
+	
+		view::render("shared/billing/dailyCashProcess", $data);
+	}
+
+	public function dailyJournal()
+	{
+		$siteID = request::get("siteID") ? : authData('site.siteID');	
+		$todayDateStart = request::get("selectDateStart");
+		$todayDateEnd = request::get("selectDateEnd");
+
+		$data['todayDateStart'] = $todayDateStart = $todayDateStart ? :  date('Y-m-d',(strtotime ( '-7 day' , strtotime (date('Y-m-d')) ) ));
+		$data['todayDateEnd'] = $todayDateEnd = $todayDateEnd ? :  date('Y-m-d');
+
+		db::from("site");
+		db::order_by("siteName","ASC");
+		
+		$res_site = db::get()->result();
+
+		foreach($res_site as $row)
+		{
+			$data['siteList'][$row['siteID']]	= $row['siteName'];
+		}
+		$todayDateStart = date('Y-m-d', strtotime($todayDateStart)); 
+		$todayDateEnd = date('Y-m-d', strtotime($todayDateEnd)); 
+
+		$data['journal'] = model::load('billing/journal')->getList($siteID,$todayDateStart,$todayDateEnd);
+
+		$total = model::load('billing/journal')->getListTotal($siteID,$todayDateStart,$todayDateEnd);	
+
+		foreach($total as $key => $journalTotal) {
+			$checkDate = date('Y-m-d', strtotime($journalTotal['billingTransactionDate'])); 
+
+			$data['journalDate'][$key] = $checkDate;
+			$data['journalQuantity'][$key] = $journalTotal[quantity];
+			$data['journalUnit'][$key] = $journalTotal[unit];
+			$data['journalTotal'][$key] = $journalTotal[total];
+		}
+
+		view::render("shared/billing/dailyJournal", $data);
+	}
+
+	public function transactionJournal()
+	{
+		$siteID = request::get("siteID") ? : authData('site.siteID');	
+		$todayDateStart = request::get("selectDateStart");
+		$todayDateEnd = request::get("selectDateEnd");
+
+		$data['todayDateStart'] = $todayDateStart = $todayDateStart ? :  date('Y-m-d',(strtotime ( '-7 day' , strtotime (date('Y-m-d')) ) ));
+		$data['todayDateEnd'] = $todayDateEnd = $todayDateEnd ? :  date('Y-m-d');
+
+		db::from("site");
+		db::order_by("siteName","ASC");
+		
+		$res_site = db::get()->result();
+
+		foreach($res_site as $row)
+		{
+			$data['siteList'][$row['siteID']]	= $row['siteName'];
+		}
+		$todayDateStart = date('Y-m-d', strtotime($todayDateStart)); 
+		$todayDateEnd = date('Y-m-d', strtotime($todayDateEnd)); 
+
+		$data['journal'] = model::orm('billing/journal')
+				->where("siteID = '$siteID' AND billingTransactionDate >= '$todayDateStart' AND billingTransactionDate <= '$todayDateEnd'")
+				->join("billing_item", "billing_item.billingItemID = billing_transaction.billingItemID")
+				->order_by("billingTransactionDate","ASC")
+				->execute();
+
+		view::render("shared/billing/transactionJournal", $data);
+	}
+}

@@ -20,6 +20,29 @@ class Cluster extends \Origami
 		return model::orm('site/site')->where('siteID IN (SELECT siteID FROM cluster_site WHERE clusterID = ?)', array($this->clusterID))->execute();
 	}
 
+	public function getClusterID($siteID)
+	{
+		db::from("cluster_site");
+		db::where("siteID",$siteID); ## only active onle
+		
+		## return result truely grouped by cluster id
+		return db::get()->result();
+	}
+
+	public function getTime($id)
+	{
+		$closingTime = array(
+
+				1=>"17",
+				2=>"17",
+				3=>"17",
+				4=>"17",
+				5=>"18"
+
+		);
+		return $closingTime[$id];
+	}
+
 	/**
 	 * Remove site assignments.
 	 * @param array siteIDs list of optional site id.
