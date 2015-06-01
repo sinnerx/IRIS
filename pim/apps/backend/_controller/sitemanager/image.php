@@ -54,6 +54,7 @@ class Controller_Image
 		$siteID				= model::load("access/auth")->getAuthData("site","siteID");
 		$data['row']		= model::load("image/album")->getSiteAlbum($siteAlbumID);
 		$data['res_photo']	= model::load("image/album")->getSitePhotos($siteID,$siteAlbumID);
+		$data['maxSize']	= 2000000;
 
 		$data['siteSlug']	= authData("site.siteSlug");
 
@@ -61,8 +62,15 @@ class Controller_Image
 		{
 			$file			= input::file("photoName");
 
+			$photoUpload = false;
+
 			## checking-checkinggg
 			$photoUpload	= !$file?"Please choose a photo":false;
+
+			// size cannot be bigger than.
+			if(!$photoUpload && $file->get('size') > $data['maxSize'])
+				$photoUpload = 'File size cannot be bigger than '.($data['maxSize']/1000000).'mb';
+
 			$photoUpload	= !$photoUpload?(!$file->isExt("jpg,jpeg,png")?"Please choose the right photo":false):$photoUpload;
 
 			## no photo uploaded.

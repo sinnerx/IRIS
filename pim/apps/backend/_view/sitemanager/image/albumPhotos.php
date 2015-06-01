@@ -416,7 +416,7 @@ var album	= new function()
 	<div class='col-sm-6'>
 	<div id='photo-add-form' style='display:none;'>
 		<div class='well well-sm'>
-		Please upload only jpg, jpeg, png or bmp. Wrong upload will not be toleranted and results to a ban.
+		Please upload only jpg, jpeg, png or bmp. Maximum size limit is <?php echo $maxSize/1000000;?>mb. Wrong upload will not be toleranted and results to a ban.
 		</div>
 		<?php echo flash::data();?>
 		<div class='row'>
