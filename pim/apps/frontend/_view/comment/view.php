@@ -151,8 +151,8 @@ setTimeout(function(){comment.getMore(1)}, 300000);
 		<ul>
 		<?php if(count($comments) > 0): ?>
 			<?php foreach($comments as $comment):
-
 			$profileHref	= url::createByRoute("api-redirect-general",Array("type"=>"profile"),true)."?user=".$comment['userID'];
+			$profileHref = in_array($comment['userID'], $nonSitemembers) ? '#' : $profileHref;
 			?>
 			<li class="clearfix">
 				<div class="forum-post-comment-avatar">

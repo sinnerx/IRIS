@@ -49,6 +49,20 @@ Class Controller_Comment
 
 		$data['comments'] = model::load("comment/comment")->getComments($refID,$type,$paginConf);
 
+		$userIDs = array();
+
+		foreach($data['comments'] as $comment)
+			$userIDs[] = $comment['userID'];
+
+		// get non site members commentor.
+
+		if(count($userIDs) > 0)
+		{
+			$nonSitemembers = db::where('userID', $userIDs)->where('userLevel !=', 1)->get('user')->result('userID');
+			$nonSitemembers = count($nonSitemembers) > 0 ? array_keys($nonSitemembers) : array();
+			$data['nonSitemembers'] = $nonSitemembers;
+		}
+
 		if(!request::get("more") || request::get('refresh'))
 		{
 			view::render("comment/view",$data);
@@ -63,6 +77,8 @@ Class Controller_Comment
 				{
 					$photoUrl = model::load("image/services")->getPhotoUrl($comment['userProfileAvatarPhoto']);
 					$href	= url::route("api-redirect-general",Array("type"=>"profile"),true)."?user=".$comment['userID'];
+					$href = in_array($comment['userID'], $nonSitemembers) ? '#' : $href;
+
 					echo '<li class="clearfix">
 								<div class="forum-post-comment-avatar">
 									<img src="'.$photoUrl.'" alt=""/>
