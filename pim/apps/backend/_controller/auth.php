@@ -75,7 +75,7 @@ Class Controller_Auth
 		## if is logged in.
 		if(session::has("userID"))
 		{
-			redirect::to(model::load("access/services")->getFirstLoginLocation(session::get("userLevel")));
+			redirect::to(model::load("access/data")->firstLoginLocation(session::get("userLevel")));
 		}
 
 		if(form::submitted())
@@ -176,7 +176,7 @@ Class Controller_Auth
 				$accessAuth->login($backendLoginCheck['userID'],$backendLoginCheck['userLevel']);
 
 				## go to home/index
-				redirect::to(model::load("access/services")->getFirstLoginLocation($backendLoginCheck['userLevel']));
+				redirect::to(model::load("access/data")->firstLoginLocation($backendLoginCheck['userLevel']));
 			}
 		}
 

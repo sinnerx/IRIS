@@ -74,10 +74,23 @@ class Data
 				2=>"sitemanager",
 				3=>"clusterlead",
 				4=>"operationmanager",
+				5=>"financialcontroller",
 				99=>"root"
 						);
 
 		return $levelR[$id];
+	}
+
+	public function firstLoginLocation($level)
+	{
+		$locR	= Array(
+					2=>"site/overview",
+					3=>"cluster/overview",
+					5=>"billing/overview",
+					99=>"site/index"
+							);
+
+		return $locR[$level];
 	}
 
 	public function accessLevelCode($id)
@@ -86,6 +99,7 @@ class Data
 				2=>"sm",
 				3=>"cl",
 				4=>"om",
+				5=>'fc',
 				99=>"r"
 						);
 

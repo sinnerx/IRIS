@@ -175,6 +175,7 @@ class User extends \Origami
 				self::LEVEL_SITEMANAGER => "Site Manager",
 				self::LEVEL_CLUSTERLEAD => "Cluster Lead",
 				self::LEVEL_OPERATIONMANAGER=>"Operation Manager",
+				self::LEVEL_FINANCIALCONTROLLER=>"Financial Controller",
 				self::LEVEL_ROOT => "Root Admin"
 						);
 

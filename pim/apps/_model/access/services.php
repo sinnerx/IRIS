@@ -56,17 +56,6 @@ class Services extends Data
 		$CM	= controller::getCurrentController()."/".controller::getCurrentMethod();
 		return in_array($CM,$publicList)?true:false;
 	}
-
-	public function getFirstLoginLocation($level)
-	{
-		$locR	= Array(
-					2=>"site/overview",
-					3=>"cluster/overview",
-					99=>"site/index"
-							);
-
-		return $locR[$level];
-	}
 }
 
 

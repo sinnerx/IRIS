@@ -30,7 +30,7 @@ Class Auth
 		db::where(Array(
 				"userIC"=>$userIC,
 				"userPassword"=>model::load("helper")->hashPassword($userPassword),
-				"userLevel"=>1, # member.
+				"userLevel"=> \model\user\user::LEVEL_MEMBER, # member.
 						));
 
 		db::from("user");
@@ -66,7 +66,7 @@ Class Auth
 		db::where(Array(
 				"userEmail"=>$email,
 				"userPassword"=>model::load("helper")->hashPassword($password),
-				"userLevel"=>2
+				"userLevel"=>\model\user\user::LEVEL_SITEMANAGER
 						));
 
 		db::from("user");
