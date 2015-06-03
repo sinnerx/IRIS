@@ -775,3 +775,8 @@ background-image: url("../images/mCSB_buttons.png") !important;
 	margin-top:-70px !important;
 }
 
+LABEL.tinynav_label{
+	display:none;
+	
+}
+

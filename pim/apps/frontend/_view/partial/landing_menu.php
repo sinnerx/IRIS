@@ -1,6 +1,5 @@
-<div id="pull" style="display: none;"><a href="#"><i class="icon-reorder"></i> Menu  <span> +</span> </a></div>
-<ul class="navigation">
-	<li><a href="<?php echo url::base();?>">Utama</a></li>
+<ul class="navigation" style="display: block;"  id="nav">
+	<li class="selected"><a href="<?php echo url::base();?>">Utama</a></li>
     <li><a href="mengenai-kami">Mengenai Kami</a></li>
 	<li><a href="#"  class="ert">Senarai Pusat <span class="main_links_span">+</span></a>
 	<!------------DROPDOWN_MENU_START_LEVEL_1------------>

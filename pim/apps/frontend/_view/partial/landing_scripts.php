@@ -40,3 +40,35 @@ $j(function() {
   $j('#example').vTicker();
 });
 </script>
+
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+ <style>
+    /* styles for desktop */
+    .tinynav { display: none }
+  
+    /* styles for mobile */
+    @media screen and (max-width: 600px) {
+      .tinynav { display: block }
+      #nav { display: none !important; }
+    }
+  </style>
+
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+  <script src="<?php echo url::asset("_landing/js/tinynav.js");?>"></script>
+
+  <script>
+    var $h = jQuery.noConflict();
+	$h(function () {
+
+      // TinyNav.js 1
+      $h('#nav').tinyNav({
+        active: 'selected',
+        indent: '-- ',
+        label: 'Menu'
+      });
+      
+      
+
+    });
+  </script>

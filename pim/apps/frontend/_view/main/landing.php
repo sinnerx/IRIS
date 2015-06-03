@@ -21,6 +21,8 @@
 <!-- Mobile Internet Explorer ClearType Technology -->
 <!--[if IEMobile]>  <meta http-equiv="cleartype" content="on">  <![endif]-->
 <?php view::render("partial/landing_scripts");?>
+
+
 </head>
 
 
@@ -40,7 +42,7 @@
 <div id="home-slider">
 <div class="main-wrap clearfix">
 
-<div class="span5"><img src="<?php echo url::asset("_landing/images/skmm_logo.png");?>"/></div>
+<div class="span5 top-logo"><img src="<?php echo url::asset("_landing/images/skmm_logo.png");?>"/></div>
 
 <div class="span5 right-blck"><img src="<?php echo url::asset("_landing/images/pi1m_logo.png");?>" /></div>
 
