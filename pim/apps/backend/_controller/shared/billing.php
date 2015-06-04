@@ -4,8 +4,12 @@ Class Controller_Billing
 	public function add()
 	{
 		$siteID = request::get("siteID");
+
+		if ($siteID == ""){ 
+			$siteID = authData('site.siteID');	
+		} 
+
 		$todayDate = request::get("selectDate");
-		//$todayDate = date('Y-m-d', strtotime($todayDate)); 
 		$data['todayDate'] = $todayDate = $todayDate ? :  date('Y-m-d H:i');
 
 		$month = date('n',strtotime($todayDate));
@@ -35,6 +39,13 @@ Class Controller_Billing
 		foreach($res_site as $row)
 		{
 			$data['siteList'][$row['siteID']]	= $row['siteName'];
+		}
+
+		$allItem = model::load('billing/billing')->getItem();
+
+		foreach($allItem as $row)
+		{
+			$data['itemList'][$row['billingItemID']]	= $row['billingItemHotkey'];
 		}
 
 		view::render("shared/billing/add", $data);
@@ -165,8 +176,7 @@ Class Controller_Billing
 		foreach($res_site as $row)
 		{
 			$data['siteList'][$row['siteID']]	= $row['siteName'];
-		}
-						
+		}						
 			$data['item'] = model::load('billing/billing')->getItem();
 			$data['list'] = model::load('billing/billing')->getList($siteID);
 		
@@ -192,22 +202,20 @@ Class Controller_Billing
 
 		foreach($allItem as $row)
 		{
-			$data['itemList'][$row['billingItemID']]	= $row['billingItemHotkey']."  ".$row['billingItemName'];
+			$data['itemList'][$row['billingItemID']] = $row['billingItemHotkey']."  ".$row['billingItemName'];
 		}
 
 		$siteID = request::get("siteID") ? : authData('site.siteID');	
 		$itemID = request::get("itemID"); 
-		$selectDate = request::get("selectDate");
+		$data['selectDate'] = $selectDate = request::get("selectDate") ? :  date('Y-m-d');
 				
 		if ($siteID != ""){
-
 			$data['list'] = model::load('billing/billing')->getAllList($siteID,$itemID,$selectDate);	
 		}
 
 		$checkVerify = model::orm('billing/verify')->where('billingTransactionDate',  date('Y-m-d', strtotime($selectDate)))->execute();
 		
 		if($checkVerify->count() > 0){
-
 			$data['verified'] = 1;
 		}
 
@@ -238,14 +246,11 @@ Class Controller_Billing
 		}
 	
 		$data['list'] = model::load('billing/billing')->getAllList($siteID,$itemID,$transactionDate);	
-			//redirect::to('billing/edit', $message, 'success');
-
 		
 		view::render("shared/billing/edit", $data);
 	}
 
-
-	public function editForm($itemID,$transactionID)
+	public function editForm($itemID,$transactionID,$transactionDate)
 	{	
 		$this->template = false;
 
@@ -292,7 +297,8 @@ Class Controller_Billing
 
 		$data['item'] = $billing;
 		$data['itemID'] = $itemID; 
-		
+		$data['transactionDate'] = date('d M Y  h:iA', $transactionDate);
+
 		view::render("shared/billing/editForm", $data);
 	}
 
@@ -326,56 +332,98 @@ Class Controller_Billing
 
 		$approval = model::load('billing/approval')->getApproval($siteID, $selectMonth, $selectYear);
 
-			if ($approval->getApprovalStatus(2) == 1){		
+			if ($approval->getApprovalStatus(\model\user\user::LEVEL_SITEMANAGER) == 1){		
+						
+				$approvalDetail = $approval->getApprovalDetail($approval->billingApprovalID,\model\user\user::LEVEL_SITEMANAGER);
+				$userDetail = model::load('user/user')->getUsersByID($approvalDetail['userID']);
+								 
 				$data['checked'] = 1;
-				
+				$data['checkedword'] = "Checked at ".$approvalDetail['billingApprovalLevelCreatedDate']." by ".$userDetail[$approvalDetail['userID']]['userProfileFullName'];
 			}
 
-			if ($approval->getApprovalStatus(3) == 1){		
+			if ($approval->getApprovalStatus(\model\user\user::LEVEL_CLUSTERLEAD) == 1){						
+
+				$approvalDetail = $approval->getApprovalDetail($approval->billingApprovalID,\model\user\user::LEVEL_CLUSTERLEAD);
+				$userDetail = model::load('user/user')->getUsersByID($approvalDetail['userID']);
+								 
 				$data['approved'] = 1;
+				$data['approvedword'] = "Approved at ".$approvalDetail['billingApprovalLevelCreatedDate']." by ".$userDetail[$approvalDetail['userID']]['userProfileFullName'];
 			}
-		}	
 
-		/*if ($approval->getApprovalStatus(5) == 1){
+			if ($approval->getApprovalStatus(\model\user\user::LEVEL_FINANCIALCONTROLLER) == 1){
 			
-			$data['checked'] = 1;
-		}		*/
-	
+				$approvalDetail = $approval->getApprovalDetail($approval->billingApprovalID,\model\user\user::LEVEL_FINANCIALCONTROLLER);
+				$userDetail = model::load('user/user')->getUsersByID($approvalDetail['userID']);
+
+				$data['closed'] = 1;
+				$data['closedword'] = "Closed at ".$approvalDetail['billingApprovalLevelCreatedDate']." by ".$userDetail[$approvalDetail['userID']]['userProfileFullName'];
+			}			
+		}	
 
 		if(form::submitted())
 		{				
+			$data['selectMonth'] = $selectMonth = input::get("month");
+			$data['selectYear'] = $selectYear = input::get("year");
+			$data['siteID'] = $siteID = input::get("siteID");	
+
 			if (authData('user.userLevel') == 2){
 				$id = authData('site.siteID'); 
 			}
 			
 			$approval = model::load('billing/approval')->getApproval($id, $selectMonth, $selectYear);
 
-			if (authData('user.userLevel') == 2)	{
+			if (authData('user.userLevel') == \model\user\user::LEVEL_SITEMANAGER){
 				$approval->check();	
+				
+				$approvalDetail = $approval->getApprovalDetail($approval->billingApprovalID,\model\user\user::LEVEL_SITEMANAGER);
+				$userDetail = model::load('user/user')->getUsersByID($approvalDetail['userID']);
+								 
 				$data['checked'] = 1;
+				$data['checkedword'] = "Checked at ".$approvalDetail['billingApprovalLevelCreatedDate']." by ".$userDetail[$approvalDetail['userID']]['userProfileFullName'];
 
-			} else {
+			} elseif(authData('user.userLevel') == \model\user\user::LEVEL_CLUSTERLEAD) {
 				
 				if (input::get("submit") == 1){
-					
+
 					$approval->approve(authData('user.userLevel'));		
+					
+					$approvalDetail = $approval->getApprovalDetail($approval->billingApprovalID,\model\user\user::LEVEL_CLUSTERLEAD);
+					$userDetail = model::load('user/user')->getUsersByID($approvalDetail['userID']);
+								 
 					$data['approved'] = 1;
+					$data['approvedword'] = "Approved at ".$approvalDetail['billingApprovalLevelCreatedDate']." by ".$userDetail[$approvalDetail['userID']]['userProfileFullName'];
 				} else {
-
+				
 					$approval->reject(authData('user.userLevel'));
-				}
 
+					$approvalDetail = $approval->getApprovalDetail($approval->billingApprovalID,\model\user\user::LEVEL_CLUSTERLEAD);
+					$userDetail = model::load('user/user')->getUsersByID($approvalDetail['userID']);								
+					
+					$data['approvedword'] = "Rejected at ".$approvalDetail['billingApprovalLevelCreatedDate']." by ".$userDetail[$approvalDetail['userID']]['userProfileFullName'];
+				}				
+			} else {
 				
-			} 
-
-		 }	
+					$approval->approve(authData('user.userLevel'));		
+					
+					$approvalDetail = $approval->getApprovalDetail($approval->billingApprovalID,\model\user\user::LEVEL_FINANCIALCONTROLLER);
+					$userDetail = model::load('user/user')->getUsersByID($approvalDetail['userID']);
+								 
+					$data['closed'] = 1;
+					$data['closedword'] = "Closed at ".$approvalDetail['billingApprovalLevelCreatedDate']." by ".$userDetail[$approvalDetail['userID']]['userProfileFullName'];
+			}
+		}	
 				
-
-
-		db::from("site");
-		db::order_by("siteName","ASC");
+		if (authData('user.userLevel') == \model\user\user::LEVEL_CLUSTERLEAD){
+			
+			$res_site	= model::load("site/site")->getSitesByClusterLead(session::get("userID"))->result();
 		
-		$res_site = db::get()->result();
+		} else {
+
+			db::from("site");
+			db::order_by("siteName","ASC");
+		
+			$res_site = db::get()->result();
+		}
 
 		foreach($res_site as $row)
 		{
@@ -391,12 +439,10 @@ Class Controller_Billing
 			$balanceCredit = model::load('billing/process')->getBalanceCredit($siteID,$selectMonth-1,$selectYear);
 
 			$data['balance'] = $balanceDebit['balance'] - $balanceCredit['balance'];
-
 			$dateList = model::load('billing/process')->getdateList($siteID,$selectMonth,$selectYear);		
 
 		 	foreach($dateList as $key1 => $row)
 			{
-
 				$checkDate = date('Y-m-d', strtotime($row['billingTransactionDate'])); 
 				$checkdateList = model::load('billing/process')->getList($siteID,$checkDate);
 
@@ -433,7 +479,6 @@ Class Controller_Billing
 
 			foreach($totalList as $key3 => $row)
 			{
-
 				$list[$row['transactionDate']] =  Array(
 			
 					"date"=>$row['transactionDate'],				
@@ -449,7 +494,6 @@ Class Controller_Billing
 
 		$start_date = "01-".$selectMonth."-".$selectYear;
 		$start_time = strtotime($start_date);
-
 		$end_time = strtotime("+1 month", $start_time);
 
 		for($i=$start_time; $i<$end_time; $i+=86400)
@@ -521,7 +565,7 @@ Class Controller_Billing
 		$todayDateEnd = date('Y-m-d', strtotime($todayDateEnd)); 
 
 		$data['journal'] = model::orm('billing/journal')
-				->where("siteID = '$siteID' AND billingTransactionDate >= '$todayDateStart' AND billingTransactionDate <= '$todayDateEnd'")
+				->where("siteID = '$siteID' AND billingTransactionDate >= '$todayDateStart' AND billingTransactionDate <= '$todayDateEnd' AND billingTransactionStatus = 1")
 				->join("billing_item", "billing_item.billingItemID = billing_transaction.billingItemID")
 				->order_by("billingTransactionDate","ASC")
 				->execute();

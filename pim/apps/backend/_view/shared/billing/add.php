@@ -9,6 +9,16 @@
 
 	$(document).ready(function() {
 
+/*	$('body').keyup(function(e)
+	{
+		var keybinds = 'abcdefghijklmnopqrstuvwxyz';
+		var key = keybinds.split('')[e.keyCode-65];
+		var hotkeybinds = {
+			'a' : 1
+		};
+
+		billing.select(hotkeybinds[key]);
+	});*/
 		var result = 1.00;
 	    $('#total').attr('value', function() {
 	        $('.amount').each(function() {
@@ -54,7 +64,7 @@
 	jQuery("#selectDate").datetimepicker({
   		
   		format:'d-m-Y H:i',
-  		step:'30',
+  		step:5,
   		onChangeDateTime:function(dp,$input){
     		
     			var siteID	= $("#siteID").val() != ""?"&siteID="+$("#siteID").val():"";  		
@@ -80,13 +90,18 @@
 	
 	
 	var base_url	= "<?php echo url::base();?>/";
-	
+	var x;
 	var billing	= new function()
 	{	
 		this.select	= function(itemID)
 		{						
-			var siteID	= $("#siteID").val() != ""?"&siteID="+$("#siteID").val():"";
-			var itemID	= itemID != ""?"&itemID="+itemID:"";
+			if (itemID == x){
+				var itemID	=  itemID != ""?"&itemID="+$("#itemID").val():"";
+			} else {
+				var itemID	=  itemID != ""?"&itemID="+itemID:"";
+			}
+
+			var siteID	= $("#siteID").val() != ""?"&siteID="+$("#siteID").val():"";			
 			var selectDate	= $("#selectDate").val() != ""?"&selectDate="+$("#selectDate").val():"";		
 	
 			if (!$("#siteID")[0]) {
@@ -187,7 +202,7 @@
         		<?php endif; ?>
       			<div onclick="billing.select(<?php echo $row[billingItemID]; ?>);" class="hotkey"><?php echo $row[billingItemHotkey]; ?></div>
       			<div onclick="billing.select(<?php echo $row[billingItemID]; ?>);" class="itemname "><?php echo $row[billingItemName]; ?></div>
-      			<div onclick="billing.select(<?php echo $row[billingItemID]; ?>);" class="price btn-default"><?php echo $row[billingItemPrice]; ?></div>
+      			<div onclick="billing.select(<?php echo $row[billingItemID]; ?>);" class="price btn-default">RM <?php echo $row[billingItemPrice]; ?></div>
         	</div>
         	<?php endforeach;?>		
 		</div>
@@ -213,7 +228,11 @@
             <label class="col-lg-2 control-label">Hot Key</label>
             <div class="col-lg-5">
               <?php
-              echo form::text("hotKey","class='form-control' readonly",$itemSelect->billingItemHotkey);?>
+
+       //       echo form::text("hotKey","class='form-control' readonly",$itemSelect->billingItemHotkey);
+              echo form::select("itemID",$itemList,"class='input-sm form-control inline v-middle' tabindex='-1' onchange='billing.select(x);'",request::get("itemID"),"[SELECT TRANSACTION]");
+              ?>
+
             </div>
           </div>
           <div class="form-group">
@@ -267,7 +286,7 @@
 
           </div>
           <div class="form-group">
-            <label class="col-lg-2 control-label">Price</label>
+            <label class="col-lg-2 control-label">Price (RM)</label>
             <div class="col-lg-5">
               <?php
               if ($itemSelect->billingItemPriceDisabled != 1){
@@ -369,3 +388,13 @@
 	</div>
 </div>	
 
+
+<div class='row'>
+	<div class="col-sm-10">
+		<div class='well well-sm'>
+		
+		</div>
+		
+	
+	</div>
+</div>	
