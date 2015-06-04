@@ -416,8 +416,8 @@
 	line-height: 23px;
 	color: #fff;
 	
-	/*	background: rgba(0, 0, 0, 0.8);*/
-		width: 490px;
+	/*	background: rgba(0, 0, 0, 0.8);
+		width: 490px;*/
 		display:inline-block;
 	
 	
@@ -449,6 +449,7 @@
 #block_navigation ul li:hover  > .colmn_wrap  {
 	opacity:1;
 	visibility: visible;
+	display:table;
 
 
 }

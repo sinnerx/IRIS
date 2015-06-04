@@ -26,7 +26,6 @@
 <link href="<?php echo url::asset("_landing/css/jquery.mCustomScrollbar.css");?>" rel="stylesheet" type="text/css" />
 
 <script src="<?php echo url::asset("_landing/js/jquery.js");?>"></script> <!-- This is jquery. Use this instead. -->
-<script src="<?php echo url::asset("_landing/js/cust.js");?>"></script>
 
 <script src="<?php echo url::asset("_landing/js/jquery-1.7.2.min.js");?>"></script>
 <script src="<?php echo url::asset("_landing/js/modernizr.js");?>"></script>
