@@ -16,7 +16,7 @@
           <div class="form-group">
             <label class="col-lg-2 control-label">Hot Key</label>
             <div class="col-lg-10">
-              <?php echo form::text("hotKey","class='form-control'");?>
+              <?php echo form::select("hotKey",$keyList,"class='input-sm form-control input-s-sm inline v-middle'","[SELECT KEY]");?>              
             </div>
           </div>
           <div class="form-group">

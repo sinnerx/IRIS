@@ -15,8 +15,8 @@
         <form class="bs-example form-horizontal" method='post' action='<?php echo url::base('billing/editItem/'.$item->billingItemID);?>'>
           <div class="form-group">
             <label class="col-lg-2 control-label">Hot Key</label>
-            <div class="col-lg-10">
-              <?php echo form::text("hotKey","class='form-control'",$item->billingItemHotkey);?>
+            <div class="col-lg-10">        
+              <?php echo form::select("hotKey",$keyList,"class='input-sm form-control input-s-sm inline v-middle'","$item->billingItemHotkey");?>  
             </div>
           </div>
           <div class="form-group">

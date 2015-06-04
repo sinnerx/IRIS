@@ -35,6 +35,16 @@ class billing extends \Origami
 	public function getItem()
 	{
 		db::from("billing_item");
+		db::order_by("billingItemHotkey","ASC");
+		
+		return db::get()->result();		
+	}
+
+		public function getAllHotkey()
+	{
+		db::select("billingItemID, billingItemHotkey");	
+		db::from("billing_item");
+
 		return db::get()->result();		
 	}
 
@@ -95,7 +105,6 @@ class billing extends \Origami
 				"billingTransactionStatus" => 1
 						);
 
-
 		db::from("billing_transaction")->where($where);
 		db::join("billing_item", "billing_item.billingItemID = billing_transaction.billingItemID");
 		db::order_by("billingTransactionDate","DESC");
@@ -133,14 +142,12 @@ class billing extends \Origami
 	}
 
 	public function getHqTransaction()
-	{
-		
+	{		
 		$where	= Array(
 				"billing_transaction.billingItemID"=>15,			
 				 "billingTransactionStatus" => 1
 						);			
 		
-
 		db::from("billing_transaction")->where($where);		
 		db::join("billing_item", "billing_item.billingItemID = billing_transaction.billingItemID");
 		db::order_by("billingTransactionDate","ASC");

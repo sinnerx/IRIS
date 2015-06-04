@@ -10,7 +10,7 @@ Class Controller_Billing
 		} 
 
 		$todayDate = request::get("selectDate");
-		$data['todayDate'] = $todayDate = $todayDate ? :  date('Y-m-d H:i');
+		$data['todayDate'] = $todayDate = $todayDate ? : date('Y-m-d H:i');
 
 		$month = date('n',strtotime($todayDate));
 		
@@ -51,27 +51,13 @@ Class Controller_Billing
 		view::render("shared/billing/add", $data);
 	}
 
-
 	public function addItem()
 	{		
 		$this->template = false;
+		
 		if(form::submitted())
 		{
-			$data['billingItemHotkey'] = model::orm('billing/billing')->where('billingItemHotkey', input::get('hotKey'))->execute();
-
-			if($data['billingItemHotkey']->count() > 0)
-			{
-				$billing = $data['billingItemHotkey']->getFirst();
-
-				$data_site = input::get();
-
-				$item = model::load("billing/billing");
-				$item->updateItemInfo($billing->billingItemID,$data_site);
-
-				$message = 'Item information updated.';
-			}
-			else
-			{
+//			$data['billingItemHotkey'] = model::orm('billing/billing')->where('billingItemHotkey', input::get('hotKey'))->execute();
 				$billing = model::orm('billing/billing')->create();
 				$billing->billingItemHotkey = input::get('hotKey');
 				$billing->billingItemName = input::get('itemName');
@@ -88,10 +74,22 @@ Class Controller_Billing
 				$billing->save();	
 
 				$message = 'New Item added!';
-			}	
-
+				
 			redirect::to('billing/add', $message, 'success');
 		}		
+
+		$keyList = model::load('billing/billing')->getAllHotkey();
+
+		foreach($keyList as $row){
+
+			$keyList[$row['billingItemHotkey']]	= $row['billingItemHotkey'];
+		}
+			$alpha = array ( "A"=>"A","B"=>"B","C"=>"C","D"=>"D","E"=>"E","F"=>"F","G"=>"G","H"=>"H","I"=>"I","J"=>"J",
+							 "K"=>"K","L"=>"L","M"=>"M","N"=>"N","O"=>"O","P"=>"P","Q"=>"Q","R"=>"R","S"=>"S","T"=>"T",
+							 "U"=>"U","V"=>"V","W"=>"W","X"=>"X","Y"=>"Y","Z"=>"Z" );
+
+		$data['keyList']=array_diff($alpha,$keyList);
+
 		view::render("shared/billing/addItem", $data);
 	}
 	
@@ -102,7 +100,6 @@ Class Controller_Billing
 
 		if(form::submitted())
 		{
-
 			$billing->billingItemHotkey = input::get('hotKey');
 			$billing->billingItemName = input::get('itemName');
 			$billing->billingItemDescription = input::get('description');
@@ -121,6 +118,22 @@ Class Controller_Billing
 
 			redirect::to('billing/add', $message, 'success');
 		}
+
+		$keyList = model::load('billing/billing')->getAllHotkey();
+
+		foreach($keyList as $row){
+
+			$keyList[$row['billingItemHotkey']]	= $row['billingItemHotkey'];
+		}
+			$alpha = array ( "A"=>"A","B"=>"B","C"=>"C","D"=>"D","E"=>"E","F"=>"F","G"=>"G","H"=>"H","I"=>"I","J"=>"J",
+							 "K"=>"K","L"=>"L","M"=>"M","N"=>"N","O"=>"O","P"=>"P","Q"=>"Q","R"=>"R","S"=>"S","T"=>"T",
+							 "U"=>"U","V"=>"V","W"=>"W","X"=>"X","Y"=>"Y","Z"=>"Z" );
+
+		$current = array($billing->billingItemHotkey => $billing->billingItemHotkey );	
+
+		$keyList=array_diff($alpha,$keyList);
+		$data['keyList'] = array_merge($keyList,$current);
+
 		$data['item'] = $billing;
 		view::render("shared/billing/editItem", $data);
 	}
@@ -147,7 +160,6 @@ Class Controller_Billing
 				redirect::to('billing/add', $message, 'error');
 			}
 		}
-
 			$checkBalance = model::load('billing/billing')->getList($siteID,1);
 			$lastBalance = $checkBalance[0][billingTransactionBalance];
 
@@ -260,7 +272,6 @@ Class Controller_Billing
 
 		if(form::submitted())
 		{
-
 			$log = model::orm('billing/log')->create();
 			$log->billingLogType = "Edit Transaction";
 			$log->userID = authData('user.userID');
@@ -303,8 +314,6 @@ Class Controller_Billing
 
 		view::render("shared/billing/editForm", $data);
 	}
-
-
 
 	public function delete()
 	{	
@@ -574,13 +583,19 @@ Class Controller_Billing
 
 		$startDate = date('Y-m-01', strtotime($todayDateStart)); 
 
-		$data['previoussum'] = model::orm('billing/journal')
+		$previoussum = model::orm('billing/journal')
 				->select("SUM(billingTransactionTotal) as total")
 				->where("siteID = '$siteID' AND billingTransactionDate >= '$startDate' AND billingTransactionDate <= '$todayDateStart' AND billingTransactionStatus = 1")
 				->join("billing_item", "billing_item.billingItemID = billing_transaction.billingItemID")
 				->order_by("billingTransactionDate","ASC")
 				->execute();
+		
+		 foreach($previoussum as $previousbalance)
+		 {
+		 	$data['previoussum'] = $previousbalance->total;
 
+		 }
+		 
 		view::render("shared/billing/transactionJournal", $data);
 	}
 }
