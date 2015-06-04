@@ -78,7 +78,7 @@ var base_url	= "<?php echo url::base();?>/";
 	Transaction
 </h3>
 <div class='well well-sm'>
-	Transaction For 
+	Transaction Journal 
 </div>
 <?php echo flash::data();?>
 <div class='row'>
@@ -90,10 +90,10 @@ var base_url	= "<?php echo url::base();?>/";
 			</div>
 			<?php endif;?>
 			<div  class="form-group" style="margin-left:10px">
-			<?php echo form::text("selectDateStart","class='input-sm input-s datepicker-input form-control' date-date-format='dd-mm-yyyy'",date('d-m-Y', strtotime($todayDateStart)));?>			
+			From <?php echo form::text("selectDateStart","class='input-sm input-s datepicker-input form-control' date-date-format='dd-mm-yyyy'",date('d-m-Y', strtotime($todayDateStart)));?>			
 			</div>
 			<div  class="form-group" style="margin-left:10px">
-			<?php echo form::text("selectDateEnd","class='input-sm input-s datepicker-input form-control' date-date-format='dd-mm-yyyy'",date('d-m-Y', strtotime($todayDateEnd)));?>			
+			to  <?php echo form::text("selectDateEnd","class='input-sm input-s datepicker-input form-control' date-date-format='dd-mm-yyyy'",date('d-m-Y', strtotime($todayDateEnd)));?>			
 			</div>
 		</form>	
 	</div>
@@ -101,14 +101,12 @@ var base_url	= "<?php echo url::base();?>/";
 
 <div class='row'>
 	<div class="col-sm-10">
-		<div class='well well-sm'>
-			A
+		<div class='well well-sm'>			
 		</div>
 		
 		<div class="table-responsive">
 			<table class='table'>
-				<tr>
-<!-- Date	TranType	Description	UnitPrice	Pcs	Repeat	Total	Balance -->					
+				<tr>		
 					<th>Date</th>
 					<th>Item</th>			
 					<th>Description</th>
@@ -119,17 +117,22 @@ var base_url	= "<?php echo url::base();?>/";
 					<th>Balance</th>
 				</tr>
 				
-				<?php if($journal->count() > 0):?>
+			<?php if($journal->count() > 0):?>
 			<?php foreach($journal as $journalItem):?>
 				<tr>
 					<td><?php echo $journalItem->billingTransactionDate; ?></td>
 					<td><?php echo $journalItem->billingItemName; ?></td>
 					<td><?php echo $journalItem->billingItemDescription; ?></td>
-					<td><?php echo $billingItemPrice = $journalItem->billingItemPrice ? :  $journalItem->billingTransactionTotal / $journalItem->billingTransactionQuantity / $journalItem->billingTransactionUnit; ?></td>
+					<td><?php echo $billingItemPrice = $journalItem->billingItemPrice ? : $journalItem->billingTransactionTotal / $journalItem->billingTransactionQuantity / $journalItem->billingTransactionUnit; ?></td>
 					<td><?php echo $journalItem->billingTransactionUnit; ?></td>
 					<td><?php echo $journalItem->billingTransactionQuantity; ?></td>
 					<td><?php echo number_format($journalItem->billingTransactionTotal, 2, '.', ''); ?></td>
-					<td><?php echo number_format($journalItem->billingTransactionBalance, 2, '.', ''); ?></td>					
+					<!-- <td><?php echo number_format($journalItem->billingTransactionBalance, 2, '.', ''); ?></td>	 -->
+
+					<td><?php $beginningbalance = $beginningbalance + $journalItem->billingTransactionTotal;
+					echo number_format($beginningbalance, 2, '.', '');?></td>
+
+
 				</tr>
 			<?php endforeach;?>
 			<?php else:?>		
@@ -141,5 +144,15 @@ var base_url	= "<?php echo url::base();?>/";
 			</table>
 			
 		</div>
+	</div>
+</div>	
+
+<div class='row'>
+	<div class="col-sm-10">
+		<div class='well well-sm'>
+		
+		</div>
+		
+	
 	</div>
 </div>	
