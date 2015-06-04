@@ -102,7 +102,7 @@
 					<th>Date</th>
 					<th>Item</th>			
 					<th>Description</th>
-					<th>Unit Price</th>
+					<th>Unit Price (RM)</th>
 					<th>Unit</th>
 					<th>Quantity</th>
 					<th>Total</th>
@@ -118,7 +118,7 @@
 					
 					<?php  if((session::get("userLevel") == 2) && ($verified != 1)): ?>					
 					<td>
-					<a href='<?php echo url::base("billing/editForm/".$row[billingItemID]."/".$row[billingTransactionID]);?>' style="margin-left:20px"  data-toggle='ajaxModal' class='fa fa-edit pull-right' style='font-size:13px;'></a>
+					<a href='<?php echo url::base("billing/editForm/".$row[billingItemID]."/".$row[billingTransactionID]."/".strtotime($row[billingTransactionDate]));?>' style="margin-left:20px"  data-toggle='ajaxModal' class='fa fa-edit pull-right' style='font-size:13px;'></a>
 					<a id='delete-button' href='javascript:void(0)' rel=<?php echo $row[billingTransactionID]; ?> class='fa fa-trash-o pull-right' style='font-size:13px;'></a></a>
 					</td>
 					<?php else: ?> 

@@ -33,7 +33,7 @@
 		<div class="modal-header">
 			<button type="button" class="close" data-dismiss="modal"><i class="fa fa-times"></i></button>
 			<h4 class="modal-title"><!-- ☮ -->
-			<span>Edit Transaction</span>
+			<span>Edit Transaction for <?php echo $transactionDate; ?></span>
 			</h4>
 		</div>
 		<?php echo flash::data();?>
@@ -59,7 +59,7 @@
             </div>
           </div>
           <div class="form-group">
-            <label class="col-lg-2 control-label">Price</label>
+            <label class="col-lg-2 control-label">Price (RM)</label>
             <div class="col-lg-10">
               <?php $price =  $item->billingTransactionTotal / $item->billingTransactionQuantity / $item->billingTransactionUnit;
               echo form::text("price","class='form-control amount'",$price);?>
