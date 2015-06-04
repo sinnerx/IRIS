@@ -38,14 +38,11 @@ class Approval extends \Origami
 
 	protected function setRejectStatus($level, $status)
 	{
-		//if(!in_array($level, array(\model\user\user::LEVEL_CLUSTERLEAD, \model\user\user::LEVEL_FINANCIALCONTROLLER)))
-		//	throw new \Exception("Can only be approved by either CL or FC");
 
 		$row = $this->getLevel($level);
 		
 		$data = array(
 			'billingApprovalLevelStatus' => $status
-			//'userID' => authData('user.userID')
 			);
 
 		db::where('billingApprovalLevelID', $row['billingApprovalLevelID'])

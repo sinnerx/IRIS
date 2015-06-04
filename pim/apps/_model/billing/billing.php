@@ -131,5 +131,21 @@ class billing extends \Origami
 		
 		return db::get()->result();
 	}
+
+	public function getHqTransaction()
+	{
+		
+		$where	= Array(
+				"billing_transaction.billingItemID"=>15,			
+				 "billingTransactionStatus" => 1
+						);			
+		
+
+		db::from("billing_transaction")->where($where);		
+		db::join("billing_item", "billing_item.billingItemID = billing_transaction.billingItemID");
+		db::order_by("billingTransactionDate","ASC");
+		
+		return db::get()->result();
+	}
 }
 ?>
