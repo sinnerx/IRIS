@@ -81,6 +81,20 @@ class Menu extends Data
 						),
 							);
 
+		$menu['fc']	= Array(
+					//"Overview"=>Array(
+					//			"Cluster Overview"=>Array("cluster/overview")
+					//				),
+					
+					"Billing"=>Array(
+						"Input Form"=>"billing/add",
+						//"Edit Form"=>"billing/edit",
+						"Daily Cash Process"=>"billing/dailyCashProcess"
+						//"Daily Journal"=>"billing/dailyJournal",
+						//"Transaction Journal"=>"billing/transactionJournal"
+						),
+							);
+
 		## root.
 		$menu['r']	= Array(
 					/*"Overview"=>"home/index",*/

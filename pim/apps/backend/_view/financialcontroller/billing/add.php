@@ -1,0 +1,166 @@
+<link rel="stylesheet" href="<?php echo url::asset("_scale/js/datepicker/datepicker.css"); ?>" type="text/css" />
+<link rel="stylesheet" href="<?php echo url::asset("_scale/js/datepicker/jquery.datetimepicker.css"); ?>" type="text/css" />
+
+<script type="text/javascript" src="<?php echo url::asset("_scale/js/datepicker/bootstrap-datepicker.js"); ?>"></script>
+<script type="text/javascript" src="<?php echo url::asset("_scale/js/datepicker/jquery.datetimepicker.js"); ?>"></script>
+
+<h3 class="m-b-xs text-black">
+<script type="text/javascript">
+
+	$(document).ready(function() {
+
+
+	jQuery("#selectDate").datetimepicker({
+  		timepicker:false,
+  		format:'d-m-Y',
+  		step:5,
+
+	
+	});
+
+
+	});
+	
+	
+
+
+</script>
+
+<style type="text/css">
+	
+	label {
+
+    	font-size: 13px;
+    	font-weight: bold;
+	}
+	.input-s-sm {
+
+		width: 250px;
+	}
+
+</style>
+
+
+
+<h3 class='m-b-xs text-black'>
+	Billing
+</h3>
+<div class='well well-sm'>
+	HQ Billing Input
+</div>
+<?php echo flash::data();?>
+<div class='row'>
+
+	<div class='col-sm-6'>
+		<form class="bs-example form-horizontal" method='post' action='<?php echo url::base('billing/addTransaction/');?>'>
+		<div style="margin-bottom:10px">
+		
+		</div>
+
+	<section class="panel panel-default">
+      <div class="panel-body">
+		<div class="form-group">
+            <label class="col-lg-2 control-label">Site</label>
+            <div class="col-lg-5">
+              <?php
+        		echo form::select("siteID",$siteList,"class='input-sm form-control input-s-sm inline v-middle'",request::get("siteID"),"[SELECT SITE]");
+              ?>
+
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-lg-2 control-label">Transaction Date</label>
+            <div class="col-lg-5">
+				<?php echo form::text("selectDate","class='input-sm input-s form-control'",date('d-m-Y', strtotime($selectDate)));?>
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label class="col-lg-2 control-label">Type</label>
+            <div class="col-lg-10">
+              <?php 
+              echo form::select("transactionType",$typeList,"class='input-sm form-control input-s-sm inline v-middle'",request::get("siteID"),"[SELECT TYPE]");	
+              	?>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-lg-2 control-label">Description</label>
+            <div id='desc' class="col-lg-10">
+             <?php              
+				echo form::text("description","class='form-control' ");              	
+              ?>       
+            </div>        
+        </div>
+        <div class="form-group">
+            <label class="col-lg-2 control-label">Amount (RM)</label>
+            <div class="col-lg-5">
+              <?php            
+				echo form::text("total","class='form-control amount' ");
+               ?>              
+            </div>
+        </div>
+          
+        <div class="form-group">
+            <div class="col-lg-offset-2 col-lg-10">
+              <button type="submit" class="btn btn-sm btn-default">Insert</button>
+           
+              <button type="submit" class="btn btn-sm btn-default">Clear</button>
+            </div>
+        </div>
+        </form>
+      </div>
+    </section>
+	</div>
+</div>
+
+<div class='row'>
+	<div class="col-sm-10">
+		<div class='well well-sm'>
+			Transaction  
+		</div>
+		
+		<div class="table-responsive">
+			<table class='table'>
+				<tr>
+					<th>Date</th>
+					<th>Site</th>			
+					<th>Type</th>
+					<th>Description</th>					
+					<th>Amount</th>
+					<!-- <th>Payment</th> -->					
+				</tr>
+				<?php if(count($list) > 0):?>
+			<?php	foreach ($list as $key => $row):?>
+				<tr>
+					<td><?php echo $row[billingFinanceTransactionDate]; ?></td>
+					<td><?php echo $row[siteName]; ?></td>
+					<?php if ($row[billingFinanceTransactionType] == 1){
+						$type = "Bank In"; } else { $type = "Cash Out"; } ?> 
+					<td><?php echo $type; ?></td>
+					<td><?php echo $row[billingFinanceTransactionDescription];  ?></td>
+					<td><?php echo $row[billingFinanceTransactionTotal]; ?></td>
+					<!-- <td><?php echo $row[billingTransactionQuantity]; ?></td> -->			
+				</tr>
+			<?php endforeach;?>
+			<?php else:?>		
+				<tr>
+					<td colspan="6"> No Transaction</td>
+				</tr>
+				<?php endif; ?>	
+
+			</table>
+			
+		</div>
+	</div>
+</div>	
+
+
+<div class='row'>
+	<div class="col-sm-10">
+		<div class='well well-sm'>
+		
+		</div>
+		
+	
+	</div>
+</div>	

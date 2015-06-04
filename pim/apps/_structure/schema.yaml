@@ -757,3 +757,16 @@ billing_approval_level:
 	userID [int]
 	billingApprovalLevelStatus [int]
 	billingApprovalLevelCreatedDate [datetime]
+
+billing_finance_transaction:
+	billingFinanceTransactionID [int]
+	siteID [int]
+	userID [int]
+	billingItemID [int]
+	billingFinanceTransactionTotal [float]
+	billingFinanceTransactionDescription [text]
+	billingFinanceTransactionType [text]  ## 1 = Bank in 2 = cash out
+	billingFinanceTransactionPayment [text]
+	billingFinanceTransactionDate [date]
+	billingFinanceTransactionCreatedDate [datetime]
+	billingFinanceTransactionUpdatedDate [datetime]  ## backdated

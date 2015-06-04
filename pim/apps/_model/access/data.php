@@ -38,12 +38,13 @@ class Data
 					"billing/editItem"=>Array("r", "sm"),
 					"billing/addTransaction"=>Array("r", "sm"),
 					"billing/edit"=>Array("r", "sm"),
-					"billing/dailyCashProcess"=>Array("r", "cl", "sm"),
+					"billing/dailyCashProcess"=>Array("r", "cl", "sm", "fc"),
 					"billing/dailyJournal"=>Array("r", "sm"),
 					"billing/transactionJournal"=>Array("r", "sm"),
 					"billing/editForm"=>Array("r", "sm"),
 					"billing/delete"=>Array("r", "sm"),
 					"billing/settlement"=>Array("r", "sm")
+
 
 							);
 
@@ -86,7 +87,7 @@ class Data
 		$locR	= Array(
 					2=>"site/overview",
 					3=>"cluster/overview",
-					5=>"billing/overview",
+					5=>"billing/add",
 					99=>"site/index"
 							);
 
