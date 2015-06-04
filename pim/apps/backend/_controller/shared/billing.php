@@ -440,7 +440,7 @@ Class Controller_Billing
 			$balanceDebit = model::load('billing/process')->getBalanceDebit($siteID,$selectMonth-1,$selectYear);
 			$balanceCredit = model::load('billing/process')->getBalanceCredit($siteID,$selectMonth-1,$selectYear);
 
-			$data['balance'] = $balanceDebit['balance'] - $balanceCredit['balance'];
+			$data['balance'] = $balanceDebit['balance'] + $balanceCredit['balance'];
 			$dateList = model::load('billing/process')->getdateList($siteID,$selectMonth,$selectYear);		
 
 		 	foreach($dateList as $key1 => $row)

@@ -11,7 +11,7 @@ class process
 
 		db::select("sum(billingTransactionTotal) as balance");
 		db::from("billing_transaction")
-		->where("siteID = '$siteID' AND year(billingTransactionDate) = '$year' AND month(billingTransactionDate) = '$month'  AND billingTransactionStatus = 1 AND ( billingItemID <> 14 AND billingItemID <> 15)");					
+		->where("siteID = '$siteID' AND year(billingTransactionDate) = '$year' AND (month(billingTransactionDate) > '1' AND month(billingTransactionDate) <= '$month')  AND billingTransactionStatus = 1 AND ( billingItemID <> 14 AND billingItemID <> 15)");					
 		db::order_by("billingTransactionDate", "ASC");
 		db::limit(1);
 
@@ -24,7 +24,7 @@ class process
 
 		db::select("sum(billingTransactionTotal) as balance");
 		db::from("billing_transaction")
-		->where("siteID = '$siteID' AND year(billingTransactionDate) = '$year' AND month(billingTransactionDate) = '$month'  AND billingTransactionStatus = 1 AND (billingItemID = 14 OR billingItemID = 15)");					
+		->where("siteID = '$siteID' AND year(billingTransactionDate) = '$year' AND (month(billingTransactionDate) > '1' AND month(billingTransactionDate) <= '$month')   AND billingTransactionStatus = 1 AND (billingItemID = 14 OR billingItemID = 15)");					
 		db::order_by("billingTransactionDate", "ASC");
 		db::limit(1);
 
