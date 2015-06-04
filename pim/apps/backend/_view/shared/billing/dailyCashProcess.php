@@ -1,29 +1,11 @@
 <link rel="stylesheet" href="<?php echo url::asset("_scale/js/datepicker/datepicker.css"); ?>" type="text/css" />
 <script type="text/javascript" src="<?php echo url::asset("_scale/js/datepicker/bootstrap-datepicker.js"); ?>"></script>
-
-
 <script type="text/javascript" src="<?php echo url::asset("_scale/js/jquery.ba-floatingscrollbar.js"); ?>"></script>
-
-
 <script type="text/javascript">
 
 	$(document).ready(function() {
 
-/*	$("#selectMonth").on("changeDate", function(ev)
-	{
-
-		var siteID	= $("#siteID").val() != ""?"&siteID="+$("#siteID").val():"";  		
-		var selectMonth	= $("#selectMonth").val() != ""?"&selectMonth="+$("#selectMonth").val():"";		
-		var selectYear	= $("#selectYear").val() != ""?"&selectYear="+$("#selectYear").val():"";
-	
-			if (!$("#siteID")[0]) {
-        		var siteID = "<?php echo $$siteID ?>";
-	   		}
-
-	   		window.location.href	= base_url+"billing/esdidt?"+siteID+selectMonth+selectYear;			    
-		});*/
-
-$('.row').floatingScrollbar();
+		$('.row').floatingScrollbar();
 	});
 	
 	
@@ -80,9 +62,9 @@ $('.row').floatingScrollbar();
 <div class='row'>
 	<div class='col-sm-10'>
 		<form class="form-inline bs-example" method='post' action=''>
-			<?php  if((session::get("userLevel") == 99) || (session::get("userLevel") == 3)): ?>
+			<?php  if((session::get("userLevel") == \model\user\user::LEVEL_ROOT) || (session::get("userLevel") == \model\user\user::LEVEL_CLUSTERLEAD)  || (session::get("userLevel") == \model\user\user::LEVEL_FINANCIALCONTROLLER)): ?>
 			<div class="form-group" style="margin-left:10px">
-				<?php echo form::select("siteID",$siteList,"class='input-sm form-control input-s-sm inline v-middle' onchange='billing.select();'",request::get("siteID"),"[SELECT SITE]");?>			
+				<?php echo form::select("siteID",$siteList,"class='input-sm form-control input-s-sm inline v-middle' onchange='billing.select();'",$siteID,"[SELECT SITE]");?>			
 			</div>
 			<?php endif;?>
 			<div class="form-group" style="margin-left:10px">
@@ -326,7 +308,7 @@ foreach ($alldate as $date => $day):?>
 							  echo number_format($totalPrint, 2, '.', ''); ?></td> 	
 
 					<?php if ($row['Printing & Photostat B&W']['date'] == $key) { ?>
-					<td><?php echo $row['Printing & Photostat B&W']['total']; ?></td> 
+					<td><?php echo number_format($row['Printing & Photostat B&W']['total'], 2, '.', ''); ?></td> 
 					<?php } else { ?>
 					<td>0.00</td> 
 					<?php } ?>
@@ -367,27 +349,20 @@ foreach ($alldate as $date => $day):?>
 					<td></td> 
 					<?php } ?>
 
-
 					<td><?php 
 								$dailytotal = $dailytotal + $totallist[$key]['total']; 
 								echo $totalperday = number_format($totallist[$key]['total'], 2, '.', ''); 
-
 					?></td>
 					<td><?php 	
 								$beginningbalance = $totallist[$key]['total'] + $beginningbalance;
 								echo $beginningbalance = number_format($beginningbalance, 2, '.', '');
 					 ?></td>	
-					
-					
+										
 				</tr>
 
 				<?php break; } ?>
 
-
 			<?php  endforeach;?>
-
-
-
 
 	<?php if ($day != $availableDate[$day][0]) {  ?>
 				<tr>	
@@ -445,9 +420,11 @@ foreach ($alldate as $date => $day):?>
 				</tr>
 				<tr>
 					<th> </th>
-					<th colspan="46">  Bank In </th>
+					<th colspan="46"> Bank In </th>
 				</tr>
-			<?php  foreach ($transferList as $key => $row):?>
+			<?php
+
+			 foreach ($transferList as $key => $row):?>
 				<tr>
 					<td><?php echo $row['date']?></td>
 					<td colspan="44"><?php echo $row['description']?></td>
@@ -463,14 +440,9 @@ foreach ($alldate as $date => $day):?>
 				</tr>
 				<?php endif; ?>	
 
-			</table>
-
-
-			
+			</table>			
 		</div>
 	</div>
-
-
 
 <div class="col-sm-12  ">
 		<div class='well well-sm'>
@@ -480,102 +452,111 @@ foreach ($alldate as $date => $day):?>
 		<div class="table-responsive">
 		<form class="form-inline bs-example" method='post' action='<?php echo url::base('billing/dailyCashProcess/'.$siteID);?>'>
 			<table class='table ' border='1'>
-
+					<input type="hidden" name="siteID" value="<?php echo $siteID?>"> 
+					<input type="hidden" name="year" value="<?php echo $selectYear?>"> 
+					<input type="hidden" name="month" value="<?php echo $selectMonth?>"> 
 				<tr>	
 					<th></th> 
 					<th>Site Manager</th>
 					<th>Cluster Lead</th>
 					<th>Financial Controller</th>
 				</tr>		
-
+				<?php if(count($list) > 0):?>
 				<tr>	
 					<td>Month Total</td> 
 					<td><?php $dailytotal = $beginningbalance - $balance;
 							echo $dailytotal = number_format($dailytotal, 2, '.', '');?></td>
 					<td><?php $dailytotal = $beginningbalance - $balance;
 							echo $dailytotal = number_format($dailytotal, 2, '.', '');?></td>
-					<td></td>
+					<td><?php $dailytotal = $beginningbalance - $balance;
+							echo $dailytotal = number_format($dailytotal, 2, '.', '');?></td>
 				</tr>	
 
 				<tr>	
 					<td>Balance</td> 
 					<td><?php echo number_format($beginningbalance, 2, '.', '');?></td>
 					<td><?php echo number_format($beginningbalance, 2, '.', '');?></td>
+					<td><?php echo number_format($beginningbalance, 2, '.', '');?></td>
+				</tr>	
+
+				<tr>	
+					<td>Status</td> 
+					<td><?php
+					
+					if((session::get("userLevel") != 3) && (session::get("userLevel") != 5) &&  ($checked == 1)) {  
+					
+					echo $checkedword;
+					 } elseif ((session::get("userLevel") == 2) && ($checked != 1)) {  ?>	
+					
+					<button name="submit" type="submit" class="btn btn-sm btn-default" value="1">Check</button>									
+					<?php } elseif ((session::get("userLevel") != 2) && ($checked == 1)) { 
+					
+					echo $checkedword;
+					 } else { ?>
+					
+					not checked					
+					<?php } ?>
+					</td>
+
+					<td>
+					<?php  if((session::get("userLevel") == 3) && ($approved == 1)) { 
+
+					 echo $approvedword;
+					 } elseif((session::get("userLevel") == 3) && ($approved != 1)) {  ?>	
+
+					<button name="submit" type="submit" class="btn btn-sm btn-default" value="1">Approve</button> <button name="submit" type="submit" class="btn btn-sm btn-default"  value="2">Reject</button>
+					<?php } elseif ((session::get("userLevel") != 3) && ($checked == 1)) { 
+					
+					echo $approvedword;
+					 } else { ?>
+					
+					not verified
+					<?php } ?>
+					</td>
+
+					<td>
+					<?php  if((session::get("userLevel") == 5) && ($closed == 1)) { 
+
+					 echo $closedword;
+					 } elseif((session::get("userLevel") == 5) && ($closed != 1)) {  ?>	
+
+					<button name="submit" type="submit" class="btn btn-sm btn-default" value="1">Close</button> <button name="submit" type="submit" class="btn btn-sm btn-default"  value="2">Reject</button>
+					<?php } elseif ((session::get("userLevel") != 5) && ($closed == 1)) { 
+					
+					echo $closedword;
+					 } else { ?>
+					
+					
+					<?php } ?>
+					</td>
+				</tr>	
+
+
+			<?php else:?>		
+				<tr>	
+					<td>Month Total</td> 
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>	
+
+				<tr>	
+					<td>Balance</td> 
+					<td></td>
+					<td></td>
 					<td></td>
 				</tr>	
 
 				<tr>	
 					<td>Status</td> 
-					<td>
-					<?php 
-					if((session::get("userLevel") != 3) && (session::get("userLevel") != 5)) { 
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+				<?php endif; ?>	
 
-						if ($checked == 1) { ?>
-
-							verified	
-
-						<?php } else { ?>	
-
-						<button name="submit" type="submit" class="btn btn-sm btn-default" value="1">Check</button>
-					<?php } 
-					}  else {
-
-						 	if ($checked == 1) { ?>
-
-							verified	
-
-						<?php } } ?>
-
-					</td>
-
-
-					<td>
-					<?php  if((session::get("userLevel") != 2) && (session::get("userLevel") != 5)) { 
-
-					if ($approved == 1) { ?>
-
-							verified	
-
-						<?php } else { ?>	
-
-
-					<button name="submit" type="submit" class="btn btn-sm btn-default" value="1">Approve</button> <button name="submit" type="submit" class="btn btn-sm btn-default"  value="2">Reject</button>
-					<?php } }  else {
-
-						 	if ($approved == 1) { ?>
-
-							verified	
-
-						<?php } } ?>
-
-					</td>
-
-
-
-
-
-					<td>
-					<?php /* if((session::get("userLevel") != 2) && (session::get("userLevel") != 3)) { 
-
-						if ($checked == 1) { ?>
-
-							verified	
-
-						<?php } else { ?>	
-
-					<button type="submit" class="btn btn-sm btn-default">Close</button> <button type="submit" class="btn btn-sm btn-default">Reject</button>
-					<?php } 
-
-					}*/ ?>
-					
-					</td>
-				</tr>	
 			</table>
 			</form>>
 		</div>	
 	</div>
-
-
-
-
 </div>	

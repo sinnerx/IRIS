@@ -75,7 +75,7 @@ class Approval extends \Origami
 		$rowLevel = $this->getLevel($level);
 
 		db::where('billingApprovalLevelID', $rowLevel['billingApprovalLevelID'])
-		->update('billing_approval_level', array('billingApprovalLevelStatus' => 1, 'userID' => authData('user.userID')));
+		->update('billing_approval_level', array('billingApprovalLevelStatus' => 1, 'userID' => authData('user.userID'), 'billingApprovalLevelCreatedDate' => now()));
 	}
 
 	protected function setApprovalStatus($level, $status)
@@ -87,7 +87,8 @@ class Approval extends \Origami
 		
 		$data = array(
 			'billingApprovalLevelStatus' => $status,
-			'userID' => authData('user.userID'));
+			'userID' => authData('user.userID'),
+			'billingApprovalLevelCreatedDate' => now());
 
 		db::where('billingApprovalLevelID', $row['billingApprovalLevelID'])
 		->update('billing_approval_level', $data);
@@ -121,6 +122,7 @@ class Approval extends \Origami
 	 */
 	public function getApproval($siteID, $month, $year)
 	{
+
 		$approval = model::orm('billing/approval')
 		->where(array(
 			'siteID' => $siteID,
@@ -141,4 +143,22 @@ class Approval extends \Origami
 
 		return $approval;
 	}
+
+	public function getApprovalDetail($billingApprovalID, $level)
+	{
+
+		$where = array(
+			'billingApprovalID' => $billingApprovalID,
+			'userLevel' => $level
+			);
+		
+		db::from("billing_approval_level")->where($where);
+
+		$row = db::get()->row();
+
+		return $row;
+	}
+
+
+
 }

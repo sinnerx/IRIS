@@ -77,7 +77,7 @@ var base_url	= "<?php echo url::base();?>/";
 	Daily Journal
 </h3>
 <div class='well well-sm'>
-	Daily Journal For 
+
 </div>
 <?php echo flash::data();?>
 <div class='row'>
@@ -89,10 +89,10 @@ var base_url	= "<?php echo url::base();?>/";
 			</div>
 			<?php endif;?>
 			<div  class="form-group" style="margin-left:10px">
-			<?php echo form::text("selectDateStart","class='input-sm input-s datepicker-input form-control' date-date-format='dd-mm-yyyy'",date('d-m-Y', strtotime($todayDateStart)));?>			
+			From <?php echo form::text("selectDateStart","class='input-sm input-s datepicker-input form-control' date-date-format='dd-mm-yyyy'",date('d-m-Y', strtotime($todayDateStart)));?>			
 			</div>
 			<div  class="form-group" style="margin-left:10px">
-			<?php echo form::text("selectDateEnd","class='input-sm input-s datepicker-input form-control' date-date-format='dd-mm-yyyy'",date('d-m-Y', strtotime($todayDateEnd)));?>			
+			To  <?php echo form::text("selectDateEnd","class='input-sm input-s datepicker-input form-control' date-date-format='dd-mm-yyyy'",date('d-m-Y', strtotime($todayDateEnd)));?>			
 			</div>
 		</form>	
 	</div>
@@ -101,7 +101,7 @@ var base_url	= "<?php echo url::base();?>/";
 <div class='row'>
 	<div class="col-sm-10">
 		<div class='well well-sm'>
-			A
+			
 		</div>
 		
 		<div class="table-responsive">
@@ -131,7 +131,6 @@ var base_url	= "<?php echo url::base();?>/";
 				</tr>
 			<?php $date1 = $checkDate; } else { $date1 = $checkDate; } ?>
 
-
 				<tr>
 				<?php if ($date != $checkDate)  { ?>
 					<td><?php echo $checkDate; ?></td>
@@ -144,7 +143,7 @@ var base_url	= "<?php echo url::base();?>/";
 					<td><?php echo number_format($journalItem[total], 2, '.', ''); ?></td>
 				</tr>
 
-			<?php   if ($key == (count($journal)-1)) { ?>
+			<?php if ($key == (count($journal)-1)) { ?>
 				<tr>
 					<td></td>
 					<th>Total : </th>

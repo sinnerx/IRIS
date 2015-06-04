@@ -11,7 +11,7 @@ class process
 
 		db::select("sum(billingTransactionTotal) as balance");
 		db::from("billing_transaction")
-		->where("siteID = '$siteID' AND year(billingTransactionDate) = '$year' AND month(billingTransactionDate) = '$month'  AND billingTransactionStatus = 1 AND billingItemID <> 14 AND billingItemID <> 15");					
+		->where("siteID = '$siteID' AND year(billingTransactionDate) = '$year' AND month(billingTransactionDate) = '$month'  AND billingTransactionStatus = 1 AND ( billingItemID <> 14 AND billingItemID <> 15)");					
 		db::order_by("billingTransactionDate", "ASC");
 		db::limit(1);
 
@@ -37,7 +37,7 @@ class process
 
 		db::select("billingTransactionDate");
 		db::from("billing_transaction")
-		->where("siteID = '$siteID' AND year(billingTransactionDate) = '$year' AND month(billingTransactionDate) = '$month'  AND billingTransactionStatus = 1 AND billingItemID <> 14 AND billingItemID <> 15 ");			
+		->where("siteID = '$siteID' AND year(billingTransactionDate) = '$year' AND month(billingTransactionDate) = '$month'  AND billingTransactionStatus = 1 AND ( billingItemID <> 14 AND billingItemID <> 15 )");			
 		db::group_by("billingTransactionDate");				
 		db::order_by("billingTransactionDate", "ASC");
 
@@ -51,7 +51,7 @@ class process
 		db::select("siteID","billingTransactionDate","billingTransactionDescription","billing_item.billingItemName","billing_item.billingItemID",
 			"sum(`billingTransactionQuantity`) as quantity", "sum(`billingTransactionUnit`) as unit","sum(`billingTransactionTotal`) as total");
 		db::from("billing_transaction")
-		->where("siteID = '$siteID' AND billingTransactionDate LIKE '$date%'  AND billingTransactionStatus = 1 AND billing_item.billingItemID <> 14 AND billing_item.billingItemID <> 15 ");
+		->where("siteID = '$siteID' AND billingTransactionDate LIKE '$date%'  AND billingTransactionStatus = 1 AND ( billing_item.billingItemID <> 14 AND billing_item.billingItemID <> 15 )");
 		
 		db::join("billing_item", "billing_item.billingItemID = billing_transaction.billingItemID");
 		db::group_by("billingItemName");				
@@ -63,14 +63,14 @@ class process
 
 	public function getTransferList($siteID,$date)
 	{
+		$date = date('m', strtotime($date)); 	
 
 		db::select("siteID","date(billingTransactionDate) as date","billingTransactionDescription as description",
 			"billingTransactionTotal as total","billingTransactionBalance as balance");
 		db::from("billing_transaction")
-		->where("siteID = '$siteID' AND billingTransactionDate LIKE '$date%'  AND billing_item.billingItemID = 14 OR billing_item.billingItemID = 15 AND billingTransactionStatus = 1 ");
+		->where("siteID = '$siteID' AND month(billingTransactionDate) = '$date' AND ( billing_item.billingItemID = 14 OR billing_item.billingItemID = 15 ) AND billingTransactionStatus = 1 ");
 		
-		db::join("billing_item", "billing_item.billingItemID = billing_transaction.billingItemID");
-						
+		db::join("billing_item", "billing_item.billingItemID = billing_transaction.billingItemID");					
 		db::order_by("billingTransactionDate", "ASC");
 
 		return db::get()->result();
@@ -82,7 +82,7 @@ class process
 		db::select("siteID","date(billingTransactionDate) as transactionDate","billing_item.billingItemName","billing_item.billingItemID",
 				"sum(`billingTransactionQuantity`) as quantity", "sum(`billingTransactionUnit`) as unit","sum(`billingTransactionTotal`) as total");
 		db::from("billing_transaction")
-			->where("siteID = '$siteID' AND year(billingTransactionDate) = '$year' AND month(billingTransactionDate) = '$month'  AND billingTransactionStatus = 1 AND billing_item.billingItemID <> 14 AND billing_item.billingItemID <> 15");
+			->where("siteID = '$siteID' AND year(billingTransactionDate) = '$year' AND month(billingTransactionDate) = '$month'  AND billingTransactionStatus = 1 AND ( billing_item.billingItemID <> 14 AND billing_item.billingItemID <> 15 )");
 		db::join("billing_item", "billing_item.billingItemID = billing_transaction.billingItemID");
 		db::group_by("date(billingTransactionDate)");			
 		db::order_by("billingTransactionDate", "ASC");

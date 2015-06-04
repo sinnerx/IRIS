@@ -569,6 +569,15 @@ Class Controller_Billing
 				->join("billing_item", "billing_item.billingItemID = billing_transaction.billingItemID")
 				->order_by("billingTransactionDate","ASC")
 				->execute();
+				
+		$startDate = date('Y-m-01', strtotime($todayDateStart)); 
+
+		$data['previoussum'] = model::orm('billing/journal')
+				->select("SUM(billingTransactionTotal) as total")
+				->where("siteID = '$siteID' AND billingTransactionDate >= '$startDate' AND billingTransactionDate <= '$todayDateStart' AND billingTransactionStatus = 1")
+				->join("billing_item", "billing_item.billingItemID = billing_transaction.billingItemID")
+				->order_by("billingTransactionDate","ASC")
+				->execute();
 
 		view::render("shared/billing/transactionJournal", $data);
 	}

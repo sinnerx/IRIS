@@ -117,7 +117,9 @@ var base_url	= "<?php echo url::base();?>/";
 					<th>Balance</th>
 				</tr>
 				
-			<?php if($journal->count() > 0):?>
+			<?php
+			 $beginningbalance = $previoussum;
+			 if($journal->count() > 0):?>
 			<?php foreach($journal as $journalItem):?>
 				<tr>
 					<td><?php echo $journalItem->billingTransactionDate; ?></td>
