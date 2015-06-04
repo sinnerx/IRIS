@@ -236,7 +236,9 @@ Class Controller_Billing
 				$verify->billingTransactionDate = date('Y-m-d', strtotime($transactionDate));
 				$verify->billingVerificationDate = now();
 				$verify->save();
+
 		$data['verified'] = 1;		
+		$data['verifiedword'] = "Verified at ".now();
 
 		$allItem = model::load('billing/billing')->getItem();
 
@@ -250,7 +252,7 @@ Class Controller_Billing
 		view::render("shared/billing/edit", $data);
 	}
 
-	public function editForm($itemID,$transactionID,$transactionDate)
+	public function editForm($itemID,$transactionID,$transactionDate = null)
 	{	
 		$this->template = false;
 
@@ -569,7 +571,7 @@ Class Controller_Billing
 				->join("billing_item", "billing_item.billingItemID = billing_transaction.billingItemID")
 				->order_by("billingTransactionDate","ASC")
 				->execute();
-				
+
 		$startDate = date('Y-m-01', strtotime($todayDateStart)); 
 
 		$data['previoussum'] = model::orm('billing/journal')

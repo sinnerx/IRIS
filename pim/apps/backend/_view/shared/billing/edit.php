@@ -150,10 +150,9 @@
 
 	<div class="col-sm-10  ">
 		<div class='well well-sm'>
-			
+		 Transaction must be verified daily. Unverified transaction  will be automatically verified at midnight and no longer editable.
 		</div>
 <?php  
-
 
  	$settlementdate = request::get("selectDate");
 
