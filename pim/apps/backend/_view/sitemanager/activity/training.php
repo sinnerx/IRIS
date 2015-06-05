@@ -15,6 +15,17 @@ function buttonCheck()
 	return true;
 }
 
+var activity = new function($)
+{
+	this.delete = function(id)
+	{
+		if(!confirm('Delete this activity?'))
+			return false;
+
+		window.location.href = '<?php echo url::base("activity/delete/");?>'+id;
+	}
+}(jQuery);
+
 </script>
 <div class='well well-sm'>
 List of training activities of your site.
@@ -33,7 +44,7 @@ List of training activities of your site.
 				<th>Participation</th>
 				<th>Max Pax</th>
 				<th colspan="2" width="20%" style='text-align:center;'>Date</th>
-				<th width='100px'></th>
+				<th width='110px'></th>
 			</tr>
 			<?php 
 			if($res_training):
@@ -73,6 +84,7 @@ List of training activities of your site.
 					<?php if($status != 2):?>
 					<a href='<?php echo url::base("activity/view/training/$id");?>' class='fa fa-search'></a>
 					<a href='<?php echo url::base("activity/edit/$id");?>' class='fa fa-edit'></a>
+					<a href='javascript:activity.delete(<?php echo $id;?>);' class='i i-cross2'></a>
 					<?php endif;?>
 				</td>
 			</tr>

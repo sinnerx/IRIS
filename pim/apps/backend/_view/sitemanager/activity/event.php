@@ -18,6 +18,17 @@ function buttonCheck()
 	return true;
 }
 
+var activity = new function($)
+{
+	this.delete = function(id)
+	{
+		if(!confirm('Delete this activity?'))
+			return false;
+
+		window.location.href = '<?php echo url::base("activity/delete/");?>'+id;
+	}
+}(jQuery);
+
 </script>
 <?php echo flash::data();?>
 <section class='panel panel-default'>
@@ -32,7 +43,7 @@ function buttonCheck()
 				<th width="10%">Type</th>
 				<th>Participation</th>
 				<th colspan="2" width="20%" style='text-align:center;'>Date</th>
-				<th width='100px'></th>
+				<th width='110px'></th>
 			</tr>
 			<?php 
 			if($res_event):
@@ -71,6 +82,7 @@ function buttonCheck()
 					<a href='<?php echo url::base("activity/view/event/$activityID");?>' class='fa fa-search'></a>
 					<a href='<?php echo url::base("activity/edit/$activityID");?>' class='fa fa-edit'></a>
 				<?php endif;?>
+					<a href='javascript:activity.delete(<?php echo $activityID;?>);' class='i i-cross2'></a>
 				</td>
 			</tr>
 			<?php 

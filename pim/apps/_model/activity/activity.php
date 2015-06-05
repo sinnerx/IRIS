@@ -6,6 +6,29 @@ class Activity extends \Origami
 	protected $table = 'activity';
 	protected $primary = 'activityID';
 
+	/**
+	 * ORM : Soft-delete activity
+	 */
+	public function delete()
+	{
+		if($this->activityApprovalStatus == 1)
+			return;
+
+		// delete related site_request for activity.add, if the current approval status is 0
+		if($this->activityApprovalStatus == 0)
+		{
+			$siteRequest = model::orm('site/request')
+			->where('siteRequestRefID', $this->activityID)
+			->where('siteRequestType', 'activity.add')
+			->execute();
+
+			$siteRequest->getFirst()->delete();
+		}
+
+		$this->activityApprovalStatus = 99;
+		$this->save();
+	}
+
 	public function type($no = null)
 	{
 		$arr	= Array(
@@ -422,6 +445,7 @@ class Activity extends \Origami
 	{
 		db::from("activity")
 		->where("siteID",$siteID)
+		->where('activityApprovalStatus', array(0,1,2))
 		->where("activityType",$type);
 
 		pagination::setFormat(model::load("template/cssbootstrap")->paginationLink());
