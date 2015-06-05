@@ -104,7 +104,7 @@
             <div class="col-lg-offset-2 col-lg-10">
               <button type="submit" class="btn btn-sm btn-default">Insert</button>
            
-              <button type="submit" class="btn btn-sm btn-default">Clear</button>
+              
             </div>
         </div>
         </form>
@@ -122,6 +122,7 @@
 		<div class="table-responsive">
 			<table class='table'>
 				<tr>
+					<th></th>
 					<th>Date</th>
 					<th>Site</th>			
 					<th>Type</th>
@@ -132,6 +133,11 @@
 				<?php if(count($list) > 0):?>
 			<?php	foreach ($list as $key => $row):?>
 				<tr>
+					<td>
+					<a href='<?php echo url::base("billing/editTransaction/".$row[billingFinanceTransactionID]);?>' style="margin-left:20px"  data-toggle='ajaxModal' class='fa fa-edit pull-right' style='font-size:13px;'></a>
+					<a id='delete-button' onclick='return confirm("Delete this transaction, are you sure?");' href='<?php echo url::base('billing/delete/'.$row[billingFinanceTransactionID]); ?>' class='fa fa-trash-o pull-right' style='font-size:13px;'></a>
+				
+					</td>
 					<td><?php echo $row[billingFinanceTransactionDate]; ?></td>
 					<td><?php echo $row[siteName]; ?></td>
 					<?php if ($row[billingFinanceTransactionType] == 1){

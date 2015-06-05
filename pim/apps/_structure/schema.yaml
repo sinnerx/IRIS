@@ -100,7 +100,7 @@ activity:
 	activityStartDate [datetime]
 	activityEndDate [datetime]
 	activityDateTimeType [int]		## 1 = multiple selection, 2 = single date. (not really important.)
-	activityApprovalStatus [int]			## 0 = unapproved, 1 = approved, 2 = disapproved, 99 = deleted
+	activityApprovalStatus [int]			## 0 = unapproved, 1 = approved, 2 = disapproved.
 	activityCreatedUser [int]
 	activityCreatedDate [datetime]
 	activityUpdatedUser [int]
@@ -449,7 +449,7 @@ site_request: ## table to store update request or anything regarding site, have,
 	siteID [int]
 	siteRequestRefID [int]					## reference-id
 	siteRequestData [text]
-	siteRequestStatus [int]					## 0 = unapproved, 1 = approved, 2 = disapproved, 99 = deleted
+	siteRequestStatus [int]					## 0 = unapproved, 1 = approved, 2 = disapproved
 	siteRequestCorrectionFlag [int]			## 0 = stay this way, 1 = require correction.
 	siteRequestRemark [text]
 	siteRequestApprovalRead [int]
@@ -767,6 +767,7 @@ billing_finance_transaction:
 	billingFinanceTransactionDescription [text]
 	billingFinanceTransactionType [text]  ## 1 = Bank in 2 = cash out
 	billingFinanceTransactionPayment [text]
+	billingFinanceTransactionStatus [int]
 	billingFinanceTransactionDate [date]
 	billingFinanceTransactionCreatedDate [datetime]
 	billingFinanceTransactionUpdatedDate [datetime]  ## backdated

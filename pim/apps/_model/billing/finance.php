@@ -12,6 +12,7 @@ class finance extends \Origami
 	{
 
 		db::from("billing_finance_transaction");
+		db::where("billingFinanceTransactionStatus = 1");
 		db::join("site", "site.siteID = billing_finance_transaction.siteID");
 		db::order_by("billingFinanceTransactionDate","DESC");
 		
