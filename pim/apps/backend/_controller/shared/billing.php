@@ -344,8 +344,8 @@ Class Controller_Billing
 		$selectMonth = request::get("selectMonth");
 		$selectYear = request::get("selectYear");
 
-		$data['selectYear'] = $selectYear = $selectYear ? : date("Y");
-		$data['selectMonth'] = $selectMonth = $selectMonth ? : date("n");
+		$data['selectYear'] = $selectYear = $selectYear ? : input::get("year");
+		$data['selectMonth'] = $selectMonth = $selectMonth ? : input::get("month");
 		
 		if ($siteID != ""){
 
@@ -384,6 +384,8 @@ Class Controller_Billing
 			$data['selectMonth'] = $selectMonth = input::get("month");
 			$data['selectYear'] = $selectYear = input::get("year");
 			$data['siteID'] = $siteID = input::get("siteID");	
+
+
 
 			if (authData('user.userLevel') == 2){
 				$id = authData('site.siteID'); 
