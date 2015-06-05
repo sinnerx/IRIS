@@ -64,6 +64,7 @@
 
 </style>
 
+
 <h3 class='m-b-xs text-black'>
 	Cashier Edit
 </h3>
@@ -119,7 +120,8 @@
 					<?php  if((session::get("userLevel") == 2) && ($verified != 1)): ?>					
 					<td>
 					<a href='<?php echo url::base("billing/editForm/".$row[billingItemID]."/".$row[billingTransactionID]."/".strtotime($row[billingTransactionDate]));?>' style="margin-left:20px"  data-toggle='ajaxModal' class='fa fa-edit pull-right' style='font-size:13px;'></a>
-					<a id='delete-button' href='javascript:void(0)' rel=<?php echo $row[billingTransactionID]; ?> class='fa fa-trash-o pull-right' style='font-size:13px;'></a></a>
+					<a id='delete-button' onclick='return confirm("Delete this transaction, are you sure?");' href='<?php echo url::base('billing/delete/'.$row[billingTransactionID]); ?>' class='fa fa-trash-o pull-right' style='font-size:13px;'></a></a>
+				
 					</td>
 					<?php else: ?> 
 					<td></td>	
@@ -156,7 +158,6 @@
 
  	$settlementdate = request::get("selectDate");
 
-
 if(session::get("userLevel") == 2): ?>	
 	<form class="form-inline bs-example" method='post' action='<?php echo url::base('billing/settlement/'.$settlementdate);?>'>	
 		<div class="table-responsive">
@@ -186,20 +187,3 @@ if(session::get("userLevel") == 2): ?>
 	</div>
 
 </div>	
-<script type="text/javascript">
-
-
-var base_url	= "<?php echo url::base();?>/";
-
-		$("#delete-button").click(function(){
-    if(confirm("Are you sure you want to delete this?")){
-        
-        var transactionId	= $(this).attr("rel") != ""?"&transactionId="+$(this).attr("rel"):""; 
-
-        window.location.href	= base_url+"billing/delete?"+transactionId;	
-    }
-    else{
-        return false;
-    }
-});
-</script>

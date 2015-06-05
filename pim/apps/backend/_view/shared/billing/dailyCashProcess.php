@@ -483,7 +483,7 @@ foreach ($alldate as $date => $day):?>
 					<td>Status</td> 
 					<td><?php
 					
-					if((session::get("userLevel") != 3) && (session::get("userLevel") != 5) &&  ($checked == 1)) {  
+					if((session::get("userLevel") == 2) &&  ($checked == 1)) {  
 					
 					echo $checkedword;
 					 } elseif ((session::get("userLevel") == 2) && ($checked != 1)) {  ?>	
@@ -502,10 +502,10 @@ foreach ($alldate as $date => $day):?>
 					<?php  if((session::get("userLevel") == 3) && ($approved == 1)) { 
 
 					 echo $approvedword;
-					 } elseif((session::get("userLevel") == 3) && ($approved != 1)) {  ?>	
+					 } elseif((session::get("userLevel") == 3) && ($approved != 1) && ($checked == 1)) {  ?>	
 
 					<button name="submit" type="submit" class="btn btn-sm btn-default" value="1">Approve</button> <button name="submit" type="submit" class="btn btn-sm btn-default"  value="2">Reject</button>
-					<?php } elseif ((session::get("userLevel") != 3) && ($checked == 1)) { 
+					<?php } elseif ((session::get("userLevel") != 3) && ($approved == 1)) { 
 					
 					echo $approvedword;
 					 } else { ?>
@@ -518,7 +518,7 @@ foreach ($alldate as $date => $day):?>
 					<?php  if((session::get("userLevel") == 5) && ($closed == 1)) { 
 
 					 echo $closedword;
-					 } elseif((session::get("userLevel") == 5) && ($closed != 1)) {  ?>	
+					 } elseif((session::get("userLevel") == 5) && ($closed != 1)&& ($approved == 1) && ($checked == 1)) {  ?>	
 
 					<button name="submit" type="submit" class="btn btn-sm btn-default" value="1">Close</button> <button name="submit" type="submit" class="btn btn-sm btn-default"  value="2">Reject</button>
 					<?php } elseif ((session::get("userLevel") != 5) && ($closed == 1)) { 
@@ -556,7 +556,7 @@ foreach ($alldate as $date => $day):?>
 				<?php endif; ?>	
 
 			</table>
-			</form>>
+			</form>
 		</div>	
 	</div>
 </div>	

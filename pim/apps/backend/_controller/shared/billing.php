@@ -159,6 +159,15 @@ Class Controller_Billing
 				$message = 'Please Select Site.';
 				redirect::to('billing/add', $message, 'error');
 			}
+
+			$checkVerify = model::orm('billing/verify')->where('billingTransactionDate',  date('Y-m-d', strtotime($todayDate)))->execute();
+		
+			if($checkVerify->count() > 0){
+				
+				$message = 'Transaction for selected date already verify, no new transaction allowed.';
+				redirect::to('billing/add', $message, 'error');			
+			}
+
 		}
 			$checkBalance = model::load('billing/billing')->getList($siteID,1);
 			$lastBalance = $checkBalance[0][billingTransactionBalance];
@@ -250,7 +259,6 @@ Class Controller_Billing
 				$verify->save();
 
 		$data['verified'] = 1;		
-		$data['verifiedword'] = "Verified at ".now();
 
 		$allItem = model::load('billing/billing')->getItem();
 
@@ -315,10 +323,10 @@ Class Controller_Billing
 		view::render("shared/billing/editForm", $data);
 	}
 
-	public function delete()
+	public function delete($transactionID)
 	{	
 		$this->template = false;
-		$transactionID = request::get("transactionId");
+		//$transactionID = request::get("transactionId");
 		$billing = model::orm('billing/journal')->find($transactionID);
 
 		$billing->billingTransactionStatus = 0;
@@ -413,7 +421,9 @@ Class Controller_Billing
 					$data['approvedword'] = "Rejected at ".$approvalDetail['billingApprovalLevelCreatedDate']." by ".$userDetail[$approvalDetail['userID']]['userProfileFullName'];
 				}				
 			} else {
-				
+
+				if (input::get("submit") == 1){
+
 					$approval->approve(authData('user.userLevel'));		
 					
 					$approvalDetail = $approval->getApprovalDetail($approval->billingApprovalID,\model\user\user::LEVEL_FINANCIALCONTROLLER);
@@ -421,6 +431,23 @@ Class Controller_Billing
 								 
 					$data['closed'] = 1;
 					$data['closedword'] = "Closed at ".$approvalDetail['billingApprovalLevelCreatedDate']." by ".$userDetail[$approvalDetail['userID']]['userProfileFullName'];
+				} else {
+				
+					$approval->disapprove(authData('user.userLevel'));
+
+					$approvalDetail = $approval->getApprovalDetail($approval->billingApprovalID,\model\user\user::LEVEL_FINANCIALCONTROLLER);
+					$userDetail = model::load('user/user')->getUsersByID($approvalDetail['userID']);								
+					
+					$data['closedword'] = "Rejected at ".$approvalDetail['billingApprovalLevelCreatedDate']." by ".$userDetail[$approvalDetail['userID']]['userProfileFullName'];
+				}
+				
+					/*$approval->approve(authData('user.userLevel'));		
+					
+					$approvalDetail = $approval->getApprovalDetail($approval->billingApprovalID,\model\user\user::LEVEL_FINANCIALCONTROLLER);
+					$userDetail = model::load('user/user')->getUsersByID($approvalDetail['userID']);
+								 
+					$data['closed'] = 1;
+					$data['closedword'] = "Closed at ".$approvalDetail['billingApprovalLevelCreatedDate']." by ".$userDetail[$approvalDetail['userID']]['userProfileFullName'];*/
 			}
 		}	
 				
@@ -595,7 +622,7 @@ Class Controller_Billing
 		 	$data['previoussum'] = $previousbalance->total;
 
 		 }
-		 
+
 		view::render("shared/billing/transactionJournal", $data);
 	}
 }
