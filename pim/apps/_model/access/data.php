@@ -33,18 +33,19 @@ class Data
 					"file/index"=>Array("r", "sm"),
 					"file/addFolder"=>Array("r", "sm"),
 					"file/addFile"=>Array("r", "sm"),
-					"billing/add"=>Array("r", "sm"),
+					"billing/add"=>Array("r","cl", "sm"),
 					"billing/addItem"=>Array("r", "sm"),
 					"billing/editItem"=>Array("r", "sm"),
-					"billing/addTransaction"=>Array("r", "sm"),
-					"billing/edit"=>Array("r", "sm"),
+					"billing/addTransaction"=>Array("r","cl", "sm"),
+					"billing/edit"=>Array("r", "cl", "sm"),
 					"billing/dailyCashProcess"=>Array("r", "cl", "sm", "fc"),
 					"billing/dailyJournal"=>Array("r", "sm"),
 					"billing/transactionJournal"=>Array("r", "sm"),
-					"billing/editForm"=>Array("r", "sm"),
+					"billing/editForm"=>Array("r", "cl", "sm"),
 					"billing/delete"=>Array("r", "sm"),
-					"billing/settlement"=>Array("r", "sm")
-
+					"billing/settlement"=>Array("r", "sm"),
+					"billing/deleteItem"=>Array("r"),
+					"kpi/kpi_overview"=>Array("cl","r")								
 
 							);
 

@@ -33,7 +33,8 @@ class Menu extends Data
 						"Edit Form"=>"billing/edit",
 						"Daily Cash Process"=>"billing/dailyCashProcess",
 						"Daily Journal"=>"billing/dailyJournal",
-						"Transaction Journal"=>"billing/transactionJournal"
+						"Transaction Journal"=>"billing/transactionJournal",
+						#"Purchase Requisition"=>"billing/transactionJournal"
 						),
 					"Pages"=>"page/index",
 					"Blog" =>Array(
@@ -69,12 +70,13 @@ class Menu extends Data
 
 		$menu['cl']	= Array(
 					"Overview"=>Array(
+								"KPI Overview"=>"kpi/kpi_overview/1",
 								"Cluster Overview"=>Array("cluster/overview")
 									),
 					
 					"Billing"=>Array(
-						//"Input Form"=>"billing/add",
-						//"E dit Form"=>"billing/edit",
+						"Input Form"=>"billing/add",
+						"Edit Form"=>"billing/edit",
 						"Daily Cash Process"=>"billing/dailyCashProcess"
 						//"Daily Journal"=>"billing/dailyJournal",
 						//"Transaction Journal"=>"billing/transactionJournal"
@@ -99,6 +101,7 @@ class Menu extends Data
 		$menu['r']	= Array(
 					/*"Overview"=>"home/index",*/
 					"Sites"=>Array(
+							"KPI Overview"=>"kpi/kpi_overview/1",
 							"Announcement"=>Array("site/announcement","site/announcement_add","site/editAnnouncement"),
 							"Preview"=>Array("site/index","site/edit","site/assignManager"),
 							"Add new site"=>"site/add",
