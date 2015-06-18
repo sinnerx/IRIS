@@ -238,15 +238,22 @@ foreach ($alldate as $date => $day):?>
 				<tr>
 					<td><?php echo date('d', strtotime($key))  ?></td> 
 									
-					<td><?php $total = $row['Membership Student']['total'] +  $row['Membership Adult']['total']; 
-						echo number_format($total, 2, '.', '') ?></td> 
-					<td><?php echo $row['Membership Student']['quantity'] + $row['Membership Adult']['quantity'] ?></td> 
+					<td><?php $totalMemberMonthly = $totalMemberMonthly + $row['Membership Student']['total'] +  $row['Membership Adult']['total']; 
+							  $totalMember = $row['Membership Student']['total'] +  $row['Membership Adult']['total'];
+						echo number_format($totalMember, 2, '.', '') ?></td> 
+					<td><?php $quantityMemberMonthly = $quantityMemberMonthly + $row['Membership Student']['quantity'] + $row['Membership Adult']['quantity'];
+								echo $row['Membership Student']['quantity'] + $row['Membership Adult']['quantity'] ?></td> 
 
-					<td class="a"><?php echo number_format($row['Membership Student']['total'], 2, '.', '') ?></td> 
-					<td class="a"><?php echo number_format($row['Membership Student']['quantity'], 0, '', '') ?></td> 
+					<td class="a"><?php $totalStudentMonthly = $totalStudentMonthly + $row['Membership Student']['total'];
+									echo number_format($row['Membership Student']['total'], 2, '.', '') ?></td> 
+					<td class="a"><?php $quantityStudentMonthly = $quantityStudentMonthly +  $row['Membership Student']['quantity'];
+									echo number_format($row['Membership Student']['quantity'], 0, '', '') ?></td> 
 
-					<td class="a"><?php echo number_format($row['Membership Adult']['total'], 2, '.', '') ?></td> 
-					<td class="a"><?php echo number_format($row['Membership Adult']['quantity'], 0, '', '') ?></td> 
+
+					<td class="a"><?php $totalAdultMonthly = $totalAdultMonthly + $row['Membership Adult']['total'];
+									echo number_format($row['Membership Adult']['total'], 2, '.', '') ?></td> 
+					<td class="a"><?php $quantityAdultMonthly = $quantityAdultMonthly +  $row['Membership Adult']['quantity'];
+									echo number_format($row['Membership Adult']['quantity'], 0, '', '') ?></td> 
 
 					<?php 
 
@@ -335,85 +342,122 @@ foreach ($alldate as $date => $day):?>
 
 					?>
 
-					<td><?php $total =  $pcMemStudentTotal +  $pcNonMemStudentTotal + $pcMemAdultTotal +  $pcNonMemAdultTotal; 
+					<td><?php $totalpc = $totalpc + $pcMemStudentTotal +  $pcNonMemStudentTotal + $pcMemAdultTotal +  $pcNonMemAdultTotal;  
+							  $total =  $pcMemStudentTotal +  $pcNonMemStudentTotal + $pcMemAdultTotal +  $pcNonMemAdultTotal; 
 							  echo number_format($total, 2, '.', ''); ?></td> 
-					<td><?php echo $pcMemStudentQuantity +  $pcNonMemStudentQuantity + $pcMemAdultQuantity +  $pcNonMemAdultQuantity; ?></td> 
-					<td><?php echo $pcMemStudentUnit +  $pcNonMemStudentUnit + $pcMemAdultUnit +  $pcNonMemAdultUnit; ?></td> 
+					<td><?php $pcQuantity = $pcQuantity + $pcMemStudentQuantity +  $pcNonMemStudentQuantity + $pcMemAdultQuantity +  $pcNonMemAdultQuantity;
+							  echo $pcMemStudentQuantity +  $pcNonMemStudentQuantity + $pcMemAdultQuantity +  $pcNonMemAdultQuantity; ?></td> 
+					<td><?php $pcUnit = $pcUnit + $pcMemStudentUnit +  $pcNonMemStudentUnit + $pcMemAdultUnit +  $pcNonMemAdultUnit;
+							  echo $pcMemStudentUnit +  $pcNonMemStudentUnit + $pcMemAdultUnit +  $pcNonMemAdultUnit; ?></td> 
 					
-					<td class="b"><?php echo number_format($pcMemStudentTotal, 2, '.', ''); ?></td> 
-					<td class="b"><?php echo $pcMemStudentQuantity; ?></td> 
-					<td class="b"><?php echo $pcMemStudentUnit; ?></td> 
+					<td class="b"><?php $totalPcStudent = $totalPcStudent + number_format($pcMemStudentTotal, 2, '.', '');
+							  echo number_format($pcMemStudentTotal, 2, '.', ''); ?></td> 
+					<td class="b"><?php $quantityPcStudent = $quantityPcStudent + $pcMemStudentQuantity; 
+							  echo $pcMemStudentQuantity; ?></td> 
+					<td class="b"><?php $unitPcStudent = $unitPcStudent + $pcMemStudentUnit; 
+					          echo $pcMemStudentUnit; ?></td> 
 					
-					<td class="b"><?php echo number_format($pcNonMemStudentTotal, 2, '.', ''); ?></td> 
-					<td class="b"><?php echo $pcNonMemStudentQuantity; ?></td>
-					<td class="b"><?php echo $pcNonMemStudentUnit; ?></td>
+					<td class="b"><?php $totalPcNonStudent = $totalPcNonStudent + number_format($pcNonMemStudentTotal, 2, '.', '');
+					          echo number_format($pcNonMemStudentTotal, 2, '.', ''); ?></td> 
+					<td class="b"><?php $quantityPcStudent1 = $quantityPcStudent1 + $pcNonMemStudentQuantity; 
+					          echo $pcNonMemStudentQuantity; ?></td>
+					<td class="b"><?php $unitPcStudent1 = $unitPcStudent1 + $pcNonMemStudentUnit; 
+					          echo $pcNonMemStudentUnit; ?></td>
 					
-					<td class="b"><?php echo number_format($pcMemAdultTotal, 2, '.', ''); ?></td> 
-					<td class="b"><?php echo $pcMemAdultQuantity; ?></td>
-					<td class="b"><?php echo $pcMemAdultUnit; ?></td>
+					<td class="b"><?php $totalPcAdult = $totalPcAdult + number_format($pcMemAdultTotal, 2, '.', '');
+					          echo number_format($pcMemAdultTotal, 2, '.', ''); ?></td> 
+					<td class="b"><?php $quantityPcAdult = $quantityPcAdult + $pcMemAdultQuantity; 
+					          echo $pcMemAdultQuantity; ?></td>
+					<td class="b"><?php $unitPcAdult = $unitPcAdult + $pcMemAdultUnit; 
+					          echo $pcMemAdultUnit; ?></td>
 					
-					<td class="b"><?php echo number_format($pcNonMemAdultTotal, 2, '.', ''); ?></td> 
-					<td class="b"><?php echo $pcNonMemAdultQuantity; ?></td>
-					<td class="b"><?php echo $pcNonMemAdultUnit; ?></td>
+					<td class="b"><?php $totalPcNonAdult = $totalPcNonAdult + number_format($pcNonMemAdultTotal, 2, '.', '');
+							  echo number_format($pcNonMemAdultTotal, 2, '.', ''); ?></td> 
+					<td class="b"><?php $quantityPcAdult1 = $quantityPcAdult1 + $pcNonMemAdultQuantity; 
+					   	 	  echo $pcNonMemAdultQuantity; ?></td>
+					<td class="b"><?php $unitPcAdult1 = $unitPcAdult1 + $pcNonMemAdultUnit; 
+							  echo $pcNonMemAdultUnit; ?></td>
 					
 					
 					<!--  PC, Member Student    NIGHT -->
-					<td><?php $totalN =  $pcMemStudentTotalN +  $pcNonMemStudentTotalN + $pcMemAdultTotalN +  $pcNonMemAdultTotalN; 
+					<td><?php $totalpcN = $totalpcN + $pcMemStudentTotalN +  $pcNonMemStudentTotalN + $pcMemAdultTotalN +  $pcNonMemAdultTotalN;  
+							  $totalN =  $pcMemStudentTotalN +  $pcNonMemStudentTotalN + $pcMemAdultTotalN +  $pcNonMemAdultTotalN; 
 							  echo number_format($totalN, 2, '.', ''); ?></td> 
-					<td><?php echo 	$pcMemStudentQuantityN +  $pcNonMemStudentQuantityN + $pcMemAdultQuantityN +  $pcNonMemAdultQuantityN; ?></td> 
-					<td><?php echo 	$pcMemStudentUnitN +  $pcNonMemStudentUnitN + $pcMemAdultUnitN +  $pcNonMemAdultUnitN; ?></td> 
+					<td><?php $pcQuantityN = $pcQuantityN + $pcMemStudentQuantityN +  $pcNonMemStudentQuantityN + $pcMemAdultQuantityN +  $pcNonMemAdultQuantityN;
+							  echo 	$pcMemStudentQuantityN +  $pcNonMemStudentQuantityN + $pcMemAdultQuantityN +  $pcNonMemAdultQuantityN; ?></td> 
+					<td><?php $pcUnitN = $pcUnitN + $pcMemStudentUnitN +  $pcNonMemStudentUnitN + $pcMemAdultUnitN +  $pcNonMemAdultUnitN;
+						      echo 	$pcMemStudentUnitN +  $pcNonMemStudentUnitN + $pcMemAdultUnitN +  $pcNonMemAdultUnitN; ?></td> 
 					
-					<td class="c"><?php echo number_format($pcMemStudentTotalN, 2, '.', ''); ?></td> 
-					<td class="c"><?php echo $pcMemStudentQuantityN; ?></td> 
-					<td class="c"><?php echo $pcMemStudentUnitN; ?></td> 
+					<td class="c"><?php $totalPcStudentN = $totalPcStudentN + number_format($pcMemStudentTotalN, 2, '.', '');
+					                    echo number_format($pcMemStudentTotalN, 2, '.', ''); ?></td> 
+					<td class="c"><?php $quantityPcStudentN = $quantityPcStudentN + $pcMemStudentQuantityN; 
+					                    echo $pcMemStudentQuantityN; ?></td> 
+					<td class="c"><?php $unitPcStudentN = $unitPcStudentN + $pcMemStudentUnitN; 
+					                    echo $pcMemStudentUnitN; ?></td> 
 					
-					<td class="c"><?php echo number_format($pcNonMemStudentTotalN, 2, '.', ''); ?></td> 
-					<td class="c"><?php echo $pcNonMemStudentQuantityN; ?></td>
-					<td class="c"><?php echo $pcNonMemStudentUnitN; ?></td>
+					<td class="c"><?php $totalPcNonStudentN = $totalPcNonStudentN + number_format($pcNonMemStudentTotalN, 2, '.', '');
+					                    echo number_format($pcNonMemStudentTotalN, 2, '.', ''); ?></td> 
+					<td class="c"><?php $quantityPcStudent1N = $quantityPcStudent1N + $pcNonMemStudentQuantityN; 
+					                    echo $pcNonMemStudentQuantityN; ?></td>
+					<td class="c"><?php $unitPcStudent1N = $unitPcStudent1N + $pcNonMemStudentUnitN; 
+					                    echo $pcNonMemStudentUnitN; ?></td>
 					
-					<td class="c"><?php echo number_format($pcMemAdultTotalN, 2, '.', ''); ?></td> 
-					<td class="c"><?php echo $pcMemAdultQuantityN; ?></td>
-					<td class="c"><?php echo $pcMemAdultUnitN; ?></td>
+					<td class="c"><?php $totalPcAdultN = $totalPcAdultN + number_format($pcMemAdultTotalN, 2, '.', '');
+					          			echo number_format($pcMemAdultTotalN, 2, '.', ''); ?></td> 
+					<td class="c"><?php $quantityPcAdultN = $quantityPcAdultN + $pcMemAdultQuantityN; 
+					          			echo $pcMemAdultQuantityN; ?></td>
+					<td class="c"><?php $unitPcAdultN = $unitPcAdultN + $pcMemAdultUnitN; 
+					          			echo $pcMemAdultUnitN; ?></td>
 					
-					<td class="c"><?php echo number_format($pcNonMemAdultTotalN, 2, '.', ''); ?></td> 
-					<td class="c"><?php echo $pcNonMemAdultQuantityN; ?></td>
-					<td class="c"><?php echo $pcNonMemAdultUnitN; ?></td>					
+					<td class="c"><?php $totalPcNonAdultN = $totalPcNonAdultN + number_format($pcNonMemAdultTotalN, 2, '.', '');
+							  			echo number_format($pcNonMemAdultTotalN, 2, '.', ''); ?></td> 
+					<td class="c"><?php $quantityPcAdult1N = $quantityPcAdult1N + $pcNonMemAdultQuantityN; 
+					   	 	  			echo $pcNonMemAdultQuantityN; ?></td>
+					<td class="c"><?php $unitPcAdult1N = $unitPcAdult1N + $pcNonMemAdultUnitN; 
+							  			echo $pcNonMemAdultUnitN; ?></td>					
 
-					<td><?php $totalPrint = $row['Printing & Photostat Color']['total'] + $row['Printing & Photostat B&W']['total']; 
+					<td><?php $totalAllPrint = $totalAllPrint + $row['Printing & Photostat Color']['total'] + $row['Printing & Photostat B&W']['total']; 
+							  $totalPrint = $row['Printing & Photostat Color']['total'] + $row['Printing & Photostat B&W']['total']; 
 							  echo number_format($totalPrint, 2, '.', ''); ?></td> 	
 
 					<?php if ($row['Printing & Photostat B&W']['date'] == $key) { ?>
-					<td class="d"><?php echo number_format($row['Printing & Photostat B&W']['total'], 2, '.', ''); ?></td> 
+					<td class="d"><?php $totalPrintBW = $totalPrintBW + $row['Printing & Photostat B&W']['total'];
+										echo number_format($row['Printing & Photostat B&W']['total'], 2, '.', ''); ?></td> 
 					<?php } else { ?>
 					<td class="d">0.00</td> 
 					<?php } ?>
 
 					<?php if ($row['Printing & Photostat Color']['date'] == $key) { ?>										
-					<td class="d"><?php echo number_format($row['Printing & Photostat Color']['total'], 2, '.', ''); ?></td> 
+					<td class="d"><?php $totalPrintC = $totalPrintC + $row['Printing & Photostat Color']['total'];
+										echo number_format($row['Printing & Photostat Color']['total'], 2, '.', ''); ?></td> 
 					<?php } else { ?>
 					<td class="d">0.00</td> 
 					<?php } ?>
 					
 					<?php if ($row['Scanning']['date'] == $key) { ?>										
-					<td><?php echo number_format($row['Scanning']['total'], 2, '.', ''); ?></td> 
+					<td><?php $totalAllScan = $totalAllScan + number_format($row['Scanning']['total'], 2, '.', '');
+									echo number_format($row['Scanning']['total'], 2, '.', ''); ?></td> 
 					<?php } else { ?>
 					<td>0.00</td> 
 					<?php } ?>
 
 					<?php if ($row['Laminating (A4)']['date'] == $key) { ?>										
-					<td><?php echo number_format($row['Laminating (A4)']['total'], 2, '.', ''); ?></td> 
+					<td><?php $totalAllLaminate =  $totalAllLaminate + number_format($row['Laminating (A4)']['total'], 2, '.', '');
+									echo number_format($row['Laminating (A4)']['total'], 2, '.', ''); ?></td> 
 					<?php } else { ?>
 					<td>0.00</td> 
 					<?php } ?>
 
 					<?php if ($row['Other Service']['date'] == $key) { ?>										
-					<td><?php echo number_format($row['Other Service']['total'], 2, '.', ''); ?></td> 
+					<td><?php $totalOther = $totalOther + number_format($row['Other Service']['total'], 2, '.', '');
+									echo number_format($row['Other Service']['total'], 2, '.', ''); ?></td> 
 					<?php } else { ?>
 					<td>0.00</td> 
 					<?php } ?>
 
 					<?php if ($row['Utilities']['date'] == $key) { ?>										
-					<td><?php echo number_format($row['Utilities']['total'], 2, '.', ''); ?></td> 
+					<td><?php $totalUtilities = $totalUtilities + number_format($row['Utilities']['total'], 2, '.', ''); 
+									echo number_format($row['Utilities']['total'], 2, '.', ''); ?></td> 
 					<?php } else { ?>
 					<td>0.00</td> 
 					<?php } ?>
@@ -469,24 +513,53 @@ foreach ($alldate as $date => $day):?>
 <?php endforeach;?>
 				<tr>	
 					<td>Total</td> 
-					<td>0.00</td><td>0</td> 
-					<td class="a">0.00</td><td class="a">0</td>	
-					<td class="a">0.00</td><td class="a">0</td> 
+					<td><?php echo number_format($totalMemberMonthly, 2, '.', '') ?></td>
+					<td><?php echo $quantityMemberMonthly ?></td>  
+					<td class="a"><?php echo number_format($totalStudentMonthly, 2, '.', '') ?></td>
+					<td class="a"><?php echo $quantityStudentMonthly ?></td>  
+					<td class="a"><?php echo number_format($totalAdultMonthly, 2, '.', '') ?></td>
+					<td class="a"><?php echo $quantityAdultMonthly ?></td>  
 					
-					<td>0.00</td><td>0</td><td>0</td> 
-					<td class="b">0.00</td><td class="b">0</td><td class="b">0</td>	
-					<td class="b">0.00</td><td class="b">0</td><td class="b">0</td>	
-					<td class="b">0.00</td><td class="b">0</td><td class="b">0</td>	
-					<td class="b">0.00</td><td class="b">0</td><td class="b">0</td>	
+					<td><?php echo number_format($totalpc, 2, '.', '') ?></td>
+					<td><?php echo $pcQuantity ?></td>  
+					<td><?php echo $pcUnit ?></td>  
+					<td class="b"><?php echo number_format($totalPcStudent, 2, '.', '') ?></td>
+					<td class="b"><?php echo $quantityPcStudent ?></td>  
+					<td class="b"><?php echo $unitPcStudent ?></td>  
+					<td class="b"><?php echo number_format($totalPcNonStudent, 2, '.', '') ?></td>
+					<td class="b"><?php echo $quantityPcStudent1 ?></td>  
+					<td class="b"><?php echo $unitPcStudent1 ?></td>  
+					<td class="b"><?php echo number_format($totalPcAdult, 2, '.', '') ?></td>
+					<td class="b"><?php echo $quantityPcAdult ?></td>  
+					<td class="b"><?php echo $unitPcAdult ?></td>  
+					<td class="b"><?php echo number_format($totalPcNonAdult, 2, '.', '') ?></td>
+					<td class="b"><?php echo $quantityPcAdult1 ?></td>  
+					<td class="b"><?php echo $unitPcAdult1 ?></td>  
 					
-					<td>0.00</td><td>0</td><td>0</td> 
-					<td class="c">0.00</td><td class="c">0</td><td class="c">0</td>	
-					<td class="c">0.00</td><td class="c">0</td><td class="c">0</td>	
-					<td class="c">0.00</td><td class="c">0</td><td class="c">0</td>	
-					<td class="c">0.00</td><td class="c">0</td><td class="c">0</td>	
+					<td><?php echo number_format($totalpcN, 2, '.', '') ?></td>
+					<td><?php echo $pcQuantityN ?></td>  
+					<td><?php echo $pcUnitN ?></td>  
+					<td class="c"><?php echo number_format($totalPcStudentN, 2, '.', '') ?></td>
+					<td class="c"><?php echo $quantityPcStudentN ?></td>  
+					<td class="c"><?php echo $unitPcStudentN ?></td>  
+					<td class="c"><?php echo number_format($totalPcNonStudentN, 2, '.', '') ?></td>
+					<td class="c"><?php echo $quantityPcStudent1N ?></td>  
+					<td class="c"><?php echo $unitPcStudent1N ?></td>  
+					<td class="c"><?php echo number_format($totalPcAdultN, 2, '.', '') ?></td>
+					<td class="c"><?php echo $quantityPcAdultN ?></td>  
+					<td class="c"><?php echo $unitPcAdultN ?></td>  
+					<td class="c"><?php echo number_format($totalPcNonAdultN, 2, '.', '') ?></td>
+					<td class="c"><?php echo $quantityPcAdult1N ?></td>  
+					<td class="c"><?php echo $unitPcAdult1N ?></td>  
 										
-					<td>0.00</td><td class="d">0.00</td><td class="d">0.00</td><td>0.00</td>
-					<td>0.00</td><td>0.00</td><td>0.00</td><td> </td> 
+					<td><?php echo number_format($totalAllPrint, 2, '.', '') ?></td>
+					<td class="d"><?php echo number_format($totalPrintBW, 2, '.', '') ?></td>
+					<td class="d"><?php echo number_format($totalPrintC, 2, '.', '') ?></td>
+					<td><?php echo number_format($totalAllScan, 2, '.', '') ?></td>
+					<td><?php echo number_format($totalAllLaminate, 2, '.', '') ?></td>
+					<td><?php echo number_format($totalOther, 2, '.', '') ?></td>
+					<td><?php echo number_format($totalUtilities, 2, '.', '') ?></td>
+					<td> </td> 
 					<td><?php echo $dailytotal = number_format($dailytotal, 2, '.', '');?></td>
 					<td><?php echo $beginningbalance = number_format($beginningbalance, 2, '.', '');?></td>
 				</tr>
