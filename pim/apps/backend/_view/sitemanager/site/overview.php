@@ -63,6 +63,10 @@ var site = new function()
 			});
 		}
 	};
+	$(document).ready(function()
+	{
+		context.overview.prepareLinking();
+	});
 }
 
 
@@ -259,29 +263,30 @@ Dashboard overview
                         </div>
                     </div>
                 </section>
-                </div>
-
-
+            </div>
 		</div>
-
-<!--             <div class='col-sm-12' id='widget-requestlist'>
-			<?php
-			## load it first along with the first request;
-		//	controller::load("sitemanager/ajax_request","lists");?>
-			</div>
-
-
-
-			<div class='col-sm-12' id='widget-messagelist'>
-			<?php 
-			## load it first along with the first request;
-		//	controller::load("sitemanager/ajax_message","lists");?>
-			</div> -->
-
-
 	</div>
 </div>
 </form>
+
+<div class='row'>
+	<div class='col-sm-12 pull-right'>
+		<div class='row'>
+			<div class='col-sm-12' id='widget-requestlist'>
+			<?php
+			## load it first along with the first request;
+			controller::load("sitemanager/ajax_request","lists");?>
+			</div>
+			<div class='col-sm-12' id='widget-messagelist'>
+			<?php 
+			## load it first along with the first request;
+			controller::load("sitemanager/ajax_message","lists");?>
+			</div>
+		</div>
+	</div>
+</div>
+
+
 <link rel="stylesheet" href="<?php echo url::asset("_scale/js/datepicker/datepicker.css");?>" type="text/css" />
 
 <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>

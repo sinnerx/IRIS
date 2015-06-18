@@ -5,9 +5,5 @@ class Log extends \Origami
 {
 	protected $table = 'billing_log';
 	protected $primary = 'billingLogID';
-
-    
-
-
 	
 }

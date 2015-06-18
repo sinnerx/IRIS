@@ -5,9 +5,5 @@ class Verify extends \Origami
 {
 	protected $table = 'billing_verification';
 	protected $primary = 'billingVerificationID';
-
-    
-
-
 	
 }

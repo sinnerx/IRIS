@@ -4,25 +4,49 @@
 <script type="text/javascript" src="<?php echo url::asset("_scale/js/datepicker/bootstrap-datepicker.js"); ?>"></script>
 <script type="text/javascript" src="<?php echo url::asset("_scale/js/datepicker/jquery.datetimepicker.js"); ?>"></script>
 
-<h3 class="m-b-xs text-black">
 <script type="text/javascript">
 
 	$(document).ready(function() {
+		jQuery("#selectDate").datetimepicker({
+  								timepicker:false,
+  								format:'Y-m-d',
+  								step:5,
+		});
 
 
-	jQuery("#selectDate").datetimepicker({
-  		timepicker:false,
-  		format:'d-m-Y',
-  		step:5,
+$('#selectDate').change(function() {
+		$('#description').attr('value', function() {
 
-	
+			if ($('#transactionType').val() == 1){
+				type = 'Monthly Revenue';
+			} else {
+				type = 'Cash Out';
+			}
+
+	        result = type + ' on ' + $('#selectDate').val();
+	        return result;
+	    });
+
 	});
 
 
-	});
-	
-	
+$('#transactionType').change(function() {
+		$('#description').attr('value', function() {
 
+			if ($('#transactionType').val() == 1){
+				type = 'Monthly Revenue';
+			} else {
+				type = 'Cash Out';
+			}
+
+	        result = type + ' on ' + $('#selectDate').val();
+	        return result;
+	    });
+
+	});
+
+
+});
 
 </script>
 
@@ -69,25 +93,25 @@
             </div>
         </div>
         <div class="form-group">
-            <label class="col-lg-2 control-label">Transaction Date</label>
-            <div class="col-lg-5">
-				<?php echo form::text("selectDate","class='input-sm input-s form-control'",date('d-m-Y', strtotime($selectDate)));?>
-            </div>
-        </div>
-        
-        <div class="form-group">
             <label class="col-lg-2 control-label">Type</label>
             <div class="col-lg-10">
               <?php 
-              echo form::select("transactionType",$typeList,"class='input-sm form-control input-s-sm inline v-middle'",request::get("siteID"),"[SELECT TYPE]");	
+              echo form::select("transactionType",$typeList,"class='input-sm form-control input-s-sm inline v-middle'",null,"[SELECT TYPE]");	
               	?>
             </div>
         </div>
         <div class="form-group">
+            <label class="col-lg-2 control-label">Transaction Date</label>
+            <div class="col-lg-5">
+				<?php echo form::text("selectDate","class='input-sm input-s form-control'",date('Y-m-d', strtotime($selectDate)));?>
+            </div>
+        </div>
+                
+        <div class="form-group">
             <label class="col-lg-2 control-label">Description</label>
             <div id='desc' class="col-lg-10">
              <?php              
-				echo form::text("description","class='form-control' ");              	
+				echo form::text("description","class='input-sm form-control input-s-sm inline v-middle' ");              	
               ?>       
             </div>        
         </div>
@@ -103,8 +127,7 @@
         <div class="form-group">
             <div class="col-lg-offset-2 col-lg-10">
               <button type="submit" class="btn btn-sm btn-default">Insert</button>
-           
-              
+                         
             </div>
         </div>
         </form>
@@ -124,6 +147,7 @@
 				<tr>
 					<th></th>
 					<th>Date</th>
+					<th>Transaction Date</th>
 					<th>Site</th>			
 					<th>Type</th>
 					<th>Description</th>					
@@ -134,17 +158,17 @@
 			<?php	foreach ($list as $key => $row):?>
 				<tr>
 					<td>
-					<a href='<?php echo url::base("billing/editTransaction/".$row[billingFinanceTransactionID]);?>' style="margin-left:20px"  data-toggle='ajaxModal' class='fa fa-edit pull-right' style='font-size:13px;'></a>
-					<a id='delete-button' onclick='return confirm("Delete this transaction, are you sure?");' href='<?php echo url::base('billing/delete/'.$row[billingFinanceTransactionID]); ?>' class='fa fa-trash-o pull-right' style='font-size:13px;'></a>
-				
+					<a href='<?php echo url::base("billing/editTransaction/".$row[billingTransactionID]);?>' style="margin-left:20px"  data-toggle='ajaxModal' class='fa fa-edit pull-right' style='font-size:13px;'></a>
+					<a id='delete-button' onclick='return confirm("Delete this transaction, are you sure?");' href='<?php echo url::base('billing/delete/'.$row[billingTransactionID]); ?>' class='fa fa-trash-o pull-right' style='font-size:13px;'></a>				
 					</td>
-					<td><?php echo $row[billingFinanceTransactionDate]; ?></td>
+					<td><?php echo date('Y-m-d', strtotime($row[billingTransactionCreatedDate])); ?></td>
+					<td><?php echo date('Y-m-d', strtotime($row[billingTransactionDate])); ?></td>
 					<td><?php echo $row[siteName]; ?></td>
 					<?php if ($row[billingFinanceTransactionType] == 1){
-						$type = "Bank In"; } else { $type = "Cash Out"; } ?> 
+						$type = "Monthly Revenue"; } else { $type = "Cash Out"; } ?> 
 					<td><?php echo $type; ?></td>
-					<td><?php echo $row[billingFinanceTransactionDescription];  ?></td>
-					<td><?php echo $row[billingFinanceTransactionTotal]; ?></td>
+					<td><?php echo $row[billingTransactionDescription];  ?></td>
+					<td><?php echo abs($row[billingTransactionTotal]); ?></td>
 					<!-- <td><?php echo $row[billingTransactionQuantity]; ?></td> -->			
 				</tr>
 			<?php endforeach;?>

@@ -36,6 +36,10 @@ class Menu extends Data
 						"Transaction Journal"=>"billing/transactionJournal",
 						#"Purchase Requisition"=>"billing/transactionJournal"
 						),
+					"Purchase Requisition"=>Array(
+						"Add"=>"requisition/add"
+						
+						),
 					"Pages"=>"page/index",
 					"Blog" =>Array(
 							"List of Articles"=>Array("site/article","site/editArticle"),
@@ -129,6 +133,7 @@ class Menu extends Data
 							"Daily Journal"=>"billing/dailyJournal",
 							"Transaction Journal"=>"billing/transactionJournal"
 						),
+					
 					"Activities"=>Array(
 							"Training"=>Array("activity/training","activity/trainingTypeAdd","activity/trainingTypeEdit")
 						),
@@ -147,6 +152,58 @@ class Menu extends Data
 					/*"Activities"=>"activity/index",
 					"Reports"=>"reports/index"*/
 							);
+
+	## root.
+		$menu['om']	= Array(
+					/*"Overview"=>"home/index",*/
+					"Sites"=>Array(
+							"KPI Overview"=>"kpi/kpi_overview/1",
+							"Announcement"=>Array("site/announcement","site/announcement_add","site/editAnnouncement"),
+							"Preview"=>Array("site/index","site/edit","site/assignManager"),
+							"Add new site"=>"site/add",
+							#"Manager"=>Array("manager/lists","manager/add","manager/edit"),
+							"General Slider"=>Array("site/slider","site/slider_edit"),
+							"Cluster"=>Array("cluster/lists","cluster/assign"),
+							"Message"=>Array("site/message","site/messageView"),
+							"Newsletter"=>"newsletter/index"
+									),/*
+					"Cluster"=>Array(
+							"Cluster List"=>Array("cluster/lists"),
+							"Cluster Lead"=>Array("cluster/leadLists","cluster/leadAdd","cluster/sitelist","cluster/assign")
+									),*/
+					"Management"=>Array(
+							"User"=>Array("user/lists","user/add","user/edit")
+										),
+					"Configuration"=>Array(
+								"Parameters"=>Array("config/index"),
+								"Article Category"=>Array("article/category"),
+											),
+					"Billing"=>Array(
+							"Input Form"=>"billing/add",
+							"Edit Form"=>"billing/edit",
+							"Daily Cash Process"=>"billing/dailyCashProcess",
+							"Daily Journal"=>"billing/dailyJournal",
+							"Transaction Journal"=>"billing/transactionJournal"
+						),
+					"Activities"=>Array(
+							"Training"=>Array("activity/training","activity/trainingTypeAdd","activity/trainingTypeEdit")
+						),
+					"Forum"=>Array(
+								"Category"=>Array("forum/category","forum/addCategory","forum/updateCategory")
+									),
+					"File Manager"=>Array(
+							"File Manager"=>Array("file/index")
+						),
+					"Report"=>Array(
+							"Monthly USP Project"=>"report/monthlyActivity",
+							"Master Listing"=>"report/masterListing",
+							"Google Analytics"=>"googleanalytics/report",
+							"Monthly Activity Report"=>"report/getallActivityReport"
+									),
+					/*"Activities"=>"activity/index",
+					"Reports"=>"reports/index"*/
+							);
+
 
 		return $menu[$level];
 	}

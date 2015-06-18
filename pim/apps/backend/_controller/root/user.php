@@ -7,6 +7,7 @@ class Controller_User
 		$this->userLevelR	= Array(
 						2=>"Site Manager",
 						3=>"Cluster Lead",
+						4=>"Operation Manager",
 						5=>"Financial Controller"
 									);
 	}
@@ -16,7 +17,7 @@ class Controller_User
 		$data['userLevelR']	= $this->userLevelR;
 
 		## manager and clusterlead only.
-		$where[]	= "userLevel IN (2,3,5)";
+		$where[]	= "userLevel IN (2,3,4,5)";
 
 		## if got search key.
 		if(request::get("search"))

@@ -64,7 +64,7 @@
 	jQuery("#selectDate").datetimepicker({
   		
   		format:'d-m-Y H:i',
-  		step:5,
+  		step:1,
   		onChangeDateTime:function(dp,$input){
     		
     			var siteID	= $("#siteID").val() != ""?"&siteID="+$("#siteID").val():"";  		
@@ -188,7 +188,11 @@
 </div>
 <?php echo flash::data();?>
 <div class='row'>
+	<?php  if(session::get("userLevel") == 99): ?>	
+	<div class='col-sm-10'>
+	<?php else: ?>
 	<div class='col-sm-6'>
+	<?php endif; ?>
 		<div align="right">
 		<?php  if(session::get("userLevel") == 99): ?>
 		<a href='<?php echo url::base("billing/addItem/");?>'  class='fa fa-external-link' data-toggle='ajaxModal' style="color:green;"> Add New Item</a>			
@@ -207,10 +211,12 @@
         	<?php endforeach;?>		
 		</div>
 	</div>
-	<div class='col-sm-6'>
+
+<div class='col-sm-6'>
+<?php  if(session::get("userLevel") != 99): ?>	
 		<form class="bs-example form-horizontal" method='post' action='<?php echo url::base('billing/addTransaction/'.$itemSelect->billingItemID);?>'>
 		<div style="margin-bottom:10px">
-		<?php  if(session::get("userLevel") == 99): ?>
+		<?php  if((session::get("userLevel")== 99) || (session::get("userLevel") == 3)): ?>
 		<?php
          $itemID = $_GET['itemID'];
  		echo form::select("siteID",$siteList,"class='input-sm form-control input-s-sm inline v-middle' onchange='billing.select($itemID);'",request::get("siteID"),"[SELECT SITE]");?>	
@@ -263,7 +269,7 @@
              	);
              
             	echo form::select("utilitiesList",$utilitiesList,"class='input-sm form-control input-s inline v-middle' style='float:left'","[SELECT UTILITIES]");	
-				echo form::text("description","class=' input-sm input-s form-control' ",$itemSelect->billingItemDescription);              	
+				echo form::text("description1","class=' input-sm input-s form-control' ",$itemSelect->billingItemDescription);              	
               ?>
             
             </div>
@@ -272,7 +278,7 @@
 
              $transferList = array(
 
-             		 'Premise Monthly'=>'Premise Monthly',
+             		 'Monthly Revenue'=>'Monthly Revenue',
              		 'Purchase Requisition'=>'Purchase Requisition'
              	);
              
@@ -330,12 +336,13 @@
               <button type="submit" class="btn btn-sm btn-default">Submit</button>
             </div>
           </div>
-        </form>
-      </div>
-    </section>
-	</div>
-</div>
 
+        </div>
+ 	</section>
+		</form>      
+<?php endif;?>
+</div>
+<?php  if(session::get("userLevel") != 99): ?>	
 <div class='row'>
 	<div class="col-sm-10">
 		<div class='well well-sm'>
@@ -384,7 +391,7 @@
 		</div>
 	</div>
 </div>	
-
+<?php endif; ?>
 
 <div class='row'>
 	<div class="col-sm-10">

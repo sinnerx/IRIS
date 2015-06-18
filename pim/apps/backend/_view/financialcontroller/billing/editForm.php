@@ -1,4 +1,50 @@
-   
+
+<script type="text/javascript">
+
+  $(document).ready(function() {
+    jQuery("#selectDate").datetimepicker({
+                  timepicker:false,
+                  format:'Y-m-d',
+                  step:5,
+    });
+
+
+$('#selectDate').change(function() {
+    $('#description').attr('value', function() {
+
+      if ($('#transactionType').val() == 1){
+        type = 'Monthly Revenue';
+      } else {
+        type = 'Cash Out';
+      }
+
+          result = type + ' on ' + $('#selectDate').val();
+          return result;
+      });
+
+  });
+
+
+$('#transactionType').change(function() {
+    $('#description').attr('value', function() {
+
+      if ($('#transactionType').val() == 1){
+        type = 'Monthly Revenue';
+      } else {
+        type = 'Cash Out';
+      }
+
+          result = type + ' on ' + $('#selectDate').val();
+          return result;
+      });
+
+  });
+
+
+});
+
+</script>
+
 <div class="modal-dialog">
 	<div class="modal-content">
 		<div class="modal-header">
@@ -13,43 +59,39 @@
     <section class="panel panel-default">
       <div class="panel-body">
 
-        <form class="bs-example form-horizontal" method='post' action='<?php echo url::base('billing/editTransaction/'.$fcTransaction->billingFinanceTransactionID);?>'>
+        <form class="bs-example form-horizontal" method='post' action='<?php echo url::base('billing/editTransaction/'.$fcTransaction->billingTransactionID);?>'>
 
-          <div class="form-group">
-            <label class="col-lg-2 control-label">Date</label>
-            <div class="col-lg-10">
-              
-              <?php echo form::text("selectDate","class='input-sm input-s form-control'",date('d-m-Y', strtotime($fcTransaction->billingFinanceTransactionDate)));?>
-                        
-            </div>
-          </div>
           <div class="form-group">
             <label class="col-lg-2 control-label">Site</label>
             <div class="col-lg-10">
-                 <?php
-            echo form::select("siteID",$siteList,"class='input-sm form-control input-s-sm inline v-middle'",$fcTransaction->siteID,"[SELECT SITE]");
-              ?>
-        
+              <?php echo form::select("siteID",$siteList,"class='input-sm form-control input-s-sm inline v-middle'",$fcTransaction->siteID,"[SELECT SITE]");  ?>      
             </div>
           </div>
+
           <div class="form-group">
             <label class="col-lg-2 control-label">Type</label>
             <div class="col-lg-10">
-              <?php 
-              echo form::select("transactionType",$typeList,"class='input-sm form-control input-s-sm inline v-middle'",$fcTransaction->billingFinanceTransactionType,"[SELECT TYPE]"); 
-                ?>
+              <?php echo form::select("transactionType",$typeList,"class='input-sm form-control input-s-sm inline v-middle'",$fcTransaction->billingTransactionAccountType,"[SELECT TYPE]");  ?>
             </div>
           </div>
+
+          <div class="form-group">
+            <label class="col-lg-2 control-label">Transaction Date</label>
+            <div class="col-lg-10">              
+              <?php echo form::text("selectDate","class='input-sm input-s form-control'",date('d-m-Y', strtotime($fcTransaction->billingTransactionDate)));?>                        
+            </div>
+          </div>
+          
           <div class="form-group">
             <label class="col-lg-2 control-label">Description</label>
             <div class="col-lg-10">
-              <?php echo form::text("description","class='form-control amount'",$fcTransaction->billingFinanceTransactionDescription);?>
+              <?php echo form::text("description","class='form-control amount'",$fcTransaction->billingTransactionDescription);?>
             </div>
           </div>
           <div class="form-group">
-            <label class="col-lg-2 control-label">Amount</label>
+            <label class="col-lg-2 control-label">Amount (RM)</label>
              <div class="col-lg-10">
-              <?php echo form::text("total","class='form-control amount'",$fcTransaction->billingFinanceTransactionTotal);?>
+              <?php echo form::text("total","class='form-control amount'",abs($fcTransaction->billingTransactionTotal));?>
             </div>
           </div>
           

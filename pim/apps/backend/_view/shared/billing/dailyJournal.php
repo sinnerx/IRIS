@@ -77,7 +77,7 @@ var base_url	= "<?php echo url::base();?>/";
 	Daily Journal
 </h3>
 <div class='well well-sm'>
-
+Select Date
 </div>
 <?php echo flash::data();?>
 <div class='row'>
@@ -101,7 +101,7 @@ var base_url	= "<?php echo url::base();?>/";
 <div class='row'>
 	<div class="col-sm-10">
 		<div class='well well-sm'>
-			
+			Transaction Per Item
 		</div>
 		
 		<div class="table-responsive">

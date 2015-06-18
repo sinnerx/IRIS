@@ -703,6 +703,7 @@ billing_item:
 	billingItemHotkey [varchar]
 	billingItemName [varchar]
 	billingItemDescription [text]
+	billingItemType [int] ## 1 = debit or 2 = credit
 	billingItemPrice [float]
 	billingItemUnit [int]
 	billingItemQuantity [int]
@@ -711,6 +712,7 @@ billing_item:
 	billingItemPriceDisabled [int]
 	billingItemUnitDisabled [int]
 	billingItemQuantityDisabled [int]
+	billingItemStatus [int]
 	billingItemCreatedDate [datetime]
 
 billing_transaction:
@@ -721,6 +723,7 @@ billing_transaction:
 	billingTransactionQuantity [int]
 	billingTransactionUnit [int] ## unit or hours
 	billingTransactionTotal [float]
+	billingTransactionAccountType [int] ## 1 = site 2 = cashout
 	billingTransactionBalance [float]
 	billingTransactionDescription [text]
 	billingTransactionDate [datetime]
@@ -771,3 +774,29 @@ billing_finance_transaction:
 	billingFinanceTransactionDate [date]
 	billingFinanceTransactionCreatedDate [datetime]
 	billingFinanceTransactionUpdatedDate [datetime]  ## backdated
+
+purchase_requisition:
+	purchaseRequisitionId [int]
+	userID [int]
+	siteID [int]
+	purchaseRequisitionItemId [int]
+	purchaseRequisitionDescription [varchar]
+	purchaseRequisitionPrice [float]
+	purchaseRequisitionQuantity [int]
+	purchaseRequisitionTotal [float]
+	purchaseRequisitionDate [date]
+	purchaseRequisitionCreatedDate [datetime]
+
+purchase_requisition_category:
+	purchaseRequisitionCategoryId [int]
+	purchaseRequisitionCategoryName [varchar]
+	purchaseRequisitionCreatedDate [datetime]
+
+purchase_requisition_item:
+	purchaseRequisitionItemId [int]
+	purchaseRequisitionCategoryId [int]
+	userID [int]
+	siteID [int]
+	purchaseRequisitionItemName [varchar]
+	purchaseRequisitionItemCreatedDate [datetime]
+

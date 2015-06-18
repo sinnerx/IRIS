@@ -78,7 +78,7 @@ var base_url	= "<?php echo url::base();?>/";
 	Transaction
 </h3>
 <div class='well well-sm'>
-	Transaction Journal 
+	Select Date
 </div>
 <?php echo flash::data();?>
 <div class='row'>
@@ -101,7 +101,8 @@ var base_url	= "<?php echo url::base();?>/";
 
 <div class='row'>
 	<div class="col-sm-10">
-		<div class='well well-sm'>			
+		<div class='well well-sm'>		
+		Transaction Journal 	
 		</div>
 		
 		<div class="table-responsive">

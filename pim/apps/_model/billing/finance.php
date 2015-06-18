@@ -8,11 +8,16 @@ class finance extends \Origami
 	protected $table = 'billing_finance_transaction';
 	protected $primary = 'billingFinanceTransactionID';
 	
-	public function getList()
+	public function getList($userID)
 	{
 
+		$where	= Array(
+				"userID"=>$userID,								
+				"billingFinanceTransactionStatus" => 1
+						);
+
 		db::from("billing_finance_transaction");
-		db::where("billingFinanceTransactionStatus = 1");
+		db::where($where);
 		db::join("site", "site.siteID = billing_finance_transaction.siteID");
 		db::order_by("billingFinanceTransactionDate","DESC");
 		

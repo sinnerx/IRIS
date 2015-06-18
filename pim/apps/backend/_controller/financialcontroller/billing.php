@@ -11,7 +11,7 @@ class Controller_Billing
 		$selectDate = input::get('selectDate');
 		$data['selectDate'] = $selectDate = $selectDate ? :  date('Y-m-d');
 		$data['typeList'] = array(
-				1 => "Bank In",
+				1 => "Monthly Revenue",			
 				2 => "Cash Out"
 			);
 
@@ -24,7 +24,7 @@ class Controller_Billing
 		}
 		
 		$data['transaction'] = model::load('billing/billing')->getHqTransaction();
-		$data['list'] = model::load('billing/finance')->getList();
+		$data['list'] = model::load('billing/billing')->getFinanceList(authData('user.userID'));
 
 		view::render("financialcontroller/billing/add", $data);
 	}
@@ -35,7 +35,7 @@ class Controller_Billing
 		
 		$data['selectDate'] = $selectDate = $selectDate ? :  date('Y-m-d');
 		$data['typeList'] = array(
-				1 => "Bank In",
+				1 => "Monthly Revenue",
 				2 => "Cash Out"
 			);
 
@@ -50,20 +50,19 @@ class Controller_Billing
 			}
 		}
 			$selectDate = date('Y-m-d', strtotime($selectDate)); 	
+			
+			$fcSite	= Array(
 
-			$fcTransaction = model::orm('billing/finance')->create();			
-			$fcTransaction->siteID = $siteID;
-			$fcTransaction->userID = authData('user.userID');
-			$fcTransaction->billingItemID = input::get('itemID');
-			$fcTransaction->billingFinanceTransactionTotal = input::get('total');
-			$fcTransaction->billingFinanceTransactionDescription = input::get('description');
-			$fcTransaction->billingFinanceTransactionType = input::get('transactionType');
-			$fcTransaction->billingFinanceTransactionPayment = "";
-			$fcTransaction->billingFinanceTransactionStatus = 1;
-			$fcTransaction->billingFinanceTransactionDate = $selectDate;
-			$fcTransaction->billingFinanceTransactionCreatedDate = now();
-			$fcTransaction->billingFinanceTransactionUpdatedDate = now();
-			$fcTransaction->save();			
+				"quantity" => 1,
+				"unit" => 1,
+				"total" => input::get('total'),
+				"description" => input::get('description'),
+				"type" => input::get('transactionType'),
+				"selectDate" => $selectDate
+
+						);
+
+			$getTransactionID = model::load('billing/billing')->addTransaction($siteID,15,$fcSite,0);	
 
 			$log = model::orm('billing/log')->create();
 			$log->billingLogType = "Add New HQ Transaction";
@@ -90,7 +89,7 @@ class Controller_Billing
 			$data['siteList'][$row['siteID']]	= $row['siteName'];
 		}
 						
-			$data['list'] = model::load('billing/finance')->getList();
+			$data['list'] = model::load('billing/billing')->getFinanceList(authData('user.userID'));
 
 		view::render("financialcontroller/billing/add", $data);
 	}
@@ -103,14 +102,13 @@ class Controller_Billing
 		
 		$data['selectDate'] = $selectDate = $selectDate ? :  date('Y-m-d');
 		$data['typeList'] = array(
-				1 => "Bank In",
+				1 => "Monthly Revenue",		
 				2 => "Cash Out"
 			);
 
 		$siteID = input::get('siteID');
 
-
-		$fcTransaction = model::orm('billing/finance')->find($id);		
+		$fcTransaction = model::orm('billing/journal')->find($id);		
 
 		$data['fcTransaction'] = $fcTransaction;
 
@@ -126,19 +124,13 @@ class Controller_Billing
 
 			$selectDate = date('Y-m-d', strtotime($selectDate)); 	
 
-			$fcTransaction = model::orm('billing/finance')->find($id);			
-			$fcTransaction->siteID = $siteID;
-			$fcTransaction->userID = authData('user.userID');
-			$fcTransaction->billingItemID = input::get('itemID');
-			$fcTransaction->billingFinanceTransactionTotal = input::get('total');
-			$fcTransaction->billingFinanceTransactionDescription = input::get('description');
-			$fcTransaction->billingFinanceTransactionType = input::get('transactionType');
-			$fcTransaction->billingFinanceTransactionPayment = "";
-			$fcTransaction->billingFinanceTransactionStatus = 1;
-			$fcTransaction->billingFinanceTransactionDate = $selectDate;
-			$fcTransaction->billingFinanceTransactionCreatedDate = now();
-			$fcTransaction->billingFinanceTransactionUpdatedDate = now();
-			$fcTransaction->save();			
+			$billing = model::orm('billing/journal')->find($id);
+
+			$billing->billingItemID = 15;			
+			$billing->billingTransactionTotal = "-".input::get('total');
+			$billing->billingTransactionDescription = input::get('description');
+			$billing->billingTransactionUpdatedDate = now();
+			$billing->save();		
 
 			$log = model::orm('billing/log')->create();
 			$log->billingLogType = "Add New HQ Transaction";
@@ -172,7 +164,7 @@ class Controller_Billing
 			$data['siteList'][$row['siteID']]	= $row['siteName'];
 		}
 						
-			$data['list'] = model::load('billing/finance')->getList();
+			$data['list'] = model::load('billing/billing')->getFinanceList(authData('user.userID'));
 
 		view::render("financialcontroller/billing/editForm", $data);
 	}
@@ -186,9 +178,9 @@ class Controller_Billing
 	{	
 		$this->template = false;
 
-		$billing = model::orm('billing/finance')->find($transactionID);
+		$billing = model::orm('billing/journal')->find($transactionID);
 
-		$billing->billingFinanceTransactionStatus = 0;
+		$billing->billingTransactionStatus = 0;
 		$billing->save();
 
 		$message = 'Transaction Updated!';

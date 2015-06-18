@@ -42,6 +42,7 @@ class Approval extends \Origami
 		$row = $this->getLevel($level);
 		
 		$data = array(
+			'userID' => authData('user.userID'),
 			'billingApprovalLevelStatus' => $status
 			);
 
@@ -105,12 +106,13 @@ class Approval extends \Origami
 		if($row)
 			return $row;
 
+		if ($this->billingApprovalID != ""){
 		db::insert('billing_approval_level', array(
 				'billingApprovalID' => $this->billingApprovalID,
 				'userLevel' => $level,
 				'billingApprovalLevelStatus' => 0,
 				'billingApprovalLevelCreatedDate' => now()));
-
+		}
 		return db::getLastID('billing_approval_level', 'billingApprovalLevelID', true);
 	}
 
@@ -136,8 +138,11 @@ class Approval extends \Origami
 		$approval->month = $month;
 		$approval->year = $year;
 		$approval->billingApprovalCreatedDate = now();
+		
+		if (($siteID != "") && ($year != "")){
 		$approval->save();
-
+		}
+		
 		return $approval;
 	}
 

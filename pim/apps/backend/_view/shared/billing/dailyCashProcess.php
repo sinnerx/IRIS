@@ -6,6 +6,20 @@
 	$(document).ready(function() {
 
 		$('.row').floatingScrollbar();
+
+		$(".a").hide();
+		$(".b").hide();
+		$(".c").hide();
+		$(".d").hide();
+		$('#a1').attr('colspan','2');
+		$('#b1').attr('colspan','3');
+		$('#c1').attr('colspan','3');
+		$('#d1').attr('colspan','1');
+		$('#e1').attr('colspan','15');
+		$('#f1').attr('colspan','17');
+		$('#g1').attr('colspan','16');
+		$('.j1').attr('colspan','14');
+
 	});
 	
 	
@@ -15,7 +29,6 @@
 	{	
 		this.select	= function(itemID)
 		{		
-				
 			var siteID	= $("#siteID").val() != ""?"&siteID="+$("#siteID").val():"";
 			var selectMonth	= $("#selectMonth").val() != ""?"&selectMonth="+$("#selectMonth").val():"";		
 			var selectYear	= $("#selectYear").val() != ""?"&selectYear="+$("#selectYear").val():"";
@@ -25,9 +38,71 @@
 	   		}
 
 	   		window.location.href	= base_url+"billing/dailyCashProcess?"+siteID+selectMonth+selectYear;	
-
 		}
 	}
+
+	var test = new function()
+	{	
+		this.select	= function()
+		{	
+			if	($('#a2').hasClass('fa-minus-square')){
+				$(".a").hide();
+				$('#a1').attr('colspan','2');
+				$('#a2').removeClass('fa-minus-square').addClass('fa-plus-square');
+
+				$('#e1').attr('colspan','15');
+				$('#f1').attr('colspan','17');
+				$('#g1').attr('colspan','16');
+				$('.j1').attr('colspan','14');
+
+			} else {
+				$(".a").show();
+				$('#a1').attr('colspan','6');
+				$('#a2').removeClass('fa-plus-square').addClass('fa-minus-square');
+
+				$('#e1').attr('colspan','45');
+				$('#f1').attr('colspan','47');
+				$('#g1').attr('colspan','46');
+				$('.j1').attr('colspan','44');
+
+			}	 
+
+			if	($('#b2').hasClass('fa-minus-square')){
+				$(".b").hide();
+				$('#b1').attr('colspan','3');
+				$('#b2').removeClass('fa-minus-square').addClass('fa-plus-square');
+			} else {
+				$(".b").show();
+				$('#b1').attr('colspan','15');
+				$('#b2').removeClass('fa-plus-square').addClass('fa-minus-square');
+			}	 
+
+			if	($('#c2').hasClass('fa-minus-square')){
+				$(".c").hide();
+				$('#c1').attr('colspan','3');
+				$('#c2').removeClass('fa-minus-square').addClass('fa-plus-square');
+			} else {
+				$(".c").show();
+				$('#c1').attr('colspan','15');
+				$('#c2').removeClass('fa-plus-square').addClass('fa-minus-square');
+			}	 
+
+			if	($('#d2').hasClass('fa-minus-square')){
+				$(".d").hide();
+				$('#d1').attr('colspan','1');
+				$('#d2').removeClass('fa-minus-square').addClass('fa-plus-square');
+			} else {
+				$(".d").show();
+				$('#d1').attr('colspan','3');
+				$('#d2').removeClass('fa-plus-square').addClass('fa-minus-square');
+			}	 
+
+			
+
+		}
+	}	
+
+
 	
 </script>
 
@@ -45,9 +120,8 @@
 	.ov {
 
 		 overflow-x: auto;
-  width: 100%;
-   
-   
+  		width: 100%;
+
 	}
 
 </style>
@@ -56,7 +130,7 @@
 	Daily Cash Process
 </h3>
 <div class='well well-sm'>
-	
+	Choose month and year
 </div>
 <?php echo flash::data();?>
 <div class='row'>
@@ -78,18 +152,19 @@
 <div class='row ov'>
 	<div class="col-sm-12  ">
 		<div class='well well-sm'>
-			
+			 <?php 
+			  echo array_search($siteID, array_flip($siteList)); ?> Monthly Cash Report for <?php echo $selectYear; ?>/<?php echo $selectMonth; ?>
 		</div>
 		
 		<div class="table-responsive">
-			<table class='table ' border='1'>
+			<table class='table b-t b-light'>
 
-				<tr>	
+				<tr style="background-color:#ededed">	
 					<th></th> 
-					<th colspan="6">Member</th>
-					<th colspan="15">PC Day</th>
-					<th colspan="15">PC Night</th>
-					<th colspan="3">Print</th>
+					<th colspan="6" id="a1">Member</th>
+					<th colspan="15" id="b1">PC Day</th>
+					<th colspan="15" id="c1">PC Night</th>
+					<th colspan="3" id="d1">Print</th>
 					<th>Scan</th>	
 					<th>Laminate</th>	
 					<th>Other</th>		
@@ -97,56 +172,56 @@
 					<th colspan="2">Day End</th>
 				</tr>			
 
-				<tr>	
+				<tr bgcolor="#ededed">	
 					<th></th> 		
-					<th colspan="2">Total</th>
-					<th colspan="2">Student</th>	
-					<th colspan="2">Adult</th>
+					<th colspan="2"><a id ="a2" href="#" onclick='test.select();' class='fa fa-plus-square pull-right' style='font-size:13px;'></a>Total</th>
+					<th class="a" colspan="2">Student</th>	
+					<th class="a" colspan="2">Adult</th>
 
-					<th colspan="3">Total</th>
-					<th colspan="3">Student Member</th>
-					<th colspan="3">Student nonMember</th>
-					<th colspan="3">Adult Member</th>
-					<th colspan="3">Adult NonMember</th>
+					<th colspan="3"><a id ="b2" href="#" onclick='test.select();' class='fa fa-plus-square pull-right' style='font-size:13px;'></a>Total</th>
+					<th class="b" colspan="3">Student Member</th>
+					<th class="b" colspan="3">Student nonMember</th>
+					<th class="b" colspan="3">Adult Member</th>
+					<th class="b" colspan="3">Adult NonMember</th>
 
-					<th colspan="3">Total</th>
-					<th colspan="3">Student Member</th>
-					<th colspan="3">Student nonMember</th>
-					<th colspan="3">Adult Member</th>
-					<th colspan="3">Adult NonMember</th>
+					<th colspan="3"><a id ="c2" href="#" onclick='test.select();' class='fa fa-plus-square pull-right' style='font-size:13px;'></a>Total</th>
+					<th class="c" colspan="3">Student Member</th>
+					<th class="c" colspan="3">Student nonMember</th>
+					<th class="c" colspan="3">Adult Member</th>
+					<th class="c" colspan="3">Adult NonMember</th>
 
-					<th>Total</th>	
-					<th>B/W</th>	
-					<th>Color</th>	
+					<th><a id ="d2" href="#" onclick='test.select();' class='fa fa-plus-square pull-right' style='font-size:13px;'></a>Total</th>	
+					<th class="d">B/W</th>	
+					<th class="d">Color</th>	
 					<th></th><th></th><th></th><th></th><th></th><th></th><th></th>
 				</tr>			
 
-				<tr>	
+				<tr bgcolor="#ededed">	
 					<th>Day</th> 
 					<th>RM</th> <th>User</th> 
-					<th>RM</th> <th>User</th>	
-					<th>RM</th>	<th>User</th> 
+					<th class="a">RM</th> <th class="a">User</th>	
+					<th class="a">RM</th> <th class="a">User</th> 
 					
 					<th>RM</th> <th>User</th> <th>Hr</th> 
-					<th>RM</th>	<th>User</th> <th>Hr</th>	
-					<th>RM</th>	<th>User</th> <th>Hr</th>	
-					<th>RM</th>	<th>User</th> <th>Hr</th>	
-					<th>RM</th>	<th>User</th> <th>Hr</th>	
+					<th class="b">RM</th>	<th class="b">User</th> <th class="b">Hr</th>	
+					<th class="b">RM</th>	<th class="b">User</th> <th class="b">Hr</th>	
+					<th class="b">RM</th>	<th class="b">User</th> <th class="b">Hr</th>	
+					<th class="b">RM</th>	<th class="b">User</th> <th class="b">Hr</th>	
 					
-					<th>RM</th> <th>User</th> <th>Hr</th> 
 					<th>RM</th>	<th>User</th> <th>Hr</th>	
-					<th>RM</th>	<th>User</th> <th>Hr</th>	
-					<th>RM</th>	<th>User</th> <th>Hr</th>	
-					<th>RM</th>	<th>User</th> <th>Hr</th>	
+					<th class="c">RM</th>	<th class="c">User</th> <th class="c">Hr</th>
+					<th class="c">RM</th>	<th class="c">User</th> <th class="c">Hr</th>
+					<th class="c">RM</th>	<th class="c">User</th> <th class="c">Hr</th>
+					<th class="c">RM</th>	<th class="c">User</th> <th class="c">Hr</th>
 										
-					<th>RM</th>	<th>RM</th>	<th>RM</th>	<th>RM</th>	<th>RM</th>	
+					<th>RM</th>	<th class="d">RM</th>	<th class="d">RM</th>	<th>RM</th>	<th>RM</th>	
 					<th>RM</th>	<th>Utilities</th>	<th>Description </th>	 <th>Total</th>	<th>Balance</th>
 				</tr>
 				
 			<?php if(count($list) > 0):?>
-				<tr>
-					<td><?php echo $alldate[0];?> </td>
-					<td colspan="45"> Beginning Balance</td>
+				<tr>					
+					<td><?php echo date('d', strtotime($alldate[0]))  ?></td> 
+					<td  id="e1" colspan="45"> Monthly Revenue (Previous Balance) </td>
 					<td><?php echo number_format($balance, 2, '.', '')?></td>
 				</tr>
 
@@ -161,17 +236,17 @@ foreach ($alldate as $date => $day):?>
 			?> 
 				 	
 				<tr>
-					<td><?php echo $key ?></td> 
+					<td><?php echo date('d', strtotime($key))  ?></td> 
 									
 					<td><?php $total = $row['Membership Student']['total'] +  $row['Membership Adult']['total']; 
 						echo number_format($total, 2, '.', '') ?></td> 
 					<td><?php echo $row['Membership Student']['quantity'] + $row['Membership Adult']['quantity'] ?></td> 
 
-					<td><?php echo number_format($row['Membership Student']['total'], 2, '.', '') ?></td> 
-					<td><?php echo number_format($row['Membership Student']['quantity'], 0, '', '') ?></td> 
+					<td class="a"><?php echo number_format($row['Membership Student']['total'], 2, '.', '') ?></td> 
+					<td class="a"><?php echo number_format($row['Membership Student']['quantity'], 0, '', '') ?></td> 
 
-					<td><?php echo number_format($row['Membership Adult']['total'], 2, '.', '') ?></td> 
-					<td><?php echo number_format($row['Membership Adult']['quantity'], 0, '', '') ?></td> 
+					<td class="a"><?php echo number_format($row['Membership Adult']['total'], 2, '.', '') ?></td> 
+					<td class="a"><?php echo number_format($row['Membership Adult']['quantity'], 0, '', '') ?></td> 
 
 					<?php 
 
@@ -265,21 +340,21 @@ foreach ($alldate as $date => $day):?>
 					<td><?php echo $pcMemStudentQuantity +  $pcNonMemStudentQuantity + $pcMemAdultQuantity +  $pcNonMemAdultQuantity; ?></td> 
 					<td><?php echo $pcMemStudentUnit +  $pcNonMemStudentUnit + $pcMemAdultUnit +  $pcNonMemAdultUnit; ?></td> 
 					
-					<td><?php echo number_format($pcMemStudentTotal, 2, '.', ''); ?></td> 
-					<td><?php echo $pcMemStudentQuantity; ?></td> 
-					<td><?php echo $pcMemStudentUnit; ?></td> 
+					<td class="b"><?php echo number_format($pcMemStudentTotal, 2, '.', ''); ?></td> 
+					<td class="b"><?php echo $pcMemStudentQuantity; ?></td> 
+					<td class="b"><?php echo $pcMemStudentUnit; ?></td> 
 					
-					<td><?php echo number_format($pcNonMemStudentTotal, 2, '.', ''); ?></td> 
-					<td><?php echo $pcNonMemStudentQuantity; ?></td>
-					<td><?php echo $pcNonMemStudentUnit; ?></td>
+					<td class="b"><?php echo number_format($pcNonMemStudentTotal, 2, '.', ''); ?></td> 
+					<td class="b"><?php echo $pcNonMemStudentQuantity; ?></td>
+					<td class="b"><?php echo $pcNonMemStudentUnit; ?></td>
 					
-					<td><?php echo number_format($pcMemAdultTotal, 2, '.', ''); ?></td> 
-					<td><?php echo $pcMemAdultQuantity; ?></td>
-					<td><?php echo $pcMemAdultUnit; ?></td>
+					<td class="b"><?php echo number_format($pcMemAdultTotal, 2, '.', ''); ?></td> 
+					<td class="b"><?php echo $pcMemAdultQuantity; ?></td>
+					<td class="b"><?php echo $pcMemAdultUnit; ?></td>
 					
-					<td><?php echo number_format($pcNonMemAdultTotal, 2, '.', ''); ?></td> 
-					<td><?php echo $pcNonMemAdultQuantity; ?></td>
-					<td><?php echo $pcNonMemAdultUnit; ?></td>
+					<td class="b"><?php echo number_format($pcNonMemAdultTotal, 2, '.', ''); ?></td> 
+					<td class="b"><?php echo $pcNonMemAdultQuantity; ?></td>
+					<td class="b"><?php echo $pcNonMemAdultUnit; ?></td>
 					
 					
 					<!--  PC, Member Student    NIGHT -->
@@ -288,35 +363,35 @@ foreach ($alldate as $date => $day):?>
 					<td><?php echo 	$pcMemStudentQuantityN +  $pcNonMemStudentQuantityN + $pcMemAdultQuantityN +  $pcNonMemAdultQuantityN; ?></td> 
 					<td><?php echo 	$pcMemStudentUnitN +  $pcNonMemStudentUnitN + $pcMemAdultUnitN +  $pcNonMemAdultUnitN; ?></td> 
 					
-					<td><?php echo number_format($pcMemStudentTotalN, 2, '.', ''); ?></td> 
-					<td><?php echo $pcMemStudentQuantityN; ?></td> 
-					<td><?php echo $pcMemStudentUnitN; ?></td> 
+					<td class="c"><?php echo number_format($pcMemStudentTotalN, 2, '.', ''); ?></td> 
+					<td class="c"><?php echo $pcMemStudentQuantityN; ?></td> 
+					<td class="c"><?php echo $pcMemStudentUnitN; ?></td> 
 					
-					<td><?php echo number_format($pcNonMemStudentTotalN, 2, '.', ''); ?></td> 
-					<td><?php echo $pcNonMemStudentQuantityN; ?></td>
-					<td><?php echo $pcNonMemStudentUnitN; ?></td>
+					<td class="c"><?php echo number_format($pcNonMemStudentTotalN, 2, '.', ''); ?></td> 
+					<td class="c"><?php echo $pcNonMemStudentQuantityN; ?></td>
+					<td class="c"><?php echo $pcNonMemStudentUnitN; ?></td>
 					
-					<td><?php echo number_format($pcMemAdultTotalN, 2, '.', ''); ?></td> 
-					<td><?php echo $pcMemAdultQuantityN; ?></td>
-					<td><?php echo $pcMemAdultUnitN; ?></td>
+					<td class="c"><?php echo number_format($pcMemAdultTotalN, 2, '.', ''); ?></td> 
+					<td class="c"><?php echo $pcMemAdultQuantityN; ?></td>
+					<td class="c"><?php echo $pcMemAdultUnitN; ?></td>
 					
-					<td><?php echo number_format($pcNonMemAdultTotalN, 2, '.', ''); ?></td> 
-					<td><?php echo $pcNonMemAdultQuantityN; ?></td>
-					<td><?php echo $pcNonMemAdultUnitN; ?></td>					
+					<td class="c"><?php echo number_format($pcNonMemAdultTotalN, 2, '.', ''); ?></td> 
+					<td class="c"><?php echo $pcNonMemAdultQuantityN; ?></td>
+					<td class="c"><?php echo $pcNonMemAdultUnitN; ?></td>					
 
 					<td><?php $totalPrint = $row['Printing & Photostat Color']['total'] + $row['Printing & Photostat B&W']['total']; 
 							  echo number_format($totalPrint, 2, '.', ''); ?></td> 	
 
 					<?php if ($row['Printing & Photostat B&W']['date'] == $key) { ?>
-					<td><?php echo number_format($row['Printing & Photostat B&W']['total'], 2, '.', ''); ?></td> 
+					<td class="d"><?php echo number_format($row['Printing & Photostat B&W']['total'], 2, '.', ''); ?></td> 
 					<?php } else { ?>
-					<td>0.00</td> 
+					<td class="d">0.00</td> 
 					<?php } ?>
 
 					<?php if ($row['Printing & Photostat Color']['date'] == $key) { ?>										
-					<td><?php echo number_format($row['Printing & Photostat Color']['total'], 2, '.', ''); ?></td> 
+					<td class="d"><?php echo number_format($row['Printing & Photostat Color']['total'], 2, '.', ''); ?></td> 
 					<?php } else { ?>
-					<td>0.00</td> 
+					<td class="d">0.00</td> 
 					<?php } ?>
 					
 					<?php if ($row['Scanning']['date'] == $key) { ?>										
@@ -365,25 +440,25 @@ foreach ($alldate as $date => $day):?>
 			<?php  endforeach;?>
 
 	<?php if ($day != $availableDate[$day][0]) {  ?>
-				<tr>	
-					<td><?php echo $day;?></td> 
+				<tr>						
+					<td><?php echo date('d', strtotime($day))  ?></td> 
 					<td>0.00</td><td>0</td> 
-					<td>0.00</td><td>0</td>	
-					<td>0.00</td><td>0</td> 
+					<td class="a">0.00</td><td class="a">0</td>	
+					<td class="a">0.00</td><td class="a">0</td> 
 					
 					<td>0.00</td><td>0</td><td>0</td> 
-					<td>0.00</td><td>0</td><td>0</td>	
-					<td>0.00</td><td>0</td><td>0</td>	
-					<td>0.00</td><td>0</td><td>0</td>	
-					<td>0.00</td><td>0</td><td>0</td>	
+					<td class="b">0.00</td><td class="b">0</td><td class="b">0</td>	
+					<td class="b">0.00</td><td class="b">0</td><td class="b">0</td>	
+					<td class="b">0.00</td><td class="b">0</td><td class="b">0</td>	
+					<td class="b">0.00</td><td class="b">0</td><td class="b">0</td>	
 					
 					<td>0.00</td><td>0</td><td>0</td> 
-					<td>0.00</td><td>0</td><td>0</td>	
-					<td>0.00</td><td>0</td><td>0</td>	
-					<td>0.00</td><td>0</td><td>0</td>	
-					<td>0.00</td><td>0</td><td>0</td>	
+					<td class="c">0.00</td><td class="c">0</td><td class="c">0</td>	
+					<td class="c">0.00</td><td class="c">0</td><td class="c">0</td>	
+					<td class="c">0.00</td><td class="c">0</td><td class="c">0</td>	
+					<td class="c">0.00</td><td class="c">0</td><td class="c">0</td>	
 										
-					<td>0.00</td><td>0.00</td><td>0.00</td><td>0.00</td><td>0.00</td>	
+					<td>0.00</td><td class="d">0.00</td><td class="d">0.00</td><td>0.00</td><td>0.00</td>	
 					<td>0.00</td><td>0.00</td><td> </td> <td>0.00</td><td><?php echo $beginningbalance = number_format($beginningbalance, 2, '.', '');?></td>
 				</tr>
 
@@ -395,39 +470,39 @@ foreach ($alldate as $date => $day):?>
 				<tr>	
 					<td>Total</td> 
 					<td>0.00</td><td>0</td> 
-					<td>0.00</td><td>0</td>	
-					<td>0.00</td><td>0</td> 
+					<td class="a">0.00</td><td class="a">0</td>	
+					<td class="a">0.00</td><td class="a">0</td> 
 					
 					<td>0.00</td><td>0</td><td>0</td> 
-					<td>0.00</td><td>0</td><td>0</td>	
-					<td>0.00</td><td>0</td><td>0</td>	
-					<td>0.00</td><td>0</td><td>0</td>	
-					<td>0.00</td><td>0</td><td>0</td>	
+					<td class="b">0.00</td><td class="b">0</td><td class="b">0</td>	
+					<td class="b">0.00</td><td class="b">0</td><td class="b">0</td>	
+					<td class="b">0.00</td><td class="b">0</td><td class="b">0</td>	
+					<td class="b">0.00</td><td class="b">0</td><td class="b">0</td>	
 					
 					<td>0.00</td><td>0</td><td>0</td> 
-					<td>0.00</td><td>0</td><td>0</td>	
-					<td>0.00</td><td>0</td><td>0</td>	
-					<td>0.00</td><td>0</td><td>0</td>	
-					<td>0.00</td><td>0</td><td>0</td>	
+					<td class="c">0.00</td><td class="c">0</td><td class="c">0</td>	
+					<td class="c">0.00</td><td class="c">0</td><td class="c">0</td>	
+					<td class="c">0.00</td><td class="c">0</td><td class="c">0</td>	
+					<td class="c">0.00</td><td class="c">0</td><td class="c">0</td>	
 										
-					<td>0.00</td><td>0.00</td><td>0.00</td><td>0.00</td>
+					<td>0.00</td><td class="d">0.00</td><td class="d">0.00</td><td>0.00</td>
 					<td>0.00</td><td>0.00</td><td>0.00</td><td> </td> 
 					<td><?php echo $dailytotal = number_format($dailytotal, 2, '.', '');?></td>
 					<td><?php echo $beginningbalance = number_format($beginningbalance, 2, '.', '');?></td>
 				</tr>
 				<tr>					
-					<th colspan="47"></th>
+					<th id="f1" colspan="47"></th>
 				</tr>
-				<tr>
+				<tr style="background-color:#ededed">	
 					<th> </th>
-					<th colspan="46"> Bank In </th>
+					<th id="g1" colspan="46"> Bank In </th>
 				</tr>
 			<?php
 
 			 foreach ($transferList as $key => $row):?>
 				<tr>
-					<td><?php echo $row['date']?></td>
-					<td colspan="44"><?php echo $row['description']?></td>
+					<td><?php echo date('d', strtotime($row['date']))  ?></td> 
+					<td class="j1" colspan="44"><?php echo $row['description']?></td>
 					<td><?php echo number_format($row['total'], 2, '.', '');?></td>
 					<td><?php $beginningbalance = $beginningbalance + $row['total'];
 					echo number_format($beginningbalance, 2, '.', '');?></td>
@@ -436,7 +511,7 @@ foreach ($alldate as $date => $day):?>
 
 			<?php else:?>		
 				<tr>
-					<td colspan="47"> No Transaction</td>
+					<td id="f1" colspan="47"> No Transaction</td>
 				</tr>
 				<?php endif; ?>	
 
@@ -446,16 +521,16 @@ foreach ($alldate as $date => $day):?>
 
 <div class="col-sm-12  ">
 		<div class='well well-sm'>
-			
+			Monthly Verification
 		</div>
 
 		<div class="table-responsive">
 		<form class="form-inline bs-example" method='post' action='<?php echo url::base('billing/dailyCashProcess/'.$siteID);?>'>
-			<table class='table ' border='1'>
+			<table class='table ' border='0'>
 					<input type="hidden" name="siteID" value="<?php echo $siteID?>"> 
 					<input type="hidden" name="year" value="<?php echo $selectYear?>"> 
 					<input type="hidden" name="month" value="<?php echo $selectMonth?>"> 
-				<tr>	
+				<tr style="background-color:#ededed">	
 					<th></th> 
 					<th>Site Manager</th>
 					<th>Cluster Lead</th>
@@ -483,9 +558,12 @@ foreach ($alldate as $date => $day):?>
 					<td>Status</td> 
 					<td><?php
 					
-					if((session::get("userLevel") == 2) &&  ($checked == 1)) {  
+					if((session::get("userLevel") == 2) &&  ($checked == 1) && ($approved != 1)) {  
 					
-					echo $checkedword;
+						echo $checkedword;
+					 } elseif((session::get("userLevel") == 2) &&  ($checked == 1) && ($approved == 1)) {  
+
+					 	echo $checkedword;
 					 } elseif ((session::get("userLevel") == 2) && ($checked != 1)) {  ?>	
 					
 					<button name="submit" type="submit" class="btn btn-sm btn-default" value="1">Check</button>									
@@ -560,3 +638,13 @@ foreach ($alldate as $date => $day):?>
 		</div>	
 	</div>
 </div>	
+
+<div class='row'>
+	<div class="col-sm-10">
+		<div class='well well-sm'>
+		
+		</div>
+		
+	
+	</div>
+</div>

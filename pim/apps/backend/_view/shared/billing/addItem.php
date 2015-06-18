@@ -25,6 +25,14 @@
               <?php echo form::text("itemName","class='form-control'");?>
             </div>
           </div>
+          <div class="form-group">
+            <label class="col-lg-2 control-label">Type</label>
+            <div class="col-lg-10">             
+              <?php echo form::select("itemType",$itemType,"class='input-sm form-control input-s-sm inline v-middle'",1);?>           
+            </div>
+          </div>
+
+
           <!-- <div class="form-group">
             <label class="col-lg-2 control-label">Description</label>
             <div class="col-lg-10">
@@ -75,7 +83,7 @@
           </div>
           <div class="form-group">
             <div class="col-lg-offset-2 col-lg-10">
-              <button type="submit" class="btn btn-sm btn-default">Submit</button>
+              <button type="submit" class="btn btn-sm btn-default">Submit</button>              
             </div>
           </div>
         </form>

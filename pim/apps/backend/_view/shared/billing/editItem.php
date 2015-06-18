@@ -25,6 +25,12 @@
               <?php echo form::text("itemName","class='form-control'",$item->billingItemName);?>
             </div>
           </div>
+          <div class="form-group">
+            <label class="col-lg-2 control-label">Type</label>
+            <div class="col-lg-10">             
+              <?php echo form::select("itemType",$itemType,"class='input-sm form-control input-s-sm inline v-middle'",$item->billingItemType);?>           
+            </div>
+          </div>
          <!--  <div class="form-group">
             <label class="col-lg-2 control-label">Description</label>
             <div class="col-lg-10">
@@ -104,6 +110,7 @@
           <div class="form-group">
             <div class="col-lg-offset-2 col-lg-10">
               <button type="submit" class="btn btn-sm btn-default">Update</button>
+              <a onclick='return confirm("Delete this transaction, are you sure?");' href='<?php echo url::base('billing/deleteItem/'.$item->billingItemID); ?>' class='btn btn-sm btn-default' style='font-size:13px;'>Delete</a>
             </div>
           </div>
         </form>

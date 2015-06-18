@@ -16,9 +16,9 @@ Class Controller_Billing
 		
 		$data['item'] = model::load('billing/billing')->getItem();
 		$data['list'] = model::load('billing/billing')->getList($siteID);
+
 		$totalBalanceDebit = model::load('billing/process')->getBalanceDebit($siteID,date('n',strtotime($todayDate)),date('Y',strtotime($todayDate)));
-		$totalBalanceCredit = model::load('billing/process')->getBalanceCredit($siteID,date('n',strtotime($todayDate)),date('Y',strtotime($todayDate)));
-		
+		$totalBalanceCredit = model::load('billing/process')->getBalanceCredit($siteID,date('n',strtotime($todayDate)),date('Y',strtotime($todayDate)));		
 		$previousBalanceDebit = model::load('billing/process')->getBalanceDebit($siteID,$month-1,date('Y',strtotime($todayDate)));
 		$previousBalanceCredit = model::load('billing/process')->getBalanceCredit($siteID,$month-1,date('Y',strtotime($todayDate)));
 
@@ -31,10 +31,18 @@ Class Controller_Billing
 			$data['itemSelect'] = $item->getFirst();			
 		}
 
-		db::from("site");
-		db::order_by("siteName","ASC");
+
+		if (authData('user.userLevel') == \model\user\user::LEVEL_CLUSTERLEAD){
+			
+			$res_site	= model::load("site/site")->getSitesByClusterLead(session::get("userID"))->result();
 		
-		$res_site = db::get()->result();
+		} else {
+
+			db::from("site");
+			db::order_by("siteName","ASC");
+		
+			$res_site = db::get()->result();
+		}
 
 		foreach($res_site as $row)
 		{
@@ -61,6 +69,7 @@ Class Controller_Billing
 				$billing = model::orm('billing/billing')->create();
 				$billing->billingItemHotkey = input::get('hotKey');
 				$billing->billingItemName = input::get('itemName');
+				$billing->billingItemType = input::get('itemType');
 				$billing->billingItemDescription = input::get('description');
 				$billing->billingItemPrice = input::get('price');
 				$billing->billingItemUnit = 1;
@@ -70,6 +79,7 @@ Class Controller_Billing
 				$billing->billingItemPriceDisabled = input::get('priceDisabled');
 				$billing->billingItemUnitDisabled = input::get('unitDisabled');
 				$billing->billingItemQuantityDisabled = input::get('quantityDisabled');
+				$billing->billingItemStatus = 1;
 				$billing->billingItemCreatedDate = now();
 				$billing->save();	
 
@@ -89,6 +99,10 @@ Class Controller_Billing
 							 "U"=>"U","V"=>"V","W"=>"W","X"=>"X","Y"=>"Y","Z"=>"Z" );
 
 		$data['keyList']=array_diff($alpha,$keyList);
+		$data['itemType']=array(
+									"1"=>"Debits",
+									"2"=>"Credits"	
+								);
 
 		view::render("shared/billing/addItem", $data);
 	}
@@ -102,6 +116,7 @@ Class Controller_Billing
 		{
 			$billing->billingItemHotkey = input::get('hotKey');
 			$billing->billingItemName = input::get('itemName');
+			$billing->billingItemType = input::get('itemType');
 			$billing->billingItemDescription = input::get('description');
 			$billing->billingItemPrice = input::get('price');
 			$billing->billingItemUnit = 1;
@@ -111,6 +126,7 @@ Class Controller_Billing
 			$billing->billingItemPriceDisabled = input::get('priceDisabled');
 			$billing->billingItemUnitDisabled = input::get('unitDisabled');
 			$billing->billingItemQuantityDisabled = input::get('quantityDisabled');
+			$billing->billingItemStatus = 1;
 			$billing->billingItemCreatedDate = now();
 			$billing->save();
 
@@ -134,13 +150,31 @@ Class Controller_Billing
 		$keyList=array_diff($alpha,$keyList);
 		$data['keyList'] = array_merge($keyList,$current);
 
+		$data['itemType']=array(
+									"1"=>"Debits",
+									"2"=>"Credits"	
+								);
+
 		$data['item'] = $billing;
-		view::render("shared/billing/editItem", $data);
+		view::render("shared/billing/editItem", $data);	
 	}
 	
+	public function deleteItem($itemID)
+	{	
+
+		$billing = model::orm('billing/billing')->find($itemID);
+
+		$billing->billingItemStatus = 0;
+		$billing->save();
+				
+		$message = 'Item Deleted!';
+
+		redirect::to('billing/add', $message, 'success');
+	}
+
 	public function addTransaction($id)
 	{	
-		$todayDate = input::get('selectDate');
+		$todayDate = request::get("selectDate");
 		$data['todayDate'] = $todayDate = $todayDate ? :  date('Y-m-d H:i');
 
 		if (authData('site.siteID') == ""){ 
@@ -168,6 +202,41 @@ Class Controller_Billing
 				redirect::to('billing/add', $message, 'error');			
 			}
 
+			$approval = model::load('billing/approval')->getApproval($siteID, date('m', strtotime(input::get('selectDate'))), date('Y', strtotime(input::get('selectDate'))));
+
+			if (authData('user.userLevel') == \model\user\user::LEVEL_CLUSTERLEAD){
+				$approvalDetail = $approval->getApprovalDetail($approval->billingApprovalID,\model\user\user::LEVEL_CLUSTERLEAD);
+				$checkManager = $approval->getApprovalDetail($approval->billingApprovalID,\model\user\user::LEVEL_SITEMANAGER);
+				
+				if ($checkManager['billingApprovalLevelStatus'] == 1) {
+
+					$message = 'Transaction for this month already checked, no new transaction allowed.';
+					redirect::to('billing/add', $message, 'error');	
+
+				}				
+
+
+				if ($approvalDetail['billingApprovalLevelStatus'] == 1) {
+
+					$message = 'Transaction for this month already verify, no new transaction allowed.';
+					redirect::to('billing/add', $message, 'error');	
+
+				} elseif ($approvalDetail['billingApprovalLevelStatus'] == 0){
+
+					$message = 'This transaction not allowed';
+					redirect::to('billing/add', $message, 'error');				
+					
+				}
+
+			} else {
+				$approvalDetail = $approval->getApprovalDetail($approval->billingApprovalID,\model\user\user::LEVEL_SITEMANAGER);
+
+				if ($approvalDetail['billingApprovalLevelStatus'] == 1) {
+
+					$message = 'Transaction for this month already verify, no new transaction allowed.';
+					redirect::to('billing/add', $message, 'error');				
+				}				
+			}	
 		}
 			$checkBalance = model::load('billing/billing')->getList($siteID,1);
 			$lastBalance = $checkBalance[0][billingTransactionBalance];
@@ -200,19 +269,37 @@ Class Controller_Billing
 		}						
 			$data['item'] = model::load('billing/billing')->getItem();
 			$data['list'] = model::load('billing/billing')->getList($siteID);
+
+		$month = date('n',strtotime($todayDate));
+
+		$totalBalanceDebit = model::load('billing/process')->getBalanceDebit($siteID,date('n',strtotime($todayDate)),date('Y',strtotime($todayDate)));
+		$totalBalanceCredit = model::load('billing/process')->getBalanceCredit($siteID,date('n',strtotime($todayDate)),date('Y',strtotime($todayDate)));
 		
+		$previousBalanceDebit = model::load('billing/process')->getBalanceDebit($siteID,$month-1,date('Y',strtotime($todayDate)));
+		$previousBalanceCredit = model::load('billing/process')->getBalanceCredit($siteID,$month-1,date('Y',strtotime($todayDate)));
+
+		$previousBalance = $previousBalanceDebit['balance'] + $previousBalanceCredit['balance'];
+		$data['totalBalance'] = $totalBalanceDebit['balance'] + $totalBalanceCredit['balance'] + $previousBalance;
+
 		view::render("shared/billing/add", $data);
 	}
 
-	public function edit()
+	public function edit($page=1)
 	{	
 		$todayDate = request::get("selectDate");
 		$data['todayDate'] = $todayDate = $todayDate ? :  date('Y-m-d');	
 		
-		db::from("site");
-		db::order_by("siteName","ASC");
+		if (authData('user.userLevel') == \model\user\user::LEVEL_CLUSTERLEAD){
+			
+			$res_site	= model::load("site/site")->getSitesByClusterLead(session::get("userID"))->result();
 		
-		$res_site = db::get()->result();
+		} else {
+
+			db::from("site");
+			db::order_by("siteName","ASC");
+		
+			$res_site = db::get()->result();
+		}
 
 		foreach($res_site as $row)
 		{
@@ -231,7 +318,16 @@ Class Controller_Billing
 		$data['selectDate'] = $selectDate = request::get("selectDate") ? :  date('Y-m-d');
 				
 		if ($siteID != ""){
-			$data['list'] = model::load('billing/billing')->getAllList($siteID,$itemID,$selectDate);	
+			$data['list'] = model::load('billing/billing')->getPaginationList($siteID,$itemID,$selectDate,$page);	
+			$totalToday = model::load('billing/billing')->getTotalToday($siteID,$selectDate);
+			
+			foreach ($totalToday as $key => $row) {
+
+				$total = $total + $row['billingTransactionTotal'];
+			}
+
+			$data['total'] = $total;	
+
 		}
 
 		$checkVerify = model::orm('billing/verify')->where('billingTransactionDate',  date('Y-m-d', strtotime($selectDate)))->execute();
@@ -240,13 +336,17 @@ Class Controller_Billing
 			$data['verified'] = 1;
 		}
 
+		$approval = model::load('billing/approval')->getApproval($siteID, date('m', strtotime($selectDate)), date('Y', strtotime($selectDate)));
+		$approvalDetail = $approval->getApprovalDetail($approval->billingApprovalID,\model\user\user::LEVEL_CLUSTERLEAD);
+
+		$data['reject'] = $approvalDetail['billingApprovalLevelStatus'];
+
 		view::render("shared/billing/edit", $data);
 	}
 
-	public function settlement($transactionDate)
+	public function settlement($transactionDate = null)
 	{	
-		
-		$data['todayDate'] = $transactionDate;
+		$data['todayDate'] = $transactionDate = $transactionDate ? :  date('Y-m-d');	
 		
 		$siteID =  authData('site.siteID');	
 		$userID =  authData('user.userID');
@@ -265,9 +365,17 @@ Class Controller_Billing
 		foreach($allItem as $row)
 		{
 			$data['itemList'][$row['billingItemID']]	= $row['billingItemHotkey']."  ".$row['billingItemName'];
+		}	
+		//$data['list'] = model::load('billing/billing')->getAllList($siteID,$itemID,$transactionDate);	
+		$data['list'] = model::load('billing/billing')->getPaginationList($siteID,$itemID,$selectDate,$page);	
+		$totalToday = model::load('billing/billing')->getTotalToday($siteID,$selectDate);
+			
+		foreach ($totalToday as $key => $row) {
+
+			$total = $total + $row['billingTransactionTotal'];
 		}
-	
-		$data['list'] = model::load('billing/billing')->getAllList($siteID,$itemID,$transactionDate);	
+
+		$data['total'] = $total;	
 		
 		view::render("shared/billing/edit", $data);
 	}
@@ -326,7 +434,7 @@ Class Controller_Billing
 	public function delete($transactionID)
 	{	
 		$this->template = false;
-		//$transactionID = request::get("transactionId");
+		
 		$billing = model::orm('billing/journal')->find($transactionID);
 
 		$billing->billingTransactionStatus = 0;
@@ -413,6 +521,12 @@ Class Controller_Billing
 								 
 					$data['approved'] = 1;
 					$data['approvedword'] = "Approved at ".$approvalDetail['billingApprovalLevelCreatedDate']." by ".$userDetail[$approvalDetail['userID']]['userProfileFullName'];
+				
+					$approvalDetail = $approval->getApprovalDetail($approval->billingApprovalID,\model\user\user::LEVEL_SITEMANAGER);
+					$userDetail = model::load('user/user')->getUsersByID($approvalDetail['userID']);
+								 
+					$data['checked'] = 1;
+					$data['checkedword'] = "Checked at ".$approvalDetail['billingApprovalLevelCreatedDate']." by ".$userDetail[$approvalDetail['userID']]['userProfileFullName'];
 				} else {
 				
 					$approval->reject(authData('user.userLevel'));
@@ -433,6 +547,18 @@ Class Controller_Billing
 								 
 					$data['closed'] = 1;
 					$data['closedword'] = "Closed at ".$approvalDetail['billingApprovalLevelCreatedDate']." by ".$userDetail[$approvalDetail['userID']]['userProfileFullName'];
+
+					$approvalDetail = $approval->getApprovalDetail($approval->billingApprovalID,\model\user\user::LEVEL_CLUSTERLEAD);
+					$userDetail = model::load('user/user')->getUsersByID($approvalDetail['userID']);
+								 
+					$data['approved'] = 1;
+					$data['approvedword'] = "Approved at ".$approvalDetail['billingApprovalLevelCreatedDate']." by ".$userDetail[$approvalDetail['userID']]['userProfileFullName'];
+				
+					$approvalDetail = $approval->getApprovalDetail($approval->billingApprovalID,\model\user\user::LEVEL_SITEMANAGER);
+					$userDetail = model::load('user/user')->getUsersByID($approvalDetail['userID']);
+								 
+					$data['checked'] = 1;
+					$data['checkedword'] = "Checked at ".$approvalDetail['billingApprovalLevelCreatedDate']." by ".$userDetail[$approvalDetail['userID']]['userProfileFullName'];
 				} else {
 				
 					$approval->disapprove(authData('user.userLevel'));
@@ -442,14 +568,7 @@ Class Controller_Billing
 					
 					$data['closedword'] = "Rejected at ".$approvalDetail['billingApprovalLevelCreatedDate']." by ".$userDetail[$approvalDetail['userID']]['userProfileFullName'];
 				}
-				
-					/*$approval->approve(authData('user.userLevel'));		
-					
-					$approvalDetail = $approval->getApprovalDetail($approval->billingApprovalID,\model\user\user::LEVEL_FINANCIALCONTROLLER);
-					$userDetail = model::load('user/user')->getUsersByID($approvalDetail['userID']);
-								 
-					$data['closed'] = 1;
-					$data['closedword'] = "Closed at ".$approvalDetail['billingApprovalLevelCreatedDate']." by ".$userDetail[$approvalDetail['userID']]['userProfileFullName'];*/
+								
 			}
 		}	
 				
@@ -605,7 +724,7 @@ Class Controller_Billing
 		$todayDateEnd = date('Y-m-d', strtotime($todayDateEnd)); 
 
 		$data['journal'] = model::orm('billing/journal')
-				->where("siteID = '$siteID' AND billingTransactionDate >= '$todayDateStart' AND billingTransactionDate <= '$todayDateEnd' AND billingTransactionStatus = 1")
+				->where("siteID = '$siteID' AND billingTransactionDate >= '$todayDateStart' AND billingTransactionDate <= '$todayDateEnd%' AND billingTransactionStatus = 1")
 				->join("billing_item", "billing_item.billingItemID = billing_transaction.billingItemID")
 				->order_by("billingTransactionDate","ASC")
 				->execute();

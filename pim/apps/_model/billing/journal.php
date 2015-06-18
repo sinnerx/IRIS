@@ -40,4 +40,10 @@ class journal extends \Origami
 		return db::get()->result();
 	}
 
+	public function checkTransaction($itemID)
+	{
+		db::from("billing_transaction")->where("billingItemID = '$itemID'");
+	
+		return db::get()->result();
+	}
 }

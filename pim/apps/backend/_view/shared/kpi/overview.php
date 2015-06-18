@@ -102,8 +102,8 @@ var site = new function()
 
 <div class='row'>
 	<div class="col-sm-10">
-		<div class='well well-sm'>		
+		
 		<?php echo pagination::link();?>
-		</div>			
+		
 	</div>
 </div>

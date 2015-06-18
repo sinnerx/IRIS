@@ -1,7 +1,7 @@
 <?php 
 
 namespace model\billing;
-use db, session;
+use db, session, pagination, model, url;
 
 class billing extends \Origami
 { 
@@ -35,14 +35,21 @@ class billing extends \Origami
 	public function getItem()
 	{
 		db::from("billing_item");
+		db::where("billingItemStatus",1);	
 		db::order_by("billingItemHotkey","ASC");
 		
 		return db::get()->result();		
 	}
 
-		public function getAllHotkey()
+/*	public function deleteItem($temID)
+	{
+		db::delete("billing_item",Array("billingItemID"=>$temID));
+	}*/
+
+	public function getAllHotkey()
 	{
 		db::select("billingItemID, billingItemHotkey");	
+		db::where("billingItemStatus",1);	
 		db::from("billing_item");
 
 		return db::get()->result();		
@@ -52,7 +59,7 @@ class billing extends \Origami
 	{
 		
 		if ($data_sales['utilitiesList'] != ""){
-			$description = $data_sales['utilitiesList']." = ".$data_sales['description'];	
+			$description = $data_sales['utilitiesList']." = ".$data_sales['description1'];	
 
 		} elseif ($data_sales['transferList'] != ""){
 			$description = $data_sales['transferList'];	
@@ -61,8 +68,9 @@ class billing extends \Origami
 		}
 
 		$todayDate = date('Y-m-d H:i', strtotime($data_sales['selectDate'])); 	
+		$billing = model::orm('billing/billing')->find($id);
 
-		if  (($id == 14) || ($id == 15))	{
+		if  ($billing->billingItemType == 2)	{
 
 		 $billingTransactionBalance = $lastBalance - $data_sales['total'];	
 		 $data_sales['total'] = 0 - $data_sales['total'];
@@ -70,6 +78,13 @@ class billing extends \Origami
 		} else {
 		 $billingTransactionBalance = $data_sales['total'] + $lastBalance;
 
+		}
+
+		if ($data_sales['type'] == 2){
+
+			$accountType = 2;
+		} else {
+			$accountType = 1;
 		}
 
 		$data	= Array(
@@ -80,6 +95,7 @@ class billing extends \Origami
 			"billingTransactionQuantity" => $data_sales['quantity'],
 			"billingTransactionUnit" => $data_sales['unit'],
 			"billingTransactionTotal" => $data_sales['total'],
+			"billingTransactionAccountType" => $accountType,
 			"billingTransactionBalance" => $billingTransactionBalance,
 			"billingTransactionDescription" => $description,
 			"billingTransactionStatus" => 1,
@@ -88,7 +104,7 @@ class billing extends \Origami
 			"billingTransactionUpdatedDate" => now()
 
 						);
-		//print_r($data);
+
 		db::insert("billing_transaction",$data);
 
 		return db::getLastID('billing_transaction', 'billingTransactionID', true);
@@ -112,6 +128,40 @@ class billing extends \Origami
 
 		return db::get()->result();
 	}
+
+
+	public function getFinanceList($userID)
+	{
+		$where	= Array(
+				"userID"=>$userID,								
+				"billingTransactionStatus" => 1
+						);
+
+		db::from("billing_transaction");
+		db::where($where);
+		db::join("site", "site.siteID = billing_transaction.siteID");
+		db::order_by("billingTransactionDate","DESC");
+		
+		return db::get()->result();
+	}
+
+	public function getTotalToday($siteID,$selectDate)
+	{
+		$selectDate = date('Y-m-d', strtotime($selectDate)); 		
+
+		$where	= Array(
+				"siteID"=>$siteID,				
+				"billingTransactionDate like"=>$selectDate."%",
+				 "billingTransactionStatus" => 1
+						);
+	
+		db::from("billing_transaction")->where($where);		
+		db::join("billing_item", "billing_item.billingItemID = billing_transaction.billingItemID");
+		db::order_by("billingTransactionDate","ASC");
+		
+		return db::get()->result();
+	}
+
 
 	public function getAllList($siteID,$itemID,$selectDate)
 	{
@@ -140,6 +190,45 @@ class billing extends \Origami
 		
 		return db::get()->result();
 	}
+
+	public function getPaginationList($siteID,$itemID,$selectDate,$page )
+	{
+		$selectDate = date('Y-m-d', strtotime($selectDate)); 	
+
+		if ($itemID == null) {
+
+		$where	= Array(
+				"siteID"=>$siteID,				
+				"billingTransactionDate like"=>$selectDate."%",
+				 "billingTransactionStatus" => 1
+						);
+		} else {
+
+		$where	= Array(
+				"siteID"=>$siteID,
+				"billing_transaction.billingItemID"=>$itemID,
+				"billingTransactionDate like"=>$selectDate."%",
+				 "billingTransactionStatus" => 1
+						);			
+		}
+
+		db::from("billing_transaction")->where($where);		
+
+				pagination::setFormat(model::load('template/cssbootstrap')->paginationLink());
+				pagination::initiate(Array(
+								"totalRow"=>db::num_rows(),
+								"limit"=>5,				
+								"urlFormat"=>url::base("billing/edit/{page}?&siteID={$siteID}&selectDate={$selectDate}"),
+								"currentPage"=>$page
+										));
+
+		db::limit(pagination::get("limit"),pagination::recordNo()-1); 
+		db::join("billing_item", "billing_item.billingItemID = billing_transaction.billingItemID");
+		db::order_by("billingTransactionDate","ASC");
+		
+		
+		return db::get()->result();
+	}	
 
 	public function getHqTransaction()
 	{		
