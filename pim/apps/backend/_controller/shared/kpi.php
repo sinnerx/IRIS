@@ -44,6 +44,7 @@ Class Controller_Kpi
 			
 		//---------------------------------------------------------------------------
 		## user login
+		$login['done'] = 0;
 		$active = db::where('month(logLoginCreatedDate) = ? AND year(logLoginCreatedDate) = ?', array($month, $year))
 		->where('userID IN (SELECT userID FROM site_member WHERE siteID = ?)', array($siteID))
 		->group_by('userID')->get('log_login')->num_rows();
