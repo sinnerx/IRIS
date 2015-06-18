@@ -465,7 +465,7 @@ Class Controller_Billing
 				$userDetail = model::load('user/user')->getUsersByID($approvalDetail['userID']);
 								 
 				$data['checked'] = 1;
-				$data['checkedword'] = "Checked at ".$approvalDetail['billingApprovalLevelCreatedDate']." by ".$userDetail[$approvalDetail['userID']]['userProfileFullName'];
+				$data['checkedword'] = "Checked at ".$approvalDetail['billingApprovalLevelCreatedDate']." <br> by ".$userDetail[$approvalDetail['userID']]['userProfileFullName'];
 			}
 
 			if ($approval->getApprovalStatus(\model\user\user::LEVEL_CLUSTERLEAD) == 1){						
@@ -474,7 +474,7 @@ Class Controller_Billing
 				$userDetail = model::load('user/user')->getUsersByID($approvalDetail['userID']);
 								 
 				$data['approved'] = 1;
-				$data['approvedword'] = "Approved at ".$approvalDetail['billingApprovalLevelCreatedDate']." by ".$userDetail[$approvalDetail['userID']]['userProfileFullName'];
+				$data['approvedword'] = "Approved at ".$approvalDetail['billingApprovalLevelCreatedDate']." <br> by ".$userDetail[$approvalDetail['userID']]['userProfileFullName'];
 			}
 
 			if ($approval->getApprovalStatus(\model\user\user::LEVEL_FINANCIALCONTROLLER) == 1){
@@ -483,7 +483,7 @@ Class Controller_Billing
 				$userDetail = model::load('user/user')->getUsersByID($approvalDetail['userID']);
 
 				$data['closed'] = 1;
-				$data['closedword'] = "Closed at ".$approvalDetail['billingApprovalLevelCreatedDate']." by ".$userDetail[$approvalDetail['userID']]['userProfileFullName'];
+				$data['closedword'] = "Closed at ".$approvalDetail['billingApprovalLevelCreatedDate']." <br> by ".$userDetail[$approvalDetail['userID']]['userProfileFullName'];
 			}			
 		}	
 
@@ -508,7 +508,7 @@ Class Controller_Billing
 				$userDetail = model::load('user/user')->getUsersByID($approvalDetail['userID']);
 								 
 				$data['checked'] = 1;
-				$data['checkedword'] = "Checked at ".$approvalDetail['billingApprovalLevelCreatedDate']." by ".$userDetail[$approvalDetail['userID']]['userProfileFullName'];
+				$data['checkedword'] = "Checked at ".$approvalDetail['billingApprovalLevelCreatedDate']." <br> by ".$userDetail[$approvalDetail['userID']]['userProfileFullName'];
 
 			} elseif(authData('user.userLevel') == \model\user\user::LEVEL_CLUSTERLEAD) {
 				
@@ -520,13 +520,13 @@ Class Controller_Billing
 					$userDetail = model::load('user/user')->getUsersByID($approvalDetail['userID']);
 								 
 					$data['approved'] = 1;
-					$data['approvedword'] = "Approved at ".$approvalDetail['billingApprovalLevelCreatedDate']." by ".$userDetail[$approvalDetail['userID']]['userProfileFullName'];
+					$data['approvedword'] = "Approved at ".$approvalDetail['billingApprovalLevelCreatedDate']." <br> by ".$userDetail[$approvalDetail['userID']]['userProfileFullName'];
 				
 					$approvalDetail = $approval->getApprovalDetail($approval->billingApprovalID,\model\user\user::LEVEL_SITEMANAGER);
 					$userDetail = model::load('user/user')->getUsersByID($approvalDetail['userID']);
 								 
 					$data['checked'] = 1;
-					$data['checkedword'] = "Checked at ".$approvalDetail['billingApprovalLevelCreatedDate']." by ".$userDetail[$approvalDetail['userID']]['userProfileFullName'];
+					$data['checkedword'] = "Checked at ".$approvalDetail['billingApprovalLevelCreatedDate']." <br> by ".$userDetail[$approvalDetail['userID']]['userProfileFullName'];
 				} else {
 				
 					$approval->reject(authData('user.userLevel'));
@@ -534,7 +534,7 @@ Class Controller_Billing
 					$approvalDetail = $approval->getApprovalDetail($approval->billingApprovalID,\model\user\user::LEVEL_CLUSTERLEAD);
 					$userDetail = model::load('user/user')->getUsersByID($approvalDetail['userID']);								
 					
-					$data['approvedword'] = "Rejected at ".$approvalDetail['billingApprovalLevelCreatedDate']." by ".$userDetail[$approvalDetail['userID']]['userProfileFullName'];
+					$data['approvedword'] = "Rejected at ".$approvalDetail['billingApprovalLevelCreatedDate']." <br> by ".$userDetail[$approvalDetail['userID']]['userProfileFullName'];
 				}				
 			} else {
 
@@ -546,19 +546,19 @@ Class Controller_Billing
 					$userDetail = model::load('user/user')->getUsersByID($approvalDetail['userID']);
 								 
 					$data['closed'] = 1;
-					$data['closedword'] = "Closed at ".$approvalDetail['billingApprovalLevelCreatedDate']." by ".$userDetail[$approvalDetail['userID']]['userProfileFullName'];
+					$data['closedword'] = "Closed at ".$approvalDetail['billingApprovalLevelCreatedDate']." <br> by ".$userDetail[$approvalDetail['userID']]['userProfileFullName'];
 
 					$approvalDetail = $approval->getApprovalDetail($approval->billingApprovalID,\model\user\user::LEVEL_CLUSTERLEAD);
 					$userDetail = model::load('user/user')->getUsersByID($approvalDetail['userID']);
 								 
 					$data['approved'] = 1;
-					$data['approvedword'] = "Approved at ".$approvalDetail['billingApprovalLevelCreatedDate']." by ".$userDetail[$approvalDetail['userID']]['userProfileFullName'];
+					$data['approvedword'] = "Approved at ".$approvalDetail['billingApprovalLevelCreatedDate']." <br> by ".$userDetail[$approvalDetail['userID']]['userProfileFullName'];
 				
 					$approvalDetail = $approval->getApprovalDetail($approval->billingApprovalID,\model\user\user::LEVEL_SITEMANAGER);
 					$userDetail = model::load('user/user')->getUsersByID($approvalDetail['userID']);
 								 
 					$data['checked'] = 1;
-					$data['checkedword'] = "Checked at ".$approvalDetail['billingApprovalLevelCreatedDate']." by ".$userDetail[$approvalDetail['userID']]['userProfileFullName'];
+					$data['checkedword'] = "Checked at ".$approvalDetail['billingApprovalLevelCreatedDate']." <br> by ".$userDetail[$approvalDetail['userID']]['userProfileFullName'];
 				} else {
 				
 					$approval->disapprove(authData('user.userLevel'));
@@ -566,7 +566,7 @@ Class Controller_Billing
 					$approvalDetail = $approval->getApprovalDetail($approval->billingApprovalID,\model\user\user::LEVEL_FINANCIALCONTROLLER);
 					$userDetail = model::load('user/user')->getUsersByID($approvalDetail['userID']);								
 					
-					$data['closedword'] = "Rejected at ".$approvalDetail['billingApprovalLevelCreatedDate']." by ".$userDetail[$approvalDetail['userID']]['userProfileFullName'];
+					$data['closedword'] = "Rejected at ".$approvalDetail['billingApprovalLevelCreatedDate']." <br> by ".$userDetail[$approvalDetail['userID']]['userProfileFullName'];
 				}
 								
 			}
