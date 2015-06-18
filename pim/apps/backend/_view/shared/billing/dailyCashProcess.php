@@ -142,7 +142,7 @@
 			</div>
 			<?php endif;?>
 			<div class="form-group" style="margin-left:10px">
-				<?php echo form::select("selectMonth",model::load("helper")->monthYear("month"),"onchange='billing.select();'",$selectMonth);?>
+				<?php echo form::select("selectMonth",model::load("helper")->monthYear("monthE"),"onchange='billing.select();'",$selectMonth);?>
 				<?php echo form::select("selectYear",model::load("helper")->monthYear("year"),"onchange='billing.select();'",$selectYear);?>			
 			</div>			
 		</form>	

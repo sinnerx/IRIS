@@ -75,6 +75,27 @@ class Helper
 					return $arrR[$firstParam];
 				}
 			break;
+			case "monthE":
+				$arrR	= Array(
+					1=>"JANUARY",
+					2=>"FEBRUARY",
+					3=>"MARCH",
+					4=>"APRIL",
+					5=>"MAY",
+					6=>"JUNE",
+					7=>"JULY",
+					8=>"AUGUST",
+					9=>"SEPTEMBER",
+					10=>"OCTOBER",
+					11=>"NOVEMBER",
+					12=>"DECEMBER"
+							);
+
+				if($firstParam)
+				{
+					return $arrR[$firstParam];
+				}
+			break;
 			case "year":
 				$startY	= !$firstParam?date("Y")-5:$firstParam;
 				$endY	= !$secondParam?date("Y")+5:$secondParam;
