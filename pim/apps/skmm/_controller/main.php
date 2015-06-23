@@ -38,7 +38,7 @@ class Controller_Main
 
 	public function blog_latest()
 	{
-		$data['res_article']	= db::where("siteID",authData("current_site.siteID"))->where('articleStatus = 1 AND date(articlePublishedDate) <', array(date('Y-m-d')))->limit(10)->order_by("articleID","desc")->get("article")->result("articleID");
+		$data['res_article']	= db::where("siteID",authData("current_site.siteID"))->where('articleStatus = 1 AND date(articlePublishedDate) < ?', array(date('Y-m-d')))->limit(10)->order_by("articleID","desc")->get("article")->result("articleID");
 
 		if($data['res_article'])
 		{
