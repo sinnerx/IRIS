@@ -1,6 +1,6 @@
 <?php
 namespace model\site;
-use db, session, pagination, model;
+use db, session, pagination, model, url;
 class Request extends \Origami
 {
 	protected $table = 'site_request';
@@ -30,6 +30,37 @@ class Request extends \Origami
 		}
 
 		return false;
+	}
+
+	/**
+	 * Backend functionality.
+	 */
+	public function getObjectUrl($siteRequestRefID, $typeObject)
+	{
+		switch($typeObject)
+		{
+			case "activity":
+			$url	= url::base("activity/edit/".$siteRequestRefID);
+			break;
+			case "site":
+			$url	= url::base("site/edit");
+			break;
+			case "article":
+			$url	= url::base("site/editArticle/".$siteRequestRefID);
+			break;
+			case "announcement":
+			$url	= url::base("site/editAnnouncement/".$siteRequestRefID);
+			break;
+			case "forum_category":
+			$url	= url::base("forum/updateCategory/".$siteRequestRefID);
+			break;
+			case "video":
+			$albumID	= db::select("videoAlbumID")->where("videoID",$siteRequestRefID)->get("video")->row("videoAlbumID");
+			$url	= url::base("video/albumVideos/$albumID#video/".$siteRequestRefID);
+			break;
+		}
+
+		return $url;
 	}
 
 	//used by model site:updateSiteInfo, page:updatePage

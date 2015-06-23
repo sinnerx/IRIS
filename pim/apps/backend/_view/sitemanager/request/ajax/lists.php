@@ -24,6 +24,7 @@
 				foreach($res_request as $row)
 				{
 					$type	= $requestTypeNameR[$row['siteRequestType']];
+					list($object) = explode('.', $row['siteRequestType']);
 					$row['siteRequestStatus']	= $row['siteRequestCorrectionFlag'] == 1?3:$row['siteRequestStatus'];
 					$status	= $requestStatusNameR[$row['siteRequestStatus']];
 					$color	= $statusColorR[$row['siteRequestStatus']];
@@ -35,8 +36,9 @@
 
 					$correctionIcon		= $row['siteRequestCorrectionFlag'] == 1?"<span class='fa fa-wrench pull-left'></span>":"";
 					$correctionLabel	= $row['siteRequestCorrectionFlag'] == 1?"<a href='".url::base("ajax/request/correctionDetail/".$row['siteRequestID'])."' data-toggle='ajaxModal' class='badge bg-$color'>$correctionIcon$status</a>":"<span class='badge bg-$color'>$status</span>";
+					$linkToSubject = $row['siteRequestCorrectionFlag'] != 1 ? '<a class="fa fa-link" href="'.model::load('site/request')->getObjectUrl($row['siteRequestRefID'], $object).'" target="_blank"></a>' : '';
 
-					echo "<tr><td>".$no++.".</td><td>$type $correctionLabel</td><td>$clearrequestIcon</td>";
+					echo "<tr><td>".$no++.".</td><td>$type $correctionLabel $linkToSubject</td><td>$clearrequestIcon</td>";
 				}
 			}
 			else

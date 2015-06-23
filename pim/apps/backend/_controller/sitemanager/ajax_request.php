@@ -47,28 +47,7 @@ class Controller_Ajax_Request
 		## prepare urlToSubject.
 		list($typeObject)	= explode(".",$row_request['siteRequestType']);
 
-		switch($typeObject)
-		{
-			case "activity":
-			$data['urlToSubject']	= url::base("activity/edit/".$row_request['siteRequestRefID']);
-			break;
-			case "site":
-			$data['urlToSubject']	= url::base("site/edit");
-			break;
-			case "article":
-			$data['urlToSubject']	= url::base("site/editArticle/".$row_request['siteRequestRefID']);
-			break;
-			case "announcement":
-			$data['urlToSubject']	= url::base("site/editAnnouncement/".$row_request['siteRequestRefID']);
-			break;
-			case "forum_category":
-			$data['urlToSubject']	= url::base("forum/updateCategory/".$row_request['siteRequestRefID']);
-			break;
-			case "video":
-			$albumID	= db::select("videoAlbumID")->where("videoID",$row_request['siteRequestRefID'])->get("video")->row("videoAlbumID");
-			$data['urlToSubject']	= url::base("video/albumVideos/$albumID#video/".$row_request['siteRequestRefID']);
-			break;
-		}
+		$data['urlToSubject'] = model::load('site/request')->getObjectUrl($row_request['siteRequestRefID'], $typeObject);
 	
 		$data['row_request']	= $row_request;		
 		view::render("sitemanager/request/ajax/correctionDetail",$data);

@@ -12,9 +12,10 @@ var site = new function()
 
 		this.getRequestList	= function(href)
 		{
+			p1mloader.start("#widget-requestlist");
 			$.ajax({type:"GET",url:href}).done(function(txt)
 			{
-				p1mloader.start("#widget-requestlist");
+				p1mloader.stop("#widget-requestlist");
 				$("#widget-requestlist").html(txt);
 				context.overview.prepareLinking();
 			});
@@ -22,9 +23,10 @@ var site = new function()
 
 		this.clearRequest = function(href)
 		{
+			p1mloader.start("#widget-requestlist");
 			$.ajax({type:"GET",url:href}).done(function(txt)
 			{
-				p1mloader.start("#widget-requestlist");
+				p1mloader.stop("#widget-requestlist");
 				$("#widget-requestlist").html(txt);
 				context.overview.prepareLinking();
 			});
