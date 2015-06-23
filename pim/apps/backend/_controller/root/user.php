@@ -22,7 +22,8 @@ class Controller_User
 		## if got search key.
 		if(request::get("search"))
 		{
-			$where[]	= Array("userProfileFullName LIKE"=>"%".request::get("search","")."%");
+			$searchText = request::get('search');
+			$where['userProfileFullName LIKE ? OR userIC LIKE ? OR userEmail = ?'] = array('%'.$searchText.'%', '%'.$searchText.'%', $searchText);
 		}
 
 		## get paginated user list.

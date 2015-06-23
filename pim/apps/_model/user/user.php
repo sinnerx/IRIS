@@ -367,8 +367,13 @@ class User extends \Origami
 		if($where)
 		{
 			$where	= !is_array($where)?Array($where):$where;
-			foreach($where as $wher)
-				$users = $users->where($wher);
+			foreach($where as $key => $wher)
+			{
+				if(is_string($key))
+					$users = $users->where($key, $wher);
+				else
+					$users = $users->where($wher);
+			}
 		}
 
 		if($pagination)
