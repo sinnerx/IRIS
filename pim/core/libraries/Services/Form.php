@@ -27,6 +27,7 @@ class Form
 	public static function text($name,$attr = Null,$value = Null)
 	{
 		$value		= flash::data("_post.$name",$value);
+		$value = htmlspecialchars($value, ENT_QUOTES);
 		$message	= /*session::has("fdata.$name")?"data-message='".session::get("fdata.$name")."'":*/"";
 		$attr		= self::buildAttr($attr);
 		return "<input name='$name' id='$name' type='text' $message $attr value='$value' />";
@@ -41,6 +42,7 @@ class Form
 	public static function textarea($name,$attr = Null,$value = Null)
 	{
 		$value		= flash::data("_post.$name",$value);
+		$value = htmlspecialchars($value, ENT_QUOTES);
 		$message	= /*session::has("fdata.$name")?"data-message='".session::get("fdata.$name")."'":*/"";
 		$attr		= self::buildAttr($attr);
 		return "<textarea name='$name' id='$name' $message $attr>$value</textarea>";
@@ -71,6 +73,8 @@ class Form
 					$selected	= ($value == $key)?"selected":"";
 				}
 			
+			$key = htmlspecialchars($key, ENT_QUOTES);
+			$val = htmlspecialchars($val, ENT_QUOTES);
 			$sel	.= "<option value='$key' $selected>$val</option>";
 		}
 		$sel	.=	"</select>";
