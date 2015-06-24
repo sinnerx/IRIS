@@ -26,8 +26,8 @@ class Data
 					"site/announcement_add"=>Array("sm","r","om"),
 					"site/editAnnouncement"=>Array("sm","r","om"),
 					"manager/edit"=>Array("r","om","sm"),
-					"user/profile"=>Array("r","om","sm","cl"),
-					"user/changePassword"=>Array("r","om","sm","cl"),
+					"user/profile"=>Array("r","om","sm","cl", "dv"),
+					"user/changePassword"=>Array("r","om","sm","cl", "dv"),
 					"site/message"=>Array("r","om"/*,"sm"*/,"cl"),
 					"site/messageView"=>Array("r","om"/*,"sm"*/,"cl"),
 					"file/index"=>Array("r","om", "sm"),
@@ -42,7 +42,7 @@ class Data
 					"billing/dailyJournal"=>Array("r","om", "sm"),
 					"billing/transactionJournal"=>Array("r","om", "sm"),
 					"billing/editForm"=>Array("r","om", "cl", "sm"),
-					"billing/delete"=>Array("r","om", "sm"),
+					"billing/delete"=>Array("r","om", "sm", "cl"),
 					"billing/settlement"=>Array("r","om", "sm"),
 					"billing/deleteItem"=>Array("r","om"),
 					"kpi/kpi_overview"=>Array("cl","r","om")								
@@ -77,7 +77,8 @@ class Data
 				3=>"clusterlead",
 				4=>"operationmanager",
 				5=>"financialcontroller",
-				99=>"root"
+				99=>"root",
+				999=>"developer"
 						);
 
 		return $levelR[$id];
@@ -90,7 +91,8 @@ class Data
 					3=>"cluster/overview",
 					4=>"site/index",
 					5=>"billing/add",
-					99=>"site/index"
+					99=>"site/index",
+					999=>'task/index'
 							);
 
 		return $locR[$level];
@@ -103,7 +105,8 @@ class Data
 				3=>"cl",
 				4=>"om",
 				5=>'fc',
-				99=>"r"
+				99=>"r",
+				999=>'dv'
 						);
 
 		return $levelR[$id];

@@ -16,6 +16,7 @@ class User extends \Origami
 	const LEVEL_OPERATIONMANAGER = 4;
 	const LEVEL_FINANCIALCONTROLLER = 5;
 	const LEVEL_ROOT = 99;
+	const LEVEL_DEVELOPER = 999;
 
 	/**
 	 * ORM : Delete user, set flag as deleted.
@@ -176,7 +177,8 @@ class User extends \Origami
 				self::LEVEL_CLUSTERLEAD => "Cluster Lead",
 				self::LEVEL_OPERATIONMANAGER=>"Operation Manager",
 				self::LEVEL_FINANCIALCONTROLLER=>"Financial Controller",
-				self::LEVEL_ROOT => "Root Admin"
+				self::LEVEL_ROOT => "Root Admin",
+				self::LEVEL_DEVELOPER => "Developer"
 						);
 
 		return !$no?$arr:$arr[$no];

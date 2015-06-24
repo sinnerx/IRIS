@@ -204,6 +204,10 @@ class Menu extends Data
 					"Reports"=>"reports/index"*/
 							);
 
+		$menu['dv'] = array(
+			'Tasks' => 'task/index'
+			);
+
 
 		return $menu[$level];
 	}

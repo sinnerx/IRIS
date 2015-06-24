@@ -800,3 +800,9 @@ purchase_requisition_item:
 	purchaseRequisitionItemName [varchar]
 	purchaseRequisitionItemCreatedDate [datetime]
 
+task_log:
+	taskLogID [int]
+	taskCode [varchar]
+	taskLogStatus [int] ## 0 = pending, 1 = success
+	taskLogCreatedDate [datetime]
+	taskLogCreatedUser [int]

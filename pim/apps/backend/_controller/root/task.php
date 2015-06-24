@@ -4,6 +4,31 @@ class Controller_Task
 {
 	var $template	= false;
 
+	public function testz()
+	{
+		$sites = model::orm('site/site')->where('siteID', 100)->execute();
+
+		echo $sites->count();
+	}
+
+	public function createDeveloper()
+	{
+		if(db::where("userIC", "DEVELOPER")->get('user')->row())
+		{
+			echo 'Failed to created. (exists.)';
+			return;
+		}
+
+		$data = array(
+			'userIC' => 'DEVELOPER',
+			'userPassword' => 12345,
+			'userEmail' => 'developer@fulkrum.com',
+			'userProfileFullName' => 'developer'
+			);
+
+		$row = model::load('user/user')->add($data, 999);
+	}
+
 	## wriiten in 21/7, to use for updating siteRefID with the old siteID.
 	public function updateSiteRefID()
 	{
