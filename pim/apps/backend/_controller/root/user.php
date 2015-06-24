@@ -167,11 +167,13 @@ class Controller_User
 				$emailCheck	= model::load("user/services")->checkEmail(input::get("userEmail"));
 			}
 
+			$userIC = str_replace('-', '', input::get('userIC'));
+
 			## ic check.
 			$icCheck	= false;
-			if(input::get("userIC") != $data['row']['userIC'])
+			if($userIC != $data['row']['userIC'])
 			{
-				$icCheck	= model::load("user/services")->checkIC(input::get("userIC"));
+				$icCheck	= model::load("user/services")->checkIC($userIC);
 			}
 
 			$rules	= Array(
@@ -195,6 +197,7 @@ class Controller_User
 
 			## update manager info.
 			$data	= input::get();
+			$data['userIC'] = $userIC;
 			$user->fullUpdate($userID,$data);
 
 			redirect::to("","Successfully updated user info.");
