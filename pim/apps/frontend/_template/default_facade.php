@@ -644,7 +644,44 @@ if($annList){?>
 <div class="bttm-1">
 <div class="maps-bottom">
 <div class="maps-container">
-<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1982.6780417481739!2d99.76039763995057!3d6.347917847778613!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x304c78508590bd0f%3A0xa081e5cf738400d2!2sKampung+Bukit+Tangga!5e0!3m2!1sen!2s!4v1394689646969" width="390" height="200" frameborder="0" style="border:0"></iframe>
+  <div class="maps-container">
+  <?php
+  $row_site['siteInfoLatitude'] = !is_numeric($row_site['siteInfoLatitude'])?3.0714381964016:$row_site['siteInfoLatitude'];
+  $row_site['siteInfoLongitude']  = !is_numeric($row_site['siteInfoLongitude'])?101.39110565186:$row_site['siteInfoLongitude'];
+  ?>
+  <style type="text/css">
+  
+  #mymap
+{
+width:390px;
+height:200px;
+}
+  </style>
+  <script type='text/javascript' src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAJYP04YDNcHuvcjj317GNsZblEK32L76M&sensor=false"></script>
+  <script type="text/javascript">
+  jQuery(document).ready(function()
+  {
+    var latLng  = new google.maps.LatLng(<?php echo $row_site['siteInfoLatitude'].",".$row_site['siteInfoLongitude'];?>)
+    var options = {
+      zoom:13,
+      center: latLng
+    };
+
+    //initiate map.
+    var map = new google.maps.Map(document.getElementById("mymap"),options);
+
+    //add marker
+    var marker  = new google.maps.Marker({
+      position: latLng,
+      map: map,
+      title: "<?php echo $row_site['siteName'];?>"
+    });
+    
+  });
+  </script>
+  <div id='mymap' style="width:100%;height:200px;">
+  </div>
+  <!-- <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1982.6780417481739!2d99.76039763995057!3d6.347917847778613!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x304c78508590bd0f%3A0xa081e5cf738400d2!2sKampung+Bukit+Tangga!5e0!3m2!1sen!2s!4v1394689646969" width="390" height="200" frameborder="0" style="border:0"></iframe> -->
 </div>
 <div class="maps-label"></div>
 </div>
