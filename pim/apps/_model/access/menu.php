@@ -28,18 +28,19 @@ class Menu extends Data
 						"Template"=>"newsletter/template",
 						"Subscribers"=>"newsletter/subscribers"
 						),
-					"Billing"=>Array(
+/*					"Billing"=>Array(
 						"Input Form"=>"billing/add",
 						"Edit Form"=>"billing/edit",
 						"Daily Cash Process"=>"billing/dailyCashProcess",
 						"Daily Journal"=>"billing/dailyJournal",
-						"Transaction Journal"=>"billing/transactionJournal",
-						#"Purchase Requisition"=>"billing/transactionJournal"
+						"Transaction Journal"=>"billing/transactionJournal"
 						),
-					"Purchase Requisition"=>Array(
-						"Add"=>"requisition/add"
-						
-						),
+					"PI1M Expense"=>Array(
+						"List of PR / RL"=>"expense/add",
+						"Purchase Requisition"=>"expense/add",
+//						"PR Collection Money"=>"expense/addPRCollectionMoney",			
+						"Reconciliation List"=>"expense/reconciliation"			
+						),*/
 					"Pages"=>"page/index",
 					"Blog" =>Array(
 							"List of Articles"=>Array("site/article","site/editArticle"),
@@ -77,30 +78,33 @@ class Menu extends Data
 								"KPI Overview"=>"kpi/kpi_overview/1",
 								"Cluster Overview"=>Array("cluster/overview")
 									),
-					
+				/*	
 					"Billing"=>Array(
 						"Input Form"=>"billing/add",
 						"Edit Form"=>"billing/edit",
 						"Daily Cash Process"=>"billing/dailyCashProcess"
-						//"Daily Journal"=>"billing/dailyJournal",
-						//"Transaction Journal"=>"billing/transactionJournal"
 						),
+					"PI1M Expense"=>Array(
+						"List of PR / RL"=>"expense/add",
+						"Purchase Requisition"=>"expense/add",
+						"Reconciliation List"=>"expense/reconciliation"			
+						),*/
 							);
 
-		$menu['fc']	= Array(
+	/*	$menu['fc']	= Array(
 					//"Overview"=>Array(
 					//			"Cluster Overview"=>Array("cluster/overview")
 					//				),
 					
 					"Billing"=>Array(
 						"Input Form"=>"billing/add",
-						//"Edit Form"=>"billing/edit",
 						"Daily Cash Process"=>"billing/dailyCashProcess"
-						//"Daily Journal"=>"billing/dailyJournal",
-						//"Transaction Journal"=>"billing/transactionJournal"
+						),
+					"PI1M Expense"=>Array(
+						"List of PR / RL"=>"expense/add"				
 						),
 							);
-
+*/
 		## root.
 		$menu['r']	= Array(
 					/*"Overview"=>"home/index",*/
@@ -126,13 +130,20 @@ class Menu extends Data
 								"Parameters"=>Array("config/index"),
 								"Article Category"=>Array("article/category"),
 											),
-					"Billing"=>Array(
+					/*"Billing"=>Array(
 							"Input Form"=>"billing/add",
 							"Edit Form"=>"billing/edit",
 							"Daily Cash Process"=>"billing/dailyCashProcess",
 							"Daily Journal"=>"billing/dailyJournal",
 							"Transaction Journal"=>"billing/transactionJournal"
 						),
+
+					"PI1M Expense"=>Array(
+						"List of PR / RL"=>"expense/add",
+						"Purchase Requisition"=>"expense/add",
+//						"PR Collection Money"=>"expense/addPRCollectionMoney",			
+						"Reconciliation List"=>"expense/reconciliation"			
+						),*/
 					
 					"Activities"=>Array(
 							"Training"=>Array("activity/training","activity/trainingTypeAdd","activity/trainingTypeEdit")
@@ -154,8 +165,8 @@ class Menu extends Data
 							);
 
 	## root.
-		$menu['om']	= Array(
-					/*"Overview"=>"home/index",*/
+		/* $menu['om']	= Array(
+				
 					"Sites"=>Array(
 							"KPI Overview"=>"kpi/kpi_overview/1",
 							"Announcement"=>Array("site/announcement","site/announcement_add","site/editAnnouncement"),
@@ -170,7 +181,7 @@ class Menu extends Data
 					"Cluster"=>Array(
 							"Cluster List"=>Array("cluster/lists"),
 							"Cluster Lead"=>Array("cluster/leadLists","cluster/leadAdd","cluster/sitelist","cluster/assign")
-									),*/
+									),
 					"Management"=>Array(
 							"User"=>Array("user/lists","user/add","user/edit")
 										),
@@ -200,9 +211,8 @@ class Menu extends Data
 							"Google Analytics"=>"googleanalytics/report",
 							"Monthly Activity Report"=>"report/getallActivityReport"
 									),
-					/*"Activities"=>"activity/index",
-					"Reports"=>"reports/index"*/
-							);
+			
+							);*/
 
 		$menu['dv'] = array(
 			'Tasks' => 'task/index'
