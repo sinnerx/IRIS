@@ -570,7 +570,7 @@ Add an activity to your site. All new activities will not be published until the
 						<?php /*echo flash::data("activityDate");*/?>
                         </div>
 					</label>
-					<span style='text-align:right;position:absolute;right:0px;'>
+					<span>
 						<?php echo form::select("activityAllDateAttendance",Array(1=>"All date required",2=>"Participant may choose date"),"style='padding:4px;border:1px solid #d2d2d2;'",null,"[Date obligation]");?>
 					</span>
 					<?php echo form::hidden("activityDateTime");?>
