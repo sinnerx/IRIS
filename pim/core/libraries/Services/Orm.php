@@ -118,6 +118,7 @@ class Orm
 				{
 					$localID = isset($args['local']) ? $args['local'] : $primary;
 					$foreignID = $args['foreign'];
+
 				}
 				else
 				{
@@ -125,8 +126,7 @@ class Orm
 					$foreignID = $args; 
 				}
 
-
-				db::join($foreignTable, $table.'.'.$primary.' = '.$foreignTable.'.'.$foreignID);
+				db::join($foreignTable, $table.'.'.$localID.' = '.$foreignTable.'.'.$foreignID);
 			}
 		}
 
