@@ -466,7 +466,7 @@ class Activity extends \Origami
 			break;
 		}
 
-		db::order_by("activityCreatedDate","desc");
+		db::order_by("activityStartDate","desc");
 		db::limit(10,pagination::recordNo()-1);
 
 		return db::get()->result("activityID");
