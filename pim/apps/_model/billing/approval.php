@@ -23,7 +23,7 @@ class Approval extends \Origami
 	public function disapprove($level)
 	{
 		if($level == \model\user\user::LEVEL_FINANCIALCONTROLLER)
-			$this->setApprovalStatus(\model\user\user::LEVEL_CLUSTERLEAD, 0);
+			$this->setApprovalStatus(\model\user\user::LEVEL_CLUSTERLEAD, 2);
 
 		return $this->setApprovalStatus($level, 2);
 	}
@@ -31,7 +31,7 @@ class Approval extends \Origami
 	public function reject($level)
 	{
 		if($level == \model\user\user::LEVEL_CLUSTERLEAD)
-			$this->setRejectStatus(\model\user\user::LEVEL_SITEMANAGER, 0);
+			$this->setRejectStatus(\model\user\user::LEVEL_SITEMANAGER, 2);
 
 		return $this->setRejectStatus($level, 2);
 	}

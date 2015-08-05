@@ -80,7 +80,6 @@ class process
 
 	public function getListTotal($siteID,$month,$year)
 	{
-
 		db::select("siteID","date(billingTransactionDate) as transactionDate","billing_item.billingItemName","billing_item.billingItemID",
 				"sum(`billingTransactionQuantity`) as quantity", "sum(`billingTransactionUnit`) as unit","sum(`billingTransactionTotal`) as total");
 		db::from("billing_transaction")
@@ -92,5 +91,12 @@ class process
 		return db::get()->result();
 	}
 
+	public function getCurrentCollection($siteID,$startDate,$lastDate)
+	{ 
+		db::select("sum(`billingTransactionTotal`) as total");
+		db::from("billing_transaction")
+			->where("siteID = '$siteID' AND billingTransactionDate between '$startDate' AND '$lastDate' AND billingTransactionStatus = 1");
 
+		return db::get()->row();
+	}
 }

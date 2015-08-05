@@ -213,6 +213,11 @@ Class Controller_Billing
 					$message = 'Transaction for this month already checked, no new transaction allowed.';
 					redirect::to('billing/add', $message, 'error');	
 
+				} elseif ($checkManager['billingApprovalLevelStatus'] == 0){
+
+					$message = 'This transaction not allowed, Site Manager should checked first';
+					redirect::to('billing/add', $message, 'error');				
+					
 				}				
 
 
@@ -563,6 +568,8 @@ Class Controller_Billing
 				
 					$approval->disapprove(authData('user.userLevel'));
 
+					$approval->reject(\model\user\user::LEVEL_CLUSTERLEAD);
+
 					$approvalDetail = $approval->getApprovalDetail($approval->billingApprovalID,\model\user\user::LEVEL_FINANCIALCONTROLLER);
 					$userDetail = model::load('user/user')->getUsersByID($approvalDetail['userID']);								
 					
@@ -724,7 +731,7 @@ Class Controller_Billing
 		$todayDateEnd = date('Y-m-d', strtotime($todayDateEnd)); 
 
 		$data['journal'] = model::orm('billing/journal')
-				->where("siteID = '$siteID' AND billingTransactionDate >= '$todayDateStart' AND billingTransactionDate <= '$todayDateEnd%' AND billingTransactionStatus = 1")
+				->where("siteID = '$siteID' AND billingTransactionDate >= '$todayDateStart' AND billingTransactionDate <= '$todayDateEnd 23:59:59' AND billingTransactionStatus = 1")
 				->join("billing_item", "billing_item.billingItemID = billing_transaction.billingItemID")
 				->order_by("billingTransactionDate","ASC")
 				->execute();
