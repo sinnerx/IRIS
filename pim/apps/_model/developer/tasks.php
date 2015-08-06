@@ -25,6 +25,10 @@ class Tasks
 		$manager->addTask('addRootCoordinator', array(
 			'description' => 'add root (coordinator)'
 			));
+		
+		$manager->addTask('addOperationManager', array(
+			'description' => 'add Operation Manager'
+			));
 
 		$manager->addTask('purchaseRequisitionCategory', array(
 			'description' => 'P1IM expense category'
@@ -62,6 +66,18 @@ class Tasks
 			);
 
 		$row = \model::load('user/user')->add($data, 99);
+	}
+
+	public function addOperationManager()
+	{
+		$data = array(
+			'userIC' => 'OPSMANAGER',
+			'userPassword' => 12345,
+			'userEmail' => 'opsmanager@gmail.com',
+			'userProfileFullName' => 'Operation Manager'
+			);
+
+		$row = \model::load('user/user')->add($data, 4);
 	}
 }
 
