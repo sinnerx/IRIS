@@ -779,13 +779,49 @@ purchase_requisition:
 	purchaseRequisitionId [int]
 	userID [int]
 	siteID [int]
-	purchaseRequisitionItemId [int]
-	purchaseRequisitionDescription [varchar]
-	purchaseRequisitionPrice [float]
-	purchaseRequisitionQuantity [int]
-	purchaseRequisitionTotal [float]
+	purchaseRequisitionType [int] ##1 = Collection Money 2 = cash advance
+	purchaseRequisitionNumber [varchar] ##PR Number
+	purchaseRequisitionExpenses [int]
+	purchaseRequisitionEquipment [int]
+	purchaseRequisitionEvent [int]
+	purchaseRequisitionAdhocevent [int]
+	purchaseRequisitionOther [int]
+	purchaseRequisitionCitizen [int]
+	purchaseRequisitionBalance [float]
+	purchaseRequisitionDeposit [float]
+	purchaseRequisitionRemark [varchar]
 	purchaseRequisitionDate [date]
 	purchaseRequisitionCreatedDate [datetime]
+	purchaseRequisitionUpdatedDate [datetime]
+
+purchase_requisition_detail:
+	purchaseRequisitionDetailId [int]
+	purchaseRequisitionId [int]
+	purchaseRequisitionDetailItemId [int]
+	purchaseRequisitionDetailDescription [varchar]
+	purchaseRequisitionDetailPrice [float]
+	purchaseRequisitionDetailQuantity [int]
+	purchaseRequisitionDetailTotal [float]
+	purchaseRequisitionDetailRemark [varchar]
+	purchaseRequisitionDetailEdit [varchar]
+	purchaseRequisitionDetailCreatedDate [datetime]
+	purchaseRequisitionDetailUpdatedDate [datetime]
+
+purchase_requisition_cash_advance:
+	purchaseRequisitionCashAdvanceId [int]
+	purchaseRequisitionId [int]
+	purchaseRequisitionCashAdvancePurpose [varchar]
+	purchaseRequisitionCashAdvanceTotal [varchar]
+	purchaseRequisitionCashAdvanceCreatedDate [datetime]
+
+purchase_requisition_cash_detail:
+	purchaseRequisitionCashDetailId [int]
+	purchaseRequisitionId [int]
+	purchaseRequisitionCashAdvanceId [int]
+	purchaseRequisitionCashDetailItem [varchar]
+	purchaseRequisitionCashDetailAmount [float]
+	purchaseRequisitionCashDetailCreatedDate [datetime]
+	purchaseRequisitionCashDetailUpdatedDate [datetime]
 
 purchase_requisition_category:
 	purchaseRequisitionCategoryId [int]
@@ -799,6 +835,39 @@ purchase_requisition_item:
 	siteID [int]
 	purchaseRequisitionItemName [varchar]
 	purchaseRequisitionItemCreatedDate [datetime]
+
+purchase_requisition_file: ## reconciliaton list
+	purchaseRequisitionFileId [int]
+	purchaseRequisitionId [int]
+	purchaseRequisitionCategoryId [int]
+	siteID [int]
+	purchaseRequisitionFileName [varchar]
+	purchaseRequisitionFileType [varchar]
+	purchaseRequisitionFileSize [int]
+	purchaseRequisitionFileExt [varchar]
+	purchaseRequisitionFileAmount [float]
+	purchaseRequisitionFileGst [float]
+	purchaseRequisitionFileTotal [float]
+	purchaseRequisitionFileStatus [int]
+	purchaseRequisitionFileCreatedUser [int]
+	purchaseRequisitionFileCreatedDate [datetime]
+	purchaseRequisitionFileUpdatedDate [datetime]
+
+expense_approval:
+	expenseApprovalID [int]
+	purchaseRequisitionId [int]
+	expenseApprovalType [int] ## 1 = pr 2 = cash advance 3 = rl
+	siteID [int]
+	purchaseRequisitionCreatedDate [datetime]
+	expenseApprovalCreatedDate [datetime]
+
+expense_approval_level:	
+	expenseApprovalLevelID [int]
+	expenseApprovalID [int]
+	userLevel [int]
+	userID [int]
+	expenseApprovalLevelStatus [int] ## 0 = request; 1 = approve; 2 = reject;
+	expenseApprovalLevelCreatedDate [datetime]
 
 task_log:
 	taskLogID [int]

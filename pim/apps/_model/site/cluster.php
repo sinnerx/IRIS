@@ -183,6 +183,16 @@ class Cluster extends \Origami
 
 		return db::get("cluster_lead")->row();
 	}
+
+	public function getClustersByUser($userID)
+	{
+		db::where(Array(
+				"clusterLeadStatus"=>1,
+				"userID"=>$userID
+				));
+		
+		return db::get("cluster_lead")->result();
+	}
 }
 
 

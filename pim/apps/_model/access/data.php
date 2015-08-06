@@ -45,7 +45,8 @@ class Data
 					"billing/delete"=>Array("r","om", "sm", "cl"),
 					"billing/settlement"=>Array("r","om", "sm"),
 					"billing/deleteItem"=>Array("r","om"),
-					"kpi/kpi_overview"=>Array("cl","r","om")								
+					"kpi/kpi_overview"=>Array("cl","r","om"),								
+					"expense/listStatus"=>Array("sm","cl","om")		
 
 							);
 
@@ -89,7 +90,7 @@ class Data
 		$locR	= Array(
 					2=>"site/overview",
 					3=>"cluster/overview",
-					4=>"site/index",
+					4=>"expense/listStatus",
 					5=>"billing/add",
 					99=>"site/index",
 					999=>'task/index'
