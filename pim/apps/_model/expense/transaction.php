@@ -1,14 +1,14 @@
 <?php 
 
 namespace model\expense;
-use db, model, session;
+use db, model, session, pagination, url;
 
 class transaction extends \Origami
 { 
 	protected $table = 'purchase_requisition';
 	protected $primary = 'purchaseRequisitionId';
 	
-	public function getPRList($allSiteID = null,$level = null)
+	public function getPRList($allSiteID = null,$level = null,$page)
 	{
 		if ($level == \model\user\user::LEVEL_CLUSTERLEAD) {
 			db::where('siteID IN (' . implode(',', array_map('intval', $allSiteID)) . ')');
@@ -19,11 +19,19 @@ class transaction extends \Origami
 		}
 
 		db::from("purchase_requisition");
-		
+				pagination::setFormat(model::load('template/cssbootstrap')->paginationLink());
+				pagination::initiate(Array(
+								"totalRow"=>db::num_rows(),
+								"limit"=>5,				
+								"urlFormat"=>url::base("expense/listStatus/{page}"),
+								"currentPage"=>$page
+										));
+
+		db::limit(pagination::get("limit"),pagination::recordNo()-1);
 		return db::get()->result();
 	}
 
-	public function getRLList($allSiteID = null,$level = null)
+	public function getRLList($allSiteID = null,$level = null, $page, $prNumber = null)
 	{
 		if ($level == \model\user\user::LEVEL_CLUSTERLEAD) {
 			db::where('siteID IN (' . implode(',', array_map('intval', $allSiteID)) . ')');
@@ -33,8 +41,24 @@ class transaction extends \Origami
 		}
 	
 		db::from("purchase_requisition");
-		db::where("purchase_requisition.purchaseRequisitionNumber != ''");
-	//	db::join("purchase_requisition_file", "purchase_requisition_file.purchaseRequisitionId = purchase_requisition.purchaseRequisitionId");
+
+		if ($prNumber != null) {
+
+			db::where("purchase_requisition.purchaseRequisitionNumber LIKE '$prNumber'");
+		} else {
+
+			db::where("purchase_requisition.purchaseRequisitionNumber != ''");
+		}
+				pagination::setFormat(model::load('template/cssbootstrap')->paginationLink());
+				pagination::initiate(Array(
+								"totalRow"=>db::num_rows(),
+								"limit"=>5,				
+								"urlFormat"=>url::base("expense/listStatusRL/{page}"),
+								"currentPage"=>$page
+										));
+
+		db::limit(pagination::get("limit"),pagination::recordNo()-1);		
+		
 		return db::get()->result();
 	}
 
@@ -123,8 +147,10 @@ class transaction extends \Origami
 
 						);
 
-		db::insert("purchase_requisition_detail",$data);
-	}
+		if ($itemList['itemPrice'] != ""){
+			db::insert("purchase_requisition_detail",$data);
+		}
+	}	
 
 	public function updateTransaction($id,$itemList) # userid:itemid:quantity:price:total
 	{
@@ -159,10 +185,12 @@ class transaction extends \Origami
 
 			$changes = $changes."r ".$update[0][purchaseRequisitionDetailRemark]."-".$itemList['itemRemark'].":";
 		}  */
+
 		
 		if (substr_count($changes, 'x') != 3){
 
 			$changes = authData('user.userID').":".$update[0][purchaseRequisitionDetailId].":".$changes."|";
+
 			$log = $this->setLog($id,authData('user.userID'));
 
 			$data	= Array(
@@ -178,9 +206,7 @@ class transaction extends \Origami
 
 			db::where('purchaseRequisitionDetailId', $itemList['prDetailId']);
 			db::update("purchase_requisition_detail",$data);
-		} else {
-			$log = $this->setLog($id,"");
-		}
+		} 
 	}
 
 	public function getCompareTransaction($itemList)
@@ -238,26 +264,10 @@ class transaction extends \Origami
 
 		$pieces = explode(":", $list);
 
-		// str_replace("world","Peter","Hello world!");
+		if ($pieces[2] == "x") { $q = 1; } else { $q = 0; }
+		if ($pieces[3] == "x") { $p = 1; } else { $p = 0; }
+		if ($pieces[4] == "x") { $t = 1; } else { $t = 0; }
 
-		//Array ( [0] => 170 [1] => 6 [2] => 1-3 [3] => 33-11 [4] => x [5] => )
-//
-		//$opsManager = model::load('user/user')->getUsersByID($pieces[0]);
-
-			//echo "--".$pieces[1];
-
-		if ($pieces[2] != "x") { $q = 1; } else { $q = 0; }
-		if ($pieces[3] != "x") { $p = 1; } else { $p = 0; }
-		if ($pieces[4] != "x") { $t = 1; } else { $t = 0; }
-
-
-		
-	/*	$pieces[0] edit item $pieces[1] quantity $pieces[2]
-										price $pieces[3]
-										total $pieces[4]		*/	
-		
-
-//170:1:1-3:33-11:x: 170:2:x:66-44:66-44: 170:3:x:22-10:22-20: 
 		return array('1' => $q,
 					 '2' => $p,
 					 '3' => $t );

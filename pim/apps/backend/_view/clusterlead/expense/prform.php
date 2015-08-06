@@ -14,6 +14,35 @@
     });
   });
 
+var requisition = new function()
+{
+
+  this.calculate = function(key)
+    {
+
+      var result = 1.00;
+      $('#itemTotalPrice'+key).attr('value', function() {
+          $('.amount'+key).each(function() {
+              if ($(this).val() !== '') {
+                  result *= parseFloat($(this).val());
+              }
+          });
+          return result;
+      });
+
+      var result = 0.00;
+      $('#allTotal').attr('value', function() {
+          $('.total').each(function() {
+              if ($(this).val() !== '') {
+                  result += parseFloat($(this).val());
+              }
+          });
+          return result;
+      });
+    } 
+}    
+
+
 </script>
 
 
@@ -62,26 +91,26 @@
                  <tr>
                   <td><label>PI1M:</label></td>
                   <td>Budgeted:</td>           
-                  <?php //if ($prFile[0]['purchaseRequisitionExpenses'] == 1) { $checked1 = "checked";} ?>
-                  <td colspan="2"><input name='expenses' type="checkbox" disabled="disabled" value="1"> PI1M Expenses</td>
-                  <?php //if ($prFile[0]['purchaseRequisitionEquipment'] == 1) { $checked2 = "checked";} ?>
-                  <td colspan="2"><input name='equipment' type="checkbox" disabled="disabled" value="1"> PI1M Equipment</td>
+                  <?php if ($prFile[0]['purchaseRequisitionExpenses'] == 1) { $checked1 = "checked";} ?>
+                  <td colspan="2"><input name='expenses' type="checkbox" disabled="disabled" <?php echo $checked1?>> PI1M Expenses</td>
+                  <?php if ($prFile[0]['purchaseRequisitionEquipment'] == 1) { $checked2 = "checked";} ?>
+                  <td colspan="2"><input name='equipment' type="checkbox" disabled="disabled" <?php echo $checked2?>> PI1M Equipment</td>
                 </tr>
                  <tr>
                   <td><?php echo $siteName['siteName']; ?></td>
                   <td>Addition:</td>                        
-                  <?php //if ($prFile[0]['purchaseRequisitionEvent'] == 1) { $checked3 = "checked";} ?>             
-                  <td colspan="2"><input name='event' type="checkbox" disabled="disabled" value="1"> Scheduled Event</td>
-                  <?php //if ($prFile[0]['purchaseRequisitionAdhocevent'] == 1) { $checked4 = "checked";} ?>
-                  <td colspan="2"><input name='adhocevent' type="checkbox" disabled="disabled" value="1"> Ad hoc Event</td>
+                  <?php if ($prFile[0]['purchaseRequisitionEvent'] == 1) { $checked3 = "checked";} ?>             
+                  <td colspan="2"><input name='event' type="checkbox" disabled="disabled" <?php echo $checked3?>> Scheduled Event</td>
+                  <?php if ($prFile[0]['purchaseRequisitionAdhocevent'] == 1) { $checked4 = "checked";} ?>
+                  <td colspan="2"><input name='adhocevent' type="checkbox" disabled="disabled" <?php echo $checked4?>> Ad hoc Event</td>
                 </tr>
                  <tr>
                   <td></td>
                   <td>Replacement:</td>
-                  <?php //if ($prFile[0]['purchaseRequisitionOther'] == 1) { $checked5 = "checked";} ?>
-                  <td colspan="2"><input name='other' type="checkbox" disabled="disabled" value="1"> Other</td>
-                  <?php //if ($prFile[0]['purchaseRequisitionCitizen'] == 1) { $checked6 = "checked";} ?>
-                  <td colspan="2"><input name='1citizen' type="checkbox" disabled="disabled" value="1"> 1Citizen</td>
+                  <?php if ($prFile[0]['purchaseRequisitionOther'] == 1) { $checked5 = "checked";} ?>
+                  <td colspan="2"><input name='other' type="checkbox" disabled="disabled" <?php echo $checked5 ?>> Other</td>
+                  <?php if ($prFile[0]['purchaseRequisitionCitizen'] == 1) { $checked6 = "checked";} ?>
+                  <td colspan="2"><input name='1citizen' type="checkbox" disabled="disabled" <?php echo $checked6 ?>> 1Citizen</td>
                 </tr>
              </table>
 
@@ -102,9 +131,9 @@
                  <tr>  
                   <td><?php echo $key+1; ?></td> 
                   <td><?php echo $itemList[$category['purchaseRequisitionDetailItemId']]." : ".$category['purchaseRequisitionDetailDescription']; ?></td>     
-                  <td><input type="text" size="5" onchange="requisition.calculate();" class="form-control amount" name="item[itemQuantity][<?php echo $key+1; ?>]" id="itemQuantity" value="<?php echo $category['purchaseRequisitionDetailQuantity']; ?>"/></td>
-                  <td><input type="text" size="5" onchange="requisition.calculate();" class="form-control amount" name="item[itemPrice][<?php echo $key+1; ?>]" id="itemPrice" value="<?php echo $category['purchaseRequisitionDetailPrice']; ?>"/></td>
-                  <td><input type="text" size="5" class="form-control total" name="item[itemTotalPrice][<?php echo $key+1; ?>]" id="itemTotalPrice" value="<?php echo $category['purchaseRequisitionDetailTotal']; ?>"/></td>
+                  <td><input type="text" size="5" onchange="requisition.calculate(<?php echo $key+1?>);" class="form-control amount<?php echo $key+1?>" name="item[itemQuantity][<?php echo $key+1; ?>]" id="itemQuantity" value="<?php echo $category['purchaseRequisitionDetailQuantity']; ?>"/></td>
+                  <td><input type="text" size="5" onchange="requisition.calculate(<?php echo $key+1?>);" class="form-control amount<?php echo $key+1?>" name="item[itemPrice][<?php echo $key+1; ?>]" id="itemPrice" value="<?php echo $category['purchaseRequisitionDetailPrice']; ?>"/></td>
+                  <td><input type="text" size="5" class="form-control total" name="item[itemTotalPrice][<?php echo $key+1; ?>]" id="itemTotalPrice<?php echo $key+1; ?>" value="<?php echo $category['purchaseRequisitionDetailTotal']; ?>"/></td>
                   <td><input type="text" class="form-control" name="item[itemRemark][<?php echo $key+1; ?>]" id="itemRemark" value="<?php echo $category['purchaseRequisitionDetailRemark']; ?>"/></td>
                   <td></td>
                 </tr>

@@ -36,7 +36,8 @@ class Menu extends Data
 						"Transaction Journal"=>"billing/transactionJournal"
 						),
 					"PI1M Expense"=>Array(
-						"List of PR / RL"=>"expense/listStatus",
+						"List of PR"=>"expense/listStatus",
+						"List of RL"=>"expense/listStatusRL",
 						"Purchase Requisition"=>"expense/add"
 						/*"Reconciliation List"=>"expense/reconciliation"			*/
 						),
@@ -84,9 +85,8 @@ class Menu extends Data
 						"Daily Cash Process"=>"billing/dailyCashProcess"
 						),
 					"PI1M Expense"=>Array(
-						"List of PR / RL"=>"expense/listStatus"
-						/*"Purchase Requisition"=>"expense/add",
-						"Reconciliation List"=>"expense/reconciliation"*/
+						"List of PR"=>"expense/listStatus",
+						"List of RL"=>"expense/listStatusRL"
 						),
 							);
 
@@ -97,7 +97,7 @@ class Menu extends Data
 						"Daily Cash Process"=>"billing/dailyCashProcess"
 						),
 					"PI1M Expense"=>Array(
-						"List of PR / RL"=>"expense/add"				
+						"List of PR"=>"expense/add"				
 						),
 							);
 
@@ -135,7 +135,8 @@ class Menu extends Data
 						),
 					
 					"PI1M Expense"=>Array(
-						"List of PR / RL"=>"expense/listStatus"
+						"List of PR"=>"expense/listStatus",
+						"List of RL"=>"expense/listStatusRL"
 						),
 					
 					"Activities"=>Array(
@@ -163,7 +164,8 @@ class Menu extends Data
 			
 
 					"PI1M Expense"=>Array(
-						"List of PR / RL"=>"expense/listStatus"
+						"List of PR"=>"expense/listStatus",
+						"List of RL"=>"expense/listStatusRL"
 						),
 
 							);

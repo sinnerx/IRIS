@@ -302,11 +302,11 @@ class Controller_Expense
 		$siteID = $reconciliation->siteID;
 		$createdDate = $reconciliation->purchaseRequisitionCreatedDate;
 		if (input::get('check') == 2 ) {
-			redirect::to('expense/listStatus', $message, 'success');												
+			redirect::to('expense/listStatusRL', $message, 'success');												
 		}
 		$approval = model::load('expense/approval')->getApproval($prID, $type, $siteID, $createdDate);
 		$message = 'Submitted';
-		redirect::to('expense/listStatus', $message, 'success');									
+		redirect::to('expense/listStatusRL', $message, 'success');									
 	}
 
 	public function viewRList($prId) # view Reconciliation List
