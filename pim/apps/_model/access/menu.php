@@ -135,8 +135,8 @@ class Menu extends Data
 						),
 					
 					"PI1M Expense"=>Array(
-						"List of PR"=>"expense/listStatus",
-						"List of RL"=>"expense/listStatusRL"
+						"List of PR"=>"expense/listStatus"
+						//"List of RL"=>"expense/listStatusRL"
 						),
 					
 					"Activities"=>Array(

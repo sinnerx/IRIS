@@ -8,12 +8,12 @@ class Controller_Expense
 	}
 
 
-	public function listStatus()
+	public function listStatus($page=1)
 	{	
 				
 		$data['prTerm'] = model::load('expense/transaction')->getPrTerm();
-		$data['listPR'] = model::load('expense/transaction')->getPRList();
-		$data['listRL'] = model::load('expense/transaction')->getRLList();
+		$data['listPR'] = model::load('expense/transaction')->getPRList($allSiteID,$level,$page);
+	//	$data['listRL'] = model::load('expense/transaction')->getRLList();
 
 		view::render("root/expense/list",$data);		
 	}

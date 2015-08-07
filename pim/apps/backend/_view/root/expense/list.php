@@ -57,11 +57,12 @@
                   <th width="10%"></th>
                 </tr>
           
-          <?php foreach ($listPR as $key => $list): 
+          <?php $no = pagination::recordNo();
 
-          ?>           
+          foreach ($listPR as $key => $list):?>           
+
                 <tr id = "<?php echo $key ?>">
-                  <td><?php echo $key + 1; ?></td>
+                  <td><?php echo $no++; ?></td>
                   <td><?php $siteName = model::load('site/site')->getSite($list['siteID']);
                       echo $siteName['siteName']; ?>
                   </td>
@@ -102,7 +103,13 @@
         
     </form>
     </section>
-
+          <footer class='panel-footer'>
+            <div class='row'>
+              <div class="col-sm-10">
+                <?php echo pagination::link();?>
+              </div>
+            </div>
+          </footer>
        
      </div>
 </div>
