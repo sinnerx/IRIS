@@ -34,6 +34,32 @@ class Controller_User
 		view::render("root/user/lists",$data);
 	}
 
+	public function upgradeUser()
+	{
+		$data = array();
+		if(request::get('ic'))
+		{
+			$data['row'] = db::where('userIC', request::get('ic'))
+			->where('userLevel', 1)
+			->join('user_profile', 'user_profile.userID = user.userID')
+			->get('user')
+			->row();
+
+			if($data['row'] && request::get('userLevel') && request::get('userID'))
+			{
+				// upgrade this user to the given level.
+				db::where('userID', request::get('userID'))->update('user', array(
+					'userLevel' => request::get('userLevel')
+					));
+
+				$levels = array(2 => 'Manager', 3 => 'Clusterlead');
+				redirect::to('user/upgradeUser', 'Successfully upgraded user '.request::get('ic').' to '.$levels[request::get('userLevel')]);
+			}
+		}
+
+		view::render('root/user/upgradeUser', $data);
+	}
+
 	public function add()
 	{
 		$data['userLevelR']	= $this->userLevelR;

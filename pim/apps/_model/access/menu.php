@@ -120,7 +120,8 @@ class Menu extends Data
 							"Cluster Lead"=>Array("cluster/leadLists","cluster/leadAdd","cluster/sitelist","cluster/assign")
 									),*/
 					"Management"=>Array(
-							"User"=>Array("user/lists","user/add","user/edit")
+							"User"=>Array("user/lists","user/add","user/edit"),
+							"User Upgrade" => array('user/upgradeUser')
 										),
 					"Configuration"=>Array(
 								"Parameters"=>Array("config/index"),
