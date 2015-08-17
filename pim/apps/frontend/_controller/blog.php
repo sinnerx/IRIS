@@ -120,7 +120,17 @@ Class Controller_Blog
 		$data['articleTags'] = model::load("blog/article")->getArticleTag($data['article']['articleID']);
 
 		$data['activity'] = model::load("blog/article")->getActivityArticle($data['article']['articleID']);
-		$data['activity'][0]['data'] = model::load("activity/activity")->getActivity($data['activity'][0]['activityID']);
+		// $data['activity'][0]['data'] = model::load("activity/activity")->getActivity($data['activity'][0]['activityID']);
+
+		// temporary bug fix
+		db::select($col);
+		db::where("activity.activityID", $data['activity'][0]['activityID']);
+		db::where("siteID", authData('current_site.siteID'));
+		db::join("event","activityType = '1' AND activity.activityID = event.activityID");
+		db::join("training","activityType = '2' AND activity.activityID = training.activityID");
+		$data['activity'][0]['data'] = db::get("activity")->row($col);
+		// temporary bug fix, end.
+
 		$data['category'] = model::load("blog/category")->getArticleCategoryList($data['article']['articleID']);
 
 		view::render("blog/view",$data);
