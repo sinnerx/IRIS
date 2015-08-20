@@ -67,7 +67,7 @@ var participants = new function()
 
 		var currentTotal	= $("#participant-table tr").length - 1;
 		var currNo			= currentTotal+1;
-		$("#participant-table").append("<tr class='participant-added-row new'><td>"+currNo+".</td><td><div class='input-group' id='search-box'>"+'<input type="text" placeholder="I.C. or Member\'s name" class="form-control">'+"<span class='input-group-btn'><button class='btn btn-default' onclick='participants.searchByObj(this)' type='button'>Find</button></span></div></td>"+tdR+"<td style='color:red;' class='container-delete'><span onclick='participants.addCancel(this);' style='cursor:pointer;'>X</span></td></tr>");
+		$("#participant-table").append("<tr class='participant-added-row new'><td>"+currNo+".</td><td><div class='input-group' id='search-box'>"+'<input type="text" onkeyup="participants.searchByEnter(this, window.event);" placeholder="I.C. or Member\'s name" class="form-control">'+"<span class='input-group-btn'><button class='btn btn-default' onclick='participants.searchByObj(this)' type='button'>Find</button></span></div></td>"+tdR+"<td style='color:red;' class='container-delete'><span onclick='participants.addCancel(this);' style='cursor:pointer;'>X</span></td></tr>");
 
 		$("#addButton").hide();
 	}
@@ -163,6 +163,14 @@ var participants = new function()
 		if(!$(".participant-added-row")[0])
 		{
 			$("#saveButton").hide();
+		}
+	}
+
+	this.searchByEnter = function(input, evt)
+	{
+		if(evt.keyCode == 13)
+		{
+			this.search($(input).val(), $(input));
 		}
 	}
 
