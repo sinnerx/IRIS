@@ -120,7 +120,7 @@ class album
 	}
 
 	## add activity album.
-	public function addActivityAlbum($activityID,$data)
+	public function addActivityAlbum($siteID, $activityID,$data)
 	{
 		## create album.
 		$siteAlbumID	= $this->addSiteAlbum($siteID,1,$data);

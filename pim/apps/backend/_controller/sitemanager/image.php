@@ -40,7 +40,7 @@ class Controller_Image
 
 			## if got activityID
 			if(input::get("activityID"))
-				$albumID	= model::load("image/album")->addActivityAlbum(input::get("activityID"),input::get());
+				$albumID	= model::load("image/album")->addActivityAlbum($siteID, input::get("activityID"),input::get());
 			else ## normal add.
 				$albumID	= model::load("image/album")->addSiteAlbum($siteID,0,input::get());
 
