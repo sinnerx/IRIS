@@ -47,6 +47,10 @@ class Controller_User
 
 			if($data['row'] && request::get('userLevel') && request::get('userID'))
 			{
+				// delete site_member
+				db::delete('site_member', array(
+					'userID' => request::get('userID')));
+
 				// upgrade this user to the given level.
 				db::where('userID', request::get('userID'))->update('user', array(
 					'userLevel' => request::get('userLevel')
