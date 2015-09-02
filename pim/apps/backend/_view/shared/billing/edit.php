@@ -127,7 +127,9 @@
 			?>
 				<tr <?php echo $opacity;?>>
 					<td><?php echo $no++;?></td>
-					<?php  if(((session::get("userLevel") == 2) && ($verified != 1)) || ((session::get("userLevel") == 3) && ($reject == 2)) ): ?>					
+					<?php
+						
+					  if(($checkSettlement == '0') &&  (((session::get("userLevel") == 2) && ($verified != 1)) || ((session::get("userLevel") == 3) && ($reject == 2))) ): ?>					
 					<td>
 					<a href='<?php echo url::base("billing/editForm/".$row[billingItemID]."/".$row[billingTransactionID]."/".strtotime($row[billingTransactionDate]));?>' style="margin-left:20px"  data-toggle='ajaxModal' class='fa fa-edit pull-right' style='font-size:13px;'></a>
 					<a id='delete-button' onclick='return confirm("Delete this transaction, are you sure?");' href='<?php echo url::base('billing/delete/'.$row[billingTransactionID]); ?>' class='fa fa-trash-o pull-right' style='font-size:13px;'></a>
@@ -190,7 +192,7 @@ if(session::get("userLevel") == 2): ?>
 				</tr>	
 				<tr>	
 					<td>Status</td> 
-					<td><?php if ($verified == 1) { ?>
+					<td><?php if (($verified == 1) || ($checkSettlement == 1)) { ?>
 					Verified
 					<?php } else { ?>
 					<button type="submit" class="btn btn-sm btn-default">Verify</button>
