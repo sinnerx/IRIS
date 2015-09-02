@@ -217,14 +217,14 @@
 					<th>RM</th>	<th class="d">RM</th>	<th class="d">RM</th>	<th>RM</th>	<th>RM</th>	
 					<th>RM</th>	<th>Utilities</th>	<th>Description </th>	 <th>Total</th>	<th>Balance</th>
 				</tr>
-				
-			<?php if(count($list) > 0):?>
+
 				<tr>					
 					<td><?php echo date('d', strtotime($alldate[0]))  ?></td> 
 					<td  id="e1" colspan="45"> Monthly Revenue (Previous Balance) </td>
 					<td><?php echo number_format($balance, 2, '.', '')?></td>
 				</tr>
-
+			<?php if(count($list) > 0):?>
+			
 <?php 
 	$beginningbalance = $balance;
 foreach ($alldate as $date => $day):?>
