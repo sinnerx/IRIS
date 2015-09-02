@@ -56,7 +56,17 @@ Class Controller_Billing
 			$data['itemList'][$row['billingItemID']]	= $row['billingItemHotkey'];
 		}
 
-		view::render("shared/billing/add", $data);
+		
+
+		if(form::submitted())
+		{ 
+			$message = 'New Transactionn added!';
+				
+			redirect::to('billing/add', $message, 'success');
+		} else {
+
+			view::render("shared/billing/add", $data);	
+		}	
 	}
 
 	public function addItem()
@@ -194,9 +204,9 @@ Class Controller_Billing
 				redirect::to('billing/add', $message, 'error');
 			}
 
-			$checkVerify = model::orm('billing/verify')->where('billingTransactionDate',  date('Y-m-d', strtotime($todayDate)))->execute();
-		
-			if($checkVerify->count() > 0){
+			$checkVerify = model::load('billing/verify')->getVerify(date('Y-m-d', strtotime(input::get('selectDate'))));
+					
+			if(count($checkVerify) > 0){
 				
 				$message = 'Transaction for selected date already verify, no new transaction allowed.';
 				redirect::to('billing/add', $message, 'error');			
@@ -336,14 +346,17 @@ Class Controller_Billing
 		}
 
 		$checkVerify = model::orm('billing/verify')->where('billingTransactionDate',  date('Y-m-d', strtotime($selectDate)))->execute();
-		
+
 		if($checkVerify->count() > 0){
 			$data['verified'] = 1;
 		}
 
 		$approval = model::load('billing/approval')->getApproval($siteID, date('m', strtotime($selectDate)), date('Y', strtotime($selectDate)));
-		$approvalDetail = $approval->getApprovalDetail($approval->billingApprovalID,\model\user\user::LEVEL_CLUSTERLEAD);
 
+		$approvalDetail = $approval->getApprovalDetail($approval->billingApprovalID,\model\user\user::LEVEL_CLUSTERLEAD);
+		$checkSettlement = $approval->getApprovalDetail($approval->billingApprovalID,\model\user\user::LEVEL_SITEMANAGER);
+
+		$data['checkSettlement'] = $checkSettlement['billingApprovalLevelStatus'];
 		$data['reject'] = $approvalDetail['billingApprovalLevelStatus'];
 
 		view::render("shared/billing/edit", $data);
@@ -382,7 +395,8 @@ Class Controller_Billing
 
 		$data['total'] = $total;	
 		
-		view::render("shared/billing/edit", $data);
+	//	view::render("shared/billing/edit", $data);
+		redirect::to('billing/edit?&itemID=&selectDate='.$transactionDate, $message, 'success');
 	}
 
 	public function editForm($itemID,$transactionID,$transactionDate = null)
@@ -393,6 +407,8 @@ Class Controller_Billing
 
 		if(form::submitted())
 		{
+			$transactionDate = date('d-m-Y', strtotime(input::get('transactionDate'))); 			
+
 			$log = model::orm('billing/log')->create();
 			$log->billingLogType = "Edit Transaction";
 			$log->userID = authData('user.userID');
@@ -418,7 +434,7 @@ Class Controller_Billing
 	
 			$message = 'Transaction Updated!';
 
-			redirect::to('billing/edit', $message, 'success');
+			redirect::to('billing/edit?&itemID=&selectDate='.$transactionDate, $message, 'success');
 		}
 
 		$billing = model::orm('billing/journal')->find($transactionID);
@@ -454,8 +470,8 @@ Class Controller_Billing
 	{		
 		$data['siteID'] = $siteID = request::get("siteID") ? : authData('site.siteID');	
 		
-		$selectMonth = request::get("selectMonth");
-		$selectYear = request::get("selectYear");
+		$selectMonth = request::get("selectMonth") ? :  date('m');
+		$selectYear = request::get("selectYear") ? :  date('Y');
 
 		$data['selectYear'] = $selectYear = $selectYear ? : input::get("year");
 		$data['selectMonth'] = $selectMonth = $selectMonth ? : input::get("month");
@@ -497,7 +513,6 @@ Class Controller_Billing
 			$data['selectMonth'] = $selectMonth = input::get("month");
 			$data['selectYear'] = $selectYear = input::get("year");
 			$data['siteID'] = $siteID = input::get("siteID");	
-
 
 
 			if (authData('user.userLevel') == 2){
@@ -652,6 +667,9 @@ Class Controller_Billing
 				
 						);					
 			}
+
+	//		print_r("<pre>");
+	//		print_r($availableData);
 			
 			$data['list'] = $availableData;
 			$data['totallist'] = $list;
