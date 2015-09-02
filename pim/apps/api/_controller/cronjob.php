@@ -25,6 +25,30 @@ class Controller_Cronjob
 
 	}
 
+	public function autoDailyVerify()
+	{		
+		
+		$currentDate = date('Y-m-d');
+		$siteLists = model::load('site/site')->lists();		
+
+		foreach($siteLists as $site)
+		{
+
+			$data = model::load('billing/verify')->getAutoVerify($site['siteID'],$currentDate);   					
+			
+			if (count($data) == 1){
+
+				//update
+				model::load('billing/verify')->updateDailyVerify($site['siteID'],$currentDate);
+
+			} else {
+
+				//insert
+				model::load('billing/verify')->insertDailyVerify($site['siteID'],$currentDate);				
+			}		
+		}
+	}
+
 	public function blastNewsletter()
 	{
 		// no one should have access yet for now
