@@ -34,6 +34,7 @@
 			<button type="button" class="close" data-dismiss="modal"><i class="fa fa-times"></i></button>
 			<h4 class="modal-title"><!-- ☮ -->
 			<span>Edit Transaction for <?php echo $transactionDate; ?></span>
+      
 			</h4>
 		</div>
 		<?php echo flash::data();?>
@@ -43,7 +44,7 @@
       <div class="panel-body">
 
         <form class="bs-example form-horizontal" method='post' action='<?php echo url::base('billing/editForm/'.$item->billingItemID.'/'.$item->billingTransactionID);?>'>
-         
+      <input type="hidden" name="transactionDate" value="<?php echo $transactionDate ?>" />   
           <div class="form-group">
             <label class="col-lg-2 control-label">Name</label>
             <div class="col-lg-10">
