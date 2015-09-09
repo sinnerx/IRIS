@@ -705,6 +705,7 @@ billing_item:
 	billingItemDescription [text]
 	billingItemType [int] ## 1 = debit or 2 = credit
 	billingItemPrice [float]
+	billingItemPriceNonmember [float]
 	billingItemUnit [int]
 	billingItemQuantity [int]
 	billingItemTaxDisabled [int]
@@ -715,17 +716,35 @@ billing_item:
 	billingItemStatus [int]
 	billingItemCreatedDate [datetime]
 
+billing_transaction_item:
+	billingTransactionItemID [int]
+	billingItemID [int]
+	billingTransactionID [int]
+	billingTransactionItemDescription [text]
+	billingTransactionItemQuantity [int]
+	billingTransactionItemUnit [float] ## unit or hours
+	billingTransactionItemPrice [float] ## unit price.
+
+billing_transaction_user:
+	billingTransactionUserID [int]
+	billingTransactionID [int]
+	billingTransactionUser [int] ## userID from user table
+	billingTransactionUserAge [int]
+	billingTransactionUserOccupationGroup [int]
+
 billing_transaction:
 	billingTransactionID [int]
 	siteID [int]
-	userID [int]
+	userID [int] ## the one created this record
 	billingItemID [int]
-	billingTransactionQuantity [int]
-	billingTransactionUnit [int] ## unit or hours
-	billingTransactionTotal [float]
+	billingTransactionQuantity [int] ##!!! to be removed
+	billingTransactionUnit [int] ## unit or hours,  ##!!! to be removed
+	billingTransactionTotalQuantity [int]
+	billingTransactionTotalUnit [float]
+	billingTransactionTotal [float] ## grand total
 	billingTransactionAccountType [int] ## 1 = site 2 = cashout
-	billingTransactionBalance [float]
-	billingTransactionDescription [text]
+	billingTransactionBalance [float] ## removed
+	billingTransactionDescription [text] ##!!! to be removed
 	billingTransactionDate [datetime]
 	billingTransactionCreatedDate [datetime]
 	billingTransactionUpdatedDate [datetime]  ## backdated
