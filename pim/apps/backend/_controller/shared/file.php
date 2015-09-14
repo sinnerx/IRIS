@@ -4,22 +4,26 @@ class Controller_File
 	public function __construct()
 	{
 		$this->siteID = authData('user.userLevel') != 99 ? authData('site.siteID') : 0;
+
+		$serverFileMaxSize = ini_get("upload_max_filesize");
+		$serverFileMaxSize = substr($serverFileMaxSize, 0, strlen($serverFileMaxSize)-1) * 1000000;
+
 		$this->maxsize = 5000000;
+
+		if($serverFileMaxSize < $this->maxsize)
+		{
+			$this->maxSizeLabel = ($serverFileMaxSize/1000000)."MB (Server setting)";
+			$this->maxsize = $serverFileMaxSize;
+		}
+		else
+		{
+			$this->maxSizeLabel = ($this->maxsize/1000000)."MB";
+		}
 	}
 
 	public function index()
 	{
-		$serverFileMaxSize = ini_get("upload_max_filesize");
-		$serverFileMaxSize = substr($serverFileMaxSize, 0, strlen($serverFileMaxSize)-1) * 1000000;
-
-		if($serverFileMaxSize < $this->maxsize)
-		{
-			$data['maxSize'] = ($serverFileMaxSize/1000000)."MB (Server setting)";
-		}
-		else
-		{
-			$data['maxSize'] = ($this->maxsize/1000000)."MB";
-		}
+		$data['maxSize'] = $this->maxSizeLabel;
 
 		if(form::submitted())
 		{
@@ -101,7 +105,7 @@ class Controller_File
 			redirect::to("","List of allowed file extension : ". implode(", ", $exts), "error");
 		}
 
-		if($file->get('size') > $maxsize)
+		if($file->get('size') > $maxsize || $file->get('size') == 0)
 		{
 			redirect::to("", "File size cannot be bigger than ". ($maxsize/1000) . "kb ", "error");
 		}
