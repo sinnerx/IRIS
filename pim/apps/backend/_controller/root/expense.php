@@ -13,7 +13,6 @@ class Controller_Expense
 				
 		$data['prTerm'] = model::load('expense/transaction')->getPrTerm();
 		$data['listPR'] = model::load('expense/transaction')->getPRList($allSiteID,$level,$page);
-	//	$data['listRL'] = model::load('expense/transaction')->getRLList();
 
 		view::render("root/expense/list",$data);		
 	}

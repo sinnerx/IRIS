@@ -19,8 +19,6 @@ class Controller_Expense
 
 		$currentCollection = model::load('billing/process')->getCurrentCollection(authData('site.siteID'),$startDate,$lastDate);			
 		$data['currentCollection'] = number_format($currentCollection['total'], 2, '.', ''); 
-
-		$data['listPR'] = model::load('expense/transaction')->getPRList();
 		$data['prTerm'] = model::load('expense/transaction')->getPrTerm();
 
 		$categories  = model::load('expense/category')->getList();

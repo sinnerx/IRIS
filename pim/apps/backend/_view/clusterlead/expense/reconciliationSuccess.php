@@ -79,7 +79,7 @@ width: auto !important;
                   <th>Amount (RM)</th>
                   <th>GST Amount (RM)</th>
                   <th>Total Amount (RM)</th>
-                  <th></th>
+     <!--              <th></th> -->
                 </tr>
 
             <?php foreach ($fileList as $key => $category):?>
@@ -92,10 +92,10 @@ width: auto !important;
                   <td><?php echo $category['purchaseRequisitionFileAmount']; ?></td>  
                   <td><?php echo $category['purchaseRequisitionFileGst']; ?></td>  
                   <td class="amount"><?php echo $category['purchaseRequisitionFileTotal']; ?></td>  
-                  <td>
+<!--                   <td>
                   <a href='<?php echo url::base("expense/editFile/".$category['purchaseRequisitionId']."/".$category['purchaseRequisitionFileId']);?>' style="margin-left:20px"  data-toggle='ajaxModal' class='fa fa-edit pull-right' style='font-size:13px;'></a>
                   <a id='delete-button' onclick='return confirm("Delete this transaction, are you sure?");' href='<?php echo url::base('expense/deleteFile/'.$category['purchaseRequisitionFileId']); ?>' class='fa fa-trash-o pull-right' style='font-size:13px;'></a>             
-                  </td>
+                  </td> -->
                 </tr>
                 
         <?php endforeach; ?>
