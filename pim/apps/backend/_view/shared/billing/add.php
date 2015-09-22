@@ -363,20 +363,18 @@
 				</tr>
 				<?php if(count($list) > 0):?>
 			<?php 
-			//	$totalBalance = $totalBalance + $previousBalance;
 
 				foreach ($list as $key => $row):?>
 				<tr>
 					<td><?php echo $row[billingTransactionDate]; ?></td>
 					<td><?php echo $row[billingItemName]; ?></td>
-					<td><?php echo $row[billingTransactionDescription]; ?></td>
-					<td><?php $itemPrice  = $row[billingTransactionTotal] / $row[billingTransactionQuantity] / $row[billingTransactionUnit];	
-							  echo number_format($itemPrice, 2, '.', '');  ?></td>
-					<td><?php echo $row[billingTransactionUnit]; ?></td>
-					<td><?php echo $row[billingTransactionQuantity]; ?></td>
-					<td><?php echo number_format($row[billingTransactionTotal], 2, '.', ''); ?></td>					
+					<td><?php echo $row[billingItemDescription]; ?></td>
+					<td><?php echo number_format($row[billingItemPrice], 2, '.', '');  ?></td>
+					<td><?php echo $row[billingTransactionItemUnit]; ?></td>
+					<td><?php echo $row[billingTransactionItemQuantity]; ?></td>
+					<td><?php echo number_format($row[billingTransactionItemPrice], 2, '.', ''); ?></td>					
 					<td><?php echo number_format($totalBalance, 2, '.', ''); 
-							$totalBalance = $totalBalance - $row[billingTransactionTotal];
+							$totalBalance = $totalBalance - $row[billingTransactionItemPrice];
 					?></td>
 				</tr>
 			<?php endforeach;?>

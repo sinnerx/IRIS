@@ -31,7 +31,6 @@ Class Controller_Billing
 			$data['itemSelect'] = $item->getFirst();			
 		}
 
-
 		if (authData('user.userLevel') == \model\user\user::LEVEL_CLUSTERLEAD){
 			
 			$res_site	= model::load("site/site")->getSitesByClusterLead(session::get("userID"))->result();
@@ -56,8 +55,6 @@ Class Controller_Billing
 			$data['itemList'][$row['billingItemID']]	= $row['billingItemHotkey'];
 		}
 
-		
-
 		if(form::submitted())
 		{ 
 			$message = 'New Transactionn added!';
@@ -75,7 +72,6 @@ Class Controller_Billing
 		
 		if(form::submitted())
 		{
-//			$data['billingItemHotkey'] = model::orm('billing/billing')->where('billingItemHotkey', input::get('hotKey'))->execute();
 				$billing = model::orm('billing/billing')->create();
 				$billing->billingItemHotkey = input::get('hotKey');
 				$billing->billingItemName = input::get('itemName');
@@ -184,6 +180,7 @@ Class Controller_Billing
 
 	public function addTransaction($id)
 	{	
+
 		$todayDate = request::get("selectDate");
 		$data['todayDate'] = $todayDate = $todayDate ? :  date('Y-m-d H:i');
 
@@ -253,10 +250,8 @@ Class Controller_Billing
 				}				
 			}	
 		}
-			$checkBalance = model::load('billing/billing')->getList($siteID,1);
-			$lastBalance = $checkBalance[0][billingTransactionBalance];
 
-			$getTransactionID = model::load('billing/billing')->addTransaction($siteID,$id,input::get(),$lastBalance);			
+			$getTransactionID = model::load('billing/billing')->addTransaction($siteID,$id,input::get());			
 
 			$log = model::orm('billing/log')->create();
 			$log->billingLogType = "Add New Transaction";
@@ -264,10 +259,10 @@ Class Controller_Billing
 			$log->billingTransactionID = $getTransactionID['billingTransactionID'];
 			$log->billingLogContent = serialize(array(
 
-											"itemID"=>$getTransactionID['billingItemID'],
-											"quantity"=>$getTransactionID['billingTransactionQuantity'],
-											"unit"=>$getTransactionID['billingTransactionUnit'],
-											"total"=>$getTransactionID['billingTransactionTotal']
+										"itemID"=>$getTransactionID['billingItemID'],
+										"quantity"=>$getTransactionID['billingTransactionQuantity'],
+										"unit"=>$getTransactionID['billingTransactionUnit'],
+										"total"=>$getTransactionID['billingTransactionTotal']
 
 										));
 			$log->billingLogCreatedDate = now();
@@ -384,7 +379,7 @@ Class Controller_Billing
 		{
 			$data['itemList'][$row['billingItemID']]	= $row['billingItemHotkey']."  ".$row['billingItemName'];
 		}	
-		//$data['list'] = model::load('billing/billing')->getAllList($siteID,$itemID,$transactionDate);	
+
 		$data['list'] = model::load('billing/billing')->getPaginationList($siteID,$itemID,$selectDate,$page);	
 		$totalToday = model::load('billing/billing')->getTotalToday($siteID,$selectDate);
 			
@@ -395,19 +390,18 @@ Class Controller_Billing
 
 		$data['total'] = $total;	
 		
-	//	view::render("shared/billing/edit", $data);
 		redirect::to('billing/edit?&itemID=&selectDate='.$transactionDate, $message, 'success');
 	}
 
-	public function editForm($itemID,$transactionID,$transactionDate = null)
+	public function editForm($transactionItemID,$transactionID,$transactionDate = null)
 	{	
 		$this->template = false;
-
-		$billing = model::orm('billing/journal')->find($transactionID);
-
+  
 		if(form::submitted())
 		{
-			$transactionDate = date('d-m-Y', strtotime(input::get('transactionDate'))); 			
+			$transactionDate = date('d-m-Y', strtotime(input::get('transactionDate'))); 						
+			$billing = model::load('billing/journal')->editTranscation($transactionItemID);
+			$billing = $billing[0];
 
 			$log = model::orm('billing/log')->create();
 			$log->billingLogType = "Edit Transaction";
@@ -415,29 +409,36 @@ Class Controller_Billing
 			$log->billingTransactionID = $transactionID;
 			$log->billingLogContent = serialize(array(
 
-					"itemID"=>$billing->billingItemID." to ".input::get('itemID'),
-					"quantity"=>$billing->billingTransactionQuantity." to ".input::get('quantity'),
-					"unit"=>$billing->billingTransactionUnit." to ".input::get('unit'),
-					"total"=>$billing->billingTransactionTotal." to ".input::get('total')
+					"itemID"=>$billing['billingTransactionItemID']." to ".input::get('itemID'),
+					"quantity"=>$billing['billingTransactionItemQuantity']." to ".input::get('quantity'),
+					"unit"=>$billing['billingTransactionItemUnit']." to ".input::get('unit'),
+					"total"=>$billing['billingTransactionItemPrice']." to ".input::get('total')
 
 										));
 			$log->billingLogCreatedDate = now();
-			$log->save();	
+			$log->save();
 
-			$billing->billingItemID = input::get('itemID');
-			$billing->billingTransactionQuantity = input::get('quantity');
-			$billing->billingTransactionUnit = input::get('unit');
-			$billing->billingTransactionTotal = input::get('total');
-			$billing->billingTransactionDescription = input::get('description');
-			$billing->billingTransactionUpdatedDate = now();
-			$billing->save();
-	
+			$data	= Array(
+
+				"billingItemID"=> input::get('itemID'),
+				"billingTransactionID"=>$billing['billingTransactionID'],
+				"billingTransactionItemDescription"=>input::get('description'),
+				"billingTransactionItemQuantity"=>input::get('quantity'),
+				"billingTransactionItemUnit"=>input::get('unit'),
+				"billingTransactionItemPrice"=>input::get('total')	
+						);
+
+			$updateTransactionItem = model::load('billing/journal')->updateTranscationItem($transactionItemID,$data);
+
+			$updateTransaction = model::load('billing/journal')->updateTranscation($billing['billingTransactionID']);
+
 			$message = 'Transaction Updated!';
 
 			redirect::to('billing/edit?&itemID=&selectDate='.$transactionDate, $message, 'success');
 		}
 
-		$billing = model::orm('billing/journal')->find($transactionID);
+
+		$billing = model::load('billing/journal')->editTranscation($transactionID);	
 		$allItem = model::load('billing/billing')->getItem();
 
 		foreach($allItem as $row)
@@ -445,8 +446,8 @@ Class Controller_Billing
 			$data['itemList'][$row['billingItemID']] = $row['billingItemHotkey']."  ".$row['billingItemName'];
 		}
 
-		$data['item'] = $billing;
-		$data['itemID'] = $itemID; 
+		$data['item'] = $billing[0];
+		$data['itemID'] = $transactionItemID; 
 		$data['transactionDate'] = date('d M Y  h:iA', $transactionDate);
 
 		view::render("shared/billing/editForm", $data);
@@ -668,9 +669,6 @@ Class Controller_Billing
 						);					
 			}
 
-	//		print_r("<pre>");
-	//		print_r($availableData);
-			
 			$data['list'] = $availableData;
 			$data['totallist'] = $list;
 			$data['availableDate'] = $availableDate;
@@ -711,17 +709,17 @@ Class Controller_Billing
 		$todayDateStart = date('Y-m-d', strtotime($todayDateStart)); 
 		$todayDateEnd = date('Y-m-d', strtotime($todayDateEnd)); 
 
-		$data['journal'] = model::load('billing/journal')->getList($siteID,$todayDateStart,$todayDateEnd);
+		$dailyJournal = model::load('billing/journal')->getList($siteID,$todayDateStart,$todayDateEnd);
+		$data['dailyJournal'] = $dailyJournal;
 
-		$total = model::load('billing/journal')->getListTotal($siteID,$todayDateStart,$todayDateEnd);	
+		foreach($dailyJournal as $key => $journalList) {
 
-		foreach($total as $key => $journalTotal) {
-			$checkDate = date('Y-m-d', strtotime($journalTotal['billingTransactionDate'])); 
+			$journal = model::load('billing/journal')->getListTotal($journalList['billingTransactionID']);		
 
-			$data['journalDate'][$key] = $checkDate;
-			$data['journalQuantity'][$key] = $journalTotal[quantity];
-			$data['journalUnit'][$key] = $journalTotal[unit];
-			$data['journalTotal'][$key] = $journalTotal[total];
+			if (count($journal) > 0){
+
+				$data['journal'][$journalList['billingTransactionDate']] = $journal;	
+			}
 		}
 
 		view::render("shared/billing/dailyJournal", $data);
@@ -745,28 +743,23 @@ Class Controller_Billing
 		{
 			$data['siteList'][$row['siteID']]	= $row['siteName'];
 		}
+
 		$todayDateStart = date('Y-m-d', strtotime($todayDateStart)); 
 		$todayDateEnd = date('Y-m-d', strtotime($todayDateEnd)); 
 
-		$data['journal'] = model::orm('billing/journal')
-				->where("siteID = '$siteID' AND billingTransactionDate >= '$todayDateStart' AND billingTransactionDate <= '$todayDateEnd 23:59:59' AND billingTransactionStatus = 1")
-				->join("billing_item", "billing_item.billingItemID = billing_transaction.billingItemID")
-				->order_by("billingTransactionDate","ASC")
-				->execute();
-
+		$data['transactionalJournal'] = model::load('billing/journal')->getTransactionalList($siteID,$todayDateStart,$todayDateEnd);
+		
 		$startDate = date('Y-m-01', strtotime($todayDateStart)); 
 
 		$previoussum = model::orm('billing/journal')
 				->select("SUM(billingTransactionTotal) as total")
 				->where("siteID = '$siteID' AND billingTransactionDate >= '$startDate' AND billingTransactionDate <= '$todayDateStart' AND billingTransactionStatus = 1")
-				->join("billing_item", "billing_item.billingItemID = billing_transaction.billingItemID")
 				->order_by("billingTransactionDate","ASC")
 				->execute();
 		
 		 foreach($previoussum as $previousbalance)
 		 {
 		 	$data['previoussum'] = $previousbalance->total;
-
 		 }
 
 		view::render("shared/billing/transactionJournal", $data);

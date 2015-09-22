@@ -84,7 +84,6 @@
                   </td>
                   <td><?php echo $list['purchaseRequisitionNumber']; ?></td>
                   <td>
-
                   <?php 
                   if ($getStatus[1] == "") {  
                       if (authData('user.userLevel') == \model\user\user::LEVEL_SITEMANAGER) {  ?> 
@@ -116,7 +115,12 @@
                             <?php } 
                       }  ?>
                   <?php   
-                  } ?>
+                  } 
+                  if ($getStatus[1] == 1){ ?>
+
+                    <a href="<?php echo url::base('expense/generateRLReport/'.$list['purchaseRequisitionNumber'].'/'.$list['purchaseRequisitionId']);?>" class='fa  fa-download pull-right' style="color:green; padding-right:20%; float:right"></a>
+
+                  <?php } ?> 
 
                   </td>
                 </tr>
@@ -128,14 +132,12 @@
           </div>
           <br>
     </section>
-
           <footer class='panel-footer'>
             <div class='row'>
               <div class="col-sm-10">
                 <?php echo pagination::link();?>
               </div>
             </div>
-          </footer>
-          
+          </footer>          
   </div>
 </div>

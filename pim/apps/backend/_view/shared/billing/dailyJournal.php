@@ -114,51 +114,49 @@ Select Date
 					<th>Total</th>
 				</tr>
 				
-			<?php if(count($journal) > 0):?>
-			<?php foreach($journal as $key => $journalItem):?>
+<?php if(count($dailyJournal) > 0):
+	 	foreach($dailyJournal as $key => $journalTotal):
 
-			<?php 
+		if(count($journal) > 0):
+		 	foreach($journal as $key => $journalDetail):
 
-			$checkDate = date('Y-m-d', strtotime($journalItem['billingTransactionDate']));
-				
-			   if (($date1 != $checkDate) && ($key != 0)) { ?>
+			if ($key == $journalTotal['billingTransactionDate']) {
+				$checkDate = date('Y-m-d', strtotime($journalTotal['billingTransactionDate']));	
+					 	
+				for ($x = 0; $x < count($journalDetail); $x++) { ?>
+    
+				<tr>
+					<td><?php 
+						if ($x == 0){echo $checkDate;} ?></td>		
+					<td><?php echo $journalDetail[$x]['billingItemName']." : ".$journalDetail[$x]['billingTransactionItemDescription']; ?></td>
+					<td><?php echo $journalDetail[$x]['billingTransactionItemQuantity']; ?></td>
+					<td><?php echo $journalDetail[$x]['billingTransactionItemUnit']; ?></td>					
+					<td><?php echo number_format($journalDetail[$x]['billingTransactionItemPrice'], 2, '.', ''); ?></td>
+				</tr>
+<?php 			} ?>
+
 				<tr>
 					<td></td>
 					<th>Total : </th>
-					<th><?php echo $journalQuantity[array_search($date1, $journalDate)]; ?></th>
-					<th><?php echo $journalUnit[array_search($date1, $journalDate)]; ?></th>
-					<th><?php echo number_format($journalTotal[array_search($date1, $journalDate)], 2, '.', ''); ?></th>
+					<th><?php echo $journalTotal['quantity']; ?></th>
+					<th><?php echo $journalTotal['unit']; ?></th>
+					<th><?php echo number_format($journalTotal['total'], 2, '.', ''); ?></th>
 				</tr>
-			<?php $date1 = $checkDate; } else { $date1 = $checkDate; } ?>
-
-				<tr>
-				<?php if ($date != $checkDate)  { ?>
-					<td><?php echo $checkDate; ?></td>
-				<?php $date = $checkDate; } else { ?>
-					<td></td>
-				<?php $date = $checkDate; } ?>
-					<td><?php echo $journalItem[billingItemName]." : ".$journalItem[billingItemDescription]; ?></td>
-					<td><?php echo $journalItem[quantity]; ?></td>
-					<td><?php echo $journalItem[unit]; ?></td>					
-					<td><?php echo number_format($journalItem[total], 2, '.', ''); ?></td>
-				</tr>
-
-			<?php if ($key == (count($journal)-1)) { ?>
-				<tr>
-					<td></td>
-					<th>Total : </th>
-					<th><?php echo $journalQuantity[array_search($date1, $journalDate)]; ?></th>
-					<th><?php echo $journalUnit[array_search($date1, $journalDate)]; ?></th>
-					<th><?php echo number_format($journalTotal[array_search($date1, $journalDate)], 2, '.', ''); ?></th>
-				</tr>
-
-			<?php } ?>
-			<?php endforeach;?>
-			<?php else:?>		
+<?php		}	
+	
+ 		endforeach;
+	 	else:	?>	
 				<tr>
 					<td colspan="8"> No Transaction</td>
 				</tr>
-				<?php endif; ?>	
+<?php 	endif; ?>			
+
+<?php 	endforeach;?>
+<?php else:?>		
+				<tr>
+					<td colspan="8"> No Transaction</td>
+				</tr>
+<?php endif; ?>	
 
 			</table>
 			

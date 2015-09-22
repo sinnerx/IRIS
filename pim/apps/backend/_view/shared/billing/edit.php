@@ -123,7 +123,7 @@
 			$href		= ($row['billingItemID'] == 1?"deactivate":"activate")."?".$row['billingItemID'];
 			$href		= "?toggle=".$row['billingItemID'];
 			
-			$billingTransactionTotal = $row[billingTransactionTotal];
+			$billingTransactionTotal = $row[billingTransactionItemPrice];
 			?>
 				<tr <?php echo $opacity;?>>
 					<td><?php echo $no++;?></td>
@@ -131,19 +131,20 @@
 						
 					  if(($checkSettlement == '0') &&  (((session::get("userLevel") == 2) && ($verified != 1)) || ((session::get("userLevel") == 3) && ($reject == 2))) ): ?>					
 					<td>
-					<a href='<?php echo url::base("billing/editForm/".$row[billingItemID]."/".$row[billingTransactionID]."/".strtotime($row[billingTransactionDate]));?>' style="margin-left:20px"  data-toggle='ajaxModal' class='fa fa-edit pull-right' style='font-size:13px;'></a>
-					<a id='delete-button' onclick='return confirm("Delete this transaction, are you sure?");' href='<?php echo url::base('billing/delete/'.$row[billingTransactionID]); ?>' class='fa fa-trash-o pull-right' style='font-size:13px;'></a>
+					<a href='<?php echo url::base("billing/editForm/".$row[billingItemID]."/".$row[billingTransactionItemID]."/".strtotime($row[billingTransactionDate]));?>' style="margin-left:20px"  data-toggle='ajaxModal' class='fa fa-edit pull-right' style='font-size:13px;'></a>
+					<a id='delete-button' onclick='return confirm("Delete this transaction, are you sure?");' href='<?php echo url::base('billing/delete/'.$row[billingTransactionItemID]); ?>' class='fa fa-trash-o pull-right' style='font-size:13px;'></a>
 				
 					</td>
 					<?php else: ?> 
 					<td></td>	
 					<?php endif; ?>
+
 					<td><?php echo $row[billingTransactionDate]; ?></td>
 					<td><?php echo $row[billingItemName]; ?></td>
 					<td><?php echo $row[billingItemDescription]; ?></td>
-					<td><?php echo $billingItemPrice = $row[billingItemPrice] ? :  $row[billingTransactionTotal] / $row[billingTransactionQuantity] / $row[billingTransactionUnit]; ?></td>
-					<td><?php echo $row[billingTransactionUnit]; ?></td>
-					<td><?php echo $row[billingTransactionQuantity]; ?></td>
+					<td><?php echo $row[billingItemPrice]; ?></td>
+					<td><?php echo $row[billingTransactionItemUnit]; ?></td>
+					<td><?php echo $row[billingTransactionItemQuantity]; ?></td>
 					<td><?php echo number_format($billingTransactionTotal, 2, '.', ''); ?></td>
 				</tr>
 			<?php 

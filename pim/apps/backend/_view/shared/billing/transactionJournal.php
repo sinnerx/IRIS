@@ -119,22 +119,22 @@ var base_url	= "<?php echo url::base();?>/";
 				</tr>
 				
 			<?php
-			 $beginningbalance = $previoussum;
-			 if($journal->count() > 0):?>
-			<?php foreach($journal as $journalItem):?>
+
+			 $beginningbalance = $previoussum;			
+			 if(count($transactionalJournal) > 0):?>
+			<?php foreach($transactionalJournal as $journalItem):?>
 				<tr>
-					<td><?php echo $journalItem->billingTransactionDate; ?></td>
-					<td><?php echo $journalItem->billingItemName; ?></td>
-					<td><?php echo $journalItem->billingItemDescription; ?></td>
-					<td><?php echo $billingItemPrice = $journalItem->billingItemPrice ? : $journalItem->billingTransactionTotal / $journalItem->billingTransactionQuantity / $journalItem->billingTransactionUnit; ?></td>
-					<td><?php echo $journalItem->billingTransactionUnit; ?></td>
-					<td><?php echo $journalItem->billingTransactionQuantity; ?></td>
-					<td><?php echo number_format($journalItem->billingTransactionTotal, 2, '.', ''); ?></td>
+					<td><?php echo $journalItem['billingTransactionDate']; ?></td>
+					<td><?php echo $journalItem['billingItemName']; ?></td>
+					<td><?php echo $journalItem['billingItemDescription']; ?></td>
+					<td><?php echo $journalItem['billingItemPrice']; ?></td>
+					<td><?php echo $journalItem['billingTransactionItemUnit']; ?></td>
+					<td><?php echo $journalItem['billingTransactionItemQuantity']; ?></td>
+					<td><?php echo number_format($journalItem['billingTransactionItemPrice'], 2, '.', ''); ?></td>
 					<!-- <td><?php echo number_format($journalItem->billingTransactionBalance, 2, '.', ''); ?></td>	 -->
 
-					<td><?php $beginningbalance = $beginningbalance + $journalItem->billingTransactionTotal;
+					<td><?php $beginningbalance = $beginningbalance + $journalItem['billingTransactionItemPrice'];
 					echo number_format($beginningbalance, 2, '.', '');?></td>
-
 
 				</tr>
 			<?php endforeach;?>

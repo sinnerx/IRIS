@@ -41,11 +41,6 @@ class billing extends \Origami
 		return db::get()->result();		
 	}
 
-/*	public function deleteItem($temID)
-	{
-		db::delete("billing_item",Array("billingItemID"=>$temID));
-	}*/
-
 	public function getAllHotkey()
 	{
 		db::select("billingItemID, billingItemHotkey");	
@@ -55,7 +50,7 @@ class billing extends \Origami
 		return db::get()->result();		
 	}
 
-	public function addTransaction($siteID,$id,$data_sales,$lastBalance)
+	public function addTransaction($siteID,$id,$data_sales)
 	{
 		
 		if ($data_sales['utilitiesList'] != ""){
@@ -71,17 +66,10 @@ class billing extends \Origami
 		$billing = model::orm('billing/billing')->find($id);
 
 		if  ($billing->billingItemType == 2)	{
-
-		 $billingTransactionBalance = $lastBalance - $data_sales['total'];	
-		 $data_sales['total'] = 0 - $data_sales['total'];
-
-		} else {
-		 $billingTransactionBalance = $data_sales['total'] + $lastBalance;
-
+		 	$data_sales['total'] = 0 - $data_sales['total'];
 		}
 
 		if ($data_sales['type'] == 2){
-
 			$accountType = 2;
 		} else {
 			$accountType = 1;
@@ -96,8 +84,6 @@ class billing extends \Origami
 			"billingTransactionUnit" => $data_sales['unit'],
 			"billingTransactionTotal" => $data_sales['total'],
 			"billingTransactionAccountType" => $accountType,
-			"billingTransactionBalance" => $billingTransactionBalance,
-			"billingTransactionDescription" => $description,
 			"billingTransactionStatus" => 1,
 			"billingTransactionDate" => $todayDate,
 			"billingTransactionCreatedDate" => now(),
@@ -106,6 +92,20 @@ class billing extends \Origami
 						);
 
 		db::insert("billing_transaction",$data);
+
+		$billingTransactionID = db::getLastID('billing_transaction', 'billingTransactionID', true);
+
+		$data_item	= Array(
+
+			"billingItemID" => $id,
+			"billingTransactionID" => $billingTransactionID['billingTransactionID'],
+			"billingTransactionItemDescription" => $description,
+			"billingTransactionItemQuantity" => $data_sales['quantity'],
+			"billingTransactionItemUnit" => $data_sales['unit'],
+			"billingTransactionItemPrice" => $data_sales['total']
+						);
+
+		db::insert("billing_transaction_item",$data_item);
 
 		return db::getLastID('billing_transaction', 'billingTransactionID', true);
 	}
@@ -117,12 +117,16 @@ class billing extends \Origami
 		}
 
 		$where	= Array(
-				"siteID"=>$siteID,								
+				"billing_transaction.siteID"=>$siteID,								
 				"billingTransactionStatus" => 1
 						);
 
-		db::from("billing_transaction")->where($where);
-		db::join("billing_item", "billing_item.billingItemID = billing_transaction.billingItemID");
+		db::from("billing_transaction_item")->where($where);
+		
+		db::join("billing_transaction", "billing_transaction_item.billingTransactionID = billing_transaction.billingTransactionID");
+		db::join("billing_item", "billing_item.billingItemID = billing_transaction_item.billingItemID");
+
+
 		db::order_by("billingTransactionDate","DESC");
 		db::limit($limit);
 
@@ -206,7 +210,7 @@ class billing extends \Origami
 
 		$where	= Array(
 				"siteID"=>$siteID,
-				"billing_transaction.billingItemID"=>$itemID,
+				"billing_transaction_item.billingItemID"=>$itemID,
 				"billingTransactionDate like"=>$selectDate."%",
 				 "billingTransactionStatus" => 1
 						);			
@@ -223,10 +227,12 @@ class billing extends \Origami
 										));
 
 		db::limit(pagination::get("limit"),pagination::recordNo()-1); 
-		db::join("billing_item", "billing_item.billingItemID = billing_transaction.billingItemID");
+
+		db::join("billing_transaction_item", "billing_transaction_item.billingTransactionID = billing_transaction.billingTransactionID");
+		db::join("billing_item", "billing_item.billingItemID = billing_transaction_item.billingItemID");
+
 		db::order_by("billingTransactionDate","ASC");
-		
-		
+				
 		return db::get()->result();
 	}	
 

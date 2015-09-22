@@ -37,13 +37,14 @@
       
 			</h4>
 		</div>
-		<?php echo flash::data();?>
+		<?php 
+    echo flash::data();?>
 		
     <div class="modal-body">    
     <section class="panel panel-default">
       <div class="panel-body">
 
-        <form class="bs-example form-horizontal" method='post' action='<?php echo url::base('billing/editForm/'.$item->billingItemID.'/'.$item->billingTransactionID);?>'>
+        <form class="bs-example form-horizontal" method='post' action='<?php echo url::base('billing/editForm/'.$item[billingTransactionItemID].'/'.$item[billingTransactionID]);?>'>
       <input type="hidden" name="transactionDate" value="<?php echo $transactionDate ?>" />   
           <div class="form-group">
             <label class="col-lg-2 control-label">Name</label>
@@ -56,37 +57,35 @@
           <div class="form-group">
             <label class="col-lg-2 control-label">Description</label>
             <div class="col-lg-10">
-              <?php echo form::text("description","class='form-control'",$item->billingItemDescription);?>              
+              <?php echo form::text("description","class='form-control'",$item['billingTransactionItemDescription']);?>              
             </div>
           </div>
           <div class="form-group">
             <label class="col-lg-2 control-label">Price (RM)</label>
             <div class="col-lg-10">
-              <?php $price =  $item->billingTransactionTotal / $item->billingTransactionQuantity / $item->billingTransactionUnit;
-              echo form::text("price","class='form-control amount'",$price);?>
+              <?php echo form::text("price","class='form-control amount' readonly",$item['billingItemPrice']);?>
             </div>
           </div>
           <div class="form-group">
             <label class="col-lg-2 control-label">Unit/Hours</label>
             <div class="col-lg-10">
-              <?php echo form::text("unit","class='form-control amount'",$item->billingTransactionUnit);?>
+              <?php echo form::text("unit","class='form-control amount'",$item['billingTransactionItemUnit']);?>
             </div>
           </div>
           <div class="form-group">
             <label class="col-lg-2 control-label">Quantity</label>
              <div class="col-lg-10">
-              <?php echo form::text("quantity","class='form-control amount'",$item->billingTransactionQuantity);?>
+              <?php echo form::text("quantity","class='form-control amount'",$item['billingTransactionItemQuantity']);?>
             </div>
           </div>
           <div class="form-group">
             <label class="col-lg-2 control-label">Total</label>
              <div class="col-lg-10">
-              <?php echo form::text("total","class='form-control' readonly",$item->billingTransactionTotal);?>
+
+              <?php echo form::text("total","class='form-control' readonly",number_format($item['billingTransactionItemPrice'], 2, '.', ''));?>
             </div>
           </div>
           
-
-         
           <div class="form-group">
             <div class="col-lg-offset-2 col-lg-10">
               <button type="submit" class="btn btn-sm btn-default">Update</button>
