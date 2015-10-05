@@ -64,6 +64,9 @@ width: auto !important;
                  <tr>
                   <td width="30%"><label>PI1M     : </label> <?php echo $siteName['siteName'] ?></td>                                    
                 </tr>
+                <tr>
+                  <td width="30%"><label>PR Number     : </label> <?php echo $prNo ?></td>                                    
+                </tr>
                  
               </thead>
              </table>
@@ -172,6 +175,10 @@ width: auto !important;
                   <td><?php echo $clusterName ?></td>
                   <td>Semenanjung Malaysia</td>
                   <td></td>
+                </tr>
+
+                <tr>
+                  <th colspan="4"> Disclamer : This is a computer-generated document and it does not require a signature</th>                  
                 </tr>
 
                 </tbody>
