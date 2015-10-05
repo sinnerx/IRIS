@@ -242,6 +242,29 @@ class Controller_User
 
 		redirect::to("user/lists","Password has been reset.");
 	}
+
+	public function takeOver()
+	{
+		if(form::submitted())
+		{
+			$email = request::post('userEmail');
+
+			$accessAuth = model::load("access/auth");
+			$user = db::where('userEmail', $email)->where('userLevel', 2)->get('user')->row();
+
+			if($user)
+			{
+				$accessAuth->login($user['userID'], $user['userLevel']);
+				redirect::to(model::load("access/data")->firstLoginLocation(2));
+			}
+			else
+			{
+				redirect::to('', 'User not found.', 'error');
+			}
+		}
+
+		view::render('root/user/takeOver');
+	}
 }
 
 ?>
