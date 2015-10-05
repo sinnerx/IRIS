@@ -240,7 +240,8 @@ class Controller_Expense
 
 		$data['opsManager'] = authData('user.userProfileFullName');
 		$getExpenseDetails = model::orm('expense/transaction')->find($prId);
-
+		
+		$data['prNo'] = $getExpenseDetails->purchaseRequisitionNumber;
 		$data['selectYear'] = $year = date('Y',strtotime($getExpenseDetails->purchaseRequisitionDate)) ? : date("Y");
 		$data['selectMonth'] = $month = date('n',strtotime($getExpenseDetails->purchaseRequisitionDate)) ? : date("n");
 		$data['siteName'] = model::load('site/site')->getSite($getExpenseDetails->siteID);
@@ -254,7 +255,6 @@ class Controller_Expense
 		$approval = model::load('expense/approval')->getApprovalDetail($prId,3,\model\user\user::LEVEL_CLUSTERLEAD);		
 		$clusterlead = model::load('user/user')->getUsersByID($approval['userID']); 
 		$data['clusterLead'] =  $clusterlead[$approval['userID']];
-
 
 		$test = model::load('site/cluster')->getClusterID($siteID);			
 		$clusterName = model::load('site/cluster')->get($test[0]['clusterID']);

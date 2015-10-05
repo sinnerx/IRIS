@@ -220,6 +220,7 @@ class Controller_Expense
 		$data['clusterLead'] = authData('user.userProfileFullName');
 		$getExpenseDetails = model::orm('expense/transaction')->find($prId);
 
+		$data['prNo'] = $getExpenseDetails->purchaseRequisitionNumber;
 		$data['selectYear'] = $year = date('Y',strtotime($getExpenseDetails->purchaseRequisitionDate)) ? : date("Y");
 		$data['selectMonth'] = $month = date('n',strtotime($getExpenseDetails->purchaseRequisitionDate)) ? : date("n");
 		$data['siteName'] = model::load('site/site')->getSite($getExpenseDetails->siteID);
