@@ -21,12 +21,29 @@ class Controller_Expense
 		$data['currentCollection'] = number_format($currentCollection['total'], 2, '.', ''); 
 		$data['prTerm'] = model::load('expense/transaction')->getPrTerm();
 
-		$categories  = model::load('expense/category')->getList();
+		$categories  = model::load('expense/category')->getList();	
 		
 		foreach($categories as $key  => $row)
 		{
 			$data['categories'][$row['purchaseRequisitionCategoryId']] = $row['purchaseRequisitionCategoryName'];
 		}		
+		
+
+		$list = model::load('expense/expenditure')->getList("1");
+
+		foreach ($list as $key => $value) {
+
+			if ($value['purchaseRequisitionExpenditureSet'] == "1" ){
+
+				$data['budgeted'][$value['purchaseRequisitionExpenditureId']]	= $value['purchaseRequisitionExpenditureName'];
+			} elseif ($value['purchaseRequisitionExpenditureSet'] == "2"){
+
+				$data['addition'][$value['purchaseRequisitionExpenditureId']]	= $value['purchaseRequisitionExpenditureName'];
+			} else {
+
+				$data['replacement'][$value['purchaseRequisitionExpenditureId']]	= $value['purchaseRequisitionExpenditureName'];
+			}
+		}
 
 		view::render("sitemanager/expense/add", $data);		
 	}
@@ -220,12 +237,16 @@ class Controller_Expense
 				$requisition->userID = authData('user.userID');
 				$requisition->siteID = authData('site.siteID');
 				$requisition->purchaseRequisitionType = input::get('prTerm1');
-				$requisition->purchaseRequisitionExpenses = input::get('expenses');
-				$requisition->purchaseRequisitionEquipment = input::get('equipment');
-				$requisition->purchaseRequisitionEvent = input::get('event');
-				$requisition->purchaseRequisitionAdhocevent = input::get('adhocevent');
-				$requisition->purchaseRequisitionOther = input::get('other');
-				$requisition->purchaseRequisitionCitizen = input::get('1citizen');
+
+				$requisition->purchaseRequisitionExpenses = input::get('budgeted1');
+				$requisition->purchaseRequisitionEquipment = input::get('budgeted2');
+
+				$requisition->purchaseRequisitionEvent = input::get('addition1');
+				$requisition->purchaseRequisitionAdhocevent = input::get('addition2');
+
+				$requisition->purchaseRequisitionOther = input::get('replacement1');
+				$requisition->purchaseRequisitionCitizen = input::get('replacement2');
+
 				$requisition->purchaseRequisitionBalance = input::get('curCollection');
 				$requisition->purchaseRequisitionDeposit = input::get('balDeposit');
 				$requisition->purchaseRequisitionDate = date('Y-m-d',strtotime(input::get('selectDate')));
@@ -355,6 +376,7 @@ class Controller_Expense
 
 		$getExpenseDetails = model::orm('expense/transaction')->find($prId);
 
+		$data['prNo'] = $getExpenseDetails->purchaseRequisitionNumber;
 		$data['selectYear'] = $year = date('Y',strtotime($getExpenseDetails->purchaseRequisitionDate)) ? : date("Y");
 		$data['selectMonth'] = $month = date('n',strtotime($getExpenseDetails->purchaseRequisitionDate)) ? : date("n");
 		$data['siteName'] = model::load('site/site')->getSite($getExpenseDetails->siteID);

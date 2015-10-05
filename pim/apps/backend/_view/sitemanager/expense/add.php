@@ -172,24 +172,35 @@ var requisition = new function()
                   <td width="7%">PR No</td>
                   <td colspan="3"></td>                        
                 </tr>
+
                  <tr>
                   <td><label>PI1M:</label></td>
-                  <td>Budgeted:</td>                        
-                  <td colspan="2"><input name='expenses' type="checkbox" value="1"> PI1M Expenses</td>
-                  <td colspan="2"><input name='equipment' type="checkbox" value="1"> PI1M Equipment</td>
+                  <td>Budgeted:</td>  
+          <?php foreach ($budgeted as $key => $value) { ?>
+                  <td colspan="2"><input name='budgeted<?php echo $key?>' type="checkbox" value="1"> <?php echo $value ?></td>
+          <?php }  ?>
                 </tr>
+
                  <tr>
                   <td><?php echo $siteName; ?></td>
-                  <td>Addition:</td>                        
-                  <td colspan="2"><input name='event' type="checkbox" value="1"> Scheduled Event</td>
-                  <td colspan="2"><input name='adhocevent' type="checkbox" value="1"> Ad hoc Event</td>
+                  <td>Addition:</td>
+              <?php 
+                foreach ($addition as $key => $value) { ?>
+                  <td colspan="2"><input name='addition<?php echo $key?>' type="checkbox" value="1"> <?php echo $value ?></td>
+              <?php 
+                }  ?>
                 </tr>
+
                  <tr>
                   <td></td>
                   <td>Replacement:</td>
-                  <td colspan="2"><input name='other' type="checkbox" value="1"> Other</td>
-                  <td colspan="2"><input name='1citizen' type="checkbox" value="1"> 1Citizen</td>
+              <?php 
+                foreach ($replacement as $key => $value) { ?>
+                  <td colspan="2"><input name='replacement<?php echo $key?>' type="checkbox" value="1"> <?php echo $value ?></td>
+              <?php 
+                }  ?>
                 </tr>
+
               </thead>
              </table>
 

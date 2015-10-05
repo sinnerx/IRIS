@@ -37,6 +37,10 @@ class Tasks
 		$manager->addTask('purchaseRequisitionItem', array(
 			'description' => 'P1IM expense Item'
 			));
+
+		$manager->addTask('purchaseRequisitionExpenditure', array(
+			'description' => 'P1IM expenditure'
+			));
 	}
 
 	public function billingItem()
@@ -53,7 +57,12 @@ class Tasks
 
 	public function purchaseRequisitionItem()
 	{
-		db::query("INSERT INTO `purchase_requisition_item` VALUES (1,1,1,0,'Water','2015-06-17 00:00:00'),(2,1,1,0,'Electricity','2015-06-17 00:00:00'),(3,1,1,0,'Astro','2015-06-17 00:00:00'),(4,2,1,0,'Sundries','2015-06-17 00:00:00'),(5,2,1,0,'Cleaning & Landscape','2015-06-17 00:00:00'),(6,4,1,0,'Gift - ICT Training & Program','2015-06-19 00:00:00'),(7,4,1,0,'Monthly Event','2015-06-19 00:00:00'),(8,4,1,0,'PI1M Launching','2015-06-19 00:00:00'),(9,4,1,0,'Open Day','2015-06-19 00:00:00'),(10,3,1,0,'Stationary','2015-06-19 00:00:00'),(11,5,1,0,'ICT Equipment','2015-06-19 00:00:00'),(12,5,1,0,'Ink & Toner','2015-06-19 00:00:00')");
+		db::query("INSERT INTO `purchase_requisition_item` VALUES (1,1,1,0,'Water','2015-06-17 00:00:00',1),(2,1,1,0,'Electricity','2015-06-17 00:00:00',1),(3,1,1,0,'Astro','2015-06-17 00:00:00',1),(4,2,1,0,'Sundries','2015-06-17 00:00:00',1),(5,2,1,0,'Cleaning & Landscape','2015-06-17 00:00:00',1),(6,4,1,0,'Gift - ICT Training & Program','2015-06-19 00:00:00',1),(7,4,1,0,'Monthly Event','2015-06-19 00:00:00',1),(8,4,1,0,'PI1M Launching','2015-06-19 00:00:00',1),(9,4,1,0,'Open Day','2015-06-19 00:00:00',1),(10,3,1,0,'Stationary','2015-06-19 00:00:00',1),(11,5,1,0,'ICT Equipment','2015-06-19 00:00:00',1),(12,5,1,0,'Ink & Toner','2015-06-19 00:00:00',1)");
+	}
+
+	public function purchaseRequisitionExpenditure()
+	{
+		db::query("INSERT INTO `purchase_requisition_expenditure` VALUES (1,1,'PI1M Expenses','2015-09-25 10:18:10',1),(2,1,'PI1M Equipment','2015-09-23 00:00:00',1),(3,2,'Scheduled Event','2015-09-25 10:25:15',1),(4,2,'Ad hoc Event','2015-09-23 00:00:00',1),(5,3,'Other','2015-09-23 00:00:00',1),(6,3,'1Citizen','2015-09-23 00:00:00',1)");
 	}
 
 	public function addRootCoordinator()
