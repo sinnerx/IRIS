@@ -736,15 +736,10 @@ billing_transaction:
 	billingTransactionID [int]
 	siteID [int]
 	userID [int] ## the one created this record
-	billingItemID [int]
-	billingTransactionQuantity [int] ##!!! to be removed
-	billingTransactionUnit [int] ## unit or hours,  ##!!! to be removed
 	billingTransactionTotalQuantity [int]
 	billingTransactionTotalUnit [float]
 	billingTransactionTotal [float] ## grand total
-	billingTransactionAccountType [int] ## 1 = site 2 = cashout
-	billingTransactionBalance [float] ## removed
-	billingTransactionDescription [text] ##!!! to be removed
+	billingTransactionAccountType [int] ## 1 = site 2 = cashout	
 	billingTransactionDate [datetime]
 	billingTransactionCreatedDate [datetime]
 	billingTransactionUpdatedDate [datetime]  ## backdated
@@ -854,6 +849,14 @@ purchase_requisition_item:
 	siteID [int]
 	purchaseRequisitionItemName [varchar]
 	purchaseRequisitionItemCreatedDate [datetime]
+	purchaseRequisitionItemStatus [int]
+
+purchase_requisition_expenditure: ## Expenditure
+	purchaseRequisitionExpenditureId [int]
+	purchaseRequisitionExpenditureSet [int]
+	purchaseRequisitionExpenditureName [varchar]
+	purchaseRequisitionExpenditureStatus [int]
+	purchaseRequisitionExpenditureCreatedDate [datetime]
 
 purchase_requisition_file: ## reconciliaton list
 	purchaseRequisitionFileId [int]
