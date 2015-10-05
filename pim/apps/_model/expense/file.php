@@ -16,7 +16,6 @@ class file extends \Origami
 		return db::get()->result();
 	}
 
-
 	public function addFile($siteID,$prID,$data)
 	{
 		$data	= Array(
@@ -60,6 +59,15 @@ class file extends \Origami
 
 		db::where("purchaseRequisitionFileId",$fileID);
 		db::update("purchase_requisition_file",$data);
+	}
+
+
+	public function getFileDetail($fileId)
+	{
+		
+		db::from("purchase_requisition_file")->where("purchaseRequisitionId = '$fileId'");
+
+		return db::get()->result();
 	}
 
 }	

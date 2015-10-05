@@ -177,7 +177,19 @@ class Approval extends \Origami
 				$pr = x;
 			}
 
-		} else {
+		} 
+		elseif ($getStatus['userLevel'] == \model\user\user::LEVEL_FINANCIALCONTROLLER )	
+		{
+			if ($getStatus['expenseApprovalLevelStatus'] == 1){
+
+				$status = "Closed by Financial Controller";
+				$pr = 1;
+			}
+
+		} 
+
+
+		else {
 
 				$status = "Waiting Manager Input";
 		}

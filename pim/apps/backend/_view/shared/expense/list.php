@@ -108,15 +108,21 @@
                   <?php
                   } elseif (authData('user.userLevel') == \model\user\user::LEVEL_OPERATIONMANAGER) {
 
-                            if ($getStatus[1] == 1){ ?>
-                              <a href="<?php echo url::base('expense/getFormSuccess/'.$list['purchaseRequisitionId']);?>" class='fa fa-external-link pull-right' style="color:green; float:right"></a>                                    
-                      <?php } else  
+                      if ($getStatus[1] == 1){ ?>
+                        <a href="<?php echo url::base('expense/getFormSuccess/'.$list['purchaseRequisitionId']);?>" class='fa fa-external-link pull-right' style="color:green; float:right"></a>                                    
+                 <?php } else  
 
-                            if ($getStatus[1] == 3) { ?>            
-                              <a href="<?php echo url::base('expense/getForm/'.$list['purchaseRequisitionId']);?>" class='fa fa-external-link pull-right' style="color:green; float:right"></a>                
-                      <?php } 
+                      if ($getStatus[1] == 3) { ?>            
+                         <a href="<?php echo url::base('expense/getForm/'.$list['purchaseRequisitionId']);?>" class='fa fa-external-link pull-right' style="color:green; float:right"></a>                
+                 <?php } 
 
-                      } ?>
+                  }  elseif (authData('user.userLevel') == \model\user\user::LEVEL_FINANCIALCONTROLLER) { 
+                        
+                        if ($getStatus[1] == 1){ ?>     
+                        <a href="<?php echo url::base('expense/getFormSuccess/'.$list['purchaseRequisitionId']);?>" class='fa fa-external-link pull-right' style="color:green; float:right"></a>                                    
+                 <?php }
+
+                  } ?>
                   </td>            
         <?php endforeach; ?>  
                         

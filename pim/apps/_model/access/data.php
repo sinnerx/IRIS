@@ -46,8 +46,14 @@ class Data
 					"billing/settlement"=>Array("r","om", "sm"),
 					"billing/deleteItem"=>Array("r","om"),
 					"kpi/kpi_overview"=>Array("cl","r","om"),								
-					"expense/listStatus"=>Array("sm","cl","om"),		
-					"expense/listStatusRL"=>Array("sm","cl","om")
+					"expense/listStatus"=>Array("sm","cl","om","fc"),		
+					"expense/listStatusRL"=>Array("sm","cl","om","fc"),
+					"expense/getFormSuccess"=>Array("fc"),
+					"expense/viewRListSuccess"=>Array("fc"),
+					"expense/viewFile"=>Array("fc"),
+					"expense/fileImage"=>Array("fc"),
+					"expense/fcClose"=>Array("fc"),
+					"expense/generateRLReport"=>Array("sm","cl","om","fc")
 							);
 
 		if($level && isset($access["$controller/$method"]))

@@ -96,6 +96,12 @@ class Menu extends Data
 						"Input Form"=>"billing/add",
 						"Daily Cash Process"=>"billing/dailyCashProcess"
 						),
+
+					"PI1M Expense"=>Array(
+						"List of PR"=>"expense/listStatus",
+						"List of RL"=>"expense/listStatusRL"
+					//	"Add new Category / Item"=>"expense/addCategory"
+						),
 							);
 
 		## root.
@@ -133,7 +139,9 @@ class Menu extends Data
 						),
 					
 					"PI1M Expense"=>Array(
-						"List of PR"=>"expense/listStatus"
+						"List of PR"=>"expense/listStatus",
+						"Add New Item"=>"expense/addNewItem",
+						"Edit PR Expenditure"=>"expense/editExpenditure"
 						//"List of RL"=>"expense/listStatusRL"
 						),
 					

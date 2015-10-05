@@ -106,21 +106,31 @@
                               <a href="<?php echo url::base('expense/viewRListSuccess/'.$list['purchaseRequisitionId']);?>" class='fa fa-external-link pull-right' style="color:green; float:right"></a>
                             <?php } ?>
                   <?php 
-                      } else {  
+                      } elseif (authData('user.userLevel') == \model\user\user::LEVEL_OPERATIONMANAGER) {
 
                             if ($getStatus[1] == 1) { ?>
                               <a href="<?php echo url::base('expense/viewRListSuccess/'.$list['purchaseRequisitionId']);?>" class='fa fa-external-link pull-right' style="color:green; float:right"></a>
                             <?php } elseif ($getStatus[1] != 2) { ?>
                               <a href="<?php echo url::base('expense/viewRList/'.$list['purchaseRequisitionId']);?>" class='fa fa-external-link pull-right' style="color:green; float:right"></a>
                             <?php } 
+
+                      } elseif (authData('user.userLevel') == \model\user\user::LEVEL_FINANCIALCONTROLLER) {
+
+                            if ($getStatus[1] == 1) { ?>
+                              <a href="<?php echo url::base('expense/viewRListSuccess/'.$list['purchaseRequisitionId']);?>" class='fa fa-external-link pull-right' style="color:green; float:right"></a>
+                            <?php } 
                       }  ?>
                   <?php   
                   } 
-                  if ($getStatus[1] == 1){ ?>
+
+
+                  if ($getStatus[1] == 1){ 
+
+                      if ((authData('user.userLevel') == \model\user\user::LEVEL_OPERATIONMANAGER) || (authData('user.userLevel') == \model\user\user::LEVEL_FINANCIALCONTROLLER)) { ?>
 
                     <a href="<?php echo url::base('expense/generateRLReport/'.$list['purchaseRequisitionNumber'].'/'.$list['purchaseRequisitionId']);?>" class='fa  fa-download pull-right' style="color:green; padding-right:20%; float:right"></a>
 
-                  <?php } ?> 
+                  <?php } } ?> 
 
                   </td>
                 </tr>
