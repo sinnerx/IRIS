@@ -186,6 +186,11 @@ Class Controller_Main
 			$isOutsider		= input::get("checkPenduduk")?0:1;
 			$checkTerm		= input::get("checkTerm")?true:false;
 
+			if(authData("current_site.siteID") == model::load("config")->get("configManagerSiteID"))
+			{
+				redirect::to('', 'Pendaftaran di laman pengurus ini adalah tidak dibenarkan.', 'error');
+			}
+
 			## if got error.
 			if(($error = input::validate($rules)) || /*!$checkPenduduk || */!$checkTerm)
 			{
