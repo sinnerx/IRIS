@@ -81,8 +81,8 @@ class Menu extends Data
 									),
 					
 					"Billing"=>Array(
-						"Input Form"=>"billing/add",
-						"Edit Form"=>"billing/edit",
+						// "Input Form"=>"billing/add",
+						// "Edit Form"=>"billing/edit",
 						"Daily Cash Process"=>"billing/dailyCashProcess"
 						),
 					"PI1M Expense"=>Array(
@@ -94,7 +94,7 @@ class Menu extends Data
 		$menu['fc']	= Array(					
 					
 					"Billing"=>Array(
-						"Input Form"=>"billing/add",
+						// "Input Form"=>"billing/add",
 						"Daily Cash Process"=>"billing/dailyCashProcess"
 						),
 
@@ -133,7 +133,7 @@ class Menu extends Data
 											),
 					"Billing"=>Array(
 							"Billing Items"=>"billing/add",
-							"Edit Form"=>"billing/edit",
+							// "Edit Form"=>"billing/edit",
 							"Daily Cash Process"=>"billing/dailyCashProcess",
 							"Daily Journal"=>"billing/dailyJournal",
 							"Transaction Journal"=>"billing/transactionJournal"
