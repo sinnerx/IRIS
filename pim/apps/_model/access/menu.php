@@ -32,7 +32,7 @@ class Menu extends Data
 						"Local Billing"=>"http://localhost/cafe",
 						// "Edit Form"=>"billing/edit",
 						"Daily Cash Process"=>"billing/dailyCashProcess",
-						"Daily Cash Process Redesign" => "billing/dailyCashProcessRedesign",
+						// "Daily Cash Process Redesign" => "billing/dailyCashProcessRedesign",
 						"Daily Journal"=>"billing/dailyJournal",
 						"Transaction Journal"=>"billing/transactionJournal"
 						),

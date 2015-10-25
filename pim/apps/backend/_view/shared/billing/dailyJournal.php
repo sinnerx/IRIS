@@ -130,7 +130,7 @@ Select Date
 					foreach($transactions as $transaction):
 					?>
 					<tr>
-						<td>#<?php echo $transactionID = $transaction['billingTransactionID'];?></td>
+						<td>#<?php echo $transactionID = $transaction['billingTransactionLocalID'];?></td>
 						<td><?php echo date('g:i A', strtotime($transaction['billingTransactionDate']));?></td>
 						<td colspan="3">
 							<table width="100%" class='item-table'>

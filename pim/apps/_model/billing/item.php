@@ -9,7 +9,8 @@ class item extends \Origami
 	protected $codes = array(
 		'Membership', 'PC', 
 		'Print Color', 'Black And White',
-		'Scan', 'Laminate'
+		'Scan', 'Laminate', 'Utilities',
+		'Bank In'
 		);
 
 	public function getItemCodes()

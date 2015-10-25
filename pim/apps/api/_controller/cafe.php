@@ -261,6 +261,15 @@ class Controller_Cafe
 									->where('siteID', $this->site->siteID)
 									->where('billingTransactionLocalID', $localId)
 									->execute()->getFirst();
+
+				/*$totalTransactions++;
+
+				$transaction->billingTransactionTotalQuantity = $row_transaction['quantity'];
+				$transaction->billingTransactionTotal = $row_transaction['total'];
+				$transaction->billingTransactionDate = $row_transaction['datetime'];
+				$transaction->billingTransactionCreatedDate = $row_transaction['datetime'];
+				$transaction->billingTransactionUpdatedDate = $row_transaction['datetime'];
+				$transaction->save();*/
 			}
 			else
 			{

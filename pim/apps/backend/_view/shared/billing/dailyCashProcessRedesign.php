@@ -7,7 +7,7 @@
 
 		$('.row').floatingScrollbar();
 
-		table.toggleExpand();
+		// table.toggleExpand();
 	});
 	
 	
@@ -37,7 +37,7 @@
 		{
 			var squareWrapper = $("#a2, #b2, #c2, #d2");
 			squareWrapper.removeClass('fa-plus-square').removeClass('fa-minus-square');
-			columns = $(".billing-column-member, .billing-column-pc-day, .billing-column-pc-day, .billing-column-print");
+			columns = $(".billing-column-member, .billing-column-pc-day, .billing-column-pc-night, .billing-column-print");
 
 			// handle expansion
 			if(this.collapsed)
@@ -164,7 +164,12 @@
 
 		 overflow-x: auto;
   		width: 100%;
+	}
 
+	/* hide for now */
+	.fa-plus-square
+	{
+		display: none;
 	}
 
 </style>
@@ -196,7 +201,7 @@
 	<div class="col-sm-12  ">
 		<div class='well well-sm'>
 			 <?php 
-			  echo array_search($siteID, array_flip($siteList)); ?> Monthly Cash Report for <?php echo $selectYear; ?>/<?php echo $selectMonth; ?>
+			  echo $site->siteName; ?> Monthly Cash Report for <?php echo $selectYear; ?>/<?php echo $selectMonth; ?>
 		</div>
 		
 		<div class="table-responsive">
@@ -264,13 +269,112 @@
 				<tr>					
 					<td><?php echo date('d', strtotime($alldate[0]))  ?></td> 
 					<td  id="e1" colspan="45"> Monthly Revenue (Previous Balance) </td>
-					<td><?php echo number_format($balance, 2, '.', '')?></td>
+					<td><?php echo number_format($balance, 2, '.', '');
+					?></td>
 				</tr>
-			<?php if(count($list) > 0):?>
+<!-- Begin master loop. -->
+<?php 
+$float = function($val = null)
+{
+	if(!$val)
+		return number_format(0, 2, '.', '');
+	else
+		return number_format($val, 2, '.', '');
+};
+
+$total = function($val = null)
+{
+	return !$val ? 0 : $val;
+}
+
+?>
+<?php foreach(range(1, date('t', strtotime($selectYear.'-'.$selectMonth.'-01'))) as $day):
+			$date = $selectYear.'-'.$selectMonth.'-'.$day;
+			$date = date('Y-m-d', strtotime($date));
+			$no = 0;
+			?>
+			<tr>
+				<td><?php echo date('d', strtotime($date));?></td>
+				<td><?php echo $amount = $float($report[$date]['Membership']['total']); $totals[$no++] += $amount;?></td>
+				<td><?php echo $amount = $total($report[$date]['Membership']['total_users']); $totals[$no++] += $amount;?></td>
+				<td><?php echo $amount = $float($report[$date]['Membership']['student']['nonmember']['total']); $totals[$no++] += $amount;?></td>
+				<td><?php echo $amount = $total($report[$date]['Membership']['student']['nonmember']['total_users']); $totals[$no++] += $amount;?></td>
+				<td><?php echo $amount = $float($report[$date]['Membership']['adult']['nonmember']['total']); $totals[$no++] += $amount;?></td>
+				<td><?php echo $amount = $total($report[$date]['Membership']['adult']['nonmember']['total_users']); $totals[$no++] += $amount;?></td>
+
+				<td><?php echo $amount = $float($report[$date]['PC']['day']['total']); $totals[$no++] += $amount;?></td>
+				<td><?php echo $amount = $total($report[$date]['PC']['day']['total_users']); $totals[$no++] += $amount;?></td>
+				<td><?php echo $amount = $float($report[$date]['PC']['day']['total_quantity']); $totals[$no++] += $amount;?></td>
+				<td><?php echo $amount = $float($report[$date]['PC']['day']['student']['member']['total']); $totals[$no++] += $amount;?></td>
+				<td><?php echo $amount = $total($report[$date]['PC']['day']['student']['member']['total_users']); $totals[$no++] += $amount;?></td>
+				<td><?php echo $amount = $float($report[$date]['PC']['day']['student']['member']['total_quantity']); $totals[$no++] += $amount;?></td>
+				<td><?php echo $amount = $float($report[$date]['PC']['day']['student']['nonmember']['total']); $totals[$no++] += $amount;?></td>
+				<td><?php echo $amount = $total($report[$date]['PC']['day']['student']['nonmember']['total_users']); $totals[$no++] += $amount;?></td>
+				<td><?php echo $amount = $float($report[$date]['PC']['day']['student']['nonmember']['total_quantity']); $totals[$no++] += $amount;?></td>
+				<td><?php echo $amount = $float($report[$date]['PC']['day']['adult']['member']['total']); $totals[$no++] += $amount;?></td>
+				<td><?php echo $amount = $total($report[$date]['PC']['day']['adult']['member']['total_users']); $totals[$no++] += $amount;?></td>
+				<td><?php echo $amount = $float($report[$date]['PC']['day']['adult']['member']['total_quantity']); $totals[$no++] += $amount;?></td>
+				<td><?php echo $amount = $float($report[$date]['PC']['day']['adult']['nonmember']['total']); $totals[$no++] += $amount;?></td>
+				<td><?php echo $amount = $total($report[$date]['PC']['day']['adult']['nonmember']['total_users']); $totals[$no++] += $amount;?></td>
+				<td><?php echo $amount = $float($report[$date]['PC']['day']['adult']['nonmember']['total_quantity']); $totals[$no++] += $amount;?></td>
+
+				<td><?php echo $amount = $float($report[$date]['PC']['night']['total']); $totals[$no++] += $amount;?></td>
+				<td><?php echo $amount = $total($report[$date]['PC']['night']['total_users']); $totals[$no++] += $amount;?></td>
+				<td><?php echo $amount = $float($report[$date]['PC']['night']['total_quantity']); $totals[$no++] += $amount;?></td>
+				<td><?php echo $amount = $float($report[$date]['PC']['night']['student']['member']['total']); $totals[$no++] += $amount;?></td>
+				<td><?php echo $amount = $total($report[$date]['PC']['night']['student']['member']['total_users']); $totals[$no++] += $amount;?></td>
+				<td><?php echo $amount = $float($report[$date]['PC']['night']['student']['member']['total_quantity']); $totals[$no++] += $amount;?></td>
+				<td><?php echo $amount = $float($report[$date]['PC']['night']['student']['nonmember']['total']); $totals[$no++] += $amount;?></td>
+				<td><?php echo $amount = $total($report[$date]['PC']['night']['student']['nonmember']['total_users']); $totals[$no++] += $amount;?></td>
+				<td><?php echo $amount = $float($report[$date]['PC']['night']['student']['nonmember']['total_quantity']); $totals[$no++] += $amount;?></td>
+				<td><?php echo $amount = $float($report[$date]['PC']['night']['adult']['member']['total']); $totals[$no++] += $amount;?></td>
+				<td><?php echo $amount = $total($report[$date]['PC']['night']['adult']['member']['total_users']); $totals[$no++] += $amount;?></td>
+				<td><?php echo $amount = $float($report[$date]['PC']['night']['adult']['member']['total_quantity']); $totals[$no++] += $amount;?></td>
+				<td><?php echo $amount = $float($report[$date]['PC']['night']['adult']['nonmember']['total']); $totals[$no++] += $amount;?></td>
+				<td><?php echo $amount = $total($report[$date]['PC']['night']['adult']['nonmember']['total_users']); $totals[$no++] += $amount;?></td>
+				<td><?php echo $amount = $float($report[$date]['PC']['night']['adult']['nonmember']['total_quantity']); $totals[$no++] += $amount;?></td>
+
+				<td><?php echo $amount = $float(($report[$date]['Print Color']['total'] ? : 0) + ($report[$date]['Black And White']['total'] ? : 0)); $totals[$no++] += $amount;?></td>
+				<td><?php echo $amount = $float($report[$date]['Print Color']['total']); $totals[$no++] += $amount;?></td>
+				<td><?php echo $amount = $float($report[$date]['Black And White']['total']); $totals[$no++] += $amount;?></td>
+
+				<td><?php echo $amount = $float($report[$date]['Scan']['total']); $totals[$no++] += $amount;?></td>
+				<td><?php echo $amount = $float($report[$date]['Laminate']['total']); $totals[$no++] += $amount;?></td>
+
+				<td><?php echo $amount = $float($report[$date]['Other']['total']); $totals[$no++] += $amount;?></td>
+				<td></td>
+				<td></td>
+
+				<td><?php echo $amount = $float($sum = $report[$date]['total']); $sums += $sum;?></td>
+				<?php $balance = $balance + $sum;?>
+				<td><?php echo $amount = $float($balance);?></td>
+			</tr>
+			<?php endforeach;?>
+<!--  End of master loop. -->
+			<tr>
+				<td>Total</td>
+				<?php foreach($totals as $value):?>
+				<td><?php echo $float($value);?></td>
+				<?php endforeach;?>
+				<td></td>
+				<td></td>
+				<td><?php echo $float($sums);?></td>
+				<td><?php echo $float($balance);?></td>
+			</tr>
+			<tr>					
+				<th id="f1" colspan="47"></th>
+			</tr>
+			<tr style="background-color:#ededed">	
+				<th> </th>
+				<th id="g1" colspan="46"> Bank In </th>
+			</tr>
+
+
+			<?php if(false || count($list) > 0):?>
 			
 <?php 
 	$beginningbalance = $balance;
-foreach ($alldate as $date => $day):?>
+	foreach ($alldate as $date => $day):?>
 
 			<?php foreach ($list as $key => $row):?>
 			<?php 	

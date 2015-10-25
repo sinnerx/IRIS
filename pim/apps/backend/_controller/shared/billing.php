@@ -497,42 +497,140 @@ Class Controller_Billing
 	}
 
 
-	public function dailyCashProcessRedesign()
+	public function dailyCashProcess()
 	{
 		$data['siteID'] = $siteID = request::get("siteID", authData('site.siteID'));
 
-		$data['selectYear'] = request::get('selectYear', date('Y'));
-		$data['selectMonth'] = request::get('selectMonth', date('m'));
+		$data['selectYear'] = $year = request::get('selectYear', date('Y'));
+		$data['selectMonth'] = $month = request::get('selectMonth', date('m'));
 
 		// prepare all the required by codes.
 		$codes = model::load('billing/item')->getItemCodes();
 
-		if(!$data['siteID'])
-			die;
+		// if(!$data['siteID'])
+		// 	die;
+
+		// site list
+		if(authData('user.userLevel') == 99)
+		{
+			$data['siteList'] = model::orm('site/site')->execute()->toList('siteID', 'siteName');
+		}
 
 		$data['site'] = model::orm('site/site')
 		->where('siteID', $data['siteID'])
 		->execute()
 		->getFirst();
 
-		// assigned
-		$data['billingItemAssigned'] = model::orm('billing/item')
-		->where('billingItemID IN (SELECT billing_item_code.billingItemID FROM billing_item_code)')
-		->execute();
+		// get previous month balance.
+		// list($previousYear, $previousMonth) = explode('-', date('Y-n', strtotime('-1 month', strtotime($year.'-'.$month.'-01'))));
 
-		// other
-		$data['billingItemOther'] = model::orm('billing/item')
-		->where('billingItemID NOT IN (SELECT billing_item_code.billingItemID FROM billing_item_code)')
-		->execute();
+		// sum of total for previous month.
+		$previousTransaction = db::from('billing_transaction')
+		->select('SUM(billingTransactionTotal) as total')
+		->where('siteID', $data['siteID'])
+		->where('billingTransactionDate <', $year.'-'.$month.'-01')
+		->get()->row('total');
 
-		// Get billing_transaction_item
-		$data['transactionItems'] = model::orm('billing/transaction_item')
-		->where('billingItemID', $data['billingItemAssigned']->getAllId());
+		if($previousTransaction)
+			$data['balance'] = $previousTransaction;
+		else
+			$data['balance'] = 0;
+
+		$billingItemCode = model::orm(array('billing_item_code', 'billingItemCodeID'))->execute();
+
+		$billingItems = model::orm('billing/item')->execute();
+
+		$startDate = $year.'-'.$month.'-01';
+		
+		$transactionItems = db::from('billing_transaction_item')
+		->where('YEAR(billingTransactionDate)', $year)
+		->where('MONTH(billingTransactionDate)', $month)
+		->where('siteID', $data['siteID'])
+		->join('billing_transaction', 'billing_transaction.billingTransactionID = billing_transaction_item.billingTransactionID', 'INNER JOIN')
+		->join('billing_transaction_user', 'billing_transaction_user.billingTransactionID = billing_transaction.billingTransactionID')
+		->join('billing_item_code', 'billing_item_code.billingItemID = billing_transaction_item.billingItemID')
+		->get()->result();
+
+		// Group by date, itemCOde by item codes.
+		$report = array();
+
+		foreach($transactionItems as $row)
+		{
+			$date = date('Y-m-d', strtotime($row['billingTransactionDate']));
+
+			// if no code was configured for this item, set it to other.
+			if($row['billingItemCodeName'])
+				$code = $row['billingItemCodeName'];
+			else
+				$code = 'Other';
+
+			// if age is lower than 18, OR occupation group = 1 (student), set it to student.
+			if($row['billingTransactionUserAge'] < 18 || $row['billingTransactionUserOccupationGroup'] == 1)
+				$userType = 'student';
+			else
+				$userType = 'adult';
+
+			// if membership, status will require no member.
+			if($code == 'Membership')
+				$status = 'nonmember';
+			else
+				$status = $row['billingTransactionUser'] === 0 || !$row['billingTransactionUser'] ? 'nonmember' : 'member';
+
+			$reference = &$report[$date][$code];
+
+			// time
+			$time = date('G') > 12 ? 'night' : 'day';
+
+			// point to the time
+			if($code == 'PC')
+			{
+				if(!isset($reference[$time]))
+					$reference[$time] = array();
+
+				$reference = &$reference[$time];
+			}
+
+			// initiates.
+			if(!isset($reference['total']))
+				$reference['total'] = 0;
+
+			if(!isset($reference['total_users']))
+				$reference['total_users'] = 0;
+
+			if(!isset($reference['total_quantity']))
+				$reference['total_quantity'] = 0;
+
+			if(!isset($reference[$userType][$status]['total']))
+				$reference[$userType][$status]['total'] = 0;
+
+			if(!isset($report[$date]['total']))
+				$report[$date]['total'] = 0;
+
+			// set.
+			$transactionItemTotal = $row['billingTransactionItemPrice'] * $row['billingTransactionItemQuantity'];
+			$reference[$userType][$status]['total'] += $transactionItemTotal;
+			$reference['total'] += $transactionItemTotal;
+			$reference['total_quantity'] += $row['billingTransactionItemQuantity'];
+
+			$report[$date]['total'] += $transactionItemTotal;
+		}
+
+		$data['report'] = $report;
+
+		// echo '<pre>';
+		// print_r($report);
+		// die;
+		/*$data['itemTotalCalculator'] = function($rows)
+		{
+			$total = 0;
+			foreach($rows as $row)
+				$row['billingTransactionItemPrice'] 
+		}*/
 
 		view::render('shared/billing/dailyCashProcessRedesign', $data);
 	}
 
-	public function dailyCashProcess($id = null)
+	public function dailyCashProcessOld($id = null)
 	{		
 		$data['siteID'] = $siteID = request::get("siteID") ? : authData('site.siteID');	
 		
