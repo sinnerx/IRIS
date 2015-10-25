@@ -214,6 +214,11 @@ class Tasks
 		TRUNCATE `billing_transaction_upload`;
 		TRUNCATE `billing_transaction_user`;
 		TRUNCATE `billing_verification`;");
+
+		// remove log for billing item.
+		db::delete('task_log', array(
+			'taskLog' => 'billingItem'
+			));
 	}
 
 	public function purchaseRequisitionCategory()
