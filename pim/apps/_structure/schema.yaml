@@ -761,6 +761,7 @@ billing_transaction:
 	billingTransactionCreatedDate [datetime]
 	billingTransactionUpdatedDate [datetime]  ## backdated
 	billingTransactionStatus [int]  ##  1 = active 0 = deleted
+	billingTransactionUploaded [int] ## 1 = uploaded by cafe, 0 = created on pi1m.
 
 billing_transaction_upload:
 	billingTransactionUploadID [int]

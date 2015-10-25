@@ -284,6 +284,7 @@ class Controller_Cafe
 				$transaction->billingTransactionDate = $row_transaction['datetime'];
 				$transaction->billingTransactionCreatedDate = $row_transaction['datetime'];
 				$transaction->billingTransactionUpdatedDate = $row_transaction['datetime'];
+				$transaction->billingTransactionUploaded = 1;
 				$transaction->save();
 
 				foreach($row_transaction['transaction_items'] as $localItemId => $row_transactionItem)
