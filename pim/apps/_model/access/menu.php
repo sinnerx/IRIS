@@ -29,9 +29,10 @@ class Menu extends Data
 						"Subscribers"=>"newsletter/subscribers"
 						),
 					"Billing"=>Array(
-						"Input Form"=>"billing/add",
-						"Edit Form"=>"billing/edit",
+						"Local Billing"=>"http://localhost/cafe",
+						// "Edit Form"=>"billing/edit",
 						"Daily Cash Process"=>"billing/dailyCashProcess",
+						"Daily Cash Process Redesign" => "billing/dailyCashProcessRedesign",
 						"Daily Journal"=>"billing/dailyJournal",
 						"Transaction Journal"=>"billing/transactionJournal"
 						),
@@ -131,7 +132,7 @@ class Menu extends Data
 								"Article Category"=>Array("article/category"),
 											),
 					"Billing"=>Array(
-							"Input Form"=>"billing/add",
+							"Billing Items"=>"billing/add",
 							"Edit Form"=>"billing/edit",
 							"Daily Cash Process"=>"billing/dailyCashProcess",
 							"Daily Journal"=>"billing/dailyJournal",
@@ -178,7 +179,11 @@ class Menu extends Data
 							);
 
 		$menu['dv'] = array(
-			'Tasks' => 'task/index'
+			'Tasks' => 'task/index',
+			'Assumption' => 'task/takeOver',
+			'Billing' => array(
+				'Codes' => array('billing/code')
+				)
 			);
 
 

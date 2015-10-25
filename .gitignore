@@ -17,3 +17,4 @@ pim/server/announcement.json
 pim/apps/_files/reportGeneration/*
 pim/apps/_files/site_requisition/*
 !pim/apps/_files/site_requisition/placeholder
+repo/*

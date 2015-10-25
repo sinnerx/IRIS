@@ -77,16 +77,30 @@ Class Controller_Billing
 				$billing->billingItemName = input::get('itemName');
 				$billing->billingItemType = input::get('itemType');
 				$billing->billingItemDescription = input::get('description');
-				$billing->billingItemPrice = input::get('price');
-				$billing->billingItemUnit = 1;
+				$billing->billingItemPriceType = input::get('priceGeneral') == 1 ? 1 : 2;
+				
+				// general
+				if($billing->billingItemPriceType == 1)
+				{
+					$billing->billingItemPrice = input::get('price', 0);
+				}
+				// membership based price
+				else
+				{
+					$billing->billingItemPrice = input::get('priceMember', 0);
+					$billing->billingITemPriceNonmember = input::get('priceNonmember', 0);
+				}
+
+				// $billing->billingItemUnit = 1;
 				$billing->billingItemQuantity = 1;
 				$billing->billingItemTaxDisabled = input::get('taxDisabled');
 				$billing->billingItemDescriptionDisabled = input::get('descriptionDisabled');
-				$billing->billingItemPriceDisabled = input::get('priceDisabled');
-				$billing->billingItemUnitDisabled = input::get('unitDisabled');
-				$billing->billingItemQuantityDisabled = input::get('quantityDisabled');
+				$billing->billingItemPriceDisabled = input::get('priceEnabled') == 1 ? 0 : 1;
+				// $billing->billingItemUnitDisabled = input::get('unitDisabled');
+				$billing->billingItemQuantityDisabled = input::get('quantityEnabled') == 1 ? 0 : 1;
 				$billing->billingItemStatus = 1;
-				$billing->billingItemCreatedDate = now();
+				// $billing->billingItemCreatedDate = now();
+				$billing->billingItemUpdateddate = now();
 				$billing->save();	
 
 				$message = 'New Item added!';
@@ -124,16 +138,30 @@ Class Controller_Billing
 			$billing->billingItemName = input::get('itemName');
 			$billing->billingItemType = input::get('itemType');
 			$billing->billingItemDescription = input::get('description');
-			$billing->billingItemPrice = input::get('price');
-			$billing->billingItemUnit = 1;
+			$billing->billingItemPriceType = input::get('priceGeneral') == 1 ? 1 : 2;
+
+			// general
+				if($billing->billingItemPriceType == 1)
+				{
+					$billing->billingItemPrice = input::get('price', 0);
+				}
+				// membership based price
+				else
+				{
+					$billing->billingItemPrice = input::get('priceMember', 0);
+					$billing->billingITemPriceNonmember = input::get('priceNonmember', 0);
+				}
+
+			// $billing->billingItemUnit = 1;
 			$billing->billingItemQuantity = 1;
 			$billing->billingItemTaxDisabled = input::get('taxDisabled');
 			$billing->billingItemDescriptionDisabled = input::get('descriptionDisabled');
-			$billing->billingItemPriceDisabled = input::get('priceDisabled');
-			$billing->billingItemUnitDisabled = input::get('unitDisabled');
-			$billing->billingItemQuantityDisabled = input::get('quantityDisabled');
+			$billing->billingItemPriceDisabled = input::get('priceEnabled') == 1 ? 0 : 1;
+			// $billing->billingItemUnitDisabled = input::get('unitDisabled');
+			$billing->billingItemQuantityDisabled = input::get('quantityEnabled') == 1 ? 0 : 1;
 			$billing->billingItemStatus = 1;
 			$billing->billingItemCreatedDate = now();
+			$billing->billingItemUpdateddate = now();
 			$billing->save();
 
 			$message = 'Item Updated!';
@@ -170,6 +198,7 @@ Class Controller_Billing
 
 		$billing = model::orm('billing/billing')->find($itemID);
 
+		$billing->billingItemUpdatedDate = now();
 		$billing->billingItemStatus = 0;
 		$billing->save();
 				
@@ -467,6 +496,42 @@ Class Controller_Billing
 		redirect::to('billing/edit', $message, 'success');
 	}
 
+
+	public function dailyCashProcessRedesign()
+	{
+		$data['siteID'] = $siteID = request::get("siteID", authData('site.siteID'));
+
+		$data['selectYear'] = request::get('selectYear', date('Y'));
+		$data['selectMonth'] = request::get('selectMonth', date('m'));
+
+		// prepare all the required by codes.
+		$codes = model::load('billing/item')->getItemCodes();
+
+		if(!$data['siteID'])
+			die;
+
+		$data['site'] = model::orm('site/site')
+		->where('siteID', $data['siteID'])
+		->execute()
+		->getFirst();
+
+		// assigned
+		$data['billingItemAssigned'] = model::orm('billing/item')
+		->where('billingItemID IN (SELECT billing_item_code.billingItemID FROM billing_item_code)')
+		->execute();
+
+		// other
+		$data['billingItemOther'] = model::orm('billing/item')
+		->where('billingItemID NOT IN (SELECT billing_item_code.billingItemID FROM billing_item_code)')
+		->execute();
+
+		// Get billing_transaction_item
+		$data['transactionItems'] = model::orm('billing/transaction_item')
+		->where('billingItemID', $data['billingItemAssigned']->getAllId());
+
+		view::render('shared/billing/dailyCashProcessRedesign', $data);
+	}
+
 	public function dailyCashProcess($id = null)
 	{		
 		$data['siteID'] = $siteID = request::get("siteID") ? : authData('site.siteID');	
@@ -706,13 +771,46 @@ Class Controller_Billing
 		{
 			$data['siteList'][$row['siteID']]	= $row['siteName'];
 		}
-		$todayDateStart = date('Y-m-d', strtotime($todayDateStart)); 
-		$todayDateEnd = date('Y-m-d', strtotime($todayDateEnd)); 
+		$todayDateStart = date('Y-m-d', strtotime($todayDateStart));
+		$todayDateEnd = date('Y-m-d', strtotime($todayDateEnd));
 
-		$dailyJournal = model::load('billing/journal')->getList($siteID,$todayDateStart,$todayDateEnd);
-		$data['dailyJournal'] = $dailyJournal;
+		if($siteID)
+		{
+			$transactions = db::where('billingTransactionDate > ? AND billingTransactionDate < ?', array($todayDateStart.' 00:00:00', $todayDateEnd.' 23:59:59'))
+			->where('siteID', $siteID)
+			->group_by('billingTransactionDate ASC')
+			->get('billing_transaction')
+			->result('billingTransactionID');
+		}
+		else
+		{
+			$transactions = array();
+		}
 
-		foreach($dailyJournal as $key => $journalList) {
+		$data['groupedTransactions'] = array();
+		if(count($transactions) > 0)
+		{
+			// get all items.
+			$data['transactionItems'] = db::where('billingTransactionID', array_keys($transactions))
+			->join('billing_item', 'billing_item.billingItemID = billing_transaction_item.billingItemID')
+			->get('billing_transaction_item')
+			->result('billingTransactionID', true);
+
+			foreach($transactions as $row)
+			{
+				$date = date('Y-m-d', strtotime($row['billingTransactionDate']));
+	
+				if(!isset($data['groupedTransactions'][$date]))
+					$data['groupedTransactions'][$date] = array();
+
+				$data['groupedTransactions'][$date][] = $row;
+			}
+		}
+
+		/*$dailyJournal = model::load('billing/journal')->getList($siteID,$todayDateStart,$todayDateEnd);
+		$data['dailyJournal'] = $dailyJournal;*/
+
+		/*foreach($dailyJournal as $key => $journalList) {
 
 			$journal = model::load('billing/journal')->getListTotal($journalList['billingTransactionID']);		
 
@@ -720,7 +818,7 @@ Class Controller_Billing
 
 				$data['journal'][$journalList['billingTransactionDate']] = $journal;	
 			}
-		}
+		}*/
 
 		view::render("shared/billing/dailyJournal", $data);
 	}
@@ -747,7 +845,7 @@ Class Controller_Billing
 		$todayDateStart = date('Y-m-d', strtotime($todayDateStart)); 
 		$todayDateEnd = date('Y-m-d', strtotime($todayDateEnd)); 
 
-		$data['transactionalJournal'] = model::load('billing/journal')->getTransactionalList($siteID,$todayDateStart,$todayDateEnd);
+		/*$data['transactionalJournal'] = model::load('billing/journal')->getTransactionalList($siteID,$todayDateStart,$todayDateEnd);
 		
 		$startDate = date('Y-m-01', strtotime($todayDateStart)); 
 
@@ -755,12 +853,46 @@ Class Controller_Billing
 				->select("SUM(billingTransactionTotal) as total")
 				->where("siteID = '$siteID' AND billingTransactionDate >= '$startDate' AND billingTransactionDate <= '$todayDateStart' AND billingTransactionStatus = 1")
 				->order_by("billingTransactionDate","ASC")
-				->execute();
+				->execute();*/
+
+		if($siteID)
+		{
+			$transactions = db::where('billingTransactionDate > ? AND billingTransactionDate < ?', array($todayDateStart.' 00:00:00', $todayDateEnd.' 23:59:59'))
+			->where('siteID', $siteID)
+			->group_by('billingTransactionDate ASC')
+			->get('billing_transaction')
+			->result('billingTransactionID');
+		}
+		else
+		{
+			$transactions = array();
+		}
+
+		$data['balance'] = 0;
+		$data['groupedTransactions'] = array();
+		if(count($transactions) > 0)
+		{
+			// get all items.
+			$data['transactionItems'] = db::where('billingTransactionID', array_keys($transactions))
+			->join('billing_item', 'billing_item.billingItemID = billing_transaction_item.billingItemID')
+			->get('billing_transaction_item')
+			->result('billingTransactionID', true);
+
+			foreach($transactions as $row)
+			{
+				$date = date('Y-m-d', strtotime($row['billingTransactionDate']));
+	
+				if(!isset($data['groupedTransactions'][$date]))
+					$data['groupedTransactions'][$date] = array();
+
+				$data['groupedTransactions'][$date][] = $row;
+			}
+		}
+
+		list($year, $month) = explode('-', date('Y-m', strtotime($todayDateStart)));
 		
-		 foreach($previoussum as $previousbalance)
-		 {
-		 	$data['previoussum'] = $previousbalance->total;
-		 }
+		 /*foreach($previoussum as $previousbalance)
+		 	$data['previoussum'] = $previousbalance->total;*/
 
 		view::render("shared/billing/transactionJournal", $data);
 	}

@@ -15,10 +15,13 @@ Class Auth
 
 		$row = db::get()->row();
 
-		if($row)
-		{
-			return $row;
-		}
+		$user = model::orm('user/user')->where(array(
+			'userEmail' => $email,
+			'userPassword' => model::load("helper")->hashPassword($password)
+			))->execute()->getFirst();
+
+		if($user)
+			return $user;
 
 		return false;
 	}

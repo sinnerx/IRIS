@@ -79,7 +79,7 @@ class Controller_Main
 		$data	= authData("current_site");
 
 		db::where("siteID",authData("current_site.siteID"))->join("user_profile","user_profile.userID = site_manager.userID");
-		$data['siteManagers']	= db::get("site_manager")->result();
+		$data['siteManagers']	= db::where('siteManagerStatus', 1)->order_by('siteManagerCreatedDate ASC')->get("site_manager")->result();
 		$data['categoryNameR']	= model::load("site/message")->getCategoryName();
 
 		## a message has been submitted.

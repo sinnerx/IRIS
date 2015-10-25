@@ -110,16 +110,37 @@ var base_url	= "<?php echo url::base();?>/";
 				<tr>		
 					<th>Date</th>
 					<th>Item</th>			
-					<th>Description</th>
-					<th>Unit Price</th>
-					<th>Unit</th>
-					<th>Quantity</th>
-					<th>Total</th>
-					<th>Balance</th>
+					<!-- <th>Description</th> -->
+					<th style='text-align: center;'>Unit Price (RM)</th>
+					<th style="text-align: center;">Quantity</th>
+					<th style="text-align: center;">Total (RM)</th>
+					<th style="text-align: center;">Balance (RM)</th>
 				</tr>
-				
-			<?php
-
+			<?php if(count($groupedTransactions) === 0):?>
+				<tr>
+					<td colspan="6" style="text-align: center;">No transaction record found.</td>
+				</tr>
+			<?php else:?>
+			<?php foreach($groupedTransactions as $date => $transactions):?>
+			<?php foreach($transactions as $transaction):
+			$time = date('g:i A', strtotime($transaction['billingTransactionDate']));?>
+				<?php foreach($transactionItems[$transaction['billingTransactionID']] as $transactionItem):?>
+					<tr>
+					<td><?php echo $date.' '.$time;?></td>
+					<td><?php echo $transactionItem['billingItemName'];?></td>
+					<!-- <td></td> -->
+					<td style='text-align: center;'><?php echo number_format($itemPrice = $transactionItem['billingTransactionItemPrice'], 2, '.', '');?></td>
+					<td style="text-align: center;"><?php echo $itemQuantity = $transactionItem['billingTransactionItemQuantity'];?></td>
+					<td style="text-align: center;"><?php echo number_format($transactionTotal = ($itemPrice * $itemQuantity), 2, '.', '');?></td>
+					<td style="text-align: center;"><?php
+					$balance += $transactionTotal;
+					echo number_format($balance, 2, '.', '');?></td>
+				</tr>
+				<?php endforeach;?>
+			<?php endforeach;?>
+			<?php endforeach;?>
+			<?php endif;?>
+<?php /*
 			 $beginningbalance = $previoussum;			
 			 if(count($transactionalJournal) > 0):?>
 			<?php foreach($transactionalJournal as $journalItem):?>
@@ -142,7 +163,7 @@ var base_url	= "<?php echo url::base();?>/";
 				<tr>
 					<td colspan="8"> No Transaction</td>
 				</tr>
-				<?php endif; ?>	
+			<?php endif;*/ ?>	
 
 			</table>
 			

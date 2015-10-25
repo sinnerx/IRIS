@@ -104,59 +104,56 @@ Select Date
 			Transaction Per Item
 		</div>
 		
+		<table>
+			
+		</table>
 		<div class="table-responsive">
 			<table class='table'>
 				<tr>
-					<th>Date</th>					
-					<th>Description</th>				
-					<th>User</th>
-					<th>Unit/Hours</th>					
-					<th>Total</th>
+					<th width="15px">No.</th>
+					<th width="100px">Date/Time</th>
+					<th>Transaction Items</th>
+					<th style="width: 100px;">Quantity</th>
+					<th style="width: 100px;">Total (RM)</th>
 				</tr>
-				
-<?php if(count($dailyJournal) > 0):
-	 	foreach($dailyJournal as $key => $journalTotal):
-
-		if(count($journal) > 0):
-		 	foreach($journal as $key => $journalDetail):
-
-			if ($key == $journalTotal['billingTransactionDate']) {
-				$checkDate = date('Y-m-d', strtotime($journalTotal['billingTransactionDate']));	
-					 	
-				for ($x = 0; $x < count($journalDetail); $x++) { ?>
-    
+				<?php if(count($groupedTransactions) === 0):?>
 				<tr>
-					<td><?php 
-						if ($x == 0){echo $checkDate;} ?></td>		
-					<td><?php echo $journalDetail[$x]['billingItemName']." : ".$journalDetail[$x]['billingTransactionItemDescription']; ?></td>
-					<td><?php echo $journalDetail[$x]['billingTransactionItemQuantity']; ?></td>
-					<td><?php echo $journalDetail[$x]['billingTransactionItemUnit']; ?></td>					
-					<td><?php echo number_format($journalDetail[$x]['billingTransactionItemPrice'], 2, '.', ''); ?></td>
+					<td colspan="5" style="text-align: center;">No transaction found.</td>
 				</tr>
-<?php 			} ?>
-
+				<?php else:?>
+				<?php foreach($groupedTransactions as $date => $transactions):?>
 				<tr>
-					<td></td>
-					<th>Total : </th>
-					<th><?php echo $journalTotal['quantity']; ?></th>
-					<th><?php echo $journalTotal['unit']; ?></th>
-					<th><?php echo number_format($journalTotal['total'], 2, '.', ''); ?></th>
+					<td style="background: #e4e9ef;"></td>
+					<td style="background: #e4e9ef; font-size: 1.1em;" colspan="4"><?php echo date('d F Y', strtotime($date));?></td>
 				</tr>
-<?php		}	
-	
- 		endforeach;
-	 	else:	?>	
-				<tr>
-					<td colspan="8"> No Transaction</td>
-				</tr>
-<?php 	endif; ?>			
-
-<?php 	endforeach;?>
-<?php else:?>		
-				<tr>
-					<td colspan="8"> No Transaction</td>
-				</tr>
-<?php endif; ?>	
+					<?php 
+					foreach($transactions as $transaction):
+					?>
+					<tr>
+						<td>#<?php echo $transactionID = $transaction['billingTransactionID'];?></td>
+						<td><?php echo date('g:i A', strtotime($transaction['billingTransactionDate']));?></td>
+						<td colspan="3">
+							<table width="100%" class='item-table'>
+								<?php foreach($transactionItems[$transactionID] as $transactionItem):?>
+								<tr>
+									<td><?php echo $transactionItem['billingItemName'];?></td>
+									<td></td>
+									<td style="text-align: center;"><?php echo (float) $transactionItem['billingTransactionItemQuantity'];?></td>
+									<td style="text-align: center;"><?php echo number_format($transactionItem['billingTransactionItemPrice'] * $transactionItem['billingTransactionItemQuantity'], 2, '.', '');?></td>
+								</tr>
+								<?php endforeach;?>
+								<tr>
+									<td><strong>Total</strong></td>
+									<td></td>
+									<td width="100px"></td>
+									<td width="100px" style="text-align: center; font-weight: bold; font-size: 1.2em;">RM <?php echo number_format($transaction['billingTransactionTotal'], 2, '.', '');?></td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+					<?php endforeach;?>
+				<?php endforeach;?>
+				<?php endif;?>
 
 			</table>
 			

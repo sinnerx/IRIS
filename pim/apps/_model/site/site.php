@@ -73,6 +73,22 @@ class Site extends \Origami
 		return $members;
 	}
 
+	/**
+	 * Get cafe token. generate if ain't exists.
+	 * @return string
+	 */
+	public function getCafeToken()
+	{
+		return md5($this->siteID.md5($this->siteID));
+		if($this->siteCafeToken == '')
+		{
+			$this->siteCafeToken = md5($this->siteID.md5(microtime(true)));
+			$this->save();
+		}
+
+		return $this->siteCafeToken;
+	}
+
 	## update table site_info only.
 	public function updateSiteInfo($id,$data)
 	{

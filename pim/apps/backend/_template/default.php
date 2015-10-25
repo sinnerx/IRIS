@@ -379,7 +379,10 @@
                       $sub_active   = $controller == $menu_con && $method == $menu_meth?"class='active'":"";
                     }
 
-                    $url  = url::base($submod);
+                    if(strpos($submod, 'http://') !== 0)
+                      $url  = url::base($submod);
+                    else
+                      $url = $submod;
                     
                     echo '<li '.$sub_active.'>
                           <a href="'.$url.'" class="auto">                                                        

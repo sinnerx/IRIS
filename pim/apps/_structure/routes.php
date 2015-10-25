@@ -119,6 +119,10 @@ $routes[]	= Array("dashboard/[:controller]/[**:method]",function($param)
 
 ### API Routes ####
 // $routes['api-image-avatar']	= Array("api/photo/avatar/[**:photo-name]","controller=api:image@get","{photo-name},avatar");
+$routes['api-cafe-auth'] = array('api/cafe/[:siteID]/auth', 'controller=api:cafe@auth');
+$routes['api-cafe-default'] = array('api/cafe/[:siteID]/[**:method]', 'controller=api:cafe@{method}');
+$routes['api-public'] = array('api/public/[**:method]', 'controller=api:public@{method}');
+
 $routes[]	= Array("api/photo/[:size]/[:year]/[:month]/[:day]/[:photo-name]","controller=api:image@get","{year},{month},{day},{photo-name},{size}");
 $routes[]	= Array("api/photo/[:year]/[:month]/[:day]/[:photo-name]/[:size]","controller=api:image@get","{year},{month},{day},{photo-name},{size}");
 $routes[]	= Array("api/photo/[:photo-name]/[:size]","controller=api:image@get","{photo-name},{size}"); ## page photo api.

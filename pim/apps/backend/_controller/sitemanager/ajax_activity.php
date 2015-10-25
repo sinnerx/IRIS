@@ -31,6 +31,12 @@ class Controller_Ajax_Activity
 		//echo '<pre>';print_r($data);die;
 		view::render("sitemanager/activity/ajax/incoming", $data);
 	}
+
+	public function articleList()
+	{
+		
+	}
+
 	public function previous($articleID = 0){
 		$type = 'previous';
 		$ref = request::get('ref')?request::get('ref'):0;

@@ -29,6 +29,14 @@ class Request
 		return !$name?$_POST:($_POST[$name] != ""?$_POST[$name]:$default);
 	}
 
+	/**
+	 * Prioritize current method
+	 */
+	public static function param($name, $default = false)
+	{
+		return strtolower(self::method()) == 'get' ? self::get($name, self::post($name, $default)) : self::post($name, self::get($name, $default));
+	}
+
 	### return named parameter, from routing.
 	public static function named($name = null,$default = null)
 	{

@@ -212,6 +212,9 @@ class User extends \Origami
 			$data_user['userPassword']	= model::load("helper")->hashPassword($data['userPassword']);
 		}
 
+		$data_user['userUpdatedDate'] = date('Y-m-d H:i:s');
+		$data_user['userUpdatedUser'] = session::get('userID');
+
 		db::where('userID',$userID)->update('user',$data_user);
 		
 		$data_profile	= Array(

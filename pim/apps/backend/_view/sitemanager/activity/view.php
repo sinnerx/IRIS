@@ -191,7 +191,7 @@ var sitealbum	= new function()
 					</div>
 					<div class='tab-pane' id='blog'>
 					<?php if(!$res_article):?>
-					There's no related blog written about this activity yet. Or you may <a target='_blank' href='<?php echo url::base("site/addArticle?reportfor=".$activityID);?>'>write a new report article</a> or <a href='#'>choose from a list just as a reference</a> for this activity.
+					There's no related blog written about this activity yet. Or you may <a target='_blank' href='<?php echo url::base("site/addArticle?reportfor=".$activityID);?>'>write a new report article</a> or <a data-toggle='ajaxModal' href='<?php echo url::base('ajax/article/lists');?>'>choose from a list just as a reference</a> for this activity.
 					<?php else:?>
 					<p>List of blog article related to this activity.</p>
 					<div class='table-responsive'>

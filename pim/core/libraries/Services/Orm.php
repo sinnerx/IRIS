@@ -70,10 +70,18 @@ class Orm
 		$primary = $this->primary;
 		$table = $this->tableName;
 
-		$this->where($table.'.'.$primary, $id);
+		if($id)
+		{
+			$this->where($table.'.'.$primary, $id);
 
-		$collection =  $this->execute($primary, $id);
-		return $collection[$id];
+			$collection =  $this->execute($primary, $id);
+			return $collection[$id];
+		}
+		else
+		{
+			$collection = $this->execute();
+			$collection->getFirst();
+		}
 	}
 
 	## validate the model.
@@ -135,6 +143,7 @@ class Orm
 		$result = $dbResult->result($primary);
 
 		$collection = new Origamis();
+		$collection->configure($table, $primary);
 
 		foreach($result as $id=>$row)
 		{

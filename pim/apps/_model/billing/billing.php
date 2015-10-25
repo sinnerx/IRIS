@@ -50,6 +50,9 @@ class billing extends \Origami
 		return db::get()->result();		
 	}
 
+	/**
+	 * TO BE REMOVED
+	 */
 	public function addTransaction($siteID,$id,$data_sales)
 	{
 		

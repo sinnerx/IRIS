@@ -1,3 +1,23 @@
+<script type="text/javascript">
+  
+var itemEdit = new function()
+{
+  this.togglePricingType = function()
+  {
+    if(!$("#price-general")[0].checked)
+    {
+      $("#price").hide();
+      $(".price-membership-based").show();
+    }
+    else
+    {
+      $("#price").show();
+      $(".price-membership-based").hide();
+    }
+  }
+}
+
+</script>
 <div class="modal-dialog">
 	<div class="modal-content">
 		<div class="modal-header">
@@ -46,37 +66,52 @@
             </div>
           </div> -->
           <div class="form-group">
-            <label class="col-lg-2 control-label">Price</label>
+            <label class="col-lg-2 control-label">Price 
+            </label>
             <div class="col-lg-10">
-              <?php echo form::text("price","class='form-control'");?>
-              <div class="checkbox i-checks">            
+              <?php echo form::text("price","class='form-control' style='display: inline; width: 150px;");?> 
+              <div style="display: inline;" class="checkbox i-checks">
                 <label>
-                  <input name="priceDisabled" type="checkbox" value="1" checked><i></i><span style="font-size: 12px;">Enable Editing.</span>
+                  <input type='checkbox' id='price-general' name='priceGeneral' value='1' checked onchange="itemEdit.togglePricingType();"  /> <i></i>
+                    <span>Same for member/non-member</span>
                 </label>
               </div>
-              <!-- <div class="checkbox i-checks">            
-                <label>
-                  <input name="taxDisabled" type="checkbox" value="1" checked><i></i><span style="font-size: 12px;">Include GST.</span>
-                </label>
-              </div> -->
             </div>
           </div>
-          <div class="form-group">
+          <div class='form-group'>
+            <label class="col-lg-4 control-label">Enable editing</label>
+            <div class="col-lg-8">
+              <span class="checkbox i-checks">
+                <label>
+                  <input name="priceEnabled" type="checkbox" value="1" checked><i></i>
+                </label>
+              </span>
+            </div>
+          </div>
+          <div class='form-group price-membership-based' style="display: none;">
+            <label class="col-lg-4 control-label">Price (member)</label>
+            <div class="col-lg-8"><?php echo form::text('priceMember', 'class="form-control" style="display: inline; width: 150px;"');?></div>
+          </div>
+          <div class='form-group price-membership-based' style="display: none;">
+            <label class="col-lg-4 control-label">Price (non-member)</label>
+            <div class="col-lg-8"><?php echo form::text('priceNonmember', 'class="form-control" style="display: inline; width: 150px;"');?></div>
+          </div>
+          <?php /*<div class="form-group">
             <label class="col-lg-2 control-label">Unit</label>
             <div class="col-lg-10">
               <div class="checkbox i-checks">            
                 <label>
-                  <input name="unitDisabled" type="checkbox" value="1" checked><i></i><span style="font-size: 12px;">Enable Editing.</span>
+                  <input name="unitDisabled" type="checkbox" value="1" checked><i></i><span style="font-size: 12px;">Disable Editing.</span>
                 </label>
               </div>
             </div>
-          </div>
+          </div> */?>
           <div class="form-group">
             <label class="col-lg-2 control-label">Quantity</label>
              <div class="col-lg-10">
               <div class="checkbox i-checks">            
                 <label>
-                  <input name="quantityDisabled" type="checkbox" value="1" checked><i></i><span style="font-size: 12px;">Enable Editing.</span>
+                  <input name="quantityEnabled" type="checkbox" value="1" checked><i></i><span style="font-size: 12px;">Enable Editing.</span>
                 </label>
               </div>
             </div>
@@ -89,8 +124,6 @@
         </form>
       </div>
     </section>
-    
-
 		</div>
 	</div>
 </div>

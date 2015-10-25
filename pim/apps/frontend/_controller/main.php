@@ -72,7 +72,7 @@ Class Controller_Main
 		$data['photoName']	= model::load("api/image")->buildPhotoUrl($row['pagePhoto'],"page_small");
 
 		## repair page text to 90 words.
-		$data['pageText'] = $row['pageTextExcerpt'] == ""?model::load("helper")->purifyHTML(stripslashes($row['pageText']),90):nl2br($row['pageTextExcerpt']);
+		$data['pageText'] = model::load("helper")->purifyHTML(stripslashes($row['pageText']),90);
 		$data['siteID'] = $siteID;
 
 		view::render("main/index",$data);

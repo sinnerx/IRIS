@@ -19,7 +19,16 @@ class Tasks
 			'description' => 'heheheh'
 			));*/
 		$manager->addTask('billingItem', array(
-			'description' => 'Migrate list of task'
+			'description' => 'Migrate list of predefined billing items'
+			));
+
+		$manager->addTask('billingReset', array(
+			'repeatable' => true,
+			'description' => 'Reset billing'
+			));
+
+		$manager->addTask('updateBillingItemUpdatedDate', array(
+			'description' => 'Update billing item updated date'
 			));
 
 		$manager->addTask('addRootCoordinator', array(
@@ -41,12 +50,170 @@ class Tasks
 		$manager->addTask('purchaseRequisitionExpenditure', array(
 			'description' => 'P1IM expenditure'
 			));
+
+		$manager->addTask('updateUserUpdatedDate', array(
+			'description' => 'Update User Updated Date With User Created Date'
+			));
 	}
 
 	public function billingItem()
 	{
-		db::query("INSERT INTO `billing_item` VALUES (1,'A','Membership Student',NULL,5,1,1,NULL,NULL,NULL,1,'2015-05-29 11:00:36',NULL,NULL,1),(2,'B','Membership Adult',NULL,5,1,1,NULL,NULL,NULL,1,'2015-05-29 11:03:09',NULL,NULL,1),(3,'C','Monthly Wifi Fee, Student',NULL,0,1,1,NULL,1,1,1,'2015-05-29 11:04:32',NULL,NULL,1),(4,'D','Monthly Wifi Fee, Adult',NULL,0,1,1,NULL,1,1,1,'2015-05-29 11:05:04',NULL,NULL,1),(5,'E','PC, Member Student',NULL,1,1,1,NULL,1,1,1,'2015-05-29 11:05:55',NULL,NULL,1),(6,'F','PC, NonMem Student',NULL,2,1,1,NULL,1,1,1,'2015-05-29 11:06:19',NULL,NULL,1),(7,'G','PC, Member Adult',NULL,1,1,1,NULL,1,1,1,'2015-05-29 11:06:40',NULL,NULL,1),(8,'H','PC, NonMem Adult',NULL,2,1,1,NULL,1,1,1,'2015-05-29 11:07:03',NULL,NULL,1),(9,'I','Printing & Photostat B&W',NULL,0.2,1,1,NULL,1,1,NULL,'2015-05-29 11:07:28',NULL,NULL,1),(10,'J','Other Service',NULL,0,1,1,NULL,1,NULL,NULL,'2015-05-29 11:08:01',NULL,NULL,1),(11,'K','Printing & Photostat Color',NULL,1,1,1,NULL,NULL,1,NULL,'2015-05-29 11:09:21',NULL,NULL,1),(12,'L','Scanning',NULL,0.2,1,1,NULL,1,1,NULL,'2015-05-29 11:10:13',NULL,NULL,1),(13,'M','Laminating (A4)',NULL,1.5,1,1,NULL,1,1,NULL,'2015-05-29 11:10:41',NULL,NULL,1),(14,'Y','Utilities',NULL,0,1,1,NULL,1,NULL,NULL,'2015-05-29 11:11:04',NULL,NULL,1),(15,'Z','Transfer to NuSuara',NULL,0,1,1,NULL,1,NULL,NULL,'2015-05-29 11:11:32',NULL,NULL,1),(16,'X','Sewaan Macbook Daily',NULL,5,1,1,NULL,1,1,1,'2015-06-05 18:14:51',NULL,NULL,1),(19,'N','Transfer Out ',NULL,0,1,1,NULL,1,1,1,'2015-06-18 11:33:22',NULL,2,1)");
+		/*$data['Membership'] = array(
+			'billingItemHotkey' => 'A',
+			'billingItemPriceType' => 1,
+			'billingItemPrice' => 5,
+			'billingItemPriceNonmember' => null,
+			'billingItemQuantity' => 1,
+			'billingItemPriceDisabled' => 1,
+			'billingItemQuantityDisabled' => 1,
+			'billingItemType' => 1,
+			);
 
+		$data['Membership'] = array(
+			'billingItemHotkey' => 'A',
+			'billingItemPriceType' => 1,
+			'billingItemPrice' => 5,
+			'billingItemPriceNonmember' => null,
+			'billingItemQuantity' => 1,
+			'billingItemPriceDisabled' => 1,
+			'billingItemQuantityDisabled' => 1,
+			'billingItemType' => 1,
+			);
+
+		$data['Membership'] = array(
+			'billingItemHotkey' => 'A',
+			'billingItemPriceType' => 1,
+			'billingItemPrice' => 5,
+			'billingItemPriceNonmember' => null,
+			'billingItemQuantity' => 1,
+			'billingItemPriceDisabled' => 1,
+			'billingItemQuantityDisabled' => 1,
+			'billingItemType' => 1,
+			);
+
+		$data['Membership'] = array(
+			'billingItemHotkey' => 'A',
+			'billingItemPriceType' => 1,
+			'billingItemPrice' => 5,
+			'billingItemPriceNonmember' => null,
+			'billingItemQuantity' => 1,
+			'billingItemPriceDisabled' => 1,
+			'billingItemQuantityDisabled' => 1,
+			'billingItemType' => 1,
+			);
+
+		$data['Membership'] = array(
+			'billingItemHotkey' => 'A',
+			'billingItemPriceType' => 1,
+			'billingItemPrice' => 5,
+			'billingItemPriceNonmember' => null,
+			'billingItemQuantity' => 1,
+			'billingItemPriceDisabled' => 1,
+			'billingItemQuantityDisabled' => 1,
+			'billingItemType' => 1,
+			);
+
+		$data['Membership'] = array(
+			'billingItemHotkey' => 'A',
+			'billingItemPriceType' => 1,
+			'billingItemPrice' => 5,
+			'billingItemPriceNonmember' => null,
+			'billingItemQuantity' => 1,
+			'billingItemPriceDisabled' => 1,
+			'billingItemQuantityDisabled' => 1,
+			'billingItemType' => 1,
+			);
+
+		$data['Membership'] = array(
+			'billingItemHotkey' => 'A',
+			'billingItemPriceType' => 1,
+			'billingItemPrice' => 5,
+			'billingItemPriceNonmember' => null,
+			'billingItemQuantity' => 1,
+			'billingItemPriceDisabled' => 1,
+			'billingItemQuantityDisabled' => 1,
+			'billingItemType' => 1,
+			);
+
+		$data['Membership'] = array(
+			'billingItemHotkey' => 'A',
+			'billingItemPriceType' => 1,
+			'billingItemPrice' => 5,
+			'billingItemPriceNonmember' => null,
+			'billingItemQuantity' => 1,
+			'billingItemPriceDisabled' => 1,
+			'billingItemQuantityDisabled' => 1,
+			'billingItemType' => 1,
+			);
+
+		$data['Membership'] = array(
+			'billingItemHotkey' => 'A',
+			'billingItemPriceType' => 1,
+			'billingItemPrice' => 5,
+			'billingItemPriceNonmember' => null,
+			'billingItemQuantity' => 1,
+			'billingItemPriceDisabled' => 1,
+			'billingItemQuantityDisabled' => 1,
+			'billingItemType' => 1,
+			);
+
+		$data['Membership'] = array(
+			'billingItemHotkey' => 'A',
+			'billingItemPriceType' => 1,
+			'billingItemPrice' => 5,
+			'billingItemPriceNonmember' => null,
+			'billingItemQuantity' => 1,
+			'billingItemPriceDisabled' => 1,
+			'billingItemQuantityDisabled' => 1,
+			'billingItemType' => 1,
+			);*/
+
+		/*db::query("INSERT INTO `billing_item` VALUES (1,'A','
+			Membership Student',NULL,5,1,1,NULL,NULL,NULL,1,'2015-05-29 11:00:36',NULL,NULL,1),(2,'B','
+			Membership Adult',NULL,5,1,1,NULL,NULL,NULL,1,'2015-05-29 11:03:09',NULL,NULL,1),(3,'C','
+			Monthly Wifi Fee, Student',NULL,0,1,1,NULL,1,1,1,'2015-05-29 11:04:32',NULL,NULL,1),(4,'D','
+			Monthly Wifi Fee, Adult',NULL,0,1,1,NULL,1,1,1,'2015-05-29 11:05:04',NULL,NULL,1),(5,'E','
+			PC, Member Student',NULL,1,1,1,NULL,1,1,1,'2015-05-29 11:05:55',NULL,NULL,1),(6,'F','
+			PC, NonMem Student',NULL,2,1,1,NULL,1,1,1,'2015-05-29 11:06:19',NULL,NULL,1),(7,'G','
+			PC, Member Adult',NULL,1,1,1,NULL,1,1,1,'2015-05-29 11:06:40',NULL,NULL,1),(8,'H','
+			PC, NonMem Adult',NULL,2,1,1,NULL,1,1,1,'2015-05-29 11:07:03',NULL,NULL,1),(9,'I','
+			Printing & Photostat B&W',NULL,0.2,1,1,NULL,1,1,NULL,'2015-05-29 11:07:28',NULL,NULL,1),(10,'J','
+			Other Service',NULL,0,1,1,NULL,1,NULL,NULL,'2015-05-29 11:08:01',NULL,NULL,1),(11,'K','
+			Printing & Photostat Color',NULL,1,1,1,NULL,NULL,1,NULL,'2015-05-29 11:09:21',NULL,NULL,1),(12,'L','
+			Scanning',NULL,0.2,1,1,NULL,1,1,NULL,'2015-05-29 11:10:13',NULL,NULL,1),(13,'M','
+			Laminating (A4)',NULL,1.5,1,1,NULL,1,1,NULL,'2015-05-29 11:10:41',NULL,NULL,1),(14,'Y','
+			Utilities',NULL,0,1,1,NULL,1,NULL,NULL,'2015-05-29 11:11:04',NULL,NULL,1),(15,'Z','
+			Transfer to NuSuara',NULL,0,1,1,NULL,1,NULL,NULL,'2015-05-29 11:11:32',NULL,NULL,1),(16,'X','
+			Sewaan Macbook Daily',NULL,5,1,1,NULL,1,1,1,'2015-06-05 18:14:51',NULL,NULL,1),(19,'N','
+			Transfer Out ',NULL,0,1,1,NULL,1,1,1,'2015-06-18 11:33:22',NULL,2,1)");*/
+
+			db::query("INSERT INTO `billing_item` (`billingItemID`, `billingItemHotkey`, `billingItemName`, `billingItemDescription`, `billingItemPrice`, `billingItemUnit`, `billingItemQuantity`, `billingItemTaxDisabled`, `billingItemDescriptionDisabled`, `billingItemPriceDisabled`, `billingItemUnitDisabled`, `billingItemQuantityDisabled`, `billingItemCreatedDate`, `billingItemType`, `billingItemStatus`, `billingItemUpdatedDate`, `billingItemPriceType`, `billingItemPriceNonmember`) VALUES
+(1, 'A', 'Membership', NULL, 5, NULL, 1, NULL, NULL, 1, NULL, 1, '2015-10-22 11:10:10', 1, 1, '2015-10-22 11:10:10', 1, NULL),
+(2, 'B', 'Monthly Wifi', NULL, 0, NULL, 1, NULL, NULL, 1, NULL, 1, '2015-10-22 08:47:25', 1, 1, '2015-10-22 08:47:25', 1, NULL),
+(3, 'C', 'PC Usage', NULL, 2, NULL, 1, NULL, NULL, 1, NULL, 1, NULL, 1, 1, '2015-10-22 08:47:42', 2, 3),
+(4, 'D', 'Printing & Photostat B&W', NULL, 0.2, NULL, 1, NULL, NULL, 1, NULL, 1, '2015-10-22 09:17:52', 1, 1, '2015-10-22 09:17:52', 1, NULL),
+(5, 'E', 'Other Service', NULL, 0, NULL, 1, NULL, NULL, 0, NULL, 0, '2015-10-22 09:04:02', 1, 1, '2015-10-22 09:04:02', 1, NULL),
+(6, 'F', 'Printing & Photostat Color', NULL, 0.5, NULL, 1, NULL, NULL, 1, NULL, NULL, NULL, 1, 1, '2015-10-22 08:49:29', 1, NULL),
+(7, 'G', 'Scanning', NULL, 1, NULL, 1, NULL, NULL, 1, NULL, 0, '2015-10-22 11:17:31', 1, 1, '2015-10-22 11:17:31', 2, 2),
+(8, 'H', 'Laminating', NULL, 2, NULL, 1, NULL, NULL, 1, NULL, NULL, NULL, 1, 1, '2015-10-22 08:49:58', 1, NULL),
+(9, 'I', 'Utilities', NULL, 2, NULL, 1, NULL, NULL, 0, NULL, 0, '2015-10-22 09:22:12', 1, 1, '2015-10-22 09:22:12', 1, NULL),
+(10, 'J', 'Transfer To Nusuara', NULL, 0, NULL, 1, NULL, NULL, 0, NULL, 1, '2015-10-22 09:56:17', 2, 1, '2015-10-22 09:56:17', 1, NULL);");
+
+	}
+
+	public function billingReset()
+	{
+				db::query("TRUNCATE `billing_approval`;
+		TRUNCATE `billing_approval_level`;
+		TRUNCATE `billing_finance_transaction`;
+		TRUNCATE `billing_item`;
+		TRUNCATE `billing_item_code`;
+		TRUNCATE `billing_log`;
+		TRUNCATE `billing_transaction`;
+		TRUNCATE `billing_transaction_item`;
+		TRUNCATE `billing_transaction_upload`;
+		TRUNCATE `billing_transaction_user`;
+		TRUNCATE `billing_verification`;");
 	}
 
 	public function purchaseRequisitionCategory()
@@ -87,6 +254,16 @@ class Tasks
 			);
 
 		$row = \model::load('user/user')->add($data, 4);
+	}
+
+	public function updateUserUpdatedDate()
+	{
+		db::query("UPDATE user SET userUpdatedDate = userCreatedDate");
+	}
+
+	public function updateBillingItemUpdatedDate()
+	{
+		db::query('UPDATE billing_item SET billingItemUpdatedDate = billingItemCreatedDate');
 	}
 }
 

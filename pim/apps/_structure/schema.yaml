@@ -15,6 +15,8 @@ user:
 	userStatus [int]			## 0 = inactive, 1 = active, 3 = deleted
 	userCreatedDate [datetime]
 	userCreatedUser [int]
+	userUpdatedDate [datetime]
+	userUpdatedUser [int]
 	userLastLogin [datetime]
 
 account:
@@ -205,6 +207,13 @@ site:
 	siteUpdatedUser [int]
 	siteUpdatedDate [datetime]
 	siteRefID [int]				## the site_id for old pi1m site.
+	siteCafeToken [varchar]
+
+site_cafe:
+	siteCafeID [int]
+	siteID [int]
+	siteCafeIpAddress [varchar]
+	siteCafeLastAccess [datetime]
 
 site_info:
 	siteInfoID [int]
@@ -698,6 +707,11 @@ product:
 	productDescription [text]
 	productPrice [float]
 
+billing_item_code:
+	billingItemCodeID [int]
+	billingItemID [int]
+	billingItemCodeName [varchar]
+
 billing_item:
 	billingItemID [int]
 	billingItemHotkey [varchar]
@@ -705,16 +719,18 @@ billing_item:
 	billingItemDescription [text]
 	billingItemType [int] ## 1 = debit or 2 = credit
 	billingItemPrice [float]
+	billingItemPriceType [int] ## 1 = general, 2 = membership-based
 	billingItemPriceNonmember [float]
-	billingItemUnit [int]
-	billingItemQuantity [int]
+	#billingItemUnit [int]
+	billingItemQuantity [float]
 	billingItemTaxDisabled [int]
 	billingItemDescriptionDisabled [int]
 	billingItemPriceDisabled [int]
-	billingItemUnitDisabled [int]
+	#billingItemUnitDisabled [int]
 	billingItemQuantityDisabled [int]
-	billingItemStatus [int]
+	billingItemStatus [int] ## 1 = active, 0 = deleted.
 	billingItemCreatedDate [datetime]
+	billingItemUpdatedDate [datetime]
 
 billing_transaction_item:
 	billingTransactionItemID [int]
@@ -736,14 +752,20 @@ billing_transaction:
 	billingTransactionID [int]
 	siteID [int]
 	userID [int] ## the one created this record
-	billingTransactionTotalQuantity [int]
-	billingTransactionTotalUnit [float]
+	billingTransactionLocalID [int]
+	billingTransactionTotalQuantity [float]
+	billingTransactionTotalUnit [float] ## to be removed
 	billingTransactionTotal [float] ## grand total
 	billingTransactionAccountType [int] ## 1 = site 2 = cashout	
 	billingTransactionDate [datetime]
 	billingTransactionCreatedDate [datetime]
 	billingTransactionUpdatedDate [datetime]  ## backdated
 	billingTransactionStatus [int]  ##  1 = active 0 = deleted
+
+billing_transaction_upload:
+	billingTransactionUploadID [int]
+	siteID [int]
+	billingTransactionUploadCreatedDate [datetime]
 
 billing_log:
 	billingLogID [int]
@@ -767,7 +789,7 @@ billing_approval:
 	year [int]
 	billingApprovalCreatedDate [datetime]
 
-billing_approval_level:	
+billing_approval_level:
 	billingApprovalLevelID [int]
 	billingApprovalID [int]
 	userLevel [int]

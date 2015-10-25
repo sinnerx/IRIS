@@ -154,15 +154,15 @@ Class Controller_Auth
 				}
 
 				## if site manager
-				if($backendLoginCheck['userLevel'] == 2)
+				if($backendLoginCheck->userLevel == 2)
 				{
-					if($backendLoginCheck['userStatus'] == 3)
+					if($backendLoginCheck->userStatus == 3)
 					{
 						input::repopulate();
 						redirect::to('', 'Your account has been disabled', 'error');
 					}
 
-					$site	= $site->getSiteByManager($backendLoginCheck['userID']);
+					$site	= $site->getSiteByManager($backendLoginCheck->userID);
 
 					## and he didn't have any site yet.
 					if(!$site)
@@ -173,10 +173,10 @@ Class Controller_Auth
 				}
 
 				## login.
-				$accessAuth->login($backendLoginCheck['userID'],$backendLoginCheck['userLevel']);
+				$accessAuth->login($backendLoginCheck->userID,$backendLoginCheck->userLevel);
 
 				## go to home/index
-				redirect::to(model::load("access/data")->firstLoginLocation($backendLoginCheck['userLevel']));
+				redirect::to(model::load("access/data")->firstLoginLocation($backendLoginCheck->userLevel));
 			}
 		}
 
