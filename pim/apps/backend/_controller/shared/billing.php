@@ -499,7 +499,8 @@ Class Controller_Billing
 
 	public function dailyCashProcess()
 	{
-		$data['siteID'] = $siteID = request::get("siteID", authData('site.siteID'));
+		$siteID = authData('site.siteID');
+		$data['siteID'] = $siteID = $siteID ? : request::get("siteID");
 
 		$data['selectYear'] = $year = request::get('selectYear', date('Y'));
 		$data['selectMonth'] = $month = request::get('selectMonth', date('m'));
@@ -516,10 +517,13 @@ Class Controller_Billing
 			$data['siteList'] = model::orm('site/site')->execute()->toList('siteID', 'siteName');
 		}
 
-		$data['site'] = model::orm('site/site')
-		->where('siteID', $data['siteID'])
-		->execute()
-		->getFirst();
+		if($data['siteID'])
+			$data['site'] = model::orm('site/site')
+			->where('siteID', $data['siteID'])
+			->execute()
+			->getFirst();
+		else
+			$data['site'] = null;
 
 		// get previous month balance.
 		// list($previousYear, $previousMonth) = explode('-', date('Y-n', strtotime('-1 month', strtotime($year.'-'.$month.'-01'))));

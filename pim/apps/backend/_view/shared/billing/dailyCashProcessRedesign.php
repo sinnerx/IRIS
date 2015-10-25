@@ -197,13 +197,13 @@
 	</div>
 </div>
 
+<?php if($site):?>
 <div class='row ov'>
 	<div class="col-sm-12  ">
 		<div class='well well-sm'>
 			 <?php 
 			  echo $site->siteName; ?> Monthly Cash Report for <?php echo $selectYear; ?>/<?php echo $selectMonth; ?>
 		</div>
-		
 		<div class="table-responsive">
 			<table class='table b-t b-light'>
 
@@ -368,373 +368,6 @@ $total = function($val = null)
 				<th> </th>
 				<th id="g1" colspan="46"> Bank In </th>
 			</tr>
-
-
-			<?php if(false || count($list) > 0):?>
-			
-<?php 
-	$beginningbalance = $balance;
-	foreach ($alldate as $date => $day):?>
-
-			<?php foreach ($list as $key => $row):?>
-			<?php 	
-				$row = $list[$key];
-				if ($day == $key) {
-			?> 
-				 	
-				<tr>
-					<td><?php echo date('d', strtotime($key))  ?></td> 
-									
-					<td><?php $totalMemberMonthly = $totalMemberMonthly + $row['Membership Student']['total'] +  $row['Membership Adult']['total']; 
-							  $totalMember = $row['Membership Student']['total'] +  $row['Membership Adult']['total'];
-						echo number_format($totalMember, 2, '.', '') ?></td> 
-					<td><?php $quantityMemberMonthly = $quantityMemberMonthly + $row['Membership Student']['quantity'] + $row['Membership Adult']['quantity'];
-								echo $row['Membership Student']['quantity'] + $row['Membership Adult']['quantity'] ?></td> 
-
-					<td class="billing-column-member"><?php $totalStudentMonthly = $totalStudentMonthly + $row['Membership Student']['total'];
-									echo number_format($row['Membership Student']['total'], 2, '.', '') ?></td> 
-					<td class="billing-column-member"><?php $quantityStudentMonthly = $quantityStudentMonthly +  $row['Membership Student']['quantity'];
-									echo number_format($row['Membership Student']['quantity'], 0, '', '') ?></td> 
-
-
-					<td class="billing-column-member"><?php $totalAdultMonthly = $totalAdultMonthly + $row['Membership Adult']['total'];
-									echo number_format($row['Membership Adult']['total'], 2, '.', '') ?></td> 
-					<td class="billing-column-member"><?php $quantityAdultMonthly = $quantityAdultMonthly +  $row['Membership Adult']['quantity'];
-									echo number_format($row['Membership Adult']['quantity'], 0, '', '') ?></td> 
-
-					<?php 
-
- 					if ($row['PC, Member Student']['pcType'] == 'Day') { 
-					$pcMemStudentTotal  = number_format($row['PC, Member Student']['total'], 2, '.', '');  
-					$pcMemStudentQuantity  = $row['PC, Member Student']['quantity'];  
-					$pcMemStudentUnit  =   $row['PC, Member Student']['unit'];  
-					} else {
-
-					$pcMemStudentTotal  = 0.00;  
-					$pcMemStudentQuantity  = 0;  
-					$pcMemStudentUnit  =   0;  			
-					}
-
-					if ($row['PC, Member Student']['pcType'] == 'Night') { 
-					$pcMemStudentTotalN  = number_format($row['PC, Member Student']['total'], 2, '.', '');  
-					$pcMemStudentQuantityN  = $row['PC, Member Student']['quantity'];  
-					$pcMemStudentUnitN  =   $row['PC, Member Student']['unit'];  
-					} else {
-
-					$pcMemStudentTotalN  = 0.00;  
-					$pcMemStudentQuantityN  = 0;  
-					$pcMemStudentUnitN  =   0;  		
-
-					}
-
-					 if ($row['PC, NonMem Student']['pcType'] == 'Day') { 
-					$pcNonMemStudentTotal = number_format($row['PC, NonMem Student']['total'], 2, '.', ''); 
-					$pcNonMemStudentQuantity = $row['PC, NonMem Student']['quantity'];  
-					$pcNonMemStudentUnit = $row['PC, NonMem Student']['unit'];  
-					 } else { 
-					$pcNonMemStudentTotal  = 0.00;  
-					$pcNonMemStudentQuantity  = 0;  
-					$pcNonMemStudentUnit  = 0;  
-					 } 
-
-					 if ($row['PC, NonMem Student']['pcType'] == 'Night') { 
-					 $pcNonMemStudentTotalN = number_format($row['PC, NonMem Student']['total'], 2, '.', ''); 
-					$pcNonMemStudentQuantityN = $row['PC, NonMem Student']['quantity'];  
-					$pcNonMemStudentUnitN = $row['PC, NonMem Student']['unit'];  
-					} else { 
-					$pcNonMemStudentTotalN  = 0.00;  
-					$pcNonMemStudentQuantityN  = 0;  
-					$pcNonMemStudentUnitN  = 0;  
-					 } 
-
-					if ($row['PC, Member Adult']['pcType'] == 'Day') { 
-					$pcMemAdultTotal = number_format($row['PC, Member Adult']['total'], 2, '.', ''); 
-					$pcMemAdultQuantity = $row['PC, Member Adult']['quantity'];  
-					$pcMemAdultUnit = $row['PC, Member Adult']['unit'];  
-					 } else { 
-					$pcMemAdultTotal = 0.00;  
-					$pcMemAdultQuantity  = 0;  
-					$pcMemAdultUnit  = 0;  
-					 } 
-
-					if ($row['PC, Member Adult']['pcType'] == 'Night') { 
-					$pcMemAdultTotalN = number_format($row['PC, Member Adult']['total'], 2, '.', ''); 
-					$pcMemAdultQuantityN = $row['PC, Member Adult']['quantity'];  
-					$pcMemAdultUnitN = $row['PC, Member Adult']['unit'];  
-					 } else { 
-					$pcMemAdultTotalN = 0.00;  
-					$pcMemAdultQuantityN  = 0;  
-					$pcMemAdultUnitN  = 0;  
-					 } 
-
-					 if ($row['PC, NonMem Adult']['pcType'] == 'Day') { 
-					$pcNonMemAdultTotal = number_format($row['PC, NonMem Adult']['total'], 2, '.', ''); 
-					$pcNonMemAdultQuantity = $row['PC, NonMem Adult']['quantity'];  
-					$pcNonMemAdultUnit = $row['PC, NonMem Adult']['unit'];  
-					 } else { 
-					$pcNonMemAdultTotal = 0.00;  
-					$pcNonMemAdultQuantity  = 0;  
-					$pcNonMemAdultUnit  = 0;  
-					 } 
-
-					 if ($row['PC, NonMem Adult']['pcType'] == 'Night') { 
-					$pcNonMemAdultTotalN = number_format($row['PC, NonMem Adult']['total'], 2, '.', ''); 
-					$pcNonMemAdultQuantityN = $row['PC, NonMem Adult']['quantity'];  
-					$pcNonMemAdultUnitN = $row['PC, NonMem Adult']['unit'];  
-					 } else { 
-					$pcNonMemAdultTotalN = 0.00;  
-					$pcNonMemAdultQuantityN  = 0;  
-					$pcNonMemAdultUnitN  = 0;  
-					 } 
-
-					?>
-
-					<td><?php $totalpc = $totalpc + $pcMemStudentTotal +  $pcNonMemStudentTotal + $pcMemAdultTotal +  $pcNonMemAdultTotal;  
-							  $total =  $pcMemStudentTotal +  $pcNonMemStudentTotal + $pcMemAdultTotal +  $pcNonMemAdultTotal; 
-							  echo number_format($total, 2, '.', ''); ?></td> 
-					<td><?php $pcQuantity = $pcQuantity + $pcMemStudentQuantity +  $pcNonMemStudentQuantity + $pcMemAdultQuantity +  $pcNonMemAdultQuantity;
-							  echo $pcMemStudentQuantity +  $pcNonMemStudentQuantity + $pcMemAdultQuantity +  $pcNonMemAdultQuantity; ?></td> 
-					<td><?php $pcUnit = $pcUnit + $pcMemStudentUnit +  $pcNonMemStudentUnit + $pcMemAdultUnit +  $pcNonMemAdultUnit;
-							  echo $pcMemStudentUnit +  $pcNonMemStudentUnit + $pcMemAdultUnit +  $pcNonMemAdultUnit; ?></td> 
-					
-					<td class="billing-column-pc-day"><?php $totalPcStudent = $totalPcStudent + number_format($pcMemStudentTotal, 2, '.', '');
-							  echo number_format($pcMemStudentTotal, 2, '.', ''); ?></td> 
-					<td class="billing-column-pc-day"><?php $quantityPcStudent = $quantityPcStudent + $pcMemStudentQuantity; 
-							  echo $pcMemStudentQuantity; ?></td> 
-					<td class="billing-column-pc-day"><?php $unitPcStudent = $unitPcStudent + $pcMemStudentUnit; 
-					          echo $pcMemStudentUnit; ?></td> 
-					
-					<td class="billing-column-pc-day"><?php $totalPcNonStudent = $totalPcNonStudent + number_format($pcNonMemStudentTotal, 2, '.', '');
-					          echo number_format($pcNonMemStudentTotal, 2, '.', ''); ?></td> 
-					<td class="billing-column-pc-day"><?php $quantityPcStudent1 = $quantityPcStudent1 + $pcNonMemStudentQuantity; 
-					          echo $pcNonMemStudentQuantity; ?></td>
-					<td class="billing-column-pc-day"><?php $unitPcStudent1 = $unitPcStudent1 + $pcNonMemStudentUnit; 
-					          echo $pcNonMemStudentUnit; ?></td>
-					
-					<td class="billing-column-pc-day"><?php $totalPcAdult = $totalPcAdult + number_format($pcMemAdultTotal, 2, '.', '');
-					          echo number_format($pcMemAdultTotal, 2, '.', ''); ?></td> 
-					<td class="billing-column-pc-day"><?php $quantityPcAdult = $quantityPcAdult + $pcMemAdultQuantity; 
-					          echo $pcMemAdultQuantity; ?></td>
-					<td class="billing-column-pc-day"><?php $unitPcAdult = $unitPcAdult + $pcMemAdultUnit; 
-					          echo $pcMemAdultUnit; ?></td>
-					
-					<td class="billing-column-pc-day"><?php $totalPcNonAdult = $totalPcNonAdult + number_format($pcNonMemAdultTotal, 2, '.', '');
-							  echo number_format($pcNonMemAdultTotal, 2, '.', ''); ?></td> 
-					<td class="billing-column-pc-day"><?php $quantityPcAdult1 = $quantityPcAdult1 + $pcNonMemAdultQuantity; 
-					   	 	  echo $pcNonMemAdultQuantity; ?></td>
-					<td class="billing-column-pc-day"><?php $unitPcAdult1 = $unitPcAdult1 + $pcNonMemAdultUnit; 
-							  echo $pcNonMemAdultUnit; ?></td>
-					
-					
-					<!--  PC, Member Student    NIGHT -->
-					<td><?php $totalpcN = $totalpcN + $pcMemStudentTotalN +  $pcNonMemStudentTotalN + $pcMemAdultTotalN +  $pcNonMemAdultTotalN;  
-							  $totalN =  $pcMemStudentTotalN +  $pcNonMemStudentTotalN + $pcMemAdultTotalN +  $pcNonMemAdultTotalN; 
-							  echo number_format($totalN, 2, '.', ''); ?></td> 
-					<td><?php $pcQuantityN = $pcQuantityN + $pcMemStudentQuantityN +  $pcNonMemStudentQuantityN + $pcMemAdultQuantityN +  $pcNonMemAdultQuantityN;
-							  echo 	$pcMemStudentQuantityN +  $pcNonMemStudentQuantityN + $pcMemAdultQuantityN +  $pcNonMemAdultQuantityN; ?></td> 
-					<td><?php $pcUnitN = $pcUnitN + $pcMemStudentUnitN +  $pcNonMemStudentUnitN + $pcMemAdultUnitN +  $pcNonMemAdultUnitN;
-						      echo 	$pcMemStudentUnitN +  $pcNonMemStudentUnitN + $pcMemAdultUnitN +  $pcNonMemAdultUnitN; ?></td> 
-					
-					<td class="billing-column-pc-night"><?php $totalPcStudentN = $totalPcStudentN + number_format($pcMemStudentTotalN, 2, '.', '');
-					                    echo number_format($pcMemStudentTotalN, 2, '.', ''); ?></td> 
-					<td class="billing-column-pc-night"><?php $quantityPcStudentN = $quantityPcStudentN + $pcMemStudentQuantityN; 
-					                    echo $pcMemStudentQuantityN; ?></td> 
-					<td class="billing-column-pc-night"><?php $unitPcStudentN = $unitPcStudentN + $pcMemStudentUnitN; 
-					                    echo $pcMemStudentUnitN; ?></td> 
-					
-					<td class="billing-column-pc-night"><?php $totalPcNonStudentN = $totalPcNonStudentN + number_format($pcNonMemStudentTotalN, 2, '.', '');
-					                    echo number_format($pcNonMemStudentTotalN, 2, '.', ''); ?></td> 
-					<td class="billing-column-pc-night"><?php $quantityPcStudent1N = $quantityPcStudent1N + $pcNonMemStudentQuantityN; 
-					                    echo $pcNonMemStudentQuantityN; ?></td>
-					<td class="billing-column-pc-night"><?php $unitPcStudent1N = $unitPcStudent1N + $pcNonMemStudentUnitN; 
-					                    echo $pcNonMemStudentUnitN; ?></td>
-					
-					<td class="billing-column-pc-night"><?php $totalPcAdultN = $totalPcAdultN + number_format($pcMemAdultTotalN, 2, '.', '');
-					          			echo number_format($pcMemAdultTotalN, 2, '.', ''); ?></td> 
-					<td class="billing-column-pc-night"><?php $quantityPcAdultN = $quantityPcAdultN + $pcMemAdultQuantityN; 
-					          			echo $pcMemAdultQuantityN; ?></td>
-					<td class="billing-column-pc-night"><?php $unitPcAdultN = $unitPcAdultN + $pcMemAdultUnitN; 
-					          			echo $pcMemAdultUnitN; ?></td>
-					
-					<td class="billing-column-pc-night"><?php $totalPcNonAdultN = $totalPcNonAdultN + number_format($pcNonMemAdultTotalN, 2, '.', '');
-							  			echo number_format($pcNonMemAdultTotalN, 2, '.', ''); ?></td> 
-					<td class="billing-column-pc-night"><?php $quantityPcAdult1N = $quantityPcAdult1N + $pcNonMemAdultQuantityN; 
-					   	 	  			echo $pcNonMemAdultQuantityN; ?></td>
-					<td class="billing-column-pc-night"><?php $unitPcAdult1N = $unitPcAdult1N + $pcNonMemAdultUnitN; 
-							  			echo $pcNonMemAdultUnitN; ?></td>					
-
-					<td><?php $totalAllPrint = $totalAllPrint + $row['Printing & Photostat Color']['total'] + $row['Printing & Photostat B&W']['total']; 
-							  $totalPrint = $row['Printing & Photostat Color']['total'] + $row['Printing & Photostat B&W']['total']; 
-							  echo number_format($totalPrint, 2, '.', ''); ?></td> 	
-
-					<?php if ($row['Printing & Photostat B&W']['date'] == $key) { ?>
-					<td class="billing-column-print"><?php $totalPrintBW = $totalPrintBW + $row['Printing & Photostat B&W']['total'];
-										echo number_format($row['Printing & Photostat B&W']['total'], 2, '.', ''); ?></td> 
-					<?php } else { ?>
-					<td class="billing-column-print">0.00</td> 
-					<?php } ?>
-
-					<?php if ($row['Printing & Photostat Color']['date'] == $key) { ?>										
-					<td class="billing-column-print"><?php $totalPrintC = $totalPrintC + $row['Printing & Photostat Color']['total'];
-										echo number_format($row['Printing & Photostat Color']['total'], 2, '.', ''); ?></td> 
-					<?php } else { ?>
-					<td class="billing-column-print">0.00</td> 
-					<?php } ?>
-					
-					<?php if ($row['Scanning']['date'] == $key) { ?>										
-					<td><?php $totalAllScan = $totalAllScan + number_format($row['Scanning']['total'], 2, '.', '');
-									echo number_format($row['Scanning']['total'], 2, '.', ''); ?></td> 
-					<?php } else { ?>
-					<td>0.00</td> 
-					<?php } ?>
-
-					<?php if ($row['Laminating (A4)']['date'] == $key) { ?>										
-					<td><?php $totalAllLaminate =  $totalAllLaminate + number_format($row['Laminating (A4)']['total'], 2, '.', '');
-									echo number_format($row['Laminating (A4)']['total'], 2, '.', ''); ?></td> 
-					<?php } else { ?>
-					<td>0.00</td> 
-					<?php } ?>
-
-					<?php if ($row['Other Service']['date'] == $key) { ?>										
-					<td><?php $totalOther = $totalOther + number_format($row['Other Service']['total'], 2, '.', '');
-									echo number_format($row['Other Service']['total'], 2, '.', ''); ?></td> 
-					<?php } else { ?>
-					<td>0.00</td> 
-					<?php } ?>
-
-					<?php if ($row['Utilities']['date'] == $key) { ?>										
-					<td><?php $totalUtilities = $totalUtilities + number_format($row['Utilities']['total'], 2, '.', ''); 
-									echo number_format($row['Utilities']['total'], 2, '.', ''); ?></td> 
-					<?php } else { ?>
-					<td>0.00</td> 
-					<?php } ?>
-
-					<?php if ($row['Utilities']['date'] == $key) { ?>										
-					<td><?php echo $row['Utilities']['desc']; ?></td> 
-					<?php } else { ?>
-					<td></td> 
-					<?php } ?>
-
-					<td><?php 
-								$dailytotal = $dailytotal + $totallist[$key]['total']; 
-								echo $totalperday = number_format($totallist[$key]['total'], 2, '.', ''); 
-					?></td>
-					<td><?php 	
-								$beginningbalance = $totallist[$key]['total'] + $beginningbalance;
-								echo $beginningbalance = number_format($beginningbalance, 2, '.', '');
-					 ?></td>	
-										
-				</tr>
-
-				<?php break; } ?>
-
-			<?php  endforeach;?>
-
-	<?php if ($day != $availableDate[$day][0]) {  ?>
-				<tr>						
-					<td><?php echo date('d', strtotime($day))  ?></td> 
-					<td>0.00</td><td>0</td> 
-					<td class="billing-column-member">0.00</td><td class="billing-column-member">0</td>	
-					<td class="billing-column-member">0.00</td><td class="billing-column-member">0</td> 
-					
-					<td>0.00</td><td>0</td><td>0</td> 
-					<td class="billing-column-pc-day">0.00</td><td class="billing-column-pc-day">0</td><td class="billing-column-pc-day">0</td>	
-					<td class="billing-column-pc-day">0.00</td><td class="billing-column-pc-day">0</td><td class="billing-column-pc-day">0</td>	
-					<td class="billing-column-pc-day">0.00</td><td class="billing-column-pc-day">0</td><td class="billing-column-pc-day">0</td>	
-					<td class="billing-column-pc-day">0.00</td><td class="billing-column-pc-day">0</td><td class="billing-column-pc-day">0</td>	
-					
-					<td>0.00</td><td>0</td><td>0</td> 
-					<td class="billing-column-pc-night">0.00</td><td class="billing-column-pc-night">0</td><td class="billing-column-pc-night">0</td>	
-					<td class="billing-column-pc-night">0.00</td><td class="billing-column-pc-night">0</td><td class="billing-column-pc-night">0</td>	
-					<td class="billing-column-pc-night">0.00</td><td class="billing-column-pc-night">0</td><td class="billing-column-pc-night">0</td>	
-					<td class="billing-column-pc-night">0.00</td><td class="billing-column-pc-night">0</td><td class="billing-column-pc-night">0</td>	
-										
-					<td>0.00</td><td class="billing-column-print">0.00</td><td class="billing-column-print">0.00</td><td>0.00</td><td>0.00</td>	
-					<td>0.00</td><td>0.00</td><td> </td> <td>0.00</td><td><?php echo $beginningbalance = number_format($beginningbalance, 2, '.', '');?></td>
-				</tr>
-
-	<?php } ?>
-				
-
-
-<?php endforeach;?>
-				<tr>	
-					<td>Total</td> 
-					<td><?php echo number_format($totalMemberMonthly, 2, '.', '') ?></td>
-					<td><?php echo $quantityMemberMonthly ?></td>  
-					<td class="billing-column-member"><?php echo number_format($totalStudentMonthly, 2, '.', '') ?></td>
-					<td class="billing-column-member"><?php echo $quantityStudentMonthly ?></td>  
-					<td class="billing-column-member"><?php echo number_format($totalAdultMonthly, 2, '.', '') ?></td>
-					<td class="billing-column-member"><?php echo $quantityAdultMonthly ?></td>  
-					
-					<td><?php echo number_format($totalpc, 2, '.', '') ?></td>
-					<td><?php echo $pcQuantity ?></td>  
-					<td><?php echo $pcUnit ?></td>  
-					<td class="billing-column-pc-day"><?php echo number_format($totalPcStudent, 2, '.', '') ?></td>
-					<td class="billing-column-pc-day"><?php echo $quantityPcStudent ?></td>  
-					<td class="billing-column-pc-day"><?php echo $unitPcStudent ?></td>  
-					<td class="billing-column-pc-day"><?php echo number_format($totalPcNonStudent, 2, '.', '') ?></td>
-					<td class="billing-column-pc-day"><?php echo $quantityPcStudent1 ?></td>  
-					<td class="billing-column-pc-day"><?php echo $unitPcStudent1 ?></td>  
-					<td class="billing-column-pc-day"><?php echo number_format($totalPcAdult, 2, '.', '') ?></td>
-					<td class="billing-column-pc-day"><?php echo $quantityPcAdult ?></td>  
-					<td class="billing-column-pc-day"><?php echo $unitPcAdult ?></td>  
-					<td class="billing-column-pc-day"><?php echo number_format($totalPcNonAdult, 2, '.', '') ?></td>
-					<td class="billing-column-pc-day"><?php echo $quantityPcAdult1 ?></td>  
-					<td class="billing-column-pc-day"><?php echo $unitPcAdult1 ?></td>  
-					
-					<td><?php echo number_format($totalpcN, 2, '.', '') ?></td>
-					<td><?php echo $pcQuantityN ?></td>  
-					<td><?php echo $pcUnitN ?></td>  
-					<td class="billing-column-pc-night"><?php echo number_format($totalPcStudentN, 2, '.', '') ?></td>
-					<td class="billing-column-pc-night"><?php echo $quantityPcStudentN ?></td>  
-					<td class="billing-column-pc-night"><?php echo $unitPcStudentN ?></td>  
-					<td class="billing-column-pc-night"><?php echo number_format($totalPcNonStudentN, 2, '.', '') ?></td>
-					<td class="billing-column-pc-night"><?php echo $quantityPcStudent1N ?></td>  
-					<td class="billing-column-pc-night"><?php echo $unitPcStudent1N ?></td>  
-					<td class="billing-column-pc-night"><?php echo number_format($totalPcAdultN, 2, '.', '') ?></td>
-					<td class="billing-column-pc-night"><?php echo $quantityPcAdultN ?></td>  
-					<td class="billing-column-pc-night"><?php echo $unitPcAdultN ?></td>  
-					<td class="billing-column-pc-night"><?php echo number_format($totalPcNonAdultN, 2, '.', '') ?></td>
-					<td class="billing-column-pc-night"><?php echo $quantityPcAdult1N ?></td>  
-					<td class="billing-column-pc-night"><?php echo $unitPcAdult1N ?></td>  
-										
-					<td><?php echo number_format($totalAllPrint, 2, '.', '') ?></td>
-					<td class="billing-column-print"><?php echo number_format($totalPrintBW, 2, '.', '') ?></td>
-					<td class="billing-column-print"><?php echo number_format($totalPrintC, 2, '.', '') ?></td>
-					<td><?php echo number_format($totalAllScan, 2, '.', '') ?></td>
-					<td><?php echo number_format($totalAllLaminate, 2, '.', '') ?></td>
-					<td><?php echo number_format($totalOther, 2, '.', '') ?></td>
-					<td><?php echo number_format($totalUtilities, 2, '.', '') ?></td>
-					<td> </td> 
-					<td><?php echo $dailytotal = number_format($dailytotal, 2, '.', '');?></td>
-					<td><?php echo $beginningbalance = number_format($beginningbalance, 2, '.', '');?></td>
-				</tr>
-				<tr>					
-					<th id="f1" colspan="47"></th>
-				</tr>
-				<tr style="background-color:#ededed">	
-					<th> </th>
-					<th id="g1" colspan="46"> Bank In </th>
-				</tr>
-			<?php
-
-			 foreach ($transferList as $key => $row):?>
-				<tr>
-					<td><?php echo date('d', strtotime($row['date']))  ?></td> 
-					<td class="j1" colspan="44"><?php echo $row['description']?></td>
-					<td><?php echo number_format($row['total'], 2, '.', '');?></td>
-					<td><?php $beginningbalance = $beginningbalance + $row['total'];
-					echo number_format($beginningbalance, 2, '.', '');?></td>
-				</tr>
-			<?php endforeach;?>
-
-			<?php else:?>		
-				<tr>
-					<td id="f1" colspan="47"> No Transaction</td>
-				</tr>
-				<?php endif; ?>	
-
 			</table>			
 		</div>
 	</div>
@@ -868,6 +501,13 @@ $total = function($val = null)
 	
 	</div>
 </div>
+<?php elseif(authData('user.userLevel') != 2):?>
+<div class='well well-sm'>Please choose one of the sites</div>
+<?php endif;?>
+
+
+
+
 <?php 
 
 
@@ -940,7 +580,7 @@ $total = function($val = null)
 
 
 return;
-
+/* BELOW HERE IS A POINT OF NO RETURN CODES! */
 
 
 
