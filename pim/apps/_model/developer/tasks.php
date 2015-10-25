@@ -217,7 +217,7 @@ class Tasks
 
 		// remove log for billing item.
 		db::delete('task_log', array(
-			'taskLog' => 'billingItem'
+			'taskCode' => 'billingItem'
 			));
 	}
 
