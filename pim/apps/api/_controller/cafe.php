@@ -187,7 +187,7 @@ class Controller_Cafe
 	public function lastTransactionDate()
 	{
 		$row = db::from('billing_transaction')
-		->where('siteID', $this->site->sipteID)
+		->where('siteID', $this->site->siteID)
 		->limit(1)
 		->order_by('billingTransactionDate DESC')
 		->get()
