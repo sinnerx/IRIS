@@ -513,9 +513,7 @@ Class Controller_Billing
 
 		// site list
 		if(authData('user.userLevel') == 99)
-		{
 			$data['siteList'] = model::orm('site/site')->execute()->toList('siteID', 'siteName');
-		}
 
 		if($data['siteID'])
 			$data['site'] = model::orm('site/site')
@@ -524,6 +522,9 @@ Class Controller_Billing
 			->getFirst();
 		else
 			$data['site'] = null;
+
+		if(!$data['site'])
+			goto skipall;
 
 		// get previous month balance.
 		// list($previousYear, $previousMonth) = explode('-', date('Y-n', strtotime('-1 month', strtotime($year.'-'.$month.'-01'))));
@@ -630,6 +631,8 @@ Class Controller_Billing
 			foreach($rows as $row)
 				$row['billingTransactionItemPrice'] 
 		}*/
+
+		skipall:
 
 		view::render('shared/billing/dailyCashProcessRedesign', $data);
 	}

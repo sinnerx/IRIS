@@ -187,7 +187,7 @@ class Controller_Cafe
 	public function lastTransactionDate()
 	{
 		$row = db::from('billing_transaction')
-		->where('siteID', $this->site->siteID)
+		->where('siteID', $this->site->sipteID)
 		->limit(1)
 		->order_by('billingTransactionDate DESC')
 		->get()
@@ -245,7 +245,9 @@ class Controller_Cafe
 		$allIds = array_keys($transactions);
 
 		// existing.
-		$existing = db::from('billing_transaction')->where('billingTransactionLocalID', $allIds)->get()->result('billingTransactionLocalID');
+		$existing = db::from('billing_transaction')
+		->where('siteID', $this->site->siteID)
+		->where('billingTransactionLocalID', $allIds)->get()->result('billingTransactionLocalID');
 		$localIds = array_keys($existing);
 
 		$totalTransactions = 0;
