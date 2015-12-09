@@ -13,6 +13,10 @@ Sample admin login ( http://p1m.gaia.my/dashboard/login )
 
 Root : root@gmail.com / 12345
 
+Operation Manager : opsmanager@gmail.com
+
+Financer Controlelr : fc@gmail.com
+
 Cluster lead (for semenanjung cluster)
 
 shamsul@nusuara.com
