@@ -154,6 +154,7 @@ class Controller_Cafe
 		db::from('billing_item')
 		->select(array(
 			'billingItemID',
+			'billingItemCode as code',
 			'billingItemHotkey as hotkey',
 			'billingItemName as name',
 			'billingItemDescription as description',

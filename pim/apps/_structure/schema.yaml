@@ -716,6 +716,7 @@ billing_item:
 	billingItemID [int]
 	billingItemHotkey [varchar]
 	billingItemName [varchar]
+	billingItemCode [varchar]
 	billingItemDescription [text]
 	billingItemType [int] ## 1 = debit or 2 = credit
 	billingItemPrice [float]
