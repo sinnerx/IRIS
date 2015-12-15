@@ -250,7 +250,7 @@ class Controller_User
 			$email = request::post('userEmail');
 
 			$accessAuth = model::load("access/auth");
-			$user = db::where('userEmail', $email)->where('userLevel', 2)->get('user')->row();
+			$user = db::where('userEmail', $email)->where('userLevel', array(2,3))->get('user')->row();
 
 			if($user)
 			{
