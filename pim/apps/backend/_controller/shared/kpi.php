@@ -1,7 +1,147 @@
 <?php
 Class Controller_Kpi
 {
-	public function kpi_overview($page = 1, $month = null,$year = null)
+	public function kpi_overview($page = null)
+	{
+		$year = $data['year'] = request::get('year', date('Y'));
+		$month = $data['month'] = request::get('month', date('n'));
+
+		// test
+
+		$data['max'] = array(
+			'event' => 2,
+			'entrepreneurship_class' => 1,
+			'entrepreneurship_sales' => 300,
+			'training_hours' => 48,
+			'active_member_percentage' => 80
+			);
+
+		db::from('site');
+		db::order_by('siteName');
+
+		if(authData('user.userLevel') == \model\user\user::LEVEL_CLUSTERLEAD)
+		{
+			db::where('siteID IN (SELECT cluster_site.siteID FROM cluster_site WHERE cluster_site.clusterID IN (SELECT cluster_lead.clusterID FROM cluster_lead WHERE cluster_lead.userID = ?))', array(authData('user.userID')));
+		}
+
+		$sites = $data['sites'] = db::get()->result('siteID');
+		$siteIDs = array_keys($sites);
+
+		if(count($sites) > 0)
+		{
+			// 1. Total events. Get total event done
+			$groupedEvents = db::from('activity')
+			->where('siteID', $siteIDs)
+			->where('activityType', 1)
+			->where('activityApprovalStatus', 1)
+			->where('MONTH(activityStartDate) = ? AND YEAR(activityStartDate) = ?', array($month, $year))
+			->join('activity_article', 'activity_article.activityID = activity.activityID', 'INNER JOIN')
+			->get()->result('siteID', true);
+
+			// 2. enterpreneuship class
+			$groupedEntrepreneurships = db::from('activity')
+			->where('siteID', $siteIDs)
+			->where('activityType', 2)
+			->where('activityApprovalStatus', 1)
+			->where('MONTH(activityStartDate) = ? AND YEAR(activityStartDate) = ?', array($month, $year))
+			->where('training_type.trainingTypeName LIKE ?', '%Entrepreneurship%')
+			->join('training', 'activity.activityID = training.activityID', 'INNER JOIN')
+			->join('training_type', 'training.trainingType = training_type.trainingTypeID', 'INNER JOIN')
+			->get()->result('siteID', true);
+
+			// 3. entrepreneurship program (accumulated amounts of sales)
+
+			// 4. training hours
+			$groupedTrainingHours = db::from('activity_date')
+			->select('activityDateStartTime', 'activityDateEndTime', 'siteID', 'activity.activityID')
+			->where('activityType', 2)
+			->where('activityApprovalStatus', 1)
+			->where('activity.siteID', $siteIDs)
+			->where('activity_date.activityID IN (SELECT activity_article.activityID FROM activity_article)')
+			->where('MONTH(activity.activityStartDate) = ? AND YEAR(activity.activityStartDate) = ?', array($month, $year))
+			->join('activity', 'activity.activityID = activity_date.activityID', 'INNER JOIN')
+			// ->join('activity_article', 'activity_article.activityID = activity.activityID', 'INNER JOIN')
+			->get()->result('siteID', true);
+
+			// 5. active members
+			/*$groupedMembers = db::from('user')
+			->select('user.userID', 'siteID')
+			->where('userLevel', 1)
+			->where('site_member.siteID', $siteIDs)
+			->where('user.userID IN (SELECT userID FROM log_login WHERE MONTH(logLoginCreatedDate) = ? AND YEAR(logLoginCreatedDate) = ?)', array($month, $year))
+			->join('site_member', 'site_member.userID = user.userID', 'INNER JOIN')
+			->get()->result('siteID', true);
+
+			// 5.1 total members.
+			$totalMembers = db::from('site_member')
+			->select('userID', 'siteID')
+			->where('siteID', $siteIDs)
+			->get()->result('siteID', true);*/
+
+			$data['total'] = array();
+
+			// main site loop.
+			foreach($sites as $row_site)
+			{
+				$siteID = $row_site['siteID'];
+
+				if(!isset($data['total'][$siteID]))
+					$data['total'][$siteID] = array();
+
+				$total = &$data['total'][$siteID];
+
+
+				// 1. prepare total events
+				$total['event'] = 0;
+				if(isset($groupedEvents[$siteID]))
+				{
+					foreach($groupedEvents[$siteID] as $event)
+						$total['event']++;
+				}
+
+
+				// 2. entrepreneurship class
+				$total['entrepreneurship_class'] = 0;
+				if(isset($groupedEntrepreneurships[$siteID]))
+				{
+					foreach($groupedEntrepreneurships[$siteID] as $entrepreneurship)
+						$total['entrepreneurship_class']++;
+				}
+
+				// 3. entrepreneurship sales
+				$total['entrepreneurship_sales'] = 0;
+
+				// 4. training hours
+				$total['training_hours'] = 0;
+				if(isset($groupedTrainingHours[$siteID]))
+				{
+					foreach($groupedTrainingHours[$siteID] as $trainingHour)
+					{
+						$hour =  (strtotime($trainingHour['activityDateEndTime']) - strtotime($trainingHour['activityDateStartTime'])) / 3600;
+
+						$total['training_hours'] += $hour;
+					}
+				}
+
+				// 5. active members.
+				/*$totalMember = 0;
+				if(isset($groupedMembers[$siteID]))
+				{
+					foreach($groupedMembers[$siteID] as $user)
+						$totalMember++; 
+				}
+
+				if($totalMember > 0 && count($totalMembers[$siteID]) > 0)
+					$total['active_member_percentage'] = $totalMember/count($totalMembers[$siteID])*100;
+				else
+					$total['active_member_percentage'] = 0;*/
+			}
+		}
+
+		view::render('shared/kpi/overview2', $data);
+	}
+
+	public function kpi_overview_old($page = 1, $month = null,$year = null)
 	{
 		$data['selectYear'] = $year = $year ? : date("Y");
 		$data['selectMonth'] = $month = $month ? : date("n");

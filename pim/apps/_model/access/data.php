@@ -47,6 +47,7 @@ class Data
 					"billing/deleteItem"=>Array("r","om"),
 					"billing/dailyCashProcessRedesign" => array('sm'),
 					"kpi/kpi_overview"=>Array("cl","r","om"),								
+					"kpi/kpi_overview2"=>Array("cl","r","om"),								
 					"expense/listStatus"=>Array("sm","cl","om","fc"),		
 					"expense/listStatusRL"=>Array("sm","cl","om","fc"),
 					"expense/getFormSuccess"=>Array("fc"),
