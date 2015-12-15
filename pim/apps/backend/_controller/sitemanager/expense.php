@@ -50,10 +50,10 @@ class Controller_Expense
 
 	public function viewForm($prID)
 	{
-
 		$data['siteManager'] = authData('user.userProfileFullName');		
 		$data['prTerm'] = model::load('expense/transaction')->getPrTerm();
 		$data['prFile'] = $prFile = model::load('expense/transaction')->getPrFile($prID);
+		$data['prNo'] = $prFile[0]['purchaseRequisitionNumber'];
 
 		$itemName  = model::load('expense/item')->getItemName();
 

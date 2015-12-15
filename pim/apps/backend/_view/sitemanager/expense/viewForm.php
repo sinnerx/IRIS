@@ -155,7 +155,7 @@ var requisition = new function()
                   <td><?php echo $prFile[0]['purchaseRequisitionDate']; ?></td>
                   <td></td>
                   <td width="7%">PR No</td>
-                  <td colspan="3"></td>                        
+                  <td colspan="3"><?php echo $prNo;?></td>                        
                 </tr>
                  <tr>
                   <td><label>PI1M:</label></td>

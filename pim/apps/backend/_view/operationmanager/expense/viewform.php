@@ -57,7 +57,7 @@
                   <td><?php echo $prDate; ?></td>
                   <td></td>
                   <td width="7%">PR No</td>
-                  <td colspan="3"></td>                        
+                  <td colspan="3"><?php echo$prNo;?></td>                        
                 </tr>
                  <tr>
                   <td><label>PI1M:</label></td>
@@ -169,8 +169,8 @@
 
                 <tr>
                   <td><?php echo $siteManager['userProfileFullName'];?></td>
-                  <td><?php echo $clusterLead; ?></td>
-                  <td>opsmanager</td>
+                  <td><?php echo $clusterLead['userProfileFullName']; ?></td>
+                  <td><?php echo $opsmanager;?></td>
                 </tr>
 
                 <tr>                  

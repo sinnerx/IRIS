@@ -91,6 +91,12 @@
 
                         <a href="<?php echo url::base('expense/editForm/'.$list['purchaseRequisitionId']);?>" class='fa fa-external-link pull-right' style="color:green; float:right"></a>                  
                       <?php }
+                      else
+                      {
+                        ?>
+                        <a href="<?php echo url::base('expense/viewForm/'.$list['purchaseRequisitionId']);?>" class='fa fa-external-link pull-right' style="color:green; float:right"></a>                  
+                        <?php
+                      }
                 
                   } elseif (authData('user.userLevel') == \model\user\user::LEVEL_CLUSTERLEAD) {  
                            
