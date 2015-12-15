@@ -864,7 +864,7 @@ purchase_requisition_cash_detail:
 purchase_requisition_category:
 	purchaseRequisitionCategoryId [int]
 	purchaseRequisitionCategoryName [varchar]
-	purchaseRequisitionCreatedDate [datetime]
+	purchaseRequisitionCategoryCreatedDate [datetime]
 
 purchase_requisition_item:
 	purchaseRequisitionItemId [int]

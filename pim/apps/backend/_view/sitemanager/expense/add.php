@@ -78,12 +78,12 @@ var requisition = new function()
           }
     });
       
-    var newrow = $('<tr><td></td>' +
+    var newrow = $('<tr class="pr-item-row"><td></td>' +
       '<td><select name="item[itemCategory][' + i +']" class="form-control itemValue' + i +' " id="item' + key +'"></select></td>' + 
       '<td><input type="text" class="form-control" name="item[itemDescription][' + i +'] " id="itemDescription' + i +'"/></td>' + 
-      '<td width="10%"><input type="text" size="5" onchange="requisition.calculate(' + i +');" class="form-control amount' + i +'" name="item[itemQuantity][' + i +']" id="itemQuantity' + i +'"/></td>' + 
-      '<td width="10%"><input type="text" size="5" onchange="requisition.calculate(' + i +');"class="form-control amount' + i +'" name="item[itemPrice][' + i +']" id="itemPrice' + i +'"/></td>' + 
-      '<td width="10%"><input type="text" size="5" class="form-control total" name="item[itemTotalPrice][' + i +']" id="itemTotalPrice' + i +'"/></td>' + 
+      '<td width="10%"><input type="text" size="5" onkeyup="requisition.calculate(' + i +');" value="1" class="form-control pr-item-input-quantity amount' + i +'" name="item[itemQuantity][' + i +']" id="itemQuantity' + i +'"/></td>' + 
+      '<td width="10%"><input type="text" size="5" onkeyup="requisition.calculate(' + i +');"class="form-control pr-item-input-price amount' + i +'" name="item[itemPrice][' + i +']" id="itemPrice' + i +'"/></td>' + 
+      '<td width="10%"><input type="text" size="5" class="form-control pr-item-input-total total" readonly name="item[itemTotalPrice][' + i +']" id="itemTotalPrice' + i +'"/></td>' + 
       '<td><input type="text" class="form-control" name="item[itemRemark][' + i +']" id="itemRemark' + i +'"/></td>' + 
       '<td><a href="#" id="remScnt" class="fa fa-times-circle"></a></td></tr>');   
       
@@ -96,7 +96,7 @@ var requisition = new function()
     this.calculate = function(key)
     {
 
-      var result = 1.00;
+      /*var result = 1.00;
       $('#itemTotalPrice'+key).attr('value', function() {
           $('.amount'+key).each(function() {
               if ($(this).val() !== '') {
@@ -114,7 +114,27 @@ var requisition = new function()
               }
           });
           return result;
+      });*/
+      $('.pr-item-row').each(function()
+      {
+        var row = $(this);
+        var quantity = parseFloat(row.find('.pr-item-input-quantity').val());
+        quantity = quantity ? quantity : 0;
+        var price = parseFloat(row.find('.pr-item-input-price').val());
+        price = price ? price : 0;
+
+        var total = quantity*price;
+        row.find('.pr-item-input-total').val(total);
       });
+      
+      // update grand total
+      var grandTotal = 0;
+      $('.pr-item-input-total').each(function()
+      {
+        grandTotal += parseFloat($(this).val());
+      });
+
+      $('#allTotal').val(grandTotal);
     }
 
     //Remove button

@@ -39,15 +39,23 @@ class Tasks
 			'description' => 'add Operation Manager'
 			));
 
-		$manager->addTask('purchaseRequisitionCategory', array(
+		/*$manager->addTask('purchaseRequisitionCategory', array(
 			'description' => 'P1IM expense category'
 			));
 
 		$manager->addTask('purchaseRequisitionItem', array(
 			'description' => 'P1IM expense Item'
+			));*/
+
+		$manager->addTask('prCategoryAndItem', array(
+			'description' => 'P1IM expense category and item'
 			));
 
-		$manager->addTask('purchaseRequisitionExpenditure', array(
+		/*$manager->addTask('purchaseRequisitionExpenditure', array(
+			'description' => 'P1IM expenditure'
+			));*/
+
+		$manager->addTask('prExpenditure', array(
 			'description' => 'P1IM expenditure'
 			));
 
@@ -221,21 +229,84 @@ class Tasks
 			));
 	}
 
-	public function purchaseRequisitionCategory()
+	/*public function purchaseRequisitionCategory()
 	{
 		db::query("INSERT INTO `purchase_requisition_category` VALUES (1,'Utilities','2015-06-16 00:00:00'),(2,'Cleaning Service','2015-06-16 00:00:00'),(3,'Admin & Other Expenses','2015-06-16 00:00:00'),(4,'Training & Awareness','2015-06-16 00:00:00'),(5,'Office Equipment & Consumable','2015-06-16 00:00:00')");
 
-	}
+	}*/
 
-	public function purchaseRequisitionItem()
+	public function prCategoryAndItem()
 	{
-		db::query("INSERT INTO `purchase_requisition_item` VALUES (1,1,1,0,'Water','2015-06-17 00:00:00',1),(2,1,1,0,'Electricity','2015-06-17 00:00:00',1),(3,1,1,0,'Astro','2015-06-17 00:00:00',1),(4,2,1,0,'Sundries','2015-06-17 00:00:00',1),(5,2,1,0,'Cleaning & Landscape','2015-06-17 00:00:00',1),(6,4,1,0,'Gift - ICT Training & Program','2015-06-19 00:00:00',1),(7,4,1,0,'Monthly Event','2015-06-19 00:00:00',1),(8,4,1,0,'PI1M Launching','2015-06-19 00:00:00',1),(9,4,1,0,'Open Day','2015-06-19 00:00:00',1),(10,3,1,0,'Stationary','2015-06-19 00:00:00',1),(11,5,1,0,'ICT Equipment','2015-06-19 00:00:00',1),(12,5,1,0,'Ink & Toner','2015-06-19 00:00:00',1)");
+		$categories = array(
+			'Utilities' => array(
+				'Water', 'Electricity', 'Astro'
+				),
+			'Cleaning Service' => array(
+				'Sundries', 'Cleaning & Landscape'
+				),
+			'Admin & Other Expenses' => array(
+				'Stationary'
+				),
+			'Training & Awareness' => array(
+				'Gift - ICT Training & Program', 'Monthly Event', 'PI1M Launching', 'Open Day'
+				),
+			'Office Equipment & Consumable' => array(
+				'ICT Equipment', 'Ink & Toner'
+				)
+			);
+
+		foreach($categories as $category => $items)
+		{
+			db::insert('purchase_requisition_category', array(
+				'purchaseRequisitionCategoryName' => $category,
+				'purchaseRequisitionCategoryCreatedDate' => date('Y-m-d H:i:s')
+				));
+
+			$id = db::getLastID('purchase_requisition_category', 'purchaseRequisitionCategoryID');
+
+			// category items
+			foreach($items as $itemName)
+			{
+				db::insert('purchase_requisition_item', array(
+					'purchaseRequisitionCategoryID' => $id,
+					'purchaseRequisitionItemName' => $itemName,
+					'purchaseRequisitionItemCreatedDate' => date('Y-m-d H:i:s'),
+					'purchaseRequisitionItemStatus' => 1
+					));
+			}
+		}
 	}
 
-	public function purchaseRequisitionExpenditure()
+	/*public function purchaseRequisitionItem()
+	{
+
+
+		db::query("INSERT INTO `purchase_requisition_item` VALUES (1,1,1,0,'Water','2015-06-17 00:00:00',1),(2,1,1,0,'Electricity','2015-06-17 00:00:00',1),(3,1,1,0,'Astro','2015-06-17 00:00:00',1),(4,2,1,0,'Sundries','2015-06-17 00:00:00',1),(5,2,1,0,'Cleaning & Landscape','2015-06-17 00:00:00',1),(6,4,1,0,'Gift - ICT Training & Program','2015-06-19 00:00:00',1),(7,4,1,0,'Monthly Event','2015-06-19 00:00:00',1),(8,4,1,0,'PI1M Launching','2015-06-19 00:00:00',1),(9,4,1,0,'Open Day','2015-06-19 00:00:00',1),(10,3,1,0,'Stationary','2015-06-19 00:00:00',1),(11,5,1,0,'ICT Equipment','2015-06-19 00:00:00',1),(12,5,1,0,'Ink & Toner','2015-06-19 00:00:00',1)");
+	}*/
+
+	public function prExpenditure()
+	{
+		$expenditures['data'] = array(
+			array(1, 'PI1M Expenses'),
+			array(1, 'PI1M Equipment'),
+			array(2, 'Scheduled Event'),
+			array(2, 'Ad hoc Event'),
+			array(3, 'Other'),
+			array(3, '1Citizen')
+		);
+
+		foreach($expenditures['data'] as $row)
+			db::insert('purchase_requisition_expenditure', array(
+				'purchaseRequisitionExpenditureSet' => $row[0],
+				'purchaseRequisitionExpenditureName' => $row[1],
+				'purchaseRequisitionExpenditureStatus' => 1,
+				'purchaseRequisitionExpenditureCreatedDate' => date('Y-m-d H:i:s')
+				));
+	}
+	/*public function purchaseRequisitionExpenditure()
 	{
 		db::query("INSERT INTO `purchase_requisition_expenditure` VALUES (1,1,'PI1M Expenses','2015-09-25 10:18:10',1),(2,1,'PI1M Equipment','2015-09-23 00:00:00',1),(3,2,'Scheduled Event','2015-09-25 10:25:15',1),(4,2,'Ad hoc Event','2015-09-23 00:00:00',1),(5,3,'Other','2015-09-23 00:00:00',1),(6,3,'1Citizen','2015-09-23 00:00:00',1)");
-	}
+	}*/
 
 	public function addRootCoordinator()
 	{
