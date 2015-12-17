@@ -19,3 +19,4 @@ pim/apps/_files/site_requisition/*
 !pim/apps/_files/site_requisition/placeholder
 repo/*
 !repo/placeholder
+env.php

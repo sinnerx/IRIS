@@ -16,6 +16,9 @@ apps::run(ROOT_FOLDER,function($router)
 			model\server::setAnnouncement($text);
 		}
 
+		if(file_exists('env.php'))
+			require_once 'env.php';
+
 		## db connection.
 		db::connect(apps::config('db_host'),apps::config('db_user'),apps::config('db_pass'),apps::config("db_name"));
 
@@ -97,7 +100,7 @@ apps::run(ROOT_FOLDER,function($router)
 			require_once "exceptionHandler.php";
 		}
 	});
-},$argv);
+});
 
 
 ?>
