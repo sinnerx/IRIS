@@ -134,7 +134,7 @@ Select Date
 						<td><?php echo date('g:i A', strtotime($transaction['billingTransactionDate']));?></td>
 						<td colspan="3">
 							<table width="100%" class='item-table'>
-								<?php foreach($transactionItems[$transactionID] as $transactionItem):?>
+								<?php foreach($transactionItems[$transaction['billingTransactionID']] as $transactionItem):?>
 								<tr>
 									<td><?php echo $transactionItem['billingItemName'];?></td>
 									<td></td>

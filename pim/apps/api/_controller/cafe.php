@@ -11,7 +11,7 @@ class Controller_Cafe
 		if(!$this->site)
 			exit(json_encode(array('status' => 'failed', 'message' => 'Site not found')));
 
-		if(controller::getCurrentMethod() == 'auth')
+		if(in_array(controller::getCurrentMethod(), array('auth', 'ping')))
 			return;
 
 		if(!request::param('access_token'))
@@ -154,6 +154,7 @@ class Controller_Cafe
 		db::from('billing_item')
 		->select(array(
 			'billingItemID',
+			'billingItemType as type',
 			'billingItemCode as code',
 			'billingItemHotkey as hotkey',
 			'billingItemName as name',
@@ -180,6 +181,21 @@ class Controller_Cafe
 			);
 
 		return json_encode($response);
+	}
+
+	public function siteInfo()
+	{
+		$site = $this->site;
+		$info = $site->info();
+
+		return json_encode(array(
+			'status' => 'success',
+			'data' => array(
+				'address' => $info->siteInfoAddress,
+				'phone' => $info->siteInfoPhone,
+				'email' => $info->siteInfoEmail
+				)
+			));
 	}
 
 	/**
