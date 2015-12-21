@@ -191,6 +191,7 @@ class Controller_Cafe
 		return json_encode(array(
 			'status' => 'success',
 			'data' => array(
+				'name' => $site->siteName,
 				'address' => $info->siteInfoAddress,
 				'phone' => $info->siteInfoPhone,
 				'email' => $info->siteInfoEmail
