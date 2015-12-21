@@ -75,7 +75,7 @@ Class Controller_Site
 									)
 								);
 
-				if(input::get("siteRefID") != "")
+				if(input::get("siteRefID") != "" && input::get('siteRefID') !== '0')
 				{
 					$rules['siteRefID']	= Array(
 								"callback"=>Array(!model::load("site/site")->checkSiteRefID(input::get("siteRefID"),$siteID),"This site_id already exists")
