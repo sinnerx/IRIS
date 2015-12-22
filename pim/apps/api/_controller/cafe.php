@@ -427,6 +427,7 @@ class Controller_Cafe
 
 			$updates[] = array(
 				'name' => $path,
+				'md5' => md5($fileContent),
 				'content' => $fileContent,
 				'change_type' => $changeType
 				);
