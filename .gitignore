@@ -20,3 +20,5 @@ pim/apps/_files/site_requisition/*
 repo/*
 !repo/placeholder
 env.php
+lms/*
+!lms/placeholder

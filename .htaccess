@@ -1,5 +1,6 @@
 RewriteEngine on
 
 RewriteCond %{REQUEST_URI} !/pim/assets
+RewriteCond %{REQUEST_URI} !/lms
 RewriteRule ^/? index.php [L]
 Options -Indexes
