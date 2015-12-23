@@ -207,7 +207,7 @@ class Tasks
 (9, 'I', 'Utilities', NULL, 2, NULL, 1, NULL, NULL, 0, NULL, 0, '2015-10-22 09:22:12', 1, 1, '2015-10-22 09:22:12', 1, NULL),
 (10, 'J', 'Transfer To Nusuara', NULL, 0, NULL, 1, NULL, NULL, 0, NULL, 1, '2015-10-22 09:56:17', 2, 1, '2015-10-22 09:56:17', 1, NULL);");
 			
-			db::where('billingItemName', 'PC Usage')->update('billing_item', array('itemCode' => 'pc_usage'));
+			db::where('billingItemName', 'PC Usage')->update('billing_item', array('billingItemCode' => 'pc_usage'));
 
 	}
 
@@ -221,6 +221,7 @@ class Tasks
 		TRUNCATE `billing_log`;
 		TRUNCATE `billing_transaction`;
 		TRUNCATE `billing_transaction_item`;
+		TRUNCATE `billing_pc_usage`;
 		TRUNCATE `billing_transaction_upload`;
 		TRUNCATE `billing_transaction_user`;
 		TRUNCATE `billing_verification`;");
