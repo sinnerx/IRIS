@@ -22,3 +22,4 @@ repo/*
 env.php
 lms/*
 !lms/placeholder
+localenvdb.php

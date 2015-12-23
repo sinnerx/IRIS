@@ -1,10 +1,17 @@
 <?php
-$config['domain']['localhost'][]	= Array(
+if(file_exists(IRIS_ROOT_DIR.'/localenvdb.php'))
+{
+	$config['domain']['localhost'][] = require_once IRIS_ROOT_DIR.'/localenvdb.php';
+}
+else
+{
+	$config['domain']['localhost'][]	= Array(
 	"db_host"=>"localhost",
 	"db_user"=>"root",
 	"db_pass"=>"",
 	"db_name"=>"digitalgaia_iris"
 	);
+}
 
 $config['domain']['p1m.gaia.my'][]	= Array(
 	"db_host"=>"localhost",
