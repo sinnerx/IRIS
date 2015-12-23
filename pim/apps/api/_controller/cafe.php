@@ -315,6 +315,27 @@ class Controller_Cafe
 					$transactionItem->billingTransactionItemPrice = $row_transactionItem['price'];
 					$transactionItem->billingTransactionItemQuantity = $row_transactionItem['quantity'];
 					$transactionItem->save();
+
+					if(isset($row_transactionItem['pc_usage']))
+					{
+						/*
+						billingPcUsageLocalID [int]
+						billingTransactionItemID [int]
+						billingPcUsageAsset [varchar]
+						billingPcUsagePcNo [varchar]
+						billingPcUsageStart [datetime]
+						billingPcUsageEnd [datetime]*/
+						$localPcUsage = $row_transactionItem['pc_usage'];
+
+						$pcUsage = model::orm('billing/pc_usage')->create();
+						$pcUsage->billingTransactionItemID = $transactionItem->billingTransactionItemID;
+						$pcUsage->billingPcUsageLocalID = $localPcUsage['pc_usage_id'];
+						$pcUsage->billingPcUsageAsset = $localPcUsage['asset'];
+						$pcUsage->billingPcUsagePcNo = $localPcUsage['pc_no'];
+						$pcUsage->billingPcUsageStart = $localPcUsage['start'];
+						$pcUsage->billingPcUsageEnd = $localPcUsage['end'];
+						$pcUsage->save();
+					}
 				}
 
 				$transactionUser = model::orm('billing/transaction_user')->create();

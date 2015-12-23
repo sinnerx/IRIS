@@ -764,6 +764,15 @@ billing_transaction:
 	billingTransactionStatus [int]  ##  1 = active 0 = deleted
 	billingTransactionUploaded [int] ## 1 = uploaded by cafe, 0 = created on pi1m.
 
+billing_pc_usage:
+	billingPcUsageID [int]
+	billingPcUsageLocalID [int]
+	billingTransactionItemID [int]
+	billingPcUsageAsset [varchar]
+	billingPcUsagePcNo [varchar]
+	billingPcUsageStart [datetime]
+	billingPcUsageEnd [datetime]
+
 billing_transaction_upload:
 	billingTransactionUploadID [int]
 	siteID [int]
