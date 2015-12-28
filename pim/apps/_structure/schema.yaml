@@ -822,107 +822,126 @@ billing_finance_transaction:
 	billingFinanceTransactionCreatedDate [datetime]
 	billingFinanceTransactionUpdatedDate [datetime]  ## backdated
 
-purchase_requisition:
-	purchaseRequisitionId [int]
+pr:
+	prID [int]
 	userID [int]
 	siteID [int]
-	purchaseRequisitionType [int] ##1 = Collection Money 2 = cash advance
-	purchaseRequisitionNumber [varchar] ##PR Number
-	purchaseRequisitionExpenses [int]
-	purchaseRequisitionEquipment [int]
-	purchaseRequisitionEvent [int]
-	purchaseRequisitionAdhocevent [int]
-	purchaseRequisitionOther [int]
-	purchaseRequisitionCitizen [int]
-	purchaseRequisitionBalance [float]
-	purchaseRequisitionDeposit [float]
-	purchaseRequisitionRemark [varchar]
-	purchaseRequisitionDate [date]
-	purchaseRequisitionCreatedDate [datetime]
-	purchaseRequisitionUpdatedDate [datetime]
+	prStatus [int] ## 0 = pending, 1 = closed, 2 = rejected
+	prStatusPendingLevel [int] ## if prStatus = 0, which level its currently pending at 
+	prStatusApprovalLevel [int] ## current approval level
+	prStatusRejectionLevel [int] ## if prStatus = 2, which level its rejected by
+	prType [int] ##1 = collection money, 2 = cash advance
+	prNumber [varchar]
+	prTotal [float]
+	prBalance [float] ## current collection
+	prBalanceDate [datetime]
+	prDeposit [float]
+	prRemark [text]
+	prDate [date]
+	prCreatedDate [datetime]
+	prUpdatedDate [datetime]
 
-purchase_requisition_detail:
-	purchaseRequisitionDetailId [int]
-	purchaseRequisitionId [int]
-	purchaseRequisitionDetailItemId [int]
-	purchaseRequisitionDetailDescription [varchar]
-	purchaseRequisitionDetailPrice [float]
-	purchaseRequisitionDetailQuantity [int]
-	purchaseRequisitionDetailTotal [float]
-	purchaseRequisitionDetailRemark [varchar]
-	purchaseRequisitionDetailEdit [varchar]
-	purchaseRequisitionDetailCreatedDate [datetime]
-	purchaseRequisitionDetailUpdatedDate [datetime]
-
-purchase_requisition_cash_advance:
-	purchaseRequisitionCashAdvanceId [int]
-	purchaseRequisitionId [int]
-	purchaseRequisitionCashAdvancePurpose [varchar]
-	purchaseRequisitionCashAdvanceTotal [varchar]
-	purchaseRequisitionCashAdvanceCreatedDate [datetime]
-
-purchase_requisition_cash_detail:
-	purchaseRequisitionCashDetailId [int]
-	purchaseRequisitionId [int]
-	purchaseRequisitionCashAdvanceId [int]
-	purchaseRequisitionCashDetailItem [varchar]
-	purchaseRequisitionCashDetailAmount [float]
-	purchaseRequisitionCashDetailCreatedDate [datetime]
-	purchaseRequisitionCashDetailUpdatedDate [datetime]
-
-purchase_requisition_category:
-	purchaseRequisitionCategoryId [int]
-	purchaseRequisitionCategoryName [varchar]
-	purchaseRequisitionCategoryCreatedDate [datetime]
-
-purchase_requisition_item:
-	purchaseRequisitionItemId [int]
-	purchaseRequisitionCategoryId [int]
-	userID [int]
-	siteID [int]
-	purchaseRequisitionItemName [varchar]
-	purchaseRequisitionItemCreatedDate [datetime]
-	purchaseRequisitionItemStatus [int]
-
-purchase_requisition_expenditure: ## Expenditure
-	purchaseRequisitionExpenditureId [int]
-	purchaseRequisitionExpenditureSet [int]
-	purchaseRequisitionExpenditureName [varchar]
-	purchaseRequisitionExpenditureStatus [int]
-	purchaseRequisitionExpenditureCreatedDate [datetime]
-
-purchase_requisition_file: ## reconciliaton list
-	purchaseRequisitionFileId [int]
-	purchaseRequisitionId [int]
-	purchaseRequisitionCategoryId [int]
-	siteID [int]
-	purchaseRequisitionFileName [varchar]
-	purchaseRequisitionFileType [varchar]
-	purchaseRequisitionFileSize [int]
-	purchaseRequisitionFileExt [varchar]
-	purchaseRequisitionFileAmount [float]
-	purchaseRequisitionFileGst [float]
-	purchaseRequisitionFileTotal [float]
-	purchaseRequisitionFileStatus [int]
-	purchaseRequisitionFileCreatedUser [int]
-	purchaseRequisitionFileCreatedDate [datetime]
-	purchaseRequisitionFileUpdatedDate [datetime]
-
-expense_approval:
-	expenseApprovalID [int]
-	purchaseRequisitionId [int]
-	expenseApprovalType [int] ## 1 = pr 2 = cash advance 3 = rl
-	siteID [int]
-	purchaseRequisitionCreatedDate [datetime]
-	expenseApprovalCreatedDate [datetime]
-
-expense_approval_level:	
-	expenseApprovalLevelID [int]
-	expenseApprovalID [int]
+pr_remark:
+	prRemarkID [int]
+	prID [int]
 	userLevel [int]
 	userID [int]
-	expenseApprovalLevelStatus [int] ## 0 = request; 1 = approve; 2 = reject;
-	expenseApprovalLevelCreatedDate [datetime]
+	prRemarkType [int] ## 1 = rejection
+	prRemarkText [text]
+	prRemarkCreatedDate [datetime]
+
+pr_item:
+	prItemID [int]
+	prID [int]
+	expenseItemID [int]
+	prItemDescription [text]
+	prItemPrice [float]
+	prItemQuantity [int]
+	prItemTotal [float]
+	prItemRemark [text]
+	prItemEdit [varchar]
+	prItemCreatedDate [datetime]
+	prItemUpdatedDate [datetime]
+
+pr_cash_advance:
+	prCashAdvanceID [int]
+	prID [int]
+	prCashAdvancePurpose [text]
+	prCashAdvanceTotal [float]
+	prCashAdvanceAmount [varchar]
+	prCashAdvanceDate [datetime]
+	prCashAdvanceCreatedDate [datetime]
+	prCashAdvanceUpdatedDate [datetime]
+
+pr_cash_advance_item:
+	prCashAdvanceItemID [int]
+	prCashAdvanceID [int]
+	prCashAdvanceItemDescription [varchar]
+	prCashAdvanceItemTotal [float]
+	prCashAdvanceItemUpdatedDate [datetime]
+
+expense_category:
+	expenseCategoryID [int]
+	expenseCategoryName [varchar]
+	expenseCategoryCreatedDate [datetime]
+
+expense_item:
+	expenseItemID [int]
+	expenseCategoryID [int]
+	siteID [int]
+	expenseItemName [varchar]
+	expenseItemStatus [int]
+	expenseItemCreatedUser [int]
+	expenseItemCreatedDate [datetime]
+
+expense_expenditure:
+	expenseExpenditureID [int]
+	expenseExpenditureSet [int]
+	expenseExpenditureName [varchar]
+	expenseExpenditureStatus [int]
+	expenseExpenditureCreatedDate [int]
+	expenseExpenditureCreatedUser [int]
+
+pr_reconcilation:
+	prReconcilationID [int]
+	prID [int]
+	prReconcilationStatus [int] ## 1 = opened, 2 = closed
+	prReconcilationCreatedDate [datetime]
+
+pr_reconcilation_file:
+	prReconcilationFileID [int]
+	prReconcilationID [int]
+	expenseCategoryID [int]
+	siteID [int]
+	prReconcilationFileName [varchar]
+	prReconcilationFileType [varchar]
+	prReconcilationFileSize [float]
+	prReconcilationFileExt [varchar]
+	prReconcilationFileAmount [float]
+	prReconcilationFileGst [float]
+	prReconcilationFileTotal [float]
+	prReconcilationFileStatus [int]
+	prReconcilationFileCreatedUser [int]
+	prReconcilationFileCreatedDate [datetime]
+	prReconcilationFileUpdatedDate [datetime]
+
+pr_approval: ## created on each transaciton
+	prApprovalID [int]
+	prID [int]
+	userLevel [int]
+	userID [int] ## updated user
+	prApprovalStatus [int] ## 0 = pending, 1 = approved, 2 = rejected
+	prApprovalCreatedDate [datetime]
+	prApprovalUpdatedDate [datetime]
+
+pr_reconcilation_approval: ## created on each pr_reconcilation
+	prReconcilationApprovalID [int]
+	prReconcilationID [int]
+	userLevel [int]
+	userID [int] ## updated user
+	prReconcilationApprovalStatus [int] ## 0 = pending, 1 = approved, 2 = rejected
+	prReconcilationApprovalCreatedDate [datetime]
+	prReconcilationApprovalUpdatedDate [datetime]
 
 task_log:
 	taskLogID [int]

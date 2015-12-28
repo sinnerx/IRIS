@@ -496,7 +496,7 @@ class Controller_Report
 				
 			       				$imageLink = $tag->getAttribute('src');
 			       				
-			       				$section->addImage($imageLink);
+			       				$section->addImage($imageLink, array('width' => 500));
 							}
 						}				
 					}
@@ -527,8 +527,6 @@ class Controller_Report
 				
 				continue;
 			}
-
-
 
 			$myzip->addFile($folderpath.'/'.$file,$file);
 		}
