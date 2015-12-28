@@ -108,7 +108,7 @@ class Tasks
 		$data['Membership'] = array(
 			'billingItemHotkey' => 'A',
 			'billingItemPriceType' => 1,
-			'billingItemPrice' => 3,
+			'billingItemPrice' => 5,
 			'billingItemPriceNonmember' => null,
 			'billingItemQuantity' => 1,
 			'billingItemPriceDisabled' => 1,
@@ -119,7 +119,7 @@ class Tasks
 		$data['Monthly Wifi'] = array(
 			'billingItemHotkey' => 'B',
 			'billingItemPriceType' => 1,
-			'billingItemPrice' => 5,
+			'billingItemPrice' => 0,
 			'billingItemPriceNonmember' => null,
 			'billingItemQuantity' => 1,
 			'billingItemPriceDisabled' => 1,
@@ -130,8 +130,8 @@ class Tasks
 		$data['PC Usage'] = array(
 			'billingItemHotkey' => 'C',
 			'billingItemPriceType' => 1,
-			'billingItemPrice' => 2,
-			'billingItemPriceNonmember' => 3,
+			'billingItemPrice' => 1,
+			'billingItemPriceNonmember' => 2,
 			'billingItemQuantity' => 1,
 			'billingItemPriceDisabled' => 0,
 			'billingItemQuantityDisabled' => 0,
@@ -142,7 +142,7 @@ class Tasks
 		$data['Printing & Photostat B&W'] = array(
 			'billingItemHotkey' => 'D',
 			'billingItemPriceType' => 1,
-			'billingItemPrice' => 5,
+			'billingItemPrice' => 0.2,
 			'billingItemPriceNonmember' => null,
 			'billingItemQuantity' => 1,
 			'billingItemPriceDisabled' => 1,
@@ -153,7 +153,7 @@ class Tasks
 		$data['Other Service'] = array(
 			'billingItemHotkey' => 'E',
 			'billingItemPriceType' => 1,
-			'billingItemPrice' => 5,
+			'billingItemPrice' => 0,
 			'billingItemPriceNonmember' => null,
 			'billingItemQuantity' => 1,
 			'billingItemPriceDisabled' => 0,
@@ -164,10 +164,10 @@ class Tasks
 		$data['Printing & Photostat Color'] = array(
 			'billingItemHotkey' => 'F',
 			'billingItemPriceType' => 1,
-			'billingItemPrice' => 5,
+			'billingItemPrice' => 1,
 			'billingItemPriceNonmember' => null,
 			'billingItemQuantity' => 1,
-			'billingItemPriceDisabled' => 0,
+			'billingItemPriceDisabled' => 1,
 			'billingItemQuantityDisabled' => 0,
 			'billingItemType' => 1,
 			);
@@ -175,7 +175,7 @@ class Tasks
 		$data['Scanning'] = array(
 			'billingItemHotkey' => 'G',
 			'billingItemPriceType' => 1,
-			'billingItemPrice' => 5,
+			'billingItemPrice' => 0.2,
 			'billingItemPriceNonmember' => null,
 			'billingItemQuantity' => 1,
 			'billingItemPriceDisabled' => 1,
@@ -186,10 +186,10 @@ class Tasks
 		$data['Laminating'] = array(
 			'billingItemHotkey' => 'H',
 			'billingItemPriceType' => 1,
-			'billingItemPrice' => 5,
+			'billingItemPrice' => 2,
 			'billingItemPriceNonmember' => null,
 			'billingItemQuantity' => 1,
-			'billingItemPriceDisabled' => 1,
+			'billingItemPriceDisabled' => 0,
 			'billingItemQuantityDisabled' => 0,
 			'billingItemType' => 1,
 			);
@@ -197,23 +197,36 @@ class Tasks
 		$data['Utilities'] = array(
 			'billingItemHotkey' => 'I',
 			'billingItemPriceType' => 1,
-			'billingItemPrice' => 5,
+			'billingItemPrice' => 0,
 			'billingItemPriceNonmember' => null,
 			'billingItemQuantity' => 1,
-			'billingItemPriceDisabled' => 1,
+			'billingItemPriceDisabled' => 0,
 			'billingItemQuantityDisabled' => 0,
 			'billingItemType' => 1,
 			);
 
-		$data['Transfer to Nusuara'] = array(
+		$data['Transfer to Nusuara (Collection)'] = array(
 			'billingItemHotkey' => 'J',
 			'billingItemPriceType' => 1,
-			'billingItemPrice' => 5,
+			'billingItemPrice' => 0,
 			'billingItemPriceNonmember' => null,
 			'billingItemQuantity' => 1,
-			'billingItemPriceDisabled' => 1,
+			'billingItemPriceDisabled' => 0,
 			'billingItemQuantityDisabled' => 1,
 			'billingItemType' => 2, // credit
+			'billingItemCode' => 'transfer_collection'
+			);
+
+		$data['Transfer to Nusuara (RL)'] = array(
+			'billingItemHotkey' => 'K',
+			'billingItemPriceType' => 1,
+			'billingItemPrice' => 0,
+			'billingItemPriceNonmember' => null,
+			'billingItemQuantity' => 1,
+			'billingItemPriceDisabled' => 0,
+			'billingItemQuantityDisabled' => 1,
+			'billingItemType' => 2, // credit
+			'billingItemCode' => 'transfer_rl'
 			);
 
 		foreach($data as $itemName => $row)
