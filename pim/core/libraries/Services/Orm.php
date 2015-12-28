@@ -63,7 +63,7 @@ class Orm
 	}
 
 	/**
-	 * Final
+	 * Get One record
 	 */
 	public function find($id = null)
 	{
@@ -80,8 +80,28 @@ class Orm
 		else
 		{
 			$collection = $this->execute();
-			$collection->getFirst();
+			return $collection->getFirst();
 		}
+	}
+
+	public function count()
+	{
+		$db = db::$instance;
+
+		$total = $db->from($this->tableName)->select('count(*) as total')->get()->row('total');
+
+		return $total;
+	}
+
+	/**
+	 * Mass deletion based on query
+	 */
+	public function delete()
+	{
+		$records = $this->execute();
+
+		foreach($records as $record)
+			$record->delete();
 	}
 
 	## validate the model.
@@ -100,6 +120,11 @@ class Orm
 		return true;
 	}
 
+	/**
+	 * Accept array of
+	 * totalRow
+	 * limit
+	 */
 	public function paginate(array $config)
 	{
 		db::$instance->from($this->tableName);
@@ -134,7 +159,9 @@ class Orm
 					$foreignID = $args; 
 				}
 
-				db::join($foreignTable, $table.'.'.$localID.' = '.$foreignTable.'.'.$foreignID);
+				$localID = strpos($localID, '.') !== false ? $localID : $table.'.'.$localID;
+				$foreignID = strpos($foreignID, '.') !== false ? $foreignID : $foreignTable.'.'.$foreignID;
+				db::join($foreignTable, $localID.' = '.$foreignID);
 			}
 		}
 

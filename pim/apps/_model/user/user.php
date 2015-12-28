@@ -69,6 +69,15 @@ class User extends \Origami
 	}
 
 	/**
+	 * ORM : Alias to getLevelName
+	 * @return string
+	 */
+	public function getLevelLabel()
+	{
+		return $this->getLevelName();
+	}
+
+	/**
 	 * ORM : Get users level 2, that is not yet a manager.
 	 * @return \Origamis
 	 */
@@ -95,7 +104,7 @@ class User extends \Origami
 	}
 
 	/**
-	 * User is level 2 and, is still site manager of some site.
+	 * ORM : User is level 2 and, is still site manager of some site.
 	 * @return boolean.
 	 */
 	public function isManager()
@@ -109,6 +118,42 @@ class User extends \Origami
 		}
 
 		return false;
+	}
+
+	/**
+	 * ORM : Check if user level is financial controller
+	 * @return bool
+	 */
+	public function isFinancialController()
+	{
+		return $this->userLevel == self::LEVEL_FINANCIALCONTROLLER;
+	}
+
+	/**
+	 * ORM : Check if user level is operation manager
+	 * @return bool
+	 */
+	public function isOperationManager()
+	{
+		return $this->userLevel == self::LEVEL_OPERATIONMANAGER;
+	}
+
+	/**
+	 * ORM : Check if user level is root
+	 * @return bool
+	 */
+	public function isRoot()
+	{
+		return $this->userLevel == self::LEVEL_ROOT;
+	}
+
+	/**
+	 * ORM : Check if user level is clusterlead
+	 * @return bool
+	 */
+	public function isClusterLead()
+	{
+		return $this->userLevel == self::LEVEL_CLUSTERLEAD;
 	}
 
 	public function getListOfUser($cols = "*",$cond = null)

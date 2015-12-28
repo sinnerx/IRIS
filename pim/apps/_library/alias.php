@@ -24,6 +24,11 @@ function orm($model, $param2 = null)
 	return model::orm($model, $param2);
 }
 
+function user()
+{
+	return model::orm('user/user')->where('user.userID', authData('user.userID'))->execute()->getFirst();
+}
+
 // return site entity
 // for now it will dual query.
 function site($siteID = null)

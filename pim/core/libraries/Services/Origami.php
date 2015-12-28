@@ -162,8 +162,21 @@ class Origami
 	/**
 	 * @return object as array.
 	 */
-	public function toArray()
+	public function toArray(array $keys = array())
 	{
+		if(count($keys) > 0)
+		{
+			$newArr = array();
+			foreach($keys as $k => $v)
+			{
+				$key = is_string($k) ? $k : $v;
+
+				$newArr[$v] = $this->modelData['attributes'][$key];
+			}
+
+			return $newArr;
+		}
+		
 		return $this->modelData['attributes'];
 	}
 
