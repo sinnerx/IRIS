@@ -129,7 +129,7 @@ class Tasks
 
 		$data['PC Usage'] = array(
 			'billingItemHotkey' => 'C',
-			'billingItemPriceType' => 1,
+			'billingItemPriceType' => 2,
 			'billingItemPrice' => 1,
 			'billingItemPriceNonmember' => 2,
 			'billingItemQuantity' => 1,
