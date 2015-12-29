@@ -135,6 +135,8 @@ class Controller_Cafe
 	 * status
 	 * data :
 	 * - billingItemID
+	 * - type
+	 * - code
 	 * - hotkey
 	 * - name
 	 * - description
@@ -146,6 +148,7 @@ class Controller_Cafe
 	 * - priceDisabled
 	 * - status
 	 * - createdDate
+	 * - updatedDate
 	 */
 	public function billingItems()
 	{
@@ -379,12 +382,19 @@ class Controller_Cafe
 			));
 	}
 
-	public function getVersion()
+	protected function getCafeVersion()
 	{
 		$path = apps::$root.'../repo/cafe/.git/refs/heads/master';
-		$cafeRoot = apps::$root.'../repo/cafe';
+		// $cafeRoot = apps::$root.'../repo/cafe';
 
 		$currentVersion = file_get_contents($path);
+
+		return trim($currentVersion);
+	}
+
+	public function getVersion()
+	{
+		$currentVersion = $this->getCafeVersion();
 
 		return json_encode(array(
 			'status' => 'success',
@@ -396,10 +406,10 @@ class Controller_Cafe
 		$version = request::get('version');
 
 		// get version from cafe's repo.
-		$path = apps::$root.'../repo/cafe/.git/refs/heads/master';
+		// $path = apps::$root.'../repo/cafe/.git/refs/heads/master';
 		$cafeRoot = apps::$root.'../repo/cafe';
 
-		$currentVersion = file_get_contents($path);
+		$currentVersion = $this->getCafeVersion();
 
 		/*if($version == $currentVersion)
 		{
