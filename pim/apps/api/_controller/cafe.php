@@ -320,6 +320,7 @@ class Controller_Cafe
 					$transactionItem->billingItemID = $row_transactionItem['billing_item_id'];
 					$transactionItem->billingTransactionItemPrice = $row_transactionItem['price'];
 					$transactionItem->billingTransactionItemQuantity = $row_transactionItem['quantity'];
+					$transactionItem->billingTransactionItemDescription = $row_transactionItem['description'];
 					$transactionItem->save();
 
 					if(isset($row_transactionItem['pc_usage']))
