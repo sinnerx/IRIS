@@ -759,7 +759,7 @@ billing_transaction:
 	billingTransactionTotal [float] ## grand total
 	billingTransactionAccountType [int] ## 1 = site 2 = cashout	
 	billingTransactionDate [datetime]
-	billingTransactionUnique [int(20)] ## a unique timestamp, used possibly for unique id
+	billingTransactionUnique [varchar] ## a unique timestamp, used possibly for unique id
 	billingTransactionCreatedDate [datetime]
 	billingTransactionUpdatedDate [datetime]
 	billingTransactionStatus [int]  ##  1 = active 0 = deleted
