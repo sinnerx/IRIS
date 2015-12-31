@@ -210,7 +210,7 @@ class Controller_Cafe
 		$row = db::from('billing_transaction')
 		->where('siteID', $this->site->siteID)
 		->limit(1)
-		->order_by('billingTransactionDate DESC')
+		->order_by('billingTransactionUpdatedDate DESC')
 		->get()
 		->row();
 		
@@ -305,8 +305,10 @@ class Controller_Cafe
 				$transaction->billingTransactionStatus = 1;
 				$transaction->billingTransactionTotal = $row_transaction['total'];
 				$transaction->billingTransactionDate = $row_transaction['datetime'];
-				$transaction->billingTransactionCreatedDate = $row_transaction['datetime'];
-				$transaction->billingTransactionUpdatedDate = $row_transaction['datetime'];
+				// $transaction->billingTransactionCreatedDate = $row_transaction['datetime'];
+				// $transaction->billingTransactionUpdatedDate = $row_transaction['datetime'];
+				$transaction->billingTransactionCreatedDate = $row_transaction['createDate'];
+				$transaction->billingTransactionUpdatedDate = $row_transaction['updatedDate'];
 				$transaction->billingTransactionUploaded = 1;
 				$transaction->save();
 
