@@ -302,6 +302,7 @@ class Controller_Cafe
 				$transaction->siteID = $this->site->siteID;
 				$transaction->billingTransactionLocalID = $localId;
 				$transaction->billingTransactionTotalQuantity = $row_transaction['quantity'];
+				$transaction->billingTransactionUnique = $row_transaction['unique'];
 				$transaction->billingTransactionStatus = 1;
 				$transaction->billingTransactionTotal = $row_transaction['total'];
 				$transaction->billingTransactionDate = $row_transaction['datetime'];
