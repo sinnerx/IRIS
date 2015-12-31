@@ -216,7 +216,7 @@ class Controller_Cafe
 		
 		return json_encode(array(
 			'status' => 'success',
-			'data' => $row['billingTransactionDate']
+			'data' => $row['billingTransactionUpdatedDate']
 			));
 	}
 
@@ -307,7 +307,7 @@ class Controller_Cafe
 				$transaction->billingTransactionDate = $row_transaction['datetime'];
 				// $transaction->billingTransactionCreatedDate = $row_transaction['datetime'];
 				// $transaction->billingTransactionUpdatedDate = $row_transaction['datetime'];
-				$transaction->billingTransactionCreatedDate = $row_transaction['createDate'];
+				$transaction->billingTransactionCreatedDate = $row_transaction['createdDate'];
 				$transaction->billingTransactionUpdatedDate = $row_transaction['updatedDate'];
 				$transaction->billingTransactionUploaded = 1;
 				$transaction->save();
