@@ -759,8 +759,9 @@ billing_transaction:
 	billingTransactionTotal [float] ## grand total
 	billingTransactionAccountType [int] ## 1 = site 2 = cashout	
 	billingTransactionDate [datetime]
+	billingTransactionUnique [int(20)] ## a unique timestamp, used possibly for unique id
 	billingTransactionCreatedDate [datetime]
-	billingTransactionUpdatedDate [datetime]  ## backdated
+	billingTransactionUpdatedDate [datetime]
 	billingTransactionStatus [int]  ##  1 = active 0 = deleted
 	billingTransactionUploaded [int] ## 1 = uploaded by cafe, 0 = created on pi1m.
 
@@ -840,6 +841,7 @@ pr:
 	prDate [date]
 	prCreatedDate [datetime]
 	prUpdatedDate [datetime]
+	prUpdatedUser [int]
 
 pr_remark:
 	prRemarkID [int]
@@ -862,6 +864,7 @@ pr_item:
 	prItemEdit [varchar]
 	prItemCreatedDate [datetime]
 	prItemUpdatedDate [datetime]
+	prItemUpdatedUser [int]
 
 pr_cash_advance:
 	prCashAdvanceID [int]
