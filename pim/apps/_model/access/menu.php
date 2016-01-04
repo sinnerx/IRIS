@@ -74,6 +74,12 @@ class Menu extends Data
 									"Google Analytics"=>Array("googleanalytics/test"),
 									/*"Monthly Activity Report"=>Array("report/activityReport")*/
 												),
+					"Learning" => Array(
+									"Learning Page " => Array("../lms/"),
+						),
+					"Attendance" => Array(
+									"Attendance Page" => Array("../attendance")
+						)					
 							);
 					
 

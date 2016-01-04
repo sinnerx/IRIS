@@ -23,3 +23,5 @@ env.php
 lms/*
 !lms/placeholder
 localenvdb.php
+attendance/*
+!attendance/placeholder
