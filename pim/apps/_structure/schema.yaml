@@ -909,7 +909,11 @@ pr_reconcilation:
 	prReconcilationID [int]
 	prID [int]
 	prReconcilationStatus [int] ## 1 = opened, 2 = closed
+	prReconcilationPendingLevel [int]
+	prReconcilationApprovalLevel [int]
+	prReconcilationRejectionLevel [int]
 	prReconcilationCreatedDate [datetime]
+	prReconcilationUpdatedDate [datetime]
 
 pr_reconcilation_file:
 	prReconcilationFileID [int]
@@ -952,3 +956,17 @@ task_log:
 	taskLogStatus [int] ## 0 = pending, 1 = success
 	taskLogCreatedDate [datetime]
 	taskLogCreatedUser [int]
+
+### attendance tables
+att_attendancedetails:
+	attID [int]
+	managerID [int]
+	activityDate [varchar(20)]
+	activityTime [varchar(20)]
+	activityStatus [text]
+	outstationStatus [text]
+	attendanceStatus [text]
+	latLongIn [varchar(255)]
+	latLongOut [varchar(255)]
+	imgIn [varchar(255)]
+	imgOut [varchar(255)]
