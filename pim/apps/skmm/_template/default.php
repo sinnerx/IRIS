@@ -68,22 +68,20 @@
             <ul>
                 <li><a href="<?php echo url::base("{site-slug}");?>">Utama</a></li>
                 <li><a href="<?php echo url::base("{site-slug}/mengenai-kami");?>">Mengenai PI1M</a>
-
-                
                 <ul>
-                
-                <li><a href="#">Sub 1</a></li>
-                <li><a href="#">Sub 2</a></li>
-                <li><a href="#">Sub 3</a></li>
-                <li><a href="#">Sub 4</a></li>
-                <li><a href="#">Sub 5</a></li>
-                <li><a href="#">Sub 6</a></li>
-                
-
+                    <?php foreach($pages as $page):
+                    if($page['pageDefaultType'] == 1)
+                        continue;
+                    ?>
+                        <li><a href="<?php echo url::base('{site-slug}/mengenai-kami/'.$page['pageDefaultSlug']);?>"><?php echo $page['pageDefaultName'];?></a></li>
+                    <?php endforeach;?>
+                    <!-- <li><a href="#">Sub 1</a></li>
+                    <li><a href="#">Sub 2</a></li>
+                    <li><a href="#">Sub 3</a></li>
+                    <li><a href="#">Sub 4</a></li>
+                    <li><a href="#">Sub 5</a></li>
+                    <li><a href="#">Sub 6</a></li> -->
                 </ul>    
-
-                    
-
                 </li>
                 <li><a href="<?php echo url::base("{site-slug}/aktiviti");?>">Jadual Latihan & Aktiviti</a></li>
                 <li><a href="<?php echo url::base("{site-slug}/galeri");?>">Galeri</a></li>

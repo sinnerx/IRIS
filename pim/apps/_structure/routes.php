@@ -163,6 +163,7 @@ if(!session::has("template_frontend")):
 	$routes['skmm-article-view']	= Array("[:site-slug]/blog/[:year]/[:month]/[:article-slug]","controller=skmm:main@blogSlug","{year},{month},{article-slug}");
 	$routes[]	= Array("[:site-slug]","controller=skmm:main@index");
 	$routes[] 	= Array("[:site-slug]/mengenai-kami","controller=skmm:main@about");
+	$routes[]	= array('[:site-slug]/mengenai-kami/[:page-slug]', 'controller=skmm:main@page', '{page-slug}');
 	$routes[]	= Array("[:site-slug]/aktiviti","controller=skmm:main@activity");
 	$routes[]	= Array("[:site-slug]/galeri","controller=skmm:main@gallery");
 	$routes[]	= Array("[:site-slug]/faq","controller=skmm:main@faq");

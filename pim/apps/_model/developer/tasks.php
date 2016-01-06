@@ -70,6 +70,50 @@ class Tasks
 		$manager->addTask('updateUserUpdatedDate', array(
 			'description' => 'Update User Updated Date With User Created Date'
 			));
+
+		$manager->addTask('pageAddDefault', array(
+			'repeatable' => true,
+			'description' => 'Add another 6 page_default for skmm'
+			));
+
+		$manager->addTask('pageLocalDataMigrate', array(
+			'description' => 'Migrate new pages',
+			'repeatable' => true
+			));
+	}
+
+	public function pageAddDefault()
+	{
+		$defaults = array(
+			array(1, 'Mengenai Kami', 'mengenai-kami'),
+			array(2, 'Pengurusan', 'pengurusan'),
+			array(3, 'AJK Pi1M', 'ajk'),
+			array(4, 'Maklumat Tempatan', 'maklumat-tempatan'),
+			array(5, 'Perlancongan & Rekreasi', 'perlancongan-rekreasi'),
+			array(6, 'Kemudahan Awam', 'kemudahan-awam'),
+			array(7, 'Ekonomi dan Keusahawanan', 'ekonomi-keusahawanan'),
+			array(8, 'Komuniti', 'komuniti'),
+			array(9, 'Pendidikan', 'pendidikan'));
+
+		foreach($defaults as $default)
+		{
+			if(db::where('pageDefaultType', $default[0])->get('page_default')->row())
+				continue;
+
+			db::insert('page_default', array(
+				'pageDefaultType' => $default[0],
+				'pageDefaultName' => $default[1],
+				'pageDefaultSlug' => $default[2]
+				));
+		}
+	}
+
+	public function pageLocalDataMigrate()
+	{
+		$defaults = db::get('page_default')->result('pageDefaultType');
+
+		foreach(orm('site/site')->execute() as $site)
+			$site->initiateDefaultPages(orm('page/page_default')->execute());
 	}
 
 	public function billingItem()

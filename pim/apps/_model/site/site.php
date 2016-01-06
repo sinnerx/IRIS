@@ -74,6 +74,53 @@ class Site extends \Origami
 	}
 
 	/**
+	 * ORM : Initiate non initiated default pages for this site.
+	 */
+	public function initiateDefaultPages(\Origamis $defaults)
+	{
+		$pageParentID = null;
+
+		foreach($defaults as $default)
+		{
+			if(db::where('pageDefaultType', $default->pageDefaultType)->where('siteID', $this->siteID)->get('page')->row())
+				continue;
+
+			// pageParentID for default pages is mengenai kami one.
+			if(!$pageParentID)
+			{
+				$pageParentID = db::where('pageDefaultType', 1)->where('siteID', $this->siteID)->get('page')->row('pageID');
+
+				if(!$pageParentID)
+				{
+					// create the first page about-us
+					$data_page	= array(
+						"pageApprovedStatus"=>1,
+						"pageName"=>"",
+						"pageSlug"=>"",
+						"pageText"=>"Page ini masih baru. Sila kemaskini terlebih dahulu",
+						"pageDefaultType"=>1, # about-us and about us
+								);
+
+					model::load('page/page')->create($this->siteID, 1, $data_page);
+					continue;
+				}
+			}
+
+
+			$data_page = array(
+				'pageParentID' => $pageParentID,
+				'pageApprovedStatus' => 1,
+				'pageName' => '',
+				'pageSlug' => '',
+				'pageText' => 'Page ini masih baru. Sila kemaskini terlebih dahulu.',
+				'pageDefaultType' => $default->pageDefaultType
+				);
+
+			model::load('page/page')->create($this->siteID, 1, $data_page);
+		}
+	}
+
+	/**
 	 * Get cafe token. generate if ain't exists.
 	 * @return string
 	 */
@@ -355,6 +402,10 @@ class Site extends \Origami
 					"menuNo"=>6
 							);
 		$menu->create($siteID,5,$data_menu);
+
+		// initiate default pages other than the specified 3 above.
+		$defaultPages = orm('page/page_default')->execute();
+		orm('site/site')->find($siteID)->initiateDefaultPages($defaultPages);
 
 		return $this->getSite($siteID);
 	}

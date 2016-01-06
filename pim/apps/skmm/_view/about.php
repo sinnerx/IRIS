@@ -1,5 +1,5 @@
 <h1>Mengenai PI1M</h1>
-<?php echo $row['pageText'];?>
+<div><?php echo $row['pageText'];?></div>
 <!-- <p>Kerajaan melalui Suruhanjaya Komunikasi dan Multimedia Malaysia (MCMC) telah menubuhkan Pusat Internet 1 Malaysia (PI1M) untuk menyediakan pusat capaian jalur lebar secara kolektif di kawasan yang kurang liputan perkhidmatan melalui <a href="http://usp.skmm.gov.my" target="_blank">Program Perkhidmatan Sejagat (USP)</a>.</p>
 <img src="images/pi1msgmasin.jpg" width="300" height="300" alt="PI1M" class="imgfloatR">
 <p>PI1M yang dahulu dikenali dengan nama Pusat Jalur Lebar Komuniti (PJK) mempunyai peralatan IT dan komputer individu yang bersambung dengan capaian jalur lebar internet, membolehkan komuniti luar bandar menikmati kebaikan internet seperti yang dirasai oleh komuniti di bandar.</p>

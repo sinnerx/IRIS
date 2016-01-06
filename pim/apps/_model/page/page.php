@@ -1,8 +1,29 @@
 <?php
 namespace model\page;
 use db, session, model;
-class Page
+class Page extends \Origami
 {
+	protected $table = 'page';
+	protected $primary = 'pageID';
+
+	/**
+	 * ORM : get page default type entity.
+	 */
+	public function getPageDefault()
+	{
+		return $this->getOne('page/page_default', 'pageDefaultType');
+	}
+
+	public function findDefaultPageBySlug($siteID, $slug)
+	{
+		$page = orm('page/page')
+				->where('siteID', $siteID)
+				->where('page.pageDefaultType IN (SELECT pageDefaultType FROM page_default WHERE pageDefaultSlug = ?)', array($slug))
+				->find();
+
+		return $page;
+	}
+
 	public function listBySite($siteID)
 	{
 		db::from("page");
