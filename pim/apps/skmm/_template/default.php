@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <title>Pusat Internet 1Malaysia</title>
 <link href="<?php echo url::asset("skmm/css/reset.css");?>" rel="stylesheet" type="text/css">
-<link href="<?php echo url::asset("skmm/css/style.css");?>" rel="stylesheet" type="text/css">
+<link href="<?php echo url::asset("skmm/css/style.css?v20160106");?>" rel="stylesheet" type="text/css">
 <link rel="stylesheet" type="text/css" href="<?php echo url::asset("_scale/css/font-awesome.min.css");?>">
 <link rel="stylesheet" href="<?php echo url::asset("skmm/css/flexslider.css");?>" type="text/css">
 <script src="<?php echo url::asset("skmm/js/jquery.min.js");?>"></script>
