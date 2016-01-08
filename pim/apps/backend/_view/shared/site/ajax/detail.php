@@ -20,7 +20,7 @@
 		<div class='row'>
 		<div class='col-sm-9'>
 		<h4 style="line-height:5px;">Site Information - <?php echo $row['siteName'];?></h4>
-		<small style='opacity:0.5;'>http://p1m.gaia.my/<?php echo strtolower($row['siteSlug']);?></small>
+		<small style='opacity:0.5;'>http://www.celcom1cbc.com/<?php echo strtolower($row['siteSlug']);?></small>
 		</div>
 		<div class='col-sm-3'>
 			<a href='<?php echo url::base("../".$row['siteSlug']);?>' class='btn btn-primary pull-right' target='_blank'>Site Preview</a>
