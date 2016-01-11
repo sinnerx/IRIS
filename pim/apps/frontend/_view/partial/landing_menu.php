@@ -5,6 +5,11 @@
 	height: 480px;
 }
 
+#nav.navigation > li:nth-child(3) ul
+{
+	top: -242px;
+}
+
 </style>
 <ul class="navigation" style="display: block;"  id="nav">
 	<li class="selected"><a href="<?php echo url::base();?>">Utama</a></li>
