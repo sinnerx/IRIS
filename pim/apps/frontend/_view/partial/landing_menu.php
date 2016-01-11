@@ -1,3 +1,11 @@
+<style type="text/css">
+
+#nav.navigation .colmn_wrap
+{
+	height: 480px;
+}
+
+</style>
 <ul class="navigation" style="display: block;"  id="nav">
 	<li class="selected"><a href="<?php echo url::base();?>">Utama</a></li>
     <li><a href="mengenai-kami">Mengenai Kami</a></li>
