@@ -4,7 +4,7 @@ $(document).ready(function() {
 			height: "650px"
 		})
 		.animate({
-			height: "550px"
+			height: "570px"
 		}, "fast");
 		$("div.panel_button").toggle();
 	

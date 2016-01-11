@@ -82,7 +82,7 @@ jQuery(document).ready(function() {
 #panel_contents {
 
 	height: 100%;
-	width: 990px;
+	width: 1200px;
 	margin:auto;
 	z-index: -1;
 	color:#FFF;
