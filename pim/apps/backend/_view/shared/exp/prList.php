@@ -43,7 +43,7 @@ var prList = new function()
 
 </script>
 <h3 class='m-b-xs text-black'>
-  Purchase Requisition List Open / Closed
+  Purchase Requisition <?php if(!user()->isFinancialController()):?> List Open / Closed <?php else:?> Cash Advance<?php endif;?>
 </h3>
 
 <?php echo flash::data();?>
@@ -52,7 +52,7 @@ var prList = new function()
    <section class="panel panel-default">
    <form class="form-inline bs-example " method='post' action='<?php echo url::base('expense/submit1Requisition/');?>'>
           <header class="panel-heading">
-            Purchase Requisition
+            Purchase Requisition <?php if(user()->isFinancialController()):?>Cash Advance<?php endif;?>
           </header>
           <div class="row wrapper">
             Filter : 

@@ -66,6 +66,7 @@ class Controller_ExpExcel
 		// get rls
 		$rlList = orm('expense/pr/reconcilation/reconcilation')
 		->where('prReconcilationStatus', 1)
+		->where('pr.siteID IN (SELECT siteID FROM cluster_site WHERE clusterID = ?)', array($clusterID))
 		->where('MONTH(prReconcilationSubmittedDate)', $month)
 		->where('YEAR(prReconcilationSubmittedDate)', $year)
 		->join('pr', 'pr.prID = pr_reconcilation.prID')
