@@ -997,5 +997,7 @@ att_attendancedetails:
 	latLongOut [varchar(255)]
 	imgIn [varchar(255)]
 	imgOut [varchar(255)]
+	managerName [varchar(255)]
+	siteName [varchar(255)]
 
 ### lms
