@@ -119,6 +119,19 @@ class Controller_ExpExcel
 			$line = $borders->$method();
 			$line->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
 		};
+
+		$setAlign = function($sheet, $range, $type)
+		{
+			$types = array(
+				'left' => PHPExcel_Style_Alignment::HORIZONTAL_LEFT,
+				'center' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+				'right' => PHPExcel_Style_Alignment::HORIZONTAL_RIGHT
+				);
+
+			$sheet->getStyle($range)
+			->getAlignment()
+			->setHorizontal($types[$type]);
+		};
 		/**
 		 * Functions ends.
 		 */
@@ -179,6 +192,11 @@ class Controller_ExpExcel
 		$allRlTotal = 0;
 		$no = 1;
 		$loopFirstY = $y;
+
+		// site based pr.
+		$rlSites = array();
+		$sites = array();
+
 		foreach($rlList as $rl)
 		{
 			$x = 'A';
@@ -187,7 +205,14 @@ class Controller_ExpExcel
 
 			$date = date('d/m/Y', strtotime($rl->prDate));
 			$prNo = $rl->prNumber;
-			$siteName = $rl->getPr()->getSite()->siteName;
+			$pr = $rl->getPr();
+			$site = $pr->getSite();
+			$siteName = $site->siteName;
+
+			// cache the site first.
+			$sites[$site->siteID] = $site;
+
+			$rlSites[$site->siteID][] = $rl;
 
 			$prItems = orm('expense/pr/item')->where('prID', $rl->prID)->execute();
 
@@ -348,6 +373,7 @@ class Controller_ExpExcel
 
 		// <> RL category summaries
 		$no = 1;
+		$categoryY = $y;
 		foreach($rlCategoryTotals as $categoryID => $amount)
 		{
 			$sheet->setCellValue('A'.$y, ($no ? $no++ : 1).'.');
@@ -357,6 +383,10 @@ class Controller_ExpExcel
 
 			$y++;
 		}
+
+		$setAlign($sheet, "A$categoryY:A$y", 'center');
+		$setAlign($sheet, "B$categoryY:B$y", 'left');
+		$setAlign($sheet, "G$categoryY:G$y", 'center');
 
 		// <> additional rows
 		foreach(range(1, 25 - count($rlCategoryTotals)) as $no)
@@ -368,7 +398,7 @@ class Controller_ExpExcel
 		$sheet->mergeCells("B$y:F$y");
 
 		$tableStyle = $sheet->getStyle("A$firstY:G$y");
-		$tableStyle->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER); // align
+		// $tableStyle->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER); // align
 		$tableStyle->getBorders()->getAllBorders()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN); // border
 
 		$y++;
@@ -382,6 +412,129 @@ class Controller_ExpExcel
 		// background-color the whole sheet.
 		$background($sheet, "A1:G$y", 'FFFFFF');
 
+		/***********************************
+		 * LAST SHEETS : SHEET OF LOOP
+		 ***********************************/
+		foreach($rlSites as $siteID => $rlList)
+		{
+			$sheet = $sheets[2] = $excel->createSheet(2);
+
+			$site = $sites[$siteID];
+
+			$sheet->setTitle($site->siteName);
+
+			$y = 11;
+
+			// <> info
+			$sheet->getCell("A$y")->setValue('RECONCILIATION LIST - Slip of Payment/Bill/Reciept')->getStyle()->getFont()->setBold(true);
+			$sheet->setCellValue("A$y", 'RECONCILIATION LIST - Summary');
+				$sheet->mergeCells("A$y:G$y");
+				$y += 2;
+
+			$sheet->setCellValue("A$y", 'Cluster : '.$cluster->clusterName);
+				$sheet->mergeCells("A$y:B$y");
+				$y++;
+			$sheet->setCellValue("A$y", 'Month : '.$monthName.' '.$year);
+				$sheet->mergeCells("A$y:B$y");
+				$y++;
+			$sheet->setCellValue("A$y", 'PI1M : '.$site->siteName);
+				$sheet->mergeCells("A$y:B$y");
+				$y += 2;
+
+			// <> table header
+			$firstY = $y;
+
+			$sheet->setCellValue("A$y", 'No.');
+			$sheet->setCellValue("B$y", "Category");
+			$sheet->setCellValue("C$y", 'Particular');
+				$sheet->mergeCells("C$y:F$y");
+			$sheet->setCellValue("G$y", 'Amount (RM)');
+
+			$highlight($sheet, "A$y:G$y", true); // bold
+			$background($sheet, "A$y:G$y", '93CDDD');
+
+			$setBorder($sheet, 'A'.$y.':G'.$y, 'outline');
+
+			$y++;
+
+			// prepare the categories.
+			$rlFilesCategories = array();
+
+			foreach($rlList as $rl)
+			{
+				foreach($rl->getFiles() as $file)
+				{
+					$rlFilesCategories[$file->expenseCategoryID][] = $file;
+				}
+			}
+
+			// <> excel preparation.
+			$no = 1;
+
+			$startY = $y;
+
+			$total = 0;
+			foreach($rlFilesCategories as $categoryID => $files)
+			{
+				$categoryY = $y;
+
+				$sheet->setCellValue('A'.$y, $no++);
+				$sheet->setCellValue('B'.$y, $expenseCategories[$categoryID]);
+				$highlight($sheet, 'A'.$y.':G'.$y, true);
+
+				$amount = 0;
+				foreach($files as $file)
+					$amount += $file->prReconcilationFileAmount;
+
+				$sheet->setCellValue('G'.$y, $amount);
+
+
+				foreach($files as $file)
+				{
+					$filePath = $file->getFilePath();
+
+					$gdImage = imagecreatefromjpeg($filePath);
+
+					$objDrawing = new PHPExcel_Worksheet_MemoryDrawing();
+					$objDrawing->setImageResource($gdImage);
+					$objDrawing->setRenderingFunction(PHPExcel_Worksheet_MemoryDrawing::RENDERING_JPEG);
+					$objDrawing->setMimeType(PHPExcel_Worksheet_MemoryDrawing::MIMETYPE_DEFAULT);
+					$objDrawing->setWidth(480);
+					$objDrawing->setWorksheet($sheet);
+					$objDrawing->setCoordinates('C'.$y);
+					// $objDrawing->setOffsetX($objDrawing->getOffsetX()+30);
+					$objDrawing->setOffsetX(10);
+					$objDrawing->setOffsetY(10);
+
+					$height = $objDrawing->getHeight();
+
+					$y += round($height / 19);
+
+					$amount += $file->prReconcilationFileAmount;
+				}
+
+				$setBorder($sheet, "A$categoryY:A$y", 'outline');
+				$setBorder($sheet, "B$categoryY:B$y", 'outline');
+				$setBorder($sheet, "C$categoryY:F$y", 'outline');
+				$setBorder($sheet, "G$categoryY:G$y", 'outline');
+
+				$total += $amount;
+
+				$y++;
+			}
+
+			// total amount.
+			$sheet->setCellValue('F'.$y, 'Total Amount :');
+				$setAlign($sheet, "F$y", 'right');
+			$sheet->setCellValue('G'.$y, $total);
+				$setAlign($sheet, "G$firstY:G$y", 'center');
+			$highlight($sheet, "F$y:G$y", true);
+			
+			// color
+			$backgrounds[] = array($sheet, 'A1:G'.$y, 'FFFFFF');
+		}
+
+
 		/**************
 		 * GLOBALS
 		 **************/
@@ -393,6 +546,14 @@ class Controller_ExpExcel
 		foreach($sheets as $sht)
 		{
 			$y = 6;
+
+			$gdImage = imagecreatefrompng(path::files('expense/nusuara-logo.png'));
+			$objDrawing = new PHPExcel_Worksheet_MemoryDrawing();
+			$objDrawing->setImageResource($gdImage);
+			$objDrawing->setRenderingFunction(PHPExcel_Worksheet_MemoryDrawing::RENDERING_JPEG);
+			$objDrawing->setMimeType(PHPExcel_Worksheet_MemoryDrawing::MIMETYPE_DEFAULT);
+			$objDrawing->setCoordinates('D2');
+			$objDrawing->setWorksheet($sht);
 
 			foreach(array('NUSUARA TECHNOLOGIES SDN BHD (599840-M)', 
 				'Unit No. 2-19-01, Block 2, VSQ @ PJ City Centre, Jalan Utara',
