@@ -57,7 +57,7 @@ class Data
 					"expense/fcClose"=>Array("fc"),
 					"expense/generateRLReport"=>Array("sm","cl","om","fc"),
 					'exp/prList' => array('sm', 'cl', 'om', 'fc', 'r'),
-					'exp/rlList' => array('sm', 'cl', 'om', 'fc'),
+					'exp/rlList' => array('sm', 'cl', 'om', 'fc', 'r'),
 					'exp/prView' => array('sm', 'cl', 'om', 'fc', 'r'),
 					'exp/prEdit' => array('sm', 'cl', 'om', 'fc', 'r'),
 					'exp/prEditCashAdvance' => array('sm', 'cl', 'fc', 'om', 'r'),

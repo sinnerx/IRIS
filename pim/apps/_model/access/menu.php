@@ -152,6 +152,7 @@ class Menu extends Data
 					"PI1M Expense"=>Array(
 						// "List of PR"=>"expense/listStatus",
 						'PR List' => 'exp/prList',
+						'RL List' => 'exp/rlList'
 						// "Add New Item"=>"expense/addNewItem",
 						// "Edit PR Expenditure"=>"expense/editExpenditure"
 						//"List of RL"=>"expense/listStatusRL"
