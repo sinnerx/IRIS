@@ -74,13 +74,12 @@ var requisition = new function()
 
     this.saveAndToCashAdvance = function()
     {
-
       return true;
     }
 
     this.save = function()
     {
-      $("#form-prEdit").attr('action', $("#form-prEdit").attr("action")+'?saveOnly=true');
+      $("#form-prEdit").attr('action', $("#form-prEdit").attr("action").split('?')[0]+'?saveOnly=true');
 
       return true;
     }
@@ -94,7 +93,7 @@ var requisition = new function()
 
       var newrow = $('<tr class="pr-item-row"></tr>');
       newrow.append('<td></td>');
-        var select = $('<select class="form-control itemValue'+i+'"></select>').attr('name', item ? 'existing['+item.id+'][expenseItemID]' : 'newItem[expenseItemID][]');
+        var select = $('<select class="form-control pr-item-input-category"></select>').attr('name', item ? 'existing['+item.id+'][expenseItemID]' : 'newItem[expenseItemID][]');
       newrow.append($('<td></td>').append(select));
         var description = $('<input type="text" class="form-control" />').attr('name', item ? 'existing['+item.id+'][itemDescription]':'newItem[itemDescription][]');
       newrow.append($('<td></td>').append(description.val(item ? item.description : '')));
@@ -139,6 +138,30 @@ var requisition = new function()
               requisition.disableForm();
           }
     });
+
+    this.validate = function()
+    {
+      if(!$(".pr-item-input-category")[0])
+      {
+        alert('Please select at least 1 item');
+        return false;
+      }
+
+      var failed = false;
+      $(".pr-item-input-category, .pr-item-input-quantity, .pr-item-input-price, #allTotal").each(function(i, e)
+      {
+        if($(e).val() == '')
+        {
+          $(e).addClass('input-required');
+          failed = true;
+        }
+      });
+
+      if(failed)
+        alert('Please complete the form.');
+
+      return failed ? false : true;
+    }
       
     /*var newrow = $('<tr class="pr-item-row"><td></td>' +
       '<td><select name="item[itemCategory][' + i +']" class="form-control itemValue' + i +' " id="item' + key +'"></select></td>' + 
@@ -238,6 +261,11 @@ var requisition = new function()
     width: 250px;
   }
 
+  .input-required
+  {
+    border: 1px solid #009bff;
+  }
+
 </style>
 
 <h3 class='m-b-xs text-black'>
@@ -248,7 +276,7 @@ var requisition = new function()
 <div class='row'>
   <div class='col-sm-12'>
    <section class="panel panel-default">
-   <form class="form-inline bs-example" id='form-prEdit' method='post' action='<?php echo url::base('exp/prEdit/'.$pr->prID);?>'>
+   <form class="form-inline bs-example" onsubmit="return requisition.validate();" id='form-prEdit' method='post' action='<?php echo url::base('exp/prEdit/'.$pr->prID);?>'>
           <header class="panel-heading">
             Purchase Requisition Type : <?php echo form::select("prTerm1", $prTerm, "class='input-sm form-control input-s inline v-middle' onchange='requisition.setStatus();' disabled", $pr->prType, "[SELECT TYPE]"); ?>
             <?php if($isEditable):?>
@@ -344,7 +372,7 @@ var requisition = new function()
                   <td colspan="4">1. Current collection money: RM <input type='text' class='form-control' size='5' name='curCollection' value='<?php echo $collection['total'] ?>' /> (as of <?php echo $collection['date']; ?>)
                  </td>
                   <td></td>
-                  <td width="10%"></td>
+                  <td width="10%"><input type="text" size="5" class="form-control" id="allTotal" name='total' value="<?php echo $pr->prTotal;?>" /></td>
                   <td></td>
                   <td></td>
                 </tr> 

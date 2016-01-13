@@ -78,11 +78,11 @@ var requisition = new function()
     });
       
     var newrow = $('<tr class="pr-item-row"><td></td>' +
-      '<td><select name="item[itemCategory][' + i +']" class="form-control itemValue' + i +' " id="item' + key +'"></select></td>' + 
-      '<td><input type="text" class="form-control" name="item[itemDescription][' + i +'] " id="itemDescription' + i +'"/></td>' + 
-      '<td width="10%"><input type="text" size="5" onkeyup="requisition.calculate(' + i +');" value="1" class="form-control pr-item-input-quantity amount' + i +'" name="item[itemQuantity][' + i +']" id="itemQuantity' + i +'"/></td>' + 
-      '<td width="10%"><input type="text" size="5" onkeyup="requisition.calculate(' + i +');"class="form-control pr-item-input-price amount' + i +'" name="item[itemPrice][' + i +']" id="itemPrice' + i +'"/></td>' + 
-      '<td width="10%"><input type="text" size="5" class="form-control pr-item-input-total total" readonly name="item[itemTotalPrice][' + i +']" id="itemTotalPrice' + i +'"/></td>' + 
+      '<td><select name="item[itemCategory][' + i +']" class="form-control pr-item-input-category" id="item' + key +'"></select></td>' + 
+      '<td><input type="text" class="form-control" name="item[itemDescription][' + i +'] " /></td>' + 
+      '<td width="10%"><input type="text" size="5" onkeyup="requisition.calculate(' + i +');" value="1" class="form-control pr-item-input-quantity" name="item[itemQuantity][' + i +']" id="itemQuantity' + i +'"/></td>' + 
+      '<td width="10%"><input type="text" size="5" onkeyup="requisition.calculate(' + i +');"class="form-control pr-item-input-price" name="item[itemPrice][' + i +']"/></td>' + 
+      '<td width="10%"><input type="text" size="5" class="form-control pr-item-input-total total" readonly name="item[itemTotalPrice][' + i +']" /></td>' + 
       '<td><input type="text" class="form-control" name="item[itemRemark][' + i +']" id="itemRemark' + i +'"/></td>' + 
       '<td><a href="#" id="remScnt" class="fa fa-times-circle"></a></td></tr>');   
       
@@ -146,7 +146,29 @@ var requisition = new function()
       return false;
     });
 
-  
+  this.validate = function()
+  {
+    if(!$(".pr-item-input-category")[0])
+    {
+      alert('Please select at least 1 item');
+      return false;
+    }
+
+    var failed = false;
+    $(".pr-item-input-category, .pr-item-input-quantity, .pr-item-input-price, #allTotal").each(function(i, e)
+    {
+      if($(e).val() == '')
+      {
+        $(e).addClass('input-required');
+        failed = true;
+      }
+    });
+
+    if(failed)
+      alert('Please complete the form.');
+
+    return failed ? false : true;
+  }
 }
 
 </script>
@@ -162,6 +184,11 @@ var requisition = new function()
     width: 250px;
   }
 
+  .input-required
+  {
+    border: 1px solid #009bff;
+  }
+
 </style>
 
 <h3 class='m-b-xs text-black'>
@@ -172,7 +199,7 @@ var requisition = new function()
 <div class='row'>
   <div class='col-sm-12'>
    <section class="panel panel-default">
-   <form class="form-inline bs-example " method='post' action='<?php echo url::base('exp/prAddSubmit/');?>'>
+   <form onsubmit='return requisition.validate();' class="form-inline bs-example " method='post' action='<?php echo url::base('exp/prAddSubmit/');?>'>
           <header class="panel-heading">
             Purchase Requisition Type : <?php echo form::select("prTerm1", $prTerm, "class='input-sm form-control input-s inline v-middle' onchange='requisition.setStatus();'","[SELECT UTILITIES]"); ?>
           </header>

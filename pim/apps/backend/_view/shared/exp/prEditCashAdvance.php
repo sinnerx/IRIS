@@ -63,11 +63,49 @@ var base_url  = "<?php echo url::base();?>/";
     });
 }*/
 
-var rl = new function()
+var pr = new function()
+{
+  this.approveCheck = function()
+  {
+    if(!confirm('Approve this PR?'))
+      return false;
+
+    return true;
+  }
+
+  this.rejectCheck = function()
+  {
+    if(!confirm('Reject this PR?'))
+      return false;
+
+    return true;
+  }
+}
+
+var ca = new function()
 {
   this.save = function()
   {
-    $("#form-rlEdit").attr('action', $("#form-rlEdit").attr('action')+'?saveOnly=true');
+    $("#form-rlEdit").attr('action', $("#form-rlEdit").attr('action').split('?')[0]+'?saveOnly=true');
+  }
+
+  this.validate = function()
+  {
+    var failed = false;
+    $(".ca-purpose, .ca-amount").each(function(i, e)
+    {
+      if($(e).val() == '')
+      {
+        failed = true;
+        $(e).addClass('input-required');
+      }
+    });
+
+    if(failed)
+    {
+      alert('Please complete the cash advance form.');
+      return false;
+    }
   }
 }
 
@@ -75,7 +113,10 @@ var rl = new function()
 
 
 <style type="text/css">
-  
+  .input-required
+  {
+    border: 1px solid #009bff;
+  }
   label {
 
       font-size: 13px;
@@ -96,12 +137,12 @@ textarea {margin:0; padding:0;  display:block;}
 <div class='row'>
   <div class='col-sm-12'>
    <section class="panel panel-default">
-          <form class="form-inline bs-example" id='form-rlEdit' method='post' action='<?php echo url::base('exp/prEditCashAdvance/'.$cashAdvanceID);?>'>
+          <form onsubmit="return ca.validate();" class="form-inline bs-example" id='form-rlEdit' method='post' action='<?php echo url::base('exp/prEditCashAdvance/'.$cashAdvanceID);?>'>
           <header class="panel-heading">
             REQUEST for CASH ADVANCE
 
             <?php if($isEditable):?>
-              <input type='submit' class='btn btn-primary pull-right' onclick='return rl.save();' style="background: #369120;" value='Save' />
+              <input type='submit' class='btn btn-primary pull-right' onclick='return ca.save();' style="background: #369120;" value='Save' />
             <?php endif;?>
             <a href='<?php echo url::base('exp/prEdit/'.$pr->prID);?>' class='btn btn-primary pull-right' style='margin-right: 10px;'>PR Form</a>
           </header>
@@ -125,7 +166,7 @@ textarea {margin:0; padding:0;  display:block;}
                 </tr>
 
                 <tr>        
-                  <td colspan="2" rowspan="3"><textarea style="height: 115px;" rows="2" cols="100" <?php echo $disabled;?> name="purpose"><?php echo $ca->prCashAdvancePurpose;?></textarea></td>
+                  <td colspan="2" rowspan="3"><textarea style="height: 115px;" rows="2" class='ca-purpose' cols="100" <?php echo $disabled;?> name="purpose"><?php echo $ca->prCashAdvancePurpose;?></textarea></td>
                   <td colspan="4"><label>For ACCOUNTS DEPARTMENT </label></td>                
                 </tr>
                 <tr>                  
@@ -171,7 +212,7 @@ textarea {margin:0; padding:0;  display:block;}
                 <tr>
                   <td></td>
                   <td>Ringgit Malaysia : 
-                   <input type="text" size="70" class="form-control" value='<?php echo $ca->prCashAdvanceAmount;?>' <?php echo $disabled;?> name= "amount" id=""/></td>
+                   <input type="text" size="70" class="form-control ca-amount" value='<?php echo $ca->prCashAdvanceAmount;?>' <?php echo $disabled;?> name= "amount" id=""/></td>
                   <td></td>
                   <td></td>
                   <td></td>                  

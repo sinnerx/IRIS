@@ -257,7 +257,6 @@ class Controller_Exp
 		{
 			foreach(array_keys(input::get('expenditure')) as $id)
 			{
-				echo $id;
 				// insert
 				if(!db::where('expenseExpenditureID', $id)->where('prID', $prID)->get('pr_expenditure')->row())
 				{
@@ -298,6 +297,7 @@ class Controller_Exp
 			}
 			else
 			{
+				
 				// update approval
 				if(user()->isClusterLead() || user()->isOperationManager())
 					$pr->approve(user());
