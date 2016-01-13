@@ -297,7 +297,7 @@ class Controller_Exp
 			}
 			else
 			{
-				
+
 				// update approval
 				if(user()->isClusterLead() || user()->isOperationManager())
 					$pr->approve(user());
@@ -558,7 +558,7 @@ class Controller_Exp
 
 		$data['rlFile'] = orm('expense/pr/reconcilation/file')->find($fileID);
 
-		view::render('shared/exp/rlFIle', $data);
+		view::render('shared/exp/rlFile', $data);
 	}
 
 	public function rlFileImage($fileID)
