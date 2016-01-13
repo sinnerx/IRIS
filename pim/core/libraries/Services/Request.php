@@ -29,6 +29,37 @@ class Request
 		return !$name?$_POST:($_POST[$name] != ""?$_POST[$name]:$default);
 	}
 
+	public static function has($param)
+	{
+		// based on method
+		$method = strtolower(self::method());
+
+		if($method == 'get')
+		{
+			$params = array_merge($_POST, $_GET);
+		}
+		else
+		{
+			$params = array_merge($_GET, $_POST);
+		}
+
+		if(is_array($param))
+		{
+			foreach($param as $key)
+			{
+				if(!isset($params[$key]))
+					return false;
+			}
+		}
+		else
+		{
+			if(!isset($params[$key]))
+				return false;
+		}
+
+		return true;
+	}
+
 	/**
 	 * Prioritize current method
 	 */
