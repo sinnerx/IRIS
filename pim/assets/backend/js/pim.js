@@ -2,9 +2,26 @@ var pim = function(conf)
 {
 	var $ = jQuery; //dependant.
 	this.base_url	= conf['base_url']+"/";
-	this.redirect	= function(url)
+	this.redirect	= function(url, param)
 	{
-		window.location.href	= this.base_url+url;
+		window.location.href	= this.url(url, param);
+	}
+
+	this.url = function(url, param)
+	{
+		if(param)
+		{
+			var uris = url.split('?');
+			url = uris[0];
+
+			if(uris[1])
+				url += '?' + uris[1] + $.param(param);
+			else
+				url += '?' + $.param(param);
+
+		}
+
+		return this.base_url+url;
 	}
 	this.uriHash	= new function()
 	{

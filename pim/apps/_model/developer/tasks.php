@@ -27,6 +27,11 @@ class Tasks
 			'description' => 'Reset billing'
 			));
 
+		$manager->addTask('expenseReset', array(
+			'repeatable' => true,
+			'description' => 'Expense Reset'
+			));
+
 		$manager->addTask('updateBillingItemUpdatedDate', array(
 			'description' => 'Update billing item updated date'
 			));
@@ -305,6 +310,21 @@ class Tasks
 			));
 	}
 
+	public function expenseReset()
+	{
+		db::query('TRUNCATE `pr`;
+			TRUNCATE `pr_approval`;
+			TRUNCATE `pr_rejection`;
+			TRUNCATE `pr_cash_advance`;
+			TRUNCATE `pr_cash_advance_item`;
+			TRUNCATE `pr_item`;
+			TRUNCATE `pr_reconcilation`;
+			TRUNCATE `pr_reconcilation_rejection`;
+			TRUNCATE `pr_reconcilation_approval`;
+			TRUNCATE `pr_reconcilation_file`;
+			TRUNCATE `pr_remark`;');
+	}
+
 	/*public function purchaseRequisitionCategory()
 	{
 		db::query("INSERT INTO `purchase_requisition_category` VALUES (1,'Utilities','2015-06-16 00:00:00'),(2,'Cleaning Service','2015-06-16 00:00:00'),(3,'Admin & Other Expenses','2015-06-16 00:00:00'),(4,'Training & Awareness','2015-06-16 00:00:00'),(5,'Office Equipment & Consumable','2015-06-16 00:00:00')");
@@ -356,12 +376,12 @@ class Tasks
 	public function prExpenditureNew()
 	{
 		$expenditures['data'] = array(
-			array(1, 'PI1M Expenses'),
-			array(1, 'PI1M Equipment'),
-			array(2, 'Scheduled Event'),
-			array(2, 'Ad hoc Event'),
-			array(3, 'Other'),
-			array(3, '1Citizen')
+			array('budgeted', 'PI1M Expenses'),
+			array('budgeted', 'PI1M Equipment'),
+			array('addition', 'Scheduled Event'),
+			array('addition', 'Ad hoc Event'),
+			array('replacement', 'Other'),
+			array('replacement', '1Citizen')
 		);
 
 		foreach($expenditures['data'] as $row)

@@ -36,15 +36,15 @@ class Menu extends Data
 						"Daily Journal"=>"billing/dailyJournal",
 						"Transaction Journal"=>"billing/transactionJournal"
 						),
-					// "PI1M Expense"=>Array(
-					// 	"List of PR"=>"expense/listStatus",
-					// 	"List of RL"=>"expense/listStatusRL",
-					// 	'PR List' => 'exp/prList',
-					// 	"RL List" => 'exp/rlList',
-					// 	'PR Add' => 'exp/prAdd',
-					// 	"Purchase Requisition"=>"expense/add"
-					// 	/*"Reconciliation List"=>"expense/reconciliation"			*/
-					// 	),
+					"PI1M Expense"=>Array(
+						// "List of PR"=>"expense/listStatus",
+						// "List of RL"=>"expense/listStatusRL",
+						'PR List' => array('exp/prList', 'exp/prEdit', 'exp/prEditCashAdvance'),
+						"RL List" => array('exp/rlList', 'exp/rlEdit'),
+						'PR Add' => 'exp/prAdd',
+						// "Purchase Requisition"=>"expense/add"
+						/*"Reconciliation List"=>"expense/reconciliation"			*/
+						),
 					"Pages"=>"page/index",
 					"Blog" =>Array(
 							"List of Articles"=>Array("site/article","site/editArticle"),
@@ -74,12 +74,9 @@ class Menu extends Data
 									"Google Analytics"=>Array("googleanalytics/test"),
 									/*"Monthly Activity Report"=>Array("report/activityReport")*/
 												),
-					"Learning" => Array(
-									"Learning Page " => Array("../lms/"),
-						),
 					"Attendance" => Array(
 									"Attendance Page" => Array("../attendance")
-						)					
+						)	
 							);
 					
 
@@ -94,12 +91,12 @@ class Menu extends Data
 						// "Edit Form"=>"billing/edit",
 						"Daily Cash Process"=>"billing/dailyCashProcess"
 						),
-					// "PI1M Expense"=>Array(
-					// 	"List of PR"=>"expense/listStatus",
-					// 	"List of RL"=>"expense/listStatusRL",
-					// 	'PR List' => 'exp/prList',
-					// 	"RL List" => 'exp/rlList'
-					// 	),
+					"PI1M Expense"=>Array(
+						// "List of PR"=>"expense/listStatus",
+						// "List of RL"=>"expense/listStatusRL",
+						'PR List' => array('exp/prList', 'exp/prEdit', 'exp/prEditCashAdvance'),
+						"RL List" => array('exp/rlList', 'exp/rlEdit')
+						),
 							);
 
 		$menu['fc']	= Array(					
@@ -109,11 +106,13 @@ class Menu extends Data
 						"Daily Cash Process"=>"billing/dailyCashProcess"
 						),
 
-					// "PI1M Expense"=>Array(
-					// 	"List of PR"=>"expense/listStatus",
-					// 	"List of RL"=>"expense/listStatusRL"
-					// //	"Add new Category / Item"=>"expense/addCategory"
-					// 	),
+					"PI1M Expense"=>Array(
+						// "List of PR"=>"expense/listStatus",
+						// "List of RL"=>"expense/listStatusRL",
+						'PR Cash Advance' => array('exp/prList', 'exp/prEdit', 'exp/prEditCashAdvance'),
+						'RL List' => array('exp/rlList', 'exp/rlEdit')
+					//	"Add new Category / Item"=>"expense/addCategory"
+						),
 							);
 
 		## root.
@@ -150,12 +149,13 @@ class Menu extends Data
 							"Transaction Journal"=>"billing/transactionJournal"
 						),
 					
-					// "PI1M Expense"=>Array(
-					// 	"List of PR"=>"expense/listStatus",
-					// 	"Add New Item"=>"expense/addNewItem",
-					// 	"Edit PR Expenditure"=>"expense/editExpenditure"
-					// 	//"List of RL"=>"expense/listStatusRL"
-					// 	),
+					"PI1M Expense"=>Array(
+						// "List of PR"=>"expense/listStatus",
+						'PR List' => 'exp/prList',
+						// "Add New Item"=>"expense/addNewItem",
+						// "Edit PR Expenditure"=>"expense/editExpenditure"
+						//"List of RL"=>"expense/listStatusRL"
+						),
 					
 					"Activities"=>Array(
 							"Training"=>Array("activity/training","activity/trainingTypeAdd","activity/trainingTypeEdit")
@@ -172,6 +172,12 @@ class Menu extends Data
 							"Google Analytics"=>"googleanalytics/report",
 							"Monthly Activity Report"=>"report/getallActivityReport"
 									),
+					"Learning" => Array(
+									"Learning Page " => Array("../lms/"),
+						),
+					"Attendance" => Array(
+									"Attendance Page" => Array("../attendance")
+						)
 					/*"Activities"=>"activity/index",
 					"Reports"=>"reports/index"*/
 							);
@@ -181,11 +187,13 @@ class Menu extends Data
 					/*"Overview"=>"home/index",*/
 			
 
-					// "PI1M Expense"=>Array(
-					// 	"List of PR"=>"expense/listStatus",
-					// 	"List of RL"=>"expense/listStatusRL"
-					// //	"Add new Category / Item"=>"expense/addCategory"
-					// 	),
+					"PI1M Expense"=>Array(
+						// "List of PR"=>"expense/listStatus",
+						// "List of RL"=>"expense/listStatusRL",
+						'PR List' => array('exp/prList', 'exp/prEdit', 'exp/prEditCashAdvance'),
+						'RL List' => array('exp/rlList', 'exp/rlEdit')
+					//	"Add new Category / Item"=>"expense/addCategory"
+						),
 
 							);
 

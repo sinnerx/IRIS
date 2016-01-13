@@ -12,7 +12,7 @@
   <link rel="stylesheet" href="<?php echo url::asset("_scale/css/font.css");?>" type="text/css" />
   <link rel="stylesheet" href="<?php echo url::asset("_scale/css/app.css");?>" type="text/css" />
   <script src="<?php echo url::asset("_scale/js/jquery.min.js");?>"></script>
-  <script type="text/javascript" src='<?php echo url::asset("backend/js/pim.js");?>'></script>
+  <script type="text/javascript" src='<?php echo url::asset("backend/js/pim.js?v2");?>'></script>
   <script type="text/javascript">
   var pim = new pim({base_url:"<?php echo url::base();?>"});
   var p1mloader = new function()

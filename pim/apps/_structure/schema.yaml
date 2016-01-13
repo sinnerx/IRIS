@@ -827,7 +827,7 @@ pr:
 	prID [int]
 	userID [int]
 	siteID [int]
-	prStatus [int] ## 0 = pending, 1 = closed, 2 = rejected
+	prStatus [int] ## 0 = pending, 1 = closed, 2 = rejected, 3 = deleted
 	prStatusPendingLevel [int] ## if prStatus = 0, which level its currently pending at 
 	prStatusApprovalLevel [int] ## current approval level
 	prStatusRejectionLevel [int] ## if prStatus = 2, which level its rejected by
@@ -842,6 +842,21 @@ pr:
 	prCreatedDate [datetime]
 	prUpdatedDate [datetime]
 	prUpdatedUser [int]
+
+pr_rejection:
+	prRejectionID [int]
+	prID [int]
+	userLevel [int]
+	prRejectionReason [text]
+	prRejectionCreatedDate [datetime]
+	prRejectionCreatedUser [int]
+
+pr_expenditure:
+	prExpenditureID [int]
+	prID [int]
+	expenseExpenditureID [int]
+	prExpenditureCreatedDate [datetime]
+	prExpenditureCreatedUser [int]
 
 pr_remark:
 	prRemarkID [int]
@@ -899,21 +914,33 @@ expense_item:
 
 expense_expenditure:
 	expenseExpenditureID [int]
-	expenseExpenditureSet [int]
+	expenseExpenditureSet [varchar]
 	expenseExpenditureName [varchar]
 	expenseExpenditureStatus [int]
-	expenseExpenditureCreatedDate [int]
+	expenseExpenditureCreatedDate [datetime]
 	expenseExpenditureCreatedUser [int]
 
 pr_reconcilation:
 	prReconcilationID [int]
 	prID [int]
-	prReconcilationStatus [int] ## 1 = opened, 2 = closed
+	prReconcilationStatus [int] ## 0 = pending, 1 = closed, 2 = rejected, 3 = deleted
 	prReconcilationPendingLevel [int]
 	prReconcilationApprovalLevel [int]
 	prReconcilationRejectionLevel [int]
+	prReconcilationCreatedUser [int]
 	prReconcilationCreatedDate [datetime]
 	prReconcilationUpdatedDate [datetime]
+	prReconcilationUpdatedUser [int]
+	prReconcilationSubmitted [int] ## if this rl has been initiated.
+	prReconcilationSubmittedUser [int]
+	prReconcilationSubmittedDate [datetime]
+
+pr_reconcilation_rejection:
+	prReconcilationRejectionID [int]
+	prReconcilationID [int]
+	prReconcilationRejectionReason [text]
+	prReconcilationRejectionCreatedDate [datetime]
+	prReconcilationRejectionCreatedUser [int]
 
 pr_reconcilation_file:
 	prReconcilationFileID [int]
@@ -970,3 +997,5 @@ att_attendancedetails:
 	latLongOut [varchar(255)]
 	imgIn [varchar(255)]
 	imgOut [varchar(255)]
+
+### lms
