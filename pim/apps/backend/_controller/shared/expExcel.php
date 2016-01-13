@@ -493,7 +493,20 @@ class Controller_ExpExcel
 				{
 					$filePath = $file->getFilePath();
 
-					$gdImage = imagecreatefromjpeg($filePath);
+					$type = $file->prReconcilationFileType;
+
+					switch($type)
+					{
+						case 'image/jpeg':
+							$gdImage = imagecreatefromjpeg($filePath);
+						break;
+						case 'image/png':
+							$gdImage = imagecreatefrompng($filePath);
+						break;
+						case 'image/bmp':
+							$gdImage = imagecreatefromwbmp($filePath);
+						break;
+					}
 
 					$objDrawing = new PHPExcel_Worksheet_MemoryDrawing();
 					$objDrawing->setImageResource($gdImage);
