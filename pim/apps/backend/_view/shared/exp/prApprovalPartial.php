@@ -14,7 +14,7 @@
           <?php if($pr->isManagerPending()):?>
             <?php if(user()->isManager()):?>
               <?php if($isCashAdvanceForm):?>
-                <input type='submit' class='btn btn-primary' value='Complete Cash Advance' />
+                <input type='submit' class='btn btn-primary' value='Submit Cash Advance' />
               <?php else:?>
                 <input type='submit' class='btn btn-primary' <?php if($pr->isCashAdvance()):?>value='Next to cash advance'<?php endif;?> />
               <?php endif;?>
