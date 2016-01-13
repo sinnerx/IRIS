@@ -60,6 +60,7 @@ class Controller_Exp
 		$pr->prCitizen = input::get('replacement2');*/
 		$pr->prTotal = input::get('total');
 		$pr->prBalance = input::get('curCollection');
+		$pr->prBalanceDate = date('Y-m-d 18:00:00', strtotime(input::get('selectDate')));
 		$pr->prDeposit = input::get('balDeposit');
 		$pr->prDate = date('Y-m-d',strtotime(input::get('selectDate')));
 		$pr->prStatus = 0;

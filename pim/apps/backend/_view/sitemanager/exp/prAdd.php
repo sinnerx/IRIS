@@ -22,9 +22,8 @@
             var siteID = "<?php echo $siteID ?>";
         }
 
-        window.location.href  = base_url+"expense/add?"+selectDate;   
+        window.location.href  = base_url+"exp/prAdd?"+selectDate;   
       }
-  
     });
   });
 
@@ -62,7 +61,7 @@ var requisition = new function()
       
       $.ajax({
           type:"GET",
-          url: base_url+"expense/listItem/"+key,
+          url: base_url+"exp/listItem/"+key,
           success: function(data){
         
             data = $.parseJSON(data);
@@ -256,8 +255,8 @@ var requisition = new function()
                 </tr> 
 
                 <tr>
-                  <td colspan="4">1. Current collection money: RM <?php echo $currentCollection ?> (as at 6.00pm, <?php echo date('d/m/Y ',$selectDate); ?>)
-                 <input type="hidden" size="5" class="form-control" name="curCollection" value="<?php echo $currentCollection ?>" /></td>
+                  <td colspan="4">1. Current collection money: RM <input type='text' size='5' class='form-control' name='curCollection' value='<?php echo $currentCollection ?>' /> (as of 6.00pm, <?php echo date('d F Y',$selectDate); ?>)
+                 </td>
                   <td></td>
                   <td width="10%"><input type="text" size="5" class="form-control" id="allTotal" name='total' /></td>
                   <td></td>
@@ -265,7 +264,7 @@ var requisition = new function()
                 </tr> 
 
                 <tr >
-                  <td colspan="4">2. Balance Deposit: RM <input type="text" size="5" class="form-control" name="balDeposit" /> (as at 6.00pm, <?php echo date('d/m/Y ',$selectDate); ?>)</td>
+                  <td colspan="4">2. Balance Deposit: RM <input type="text" size="5" class="form-control" name="balDeposit" /> (as of 6.00pm, <?php echo date('d F Y',$selectDate); ?>)</td>
                   <td colspan="4" style="background-color:#ededed"><b>Terms of Payment (For Nusuara's use only):</b></td>
                 </tr> 
 

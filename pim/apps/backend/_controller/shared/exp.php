@@ -119,7 +119,7 @@ class Controller_Exp
 			'date' => date('g:ia, d F Y', strtotime($data['pr']->prBalanceDate))
 			);
 
-		$selectDate = request::get('selectDate', date('d F Y'));
+		$selectDate = request::get('selectDate', date('d F Y', strtotime($pr->prDate)));
 		$data['selectDate'] = date('d F Y', strtotime($selectDate));
 
 		$startDate = date('Y-m-1 00:00:00',strtotime($selectDate));
@@ -245,6 +245,31 @@ class Controller_Exp
 			}
 		}
 
+		// update pr_expenditure
+		$db = db::where('prID', $prID);
+		
+		if(input::get('expenditure'))
+			$db->where('expenseExpenditureID !=', array_keys(input::get('expenditure')));
+
+		$db->delete('pr_expenditure');
+
+		if(input::get('expenditure'))
+		{
+			foreach(array_keys(input::get('expenditure')) as $id)
+			{
+				echo $id;
+				// insert
+				if(!db::where('expenseExpenditureID', $id)->where('prID', $prID)->get('pr_expenditure')->row())
+				{
+					db::insert('pr_expenditure', array(
+						'prID' => $pr->prID,
+						'expenseExpenditureID' => $id,
+						'prExpenditureCreatedDate' => now(),
+						'prExpenditureCreatedUser' => session::get('userID')
+						));
+				}
+			}
+		}
 
 		// update pr
 		$pr->prDeposit = input::get('balDeposit');
@@ -254,8 +279,8 @@ class Controller_Exp
 		$startDate = date('Y-m-1 00:00:00',strtotime($selectDate));
 		$lastDate = date('Y-m-d 18:00:00',strtotime($selectDate));
 
-		$currentCollection = model::load('billing/process')->getCurrentCollection(authData('site.siteID'), $startDate, $lastDate);
-		$pr->prBalance = $currentCollection['total'];
+		/*$currentCollection = model::load('billing/process')->getCurrentCollection(authData('site.siteID'), $startDate, $lastDate);
+		$pr->prBalance = $currentCollection['total'];*/
 		$pr->prBalanceDate = $lastDate;
 		$pr->save();
 

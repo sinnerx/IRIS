@@ -279,7 +279,7 @@ var requisition = new function()
                   <td>Budgeted:</td>  
           <?php foreach ($budgeted as $id => $value) { ?>
                   <td colspan="2">
-                    <input name='budgeted<?php echo $id?>' type="checkbox" <?php if(isset($expenditures[$id])):?>checked<?php endif;?> > <?php echo $value ?>
+                    <input name='expenditure[<?php echo $id?>]' type="checkbox" <?php if(isset($expenditures[$id])):?>checked<?php endif;?> > <?php echo $value ?>
                   </td>
           <?php }  ?>
                 </tr>
@@ -289,7 +289,7 @@ var requisition = new function()
               <?php 
                 foreach ($addition as $id => $value) { ?>
                   <td colspan="2">
-                    <input name='addition<?php echo $id?>' type="checkbox" <?php if(isset($expenditures[$id])):?>checked<?php endif;?> > <?php echo $value ?>
+                    <input name='expenditure[<?php echo $id?>]' type="checkbox" <?php if(isset($expenditures[$id])):?>checked<?php endif;?> > <?php echo $value ?>
                   </td>
               <?php 
                 }  ?>
@@ -300,7 +300,7 @@ var requisition = new function()
               <?php 
                 foreach ($replacement as $id => $value) { ?>
                   <td colspan="2">
-                    <input name='replacement<?php echo $id?>' type="checkbox" <?php if(isset($expenditures[$id])):?>checked<?php endif;?> > <?php echo $value ?>
+                    <input name='expenditure[<?php echo $id?>]' type="checkbox" <?php if(isset($expenditures[$id])):?>checked<?php endif;?> > <?php echo $value ?>
                   </td>
               <?php 
                 }  ?>
@@ -321,7 +321,7 @@ var requisition = new function()
                   <th></th>
                 </tr>
           
-          <?php $selectDate = strtotime($selectDate);
+          <?php
 
               foreach ($categories as $key => $category):?>           
                 <tr id = "<?php echo $key ?>">
@@ -341,16 +341,16 @@ var requisition = new function()
                 </tr> 
                 
                 <tr>
-                  <td colspan="4">1. Current collection money: RM <?php echo $collection['total'] ?> (<?php echo $collection['date']; ?>)
-                 <input type="hidden" size="5" class="form-control" name="curCollection" value="<?php echo $collection['total'];?>" /></td>
+                  <td colspan="4">1. Current collection money: RM <input type='text' class='form-control' size='5' name='curCollection' value='<?php echo $collection['total'] ?>' /> (as of <?php echo $collection['date']; ?>)
+                 </td>
                   <td></td>
-                  <td width="10%"><input type="text" size="5" class="form-control" id="allTotal" name='total' value="<?php echo $pr->prTotal;?>" /></td>
+                  <td width="10%"></td>
                   <td></td>
                   <td></td>
                 </tr> 
 
                 <tr >
-                  <td colspan="4">2. Balance Deposit: RM <input type="text" size="5" class="form-control" value='<?php echo $pr->prDeposit;?>' name="balDeposit" /> (as at 6.00pm, <?php echo date('d/m/Y ',$selectDate); ?>)</td>
+                  <td colspan="4">2. Balance Deposit: RM <input type="text" size="5" class="form-control" value='<?php echo $pr->prDeposit;?>' name="balDeposit" /> (as of 6.00pm, <?php echo date('d F Y', strtotime($selectDate)); ?>)</td>
                   <td colspan="4" style="background-color:#ededed"><b>Terms of Payment (For Nusuara's use only):</b></td>
                 </tr> 
 
