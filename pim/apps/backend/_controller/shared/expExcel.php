@@ -483,8 +483,12 @@ class Controller_ExpExcel
 				$highlight($sheet, 'A'.$y.':G'.$y, true);
 
 				$amount = 0;
+
 				foreach($files as $file)
+				{
 					$amount += $file->prReconcilationFileAmount;
+					$total += $file->prReconcilationFileAmount;
+				}
 
 				$sheet->setCellValue('G'.$y, $amount);
 
@@ -531,7 +535,7 @@ class Controller_ExpExcel
 				$setBorder($sheet, "C$categoryY:F$y", 'outline');
 				$setBorder($sheet, "G$categoryY:G$y", 'outline');
 
-				$total += $amount;
+				// $total += $amount;
 
 				$y++;
 			}
