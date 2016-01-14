@@ -94,26 +94,6 @@ var requisition = new function()
 
     this.calculate = function(key)
     {
-
-      /*var result = 1.00;
-      $('#itemTotalPrice'+key).attr('value', function() {
-          $('.amount'+key).each(function() {
-              if ($(this).val() !== '') {
-                  result *= parseFloat($(this).val());
-              }
-          });
-          return result;
-      });
-
-      var result = 0.00;
-      $('#allTotal').attr('value', function() {
-          $('.total').each(function() {
-              if ($(this).val() !== '') {
-                  result += parseFloat($(this).val());
-              }
-          });
-          return result;
-      });*/
       $('.pr-item-row').each(function()
       {
         var row = $(this);
@@ -138,9 +118,9 @@ var requisition = new function()
 
     //Remove button
     $(document).on('click', '#remScnt', function() {
-
       if (i > 2) {
           $(this).closest('tr').remove();
+          requisition.calculate();
           i--;
       }
       return false;
