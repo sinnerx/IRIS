@@ -28,7 +28,7 @@
           </div>
 
           <div class="form-group">
-            <label class="col-lg-3 control-label">Amount (RM)</label>
+            <label class="col-lg-3 control-label">Amount Without GST (RM)</label>
             <div class="col-lg-8">
 				<?php echo form::text("amount","class='form-control' required"); ?>
             </div>
@@ -42,7 +42,7 @@
           </div>
 
           <div class="form-group">
-            <label class="col-lg-3 control-label">Total Amount (RM)</label>
+            <label class="col-lg-3 control-label">Total Amount with GST (RM)</label>
             <div class="col-lg-8">
         <?php echo form::text("total","class='form-control' required"); ?>
             </div>
