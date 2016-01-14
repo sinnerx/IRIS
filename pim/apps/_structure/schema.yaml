@@ -409,6 +409,13 @@ cluster_lead:
 	clusterLeadCreatedDate [datetime]
 	clusterLeadCreatedUser [int]
 
+cluster_opsmanager:
+	clusterOpsmanagerID [int]
+	clusterID [int]
+	userID [int]
+	clusterOpsmanagerCreatedDate [datetime]
+	clusterOpsmanagerCreatedUser [int]
+
 album:
 	albumID [int]
 	albumName [varchar]
