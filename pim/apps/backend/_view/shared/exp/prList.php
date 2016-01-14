@@ -50,7 +50,7 @@ var prList = new function()
 <div class='row'>
   <div class='col-sm-12'>
    <section class="panel panel-default">
-   <form class="form-inline bs-example " method='post' action='<?php echo url::base('expense/submit1Requisition/');?>'>
+   <div class="form-inline bs-example " method='post' action='<?php echo url::base('expense/submit1Requisition/');?>'>
           <header class="panel-heading">
             Purchase Requisition <?php if(user()->isFinancialController()):?>Cash Advance<?php endif;?>
           </header>
@@ -109,7 +109,9 @@ var prList = new function()
               <?php if($list->prNumber):?>
                 <?php echo $list->prNumber;?>
               <?php elseif(user()->isRoot() && $list->isWaitingForPrNumber()):?>
-                <input type='name' id='pr-input-<?php echo $list->prID;?>' class='form-control' style='display: inline;' size='10'  /> <input type='button' value="Add" class='btn btn-primary' onclick="prList.submitPrNumber(<?php echo $list->prID;?>);" />
+                <form method="post" action='<?php echo url::base('exp/submitPrNumber/'.$list->prID);?>'>
+                  <input type='text' name='prNumber' id='pr-input-<?php echo $list->prID;?>' class='form-control' style='display: inline;' size='22'  /> <input type='submit' value="Add" class='btn btn-primary'  />
+                </form>
               <?php endif;?>
             </td>
             <td>
@@ -139,7 +141,7 @@ var prList = new function()
 
           <br>
         
-    </form>
+    </div>
     </section>
 
           <footer class='panel-footer'>

@@ -347,7 +347,12 @@ class Controller_Exp
 
 		$prNumber = input::get('prNumber');
 
+		if(!$prNumber)
+			redirect::back('Please set a PR number', 'error');
+
 		$pr->close(user(), $prNumber);
+
+		redirect::to('exp/prList', 'PR Number submitted', 'success');
 	}
 
 	public function listItem($categoryId)
