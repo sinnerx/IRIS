@@ -100,7 +100,7 @@ var prList = new function()
             <td><?php echo $list->getTypeLabel();?></td>
             <td>
               <?php if($list->isRejected()):?>
-                <a href='<?php echo url::base('exp/prRejectionReason/'.$list->prID);?>' style='color: red;' data-toggle='ajaxModal'><?php echo $list->getStatusLabel();?></a>
+                <a href='<?php echo url::base('exp/prRejectionReason/'.$list->prID);?>' style='color: red;' data-toggle='ajaxModal'><?php echo $list->getStatusLabel();?> [See Reason]</a>
               <?php else:?>
                 <?php echo $list->getStatusLabel();?>
               <?php endif;?>

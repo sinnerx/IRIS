@@ -132,7 +132,7 @@ var rlList = new function()
                   <td><?php echo $pr->getTypeLabel();?></td>
                   <td>
                     <?php if($list->isRejected()):?>
-                      <a style="color: red;" href='<?php echo url::base('exp/rlRejectionReason/'.$list->prReconcilationID);?>' data-toggle='ajaxModal'><?php echo $list->getStatusLabel();?></a>
+                      <a style="color: red;" href='<?php echo url::base('exp/rlRejectionReason/'.$list->prReconcilationID);?>' data-toggle='ajaxModal'><?php echo $list->getStatusLabel();?> [See Reason]</a>
                     <?php else:?>
                       <?php echo $list->getStatusLabel();?>
                     <?php endif;?>

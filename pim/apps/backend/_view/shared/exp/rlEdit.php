@@ -207,7 +207,7 @@ var rl = new function()
                       <a href='<?php echo url::base('exp/rlRejectForm/'.$rl->prReconcilationID);?>' class='btn btn-danger' data-toggle='ajaxModal'>Reject</a>
                     <?php else:?>
                       <?php if($clApproval->isRejected()):?>
-                        <a href='<?php echo url::base('exp/rlRejectionReason/'.$rl->prReconcilationID);?>' style='color: red;' data-toggle='ajaxModal'><?php echo $clApproval->getStatusLabel();?>
+                        <a href='<?php echo url::base('exp/rlRejectionReason/'.$rl->prReconcilationID);?>' style='color: red;' data-toggle='ajaxModal'><?php echo $clApproval->getStatusLabel();?> [See Reason] 
                         </a>
                       <?php else:?>
                         <?php echo $clApproval->getStatusLabel();?>
@@ -223,7 +223,7 @@ var rl = new function()
                       <a href='<?php echo url::base('exp/rlRejectForm/'.$rl->prReconcilationID);?>' class='btn btn-danger' data-toggle='ajaxModal'>Reject</a>
                     <?php else:?>
                       <?php if($omApproval->isRejected()):?>
-                        <a href='<?php echo url::base('exp/rlRejectionReason/'.$rl->prReconcilationID);?>' style='color: red;' data-toggle='ajaxModal'><?php echo $omApproval->getStatusLabel();?>
+                        <a href='<?php echo url::base('exp/rlRejectionReason/'.$rl->prReconcilationID);?>' style='color: red;' data-toggle='ajaxModal'><?php echo $omApproval->getStatusLabel();?> [See Reason]
                         </a>
                       <?php else:?>
                       <?php echo $omApproval->getStatusLabel();?>
@@ -239,7 +239,7 @@ var rl = new function()
                       <a href='<?php echo url::base('exp/rlRejectForm/'.$rl->prReconcilationID);?>' class='btn btn-danger' data-toggle='ajaxModal'>Reject</a>
                     <?php else:?>
                       <?php if($fcApproval->isRejected()):?>
-                        <a href='<?php echo url::base('exp/rlRejectionReason/'.$rl->prReconcilationID);?>' style='color: red;' data-toggle='ajaxModal'><?php echo $fcApproval->getStatusLabel();?>
+                        <a href='<?php echo url::base('exp/rlRejectionReason/'.$rl->prReconcilationID);?>' style='color: red;' data-toggle='ajaxModal'><?php echo $fcApproval->getStatusLabel();?> [See Reason]
                         </a>
                       <?php else:?>
                         <?php echo $fcApproval->getStatusLabel();?>

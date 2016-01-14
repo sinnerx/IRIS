@@ -33,7 +33,7 @@
             <a href='<?php echo url::base('exp/prRejectForm/'.$pr->prID);?>' data-toggle='ajaxModal' class='btn btn-danger'>Reject</a>
           <?php else:?>
             <?php if($clApproval->isRejected()):?>
-              <a href='<?php echo url::base('exp/prRejectionReason/'.$pr->prID);?>' style='color: red;' data-toggle='ajaxModal'><?php echo $clApproval->getStatusLabel();?></a>
+              <a href='<?php echo url::base('exp/prRejectionReason/'.$pr->prID);?>' style='color: red;' data-toggle='ajaxModal'><?php echo $clApproval->getStatusLabel();?> [See Reason]</a>
             <?php else:?>
               <?php echo $clApproval->getStatusLabel();?>
             <?php endif;?>
@@ -47,7 +47,7 @@
             <a  href='<?php echo url::base('exp/prRejectForm/'.$pr->prID);?>' data-toggle='ajaxModal' class='btn btn-danger'>Reject</a>
           <?php else:?>
             <?php if($omApproval->isRejected()):?>
-              <a href='<?php echo url::base('exp/prRejectionReason/'.$pr->prID);?>' style='color: red;' data-toggle='ajaxModal'><?php echo $omApproval->getStatusLabel();?></a>
+              <a href='<?php echo url::base('exp/prRejectionReason/'.$pr->prID);?>' style='color: red;' data-toggle='ajaxModal'><?php echo $omApproval->getStatusLabel();?> [See Reason]</a>
             <?php else:?>
               <?php echo $omApproval->getStatusLabel();?>
             <?php endif;?>
