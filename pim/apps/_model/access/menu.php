@@ -36,15 +36,15 @@ class Menu extends Data
 						"Daily Journal"=>"billing/dailyJournal",
 						"Transaction Journal"=>"billing/transactionJournal"
 						),
-					"PI1M Expense"=>Array(
-						// "List of PR"=>"expense/listStatus",
-						// "List of RL"=>"expense/listStatusRL",
-						'PR List' => array('exp/prList', 'exp/prEdit', 'exp/prEditCashAdvance'),
-						"RL List" => array('exp/rlList', 'exp/rlEdit'),
-						'PR Add' => 'exp/prAdd',
-						// "Purchase Requisition"=>"expense/add"
-						/*"Reconciliation List"=>"expense/reconciliation"			*/
-						),
+					// "PI1M Expense"=>Array(
+					// 	// "List of PR"=>"expense/listStatus",
+					// 	// "List of RL"=>"expense/listStatusRL",
+					// 	'PR List' => array('exp/prList', 'exp/prEdit', 'exp/prEditCashAdvance'),
+					// 	"RL List" => array('exp/rlList', 'exp/rlEdit'),
+					// 	'PR Add' => 'exp/prAdd',
+					// 	// "Purchase Requisition"=>"expense/add"
+					// 	/*"Reconciliation List"=>"expense/reconciliation"			*/
+					// 	),
 					"Pages"=>"page/index",
 					"Blog" =>Array(
 							"List of Articles"=>Array("site/article","site/editArticle"),
@@ -91,12 +91,12 @@ class Menu extends Data
 						// "Edit Form"=>"billing/edit",
 						"Daily Cash Process"=>"billing/dailyCashProcess"
 						),
-					"PI1M Expense"=>Array(
-						// "List of PR"=>"expense/listStatus",
-						// "List of RL"=>"expense/listStatusRL",
-						'PR List' => array('exp/prList', 'exp/prEdit', 'exp/prEditCashAdvance'),
-						"RL List" => array('exp/rlList', 'exp/rlEdit')
-						),
+					// "PI1M Expense"=>Array(
+					// 	// "List of PR"=>"expense/listStatus",
+					// 	// "List of RL"=>"expense/listStatusRL",
+					// 	'PR List' => array('exp/prList', 'exp/prEdit', 'exp/prEditCashAdvance'),
+					// 	"RL List" => array('exp/rlList', 'exp/rlEdit')
+					// 	),
 							);
 
 		$menu['fc']	= Array(					
@@ -149,14 +149,14 @@ class Menu extends Data
 							"Transaction Journal"=>"billing/transactionJournal"
 						),
 					
-					"PI1M Expense"=>Array(
-						// "List of PR"=>"expense/listStatus",
-						'PR List' => 'exp/prList',
-						'RL List' => 'exp/rlList'
-						// "Add New Item"=>"expense/addNewItem",
-						// "Edit PR Expenditure"=>"expense/editExpenditure"
-						//"List of RL"=>"expense/listStatusRL"
-						),
+					// "PI1M Expense"=>Array(
+					// 	// "List of PR"=>"expense/listStatus",
+					// 	'PR List' => 'exp/prList',
+					// 	'RL List' => 'exp/rlList'
+					// 	// "Add New Item"=>"expense/addNewItem",
+					// 	// "Edit PR Expenditure"=>"expense/editExpenditure"
+					// 	//"List of RL"=>"expense/listStatusRL"
+					// 	),
 					
 					"Activities"=>Array(
 							"Training"=>Array("activity/training","activity/trainingTypeAdd","activity/trainingTypeEdit")

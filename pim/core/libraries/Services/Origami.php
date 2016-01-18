@@ -9,6 +9,7 @@ class Origami
 	protected $prefix;
 	protected $exception = array();
 	protected $relationCaches = array();
+	protected $db;
 
 	public $modelData = array(
 		'name'=> null,
