@@ -176,10 +176,7 @@ Class Controller_Auth
 				$accessAuth->login($backendLoginCheck->userID,$backendLoginCheck->userLevel);
 				$_SESSION['userid'] = $backendLoginCheck->userID;
 				$_SESSION['userLevel'] = $backendLoginCheck->userLevel;
-<<<<<<< HEAD
 				
-=======
->>>>>>> 55688070ea156d4b3a01e6cdddbaa6c6d4b71334
 
 				## go to home/index
 				redirect::to(model::load("access/data")->firstLoginLocation($backendLoginCheck->userLevel));
