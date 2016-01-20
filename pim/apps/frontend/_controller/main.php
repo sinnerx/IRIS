@@ -132,6 +132,11 @@ Class Controller_Main
 			## and log user in.
 			model::load("access/auth")->login($login['userID'],$login['userLevel']);
 
+			if ($login){
+				$_SESSION['userid'] = $login['userID'];
+				$_SESSION['userLevel'] = $login['userLevel'];
+			}
+
 			## success and redirect to main site.
 			redirect::to("{site-slug}");
 		}

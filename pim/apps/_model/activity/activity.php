@@ -312,6 +312,9 @@ class Activity extends \Origami
 	## set to public so site/request can read this method for update.
 	public function _updateActivity($activityID,$type,$data)
 	{
+		//print_r($data);
+		
+			//print_r($rowTraining);
 		$originalSlug	= model::load("helper")->slugify($data['activityName']);
 
 		## recreate slug, with exception to activityID.
@@ -352,13 +355,20 @@ class Activity extends \Origami
 						"trainingType"=>$data['trainingType'],
 						"trainingMaxPax"=>$data['trainingMaxPax']
 									));
+
+			$rowTraining = db::select("trainingID")->where("activityID", $activityID)->get("training")->row();
+			db::where("trainingID", $rowTraining['trainingID']);
+			db::update("training_lms", Array(
+					"moduleID" => $data["learningModule"]
+				));
 			break;
 		}
 	}
 
-	public function addActivity($siteID,$type,$data)
+	public function addActivity($siteID,$type,$data, $learningSelect)
 	{
 		## create slug by activity name.
+		//print_r($data);
 		$originalSlug	= model::load("helper")->slugify($data['activityName']);
 		$activitySlug	= $this->refineActivitySlug($originalSlug,$data['activityStartDate']);
 
@@ -403,6 +413,18 @@ class Activity extends \Origami
 										);
 
 				db::insert("training",$data_training);
+				$trainingID = db::getLastID("training","trainingID");
+				
+				if ($learningSelect == 2)
+				{
+					$data_learning = Array(
+						"trainingID" => $trainingID,
+						"moduleID" => $data['learningModule']
+					);
+
+					db::insert("training_lms", $data_learning);
+				}
+				
 			break;
 		}
 

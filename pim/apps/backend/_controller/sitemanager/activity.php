@@ -24,6 +24,10 @@ class Controller_Activity
 		## check participation
 		$data['hasParticipation']	= model::load("activity/activity")->getParticipant($activityID)?true:false;
 
+		$Training					= model::load("activity/training")->getTrainingModule($row['trainingID']);
+		$data['learningPackage'] 	= model::load("activity/learning")->package();
+		
+		//print_r($data['learningModule']);
 		if(form::submitted())
 		{
 			$rules	= Array(
@@ -73,6 +77,17 @@ class Controller_Activity
 			redirect::to("","Activity has been updated");
 		}
 
+		if($Training[0]['packageID'] != ""){
+			$row['learningSelection'] 	= 2;
+			$row['package']				= $Training[0]['packageID'];
+			$data['learningModule']		= model::load("activity/learning")->module(null,$row['package']);
+			$row['module']				= $Training[0]['moduleID'];
+		}
+		else{
+			$row['learningSelection'] = 1;
+		}
+		$data['learningSelection'] = model::load("activity/training")->getLearningSelection();
+
 		$data['eventTypeR']		= model::load("activity/event")->type();
 		$data['trainingTypeR']	= model::load("activity/training")->type();
 		$data['row']			= $row;
@@ -112,7 +127,7 @@ class Controller_Activity
 		$data['trainingTypeR']	= model::load("activity/training")->type();
 		$row_site				= model::load("access/auth")->getAuthData("site");
 		$data['siteInfoAddress']	= $row_site['siteInfoAddress'];
-
+		$data['learningPackage'] = model::load("activity/learning")->package();
 		if(form::submitted())
 		{
 			$rules	= Array(
@@ -151,7 +166,7 @@ class Controller_Activity
 			$data['activityDateTime']		= $datetime['timeList'];
 
 			## win.
-			model::load("activity/activity")->addActivity($row_site['siteID'],input::get("activityType"),$data);
+			model::load("activity/activity")->addActivity($row_site['siteID'],input::get("activityType"),$data, input::get("learningSelect"));
 
 			redirect::to("","New activity has been submitted, and is pending for cluster lead approval.");
 		}

@@ -5,14 +5,14 @@ $config['domain']['localhost'][]	= Array(
 				"db_host"=>"localhost",
 				"db_name"=>"digitalgaia_iris",
 				"db_user"=>"root",
-				"db_pass"=>""
+				"db_pass"=>"root"
 						);
 
 $config['domain'][LOCALHOST][]	= Array(
 				"db_host"=>"localhost",
 				"db_name"=>"digitalgaia_iris",
 				"db_user"=>"root",
-				"db_pass"=>""
+				"db_pass"=>"root"
 						);
 
 $config['domain']['p1m.gaia.my'][]	= Array(
