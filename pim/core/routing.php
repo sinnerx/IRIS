@@ -4,6 +4,8 @@ apps::run(ROOT_FOLDER,function($router)
 {
 	$router->add("domain:all",function($param) use($router)
 	{
+		error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING);
+		
 		if(apps::config('env') == 'dev')
 		{
 			error_reporting(E_ALL & ~E_NOTICE);

@@ -4,9 +4,10 @@ class Controller_Cluster
 	public function lists()
 	{
 		$cluster				= model::load("site/cluster");
-		$data['res_cluster']	= $cluster->lists();
+		// $data['res_cluster']	= $cluster->lists();
+		$data['res_cluster'] = orm('site/cluster')->execute();
 		## get a grouped cluster lead, by cluster, that they may live under the same cluster.
-		$data['clusterLeadByClusterR']	= $cluster->getClusterLeadByCluster(); 
+		$data['clusterLeadByClusterR']	= $cluster->getClusterLeadByCluster();
 
 		## new cluster submitted.
 		if(form::submitted())
@@ -26,6 +27,39 @@ class Controller_Cluster
 		}
 
 		view::render("root/cluster/lists",$data);
+	}
+
+	public function assignOpsmanager($clusterID)
+	{
+		$cluster = orm('site/cluster')->find($clusterID);
+
+		if(form::submitted())
+		{
+			$cluster->assignOpsmanager($user = orm('user/user')->find(input::get('userID')));
+
+			redirect::to('cluster/lists', 'Successfully assigned '.$user->getProfile()->userProfileFullName.' to cluster '.$cluster->clusterName);
+		}
+
+		// find unassigned clusters
+		$clusters = orm('site/cluster')->where('clusterID NOT IN (SELECT clusterID FROM cluster_opsmanager)')->execute()->toList('clusterID', 'clusterName');
+
+		$users = orm('user/user')->join('user_profile', 'user.userID = user_profile.userID')->where('userLevel', 4)->execute()->toList('userID', 'userProfileFullName');
+
+		view::render('root/cluster/assignOpsmanager', array(
+			'cluster' => $cluster,
+			'clusters' => $clusters,
+			'clusterID' => $cluster->clusterID,
+			'users' => $users
+			));
+	}
+
+	public function deassignOpsmanager($clusterID)
+	{
+		$cluster = orm('site/cluster')->find($clusterID);
+
+		db::where('clusterID', $clusterID)->delete('cluster_opsmanager');
+
+		redirect::to('cluster/lists', 'Successfully deassigned opsmanager from cluster'.$cluster->clusterName);
 	}
 
 	public function assign()

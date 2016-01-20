@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <title>Pusat Internet 1Malaysia</title>
 <link href="<?php echo url::asset("skmm/css/reset.css");?>" rel="stylesheet" type="text/css">
-<link href="<?php echo url::asset("skmm/css/style.css");?>" rel="stylesheet" type="text/css">
+<link href="<?php echo url::asset("skmm/css/style.css?v20160106");?>" rel="stylesheet" type="text/css">
 <link rel="stylesheet" type="text/css" href="<?php echo url::asset("_scale/css/font-awesome.min.css");?>">
 <link rel="stylesheet" href="<?php echo url::asset("skmm/css/flexslider.css");?>" type="text/css">
 <script src="<?php echo url::asset("skmm/js/jquery.min.js");?>"></script>
@@ -67,7 +67,22 @@
     <div id="nav">
             <ul>
                 <li><a href="<?php echo url::base("{site-slug}");?>">Utama</a></li>
-                <li><a href="<?php echo url::base("{site-slug}/mengenai-kami");?>">Mengenai PI1M</a></li>
+                <li><a href="<?php echo url::base("{site-slug}/mengenai-kami");?>">Mengenai PI1M</a>
+                <ul>
+                    <?php foreach($pages as $page):
+                    if($page['pageDefaultType'] == 1)
+                        continue;
+                    ?>
+                        <li><a href="<?php echo url::base('{site-slug}/mengenai-kami/'.$page['pageDefaultSlug']);?>"><?php echo $page['pageDefaultName'];?></a></li>
+                    <?php endforeach;?>
+                    <!-- <li><a href="#">Sub 1</a></li>
+                    <li><a href="#">Sub 2</a></li>
+                    <li><a href="#">Sub 3</a></li>
+                    <li><a href="#">Sub 4</a></li>
+                    <li><a href="#">Sub 5</a></li>
+                    <li><a href="#">Sub 6</a></li> -->
+                </ul>    
+                </li>
                 <li><a href="<?php echo url::base("{site-slug}/aktiviti");?>">Jadual Latihan & Aktiviti</a></li>
                 <li><a href="<?php echo url::base("{site-slug}/galeri");?>">Galeri</a></li>
                 <li><a href="<?php echo url::base("{site-slug}/faq");?>">Soalan Lazim</a></li>

@@ -27,6 +27,14 @@ class Redirect
 		}
 	}
 
+	public static function back($message, $type)
+	{
+		// redirect back to referrer.
+		$referrer = $_SERVER['HTTP_REFERER'];
+
+		return self::to($referrer, $message, $type);
+	}
+
 	public static function toRoute($route)
 	{
 		$url = url::route($route);

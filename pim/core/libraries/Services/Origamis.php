@@ -37,7 +37,6 @@ class Origamis extends ArrayIterator
 				$ids[] = $origami->$primary;
 
 		return $ids;
-
 	}
 
 	public function toList($key, $column)

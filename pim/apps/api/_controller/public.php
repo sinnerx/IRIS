@@ -23,9 +23,24 @@ class Controller_Public
 		return json_encode($response);
 	}
 
+	protected function getCafeVersion()
+	{
+		$path = apps::$root.'../repo/cafe/.git/refs/heads/master';
+		$cafeRoot = apps::$root.'../repo/cafe';
+
+		$currentVersion = file_get_contents($path);
+
+		return trim($currentVersion);
+	}
+
 	public function ping()
 	{
-		return json_encode(array('status' => 'success'));
+		$version = $this->getCafeVersion();
+
+		return json_encode(array(
+			'status' => 'success',
+			'cafe_version' => $version
+			));
 	}
 }
 

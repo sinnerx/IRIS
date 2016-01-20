@@ -57,6 +57,8 @@ class Controller_Partial
 		else
 			$data['latestPhotoLink'] 	= null;
 
+		$data['pages'] = db::where('siteID', $this->row_site['siteID'])->join('page_default', 'page_default.pageDefaultType = page.pageDefaultType')->get('page')->result();
+
 		## pass row_site to default template.
 		return $data;
 	}

@@ -135,6 +135,8 @@ class Controller_Cafe
 	 * status
 	 * data :
 	 * - billingItemID
+	 * - type
+	 * - code
 	 * - hotkey
 	 * - name
 	 * - description
@@ -146,6 +148,7 @@ class Controller_Cafe
 	 * - priceDisabled
 	 * - status
 	 * - createdDate
+	 * - updatedDate
 	 */
 	public function billingItems()
 	{
@@ -207,13 +210,13 @@ class Controller_Cafe
 		$row = db::from('billing_transaction')
 		->where('siteID', $this->site->siteID)
 		->limit(1)
-		->order_by('billingTransactionDate DESC')
+		->order_by('billingTransactionUpdatedDate DESC')
 		->get()
 		->row();
 		
 		return json_encode(array(
 			'status' => 'success',
-			'data' => $row['billingTransactionDate']
+			'data' => $row['billingTransactionUpdatedDate']
 			));
 	}
 
@@ -299,11 +302,14 @@ class Controller_Cafe
 				$transaction->siteID = $this->site->siteID;
 				$transaction->billingTransactionLocalID = $localId;
 				$transaction->billingTransactionTotalQuantity = $row_transaction['quantity'];
+				$transaction->billingTransactionUnique = $row_transaction['unique'];
 				$transaction->billingTransactionStatus = 1;
 				$transaction->billingTransactionTotal = $row_transaction['total'];
 				$transaction->billingTransactionDate = $row_transaction['datetime'];
-				$transaction->billingTransactionCreatedDate = $row_transaction['datetime'];
-				$transaction->billingTransactionUpdatedDate = $row_transaction['datetime'];
+				// $transaction->billingTransactionCreatedDate = $row_transaction['datetime'];
+				// $transaction->billingTransactionUpdatedDate = $row_transaction['datetime'];
+				$transaction->billingTransactionCreatedDate = $row_transaction['createdDate'] ? : $row_transaction['datetime'];
+				$transaction->billingTransactionUpdatedDate = $row_transaction['updatedDate'] ? : $row_transaction['datetime'];
 				$transaction->billingTransactionUploaded = 1;
 				$transaction->save();
 
@@ -314,6 +320,7 @@ class Controller_Cafe
 					$transactionItem->billingItemID = $row_transactionItem['billing_item_id'];
 					$transactionItem->billingTransactionItemPrice = $row_transactionItem['price'];
 					$transactionItem->billingTransactionItemQuantity = $row_transactionItem['quantity'];
+					$transactionItem->billingTransactionItemDescription = $row_transactionItem['description'];
 					$transactionItem->save();
 
 					if(isset($row_transactionItem['pc_usage']))
@@ -379,12 +386,19 @@ class Controller_Cafe
 			));
 	}
 
-	public function getVersion()
+	protected function getCafeVersion()
 	{
 		$path = apps::$root.'../repo/cafe/.git/refs/heads/master';
-		$cafeRoot = apps::$root.'../repo/cafe';
+		// $cafeRoot = apps::$root.'../repo/cafe';
 
 		$currentVersion = file_get_contents($path);
+
+		return trim($currentVersion);
+	}
+
+	public function getVersion()
+	{
+		$currentVersion = $this->getCafeVersion();
 
 		return json_encode(array(
 			'status' => 'success',
@@ -396,10 +410,10 @@ class Controller_Cafe
 		$version = request::get('version');
 
 		// get version from cafe's repo.
-		$path = apps::$root.'../repo/cafe/.git/refs/heads/master';
+		// $path = apps::$root.'../repo/cafe/.git/refs/heads/master';
 		$cafeRoot = apps::$root.'../repo/cafe';
 
-		$currentVersion = file_get_contents($path);
+		$currentVersion = $this->getCafeVersion();
 
 		/*if($version == $currentVersion)
 		{

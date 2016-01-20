@@ -8,9 +8,12 @@ class Orm
 	protected $tableName;
 	protected $primary;
 	protected $anonymous;
+	protected $db;
 
-	public function __construct($model, $primaryKey = null)
+	public function __construct($model, $primaryKey = null, $db = null)
 	{
+		$this->db = !$db ? \db::create() : $db;
+
 		if(is_array($model) || strpos($model, 'table:') === 0)
 		{
 			$this->anonymous = true;
@@ -49,9 +52,14 @@ class Orm
 		$this->model->modelData['name'] = $model;
 	}
 
+	public function setDbInstance($db)
+	{
+		$this->db = $db;
+	}
+
 	public function __call($func, $args)
 	{
-		call_user_func_array(array(db::$instance, $func), $args);
+		call_user_func_array(array($this->db, $func), $args);
 
 		return $this;
 	}
@@ -63,7 +71,7 @@ class Orm
 	}
 
 	/**
-	 * Final
+	 * Get One record
 	 */
 	public function find($id = null)
 	{
@@ -80,8 +88,28 @@ class Orm
 		else
 		{
 			$collection = $this->execute();
-			$collection->getFirst();
+			return $collection->getFirst();
 		}
+	}
+
+	public function count()
+	{
+		$db = $this->db;
+
+		$total = $db->from($this->tableName)->select('count(*) as total')->get()->row('total');
+
+		return $total;
+	}
+
+	/**
+	 * Mass deletion based on query
+	 */
+	public function delete()
+	{
+		$records = $this->execute();
+
+		foreach($records as $record)
+			$record->delete();
 	}
 
 	## validate the model.
@@ -100,14 +128,19 @@ class Orm
 		return true;
 	}
 
+	/**
+	 * Accept array of
+	 * totalRow
+	 * limit
+	 */
 	public function paginate(array $config)
 	{
-		db::$instance->from($this->tableName);
-		$config['totalRow'] = db::$instance->num_rows();
+		$this->db->from($this->tableName);
+		$config['totalRow'] = $this->db->num_rows();
 		pagination::initiate($config);
 
 		if(isset($config['limit']))
-			db::$instance->limit($config['limit'], pagination::recordNo() - 1);
+			$this->db->limit($config['limit'], pagination::recordNo() - 1);
 
 		return $this;
 	}
@@ -134,11 +167,13 @@ class Orm
 					$foreignID = $args; 
 				}
 
-				db::join($foreignTable, $table.'.'.$localID.' = '.$foreignTable.'.'.$foreignID);
+				$localID = strpos($localID, '.') !== false ? $localID : $table.'.'.$localID;
+				$foreignID = strpos($foreignID, '.') !== false ? $foreignID : $foreignTable.'.'.$foreignID;
+				$this->db->join($foreignTable, $localID.' = '.$foreignID);
 			}
 		}
 
-		$dbResult = db::get($table);
+		$dbResult = $this->db->get($table);
 
 		$result = $dbResult->result($primary);
 
