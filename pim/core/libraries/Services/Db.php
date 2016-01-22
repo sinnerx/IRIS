@@ -314,6 +314,14 @@ class Db_instance
 		return $this;
 	}
 
+	public function innerjoin($table,$cond,$type = "INNER JOIN")
+	{
+		$this->clearResult();
+
+		$this->joinR[]	= "$type $table ON $cond";
+
+		return $this;
+	}
 	### SQL SELECT BUILDER, END ###
 	### 2. SQL PREPARATION ###
 	public function prepareSQL($count = false)

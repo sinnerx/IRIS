@@ -12,6 +12,8 @@ var activity	= function()
 		}
 		else{
 			$("#packagediv").hide();
+			$("#modulediv").hide();
+			
 		}	
 
 	}

@@ -286,4 +286,73 @@ class Activity
 
 		return $link;
 	}
+
+	public function getModuleByUser($userID)
+	{
+		db::select("P.name as packageName, P.packageid as packageID, M.name as moduleName, M.id as moduleID");
+		//
+		db::where("AU.userID", $userID);
+		db::innerjoin("training AS TR", "TR.activityID = AU.activityID");
+		db::innerjoin("training_lms AS L", "TR.trainingID = L.trainingid");
+		db::innerjoin("lms_module AS M", "L.moduleID = M.id");
+		db::innerjoin("lms_package AS P", "M.packageid = P.packageid");
+		//db::from("training as TR");
+		//return db::get("activity_user AS AU")->result();
+		$resultdb = db::get("activity_user AS AU")->result();
+
+
+		$result = $this->getModuleInPackage($resultdb);
+
+		//return $resultdb;
+		return $result;
+
+	}
+
+	public function getModuleInPackage($results)
+	{
+		//$x = 0;
+			db::select("P.packageid, P.name as PackageName");
+			//db::where("M.packageid", $var["packageID"]);
+			$resultPackage = db::get("lms_package AS P")->result();		
+			$x=0;
+			foreach ($resultPackage as $key) {
+					//print_r($key["packageid"]);
+					db::select("M.id, M.name");
+					//db::where("M.packageid", $key["packageid"]);
+					db::join("lms_package_module AS LPM", "LPM.moduleid = M.id");
+					db::where("LPM.packageid", $key["packageid"]);
+					$resultModule = db::get("lms_module AS M")->result();
+					//$resultPackage["modules"] = array();
+						//print_r($resultModule);
+					 	
+					 		foreach ($resultModule as $keyModule) {
+					 			# code...
+					 			//print_r($keyModule);
+					 			$y = 0;
+					 			foreach ($results as $keyModuleSelected) {
+						 			# code...
+						 			//print_r($keyModuleSelected["moduleID"]);
+						 			//print_r($keyModule);
+						 			//print_r($resultPackage[$x]);
+						 			if($keyModuleSelected["moduleID"] == $keyModule["id"]){
+						 				//print_r( $keyModuleSelected["moduleID"] . "selected");
+						 				$resultModule[$y]["selected"] = 1;
+						 				
+						 				//print_r($resultPackage[$x]["modules"]);
+						 				//[$y]["selected"] = 1;
+									}
+									$y++;
+					 			}//foreach
+					 		}
+					 		
+					$resultPackage[$x]["modules"] =  $resultModule;	 	
+					$x++;
+				}//foreach	
+					//print_r($resultPackage);
+				//var_dump($results);
+					return $resultPackage;
+	}
+
+//830512105141
+
 }

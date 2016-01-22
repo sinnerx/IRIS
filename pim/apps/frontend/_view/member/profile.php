@@ -7,6 +7,23 @@
 
 </style>
 <script src="<?php echo url::asset("_templates/js/easyResponsiveTabs.js");?>" type="text/javascript"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+    
+    // $('#horizontalTab ul').tabs({
+    //     select: function(event) {
+    //         // You need Firebug or the developer tools on your browser open to see these
+    //         console.log(event);
+    //         // This will get you the index of the tab you selected
+    //         console.log(event.options.selected);
+    //         // And this will get you it's name
+    //         console.log(event.tab.text);
+            
+    //     }
+    // });  
+});
+
+</script>
 <h3 class="block-heading"><a href='.'>PROFIL AHLI</a> <span class="subforum"> > Pemegang kad</span> 
 
 <?php if($ownPage):?>
@@ -84,6 +101,7 @@
                         <ul class="resp-tabs-list">
                             <li>Maklumat</li>
                             <li>Aktiviti laman</li>
+                            <li>Kelas</li>
                         </ul>
                         <div class="resp-tabs-container">
                             <div>
@@ -199,6 +217,36 @@
                                 </ul>
                                 </div>
                             </div>
+
+                            <!-- Kelas-->
+                            <div>
+                                <!-- loop -->
+                                <div class="heading-category">Pakej</div>
+                                <div class="profile-activity-forum-container">
+                                    <?php
+                                     if ($activities_lms){
+                                        foreach ($activities_lms as $package) {
+                                            //print_r($package);
+                                            # code...
+                                            echo $package["PackageName"] . '<br>';
+                                            
+                                            foreach ($package["modules"] as $module) {
+                                                # code...
+                                                //print_r($module);
+                                                echo $module["name"];
+                                                if ($module["selected"] == 1){
+                                                    echo "(1)";         
+                                                }//if
+                                                
+                                            }//foreach
+                                            echo '<br>';
+                                        }
+                                     }//if activities_lms
+                                    ?>
+                                </div>
+                                <!-- end loop -->
+                            </div>
+                            <!-- Kelas -->
                         </div>
                     </div>
                 </div>
@@ -223,6 +271,8 @@
                 $name.text($tab.text());
 
                 $info.show();
+                console.log($info);
+                //if ($tab == )
             }
         });
     });
