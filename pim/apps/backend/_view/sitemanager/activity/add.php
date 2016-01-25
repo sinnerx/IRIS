@@ -21,6 +21,7 @@ var activity	= function()
 
 
 	this.showModuleDetail = function (module_id){
+		//alert(module_id);
 		$.ajax({
 			url: pim.base_url +"ajax/activity/getModuleByID/"+ module_id, success: function (result){
 				//console.log(result);
@@ -32,7 +33,9 @@ var activity	= function()
 				  	$('<option></option>', {html:this.type_name}).attr('value', this.type_id).appendTo('#trainingType');
 				
 					$('#activityDescription').text(this.description);
+					//$('#trainingType select').val(this.typeid);
 				});
+
 				$('#typediv').show();
 			}
 		});

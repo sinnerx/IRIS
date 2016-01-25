@@ -229,7 +229,7 @@ class Controller_Ajax_Activity
 	public function getModuleByPackageID($packageid)
 	{
 		//echo "test controller " . $packageid;
-		$module = model::load("activity/learning/module")->getModuleByPackageID($packageid);
+		$module = model::load("activity/learning/packagemodule")->getModuleByPackageID($packageid);
 		$module = json_encode($module);
 		echo $module;
 	}
@@ -237,7 +237,7 @@ class Controller_Ajax_Activity
 	public function getModuleByID($id)
 	{
 		//echo "test controller " . $packageid;
-		$module = model::load("activity/learning/module")->getModuleByID($id);
+		$module = model::load("activity/learning/packagemodule")->getModuleByID($id);
 		$module = json_encode($module);
 		echo $module;
 	}

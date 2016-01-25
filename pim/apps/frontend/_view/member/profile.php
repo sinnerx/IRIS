@@ -228,7 +228,7 @@ $(document).ready(function(){
                                         foreach ($activities_lms as $package) {
                                             //print_r($package);
                                             # code...
-                                            echo $package["PackageName"] . '<br>';
+                                            echo $package["PackageName"] . $package["complete"].'<br>';
                                             
                                             foreach ($package["modules"] as $module) {
                                                 # code...

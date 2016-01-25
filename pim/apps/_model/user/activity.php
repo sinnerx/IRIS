@@ -294,13 +294,14 @@ class Activity
 		db::where("AU.userID", $userID);
 		db::innerjoin("training AS TR", "TR.activityID = AU.activityID");
 		db::innerjoin("training_lms AS L", "TR.trainingID = L.trainingid");
-		db::innerjoin("lms_module AS M", "L.moduleID = M.id");
-		db::innerjoin("lms_package AS P", "M.packageid = P.packageid");
+		db::innerjoin("lms_package_module AS LPM", "LPM.id = L.packageModuleID");
+		db::innerjoin("lms_module AS M", "M.id = LPM.moduleid");
+		db::innerjoin("lms_package AS P", "P.packageid = LPM.packageid");		
 		//db::from("training as TR");
 		//return db::get("activity_user AS AU")->result();
 		$resultdb = db::get("activity_user AS AU")->result();
-
-
+		//print_r($userID);
+		//print_r($resultdb);
 		$result = $this->getModuleInPackage($resultdb);
 
 		//return $resultdb;
@@ -316,35 +317,57 @@ class Activity
 			$resultPackage = db::get("lms_package AS P")->result();		
 			$x=0;
 			foreach ($resultPackage as $key) {
+
+					db::select("M.id, M.name");
+					//db::where("M.packageid", $key["packageid"]);
+					db::join("lms_package_module AS LPM", "LPM.moduleid = M.id");
+					db::where("LPM.packageid", $key["packageid"]);					
+					$countModule = db::get("lms_module AS M")->num_rows();
+
 					//print_r($key["packageid"]);
 					db::select("M.id, M.name");
 					//db::where("M.packageid", $key["packageid"]);
 					db::join("lms_package_module AS LPM", "LPM.moduleid = M.id");
 					db::where("LPM.packageid", $key["packageid"]);
 					$resultModule = db::get("lms_module AS M")->result();
+
 					//$resultPackage["modules"] = array();
 						//print_r($resultModule);
-					 	
+					 	//print_r($results);
+							$y = 0;
+							$taken = 0;
 					 		foreach ($resultModule as $keyModule) {
 					 			# code...
 					 			//print_r($keyModule);
-					 			$y = 0;
+					 			//if(in_array())
+					 			
 					 			foreach ($results as $keyModuleSelected) {
 						 			# code...
-						 			//print_r($keyModuleSelected["moduleID"]);
-						 			//print_r($keyModule);
+						 			//print_r($keyModuleSelected["moduleID"].$y." ");
+						 			//print_r($keyModule["id"]);
 						 			//print_r($resultPackage[$x]);
-						 			if($keyModuleSelected["moduleID"] == $keyModule["id"]){
-						 				//print_r( $keyModuleSelected["moduleID"] . "selected");
+						 			if(($keyModuleSelected["moduleID"] == $keyModule["id"]) && ($keyModuleSelected["packageID"] == $key["packageid"])){
+						 				//print_r( $key["packageid"] ." ". $keyModuleSelected["packageID"] . " ". $keyModuleSelected["moduleName"] . "selected ");
+						 				//array_push($resultModule, ["selected"]);
 						 				$resultModule[$y]["selected"] = 1;
-						 				
-						 				//print_r($resultPackage[$x]["modules"]);
+						 				//$keyModule["selected"] = 1;
+						 				//print_r($resultModule[$y]);
+						 				//print_r($keyModule);
 						 				//[$y]["selected"] = 1;
+						 				$taken++;
 									}
-									$y++;
+									
+									//print_r($resultModule);
 					 			}//foreach
+					 			$y++;
 					 		}
-					 		
+					 		//print_r($taken);
+					 		//print_r($countModule);
+					 		if ($taken == $countModule)
+					 			$resultPackage[$x]["complete"] = 1;
+					 		else
+					 			$resultPackage[$x]["complete"] = 0;
+
 					$resultPackage[$x]["modules"] =  $resultModule;	 	
 					$x++;
 				}//foreach	
