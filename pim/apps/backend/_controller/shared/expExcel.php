@@ -49,7 +49,7 @@ class Controller_ExpExcel
 		}
 
 		// Project Director signature
-		$lizaSignature = imagecreatefromjpeg(path::files('expense/liza-signature.jpg'));
+		/*$lizaSignature = imagecreatefromjpeg(path::files('expense/liza-signature.jpg'));
 
 		$objDrawing = new PHPExcel_Worksheet_MemoryDrawing();
 		$objDrawing->setImageResource($lizaSignature);
@@ -61,7 +61,7 @@ class Controller_ExpExcel
 		$objDrawing->setCoordinates('I32');
 		// $objDrawing->setOffsetX($objDrawing->getOffsetX()+30);
 		$objDrawing->setOffsetX(10);
-		$objDrawing->setOffsetY(10);
+		$objDrawing->setOffsetY(10);*/
 
 		$sheet->setCellValue('B29', 'Ringgit Malaysia : '.$ca->prCashAdvanceAmount);
 
