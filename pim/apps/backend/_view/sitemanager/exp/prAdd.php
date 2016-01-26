@@ -6,8 +6,8 @@
 
 <script type="text/javascript">
 
+<?php if(date('Y-m') == '2016-01'): // enable backdating ?>
   $(document).ready(function() {
-
       jQuery("#selectDate").datetimepicker({
       
         timepicker:false,
@@ -26,6 +26,7 @@
       }
     });
   });
+<?php endif;?>
 
 </script>
 
@@ -35,96 +36,110 @@ var base_url  = "<?php echo url::base();?>/";
 
 var requisition = new function()
 { 
-    this.setStatus = function(key)
-    {   
-      var prType  = $("#prTerm1").val();          
-      $('#prTerm').val(prType);
+  this.month = <?php echo $month;?>;
+  this.year = <?php echo $year;?>;
 
+  this.showExistingWarning = function()
+  {
+    var type = {1: 'Collection Money', 2: 'Cash Advance'}[$('#prTerm1').val()];
+    $('.pim-warning').show().html('This site already made a '+type+' PR for this month already.');
+  }
+
+  this.setStatus = function(key)
+  {   
+    var prType  = $("#prTerm1").val();          
+    $('#prTerm').val(prType);
+    $("#submit").html('');
+
+    $.ajax({url: pim.url('exp/prAddCheck/'+prType+'/'+requisition.month+'/'+requisition.year), dataType: 'json'}).done(function(result)
+    {
+      if(result.exists == true)
+        return requisition.showExistingWarning();
 
       if (prType == 2){
 //        $("#addCashAdvance").show();
         $("#check").remove();
-        $("#submit").after($('<button id="check" name="check" type="submit" class="btn btn-sm btn-default" value="2">Proceed to Cash Advance</button>'));
+        $("#submit").html($('<button id="check" name="check" type="submit" class="btn btn-sm btn-default" value="2">Proceed to Cash Advance</button>'));
       } else {
 //        $("#addCashAdvance").hide();
         $("#check").remove();
-        $("#submit").after($('<button id="check" name="check" type="submit" class="btn btn-sm btn-default" value="1">Submit</button>'));
+        $("#submit").html($('<button id="check" name="check" type="submit" class="btn btn-sm btn-default" value="1">Submit</button>'));
       } 
+    });
+  }
 
-    }
-
-    var i;
-    var t;
-    this.select = function(key)
-    {           
-      i = $('#p_scents tr').size() + 1;
+  var i;
+  var t;
+  this.select = function(key)
+  {           
+    i = $('#p_scents tr').size() + 1;
+    
+    $.ajax({
+        type:"GET",
+        url: base_url+"exp/listItem/"+key,
+        success: function(data){
       
-      $.ajax({
-          type:"GET",
-          url: base_url+"exp/listItem/"+key,
-          success: function(data){
-        
-            data = $.parseJSON(data);
-            var sel = $("#item"+key);
-            sel.empty();          
-            sel.append('<option value="">Please Select</option>');
+          data = $.parseJSON(data);
+          var sel = $("#item"+key);
+          sel.empty();          
+          sel.append('<option value="">Please Select</option>');
 
-            for (var t in data) {
-              if (data.hasOwnProperty(t)) {             
-                  sel.append('<option value="' + t + '">' + data[t] + '</option>');                  
-              }
+          for (var t in data) {
+            if (data.hasOwnProperty(t)) {             
+                sel.append('<option value="' + t + '">' + data[t] + '</option>');                  
             }
           }
-    });
-      
-    var newrow = $('<tr class="pr-item-row"><td></td>' +
-      '<td><select name="item[itemCategory][' + i +']" class="form-control pr-item-input-category" id="item' + key +'"></select></td>' + 
-      '<td><input type="text" class="form-control" name="item[itemDescription][' + i +'] " /></td>' + 
-      '<td width="10%"><input type="text" size="5" onkeyup="requisition.calculate(' + i +');" value="1" class="form-control pr-item-input-quantity" name="item[itemQuantity][' + i +']" id="itemQuantity' + i +'"/></td>' + 
-      '<td width="10%"><input type="text" size="5" onkeyup="requisition.calculate(' + i +');"class="form-control pr-item-input-price" name="item[itemPrice][' + i +']"/></td>' + 
-      '<td width="10%"><input type="text" size="5" class="form-control pr-item-input-total total" readonly name="item[itemTotalPrice][' + i +']" /></td>' + 
-      '<td><input type="text" class="form-control" name="item[itemRemark][' + i +']" id="itemRemark' + i +'"/></td>' + 
-      '<td><a href="#" id="remScnt" class="fa fa-times-circle"></a></td></tr>');   
-      
-      $('#'+key).after(newrow);
+        }
+  });
+    
+  var newrow = $('<tr class="pr-item-row"><td></td>' +
+    '<td><select name="item[itemCategory][' + i +']" class="form-control pr-item-input-category" id="item' + key +'"></select></td>' + 
+    '<td><input type="text" class="form-control" name="item[itemDescription][' + i +'] " /></td>' + 
+    '<td width="10%"><input type="text" size="5" onkeyup="requisition.calculate(' + i +');" value="1" class="form-control pr-item-input-quantity" name="item[itemQuantity][' + i +']" id="itemQuantity' + i +'"/></td>' + 
+    '<td width="10%"><input type="text" size="5" onkeyup="requisition.calculate(' + i +');"class="form-control pr-item-input-price" name="item[itemPrice][' + i +']"/></td>' + 
+    '<td width="10%"><input type="text" size="5" class="form-control pr-item-input-total total" readonly name="item[itemTotalPrice][' + i +']" /></td>' + 
+    '<td><input type="text" class="form-control" name="item[itemRemark][' + i +']" id="itemRemark' + i +'"/></td>' + 
+    '<td><a href="#" id="remScnt" class="fa fa-times-circle"></a></td></tr>');   
+    
+    $('#'+key).after(newrow);
 
-      i++;
-    return false;
-    }
+    i++;
+  return false;
+  }
 
-    this.calculate = function(key)
+  this.calculate = function(key)
+  {
+    $('.pr-item-row').each(function()
     {
-      $('.pr-item-row').each(function()
-      {
-        var row = $(this);
-        var quantity = parseFloat(row.find('.pr-item-input-quantity').val());
-        quantity = quantity ? quantity : 0;
-        var price = parseFloat(row.find('.pr-item-input-price').val());
-        price = price ? price : 0;
+      var row = $(this);
+      var quantity = parseFloat(row.find('.pr-item-input-quantity').val());
+      quantity = quantity ? quantity : 0;
+      var price = parseFloat(row.find('.pr-item-input-price').val());
+      price = price ? price : 0;
 
-        var total = quantity*price;
-        row.find('.pr-item-input-total').val(total);
-      });
-      
-      // update grand total
-      var grandTotal = 0;
-      $('.pr-item-input-total').each(function()
-      {
-        grandTotal += parseFloat($(this).val());
-      });
-
-      $('#allTotal').val(grandTotal);
-    }
-
-    //Remove button
-    $(document).on('click', '#remScnt', function() {
-      if (i > 2) {
-          $(this).closest('tr').remove();
-          requisition.calculate();
-          i--;
-      }
-      return false;
+      var total = quantity*price;
+      row.find('.pr-item-input-total').val(total);
     });
+    
+    // update grand total
+    var grandTotal = 0;
+    $('.pr-item-input-total').each(function()
+    {
+      grandTotal += parseFloat($(this).val());
+    });
+
+    $('#allTotal').val(grandTotal);
+  }
+
+  //Remove button
+  $(document).on('click', '#remScnt', function() {
+    if (i > 2) {
+        $(this).closest('tr').remove();
+        requisition.calculate();
+        i--;
+    }
+    return false;
+  });
 
   this.validate = function()
   {
@@ -177,7 +192,9 @@ var requisition = new function()
 
 <?php echo flash::data();?>
 <div class='row'>
-  <div class='col-sm-12'>
+  <div class='alert alert-danger pim-warning' style="display: none;">
+
+  </div>
    <section class="panel panel-default">
    <form onsubmit='return requisition.validate();' class="form-inline bs-example " method='post' action='<?php echo url::base('exp/prAddSubmit/');?>'>
           <header class="panel-heading">
@@ -193,7 +210,7 @@ var requisition = new function()
                   <td colspan="4"><label>For NuSuara's use only</label></td>                        
                 </tr>
                  <tr>
-                  <td><?php echo form::text("selectDate","class='input-sm input-s form-control'",date('d F Y', strtotime($selectDate)));?></td>
+                  <td><?php echo form::text("selectDate","readonly class='input-sm input-s form-control'",date('d F Y', strtotime($selectDate)));?></td>
                   <td></td>
                   <td width="7%">PR No</td>
                   <td colspan="3"></td>                        

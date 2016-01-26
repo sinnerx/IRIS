@@ -13,9 +13,36 @@ class Reconcilation extends \Origami
 		return $this->getOne('expense/pr/pr', 'prID');
 	}
 
+	public function getCategories()
+	{
+		return $this->getMany('expense/pr/reconcilation/category', 'prReconcilationID');
+	}
+
 	public function getFiles()
 	{
 		return $this->getMany('expense/pr/reconcilation/file', 'prReconcilationID');
+	}
+
+	public function getItems()
+	{
+		return $this->getMany('expense/pr/reconcilation/item', 'prReconcilationID');
+	}
+
+	public function getReconciledCategories()
+	{
+		$id = $this->prReconcilationID;
+
+		return $this->withQuery(function($query) use($id)
+		{
+			$query->where('prReconcilationID IN (SELECT prReconcilationID FROM pr_reconcilation_file WHERE prReconcilationCategoryID = pr_reconcilation_category.prReconcilationCategoryID AND prReconcilationID = ?)', array($id));
+			$query->where('prReconcilationID IN (SELECT prReconcilationID FROM pr_reconcilation_item WHERE prReconcilationID = ? AND prReconcilationItemStatus = 1)', array($id));
+		})->getCategories();
+	}
+
+	public function isEditable()
+	{
+		return $this->isManagerPending();
+		// return !$this->isSubmitted() && user()->isManager();
 	}
 
 	public function getFileTotalAmount()
@@ -301,6 +328,61 @@ class Reconcilation extends \Origami
 	public function isSubmitted()
 	{
 		return $this->prReconcilationSubmitted == 1;
+	}
+
+	public function initiateItems()
+	{
+		$pr = $this->getPr();
+
+		$prItems = $pr->getItems();
+
+		$prItemCategories = array();
+
+		foreach($prItems as $prItem)
+			$prItemCategories[$prItem->expenseCategoryID][] = $prItem;
+
+		foreach($prItemCategories as $categoryID => $items)
+		{
+			// create pr_reconcilation_category
+			$category = orm('expense/pr/reconcilation/category')->create();
+
+			$category->prReconcilationID = $this->prReconcilationID;
+			$category->expenseCategoryID = $categoryID;
+			$category->save();
+
+			foreach($items as $item)
+			{
+				// create pr_reconcilation_item
+				$rlItem = orm('expense/pr/reconcilation/item')->create();
+				$rlItem->prReconcilationID = $this->prReconcilationID;
+				$rlItem->prItemID = $item->prItemID;
+				$rlItem->expenseItemID = $item->expenseItemID;
+				$rlItem->prReconcilationCategoryID = $category->prReconcilationCategoryID;
+				$rlItem->prReconcilationItemName = $item->expenseItemName.($item->prItemDescription ? ' ('.$item->prItemDescription.')' : '');
+				$rlItem->prReconcilationItemAmount = $item->prItemTotal;
+				$rlItem->prReconcilationItemGst = 0;
+				$rlItem->prReconcilationItemTotal = $item->prItemTotal;
+				$rlItem->prReconcilationItemStatus = 2; // by default is not reconciled. after file uploaded will set to reconciled.
+				$rlItem->prReconcilationItemCreatedDate = now();
+				$rlItem->prReconcilationItemCreatedUser = \session::get('userID');
+				$rlItem->save();
+			}
+		}
+	}
+
+	public function getTotal()
+	{
+		$total = 0;
+
+		foreach($this->getItems() as $item)
+		{
+			if(!$item->isReconciled())
+				continue;
+
+			$total += $item->prReconcilationItemTotal;
+		}
+
+		return $total;
 	}
 }
 

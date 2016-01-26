@@ -18,13 +18,14 @@ var rlList = new function()
   this.downloadSummary = function()
   {
     var clusterID = $("#clusterID").val();
+    var type = $('#rlDownloadPrType').val();
     var month = $("#downloadMonth").val();
     var year = $("#downloadYear").val();
 
-    if(!clusterID || !month || !year)
+    if(!clusterID || !month || !year || !type)
       return alert('Please complete the form');
 
-    $.ajax({url: pim.url('ajax/shared/exp/rlCheckPending/'+month+'/'+year), dataType: 'json'}).done(function(result)
+    $.ajax({url: pim.url('ajax/shared/exp/rlCheckPending/'+clusterID+'/'+type+'/'+month+'/'+year), dataType: 'json'}).done(function(result)
     {
       if(result.hasPending == true)
       {
@@ -32,13 +33,7 @@ var rlList = new function()
           return;
       }
 
-      if(result.hasRecords)
-      {
-
-      }
-
-
-      window.location.href = pim.url('expExcel/rlSummaryGenerate/'+clusterID+'/'+month+'/'+year);
+      window.location.href = pim.url('expExcel/rlSummaryGenerate/'+clusterID+'/'+type+'/'+month+'/'+year);
     });
   }
 
@@ -71,14 +66,14 @@ var rlList = new function()
           <div class="row wrapper">
             <form class='form-inline'>
             <div class="col-sm-9 m-b-xs">
-              <?php if(!user()->isManager()):?>
-              <a class='btn btn-primary' data-toggle='ajaxModal' href='<?php echo url::base('exp/rlDownload');?>'><span class='fa fa-download'></span> Download RL Summary</a>
-              <?php endif;?>
-              <span class='pull-right'>
+              <span>
               Filter : <?php echo form::select('status', array('pending' => 'Pending', 'closed' => 'Closed', 'all' => 'All'), 'onchange="rlList.updateFilter();" class="form-control"', $status, false);?>
               <?php echo form::select('month', model::load('helper')->monthYear('month'), 'onchange="rlList.updateFilter();" class="form-control"', $month, false);?>
                <?php echo form::select('year', model::load('helper')->monthYear('year'), 'onchange="rlList.updateFilter();" class="form-control"', $year, false);?>
               </span>
+              <?php if(!user()->isManager()):?>
+              <a class='btn btn-primary pull-right' data-toggle='ajaxModal' href='<?php echo url::base('exp/rlDownload');?>'><span class='fa fa-download'></span> Download RL Summary</a>
+              <?php endif;?>
             </div>
             <div class="col-sm-3">
               <div class='input-group'>

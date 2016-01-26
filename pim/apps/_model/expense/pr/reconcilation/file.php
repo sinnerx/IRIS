@@ -61,6 +61,18 @@ class File extends \Origami
 
 		return file_get_contents($path);
 	}
+
+	/**
+	 * @ORM delete file and it's path.
+	 */
+	public function delete()
+	{
+		$path = $this->getFilePath();
+
+		unlink($path);
+
+		parent::delete();
+	}
 }
 
 
