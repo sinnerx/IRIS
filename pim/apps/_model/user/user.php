@@ -358,7 +358,9 @@ class User extends \Origami
 					"userStatus"=>$data['userStatus']?$data['userStatus']:1,
 					#"userPremiumStatus"=>$data['userPremiumStatus']?$data['userPremiumStatus']:0,
 					"userCreatedDate"=>now(),
-					"userCreatedUser"=>session::get("userID")
+					"userCreatedUser"=>session::get("userID"),
+					'userUpdatedDate' => now(),
+					'userUpdatedUser' => session::get('userID')
 							);
 
 		## insert into user.

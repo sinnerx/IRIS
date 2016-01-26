@@ -73,7 +73,8 @@ class Tasks
 			));
 
 		$manager->addTask('updateUserUpdatedDate', array(
-			'description' => 'Update User Updated Date With User Created Date'
+			'repeatable' => true,
+			'description' => 'Update null User Updated Date With Current date'
 			));
 
 		$manager->addTask('pageAddDefault', array(
@@ -318,10 +319,13 @@ class Tasks
 			TRUNCATE `pr_cash_advance`;
 			TRUNCATE `pr_cash_advance_item`;
 			TRUNCATE `pr_item`;
+			TRUNCATE `pr_expenditure`;
 			TRUNCATE `pr_reconcilation`;
 			TRUNCATE `pr_reconcilation_rejection`;
 			TRUNCATE `pr_reconcilation_approval`;
 			TRUNCATE `pr_reconcilation_file`;
+			TRUNCATE `pr_reconcilation_category`;
+			TRUNCATE `pr_reconcilation_item`;
 			TRUNCATE `pr_remark`;');
 	}
 
@@ -492,7 +496,12 @@ class Tasks
 
 	public function updateUserUpdatedDate()
 	{
-		db::query("UPDATE user SET userUpdatedDate = userCreatedDate");
+		$date = now();
+
+		db::where('userUpdatedDate IS NULL')->update('user', array(
+			'userUpdatedDate' => now()
+			));
+		// db::query("UPDATE user SET userUpdatedDate = userCreatedDate");
 	}
 
 	public function updateBillingItemUpdatedDate()
