@@ -255,7 +255,11 @@ class Controller_Cafe
 	 */
 	public function uploadTransactions()
 	{
-		$transactions = request::post('transactions');
+		// to handle both case from not-updated yet cafe..
+		if($uploadData = request::post('uploadData'))
+			$transactions = unserialize(base64_decode($uploadData));
+		else
+			$transactions = request::post('transactions');
 
 		if(!$transactions)
 			return json_encode(array(
@@ -265,20 +269,26 @@ class Controller_Cafe
 
 		$allIds = array_keys($transactions);
 
+		// get all unique ids
+		foreach($allIds as $row)
+			$allIds[] = $row['unique'];
+
 		// existing.
 		$existing = db::from('billing_transaction')
 		->where('siteID', $this->site->siteID)
-		->where('billingTransactionLocalID', $allIds)->get()->result('billingTransactionLocalID');
-		$localIds = array_keys($existing);
+		->where('billingTransactionUnique', $allIds)->get()->result('billingTransactionUnique');
+
+		$uniqueIds = array_keys($existing);
 
 		$totalTransactions = 0;
 
 		foreach($transactions as $row_transaction)
 		{
 			$localId = $row_transaction['transaction_id'];
+			$uniqueId = $row_transaction['unique'];
 
 			// update
-			if(in_array($localId, $localIds))
+			if(in_array($uniqueId, $uniqueIds))
 			{
 				$transaction = model::orm('billing/transaction')
 									->where('siteID', $this->site->siteID)
