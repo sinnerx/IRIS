@@ -6,6 +6,8 @@ class Controller_Cafe
 {
 	public function __construct()
 	{
+		header("Access-Control-Allow-Origin: *");
+
 		$this->site = model::orm('site/site')->where('siteID', request::named('siteID'))->execute()->getFirst();
 
 		if(!$this->site)
@@ -397,8 +399,16 @@ class Controller_Cafe
 				));
 		}
 
+		$lastUpdatedDate = db::select('userUpdatedDate')
+		->where('userID IN (SELECT userID FROM site_member WHERE siteID = ?)', array($this->site->siteID))
+		->limit(1)
+		->order_by('userUpdatedDate DESC')
+		->get('user')->row('userUpdatedDate');
+
 		return json_encode(array(
-			'status' => 'success'
+			'status' => 'success',
+			'cafe_version' => $this->getCafeVersion(),
+			'mlu' => $lastUpdatedDate ? : 0 // member last update in a timestamp
 			));
 	}
 
