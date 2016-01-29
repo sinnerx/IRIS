@@ -27,6 +27,11 @@ class Tasks
 			'description' => 'Reset billing'
 			));
 
+		$manager->addTask('billingTransactionReset', array(
+			'repeatable' => true,
+			'description' => 'Reset billing Transaction'
+			));
+
 		$manager->addTask('expenseReset', array(
 			'repeatable' => true,
 			'description' => 'Expense Reset'
@@ -288,6 +293,20 @@ class Tasks
 			db::insert('billing_item', $row);
 		}
 		// db::where('billingItemName', 'PC Usage')->update('billing_item', array('billingItemCode' => 'pc_usage'));
+	}
+
+	public function billingTransactionReset()
+	{
+		db::query("TRUNCATE `billing_approval`;
+		TRUNCATE `billing_approval_level`;
+		TRUNCATE `billing_finance_transaction`;
+		TRUNCATE `billing_log`;
+		TRUNCATE `billing_transaction`;
+		TRUNCATE `billing_transaction_item`;
+		TRUNCATE `billing_pc_usage`;
+		TRUNCATE `billing_transaction_upload`;
+		TRUNCATE `billing_transaction_user`;
+		TRUNCATE `billing_verification`;");
 	}
 
 	public function billingReset()

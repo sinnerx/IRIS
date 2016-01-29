@@ -288,7 +288,7 @@ class Controller_Cafe
 			$uniqueId = $row_transaction['unique'];
 
 			// update
-			if(in_array($uniqueId, $uniqueIds))
+			if(in_array($uniqueId, $uniqueIds) && $uniqueId != null)
 			{
 				$transaction = model::orm('billing/transaction')
 									->where('siteID', $this->site->siteID)
@@ -312,7 +312,7 @@ class Controller_Cafe
 				$transaction->siteID = $this->site->siteID;
 				$transaction->billingTransactionLocalID = $localId;
 				$transaction->billingTransactionTotalQuantity = $row_transaction['quantity'];
-				$transaction->billingTransactionUnique = $row_transaction['unique'];
+				$transaction->billingTransactionUnique = $uniqueId ? $uniqueId : strtotime($row_transaction['createdDate'])*1000;
 				$transaction->billingTransactionStatus = 1;
 				$transaction->billingTransactionTotal = $row_transaction['total'];
 				$transaction->billingTransactionDate = $row_transaction['datetime'];
@@ -363,6 +363,12 @@ class Controller_Cafe
 				$transactionUser->save();
 			}
 		}
+
+		// log the upload date.
+		db::insert('billing_transaction_upload', array(
+			'siteID' => $this->site->siteID,
+			'billingTransactionUploadCreatedDate' => now()
+			));
 
 		return json_encode(array(
 			'status' => 'success',
