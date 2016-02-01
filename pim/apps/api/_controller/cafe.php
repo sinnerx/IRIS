@@ -6,6 +6,8 @@ class Controller_Cafe
 {
 	public function __construct()
 	{
+		header("Access-Control-Allow-Origin: *");
+
 		$this->site = model::orm('site/site')->where('siteID', request::named('siteID'))->execute()->getFirst();
 
 		if(!$this->site)
@@ -255,7 +257,11 @@ class Controller_Cafe
 	 */
 	public function uploadTransactions()
 	{
-		$transactions = request::post('transactions');
+		// to handle both case from not-updated yet cafe..
+		if($uploadData = request::post('uploadData'))
+			$transactions = unserialize(base64_decode($uploadData));
+		else
+			$transactions = request::post('transactions');
 
 		if(!$transactions)
 			return json_encode(array(
@@ -265,20 +271,26 @@ class Controller_Cafe
 
 		$allIds = array_keys($transactions);
 
+		// get all unique ids
+		foreach($allIds as $row)
+			$allIds[] = $row['unique'];
+
 		// existing.
 		$existing = db::from('billing_transaction')
 		->where('siteID', $this->site->siteID)
-		->where('billingTransactionLocalID', $allIds)->get()->result('billingTransactionLocalID');
-		$localIds = array_keys($existing);
+		->where('billingTransactionUnique', $allIds)->get()->result('billingTransactionUnique');
+
+		$uniqueIds = array_keys($existing);
 
 		$totalTransactions = 0;
 
 		foreach($transactions as $row_transaction)
 		{
 			$localId = $row_transaction['transaction_id'];
+			$uniqueId = $row_transaction['unique'];
 
 			// update
-			if(in_array($localId, $localIds))
+			if(in_array($uniqueId, $uniqueIds) && $uniqueId != null)
 			{
 				$transaction = model::orm('billing/transaction')
 									->where('siteID', $this->site->siteID)
@@ -302,7 +314,7 @@ class Controller_Cafe
 				$transaction->siteID = $this->site->siteID;
 				$transaction->billingTransactionLocalID = $localId;
 				$transaction->billingTransactionTotalQuantity = $row_transaction['quantity'];
-				$transaction->billingTransactionUnique = $row_transaction['unique'];
+				$transaction->billingTransactionUnique = $uniqueId ? $uniqueId : strtotime($row_transaction['createdDate'])*1000;
 				$transaction->billingTransactionStatus = 1;
 				$transaction->billingTransactionTotal = $row_transaction['total'];
 				$transaction->billingTransactionDate = $row_transaction['datetime'];
@@ -354,6 +366,12 @@ class Controller_Cafe
 			}
 		}
 
+		// log the upload date.
+		db::insert('billing_transaction_upload', array(
+			'siteID' => $this->site->siteID,
+			'billingTransactionUploadCreatedDate' => now()
+			));
+
 		return json_encode(array(
 			'status' => 'success',
 			'total_transactions' => $totalTransactions
@@ -381,8 +399,16 @@ class Controller_Cafe
 				));
 		}
 
+		$lastUpdatedDate = db::select('userUpdatedDate')
+		->where('userID IN (SELECT userID FROM site_member WHERE siteID = ?)', array($this->site->siteID))
+		->limit(1)
+		->order_by('userUpdatedDate DESC')
+		->get('user')->row('userUpdatedDate');
+
 		return json_encode(array(
-			'status' => 'success'
+			'status' => 'success',
+			'cafe_version' => $this->getCafeVersion(),
+			'mlu' => $lastUpdatedDate ? : 0 // member last update in a timestamp
 			));
 	}
 

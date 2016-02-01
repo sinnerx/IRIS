@@ -147,6 +147,9 @@ class Pr extends \Origami
 		// $rl->prReconcilationCreatingUser = session::get('userID');
 		$rl->save();
 
+		// initiate RL items based on pr.
+		$rl->initiateItems();
+
 		// create approval level for rl.
 		$rl->initiateApprovals();
 	}

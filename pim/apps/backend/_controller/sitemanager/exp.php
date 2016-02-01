@@ -8,6 +8,9 @@ class Controller_Exp
 		$data['selectDate'] = $selectDate = $selectDate ? : date('d F Y');
 		$data['siteName'] =  authData('site.siteName');
 		$data['siteManager'] = authData('user.userProfileFullName');
+
+		$data['month'] = date('n', strtotime($selectDate));
+		$data['year'] = date('Y', strtotime($selectDate));
 		
 		$startDate = date('Y-m-1 00:00:00',strtotime($selectDate));
 		$lastDate = date('Y-m-d 18:00:00',strtotime($selectDate));
@@ -40,6 +43,20 @@ class Controller_Exp
 			$data['categories'][$category->expenseCategoryID] = $category->expenseCategoryName;
 
 		view::render('sitemanager/exp/prAdd', $data);
+	}
+
+	public function prAddCheck($prType, $month, $year)
+	{
+		// check if already got existing pr for this month.
+		$prs = orm('expense/pr/pr')
+			->where('siteID', site()->siteID)
+			->where('prStatus !=', 3)
+			->where('MONTH(prDate) = ? AND YEAR(prDate) = ? AND prType = ?', array($month, $year, $prType))
+			->execute();
+
+		return json_encode(array(
+			'exists' => $prs->count() > 0
+			));
 	}
 
 	/**
@@ -173,8 +190,71 @@ class Controller_Exp
 	{
 		$rl = orm('expense/pr/reconcilation/reconcilation')->find($rlID);
 
+		$reconcileds = input::get('prReconcilationReconciled');
+
+		$reconciledIds = $reconcileds ? array_keys($reconcileds) : array();
+
+		// update.
+		foreach(input::get('prReconcilationItemAmount') as $itemId => $value)
+		{
+			$status = in_array($itemId, $reconciledIds) ? 1 : 2;
+
+			// update.
+			$item = orm('expense/pr/reconcilation/item')->find($itemId);
+
+			$item->prReconcilationItemAmount = $_POST['prReconcilationItemAmount'][$itemId];
+			$item->prReconcilationItemGst = $_POST['prReconcilationItemGst'][$itemId];
+			$item->prReconcilationItemTotal = $_POST['prReconcilationItemTotal'][$itemId];
+			$item->prReconcilationItemStatus = $status;
+			$item->save();
+		}
+
+		// add new item
+		if($newItems = input::get('newItem'))
+		{
+			foreach($newItems['name'] as $categoryID => $items)
+			{
+				foreach($items as $index => $itemName)
+				{
+					$item = orm('expense/pr/reconcilation/item')->create();
+					$item->prReconcilationID = $rlID;
+					$item->prReconcilationCategoryID = $categoryID;
+					$item->prReconcilationItemName = $newItems['name'][$categoryID][$index];
+					$item->prReconcilationItemAmount = $newItems['amount'][$categoryID][$index];
+					$item->prReconcilationItemGst = $newItems['gst'][$categoryID][$index];
+					$item->prReconcilationItemTotal = $newItems['total'][$categoryID][$index];
+					$item->prReconcilationItemStatus = 1;
+					$item->prReconcilationItemCreatedDate = now();
+					$item->prReconcilationItemCreatedUser = user()->userID;
+					$item->save();
+				}
+			}
+		}
+
 		$rl->managerSubmit(user());
 
 		redirect::to('exp/rlEdit/'.$rlID, 'Reconcilation list submitted!', 'success');
+	}
+
+	public function rlRemoveReceipt($fileID)
+	{
+		$file = orm('expense/pr/reconcilation/file')
+			->where('prReconcilationID IN (SELECT prReconcilationID FROM pr_reconcilation WHERE prID IN (SELECT prID FROM pr WHERE siteID = ?))', array(site()->siteID))
+			->find($fileID);
+
+		if($file)
+			$file->delete();
+
+		redirect::back('Successfully deleted receipt.', 'success');
+	}
+
+	public function rlRemoveItem($itemID)
+	{
+		$item = orm('expense/pr/reconcilation/item')->find($itemID);
+
+		if($item)
+			$item->delete();
+
+		redirect::back('Successfully deleted RL item', 'success');
 	}
 }

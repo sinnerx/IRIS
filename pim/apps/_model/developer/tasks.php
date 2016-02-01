@@ -27,6 +27,11 @@ class Tasks
 			'description' => 'Reset billing'
 			));
 
+		$manager->addTask('billingTransactionReset', array(
+			'repeatable' => true,
+			'description' => 'Reset billing Transaction'
+			));
+
 		$manager->addTask('expenseReset', array(
 			'repeatable' => true,
 			'description' => 'Expense Reset'
@@ -73,7 +78,8 @@ class Tasks
 			));
 
 		$manager->addTask('updateUserUpdatedDate', array(
-			'description' => 'Update User Updated Date With User Created Date'
+			'repeatable' => true,
+			'description' => 'Update null User Updated Date With Current date'
 			));
 
 		$manager->addTask('pageAddDefault', array(
@@ -289,6 +295,20 @@ class Tasks
 		// db::where('billingItemName', 'PC Usage')->update('billing_item', array('billingItemCode' => 'pc_usage'));
 	}
 
+	public function billingTransactionReset()
+	{
+		db::query("TRUNCATE `billing_approval`;
+		TRUNCATE `billing_approval_level`;
+		TRUNCATE `billing_finance_transaction`;
+		TRUNCATE `billing_log`;
+		TRUNCATE `billing_transaction`;
+		TRUNCATE `billing_transaction_item`;
+		TRUNCATE `billing_pc_usage`;
+		TRUNCATE `billing_transaction_upload`;
+		TRUNCATE `billing_transaction_user`;
+		TRUNCATE `billing_verification`;");
+	}
+
 	public function billingReset()
 	{
 				db::query("TRUNCATE `billing_approval`;
@@ -318,10 +338,13 @@ class Tasks
 			TRUNCATE `pr_cash_advance`;
 			TRUNCATE `pr_cash_advance_item`;
 			TRUNCATE `pr_item`;
+			TRUNCATE `pr_expenditure`;
 			TRUNCATE `pr_reconcilation`;
 			TRUNCATE `pr_reconcilation_rejection`;
 			TRUNCATE `pr_reconcilation_approval`;
 			TRUNCATE `pr_reconcilation_file`;
+			TRUNCATE `pr_reconcilation_category`;
+			TRUNCATE `pr_reconcilation_item`;
 			TRUNCATE `pr_remark`;');
 	}
 
@@ -492,7 +515,12 @@ class Tasks
 
 	public function updateUserUpdatedDate()
 	{
-		db::query("UPDATE user SET userUpdatedDate = userCreatedDate");
+		$date = now();
+
+		db::where('userUpdatedDate IS NULL')->update('user', array(
+			'userUpdatedDate' => now()
+			));
+		// db::query("UPDATE user SET userUpdatedDate = userCreatedDate");
 	}
 
 	public function updateBillingItemUpdatedDate()

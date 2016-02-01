@@ -952,8 +952,7 @@ pr_reconcilation_rejection:
 pr_reconcilation_file:
 	prReconcilationFileID [int]
 	prReconcilationID [int]
-	expenseCategoryID [int]
-	siteID [int]
+	prReconcilationCategoryID [int]
 	prReconcilationFileName [varchar]
 	prReconcilationFileType [varchar]
 	prReconcilationFileSize [float]
@@ -965,6 +964,41 @@ pr_reconcilation_file:
 	prReconcilationFileCreatedUser [int]
 	prReconcilationFileCreatedDate [datetime]
 	prReconcilationFileUpdatedDate [datetime]
+
+pr_reconcilation_category:
+	prReconcilationCategoryID [int]
+	prReconcilationID [int]
+	expenseCategoryID [int]
+
+pr_reconcilation_item:
+	prReconcilationItemID [int]
+	prReconcilationID [int]
+	prReconcilationCategoryID [int]
+	prItemID [int]
+	expenseItemID [int]
+	prReconcilationItemName [varchar]
+	prReconcilationItemAmount [float]
+	prReconcilationItemGst [float]
+	prReconcilationItemTotal [float]
+	prReconcilationItemStatus [int] ## 1 = reconciled, 2 = deleted
+	prReconcilationItemCreatedDate [datetime]
+	prReconcilationItemCreatedUser [int]
+	prReconcilationItemUpdatedDate [datetime]
+	prReconcilationItemUpdatedUser [int]
+
+pr_item:
+	prItemID [int]
+	prID [int]
+	expenseItemID [int]
+	prItemDescription [text]
+	prItemPrice [float]
+	prItemQuantity [int]
+	prItemTotal [float]
+	prItemRemark [text]
+	prItemEdit [varchar]
+	prItemCreatedDate [datetime]
+	prItemUpdatedDate [datetime]
+	prItemUpdatedUser [int]
 
 pr_approval: ## created on each transaciton
 	prApprovalID [int]

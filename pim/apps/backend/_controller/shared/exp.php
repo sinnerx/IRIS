@@ -48,6 +48,11 @@ class Controller_Exp
 		{
 			$pr->where('pr.siteID IN (SELECT siteID FROM cluster_site WHERE clusterID IN (SELECT clusterID FROM cluster_lead WHERE userID = ?))', array(user()->userID));
 		}
+		else if(user()->isOperationManager())
+		{
+			// only for his cluster.
+			$pr->where('pr.siteID IN (SELECT siteID FROM cluster_site WHERE clusterID IN (SELECT clusterID FROM cluster_opsmanager WHERE userID = ?))', array(user()->userID));
+		}
 		// only shown for pr with prNumber, and status is 1 (closed)
 		else if(user()->isFinancialController())
 		{
@@ -545,6 +550,9 @@ class Controller_Exp
 
 	public function rlEdit($rlID)
 	{
+		if(form::submitted())
+			return $this->rlEditSubmit($rlID);
+
 		$rl = $data['rl'] = orm('expense/pr/reconcilation/reconcilation')->find($rlID);
 
 		$data['pr'] = $rl->getPr();
@@ -552,6 +560,11 @@ class Controller_Exp
 		$data['rlFileTotalAmount'] = $rl->getFileTotalAmount();
 
 		view::render('shared/exp/rlEdit', $data);
+	}
+
+	public function rlEditSubmit($rlID)
+	{
+		
 	}
 
 	public function rlFile($fileID)
@@ -581,21 +594,27 @@ class Controller_Exp
 		return file_get_contents($path);
 	}
 
-	public function rlFileUpload($rlID)
+	public function rlFileUpload($rlID, $categoryID)
 	{
 		$rl = $data['rl'] = orm('expense/pr/reconcilation/reconcilation')->find($rlID);
 
 		if(form::submitted())
-			return $this->rlFileUploadSubmit($rl);
+			return $this->rlFileUploadSubmit($rl, $categoryID);
 
 		$this->template = false;
 
 		$data['categories'] = orm('expense/expense_category')->execute()->toList('expenseCategoryID', 'expenseCategoryName');
+		$data['categories'] = orm('expense/pr/reconcilation/category')
+			->where('prReconcilationID', $rlID)
+			->execute()
+			->toList('prReconcilationCategoryID', 'expenseCategoryName');
+		
+		$data['categoryID'] = $categoryID;
 
 		view::render('shared/exp/rlFileUpload', $data);
 	}
 
-	public function rlFileUploadSubmit($rl)
+	public function rlFileUploadSubmit($rl, $prReconcilationCategoryID)
 	{
 		$rlID = $rl->prReconcilationID;
 
@@ -661,10 +680,11 @@ class Controller_Exp
 		// $updateFile	= model::load("expense/file")->editFile($fileID, $data);
 		$rlFile = orm('expense/pr/reconcilation/file')->create();
 		$rlFile->prReconcilationID = $rlID;
-		$rlFile->expenseCategoryID = $data['itemCategory'];
-		$rlFile->prReconcilationFileAmount = $data['amount'];
-		$rlFile->prReconcilationFileGst = $data['gst'];
-		$rlFile->prReconcilationFileTotal = $data['total'];
+		// $rlFile->expenseCategoryID = $data['itemCategory'];
+		$rlFile->prReconcilationCategoryID = $prReconcilationCategoryID;
+		// $rlFile->prReconcilationFileAmount = $data['amount'];
+		// $rlFile->prReconcilationFileGst = $data['gst'];
+		// $rlFile->prReconcilationFileTotal = $data['total'];
 		$rlFile->prReconcilationFileName = $data['fileName'];
 		$rlFile->prReconcilationFileType = $data['fileType'];
 		$rlFile->prReconcilationFileSize = $data['fileSize'];
@@ -672,6 +692,9 @@ class Controller_Exp
 		$rlFile->prReconcilationFileStatus = 1;
 		$rlFile->prReconcilationFileUpdatedDate = now();
 		$rlFile->save();
+
+		$category = orm('expense/pr/reconcilation/category')->find($prReconcilationCategoryID);
+		$category->reconcileAllItems();
 
 		$file->move($path.'/'.$rlFile->prReconcilationFileID);
 

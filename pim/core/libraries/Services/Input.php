@@ -88,7 +88,7 @@ class Uploaded_File
 			$extensions	= explode(",",$extensions);
 		}
 
-		if(!in_array($this->get('ext'),$extensions))
+		if(!in_array(strtolower($this->get('ext')),$extensions))
 		{
 			return false;
 		}

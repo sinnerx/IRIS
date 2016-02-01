@@ -233,7 +233,8 @@ class Origami
 	 */
 	public function relate($model, $ref, $type)
 	{
-		$modelKey = is_array($model) ? serialize($model) : $model;
+		$baseTable = $this->table;
+		$modelKey = is_array($model) ? serialize(array_merge(array($baseTable), $model)) : $baseTable.'_'.$model;
 
 		if(is_string($ref))
 		{

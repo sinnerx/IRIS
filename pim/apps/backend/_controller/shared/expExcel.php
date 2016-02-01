@@ -48,17 +48,37 @@ class Controller_ExpExcel
 			}
 		}
 
+		// Project Director signature
+		/*$lizaSignature = imagecreatefromjpeg(path::files('expense/liza-signature.jpg'));
+
+		$objDrawing = new PHPExcel_Worksheet_MemoryDrawing();
+		$objDrawing->setImageResource($lizaSignature);
+		$objDrawing->setRenderingFunction(PHPExcel_Worksheet_MemoryDrawing::RENDERING_JPEG);
+		$objDrawing->setMimeType(PHPExcel_Worksheet_MemoryDrawing::MIMETYPE_DEFAULT);
+		$objDrawing->setWidth(160);
+		$objDrawing->setHeight($objDrawing->getHeight()-30);
+		$objDrawing->setWorksheet($sheet);
+		$objDrawing->setCoordinates('I32');
+		// $objDrawing->setOffsetX($objDrawing->getOffsetX()+30);
+		$objDrawing->setOffsetX(10);
+		$objDrawing->setOffsetY(10);*/
+
 		$sheet->setCellValue('B29', 'Ringgit Malaysia : '.$ca->prCashAdvanceAmount);
 
 		$sheet->setCellValue('C33', $user->getProfile()->userProfileFullName);
 
 		$sheet->setCellValue('B35', 'Date : '.date('d-m-Y', strtotime($pr->prCreatedDate)));
 
+		$omApproval = $pr->getLevelApproval('om');
+		$sheet->setCellValue('H35', 'Date : '.date('d-m-Y', strtotime($omApproval->prApprovalUpdatedDate))); 
+
 		$ExcelHelper->execute();
 	}
 
-	public function rlSummaryGenerate($clusterID, $month, $year)
+	public function rlSummaryGenerate($clusterID, $prType, $month, $year)
 	{
+		$time = microtime(true);
+
 		$cluster = orm('site/cluster')->find($clusterID);
 
 		$monthName = date('F', strtotime('2015-'.$month.'-01'));
@@ -66,13 +86,18 @@ class Controller_ExpExcel
 		// get rls
 		$rlList = orm('expense/pr/reconcilation/reconcilation')
 		->where('prReconcilationStatus', 1)
-		->where('pr.siteID IN (SELECT siteID FROM cluster_site WHERE clusterID = ?)', array($clusterID))
+		->where('pr.prType = ? AND pr.siteID IN (SELECT siteID FROM cluster_site WHERE clusterID = ?)', array($prType, $clusterID))
 		->where('MONTH(prReconcilationSubmittedDate)', $month)
 		->where('YEAR(prReconcilationSubmittedDate)', $year)
 		->join('pr', 'pr.prID = pr_reconcilation.prID')
 		->execute();
 
-		$filename = 'Pi1M'.$cluster->clusterName.$monthName.'-'.$year;
+		$types = array(
+			1 => 'Collection Money',
+			2 => 'Cash Advance'
+			);
+
+		$filename = 'Pi1M '.$cluster->clusterName.' '.$types[$prType].' '.$monthName.'-'.$year;
 
 		/**
 		 * Functions
@@ -131,6 +156,54 @@ class Controller_ExpExcel
 			$sheet->getStyle($range)
 			->getAlignment()
 			->setHorizontal($types[$type]);
+		};
+
+		$signatureAdd = function($sheet, &$y)
+		{
+			// signature.
+			$sheet->setCellValue('B'.$y, 'Acknowledged/Approved By:');
+			$sheet->setCellValue('D'.$y, 'Checked by:');
+
+			$y += 4;
+
+			$saifulSignature = imagecreatefromjpeg(path::files('expense/saiful-signature.jpg'));
+			$lizaSignature = imagecreatefromjpeg(path::files('expense/liza-signature.jpg'));
+
+			$objDrawing = new PHPExcel_Worksheet_MemoryDrawing();
+			$objDrawing->setImageResource($saifulSignature);
+			$objDrawing->setRenderingFunction(PHPExcel_Worksheet_MemoryDrawing::RENDERING_JPEG);
+			$objDrawing->setMimeType(PHPExcel_Worksheet_MemoryDrawing::MIMETYPE_DEFAULT);
+			$objDrawing->setWidth(160);
+			$objDrawing->setWorksheet($sheet);
+			$objDrawing->setCoordinates('B'.($y-2));
+			// $objDrawing->setOffsetX($objDrawing->getOffsetX()+30);
+			$objDrawing->setOffsetX(10);
+			$objDrawing->setOffsetY(10);
+
+			$objDrawing = new PHPExcel_Worksheet_MemoryDrawing();
+			$objDrawing->setImageResource($lizaSignature);
+			$objDrawing->setRenderingFunction(PHPExcel_Worksheet_MemoryDrawing::RENDERING_JPEG);
+			$objDrawing->setMimeType(PHPExcel_Worksheet_MemoryDrawing::MIMETYPE_DEFAULT);
+			$objDrawing->setWidth(160);
+			$objDrawing->setHeight($objDrawing->getHeight()-10);
+			$objDrawing->setWorksheet($sheet);
+			$objDrawing->setCoordinates('D'.($y-3));
+			// $objDrawing->setOffsetX($objDrawing->getOffsetX()+30);
+			$objDrawing->setOffsetX(10);
+			$objDrawing->setOffsetY(10);
+
+			$sheet->setCellValue('B'.($y), '_______________________');
+			$sheet->setCellValue('D'.($y), '_______________________');
+
+			$y++;
+
+			$sheet->setCellValue('B'.$y, 'Mohamad Saiful Sabran');
+			$sheet->setCellValue('D'.$y, 'Yusliza Mad Yusop');
+
+			$y++;
+
+			$sheet->setCellValue('B'.$y, 'Operation Manager');
+			$sheet->setCellValue('D'.$y, 'Operation Coordinator');
 		};
 		/**
 		 * Functions ends.
@@ -214,7 +287,10 @@ class Controller_ExpExcel
 
 			$rlSites[$site->siteID][] = $rl;
 
-			$prItems = orm('expense/pr/item')->where('prID', $rl->prID)->execute();
+			// $prItems = orm('expense/pr/item')->where('prID', $rl->prID)->execute();
+			$prItems = $rlItems = orm('expense/pr/reconcilation/item')
+			->where('prReconcilationItemStatus', 1) // reconciled
+			->where('prReconcilationID', $rl->prReconcilationID)->execute();
 
 			// <> Lirst loop
 			$sheet->setCellValue($pos('A', $y), $no++);
@@ -225,26 +301,26 @@ class Controller_ExpExcel
 			$sheet->mergeCells("D$y:E$y");
 			$y++;
 
-			$prItemCategories = array();
+			$rlCategories = array();
 
 			// Prepare pr_items grouped by categories
-			foreach($prItems as $prItem)
+			foreach($rlItems as $rlItem)
 			{
-				if(!isset($prItemCategories[$prItem->expenseCategoryID]))
-					$prItemCategories[$prItem->expenseCategoryID] = array();
+				if(!isset($rlCategories[$rlItem->prReconcilationCategoryID]))
+					$rlCategories[$rlItem->prReconcilationCategoryID] = array();
 
-				$prItemCategories[$prItem->expenseCategoryID][] = $prItem;
+				$rlCategories[$rlItem->prReconcilationCategoryID][] = $rlItem;
 
-				if(!isset($rlCategoryTotals[$prItem->expenseCategoryID]))
-					$rlCategoryTotals[$prItem->expenseCategoryID] = 0;
+				if(!isset($rlCategoryTotals[$rlItem->prReconcilationCategoryID]))
+					$rlCategoryTotals[$rlItem->prReconcilationCategoryID] = 0;
 
-				$rlCategoryTotals[$prItem->expenseCategoryID] += $prItem->prItemTotal;
+				$rlCategoryTotals[$rlItem->prReconcilationCategoryID] += $rlItem->prReconcilationItemTotal;
 			}
 
 			// <> Item loops.
 			$itemTotal = 0;
 
-			foreach($prItemCategories as $categoryID => $prItems)
+			foreach($rlCategories as $categoryID => $rlItems)
 			{
 				$rlCategoryTotal = 0;
 				$categoryName = $expenseCategories[$categoryID];
@@ -253,23 +329,21 @@ class Controller_ExpExcel
 					$sheet->mergeCells("D$y:E$y");
 				$highlight($sheet, 'D'.$y);
 
-				foreach($prItems as $prItem)
-					$rlCategoryTotal += $prItem->prItemTotal;
+				foreach($rlItems as $rlItem)
+					$rlCategoryTotal += $rlItem->prReconcilationItemTotal;
 
 				$sheet->setCellValue($pos('G', $y), $rlCategoryTotal);  // total amount
 				$highlight($sheet, 'G'.$y, true);
 				$y++;
 
-				foreach($prItems as $prItem)
+				foreach($rlItems as $rlItem)
 				{
-					$desc = $prItem->prItemDescription;
-
 					$num = strtolower(numberToRoman($no ? 1 : $no++));
 
-					$itemTotal += $prItem->prItemTotal;
+					$itemTotal += $rlItem->prReconcilationItemTotal;
 
-					$sheet->setCellValue($pos('D', $y), $num.'. '.$prItem->expenseItemName.($desc ? '('.$desc.')' : '')); // item name
-					$sheet->setCellValue($pos('F', $y), $prItem->prItemTotal); // item total
+					$sheet->setCellValue($pos('D', $y), $num.'. '.$rlItem->prReconcilationItemName); // item name
+					$sheet->setCellValue($pos('F', $y), $rlItem->prReconcilationItemTotal); // item total
 
 					$y++;
 				}
@@ -322,6 +396,10 @@ class Controller_ExpExcel
 		$sheet->setCellValue("G$y", $allRlTotal);
 		$setBorder($sheet, "F$y:G$y", 'allBorders');
 
+		$y += 2;
+
+		$signatureAdd($sheet, $y);
+
 		// background-color the whole sheet.
 		$sheet->getStyle('A1:'."G$y")->applyFromArray(
 		    array
@@ -332,6 +410,8 @@ class Controller_ExpExcel
 		        )
 		    )
 		);
+
+
 
 		/***********************************
 		 * SECOND SHEET : SUMMARY
@@ -409,146 +489,143 @@ class Controller_ExpExcel
 
 		$highlight($sheet, 'F'.$y, true);
 
+		$y += 2;
+
+		$signatureAdd($sheet, $y);
+
 		// background-color the whole sheet.
 		$background($sheet, "A1:G$y", 'FFFFFF');
 
+		$sheetNo = 2;
+
 		/***********************************
-		 * LAST SHEETS : SHEET OF LOOP
+		 * LAST SHEETS : SHEETS OF LOOP
 		 ***********************************/
 		foreach($rlSites as $siteID => $rlList)
 		{
-			$sheet = $sheets[2] = $excel->createSheet(2);
-
-			$site = $sites[$siteID];
-
-			$sheet->setTitle($site->siteName);
-
-			$y = 11;
-
-			// <> info
-			$sheet->getCell("A$y")->setValue('RECONCILIATION LIST - Slip of Payment/Bill/Reciept')->getStyle()->getFont()->setBold(true);
-			$sheet->setCellValue("A$y", 'RECONCILIATION LIST - Summary');
-				$sheet->mergeCells("A$y:G$y");
-				$y += 2;
-
-			$sheet->setCellValue("A$y", 'Cluster : '.$cluster->clusterName);
-				$sheet->mergeCells("A$y:B$y");
-				$y++;
-			$sheet->setCellValue("A$y", 'Month : '.$monthName.' '.$year);
-				$sheet->mergeCells("A$y:B$y");
-				$y++;
-			$sheet->setCellValue("A$y", 'PI1M : '.$site->siteName);
-				$sheet->mergeCells("A$y:B$y");
-				$y += 2;
-
-			// <> table header
-			$firstY = $y;
-
-			$sheet->setCellValue("A$y", 'No.');
-			$sheet->setCellValue("B$y", "Category");
-			$sheet->setCellValue("C$y", 'Particular');
-				$sheet->mergeCells("C$y:F$y");
-			$sheet->setCellValue("G$y", 'Amount (RM)');
-
-			$highlight($sheet, "A$y:G$y", true); // bold
-			$background($sheet, "A$y:G$y", '93CDDD');
-
-			$setBorder($sheet, 'A'.$y.':G'.$y, 'outline');
-
-			$y++;
-
-			// prepare the categories.
-			$rlFilesCategories = array();
-
 			foreach($rlList as $rl)
 			{
-				foreach($rl->getFiles() as $file)
-				{
-					$rlFilesCategories[$file->expenseCategoryID][] = $file;
-				}
-			}
+				$sheet = $sheets[$sheetNo] = $excel->createSheet($sheetNo);
 
-			// <> excel preparation.
-			$no = 1;
+				$sheetNo++;
 
-			$startY = $y;
+				$site = $sites[$siteID];
 
-			$total = 0;
-			foreach($rlFilesCategories as $categoryID => $files)
-			{
-				$categoryY = $y;
+				$sheet->setTitle($site->siteName);
 
-				$sheet->setCellValue('A'.$y, $no++);
-				$sheet->setCellValue('B'.$y, $expenseCategories[$categoryID]);
-				$highlight($sheet, 'A'.$y.':G'.$y, true);
+				$y = 11;
 
-				$amount = 0;
+				// <> info
+				$sheet->getCell("A$y")->setValue('RECONCILIATION LIST - Slip of Payment/Bill/Reciept')->getStyle()->getFont()->setBold(true);
+				$sheet->setCellValue("A$y", 'RECONCILIATION LIST - Summary');
+					$sheet->mergeCells("A$y:G$y");
+					$y += 2;
 
-				foreach($files as $file)
-				{
-					$amount += $file->prReconcilationFileAmount;
-					$total += $file->prReconcilationFileAmount;
-				}
+				$sheet->setCellValue("A$y", 'Cluster : '.$cluster->clusterName);
+					$sheet->mergeCells("A$y:B$y");
+					$y++;
+				$sheet->setCellValue("A$y", 'Month : '.$monthName.' '.$year);
+					$sheet->mergeCells("A$y:B$y");
+					$y++;
+				$sheet->setCellValue("A$y", 'PI1M : '.$site->siteName);
+					$sheet->mergeCells("A$y:B$y");
+					$y += 2;
 
-				$sheet->setCellValue('G'.$y, $amount);
+				// <> table header
+				$firstY = $y;
 
+				$sheet->setCellValue("A$y", 'No.');
+				$sheet->setCellValue("B$y", "Category");
+				$sheet->setCellValue("C$y", 'Particular');
+					$sheet->mergeCells("C$y:F$y");
+				$sheet->setCellValue("G$y", 'Amount (RM)');
 
-				foreach($files as $file)
-				{
-					$filePath = $file->getFilePath();
+				$highlight($sheet, "A$y:G$y", true); // bold
+				$background($sheet, "A$y:G$y", '93CDDD');
 
-					$type = $file->prReconcilationFileType;
-
-					switch($type)
-					{
-						case 'image/jpeg':
-							$gdImage = imagecreatefromjpeg($filePath);
-						break;
-						case 'image/png':
-							$gdImage = imagecreatefrompng($filePath);
-						break;
-						case 'image/bmp':
-							$gdImage = imagecreatefromwbmp($filePath);
-						break;
-					}
-
-					$objDrawing = new PHPExcel_Worksheet_MemoryDrawing();
-					$objDrawing->setImageResource($gdImage);
-					$objDrawing->setRenderingFunction(PHPExcel_Worksheet_MemoryDrawing::RENDERING_JPEG);
-					$objDrawing->setMimeType(PHPExcel_Worksheet_MemoryDrawing::MIMETYPE_DEFAULT);
-					$objDrawing->setWidth(480);
-					$objDrawing->setWorksheet($sheet);
-					$objDrawing->setCoordinates('C'.$y);
-					// $objDrawing->setOffsetX($objDrawing->getOffsetX()+30);
-					$objDrawing->setOffsetX(10);
-					$objDrawing->setOffsetY(10);
-
-					$height = $objDrawing->getHeight();
-
-					$y += round($height / 19);
-
-					$amount += $file->prReconcilationFileAmount;
-				}
-
-				$setBorder($sheet, "A$categoryY:A$y", 'outline');
-				$setBorder($sheet, "B$categoryY:B$y", 'outline');
-				$setBorder($sheet, "C$categoryY:F$y", 'outline');
-				$setBorder($sheet, "G$categoryY:G$y", 'outline');
-
-				// $total += $amount;
+				$setBorder($sheet, 'A'.$y.':G'.$y, 'outline');
 
 				$y++;
-			}
 
-			// total amount.
-			$sheet->setCellValue('F'.$y, 'Total Amount :');
-				$setAlign($sheet, "F$y", 'right');
-			$sheet->setCellValue('G'.$y, $total);
-				$setAlign($sheet, "G$firstY:G$y", 'center');
-			$highlight($sheet, "F$y:G$y", true);
-			
-			// color
-			$backgrounds[] = array($sheet, 'A1:G'.$y, 'FFFFFF');
+				// <> excel preparation
+				$no = 1;
+				
+				$startY = $y;
+
+				$total = 0;
+
+				foreach($rl->getReconciledCategories() as $category)
+				{
+					$categoryY = $y;
+
+					$categoryID = $category->expenseCategoryID;
+
+					$sheet->setCellValue('A'.$y, $no++);
+					$sheet->setCellValue('B'.$y, $expenseCategories[$categoryID]);
+					$highlight($sheet, 'A'.$y.':G'.$y, true);
+
+					$categoryTotal = $category->getTotal();
+
+					$total += $categoryTotal;
+
+					$sheet->setCellValue('G'.$y, $categoryTotal);
+
+					foreach($category->getFiles() as $file)
+					{
+						$filePath = $file->getFilePath();
+
+						$type = $file->prReconcilationFileType;
+
+						switch($type)
+						{
+							case 'image/jpeg':
+								$gdImage = imagecreatefromjpeg($filePath);
+							break;
+							case 'image/png':
+								$gdImage = imagecreatefrompng($filePath);
+							break;
+							case 'image/bmp':
+								$gdImage = imagecreatefromwbmp($filePath);
+							break;
+						}
+
+						$objDrawing = new PHPExcel_Worksheet_MemoryDrawing();
+						$objDrawing->setImageResource($gdImage);
+						$objDrawing->setRenderingFunction(PHPExcel_Worksheet_MemoryDrawing::RENDERING_JPEG);
+						$objDrawing->setMimeType(PHPExcel_Worksheet_MemoryDrawing::MIMETYPE_DEFAULT);
+						$objDrawing->setWidth(480);
+						$objDrawing->setWorksheet($sheet);
+						$objDrawing->setCoordinates('C'.$y);
+						// $objDrawing->setOffsetX($objDrawing->getOffsetX()+30);
+						$objDrawing->setOffsetX(10);
+						$objDrawing->setOffsetY(10);
+
+						$height = $objDrawing->getHeight();
+
+						$y += round($height / 19);
+					}
+
+					$setBorder($sheet, "A$categoryY:A$y", 'outline');
+					$setBorder($sheet, "B$categoryY:B$y", 'outline');
+					$setBorder($sheet, "C$categoryY:F$y", 'outline');
+					$setBorder($sheet, "G$categoryY:G$y", 'outline');
+
+					$y++;
+				}
+
+				// total amount.
+				$sheet->setCellValue('F'.$y, 'Total Amount :');
+					$setAlign($sheet, "F$y", 'right');
+				$sheet->setCellValue('G'.$y, $total);
+					$setAlign($sheet, "G$firstY:G$y", 'center');
+				$highlight($sheet, "F$y:G$y", true);
+
+				$y += 2;
+				$sheet->setCellValue('A'.$y, 'Disclaimer : This excel is computer generated. No signature is required.');
+				
+				// color
+				$backgrounds[] = array($sheet, 'A1:G'.$y, 'FFFFFF');
+			}
 		}
 
 
@@ -559,8 +636,7 @@ class Controller_ExpExcel
 		foreach($backgrounds as $bg)
 			$background($bg[0], $bg[1], $bg[2]);
 
-		// give average width to all sheets.
-		foreach($sheets as $sht)
+		foreach($sheets as $no => $sht)
 		{
 			$y = 6;
 
@@ -589,6 +665,8 @@ class Controller_ExpExcel
 
 			foreach(array('B', 'C', 'D', 'E', 'F', 'G') as $x)
 				$sht->getColumnDimension($x)->setWidth('18');
+
+			
 		}
 
 		$ExcelHelper->execute();
