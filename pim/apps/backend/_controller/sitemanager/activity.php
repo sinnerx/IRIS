@@ -28,6 +28,7 @@ class Controller_Activity
 		$data['learningPackage'] 	= model::load("activity/learning")->package();
 		
 		//print_r($data['learningModule']);
+		//print_r($Training);
 		if(form::submitted())
 		{
 			$rules	= Array(

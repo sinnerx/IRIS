@@ -289,32 +289,64 @@ class Activity
 
 	public function getModuleByUser($userID)
 	{
+		db::select("P.packageid as packageID");
+		db::where("AU.userID", $userID);
+		db::innerjoin("training AS TR", "TR.activityID = AU.activityID");
+		db::innerjoin("training_lms AS L", "TR.trainingID = L.trainingid");
+		db::innerjoin("lms_package_module AS LPM", "LPM.id = L.packageModuleID");
+		//db::innerjoin("lms_module AS M", "M.id = LPM.moduleid");
+		db::innerjoin("lms_package AS P", "P.packageid = LPM.packageid");
+		db::group_by("packageID");
+		$resultgroupdb = db::get("activity_user AS AU")->result();
+		//print_r($resultgroupdb);
+		//->result();
+
+		$arrayGroup = array();
+		$in_string = "(";
+		foreach ($resultgroupdb as $value) {
+			# code...
+			//print_r($value);
+			//$in_string .= implode(", ", $value);
+			array_push($arrayGroup, $value["packageID"]);
+		}
+		
+		//print_r($arrayGroup);
+		$in_string .= implode(", ", $arrayGroup);
+		$in_string .= ")";
+		//print_r($in_string);
+
 		db::select("P.name as packageName, P.packageid as packageID, M.name as moduleName, M.id as moduleID");
-		//
 		db::where("AU.userID", $userID);
 		db::innerjoin("training AS TR", "TR.activityID = AU.activityID");
 		db::innerjoin("training_lms AS L", "TR.trainingID = L.trainingid");
 		db::innerjoin("lms_package_module AS LPM", "LPM.id = L.packageModuleID");
 		db::innerjoin("lms_module AS M", "M.id = LPM.moduleid");
 		db::innerjoin("lms_package AS P", "P.packageid = LPM.packageid");		
-		//db::from("training as TR");
-		//return db::get("activity_user AS AU")->result();
 		$resultdb = db::get("activity_user AS AU")->result();
+
+
 		//print_r($userID);
 		//print_r($resultdb);
-		$result = $this->getModuleInPackage($resultdb);
+		//$result = array();
+		$resultdb["packageInclude"] = $in_string;
+		//array_push($resultdb, $in_string);
 
+		$result = $this->getModuleInPackage($resultdb);
+		//print_r($result);	
 		//return $resultdb;
+
 		return $result;
 
 	}
 
 	public function getModuleInPackage($results)
 	{
+			//print_r($results);
 		//$x = 0;
 			db::select("P.packageid, P.name as PackageName");
-			//db::where("M.packageid", $var["packageID"]);
-			$resultPackage = db::get("lms_package AS P")->result();		
+			db::where("P.packageid IN ", $results["packageInclude"]);
+			$resultPackage = db::get("lms_package AS P")->result();	
+			unset($results["packageInclude"]);	
 			$x=0;
 			foreach ($resultPackage as $key) {
 
@@ -355,7 +387,7 @@ class Activity
 						 				//print_r($keyModule);
 						 				//[$y]["selected"] = 1;
 						 				$taken++;
-									}
+									}//if
 									
 									//print_r($resultModule);
 					 			}//foreach

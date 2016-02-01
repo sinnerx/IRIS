@@ -359,7 +359,7 @@ class Activity extends \Origami
 			$rowTraining = db::select("trainingID")->where("activityID", $activityID)->get("training")->row();
 			db::where("trainingID", $rowTraining['trainingID']);
 			db::update("training_lms", Array(
-					"moduleID" => $data["learningModule"]
+					"packageModuleID" => $data["learningModule"]
 				));
 			break;
 		}
@@ -419,7 +419,7 @@ class Activity extends \Origami
 				{
 					$data_learning = Array(
 						"trainingID" => $trainingID,
-						"moduleID" => $data['learningModule']
+						"packageModuleID" => $data['learningModule']
 					);
 
 					db::insert("training_lms", $data_learning);

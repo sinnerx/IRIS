@@ -76,13 +76,14 @@ class Training
 
 	public function getTrainingModule($id)
 	{
-		
+		//echo $id;
 		db::select("P.name as packageName, P.packageid as packageID, M.name as moduleName, M.id as moduleID");
 		//
 		db::where("TR.trainingID", $id);
 		db::join("training_lms AS L", "TR.trainingID = L.trainingid");
-		db::join("lms_module AS M", "L.moduleID = M.id");
-		db::join("lms_package AS P", "M.packageid = P.packageid");
+		db::join("lms_package_module AS LPM", "LPM.id = L.packageModuleID");
+		db::join("lms_module AS M", "LPM.moduleID = M.id");
+		db::join("lms_package AS P", "LPM.packageid = P.packageid");
 		//db::from("training as TR");
 		return db::get("training AS TR")->result();
 	}

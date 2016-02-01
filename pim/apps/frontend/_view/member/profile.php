@@ -20,7 +20,14 @@ $(document).ready(function(){
     //         console.log(event.tab.text);
             
     //     }
-    // });  
+    // }); 
+    // $("#takequiz").on("click",function(e){
+    //     alert('takequiz');
+    //     e.preventDefault();
+    //     $.post("../lms/quizs/login",function(data) {
+    //       //$("#someContainer").html(data);
+    //     });
+    // });
 });
 
 </script>
@@ -221,26 +228,46 @@ $(document).ready(function(){
                             <!-- Kelas-->
                             <div>
                                 <!-- loop -->
-                                <div class="heading-category">Pakej</div>
+                                <!-- <div class="heading-category">Pakej</div> -->
                                 <div class="profile-activity-forum-container">
                                     <?php
+                                    //print_r($row);
                                      if ($activities_lms){
                                         foreach ($activities_lms as $package) {
                                             //print_r($package);
                                             # code...
-                                            echo $package["PackageName"] . $package["complete"].'<br>';
-                                            
+                                            echo "<div class='heading-category' >";
+                                            echo $package["PackageName"] .'<br>';
+                                            echo "</div>";
+                                            echo "<ul style='border-bottom:1px solid #e8e8e8'>";
                                             foreach ($package["modules"] as $module) {
                                                 # code...
                                                 //print_r($module);
+                                                echo "<li class='clearfix'>
+                                                        
+                                                        <div class='forum-activity-title'>";
                                                 echo $module["name"];
                                                 if ($module["selected"] == 1){
-                                                    echo "(1)";         
+                                                    echo "<i class='fa fa-check'></i>";         
                                                 }//if
-                                                
+                                                else{
+                                                    echo "<i style='margin-left:10px'>.</i>";
+                                                }
+                                                echo "</div></li>";
                                             }//foreach
-                                            echo '<br>';
-                                        }
+                                            //echo '<br>';
+                                            echo "<span class='clearfix'><br></span>";
+                                            if ($package["complete"] == 1)
+                                                echo "<a href='../lms/quizs/login?packageid=" .$package["packageid"]."&userid=" .$row["userID"]. "' class='bttn-submit-success' id='takequiz'>Ambil Kuiz</a>";
+                                                //echo "<a href='#' class='bttn-submit-success' id='takequiz'>Ambil Kuiz</a>";
+                                            else
+                                                echo "<a href='#' class='bttn-submit-gray'>Belum Lengkap</a>";
+
+                                            echo "<span class='clearfix'><br></span>";
+                                            echo "</ul>";
+
+
+                                        }//foreach package
                                      }//if activities_lms
                                     ?>
                                 </div>

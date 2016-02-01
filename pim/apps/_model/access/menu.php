@@ -75,7 +75,7 @@ class Menu extends Data
 									/*"Monthly Activity Report"=>Array("report/activityReport")*/
 												),
 					"Attendance" => Array(
-									"Attendance Page" => Array("../attendance")
+									"Attendance Page" => Array("../attendance/")
 						)	
 							);
 
@@ -98,6 +98,9 @@ class Menu extends Data
 					// 	'PR List' => array('exp/prList', 'exp/prEdit', 'exp/prEditCashAdvance'),
 					// 	"RL List" => array('exp/rlList', 'exp/rlEdit')
 					// 	),
+										"Attendance" => Array(
+									"Attendance Page" => Array("../attendance/")
+						),
 							);
 
 		$menu['fc']	= Array(					
@@ -178,7 +181,7 @@ class Menu extends Data
 									"Learning Page " => Array("../lms/"),
 						),
 					"Attendance" => Array(
-									"Attendance Page" => Array("../attendance")
+									"Attendance Page" => Array("../attendance/")
 						)
 					/*"Activities"=>"activity/index",
 					"Reports"=>"reports/index"*/
