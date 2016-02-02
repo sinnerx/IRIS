@@ -98,6 +98,14 @@ class Menu extends Data
 						'PR List' => array('exp/prList', 'exp/prEdit', 'exp/prEditCashAdvance'),
 						"RL List" => array('exp/rlList', 'exp/rlEdit')
 						),
+					//"Report"=>Array(
+						// "Input Form"=>"billing/add",
+						// "Edit Form"=>"billing/edit",
+					//	"Reporting"=>"./attendance/reporting/"
+						//),		
+					"Attendance" => Array(
+									"Attendance Page" => Array("../attendance/")
+						)				
 							);
 
 		$menu['fc']	= Array(					
@@ -114,6 +122,9 @@ class Menu extends Data
 						'RL List' => array('exp/rlList', 'exp/rlEdit')
 					//	"Add new Category / Item"=>"expense/addCategory"
 						),
+					"Attendance" => Array(
+									"Attendance Page" => Array("../attendance/")
+						)	
 							);
 
 		## root.
@@ -196,7 +207,9 @@ class Menu extends Data
 						'RL List' => array('exp/rlList', 'exp/rlEdit')
 					//	"Add new Category / Item"=>"expense/addCategory"
 						),
-
+					"Attendance" => Array(
+									"Attendance Page" => Array("../attendance/")
+						)	
 							);
 
 		$menu['dv'] = array(
