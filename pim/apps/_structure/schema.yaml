@@ -1041,6 +1041,12 @@ att_attendancedetails:
 	managerName [varchar(255)]
 	siteName [varchar(255)]
 	siteID [int]
+	clusterID [int]
+	userEmail [varchar(100)]
+	hours [float]
+	lateIn [int]
+	earlyOut [int]
+	anomaly [int]
 
 ### lms
 lms_module:
