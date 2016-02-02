@@ -46,7 +46,7 @@ var activity	= function()
 
 		 $.ajax({
 		 	url: pim.base_url +"ajax/activity/getModuleByPackageID/"+ pid, success: function (result){
-		 		
+		 		//console.log(pim.base_url +"ajax/activity/getModuleByPackageID/"+ pid);
 		 		//var result = result.substring(3, result.length); 
 		 		//console.log(result);
 		 		result = $.parseJSON(result);

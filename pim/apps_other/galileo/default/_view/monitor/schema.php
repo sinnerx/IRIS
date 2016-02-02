@@ -259,7 +259,9 @@ foreach($schema as $table=>$colR)
 		{
 			foreach($db_extracolumn[$table] as $colname)
 			{
-				echo "<div class='table_column table_column_extra'>$colname</div>";
+				$type	= trim($colR['type'][$colname],"[]");
+
+				echo "<div class='table_column table_column_extra'>$colname [$type]</div>";
 			}
 		}
 
@@ -275,7 +277,9 @@ if(count($db_extratable) > 0)
 		echo "<div class='table_name'>$table</div>";
 		foreach($db_table[$table]['columns'] as $colname)
 		{
-			echo "<div class='table_column'>$colname</div>";
+			$type	= trim($db_table[$table]['type'][$colname],"[]");
+
+			echo "<div class='table_column'>$colname [$type]</div>";
 		}
 		echo "</div></div>";
 	}

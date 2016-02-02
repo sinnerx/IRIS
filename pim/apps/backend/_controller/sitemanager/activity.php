@@ -129,6 +129,7 @@ class Controller_Activity
 		$row_site				= model::load("access/auth")->getAuthData("site");
 		$data['siteInfoAddress']	= $row_site['siteInfoAddress'];
 		$data['learningPackage'] = model::load("activity/learning")->package();
+		//print_r($data['learningPackage']);
 		if(form::submitted())
 		{
 			$rules	= Array(
