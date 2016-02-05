@@ -1055,6 +1055,7 @@ att_attendancedetails:
 	lateIn [int]
 	earlyOut [int]
 	anomaly [int]
+	accuracy [double]
 
 ### lms
 lms_module:
