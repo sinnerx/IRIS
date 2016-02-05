@@ -772,6 +772,14 @@ billing_transaction:
 	billingTransactionStatus [int]  ##  1 = active 0 = deleted
 	billingTransactionUploaded [int] ## 1 = uploaded by cafe, 0 = created on pi1m.
 
+billing_reupload_request:
+	billingReuploadRequestID [int]
+	siteID [int]
+	billingReuploadRequestStatus [int] ## 0 = pending, 1 = success
+	billingReuploadRequestBeginDate [datetime]
+	billingReuploadRequestCreatedDate [datetime]
+	billingReuploadRequestUpdatedDate [datetime]
+
 billing_pc_usage:
 	billingPcUsageID [int]
 	billingPcUsageLocalID [int]
