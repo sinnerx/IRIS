@@ -237,8 +237,11 @@ $(document).ready(function(){
                                             //print_r($package);
                                             # code...
                                             echo "<div class='heading-category' >";
-                                            echo $package["PackageName"] .'<br>';
-                                            echo "</div>";
+                                            echo $package["PackageName"];
+                                            if ($package["completepayment"] == 1){
+                                                echo " (Dibayar)";
+                                            }
+                                            echo "</div>".'<br>';
                                             echo "<ul style='border-bottom:1px solid #e8e8e8'>";
                                             foreach ($package["modules"] as $module) {
                                                 # code...
@@ -248,22 +251,36 @@ $(document).ready(function(){
                                                         <div class='forum-activity-title'>";
                                                 echo $module["name"];
                                                 if ($module["selected"] == 1){
-                                                    echo "<i class='fa fa-check'></i>";         
+                                                    echo "<i class='fa fa-check'></i>";
+                                                    if($module["status"] != 1){
+                                                        if ($package["completepayment"] == 1){
+                                                        echo "<a href='../lms/quizs/login?moduleid=" .$module["id"]."&userid=" .$row["userID"]. "' class='bttn-submit-success' id='takequiz' style='margin-top:0px; float:right; color: white'>Ambil Kuiz</a>";
+                                                        }//if payment
+                                                        else if ($package["completepayment"] == 0){
+                                                            echo "<a href='#' class='bttn-submit-gray' style='margin-top:0px; float:right; color: white'>Ambil Kuiz</a>";
+                                                        }                                                        
+                                                    }//if status
+                                                    else {
+                                                        echo "<a href='#' class='bttn-submit-pass' style='margin-top:0px; float:right; color: white; padding:8px 47px'>Lulus</a>";
+                                                    }
+ 
+
                                                 }//if
-                                                else{
+                                                else{//not selected
                                                     echo "<i style='margin-left:10px'>.</i>";
+                                                    echo "<a href='#' class='bttn-submit-gray' style='margin-top:0px; float:right; color: white'>Ambil Kuiz</a>";
                                                 }
                                                 echo "</div></li>";
                                             }//foreach
                                             //echo '<br>';
                                             echo "<span class='clearfix'><br></span>";
-                                            if ($package["complete"] == 1)
-                                                echo "<a href='../lms/quizs/login?packageid=" .$package["packageid"]."&userid=" .$row["userID"]. "' class='bttn-submit-success' id='takequiz'>Ambil Kuiz</a>";
-                                                //echo "<a href='#' class='bttn-submit-success' id='takequiz'>Ambil Kuiz</a>";
-                                            else
-                                                echo "<a href='#' class='bttn-submit-gray'>Belum Lengkap</a>";
+                                            // if ($package["complete"] == 1)
+                                            //     echo "<a href='../lms/quizs/login?packageid=" .$package["packageid"]."&userid=" .$row["userID"]. "' class='bttn-submit-success' id='takequiz'>Ambil Kuiz</a>";
+                                            //     //echo "<a href='#' class='bttn-submit-success' id='takequiz'>Ambil Kuiz</a>";
+                                            // else
+                                            //     echo "<a href='#' class='bttn-submit-gray'>Belum Lengkap</a>";
 
-                                            echo "<span class='clearfix'><br></span>";
+                                            // echo "<span class='clearfix'><br></span>";
                                             echo "</ul>";
 
 

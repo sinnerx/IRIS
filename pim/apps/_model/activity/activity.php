@@ -369,6 +369,7 @@ class Activity extends \Origami
 	{
 		## create slug by activity name.
 		//print_r($data);
+		//die;
 		$originalSlug	= model::load("helper")->slugify($data['activityName']);
 		$activitySlug	= $this->refineActivitySlug($originalSlug,$data['activityStartDate']);
 

@@ -16,7 +16,7 @@ class PackageModule extends \Origami
 
 	public function getModuleByPackageID($packageID)
 	{
-		db::select("LPM.id, M.name AS name, M.description AS description, T.trainingTypeName AS type_name, T.trainingTypeID as type_id ");
+		db::select("M.id, M.name AS name, M.description AS description, T.trainingTypeName AS type_name, T.trainingTypeID as type_id ");
 		db::where("LPM.packageid", $packageID);
 		db::join("lms_module AS M", "M.id = LPM.moduleid");
 		db::join("training_type AS T", "T.trainingTypeID = M.typeid");
@@ -27,7 +27,7 @@ class PackageModule extends \Origami
 
 	public function getModuleByID($ID)
 	{
-		db::select("LPM.id, M.name AS name, M.description AS description, T.trainingTypeName AS type_name, T.trainingTypeID as type_id ");
+		db::select("M.id, M.name AS name, M.description AS description, T.trainingTypeName AS type_name, T.trainingTypeID as type_id ");
 		db::where("LPM.id", $ID);
 		db::join("lms_module AS M", "M.id = LPM.moduleid");
 		db::join("training_type AS T", "T.trainingTypeID = M.typeid");

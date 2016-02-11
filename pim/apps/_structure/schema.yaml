@@ -1081,7 +1081,7 @@ lms_result:
 	result [int(11)]
 	datecreated [datetime]
 	status [varchar(100)]
-	packageid [int(11)]
+	moduleid [int(11)]
 	sessionid [varchar(100)]
 
 training_lms:
@@ -1100,7 +1100,6 @@ lms_package:
 	updatedate [datetime]
 	updateby [varchar(100)]
 	status [int(11)]
-	price [float]
 
 lms_package_module:
 	id [int(11)]

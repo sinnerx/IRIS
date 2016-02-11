@@ -25,3 +25,4 @@ lms/*
 localenvdb.php
 attendance/*
 !attendance/placeholder
+pim/apps/_config/database.php

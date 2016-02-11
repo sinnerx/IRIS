@@ -1676,6 +1676,26 @@ border-bottom:3px solid #176B2D;
 margin-top:15px;
 }
 
+.bttn-submit-pass{
+background:#80E6A0;
+color:#FFF;
+font-family: 'Open Sans', sans-serif;
+font-size:12px;
+font-weight:bold;
+padding:8px 30px;
+font-style:normal !important;
+-webkit-border-radius: 3px;
+-moz-border-radius: 3px;
+border-radius: 3px;
+cursor:pointer;
+text-decoration:none;
+margin-left:2px;
+border:none;
+text-transform:uppercase;
+/*border-bottom:3px solid #176B2D;*/
+margin-top:15px;
+}
+
 .bttn-submit-gray{
 background:#8C8C8C;
 color:#FFF;
@@ -1692,7 +1712,7 @@ text-decoration:none;
 margin-left:2px;
 border:none;
 text-transform:uppercase;
-border-bottom:3px solid #545454;
+/*border-bottom:3px solid #545454;*/
 margin-top:15px;
 }
 
