@@ -209,6 +209,21 @@ class Controller_Cafe
 	 */
 	public function lastTransactionDate()
 	{
+		$reuploadRequest = db::where('billingReuploadRequestStatus', 0)
+			->where('siteID', $this->site->siteID)
+			->get('billing_reupload_request')->row();
+
+		if($reuploadRequest)
+		{
+			$date = $reuploadRequest['billingReuploadRequestBeginDate'];
+
+			return json_encode(array(
+				'status' => 'success',
+				'data' => $date
+				));
+		}
+
+
 		$row = db::from('billing_transaction')
 		->where('siteID', $this->site->siteID)
 		->limit(1)
@@ -269,10 +284,11 @@ class Controller_Cafe
 				'total_transactions' => 0
 				));
 
-		$allIds = array_keys($transactions);
+		// $allIds = array_keys($transactions);
+		$allIds = array();
 
 		// get all unique ids
-		foreach($allIds as $row)
+		foreach($transactions as $row)
 			$allIds[] = $row['unique'];
 
 		// existing.
@@ -366,6 +382,9 @@ class Controller_Cafe
 			}
 		}
 
+		// if site has reupload request, update to success.
+		db::where('siteID', $this->site->siteID)->where('billingReuploadRequestStatus', 0)->update('billing_reupload_request', array('billingReuploadRequestStatus' => 1));
+
 		// log the upload date.
 		db::insert('billing_transaction_upload', array(
 			'siteID' => $this->site->siteID,
@@ -386,17 +405,21 @@ class Controller_Cafe
 		{
 			db::insert('site_cafe', array(
 				'siteID' => $this->site->siteID,
-				'siteCafeIpAddress' => $_REQUEST['REMOTE_ADDR'],
+				'siteCafeIpAddress' => $_SERVER['REMOTE_ADDR'],
 				'siteCafeLastAccess' => date('Y-m-d H:i:s')
 				));
 		}
 		else
 		{
-			db::where('siteCafeID', $siteCafe['siteCafeID'])
-			->update('site_cafe', array(
-				'siteCafeIpAddress' => $_REQUEST['REMOTE_ADDR'],
-				'siteCafeLastAccess' => date('Y-m-d H:i:s')
-				));
+			// only insert at least per minute
+			if(time() > (strtotime($siteCafe['siteCafeLastAccess']) + 60))
+			{
+				db::where('siteCafeID', $siteCafe['siteCafeID'])
+				->update('site_cafe', array(
+					'siteCafeIpAddress' => $_SERVER['REMOTE_ADDR'],
+					'siteCafeLastAccess' => date('Y-m-d H:i:s')
+					));
+			}
 		}
 
 		$lastUpdatedDate = db::select('userUpdatedDate')
