@@ -1,0 +1,31 @@
+Test Name = Backend.Root
+
+Configuration/category
+	### Add Category
+	- Click on the top button to add new parent category
+		[expectation : an add category form shown]
+	- Fill name, and click Add Category button
+		[expectation : new category added to the list]
+
+	### Add Sub Category
+	- Click plus icon for the recent added category
+		[expectation : an adding sub category form shown]
+	- Fill the name, and click Add Sub Category
+		[expectation : Sub category added under the selected parent]
+
+Site/Announcement
+	## Add announcement
+	- Click Add button
+		[expectation : A form for adding announcement shown]
+	- Click Add (submit) without filling the form
+		[expectation : Error]
+	- Fill the form and Add announcement
+		[expectation : Redirected to the same page with a success message = Successfully added an announcement.]
+
+	## Edit Announcemnet
+	- Click icon edit from the list
+		[expectation : redirected to edit page]
+	- Empty the announcement text
+		[expectation : error]
+	- Change announcement text and click Update Announcement
+		[expectation : redirected back to the list with message = Announcement has been updated.]

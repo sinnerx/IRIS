@@ -1,0 +1,1144 @@
+config:
+	configID [int]
+	configMemberFee [float]
+	configResetPassFee [float]
+	configAllSiteMenu [int]		## 1 = use site menu, 2 = use default menu.
+	configNewsCategoryID [int]	## stores category for news.
+	configManagerSiteID [int]	## id for managers site.
+
+user:
+	userID [int]
+	userIC [varchar]
+	userPassword [varchar]
+	userEmail [varchar]
+	userLevel [varchar]			## 1 = members (M), 2 = site manager (SM), 3 = cluster lead (CL), 4 = operation manager (OM), 99 = root admin (R)
+	userStatus [int]			## 0 = inactive, 1 = active, 3 = deleted
+	userCreatedDate [datetime]
+	userCreatedUser [int]
+	userUpdatedDate [datetime]
+	userUpdatedUser [int]
+	userLastLogin [datetime]
+
+account:
+	accountID [int]
+	accountType [int]			## 1 = user account, 2 = site account
+	accountRefID [int]			## if type 1, user.userID, else site.siteID.
+	accountBalance [int]		## constantly updated on every transaction, for easy querying record.
+	accountCreatedDate [datetime]
+	accountCreatedUser [int]
+	accountUpdatedDate [datetime]
+	accountUpdatedUser [int]
+
+account_transaction:
+	accountTransactionID [int]
+	accountTransactionType [varchar]		## like, registration, cybercafe-topup.
+	accountTransactionRefID [int]			## if later got referenced from somewhere can use this.
+	accountTransactionDestination [int]		## accountID.
+	accountTransactionSource [int]			## accountID
+	accountTransactionValue [float]			## value of this transaction.
+	accountTransactionRemark [text]
+	accountTransactionStatus [int]			## 0 = pending , 1 = success, 2 = cancelled.
+	accountTransactionCreatedDate [int]
+	accountTransactionCreatedUser [int]
+
+user_profile:
+	userProfileID [int]
+	userID [int]
+	userProfileTitle [int]		## 1 = mr, 2 = mrs
+	userProfileFullName [varchar] ## an alias for userProfileFirstname
+	userProfileLastName [varchar]
+	userProfilePhoneNo [varchar]
+	userProfileGender [int]		## 1 = male, 2 = female
+	userProfilePOB [varchar]
+	userProfileMarital [int]	## 1 = single, 2 = married, 3 = widow
+	userProfileDOB [date]
+	userProfileMobileNo [varchar]
+	userProfileMailingAddress [text]
+	userProfileAvatarPhoto [varchar]
+
+user_profile_additional: ## additional info for user.
+	userProfileAdditionalID [int]
+	userID [int]
+	userProfileOccupation [varchar]		##
+	userProfileOccupationGroup [int]	## 1 = student, 2 = housewives, 3 = self-employed, 4 = employed, 5 = non-employed, 6 = retiree
+	userProfileFacebook [varchar]		##
+	userProfileTwitter [varchar]		##
+	userProfileWeb [varchar]			##
+	userProfileEcommerce [varchar]		##
+	userProfileIntroductional [text]	##
+	userProfileEducation [varchar]
+
+user_activity:
+	userActivityID [int]
+	siteID [int]
+	userID [int]
+	userActivityTypeCode [varchar(5)]			## 1XX = komen, 2XX = forum, 3XX = activity, 4XX = fail, 5XX = keahlian, 6XX = kemaskini
+	userActivityType [varchar]
+	userActivityAction [varchar]
+	userActivityParameter1 [varchar]
+	userActivityParameter2 [varchar]
+	userActivityParameter3 [varchar]
+	userActivityParameter4 [varchar]
+	userActivityRefID [int]						## 1 reference table.
+	userActivityCreatedDate [datetime]
+
+user_activity_type:
+	userActivityTypeID [int]
+	userActivityTypeCode [varchar(5)]
+	userActivityTypeMessage [varchar(255)]		## format example
+	userActivityTypeCategory [int]				## 1 = komen,  2 = forum, 3 = activity, 4 = fail, 5 = keahlian, 6 = kemaskini
+
+activity:
+	activityID [int]
+	siteID [int]
+	activityType [int]				## 1 = event, 2 = training
+	activityName [varchar]
+	activitySlug [varchar]
+	activitySlugOriginal [varchar]
+	activityAddressFlag [int]		## 0 = use field activityAddress, 1 = use site info address.
+	activityAddress [text]
+	activityDescription [text]
+	activityParticipation [int]		## 1 = open for all p1m member, 2 = closed to member, 3 = open for all.
+	activityStartDate [datetime]
+	activityEndDate [datetime]
+	activityDateTimeType [int]		## 1 = multiple selection, 2 = single date. (not really important.)
+	activityApprovalStatus [int]			## 0 = unapproved, 1 = approved, 2 = disapproved.
+	activityCreatedUser [int]
+	activityCreatedDate [datetime]
+	activityUpdatedUser [int]
+	activityUpdatedDate [datetime]
+	activityAllDateAttendance [int]	## all-date compulsory. 1 = ya, 2 = free to choose.
+	activityAttendanceMarked [int]	## 0 = unmarked, 1 = marked.
+
+activity_attendance_mark:
+	activityAttendanceMarkID [int]
+	activityID [int]
+	userID [int]	## marked by.
+	activityAttendanceMarkCreatedUser [int]
+	activityAttendanceMarkCreatedDate [datetime]
+
+activity_budget:			## incomplete.
+	activityBudgedID [int]
+	activityID [int]
+
+activity_date:
+	activityDateID [int]
+	activityID [int]
+	activityDateValue [date]		## date of the activity.
+	activityDateStartTime [time]
+	activityDateEndTime [time]
+
+activity_user: ## joining table.
+	activityUserID [int]
+	activityID [int]
+	userID [int]
+	activityUserCreatedDate [datetime]
+	activityUserCreatedUser [int]
+
+activity_user_date:
+	activityUserDateID [int]
+	activityUserID [int]
+	activityUserDateValue [date]	## attend date. i think better use date as the foreignkey than activityDateID.
+	activityUserDateAttendance [int]	## 0 = not-signed, 1 = attend, 2 = absence
+	activityUserDateCreatedDate [datetime]
+	activityUserDateCreatedUser [int]
+	activityUserDateUpdatedDate [datetime]
+	activityUserDateUpdatedUser [int]
+
+activity_article:
+	activityArticleID [int]
+	activityArticleType [int]		## 1 = report, 2 = reference
+	articleID [int]
+	activityID [int]
+	activityArticleCreatedDate [datetime]
+	activityArticleCreatedUser [int]
+
+activity_album:
+	activityAlbumID [int]
+	activityID [int]
+	siteAlbumID [int]
+	activityAlbumCreatedDate [datetime]
+	activityAlbumCreatedUser [int]
+
+activity_comment:
+	activityCommentID [int]
+	activityID [int]
+	userID [int]
+	activityCommentValue [varchar]
+	activityCreatedDate [datetime]
+	activityCreatedUser [int]
+
+event:
+	eventID [int]
+	activityID [int]
+	eventType [int]				## 1 = lawatan
+	eventRefID [int]				## if eventType == 1
+	eventCreatedUser [int]
+	eventCreatedDate [datetime]
+
+training:
+	trainingID [int]
+	activityID [int]
+	trainingType [int]			## 0 is default
+	trainingMaxPax [int]
+
+training_type:
+	trainingTypeID [int]
+	trainingTypeName [varchar]
+	trainingTypeDescription [text]
+	trainingTypeStatus [int]	## 0 inactive, 1 = active.
+	trainingTypeCreatedDate [datetime]
+	trainingTypeCreatedUser [int]
+	trainingTypeUpdatedDate [datetime]
+	trainingTypeUpdatedUser [int]
+
+state:
+	stateID [int]
+	stateName [varchar]
+	stateCode [varchar(10)]
+
+site:
+	siteID [int]
+	stateID [int]
+	siteName [varchar]
+	siteSlug [varchar]
+	siteCreatedUser [int]
+	siteCreatedDate [datetime]
+	siteUpdatedUser [int]
+	siteUpdatedDate [datetime]
+	siteRefID [int]				## the site_id for old pi1m site.
+	siteCafeToken [varchar]
+
+site_cafe:
+	siteCafeID [int]
+	siteID [int]
+	siteCafeIpAddress [varchar]
+	siteCafeLastAccess [datetime]
+
+site_info:
+	siteInfoID [int]
+	siteID [int]
+	siteInfoLatitude [varchar]
+	siteInfoLongitude [varchar]
+	siteInfoPhone [varchar]
+	siteInfoAddress [text]
+	siteInfoDescription [text]
+	siteInfoFax [varchar]
+	siteInfoTwitterUrl [varchar]
+	siteInfoFacebookUrl [varchar]
+	siteInfoFacebookPageId [varchar]
+	siteInfoEmail [varchar]
+	siteInfoImage [varchar]
+
+site_member:
+	siteMemberID [int]
+	siteID [int]
+	userID [int]
+	siteMemberStatus [int]			## 0 = in-active, 1 = active.	// activation require payment.
+	siteMemberOutsider [int]		## 1 = yes, 0 = no.
+	siteMemberImported [int]		##  0 = no (new registration), 1 = yes.
+	siteMemberSynced [int]			## 0 = no, 1 = yes. flag whether user has been synced or not.
+
+site_slider:
+	siteSliderID [int]
+	siteID [int]
+	siteSliderType [int]		## 1 = site specific, 2 = general (added by admin.)
+	siteSliderName [varchar]
+	siteSliderImage [varchar]
+	siteSliderLink [varchar]	## link for which and which.
+	siteSliderTarget [int]		## 1 = normal, 2 = new tab.
+	siteSliderStatus [int]		## 0 = inactive, 1 = active
+	siteSliderCreatedDate [datetime]
+	siteSliderCreatedUser [int]
+
+site_message:	## a message from public
+	siteMessageID [int]
+	messageID [int]
+	siteID [int]
+	siteMessageType [int]		## 1 = public, 2 = members.
+	siteMessageCategory [int]	## 1 = aduan, 2 = pertanyaan, 3 = cadangan
+	siteMessageReadStatus [int]
+	siteMessageReadUser [int]
+	siteMessageStatus [int]		## 1 = active, 2 = closed.
+	siteMessageRemark [text]
+	siteMessageCreatedUser [int] ## if public (1), will use table contact. if members, will use table member.
+	siteMessageUpdatedUser [int]
+
+contact:
+	contactID [int]
+	contactName [varchar]
+	contactEmail [varchar]
+	contactPhoneNo [varchar]
+
+message:
+	messageID [int]
+	messageSubject [varchar]
+	messageContent [text]
+	messageCreatedDate [datetime]
+
+menu:
+	menuID [int]
+	siteID [int]
+	menuParentID [int]
+	menuType [int]		## 1 = top
+	componentNo [int]
+	menuName [varchar]
+	menuRefID [int]		## if componentID = 1 (page), refer to page id.
+	menuRoute [varchar] ## if componentNo = 99, custom. else, empty.
+	menuNo [int]		## to sort by listing.
+
+component:	## static record, 6 currently.
+	componentNo [int]				## 1 = page, 2 = main (/), 3 =  activity, 4 = members, 5 = contact us, 99 = custom.
+	componentName [varchar]
+	componentRoute [varchar]		## controller/action or route.
+	componentStatus [int]			## 0 = inactive (wont show menu), 1 = activated.
+
+page: 		## by default, will create about me page.
+	pageID [int]
+	siteID [int]
+	pageApprovedStatus [int]	## 0 = unapproved, 1 = approve, 2 = unapproved.
+	pagePhoto [varchar]			## store path to page photo.
+	pageName [varchar]
+	pageSlug [varchar]			## page slug
+	pageText [text]
+	pageTextExcerpt [text]		## a shortened version for pageText
+	pageType [int]			## 1 = default, 2 = manual, 3 = general page
+	pageDefaultType [int]	## if pageType is 0, this column is 0. 1 = about-us, 2 = about-pengurus, 3 = about-kampung.
+	pageCreatedUser [int]
+	pageCreatedDate [datetime]
+	pageUpdatedUser [int]
+	pageUpdatedDate [datetime]
+
+page_photo:
+	pagePhotoID [int]
+	pageID [int]
+	photoID [int]
+
+page_reference:
+	pageReferenceID [int]
+	pageParentID [int]
+	pageID [int]
+
+page_default:
+	pageDefaultID [int]
+	pageDefaultType [varchar]	## 1 = about-us, 2 = about-pengurus, 3 = about-kampung.
+	pageDefaultName [varchar]
+	pageDefaultSlug [varchar]
+
+## site editor can see article with articleStatus = 1 (saved).
+article:
+	articleID [int]
+	siteID [int]
+	articleStatus [int]		## 0 = unapproved, 1 = approved, 2 = disapproved, 3 = draft
+	articleSlug [varchar]
+	articleOriginalSlug [varchar]
+	articleName [varchar]
+	articleText [text]
+	articlePublishedDate [datetime]		## will only published after this date.
+	articleCreatedUser [int]
+	articleCreatedDate [datetime]
+	articleUpdatedUser [int]
+	articleUpdatedDate [datetime]
+
+article_photo:
+	photoArticleID [int]
+	photoID [int]
+	articleID [int]
+	articlePhotoCreatedDate [datetime]
+	articlePhotoCreatedUser [int]
+
+article_tag:
+	articleTagID [int]
+	articleID [int]	## article ID
+	articleTagName [varchar]
+
+article_category:
+	articleCategoryID [int]
+	articleID [int]
+	categoryID [int]
+
+category:
+	categoryID [int]
+	categoryName [varchar]
+	categoryParentID [int]
+	categoryCreatedDate [datetime]
+	categoryCreatedUser [int]
+
+article_listed:
+	articleListedID [int]
+	articleID [int]
+
+announcement:
+	announcementID [int]
+	siteID [int]					## 0 = all sites, !0 = specific site
+	announcementStatus [int]		## 0 = not appeared, 1 = appeared, 2 = unapproved.
+	announcementText [text]
+	announcementLink [text]
+	announcementCreatedUser [int]
+	announcementCreatedDate [datetime]
+	announcementUpdatedUser [int]
+	announcementUpdatedDate [datetime]
+	announcementExpiredDate [datetime]
+
+site_manager:
+	siteManagerID [int]
+	userID [int]
+	siteID [int]
+	siteManagerStatus [int]		## 1 = active, 0 = deactived.
+	siteManagerCreatedDate [datetime]
+	siteManagerCreatedUser [int]
+	siteManagerUpdatedDate [datetime]
+	siteManagerUpdatedUser [int]
+
+cluster:
+	clusterID [int]
+	clusterName [varchar]
+	clusterCreatedDate [datetime]
+	clusterCreatedUser [int]
+
+cluster_site: # many site to one cluster.
+	clusterSiteID [int]
+	siteID [int]
+	clusterID [int]
+
+cluster_lead:
+	clusterLeadID [int]
+	clusterID [int]
+	userID [int]
+	clusterLeadStatus [int] ## 1 = active, 0 = inactive.
+	clusterLeadCreatedDate [datetime]
+	clusterLeadCreatedUser [int]
+
+cluster_opsmanager:
+	clusterOpsmanagerID [int]
+	clusterID [int]
+	userID [int]
+	clusterOpsmanagerCreatedDate [datetime]
+	clusterOpsmanagerCreatedUser [int]
+
+album:
+	albumID [int]
+	albumName [varchar]
+	albumCoverImageName [varchar] ## relative url for photo.
+	albumDescription [text]
+	albumCreatedDate [datetime]
+	albumCreatedUser [int]
+
+site_album:
+	siteAlbumID [int]
+	siteAlbumSlug [varchar]
+	siteAlbumSlugOriginal [varchar]
+	albumID [int]
+	siteID [int]
+	siteAlbumType [int] ## 1 = activity-album.
+	siteAlbumStatus [int] ## 1 = active, 2 = deleted.
+
+site_photo:
+	sitePhotoID [int]
+	photoID [int]
+	siteID [int]
+	siteAlbumID [int]
+	sitePhotoStatus [int]	## 1 = active, 2 = deleted.
+
+user_album:
+	userAlbumID [int]
+	albumID [int]
+	userID [int]
+
+user_photo:
+	userPhotoID [int]
+	photoID [int]
+	userID [int]
+	userAlbumID [int]
+
+photo:
+	photoID [int]
+	photoName [varchar]			## photo full saved name, (path included)
+	photoOriginalName [varchar]	## original photo name.
+	photoDescription [text]
+	photoCreatedDate [datetime]
+	photoCreatedUser [int]
+
+site_request: ## table to store update request or anything regarding site, have, status.
+	siteRequestID [int]
+	siteRequestType [varchar]					## 1 = new pages, 2 = page edit, 3 = site edit, 4 = new site announcement
+	siteID [int]
+	siteRequestRefID [int]					## reference-id
+	siteRequestData [text]
+	siteRequestStatus [int]					## 0 = unapproved, 1 = approved, 2 = disapproved
+	siteRequestCorrectionFlag [int]			## 0 = stay this way, 1 = require correction.
+	siteRequestRemark [text]
+	siteRequestApprovalRead [int]
+	siteRequestCreatedDate [datetime]
+	siteRequestCreatedUser [int]
+	siteRequestUpdatedDate [datetime]
+	siteRequestUpdatedUser [int]
+
+site_request_correction:
+	siteRequestCorrectionID [int]
+	siteRequestID [int]
+	siteRequestCorrectionMessage [text]
+	siteRequestCorrectionLastData [text]
+	siteRequestCorrectionCreatedDate [datetime]
+	siteRequestCorrectionCreatedUser [int]
+	siteRequestCorrectionUpdatedDate [datetime]
+	siteRequestCorrectionUpdatedUser [int]
+	siteRequestCorrectionStatus [int]		## 1 = active, 2 = updated.
+
+token:
+	tokenID [int]
+	tokenType [int]		## 1 = reset password.
+	tokenName [varchar]
+	tokenStatus [int]	## status 1 = active, 2 = expired.
+	tokenCreatedDate [datetime]
+	tokenUpdatedDate [datetime]
+
+token_resetpass:
+	tokenResetpassID [int]
+	tokenID [int]
+	userID [int]
+	tokenResetpassStatus [int] ## 0 = in-active, 1 = active (after user has accessed the link), 2 = reset success.
+
+log_login:
+	logLoginID [int]
+	userID [int]
+	logLoginCreatedDate [datetime]
+	logLoginIP [varchar]
+
+log_error:
+	logErrorID [int]
+	logErrorMessage [text]
+	logErrorCreatedDate [datetime]
+	logErrorCreatedUser [int]
+	logErrorStatus [int]		## 0 = un-attended, 1 = attended.
+
+temp_user:
+	tempUserID [int]
+	temp_userid [int]
+	temp_username [varchar]
+	temp_usernameOriginal [varchar]
+	temp_password [varchar]
+	temp_totallogin [int]
+	temp_lastlogin [datetime]
+	temp_userright [int]
+	temp_user_status [int]
+	temp_name [varchar]
+	temp_ic_no [varchar]
+	temp_contact_no [varchar]
+	temp_Address [text]
+	temp_datecreated [datetime]
+	temp_DOB [date]
+	temp_POB [varchar]
+	temp_Tel [varchar]
+	temp_CBC_Site [varchar]
+	temp_email [varchar]
+	temp_Occupation [varchar]
+	temp_Education [varchar]
+	temp_Title [varchar]
+	temp_activationCode [varchar]
+	temp_Gender [varchar]
+	temp_mobile [varchar]
+	temp_cbc_siteRight [varchar]
+
+## module : forum.
+forum_thread:
+	forumThreadID [int]
+	siteID [int]
+	forumCategoryID [int]
+	forumThreadTitle [varchar]
+	forumThreadDescription [text]
+	forumThreadStatus [int] ## 0 = locked, 1 = active.
+	forumThreadCreatedDate [datetime]
+	forumThreadCreatedUser [int]
+
+forum_thread_post:
+	forumThreadPostID [int]
+	forumThreadID [int]
+	forumThreadPostTitle [varchar]
+	forumThreadPostBody [text]
+	forumThreadPostStatus [int]		## 0 = deleted, 1 = active.
+	forumThreadPostCreatedUser [int]
+	forumThreadPostCreatedDate [datetime]
+
+forum_thread_tag:
+	forumThreadTagID [int]
+	forumThreadID [int]
+	forumThreadTagName [varchar]
+	forumThreadTagCreatedDate [datetime]
+	forumThreadTagCreatedUser [int]
+
+forum_category:
+	forumCategoryID [int]
+	siteID [int]					## zero siteID is root one.
+	forumCategoryParentID [int]
+	forumCategoryTitle [varchar]
+	forumCategorySlug [varchar]
+	forumCategoryOriginalSlug [varchar]
+	forumCategoryDescription [text]
+	forumCategoryApprovalStatus [int]
+	forumCategoryAccess [int]			## 1 = any-site-member, 2 = site-specific member.
+	forumCategoryCreatedUser [int]
+	forumCategoryCreatedDate [datetime]
+
+## module : video
+video:
+	videoID [int]
+	videoAlbumID [int]
+	videoType [int]			# 1 = youtube
+	videoRefID [varchar]
+	videoName [varchar]
+	videoStatus [int]		# 0 = disable, 1 = enable
+	videoApprovalStatus [int]	# 0 = pending, 1 = approve , 2 = disapprove
+	videoCreatedDate [datetime]
+	videoCreatedUser [int]
+
+## album for video
+video_album:
+	videoAlbumID [int]
+	siteID [int]
+	videoAlbumName [varchar]
+	videoAlbumSlug [varchar]
+	videoAlbumStatus [int]		# 0 = disable, 1 = enable
+	videoAlbumOriginalSlug [varchar]
+	videoAlbumDescription [text]
+	videoAlbumThumbnail [varchar]
+	videoAlbumCreatedDate [datetime]
+	videoAlbumCreatedUser [int]
+
+## module : file sharing.
+file:
+	fileID [int]
+	siteID [int]
+	filePath [varchar]
+	fileFolderID [int]
+	filePrivacy [int]		## 1 = private, 2 = public
+	fileName [varchar]
+	fileSlug [varchar]
+	fileOriginalSlug [varchar]
+	fileType [varchar]
+	fileExt [varchar]
+	fileSize [int]
+	fileDescription [text]
+	fileStatus [int]		## 1 = active, 2 = deleted.
+	fileCreatedDate [datetime]
+	fileCreatedUser [int]
+	fileUpdatedDate [datetime]
+	fileUpdatedUser [int]
+
+file_folder:
+	fileFolderID [int]
+	siteID [int]
+	fileFolderParentID [int]
+	fileFolderPrivacy [int]	## 1 = private, 2 = public
+	fileFolderName [varchar]
+	fileFolderStatus [int]			## 1 = active, 2 = deleted.
+	fileFolderHasFiles [int]		## 0 = empty, 1 = has files.
+	fileFolderCreatedDate [datetime]
+	fileFolderCreatedUser [int]
+	fileFolderUpdatedDate [datetime]
+	fileFolderUpdatedUser [int]
+
+file_download:
+	fileDownloadID [int]
+	fileID [int]
+	userID [int]
+	fileDownloadCreatedDate [datetime]
+	fileDownloadCreatedUser [int]
+
+comment:
+	commentID [int]
+	commentType [varchar]
+	userID [int]
+	commentRefID [int]
+	commentBody [text]
+	commentApprovalStatus [int]	## 0 = pending, 1 = approve, 2 = reject, 3 = deleted
+	commentCreatedDate [datetime]
+	commentUpdatedDate [datetime]
+
+ga_report:
+	gaReportID [int]
+	siteID [int]
+	gaReportDate [datetime]
+	gaReportSiteSlug [varchar]
+	gaReportSitePage [varchar]
+	gaReportSitePageViews [int]
+	gaReportSiteUsers [int]
+
+site_newsletter:
+	siteNewsletterID [int]
+	siteID [int]
+	mailChimpListID [varchar]
+	mailChimpCampaignID [varchar]
+	siteNewsletterEdited [int]
+	siteNewsletterSubject [varchar]
+	siteNewsletterTemplate [text]
+	siteNewsletterUpdatedDate [datetime]
+
+site_newsletter_mailpush: ## newsletter single push record.
+	siteNewsletterMailpushID [int]
+	siteID [int]
+	siteNewsletterMailpushSubject [varchar]
+	siteNewsletterMailpushTemplate [text]
+	siteNewsletterMailpushDate [datetime]
+	siteNewsletterMailpushUser [int]
+
+site_newsletter_push: ## newsletter cron total push
+	siteNewsletterPushID [int]
+	siteNewsletterPushStatus [int] ## 0 = pending, 1 = success
+	siteNewsletterPushSameContent [int] ## serialized list of site that use the same content
+	siteNewsletterPushEmpty [int] ## serialized list of not pushed content due to an empty subject/message
+	siteNewsletterPushTotalSite [int] ## serialized list of total site
+	siteNewsletterPushDate [datetime]
+
+sales: ## site sales every month
+	salesID [int]
+	siteID [int]
+	salesCreatedDate [datetime]
+	salesCreatedUser [int]
+	salesDate [datetime]
+	salesUpdatedDate [datetime]
+	salesUpdatedUser [int]
+	salesTotal [float]
+	salesRemark [text]
+
+sales_product:
+	salesProductID [int]
+	salesID [int]
+	productID [int]
+	salesProductTotal [int]
+	salesProductQuantity [int]
+
+product:
+	productID [int]
+	productName [varchar]
+	productDescription [text]
+	productPrice [float]
+
+billing_item_code:
+	billingItemCodeID [int]
+	billingItemID [int]
+	billingItemCodeName [varchar]
+
+billing_item:
+	billingItemID [int]
+	billingItemHotkey [varchar]
+	billingItemName [varchar]
+	billingItemCode [varchar]
+	billingItemDescription [text]
+	billingItemType [int] ## 1 = debit or 2 = credit
+	billingItemPrice [float]
+	billingItemPriceType [int] ## 1 = general, 2 = membership-based
+	billingItemPriceNonmember [float]
+	#billingItemUnit [int]
+	billingItemQuantity [float]
+	billingItemTaxDisabled [int]
+	billingItemDescriptionDisabled [int]
+	billingItemPriceDisabled [int]
+	#billingItemUnitDisabled [int]
+	billingItemQuantityDisabled [int]
+	billingItemStatus [int] ## 1 = active, 0 = deleted.
+	billingItemCreatedDate [datetime]
+	billingItemUpdatedDate [datetime]
+
+billing_transaction_item:
+	billingTransactionItemID [int]
+	billingItemID [int]
+	billingTransactionID [int]
+	billingTransactionItemDescription [text]
+	billingTransactionItemQuantity [int]
+	billingTransactionItemUnit [float] ## unit or hours
+	billingTransactionItemPrice [float] ## unit price.
+
+billing_transaction_user:
+	billingTransactionUserID [int]
+	billingTransactionID [int]
+	billingTransactionUser [int] ## userID from user table
+	billingTransactionUserAge [int]
+	billingTransactionUserOccupationGroup [int]
+
+billing_transaction:
+	billingTransactionID [int]
+	siteID [int]
+	userID [int] ## the one created this record
+	billingTransactionLocalID [int]
+	billingTransactionTotalQuantity [float]
+	billingTransactionTotalUnit [float] ## to be removed
+	billingTransactionTotal [float] ## grand total
+	billingTransactionAccountType [int] ## 1 = site 2 = cashout	
+	billingTransactionDate [datetime]
+	billingTransactionUnique [varchar] ## a unique timestamp, used possibly for unique id
+	billingTransactionCreatedDate [datetime]
+	billingTransactionUpdatedDate [datetime]
+	billingTransactionStatus [int]  ##  1 = active 0 = deleted
+	billingTransactionUploaded [int] ## 1 = uploaded by cafe, 0 = created on pi1m.
+
+billing_reupload_request:
+	billingReuploadRequestID [int]
+	siteID [int]
+	billingReuploadRequestStatus [int] ## 0 = pending, 1 = success
+	billingReuploadRequestBeginDate [datetime]
+	billingReuploadRequestCreatedDate [datetime]
+	billingReuploadRequestUpdatedDate [datetime]
+
+billing_pc_usage:
+	billingPcUsageID [int]
+	billingPcUsageLocalID [int]
+	billingTransactionItemID [int]
+	billingPcUsageAsset [varchar]
+	billingPcUsagePcNo [varchar]
+	billingPcUsageStart [datetime]
+	billingPcUsageEnd [datetime]
+
+billing_transaction_upload:
+	billingTransactionUploadID [int]
+	siteID [int]
+	billingTransactionUploadCreatedDate [datetime]
+
+billing_log:
+	billingLogID [int]
+	billingLogType [varchar] ## add, 
+	userID [int]
+	billingTransactionID [int]
+	billingLogContent [text] ## changes
+	billingLogCreatedDate [datetime]
+
+billing_verification:
+	billingVerificationID [int]
+	userID [int]
+	siteID [int]
+	billingTransactionDate [date]
+	billingVerificationDate [datetime]
+
+billing_approval:
+	billingApprovalID [int]
+	siteID [int]
+	month [int]
+	year [int]
+	billingApprovalCreatedDate [datetime]
+
+billing_approval_level:
+	billingApprovalLevelID [int]
+	billingApprovalID [int]
+	userLevel [int]
+	userID [int]
+	billingApprovalLevelStatus [int]
+	billingApprovalLevelCreatedDate [datetime]
+
+billing_finance_transaction:
+	billingFinanceTransactionID [int]
+	siteID [int]
+	userID [int]
+	billingItemID [int]
+	billingFinanceTransactionTotal [float]
+	billingFinanceTransactionDescription [text]
+	billingFinanceTransactionType [text]  ## 1 = Bank in 2 = cash out
+	billingFinanceTransactionPayment [text]
+	billingFinanceTransactionStatus [int]
+	billingFinanceTransactionDate [date]
+	billingFinanceTransactionCreatedDate [datetime]
+	billingFinanceTransactionUpdatedDate [datetime]  ## backdated
+
+pr:
+	prID [int]
+	userID [int]
+	siteID [int]
+	prStatus [int] ## 0 = pending, 1 = closed, 2 = rejected, 3 = deleted
+	prStatusPendingLevel [int] ## if prStatus = 0, which level its currently pending at 
+	prStatusApprovalLevel [int] ## current approval level
+	prStatusRejectionLevel [int] ## if prStatus = 2, which level its rejected by
+	prType [int] ##1 = collection money, 2 = cash advance
+	prNumber [varchar]
+	prTotal [float]
+	prBalance [float] ## current collection
+	prBalanceDate [datetime]
+	prDeposit [float]
+	prRemark [text]
+	prDate [date]
+	prCreatedDate [datetime]
+	prUpdatedDate [datetime]
+	prUpdatedUser [int]
+
+pr_rejection:
+	prRejectionID [int]
+	prID [int]
+	userLevel [int]
+	prRejectionReason [text]
+	prRejectionCreatedDate [datetime]
+	prRejectionCreatedUser [int]
+
+pr_expenditure:
+	prExpenditureID [int]
+	prID [int]
+	expenseExpenditureID [int]
+	prExpenditureCreatedDate [datetime]
+	prExpenditureCreatedUser [int]
+
+pr_remark:
+	prRemarkID [int]
+	prID [int]
+	userLevel [int]
+	userID [int]
+	prRemarkType [int] ## 1 = rejection
+	prRemarkText [text]
+	prRemarkCreatedDate [datetime]
+
+pr_item:
+	prItemID [int]
+	prID [int]
+	expenseItemID [int]
+	prItemDescription [text]
+	prItemPrice [float]
+	prItemQuantity [int]
+	prItemTotal [float]
+	prItemRemark [text]
+	prItemEdit [varchar]
+	prItemCreatedDate [datetime]
+	prItemUpdatedDate [datetime]
+	prItemUpdatedUser [int]
+
+pr_cash_advance:
+	prCashAdvanceID [int]
+	prID [int]
+	prCashAdvancePurpose [text]
+	prCashAdvanceTotal [float]
+	prCashAdvanceAmount [varchar]
+	prCashAdvanceDate [datetime]
+	prCashAdvanceCreatedDate [datetime]
+	prCashAdvanceUpdatedDate [datetime]
+
+pr_cash_advance_item:
+	prCashAdvanceItemID [int]
+	prCashAdvanceID [int]
+	prCashAdvanceItemDescription [varchar]
+	prCashAdvanceItemTotal [float]
+	prCashAdvanceItemUpdatedDate [datetime]
+
+expense_category:
+	expenseCategoryID [int]
+	expenseCategoryName [varchar]
+	expenseCategoryCreatedDate [datetime]
+
+expense_item:
+	expenseItemID [int]
+	expenseCategoryID [int]
+	siteID [int]
+	expenseItemName [varchar]
+	expenseItemStatus [int]
+	expenseItemCreatedUser [int]
+	expenseItemCreatedDate [datetime]
+
+expense_expenditure:
+	expenseExpenditureID [int]
+	expenseExpenditureSet [varchar]
+	expenseExpenditureName [varchar]
+	expenseExpenditureStatus [int]
+	expenseExpenditureCreatedDate [datetime]
+	expenseExpenditureCreatedUser [int]
+
+pr_reconcilation:
+	prReconcilationID [int]
+	prID [int]
+	prReconcilationStatus [int] ## 0 = pending, 1 = closed, 2 = rejected, 3 = deleted
+	prReconcilationPendingLevel [int]
+	prReconcilationApprovalLevel [int]
+	prReconcilationRejectionLevel [int]
+	prReconcilationCreatedUser [int]
+	prReconcilationCreatedDate [datetime]
+	prReconcilationUpdatedDate [datetime]
+	prReconcilationUpdatedUser [int]
+	prReconcilationSubmitted [int] ## if this rl has been initiated.
+	prReconcilationSubmittedUser [int]
+	prReconcilationSubmittedDate [datetime]
+
+pr_reconcilation_rejection:
+	prReconcilationRejectionID [int]
+	prReconcilationID [int]
+	prReconcilationRejectionReason [text]
+	prReconcilationRejectionCreatedDate [datetime]
+	prReconcilationRejectionCreatedUser [int]
+
+pr_reconcilation_file:
+	prReconcilationFileID [int]
+	prReconcilationID [int]
+	prReconcilationCategoryID [int]
+	prReconcilationFileName [varchar]
+	prReconcilationFileType [varchar]
+	prReconcilationFileSize [float]
+	prReconcilationFileExt [varchar]
+	prReconcilationFileAmount [float]
+	prReconcilationFileGst [float]
+	prReconcilationFileTotal [float]
+	prReconcilationFileStatus [int]
+	prReconcilationFileCreatedUser [int]
+	prReconcilationFileCreatedDate [datetime]
+	prReconcilationFileUpdatedDate [datetime]
+
+pr_reconcilation_category:
+	prReconcilationCategoryID [int]
+	prReconcilationID [int]
+	expenseCategoryID [int]
+
+pr_reconcilation_item:
+	prReconcilationItemID [int]
+	prReconcilationID [int]
+	prReconcilationCategoryID [int]
+	prItemID [int]
+	expenseItemID [int]
+	prReconcilationItemName [varchar]
+	prReconcilationItemAmount [float]
+	prReconcilationItemGst [float]
+	prReconcilationItemTotal [float]
+	prReconcilationItemStatus [int] ## 1 = reconciled, 2 = deleted
+	prReconcilationItemCreatedDate [datetime]
+	prReconcilationItemCreatedUser [int]
+	prReconcilationItemUpdatedDate [datetime]
+	prReconcilationItemUpdatedUser [int]
+
+pr_item:
+	prItemID [int]
+	prID [int]
+	expenseItemID [int]
+	prItemDescription [text]
+	prItemPrice [float]
+	prItemQuantity [int]
+	prItemTotal [float]
+	prItemRemark [text]
+	prItemEdit [varchar]
+	prItemCreatedDate [datetime]
+	prItemUpdatedDate [datetime]
+	prItemUpdatedUser [int]
+
+pr_approval: ## created on each transaciton
+	prApprovalID [int]
+	prID [int]
+	userLevel [int]
+	userID [int] ## updated user
+	prApprovalStatus [int] ## 0 = pending, 1 = approved, 2 = rejected
+	prApprovalCreatedDate [datetime]
+	prApprovalUpdatedDate [datetime]
+
+pr_reconcilation_approval: ## created on each pr_reconcilation
+	prReconcilationApprovalID [int]
+	prReconcilationID [int]
+	userLevel [int]
+	userID [int] ## updated user
+	prReconcilationApprovalStatus [int] ## 0 = pending, 1 = approved, 2 = rejected
+	prReconcilationApprovalCreatedDate [datetime]
+	prReconcilationApprovalUpdatedDate [datetime]
+
+task_log:
+	taskLogID [int]
+	taskCode [varchar]
+	taskLogStatus [int] ## 0 = pending, 1 = success
+	taskLogCreatedDate [datetime]
+	taskLogCreatedUser [int]
+
+### attendance tables
+att_attendancedetails:
+	attID [int]
+	managerID [int]
+	activityDate [varchar(20)]
+	activityTime [varchar(20)]
+	activityDateTime [datetime]
+	activityStatus [text]
+	outstationStatus [text]
+	attendanceStatus [text]
+	latLongIn [varchar(255)]
+	latLongOut [varchar(255)]
+	imgIn [varchar(255)]
+	imgOut [varchar(255)]
+	managerName [varchar(255)]
+	siteName [varchar(255)]
+	siteID [int]
+	clusterID [int]
+	userEmail [varchar(100)]
+	hours [float]
+	lateIn [int]
+	earlyOut [int]
+	anomaly [int]
+	accuracy [double]
+
+### lms
+lms_module:
+	id [int]
+	code [varchar(100)]
+	name [varchar(100)]
+	description [varchar(200)]
+	typeid [int(11)]
+	createdate [datetime]
+	createby [varchar(100)]
+	deletedate [datetime]
+	deleteby [varchar(100)]
+	updatedate [datetime]
+	updateby [varchar(100)]
+	status [int(11)]
+
+lms_module_type:
+	id [int]
+	name [varchar(100)]
+	code [varchar(10)]
+	createdate [datetime]
+	createby [varchar(100)]
+	deletedate [datetime]
+	deleteby [varchar(100)]
+	updatedate [datetime]
+	updateby [varchar(100)]
+	status [int(11)]
+
+lms_result:
+	id [int]
+	userid [int(11)]
+	result [int(11)]
+	datecreated [datetime]
+	status [varchar(100)]
+	moduleid [int(11)]
+	sessionid [varchar(100)]
+
+training_lms:
+	id [int]
+	trainingID [int(11)]
+	packageModuleID [int(11)]
+
+lms_package:
+	packageid [int]
+	name [varchar(100)]
+	code [varchar(10)]
+	createdate [datetime]
+	createby [varchar(100)]
+	deletedate [datetime]
+	deleteby [varchar(100)]
+	updatedate [datetime]
+	updateby [varchar(100)]
+	status [int(11)]
+
+lms_package_module:
+	id [int(11)]
+	packageid [int(11)]
+	moduleid [int(11)]
+
+lms_user_answer:
+	u_id [int]
+	q_id [int(11)]
+	a_id [int(11)]
+
+lms_question_user:
+	qn_id [int]
+	userid [int(11)]
+	sessionid [varchar(100)]
+	id [int(11)]
+	q_id [int(11)]
+	a_id [int(11)]
+	marks [int(11)]
+
+lms_answer:
+	a_id [int]
+	q_id [int(11)]
+	a_text [varchar(100)]
+	correct [int(11)]
+
+lms_questions_bank:
+	q_id [int]
+	id [int(11)]
+	type [varchar(100)]
+	q_text [varchar(200)]
+	correct [varchar(11)]

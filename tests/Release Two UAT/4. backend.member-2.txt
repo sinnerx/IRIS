@@ -1,0 +1,49 @@
+Test Name : Frontend.Member
+
+Requirement
+	- logout any logged in user.
+	- log in as recent registered member
+
+Calendar
+	## Changing Date
+	- Click left and right arrow icon on calendar, to navigate
+		[expectation : month changed]
+
+	## Selecting Activity
+	- Navigate the month to the month of the recent added activity
+	- Mouseover to the highlighted date
+		[expectation : a transparent preview of the activities for that date shown]
+	- Click the highlighted date
+		[expectation : the fully shown, and stay]
+	- Click on the activity link from the preview box
+		[expectation : redirected to detail of the selected activity]
+
+Activity
+	## Accessing from menu
+	- Click activity from top menu
+		[expectation : open an activity page listing all activities based on current year]
+
+		## changing year
+		- Click the year selection, change year to previous year.
+			[expectation : list changed according to the selected year]
+
+		## changing month
+		- Click any of the month
+			[expectation : list based on the selected month, of the current year]
+
+		## viewing activity detail
+		- Click on activity name [choose 'Activity 1']
+			[expectation : redirected to detail of the selected activity]
+
+		## join activity
+		- Click on button join on date list.
+			[expectation : if user confirmed, will mark the selected date, and set the photo in attendance list]
+
+Blog
+	## List of blog
+	- Click blog from top menu
+		[expectation : open the main list of blog of the current site]
+
+		## Blog view
+		- Choose and click the one of the article
+			[expectation : read the selected article]

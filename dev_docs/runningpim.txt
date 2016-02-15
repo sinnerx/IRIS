@@ -1,0 +1,132 @@
+=== INSTALLATION
+1. first, just install github client.
+2. then clone repository dkat under some folder dalam www. 
+	2.1 katakan anda clone ke dalam folder www/digitalgaia. then, later boleh akses di url dengan cara localhost/digitalgaia/iris/pim
+	2.2 tapi make sure akses after no. 6
+3. then, dkat github client tu, tukar kepada development punya branch. sbb all latest files adalah dkat dev branch. and jangan commit pape dkat master..
+
+== cloning location
+4. dicadangkan boleh clone ke dalam www/digitalgaia, then no need to change base_url and asset url config,
+4.1 else, klau nak klone dkat folder lain, just later set up apps/_config/config.php untuk base_url dan asset_url
+4.2 then .gitignore the config files (currently that config files wasn't ignored.) klau tak akan tercommit the config file.
+
+== database
+5. lepas tu, set up satu database namanya digitalgaia_iris.
+	5.1 currently dkat config untuk localhost punya environment : 
+		- nama database ialah digitalgaia_iris, 
+		- user ialah root
+		- pass empty
+	5.2 boleh tukar di apps/_config/database.php untuk localhost.
+	5.3 then gitigore file tu di 
+	5.4 and then, open localhost/digitalgaia/iris/pim/monitor/schema, and run the update.
+	5.5 semua current tables untuk pim akan updated.
+	5.6 and then, execute iris_firstrelease.sql under folder localhost/digitalgaia/iris. initial site data akan imported.
+		5.6.1 tapi before executing tu, first need to open iris_firstrelease.sql tersebut, then cari pim_iris dan tukar kepada digitalgaia_iris
+		4.3.1 mungkin akan ada error, mungkin tidak.
+	5.7 most data adalah default one.
+	5.8 kemudian lagi, execute file iris/pim/sql changes.txt ia adalah file latest changes to schema, just in-case.
+
+6. then boleh login first as a root : root@gmail.com password ialah 12345
+7. untuk sitemanager boleh pilih dari senarai user dkat menu management->user.
+8. untuk klusterlead boleh pilih dari senarai sama. atau dari menu sites->cluster
+
+
+=== DETAILS
+1. basically project base files ini terbahagi kepada dua : 
+- Backend
+- Frontend
+ini kita panggil sub-apps.
+
+2. setiap sub apps ini ada structure yang sama
+_controller
+_view
+_template
+
+3. tetapi sub-application ini kita invoke by routing, yang bermula dari file iris/pim/core/routing.php (general routing)
+3.1 then main routing ada dalam apps/_structure/routes.php
+3.2 dkat route list inilah kita invoke semua perkara tentang application pim ni.
+
+** everything about routing starts after localhost/digitalgaia/iris/pim/[everything]/[after]/[here] **
+
+=== SUB APPLICATION FOLDER STRUCTURE
+== BACKEND
+1. untuk backend, terdapat sub-folder dalam _controller, that represented by user level. (sitemanager,clusterlead,root)
+1.1 basically sub-folder tersebut ditentukan dekat routing, based on their user level. under that baru ada individual controller
+1.2 untuk routing format bagi sub-application ini, adalah just a typical controller/action/param1/param2 convention
+1.3 tetapi ianya lives under uri dashboard/. forxample localhost/digitalgaia/iris/pim/dashboard/[controller]/[action]
+
+1.4 so, klau kita nak try akses file controller untuk user sitemanager bagi localhost/digitalgaia/iris/pim/dashboard/actvity/training
+1.4.1. kita boleh akses dkat apps/backend/_controller/sitemanager/activity.php
+1.4.2. klau nak akses view, ia ada dalam apps/backend/_view/sitemanager/activity/training.php
+1.4.3. tapi view adalah still entitled kepada nama apa yang di render dkat dlam controller.
+
+1.5 terdapat satu subfolder under _controller, yang diberi nama shared.
+1.5.1 basically folder ini store controller yang dikongsi oleh different user level. list of that kita defined dkat apps/_model/access/data@sharedController
+1.5.2 so, kalau tak jumpa file yang kita nak cari based on URI, tu, boleh cek di shared folder.
+
+1.6 okay, about template. file template ada dalam folder apps/backend/_template. basically file ni seperti wrapper kepada view2 yang ada.
+1.6.1 for example untuk backend punya template ada dalam folder apps/backend/_template/default.php
+1.6.2 klau dilihat pada line 411, ada some function namanya template::showContent()
+1.6.3 basically ia function tuk show where the view gonna load. basically ini just main template from _scale punya theme. most of the things loaded here.
+1.6.4 most of the styles already provided by scale adalah seperti bootstrap.css, animate.css, font-awesome.min.css, icon.css, dan app.css
+1.6.5 smua ini lives under folder assets/_scale/css
+
+== FRONTEND
+2. Untuk Frontend, structure files adalah berbeza, sebab ianya adalah ditentukan oleh routing.
+2.1 routing untuk frontend mostly adalah custom routing. berbeza dari backend. (except accessing ajax controller.)
+2.2 dan klau dilihat, smuanya bermula dari /[site-slug]/
+2.3 so, kalau nak figure out, which controller is this page, just refer dkat format routing tu.
+2.4 for example klau nak cari controller untuk localhost/digitalgaia/iris/pim/felda-ayer-hitam/activity/2011/04/kenduri-kahwin,
+2.4.1 boleh rujuk pada routing berkaitan iaitu [:site-slug]/activity/[:year]/[:month]/[:activity-slug], then tgk nama controller.
+
+2.5 untuk template juga ada dkat dalam folder apps/frontend/_template/default.php
+2.5.1 basically in adalah sama dengan apa telah diberi pada permulaannya.
+2.5.2 tetapi kebanyakannya telah dipartialize kepada component2 lebih kecil. that time i am not sure what is the better structure design. 
+
+2.6 mungkin later perlu restructure balik. tapi basically things like component2 yang dimaksudkan itu boleh dirujuk dekat view/partial. dia punya susunan boleh rujuk dekat apps/frontend/_template/default.php
+
+=== ASSETS 
+1. Kesemua assets file lives under folder assets/, 
+2. kita boleh build a url to this dengan menggunakan function url::assets(); 
+2.1 ini adalah untuk membuatkan file location always relative kepada apa yang diconfigure. regardless of the pim location.
+2.2 main backend assets folder adalah seperti
+2.2.1 assets/_scale
+2.2.2 assets/backend
+
+2.3 untuk frontend adalah :
+2.3.1 _landing
+2.3.2 _frontend
+
+2.4 so, dicadangkan klau nak buat new stylesheet untuk backend, boleh buat di folder assets/backend/css/style.css
+2.5 then link css tu di apps/backend/_template/default.php
+
+2.6 assets file mmg kami jarang usik, seperti css files or anything. untuk backend, basically kami just guna bootstrap punya classes.
+2.6.1 so, actually dicadangkan untuk guna bootstrap lah untuk styling or structuring.
+2.6.2 else, boleh create convention, dan format baru kami akan follow the format.
+
+=== CONVENTION AND STYLING
+1. basically untuk backend kita just guna styling and structure based on bootstrap. kecuali some things kami write some internal css. untuk development phase ini bagi memudahkan editing, dan tak campur aduk di style.css. later everything dah release mungkin baru buat gabungan.
+2. sekiranya ada custom css out of _scale punya, mungkin boleh first :
+2.1 documents the usage, by component. like feature specific icon, record table, information page, and etc.
+2.2 ini supaya deveoper boleh follow the convention.
+
+=== DEVELOPMENT RULE OF THUMB
+1. kebanyakan files dekat backend dan frontend adalah hotfiles. 
+1.2. so, before doing any changes, sila maklumkan kami terlebih dahulu, so kami boleh commit the latest files.
+
+2. for committing, kadang2 ada changes made by other dev, tapi biasanya kami akan bincang dahulu, apa file yang nak ubah, so tiada conflict later.
+3. kalau ada files baru, and kita nak fetch, boleh first do the following :
+- 'git stash' (all your current changes will be gone, stashed)
+- then sync dekan github windows client
+- then do 'git stash pop'
+- kalau pada latest commit ada changes pada file yang kita currently stash, akan ada auto merging.
+
+4. untuk backend, development mmg laju, and banyak file yang berubah dan bertambah, tapi untuk styling biasanya developer just follow bootstrap punya convention. 
+5. sukar designer nak follow changes dekat backend. so, cadangan : kalau designer ada styling baru, mungkin first boleh documents penggunaannya, dan the rest later, kami just follow that. for things like :
+- feature icon (like detail, status indicator, edit and etc)
+- record (list) table 
+- information page (detail page)
+- edit page
+- dan lain-lain
+
+6. itu sahaja kott.

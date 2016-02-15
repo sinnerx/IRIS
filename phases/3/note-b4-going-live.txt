@@ -1,0 +1,27 @@
+- Push announcement
+
+## dev > master merge.
+- git checkout master
+- git merge dev
+- git push origin
+
+## prod server
+- git remote update
+- git reset --hard origin/master
+- create a simple text in index.php, that devs is doing a maintenance.
+
+## sql
+- run update on www.celcom1cbc.com/monitor/schema
+- there already has some training in production.
+- since we're updating type of training in this release, some of the record need to be first repaired.
+- run sql-changes.sql
+	- take note on training type
+
+## about training type :
+- log as root
+- add type
+- re-assign training type based on the new list.
+
+## urgent : later
+- create a task to update occupationGroup (will take a while.)
+- for activity attendance, need update.

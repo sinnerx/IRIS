@@ -1,0 +1,154 @@
+@charset "utf-8";
+/*! fileicon.css v1.0.0 | MIT License | github.com/picturepan2/fileicon.css */
+/* fileicon.basic */
+.xfile-icon {
+  font-family: Arial, Tahoma, sans-serif;
+  font-weight: 300;
+  display: block;
+  width: 24px;
+  height: 32px;
+  background: #018FEF;
+  position: relative;
+  border-radius: 2px;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.xfile-icon::before {
+  display: block;
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 0;
+  height: 0;
+  border-bottom-left-radius: 2px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #FFF #FFF rgba(255,255,255,.35) rgba(255,255,255,.35);
+}
+.xfile-icon::after {
+  display: block;
+  content: attr(data-type);
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  font-size: 10px;
+  color: #fff;
+  text-transform: lowercase;
+  width: 100%;
+  padding: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+}
+/* fileicons */
+.xfile-icon-xs {
+  width: 12px;
+  height: 16px;
+  border-radius: 2px;
+}
+.xfile-icon-xs::before {
+  border-bottom-left-radius: 1px;
+  border-width: 3px;
+}
+.xfile-icon-xs::after {
+  content: "";
+  border-bottom: 2px solid rgba(255,255,255,.45);
+  width: auto;
+  left: 2px;
+  right: 2px;
+  bottom: 3px;
+}
+.xfile-icon-sm {
+  width: 18px;
+  height: 24px;
+  border-radius: 2px;
+}
+.xfile-icon-sm::before {
+  border-bottom-left-radius: 2px;
+  border-width: 4px;
+}
+.xfile-icon-sm::after {
+  font-size: 7px;
+  padding: 2px;
+}
+.xfile-icon-lg {
+  width: 48px;
+  height: 64px;
+  border-radius: 3px;
+}
+.xfile-icon-lg::before {
+  border-bottom-left-radius: 2px;
+  border-width: 8px;
+}
+.xfile-icon-lg::after {
+  font-size: 16px;
+  padding: 4px 6px;
+}
+.xfile-icon-xl {
+  width: 96px;
+  height: 128px;
+  border-radius: 4px;
+}
+.xfile-icon-xl::before {
+  border-bottom-left-radius: 4px;
+  border-width: 16px;
+}
+.xfile-icon-xl::after {
+  font-size: 24px;
+  padding: 4px 10px;
+}
+/* fileicon.types */
+.xfile-icon[data-type=zip],
+.xfile-icon[data-type=rar] {
+  background: #ACACAC;
+}
+.xfile-icon[data-type^=doc] {
+  background: #307CF1;
+}
+.xfile-icon[data-type^=xls] {
+  background: #0F9D58;
+}
+.xfile-icon[data-type^=ppt] {
+  background: #D24726;
+}
+.xfile-icon[data-type=pdf] {
+  background: #E13D34;
+}
+.xfile-icon[data-type=txt] {
+  background: #5EB533;
+}
+.xfile-icon[data-type=mp3],
+.xfile-icon[data-type=wma],
+.xfile-icon[data-type=m4a],
+.xfile-icon[data-type=flac] {
+  background: #8E44AD;
+}
+.xfile-icon[data-type=mp4],
+.xfile-icon[data-type=wmv],
+.xfile-icon[data-type=mov],
+.xfile-icon[data-type=avi],
+.xfile-icon[data-type=mkv] {
+  background: #7A3CE7;
+}
+.xfile-icon[data-type=bmp],
+.xfile-icon[data-type=jpg],
+.xfile-icon[data-type=jpeg],
+.xfile-icon[data-type=gif],
+.xfile-icon[data-type=png] {
+  background: #F4B400;
+}
+
+/* newly added */
+.xfile-icon-pi1m {
+  width: 135px;
+  height: 148px;
+  border-radius: 4px;
+}
+.xfile-icon-pi1m::before {
+  border-bottom-left-radius: 4px;
+  border-width: 16px;
+}
+.xfile-icon-pi1m::after {
+  font-size: 24px;
+  padding: 4px 10px;
+}

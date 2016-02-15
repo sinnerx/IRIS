@@ -1,0 +1,55 @@
+Test name : Backend.Sitemanager
+
+Requirement
+- Logout any logged in user.
+- Log in as site manager
+
+Overview
+	## Clear request list
+	- Click on clear all
+		[expectation : all approved or rejected request removed]
+
+	## Update correction
+	- click on correction request icon
+		[expectation : modal box shown]
+		- click on the redirection link
+			[expectation : redirected to the item for the request]
+		- update item for the correction
+			[expectation : correction reverted back to pending in overview, and clusterlead may be able to re-approve]
+
+Activity
+	### Edit activity with joined user
+	- Select recent user joined activity. (event -> "Activity 1")
+		[expectation : sitemanager may not edit date of participated activity]
+	- Change some column, and click update.
+		[expectation : the update wont be seen in frontend site yet]
+
+	### Add blog relation
+	- View detail of any activity (training or event)
+		- Click tab Related Blogs
+		- Click 'Write a new report' to write a report article
+			[expectation : redirected to article module, but permanently linked with this activity as a report]
+		- Complete the article test, and click publish
+			[expectation : submitted article waits for approval]
+
+	### Add album
+	- View detail of any activity (training or event)
+		- Click tab Albums
+		- Click 'Add' to add album for this activity
+			[expectation : redirected to album module]
+		- Complete the album add, and add photos
+			[expectation : the album will be seen in the selected activity detail]
+
+Article
+	### Edit article
+	- Select any article
+	- Change any field (dont change tag, and category. wont be listed in request)
+	- And then update.
+		[expectation : the update wont be seen in frontend site yet]
+
+Announcement
+	### Edit announcement
+	- Select any announcement
+	- Change update announcement
+	- And then Update Announcement
+		[expectation : the update wont be seen in frontend site yet]

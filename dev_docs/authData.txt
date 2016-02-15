@@ -1,0 +1,37 @@
+Below is some helpful authData information.
+1. basically, this function (authData()) is an alias to model::load("access/auth")->getAuthData()
+2. there're two optional parameter, first : object, second is property.
+	2.1 if no parameter was passed, will return all the data.
+	2.2 if only object was passed, will return data regarding that object.
+	2.3 if property was passed too, will return value of that property of that object.
+3. all data format are in the form of array.
+
+=======================================
+below is the object and their property.
+
+1. Backend :
+user
+	property : 
+	- all column of user and user_profile.
+site (may only be accessed by sitemanager, else, will return false)
+	property :
+	- all column of site and site_information
+
+2. Frontend :
+user
+	property :
+	- all column of user and user_profile.
+	- isActive : return "active" or "inactive", if level is nonmember (like sitemanager etc), will return false instead.
+
+site
+	property :
+	- all column of site and site_information of his own.
+
+current_site :
+	property :
+	- all column of site and site_information of the current site the user were in.
+	- isMember : return true if current user is member of the current-site
+
+
+===================================
+Any non found item will return null

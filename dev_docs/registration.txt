@@ -1,0 +1,10 @@
+1. every member registration will create
+- user
+- user_profile
+- site_member (with siteMemberStatus = 0, siteID (the registered siteID))
+- account (type : 1, and userID = user.userID)
+
+2. to activate the member, user need to pay initial fee for total of {config.configMemberFee}
+3. this will create 2 transaction with code : 'registration', after user paid.
+	- top up user account
+	- pay site account source user account, destination : site account.

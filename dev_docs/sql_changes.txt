@@ -1,0 +1,15 @@
+ALTER TABLE site_request MODIFY COLUMN siteRequestType varchar(100);
+UPDATE site_request SET siteRequestType = 'page.add' WHERE siteRequestType = '1';
+UPDATE site_request SET siteRequestType = 'page.update' WHERE siteRequestType = '2';
+UPDATE site_request SET siteRequestType = 'site.update' WHERE siteRequestType = '3';
+UPDATE site_request SET siteRequestType = 'announcement.add' WHERE siteRequestType = '4';
+UPDATE site_request SET siteRequestType = 'announcement.update' WHERE siteRequestType = '5';
+ALTER TABLE activity MODIFY activityStartDate DATETIME;
+ALTER TABLE activity MODIFY activityEndDate DATETIME;
+
+-- UPDATE site_photo SET sitePhotoStatus =  '1'; commented for now.
+-- UPDATE site_album SET siteAlbumStatus =  '1'; commented for now
+
+-- Run this after moved all photoName to page.pagePhoto
+-- ALTER TABLE photo DROP COLUMN siteID, articleID, albumType
+-- 

@@ -1,0 +1,12 @@
+form::text('theName',"style='color:red;'",'theValue');
+<input type='text' name='theName' id='theName' style='color:red;' value='theValue' />
+
+form::select('theSelect',Array('no1'='no satu','no2'=>'no dua'),null,value='no1');
+<select name='theSelect' id='theSelect'>
+	<option value='no1'>no satu</option>
+	<option value='no2'>no dua</option>
+</select>
+
+## return boolean if form was submitted or not.
+form::submitted()
+

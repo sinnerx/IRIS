@@ -1,0 +1,161 @@
+Test name : Backend.Sitemanager
+
+Requirement
+- Logout any logged in user
+- Login as $site.manager
+
+Test Variables : 
+	activity.event.firstDate	= now + 5 day
+	activity.event.endDate 	= activity.event.firstDate + 4 day
+
+	activity.training.firstDate = now + 3 day
+	activity.training.endDate	= activity.training.firstDate + 4 day
+
+Site Menu
+	## Changing order
+		- click and hold any menu name, and drag, to beneath/above other menu
+		- then click save [expectation : the changes reflected the frontend top menu]
+	## Editing name
+		- on hovering each menu, click icon edit,
+		- change the name
+		- and save [expectation : name changed, but wont reflect in frontend, because all name set to default name]
+	## Adding new component [component name : blog]
+		- click plus icon at the bottom of the list.
+			[expectation : a small window will pop in the right, if there're no more added component, you may not add anything anymore]
+		- click plus icon on left of the component name (blog)
+			[expectation : the plus icon changed to checked and save button shown below the list]
+		- click save to save the changes.
+			[expectation : redirected to the same page and message shown = Site Menu has been updated]
+
+Announcement
+	## Adding Announcement
+		- Click add button to add announcement
+			[expectation : a form will show]
+		- Click Add to submit without filling the form.
+			[expectation : an error will shown]
+		- Fill the form, annoucement text, set expired date and set links
+		- And click Add again.
+			[expectation : redirected to the same page and message shown = Successfully added an announcement.]
+
+Albums
+	## overview
+		### adding album
+			- click 'add'
+				[expectation : adding form shown]
+			- click add button without filling the fields. 
+				[expectation : error]
+			- fill the form Album Name and Description
+			- and then click add button to submit.
+				[expectation : redirected to the added album, no photo was shown yet]
+		### adding photo
+			- while in the same page as previous, or you may select one of the album if you're back on the album list
+			- click add to show the form form adding photo
+				[expectation : a fields for adding photo shown]
+			- fill nothing and click submit.
+				[expectation : error = please choose a photo]
+			- choose non photo type of image, and submit
+				[expectation : error = please choose the right photo]
+			- choose the photo of the right one, and fill description then submit.
+				[expectation 1 : redirected at the same page, a new photo will be added]
+				[expectation 2 : if there's no photo previously, the first photo will be used as cover photo for the album]
+
+Article
+	## add article
+		- publish without filling the fields. 
+			[expectation : error]
+		### inserting photo
+			- click icon insert/add photo to add photo
+				[expectation : new image library shown as modal box]
+			- click select without doing anything yet
+				[expectation : error alert = Please upload the photo, or choose from the album or existing photos.]
+			- on first tab (Add New), select the desired photo, set description and click upload
+				[expectation 1 : new photo uploaded and shown]
+				[expectation 2 : click tab Existing Photos, the uploaded photo will be shown here]
+			- re-select tab Add New you may click select from this tab
+				[expectation : the photo will be appended to the article text field]
+			- or you may click tab 'Existing Photos' and select the photo from here.
+				[expectation : same as above]
+			- or you may click the tab 'Albums',
+				- select recent added album
+					[expectation : recent added photo will shown]
+				- click the photo
+					[expectation : photo highlighted]
+				- and then click 'Select' to append the photo to the article textfield
+					[expectation : the photo will be appended to the article textfield]
+		### saving as draft
+			- click button Save as draft after filling required field
+				[expectation : redirected to Lists of articles, and the drafted article will be shown with yellow box as drafting status indicater]
+			- click the edit button to edit the draft, and continue editing.
+		### continue on editing
+			- select category by ticking any of it.
+			- select tags input, and write 3 input
+			- click publish blog button to publish the blog.
+				[expectation 1 : redirected to the List of Articles with message = Your edited article has been requested.]
+				[expectation 2 : status changed to pending, with grey indicator]
+
+Activity
+## Objective
+	- Add 4 activity
+		- Event 1 named : Activity 1
+		- Event 2 named : Activity 2
+		- Training 1 named : Activity 3
+		- Training 2 named : Activity 4
+
+	## events
+		### add event
+			- open add activity:event form by clicking 'Add'
+			- submit activity without filling the fields. 
+				[expectation : error]
+			- fill in the form :
+				- Activity Name
+					- Choose name : Activity 1
+				- Participation
+					- Choose open to all
+				- Type
+					* By default set to event
+					- Change type to training 
+						[expectation : changes the right box fields]
+				- Description
+				- Address
+					- Choose Use Site Address 
+						[expectation : site address will be shown, and field disabled]
+				- Date
+					- Click on calendar icon to choose date [expectation : a calendar picker opened]
+						- Pick first date : $activity.event.firstDate 
+							[expectation : field 'from' changed to selected start date]
+						- Pick end date : $activity.event.endDate 
+							[expectation 1 : field 'to' changed to selected end date, field 'total days' changed to 5 days]
+							[expectation 2 : list of date shown, along with time picking selects]
+						- Click 'reset'. 
+							[expectation : everything reverted back to empty]
+						- Re-do first two action.
+						- Select Time Schema : 'Single'
+							[expectation : question asked, if clicked yes, list of time becomes one]
+						- Set start time to 8 AM, and end time to 5 PM
+						- Then switch back time schema to 'Multiple'
+							[expectation : all list of time followed the last selection]
+						- Click X on the second date 
+							[expectation : the date removed]
+						- On calendar, click the 4th date 
+							[expectation : the selected date removed]
+						- Click button Submit Date
+							[expectation 1 : the calendar picker closed]
+							[expectation 2 : a date summary is shown, regarding the selected date and time]
+					- Choose Date Obligation to 'Participant may choose date'
+				- On event detail, choose type of event : lawatan
+			- Click Submit Activity to submit the activity 
+				[expectation : redirected at the same page and pop a message new activity has been submitted, and is pending for cluster lead approval.]
+
+	## training
+		### add training [repeat the same above flow, but with different date and different activity name, (activity.training.firstDate and activity.training.endDate)]
+
+Members Management
+	## List of Member
+		## Approving Member
+			- Click the unchecked grey checkbox, to approve the recent registered member
+			- After confirming the confirmation alert, the user will be rendered activated
+			[expectation : the approved member will be registered]
+
+		## Member detail
+			- click the detail icon from the list
+			[expectation : modal box shown]

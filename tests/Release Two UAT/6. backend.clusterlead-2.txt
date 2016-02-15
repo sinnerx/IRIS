@@ -1,0 +1,29 @@
+Test name : Backend.Sitemanager
+
+Cluster Overview
+	## Showing list of request
+	- click the total request number
+		[expectation : list of site request according to what we did before are shown, 
+				- announcement.update, 
+				- article.update, 
+				- activity.update, activity.add (correction)]
+
+	## Preview last corrected change request
+		[expectation : A wrench icon shown next to the name in the list, for the corrected change request]
+
+	## Viewing detail of request
+	- click magnifier icon on activity update request
+		[expectation : comparation detail and enlarged page are shown.]
+		# Approve request
+		- Click on the green checkbox
+			[expectation : a question popped for confirmation, and if clicked on, will approve the request, and refreshed the list of request]
+
+	- click magnifier icon on article update request
+		[expectation : comparation detail and enlarged page are shown.]
+		# approve request
+			[expectation : a question popped for confirmation, and if clicked on, will approve the request, and refreshed the list of request]
+
+	- click magnifier icon on announcment update request
+		[expectation : comparation detail and enlarged page are shown.]
+		# approve request
+			[expectation : a question popped for confirmation, and if clicked on, will approve the request, and refreshed the list of request]

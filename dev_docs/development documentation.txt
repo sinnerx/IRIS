@@ -1,0 +1,67 @@
+## GENERAL
+- testing boleh try di controller tests, and can access the uri under test/[controller]/[method]
+	- ada example boleh refer di situ.
+- db schema untuk application, boleh refer di _structure/schema.yaml
+	- boleh compare dengan current db dengan cara masuk uri : monitor/schema
+	- untuk update current to latest schema, just guna ?db_update
+		- this action is not destructive. old column still exists.
+- this project uses GIT (for versioning and codebase control) and Composer (for package management)
+	- install composer, and run "composer update"
+
+## MODEL
+1. this place store business logics, can also store application logic.
+2. some common model yang sering diguna dalam development adalah seperti :
+	- helper
+	- template/services (extends template/repository)
+		- data for template stored in (template/repository)
+	- mailing/services
+3. all db call mesti dibuat di model, except mcm pagination, mungkin ada kelonggaran. usah dibuat di controller.
+
+## BACKEND
+1. uri format.
+- uses clear format, behavior :
+	- every dashboard/[controller]/[method]/[param1]/[param2]/.. will execute controller based on role (or shared if specified in model=access/data:sharedController)
+	- refer no 4 for detail.
+
+2. Authentication.
+- Every request will hook below controller@method :
+	- auth@index			# authenticate user, with exception from model=access/data:publicBackend
+	- template@formatting	# just applying some formating through here. (hooked pre_controller)
+	- template@index 		# this one pass data to template (hooked before loading template)
+
+3. Menu
+- model=access/menu:get 
+- used by _template/backend/default.php
+
+4. Two type of controller, shared based controller and role based controller.
+- shared : all these controller stored under : _controller/shared
+	- the access is based on list in model=access/data:sharedController
+- role based : stored under _controller/[rolename]
+
+5. Ajax
+- each ajax controller prefixed with ajax_
+two type of ajax controller.
+- shared : to access this way, just use 	: shared/ajax/[controllername]/[method]
+	- will find under _controller/shared/[controllername]/[method]
+- role based : to access this way, just use : ajax/[controllername]/[method]
+	- will find under _controller/ajax_[controllername]/[method]
+- u can still use normal controller for ajax request anyway.
+
+6. Template
+- using a template from themeforest called scale.
+- the markup stored in _template/backend/default.php
+
+7. Site request
+- some site manager action, will create site_request. the related model is model=site/request.
+- to create, use method create(). parameter : type,siteID,refID,siteRequestData
+
+8. URL:base_url
+- all url must be absolute, by using url::base($url). it will automatically append the configured base_url in config.php
+
+9. URL:asset
+- untuk file like css/js/ smua boleh guna url::asset($url),
+	- for example, klau file tu ada dlm assets/_backend/js/myjs.js, url::asset('_backend/js/myjs.js') akan return url untuk itu.
+
+## FRONTEND
+1. uri format.
+- routed specifically. can refer in _structure/routes.php

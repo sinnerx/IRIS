@@ -1,0 +1,8 @@
+## simple redirect.
+redirect::to("url");
+
+## redirect with flash message
+redirect::to("another/page","success message")
+
+## redirect with flash message (error)
+redirect::to("another/page","error lah","error");

@@ -1,0 +1,49 @@
+urls :
+// give url based on base_url
+url::base();
+
+// give url to folder /assets
+url::asset();
+
+view :
+view::render('pathto/view');
+
+redirect :
+redirect::to();
+
+Database :
+simple querying : 
+1. get row
+select * from user where userID = '$userID'
+db::where('userID',$userID);
+$row = db::get('user')->row();
+
+2. get result
+$result = db::get('user')->result();
+
+3. join
+SELECT * FROM user WHERE userID = $userID;
+db::from('user');
+db::where('userID',$userID);
+db::join('user_profile','user_profile.userID = user.userID');
+$row = db::get()->row();
+
+4. IN
+SELECT * FROM user WHERE userID IN (1,2,3);
+db::from('user');
+db::where('userID',Array(1,2,3));
+$result = db::get()->result();
+
+5. Subquerying
+Custom query
+db::where('userID = ? AND userStatus = ?',Array(1,1));
+$result = db::get('user')->row();
+
+Custom query 2
+db::where('articleApprovalStatus = ? AND articleCreatedUser IN (SELECT userID FROM user WHERE userID = ?)',Array(1,$userID));
+
+6. Multiple where
+SELECT * FROM article WHERE userID = $userID AND articleID = $articleID;
+db::where('userID',$userID);
+db::where('articleID',$articleID);
+$row = db::get('user')->row();

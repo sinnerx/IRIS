@@ -1,0 +1,100 @@
+before reusable flag.
+public function add($param_first,$param_second = Null,$callback = Null)
+	{
+		### Prepare reusable flag.
+		## 1. param first is callback, or controller init.
+		$first_callback	= (is_object($param_first) && ($param_first instanceof Closure))?"callback":false;
+		if(!$first_callback && is_string($param_first))
+			$first_callback	= strpos($param_first,"controller=") === 0?"controller_init":false;
+		
+		## 2. param second is callback or controoler init.
+		
+
+		## if first param is a list of route or a path.
+		if((is_array($param_first) || is_string($param_first)) && !$param_second && !$callback)
+		{
+			if(is_string($param_first))
+			{
+				$path	= $param_first;
+				if(strpos($param_first,"routes:") === 0)
+				{
+					$apps	= substr($param_first,7,strlen($param_first));
+					$path	= "apps/$apps/_structure/routes.php";
+				}
+				if(!file_exists($path))
+				{
+					error::set("Routing","Failed to find routes file. [$path]");
+					return;
+				}
+
+				$this->add(require_once $path);
+				return;
+			}
+			else if(is_array($param_first))
+			{
+				foreach($param_first as $routeR)
+				{
+					call_user_func_array(array($this,"add"), $routeR);
+				}
+				return;
+			}
+		}
+		## if first param is a callback
+		else if($first_callback/*is_object($param_first) && ($param_first instanceof Closure) || strpos($param_first, "controller=") === 0*/)
+		{
+			$callback	= $param_first;
+			$route		= true;
+			$method		= Array("GET","POST","PUT","DELETE");
+		}
+		## first param is a route or method and second is callback.
+		else if(is_object($param_second) && ($param_second instanceof Closure))
+		{
+			$callback	= $param_second;
+
+			if(is_bool($param_first))
+			{
+				$route	= true;
+				$method	= Array("GET","POST","PUT","DELETE");
+			}
+			## first is method, only filter by post.
+			else if(in_array($param_first,Array("GET","POST","PUT","DELETE")) || is_array($param_first))
+			{
+				$route		= true;
+				$method		= !is_array($param_first)?array($param_first):$param_first;
+			}
+			## domain routing.
+			else if(strpos($param_first,"domain:") === 0)
+			{
+				$domain			= substr($param_first, 7,strlen($param_first));
+				if($domain == "all")
+				{
+					$this->paramListR['domain_name']	= $_SERVER['HTTP_HOST'];
+					$this->executeCallback($param_second);
+					return; ## early return.
+				}
+
+				$domainListR	= explode("|",$domain);
+
+				if(in_array($_SERVER['HTTP_HOST'],$domainListR))
+				{
+					$this->paramListR['domain_name']	= $_SERVER['HTTP_HOST'];
+					$this->executeCallback($param_second);
+				}
+				return;
+			}
+			else
+			{
+				$route		= $param_first;
+				$method		= Array("GET","POST","PUT","DELETE");
+			}
+		}
+		## if callback is in the last. everything should be in place then. =)
+		else
+		{
+			$method		= !is_array($param_first)?array($param_first):$param_first;
+			$route		= is_bool($param_second)?true:$param_second;	## if second param, is book, set route to true.
+		}
+
+
+		$this->routeListR[]	= Array($route,$callback,$method);
+	}

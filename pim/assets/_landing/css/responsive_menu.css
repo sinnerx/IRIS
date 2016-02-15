@@ -1,0 +1,157 @@
+@media screen and (max-width: 600px) {
+
+#block_navigation {
+	width: 100%;
+	padding:15px 0px;
+	margin: 0px auto;
+	background:#000;
+}
+
+#block_navigation select{
+	width:100% !important;
+	margin-bottom:0px;
+	background:none;
+	border:none;
+	color:#FFF;
+	font-weight:bold;
+	z-index:9999;
+	position:relative;
+
+	
+	
+}
+.top-logo{
+	display:none;
+	
+}
+.right-blck {
+    float: right !important;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+
+
+.content{
+	width:100%;
+	
+}
+
+#block_navigation ul li  ul li:last-child {
+	border-bottom-right-radius: 7px;
+	border-bottom-left-radius: 7px;
+}
+.colmn_wrap{
+	height:auto;
+	position:relative;
+	
+}
+
+
+.content{
+	height:auto;
+	
+}
+
+.colm_5_container,
+.colm_3_container,
+.colm_2_container  {
+	width: 100%;
+	/**height: 170px;**/
+	/**background: #fff;**/
+	margin-top: 0px;
+	margin-left: 20px;
+	margin-bottom: 0px;
+
+}
+
+.colmn_1,
+.colmn_2,
+.colmn_3,
+.colmn_4,
+.colmn_5  {
+	width: 96.96%;
+	margin-bottom: 20px;
+	padding: 0;
+	padding-left: 1.52%;
+	padding-right: 1.52%;
+
+}
+
+.colmn_4_fullwidth,
+.colmn_3_fullwidth,
+.colmn_2_fullwidth  {
+	width: 96.96%;
+	margin-bottom: 20px;
+	padding: 0;
+	padding-left: 1.52%;
+	padding-right: 1.52%;
+
+}
+.image {
+
+	margin-bottom: 5px;
+
+}
+#block_navigation ul li:first-child {
+	border-radius: 0;
+}
+
+
+
+
+
+
+#block_navigation select {
+  
+
+
+    border:none;
+    outline:none;
+    display: inline-block;
+    -webkit-appearance:none;
+    -moz-appearance:none;
+    appearance:none;
+    cursor:pointer;
+
+}
+
+/* Targetting Webkit browsers only. FF will show the dropdown arrow with so much padding. */
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+ #block_navigation select {padding-right:20px}
+  #block_navigation label:after {
+	  right: 8px !important;
+  }
+
+  
+  
+}
+
+#block_navigation label {position:relative}
+#block_navigation:after {
+  
+     content: "\f0c9";
+    font-family: FontAwesome;
+    font-style: normal;
+    font-weight: normal;
+	 color: #FFF;
+    font-size: 18px;
+    padding-right: 0.5em;
+    position: absolute;
+    top: 15px;
+    right: 5px;
+	cursor:pointer;
+
+}
+#block_navigation:before {
+    content:'';
+    right:6px; top:0px;
+    width:20px; height:20px;
+   
+    position:absolute;
+    pointer-events:none;
+    display:block;
+}
+
+
+}

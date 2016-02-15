@@ -1,0 +1,36 @@
+// Todo : find more components.
+// Todo : db maker here.
+// TODO : _storage folder.
+
+FRAMEWORK BEHAVIOUR
+// CONTROLLER
+- two main method which is init, and load (and hook)
+- you can only init a controller in a routing. can't load it there. and the public method it initiated must be a public.
+- individual config will be initiated on each controller initiation, any parameter is replaced.
+- can only init once. after that, can load a controller already.
+- you can load a private method whenever you want. but must be through controller::load()
+- you can never change currentController, except by redirecting, however you may load controller anytime you want.
+
+// MODEL
+- simply one a model located in apps/_model/
+- optional anyway, up to you whether you wanna use namespace or just use this given method.
+
+// VIEW
+- you can render view anytime after the controller has been initiated.
+- template will be loaded in first time rendering is called.
+- template won't be loaded, in a forwarded controller. it will render the current view only.
+- you can load a controller whenever you want
+
+// TEMPLATE
+- by calling template::showContent(), will load the main view for the current controller.
+- you can load a controller whenever you want inside a template (same with view)
+
+// HOOKING
+- Give you an ability to hook your function into some point
+- Permit you to load a controller. [Not Init]
+- There're currently only got 2 hooking point :
+	- pre_controller initiation
+	- post_controller initiation 
+- Cannot render a view in a hook
+
+

@@ -1,0 +1,30 @@
+TRUNCATE `menu`;
+TRUNCATE `page`;
+TRUNCATE `page_reference`;
+TRUNCATE `page_photo`;
+TRUNCATE `site`;
+TRUNCATE `site_info`;
+TRUNCATE `site_manager`;
+TRUNCATE `site_request`;
+TRUNCATE `site_slider`;
+TRUNCATE `site_message`;
+TRUNCATE `user_profile`;
+TRUNCATE `user`;
+TRUNCATE `cluster_site`;
+TRUNCATE `cluster`;
+TRUNCATE `cluster_lead`;
+TRUNCATE `contact`;
+TRUNCATE `photo`;
+TRUNCATE `message`;
+TRUNCATE `token`;
+TRUNCATE `token_resetpass`;
+
+INSERT INTO `digitalgaia_iris`.`user` (`userID`, `userIC`, `userPassword`, `userEmail`, `userLevel`, `userStatus`, `userPremiumStatus`, `userCreatedDate`, `userCreatedUser`) VALUES (NULL, '890910105117', 'daa57b48840eb2156dca97c43c985371', 'root@gmail.com', '99', '1', '1', NULL, NULL);
+INSERT INTO `digitalgaia_iris`.`user_profile` (`userID`) SELECT userID FROM user ORDER BY userID DESC;
+
+INSERT INTO `cluster` (`clusterID`, `clusterName`, `clusterCreatedDate`, `clusterCreatedUser`) VALUES
+(1, 'Sabah Cluster A', NULL, NULL),
+(2, 'Sabah Cluster B', NULL, NULL),
+(3, 'Sabah Cluster C', NULL, NULL),
+(4, 'Sarawak', NULL, NULL),
+(5, 'Semenanjung Cluster', NULL, NULL);
