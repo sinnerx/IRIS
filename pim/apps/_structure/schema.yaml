@@ -1039,6 +1039,7 @@ att_attendancedetails:
 	managerID [int]
 	activityDate [varchar(20)]
 	activityTime [varchar(20)]
+	activityDateTime [datetime]
 	activityStatus [text]
 	outstationStatus [text]
 	attendanceStatus [text]
