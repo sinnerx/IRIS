@@ -53,8 +53,10 @@ class Origami
 		}
 		else
 		{
-			db::create()->insert($this->table, $data);
-			$lastID = db::create()->getLastID($this->table, $primaryCol);
+			// db::create()->insert($this->table, $data);
+			// $lastID = db::create()->getLastID($this->table, $primaryCol);
+			// insert and get last insert id
+			$lastID = db::create()->insert($this->table, $data)->getLastInsertID();
 
 			$this->modelData['isNew'] = false;
 			$this->$primaryCol = $lastID;

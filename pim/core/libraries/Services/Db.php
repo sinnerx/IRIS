@@ -476,6 +476,13 @@ class Db_instance
 		}
 
 		$this->clear();
+
+		return $this;
+	}
+
+	public function getLastInsertID()
+	{
+		return $this->db->lastInsertId();
 	}
 
 	public function update($table,$data)

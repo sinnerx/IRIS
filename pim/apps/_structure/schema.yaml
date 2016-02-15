@@ -745,7 +745,7 @@ billing_transaction_item:
 	billingItemID [int]
 	billingTransactionID [int]
 	billingTransactionItemDescription [text]
-	billingTransactionItemQuantity [int]
+	billingTransactionItemQuantity [float]
 	billingTransactionItemUnit [float] ## unit or hours
 	billingTransactionItemPrice [float] ## unit price.
 
@@ -792,6 +792,10 @@ billing_pc_usage:
 billing_transaction_upload:
 	billingTransactionUploadID [int]
 	siteID [int]
+	billingTransactionUploadStatus [int] ## 0 = uploading, 1 = completed
+	billingTransactionUploadTotal [int] ## total transactions uploaded
+	billingTransactionUploadStartDate [datetime]
+	billingTransactionUploadCompletedDate [datetime]
 	billingTransactionUploadCreatedDate [datetime]
 
 billing_log:
@@ -837,6 +841,13 @@ billing_finance_transaction:
 	billingFinanceTransactionDate [date]
 	billingFinanceTransactionCreatedDate [datetime]
 	billingFinanceTransactionUpdatedDate [datetime]  ## backdated
+
+billing_update_request:
+	billingUpdateRequestID [int]
+	siteID [int]
+	billingUpdateRequestStatus [int] ## 0 = pending, 1 = patch given
+	billingUpdateRequestCreatedDate [datetime]
+	billingUpdateRequestUpdatedDate [datetime]
 
 pr:
 	prID [int]

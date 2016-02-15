@@ -278,11 +278,29 @@ class Controller_Cafe
 		else
 			$transactions = request::post('transactions');
 
+		// begin upload record
+		db::insert('billing_transaction_upload', array(
+			'siteID' => $this->site->siteID,
+			'billingTransactionUploadStatus' => 0,
+			'billingTransactionUploadStartDate' => now(),
+			'billingTransactionUploadCreatedDate' => now()
+			));
+
+		$transactionUploadId = db::getLastID('billing_transaction_upload', 'billingTransactionUploadID');
+
 		if(!$transactions)
+		{
+			db::where('billingTransactionUploadID', $transactionUploadId)->update('billing_transaction_upload', array(
+				'billingTransactionUploadStatus' => 2,
+				'billingTransactionUploadTotal' => 0,
+				'billingTransactionUploadCompletedDate' => now()
+			));
+
 			return json_encode(array(
 				'status' => 'success',
 				'total_transactions' => 0
 				));
+		}
 
 		// $allIds = array_keys($transactions);
 		$allIds = array();
@@ -386,10 +404,15 @@ class Controller_Cafe
 		db::where('siteID', $this->site->siteID)->where('billingReuploadRequestStatus', 0)->update('billing_reupload_request', array('billingReuploadRequestStatus' => 1));
 
 		// log the upload date.
-		db::insert('billing_transaction_upload', array(
+		db::where('billingTransactionUploadID', $transactionUploadId)->update('billing_transaction_upload', array(
+			'billingTransactionUploadStatus' => 1,
+			'billingTransactionUploadTotal' => $totalTransactions,
+			'billingTransactionUploadCompletedDate' => now()
+			));
+		/*db::insert('billing_transaction_upload', array(
 			'siteID' => $this->site->siteID,
 			'billingTransactionUploadCreatedDate' => now()
-			));
+			));*/
 
 		return json_encode(array(
 			'status' => 'success',
@@ -435,7 +458,7 @@ class Controller_Cafe
 			));
 	}
 
-	protected function getCafeVersion()
+	protected function getAbsoluteCafeVersion()
 	{
 		$path = apps::$root.'../repo/cafe/.git/refs/heads/master';
 		// $cafeRoot = apps::$root.'../repo/cafe';
@@ -443,6 +466,19 @@ class Controller_Cafe
 		$currentVersion = file_get_contents($path);
 
 		return trim($currentVersion);
+	}
+
+	protected function isFullUpdateNeeded()
+	{
+		return db::where('siteID', $this->site->siteID)->where('billingUpdateRequestStatus', 0)->get('billing_update_request')->row() ? true : false;
+	}
+
+	protected function getCafeVersion()
+	{
+		if($this->isFullUpdateNeeded())
+			return 1;
+
+		return $this->getAbsoluteCafeVersion();
 	}
 
 	public function getVersion()
@@ -462,7 +498,19 @@ class Controller_Cafe
 		// $path = apps::$root.'../repo/cafe/.git/refs/heads/master';
 		$cafeRoot = apps::$root.'../repo/cafe';
 
-		$currentVersion = $this->getCafeVersion();
+		// check if there's a forced update request
+		if($this->isFullUpdateNeeded())
+		{
+			$version = '76a59b79e7a6a4c580784e9d7f2c87ac5f37d1fb';
+
+			// update billing_update_request if any.
+			db::where('siteID', $this->site->siteID)->where('billingUpdateRequestStatus', 0)->update('billing_update_request', array(
+				'billingUpdateRequestStatus' => 1,
+				'billingUpdateRequestUpdatedDate' => now()
+				));
+		}
+
+		$currentVersion = $this->getAbsoluteCafeVersion();
 
 		/*if($version == $currentVersion)
 		{
