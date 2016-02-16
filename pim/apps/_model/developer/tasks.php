@@ -305,6 +305,7 @@ class Tasks
 		TRUNCATE `billing_transaction_item`;
 		TRUNCATE `billing_pc_usage`;
 		TRUNCATE `billing_transaction_upload`;
+		TRUNCATE `billing_reupload_request`;
 		TRUNCATE `billing_transaction_user`;
 		TRUNCATE `billing_verification`;");
 	}
@@ -321,6 +322,7 @@ class Tasks
 		TRUNCATE `billing_transaction_item`;
 		TRUNCATE `billing_pc_usage`;
 		TRUNCATE `billing_transaction_upload`;
+		TRUNCATE `billing_reupload_request`;
 		TRUNCATE `billing_transaction_user`;
 		TRUNCATE `billing_verification`;");
 

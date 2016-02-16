@@ -252,6 +252,27 @@ class Controller_Cafe
 			));
 	}*/
 
+	protected function getPendingUpload()
+	{
+		return db::where('billingTransactionUploadStatus', 0)->get('billing_transaction_upload')->num_rows();
+	}
+
+	protected function getUploadableDay()
+	{
+		$day = floor($this->site->siteID / 26) + 1;
+		
+		return $day;
+	}
+
+	protected function transactionLock()
+	{
+		return json_encode(array(
+			'status' => 'success',
+			'message' => 'Transaction upload is being locked for the time being, be try again after 30 minutes.',
+			'total_transactions' => 0
+			));
+	}
+
 	/**
 	 * Upload transactions.
 	 * @param $_POST[transactions]
@@ -278,6 +299,42 @@ class Controller_Cafe
 		else
 			$transactions = request::post('transactions');
 
+		// lock to do billing reset
+		// return $this->transactionLock();
+
+		if(($uploadableDay = $this->getUploadableDay()) != date('N'))
+		{
+			$days = array(
+				1 => 'Monday',
+				2 => 'Tuesday',
+				3 => 'Wednesday',
+				4 => 'Thursday',
+				5 => 'Friday'
+				);
+
+			$interval = (date('N') > $uploadableDay ? 7 + $uploadableDay : $uploadableDay) - 1;
+
+			$date = date('d/m/Y', strtotime("+$interval days", time()));
+
+			return json_encode(array(
+				'status' => 'success',
+				'message' => "We are currently doing a transaction reset on pi1m server. However, in order to cater the load of microsites upload on the server, we have rescheduled your transaction uploading day to $days[$uploadableDay] $date.\n\nYou may however continue uploading your transaction normally after this period. (this week)",
+				'total_transactions' => 0
+				));
+		}
+
+		$pendingUpload = $this->getPendingUpload();
+
+		// if there's currently 10 pending upload. lessen the server load.
+		if($pendingUpload > 10)
+		{
+			return json_encode(array(
+				'status' => 'success',
+				'message' => $pendingUpload.' site(s) are currently uploading their transactions. Please try again after '.($pendingUpload*2).' minutes.',
+				'total_transactions' => 0
+				));
+		}
+
 		// begin upload record
 		db::insert('billing_transaction_upload', array(
 			'siteID' => $this->site->siteID,
@@ -286,7 +343,8 @@ class Controller_Cafe
 			'billingTransactionUploadCreatedDate' => now()
 			));
 
-		$transactionUploadId = db::getLastID('billing_transaction_upload', 'billingTransactionUploadID');
+		// $transactionUploadId = db::getLastID('billing_transaction_upload', 'billingTransactionUploadID');
+		$transactionUploadId = db::getLastInsertId();
 
 		if(!$transactions)
 		{
