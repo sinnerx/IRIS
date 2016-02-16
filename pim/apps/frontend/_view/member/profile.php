@@ -254,7 +254,7 @@ $(document).ready(function(){
                                                     echo "<i class='fa fa-check'></i>";
                                                     if($module["status"] != 1){
                                                         if ($package["completepayment"] == 1){
-                                                        echo "<a href='../lms/quizs/login?moduleid=" .$module["id"]."&userid=" .$row["userID"]. "' class='bttn-submit-success' id='takequiz' style='margin-top:0px; float:right; color: white'>Ambil Kuiz</a>";
+                                                        echo "<a href='../lms/login?moduleid=" .$module["id"]."&userid=" .$row["userID"]. "' class='bttn-submit-success' id='takequiz' style='margin-top:0px; float:right; color: white'>Ambil Kuiz</a>";
                                                         }//if payment
                                                         else if ($package["completepayment"] == 0){
                                                             echo "<a href='#' class='bttn-submit-gray' style='margin-top:0px; float:right; color: white'>Ambil Kuiz</a>";
