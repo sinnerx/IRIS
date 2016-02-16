@@ -1050,6 +1050,7 @@ att_attendancedetails:
 	managerID [int]
 	activityDate [varchar(20)]
 	activityTime [varchar(20)]
+	activityDateTime [datetime]
 	activityStatus [text]
 	outstationStatus [text]
 	attendanceStatus [text]
@@ -1120,6 +1121,7 @@ lms_package:
 	updatedate [datetime]
 	updateby [varchar(100)]
 	status [int(11)]
+	billing_item_id [int(11)]
 
 lms_package_module:
 	id [int(11)]
