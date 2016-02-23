@@ -11,8 +11,8 @@
 <script src="<?php echo url::asset("_scale/js/bootstrap.js");?>" type="text/javascript"></script>
 <!-- <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css"> -->
 <!-- <link rel="stylesheet" href="<?php //echo url::asset("_scale/js/nestable/nestable.css");?>"> -->
- <link rel="stylesheet" href="<?php echo url::asset("_scale/css/bootstrap.css");?>">
- <link rel="stylesheet" href="<?php echo url::asset("_scale/css/app.css");?>">
+ <link rel="stylesheet" href="<?php echo url::asset("_scale/css/bootstrap_frontend.css");?>">
+ <link rel="stylesheet" href="<?php echo url::asset("_scale/css/app_frontend.css");?>">
 
 <!-- <script src="//code.jquery.com/jquery-1.10.2.js"></script> -->
   <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js" type="text/javascript"></script>
