@@ -1,3 +1,3 @@
 <?php
 
-apps::saveConfig('db_pass', 'root');
+apps::saveConfig('db_pass', '');
