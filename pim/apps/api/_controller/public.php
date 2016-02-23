@@ -33,6 +33,34 @@ class Controller_Public
 		return trim($currentVersion);
 	}
 
+	public function uploadReschedule()
+	{
+		template::set(false);
+
+		$sites = db::get('site')->result();
+
+		$data = array();
+
+		foreach($sites as $row)
+		{
+			$siteID = $row['siteID'];
+
+			$day = floor($siteID / 26) + 1;
+
+			$days = array(
+				1 => 'Monday',
+				2 => 'Tuesday',
+				3 => 'Wednesday',
+				4 => 'Thursday',
+				5 => 'Friday'
+			);
+
+			$data[$days[$day]][] = $row;
+		}
+
+		view::render('public/uploadReschedule', array('sites' => $data));
+	}
+
 	public function ping()
 	{
 		$version = $this->getCafeVersion();

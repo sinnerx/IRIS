@@ -23,7 +23,7 @@ class Learning
 			);
 
 		## type.
-		$res_type = db::select("id,name")->where("status",1)->where("packageid", $packageid)->get("lms_module")->result();
+		$res_type = db::select("id,name")->where("status",1)->get("lms_module")->result();
 
 		$arr	= Array();
 		if($res_type)

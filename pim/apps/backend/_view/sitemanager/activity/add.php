@@ -1,3 +1,4 @@
+
 <script type="text/javascript">
 	
 var activity	= function()
@@ -8,7 +9,9 @@ var activity	= function()
 
 		if (y == "2"){
 			$("#packagediv").show();
-			//activity.showModule(1);
+			$("#learningPackage").val('1');
+			activity.showModule(1);
+			activity.showModuleDetail(1);
 		}
 		else{
 			$("#packagediv").hide();
@@ -33,6 +36,7 @@ var activity	= function()
 				  	$('<option></option>', {html:this.type_name}).attr('value', this.type_id).appendTo('#trainingType');
 				
 					$('#activityDescription').text(this.description);
+					$('#activityName').val(this.name);
 					//$('#trainingType select').val(this.typeid);
 				});
 
@@ -531,6 +535,10 @@ $(document).ready(function()
 	{
 		activity.datePicker.initiateData();
 	}
+
+	// if($("#learningselect").val() == 2){
+	// 	;
+	// }
 });
 
 pim.uriHash.addCallback({"event":function(){activity.showTypeDetail(1)},"training":function(){activity.showTypeDetail(2)},"others":function(){activity.showTypeDetail(99)}});
@@ -574,6 +582,7 @@ pim.uriHash.addCallback({"event":function(){activity.showTypeDetail(1)},"trainin
 <h3 class='m-b-xs text-black'>
 Add Activity 
 </h3>
+
 <div class='well well-sm'>
 Add an activity to your site. All new activities will not be published until they are approved by your cluster lead.
 </div>
@@ -688,7 +697,7 @@ Add an activity to your site. All new activities will not be published until the
 						<div class='form-group' id="modulediv" style="display:none">
 							<label>Module of LMS <?php echo flash::data("learningModule");?></label>
 							<?php //echo form::select("learningPackage",$learningPackage,"class='form-control'");?>
-							<?php echo form::select("learningModule",'',"onchange='activity.showModuleDetail(this.value);' class='form-control'",$conv[request::get("module_id")]);?>
+							<?php echo form::select("learningModule",$learningModule,"onchange='activity.showModuleDetail(this.value);' class='form-control'",$conv[request::get("module_id")]);?>
 						</div>						
 						<div class='form-group' id="typediv">
 							<label>Training Type <?php echo flash::data("trainingType");?></label>

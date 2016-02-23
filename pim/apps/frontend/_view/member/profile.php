@@ -7,6 +7,16 @@
 
 </style>
 <script src="<?php echo url::asset("_templates/js/easyResponsiveTabs.js");?>" type="text/javascript"></script>
+<script src="<?php echo url::asset("_scale/js/slimscroll/jquery.slimscroll.min.js");?>" type="text/javascript"></script>
+<script src="<?php echo url::asset("_scale/js/bootstrap.js");?>" type="text/javascript"></script>
+<!-- <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css"> -->
+<!-- <link rel="stylesheet" href="<?php //echo url::asset("_scale/js/nestable/nestable.css");?>"> -->
+ <link rel="stylesheet" href="<?php echo url::asset("_scale/css/bootstrap_frontend.css");?>">
+ <link rel="stylesheet" href="<?php echo url::asset("_scale/css/app_frontend.css");?>">
+
+<!-- <script src="//code.jquery.com/jquery-1.10.2.js"></script> -->
+  <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js" type="text/javascript"></script>
+  <!-- <link rel="stylesheet" href="/resources/demos/style.css"> -->
 <script type="text/javascript">
 $(document).ready(function(){
     
@@ -28,6 +38,9 @@ $(document).ready(function(){
     //       //$("#someContainer").html(data);
     //     });
     // });
+      // $(function() {
+      //   $( "#accordion-kursus" ).accordion();
+      // });    
 });
 
 </script>
@@ -108,7 +121,7 @@ $(document).ready(function(){
                         <ul class="resp-tabs-list">
                             <li>Maklumat</li>
                             <li>Aktiviti laman</li>
-                            <li>Kelas</li>
+                            <li>Kursus</li>
                         </ul>
                         <div class="resp-tabs-container">
                             <div>
@@ -230,67 +243,99 @@ $(document).ready(function(){
                                 <!-- loop -->
                                 <!-- <div class="heading-category">Pakej</div> -->
                                 <div class="profile-activity-forum-container">
+                                    <div class="panel-group m-b" id="accordion2">
+
                                     <?php
                                     //print_r($row);
                                      if ($activities_lms){
+                                        $x = 1;
                                         foreach ($activities_lms as $package) {
                                             //print_r($package);
+                                            //die;
                                             # code...
-                                            echo "<div class='heading-category' >";
-                                            echo $package["PackageName"];
-                                            if ($package["completepayment"] == 1){
-                                                echo " (Dibayar)";
-                                            }
-                                            echo "</div>".'<br>';
-                                            echo "<ul style='border-bottom:1px solid #e8e8e8'>";
-                                            foreach ($package["modules"] as $module) {
-                                                # code...
-                                                //print_r($module);
-                                                echo "<li class='clearfix'>
-                                                        
-                                                        <div class='forum-activity-title'>";
-                                                echo $module["name"];
-                                                if ($module["selected"] == 1){
-                                                    echo "<i class='fa fa-check'></i>";
-                                                    if($module["status"] != 1){
-                                                        if ($package["completepayment"] == 1){
-                                                        echo "<a href='../lms/login?moduleid=" .$module["id"]."&userid=" .$row["userID"]. "' class='bttn-submit-success' id='takequiz' style='margin-top:0px; float:right; color: white'>Ambil Kuiz</a>";
-                                                        }//if payment
-                                                        else if ($package["completepayment"] == 0){
-                                                            echo "<a href='#' class='bttn-submit-gray' style='margin-top:0px; float:right; color: white'>Ambil Kuiz</a>";
-                                                        }                                                        
-                                                    }//if status
-                                                    else {
-                                                        echo "<a href='#' class='bttn-submit-pass' style='margin-top:0px; float:right; color: white; padding:8px 47px'>Lulus</a>";
-                                                    }
- 
-
-                                                }//if
-                                                else{//not selected
-                                                    echo "<i style='margin-left:10px'>.</i>";
-                                                    echo "<a href='#' class='bttn-submit-gray' style='margin-top:0px; float:right; color: white'>Ambil Kuiz</a>";
-                                                }
-                                                echo "</div></li>";
-                                            }//foreach
-                                            //echo '<br>';
-                                            echo "<span class='clearfix'><br></span>";
-                                            // if ($package["complete"] == 1)
-                                            //     echo "<a href='../lms/quizs/login?packageid=" .$package["packageid"]."&userid=" .$row["userID"]. "' class='bttn-submit-success' id='takequiz'>Ambil Kuiz</a>";
-                                            //     //echo "<a href='#' class='bttn-submit-success' id='takequiz'>Ambil Kuiz</a>";
-                                            // else
-                                            //     echo "<a href='#' class='bttn-submit-gray'>Belum Lengkap</a>";
-
-                                            // echo "<span class='clearfix'><br></span>";
-                                            echo "</ul>";
-
-
-                                        }//foreach package
-                                     }//if activities_lms
                                     ?>
+                                            <div class="panel panel-default">
+                                                <div class="panel-heading">
+                                                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="<?php echo '#collapse' . $x;?>">
+                                                  <?php 
+                                                  echo $package["PackageName"];
+                                                    if ($package["completepayment"] == 1){
+                                                        echo " (Dibayar)";
+                                                    }
+                                                  ?>
+                                                </a> 
+                                                </div>
+                                                <div id="<?php echo 'collapse' . $x;?>" class="panel-collapse collapse">
+                                                    <div class="panel-body text-sm"> 
+                                                        <ul style='border-bottom:1px solid #e8e8e8' >
+                                                            <?php
+                                                                    //echo "<div><ul style='border-bottom:1px solid #e8e8e8' >";
+                                                                    foreach ($package["modules"] as $module) {
+                                                                        # code...
+                                                                        //print_r($module);
+                                                                        echo "<li class='clearfix dd-item'>
+                                                                                
+                                                                                ";
+                                                                        echo $module["name"];
+                                                                        if ($module["selected"] == 1){
+                                                                            echo "<i class='fa fa-check'></i>";
+                                                                            if($module["status"] != 1){
+                                                                                if ($package["completepayment"] == 1){
+                                                                                echo "<a href='../lms/login?moduleid=" .$module["id"]."&userid=" .$row["userID"]. "&packageid=" .$package["packageid"]."' class='bttn-submit-success' id='takequiz' style='margin-top:0px; float:right; color: white'>Ambil Kuiz</a>";
+                                                                                }//if payment
+                                                                                else if ($package["completepayment"] == 0){
+                                                                                    echo "<a href='#' class='bttn-submit-gray' style='margin-top:0px; float:right; color: white'>Ambil Kuiz</a>";
+                                                                                }                                                        
+                                                                            }//if status
+                                                                            else {
+                                                                                echo "<a href='#' class='bttn-submit-pass' style='margin-top:0px; float:right; color: white; padding:8px 45px'>Lulus</a>";
+                                                                            }
+                         
+
+                                                                        }//if
+                                                                        else{//not selected
+                                                                            echo "<i style='margin-left:10px'>.</i>";
+                                                                            echo "<a href='#' class='bttn-submit-gray' style='margin-top:0px; float:right; color: white'>Ambil Kuiz</a>";
+                                                                        }
+                                                                        echo "</li>";
+                                                                    }//foreach
+                                                                    //echo '<br>';
+
+                                                                    //echo "<span class='clearfix'><br></span>";
+
+                                                                    // if ($package["complete"] == 1)
+                                                                    //     echo "<a href='../lms/quizs/login?packageid=" .$package["packageid"]."&userid=" .$row["userID"]. "' class='bttn-submit-success' id='takequiz'>Ambil Kuiz</a>";
+                                                                    //     //echo "<a href='#' class='bttn-submit-success' id='takequiz'>Ambil Kuiz</a>";
+                                                                    // else
+                                                                    //     echo "<a href='#' class='bttn-submit-gray'>Belum Lengkap</a>";
+
+                                                                    // echo "<span class='clearfix'><br></span>";
+                                                                    echo "</ul>";
+
+                                                                    $x++;
+                                                                
+                                                             
+                                                            ?>
+
+                                                        </ul>
+                                                    </div><!--panelbody-->
+                                                </div><!--collapseid-->  
+                                            </div><!-- paneldefault-->
+                                            <?php 
+                                                    }//foreach package
+                                             }//if activities_lms
+                                             else{
+                                                echo "<h3> Sila hubungi pi1m anda untuk pendaftaran kursus </h3>";
+                                             }
+                                            ?>
                                 </div>
-                                <!-- end loop -->
+                                </div>
+                                <!-- end loop -->                              
                             </div>
                             <!-- Kelas -->
+
+
+
                         </div>
                     </div>
                 </div>
