@@ -93,7 +93,7 @@ class Origami
 		}
 	}
 
-	private function isNotOrmProperties()
+	private function isNotOrmProperties($column)
 	{
 		return !in_array($column, array('modelData'));
 	}
