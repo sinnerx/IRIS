@@ -531,6 +531,15 @@ var activity = new activity();
 
 $(document).ready(function()
 {
+	var selected = '<?php echo $learningIsSelected; ?>';
+	if( selected == 1){
+		alert("Selected");
+	}
+
+	if ($("#learningSelect").val() == 2){
+		//alert("Selected");
+		activity.showPackage(2);
+	}
 	if($("#activityDateTime").val() != "")
 	{
 		activity.datePicker.initiateData();
