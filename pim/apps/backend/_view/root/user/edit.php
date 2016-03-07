@@ -129,13 +129,14 @@ Edit existing user information.
 		</div>		
 	</div>
 </div>
+-->
 <div class='row'>
 	<div class='col-sm-12'>
 
 		<div class='form-group' style='text-align:center;'>
-			<?php //echo form::submit("Submit","class='btn btn-primary'");?>
+			<?php echo form::submit("Submit","class='btn btn-primary'");?>
 		</div>
 
 	</div>
-</div> -->
+</div> 
 </form>
