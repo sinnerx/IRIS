@@ -1137,7 +1137,6 @@ lms_question_user:
 	qn_id [int]
 	userid [int(11)]
 	sessionid [varchar(100)]
-	id [int(11)]
 	q_id [int(11)]
 	a_id [int(11)]
 	marks [int(11)]
@@ -1146,7 +1145,6 @@ lms_answer:
 	a_id [int]
 	q_id [int(11)]
 	a_text [varchar(100)]
-	correct [int(11)]
 
 lms_questions_bank:
 	q_id [int]
