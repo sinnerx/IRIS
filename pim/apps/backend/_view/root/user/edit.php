@@ -1,5 +1,15 @@
 <link rel="stylesheet" href="<?php echo url::asset("_scale/js/datepicker/datepicker.css");?>" type="text/css">
 <script src="<?php echo url::asset("_scale/js/datepicker/bootstrap-datepicker.js");?>"></script>
+<script src="<?php echo url::asset("_scale/js/qrcode/jquery.qrcode-0.12.0.min.js");?>"></script>
+<script>
+$(document).ready(function(){
+	$("#ic-qr").qrcode({
+    "size": 100,
+    "color": "#3a3",
+    "text": "<?php echo $row['userIC']; ?>"
+});
+});
+</script>
 <h3 class="m-b-xs text-black">
 <a href='info'>Edit User</a>
 </h3>
@@ -108,9 +118,24 @@ Edit existing user information.
 </div>
 <div class='row'>
 	<div class='col-sm-12'>
-		<div class='form-group' style='text-align:center;'>
-		<?php echo form::submit("Submit","class='btn btn-primary'");?>
+		<div class='panel panel-default'>
+		<div class='panel-body'>
+		<label>12. Member QR Code</label><p>	
+		<div class='form-group'  id="ic-qr">
+				
+		
 		</div>
+		</div>
+		</div>		
+	</div>
+</div>
+<div class='row'>
+	<div class='col-sm-12'>
+
+		<div class='form-group' style='text-align:center;'>
+			<?php echo form::submit("Submit","class='btn btn-primary'");?>
+		</div>
+
 	</div>
 </div>
 </form>
