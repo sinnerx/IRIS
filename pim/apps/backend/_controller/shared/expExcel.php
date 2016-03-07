@@ -289,6 +289,7 @@ class Controller_ExpExcel
 
 			// $prItems = orm('expense/pr/item')->where('prID', $rl->prID)->execute();
 			$prItems = $rlItems = orm('expense/pr/reconcilation/item')
+			->join('expense_item', 'expense_item.expenseItemID = pr_reconcilation_item.expenseItemID')
 			->where('prReconcilationItemStatus', 1) // reconciled
 			->where('prReconcilationID', $rl->prReconcilationID)->execute();
 
@@ -302,6 +303,7 @@ class Controller_ExpExcel
 			$y++;
 
 			$rlCategories = array();
+			$rlCategoryNames = array();
 
 			// Prepare pr_items grouped by categories
 			foreach($rlItems as $rlItem)
@@ -314,6 +316,9 @@ class Controller_ExpExcel
 				if(!isset($rlCategoryTotals[$rlItem->prReconcilationCategoryID]))
 					$rlCategoryTotals[$rlItem->prReconcilationCategoryID] = 0;
 
+				if(!isset($rlCategoryNames[$rlItem->prReconcilationCategoryID]))
+					$rlCategoryNames[$rlItem->prReconcilationCategoryID] = $expenseCategories[$rlItem->expenseCategoryID];
+
 				$rlCategoryTotals[$rlItem->prReconcilationCategoryID] += $rlItem->prReconcilationItemTotal;
 			}
 
@@ -323,7 +328,7 @@ class Controller_ExpExcel
 			foreach($rlCategories as $categoryID => $rlItems)
 			{
 				$rlCategoryTotal = 0;
-				$categoryName = $expenseCategories[$categoryID];
+				$categoryName = $rlCategoryNames[$categoryID];
 
 				$sheet->setCellValue($pos('D', $y), $categoryName); // categoryName
 					$sheet->mergeCells("D$y:E$y");
@@ -457,7 +462,7 @@ class Controller_ExpExcel
 		foreach($rlCategoryTotals as $categoryID => $amount)
 		{
 			$sheet->setCellValue('A'.$y, ($no ? $no++ : 1).'.');
-			$sheet->setCellValue('B'.$y, $expenseCategories[$categoryID]);
+			$sheet->setCellValue('B'.$y, $rlCategoryNames[$categoryID]);
 				$sheet->mergeCells("B$y:F$y");
 			$sheet->setCellValue('G'.$y, $amount);
 

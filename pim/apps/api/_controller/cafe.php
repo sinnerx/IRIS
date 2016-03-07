@@ -302,7 +302,7 @@ class Controller_Cafe
 		// lock to do billing reset
 		// return $this->transactionLock();
 
-		if(($uploadableDay = $this->getUploadableDay()) != date('N'))
+		/*if(($uploadableDay = $this->getUploadableDay()) != date('N'))
 		{
 			$days = array(
 				1 => 'Monday',
@@ -321,7 +321,7 @@ class Controller_Cafe
 				'message' => "We are currently doing a transaction reset on pi1m server. However, in order to cater the load of microsites upload on the server, we have rescheduled your transaction uploading day to $days[$uploadableDay] $date.\n\nYou may however continue uploading your transaction normally after this period. (this week)",
 				'total_transactions' => 0
 				));
-		}
+		}*/
 
 		$pendingUpload = $this->getPendingUpload();
 
@@ -384,19 +384,21 @@ class Controller_Cafe
 			// update
 			if(in_array($uniqueId, $uniqueIds) && $uniqueId != null)
 			{
+				$totalTransactions++;
+
 				$transaction = model::orm('billing/transaction')
 									->where('siteID', $this->site->siteID)
 									->where('billingTransactionLocalID', $localId)
 									->execute()->getFirst();
 
-				/*$totalTransactions++;
-
-				$transaction->billingTransactionTotalQuantity = $row_transaction['quantity'];
-				$transaction->billingTransactionTotal = $row_transaction['total'];
+				// only update date if there's changes. since currently only date can be updated. and status
 				$transaction->billingTransactionDate = $row_transaction['datetime'];
-				$transaction->billingTransactionCreatedDate = $row_transaction['datetime'];
-				$transaction->billingTransactionUpdatedDate = $row_transaction['datetime'];
-				$transaction->save();*/
+				$transaction->billingTransactionUpdatedDate = $row_transaction['updatedDate'];
+
+				if(isset($row_transaction['status']))
+					$transaction->billingTransactionStatus = $row_transaction['status'];
+				
+				$transaction->save();
 			}
 			else
 			{
@@ -407,7 +409,7 @@ class Controller_Cafe
 				$transaction->billingTransactionLocalID = $localId;
 				$transaction->billingTransactionTotalQuantity = $row_transaction['quantity'];
 				$transaction->billingTransactionUnique = $uniqueId ? $uniqueId : strtotime($row_transaction['createdDate'])*1000;
-				$transaction->billingTransactionStatus = 1;
+				$transaction->billingTransactionStatus = $row_transaction['status'] ? : 1;
 				$transaction->billingTransactionTotal = $row_transaction['total'];
 				$transaction->billingTransactionDate = $row_transaction['datetime'];
 				// $transaction->billingTransactionCreatedDate = $row_transaction['datetime'];
