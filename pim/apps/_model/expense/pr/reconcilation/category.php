@@ -12,6 +12,8 @@ class Category extends \Origami
 			)
 		);
 
+	protected $caches = array();
+
 	public function getItems()
 	{
 		return $this->getMany('expense/pr/reconcilation/item', 'prReconcilationCategoryID');
@@ -19,7 +21,10 @@ class Category extends \Origami
 
 	public function getReconciledItems()
 	{
-		return $this->withQuery(function($query)
+		if(isset($this->caches['reconciled_items']))
+			return $this->caches['reconciled_items'];
+
+		return $this->caches['reconciled_items'] = $this->withQuery(function($query)
 		{
 			$query->where('prReconcilationItemStatus', 1);
 
@@ -39,6 +44,16 @@ class Category extends \Origami
 	public function isUploaded()
 	{
 		return $this->getFile() ? true : false;
+	}
+
+	public function getGst()
+	{
+		$total = 0;
+
+		foreach($this->getReconciledItems() as $item)
+			$total += $item->prReconcilationItemGst;
+
+		return $total;
 	}
 
 	/**
