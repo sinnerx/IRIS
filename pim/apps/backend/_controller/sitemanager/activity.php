@@ -157,6 +157,7 @@ class Controller_Activity
 				input::repopulate();
 				redirect::withFlash(model::load("template/services")->wrap("input-error",$error));
 				redirect::to("","Please correct the error highlighted.","error");
+				//view::render("sitemanager/activity/add",$data);
 			}
 
 			$data	= input::get();

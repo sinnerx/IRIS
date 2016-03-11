@@ -134,6 +134,8 @@ class Controller_Main
 
 		$data['pageTitle'] = $page->getPageDefault()->pageDefaultName;
 
+		$data['pageImage'] = $page->pagePhoto;
+
 		$data['pageText'] = $page->pageText;
 
 		view::render('page', $data);

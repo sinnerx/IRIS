@@ -74,6 +74,9 @@ class Menu extends Data
 									"Google Analytics"=>Array("googleanalytics/test"),
 									/*"Monthly Activity Report"=>Array("report/activityReport")*/
 												),
+					"Learning" => Array(
+									"Learning Page " => Array("../lms/"),
+						),					
 					"Attendance" => Array(
 									"Attendance Page" => Array("../attendance/")
 						)	
@@ -102,7 +105,10 @@ class Menu extends Data
 						// "Input Form"=>"billing/add",
 						// "Edit Form"=>"billing/edit",
 					//	"Reporting"=>"./attendance/reporting/"
-						//),		
+						//),
+					"Learning" => Array(
+									"Learning Page " => Array("../lms/"),
+						),								
 					"Attendance" => Array(
 									"Attendance Page" => Array("../attendance/")
 						)				
@@ -122,6 +128,9 @@ class Menu extends Data
 						'RL List' => array('exp/rlList', 'exp/rlEdit')
 					//	"Add new Category / Item"=>"expense/addCategory"
 						),
+					"Learning" => Array(
+									"Learning Page " => Array("../lms/"),
+						),					
 					"Attendance" => Array(
 									"Attendance Page" => Array("../attendance/")
 						)	
@@ -207,6 +216,9 @@ class Menu extends Data
 						'RL List' => array('exp/rlList', 'exp/rlEdit')
 					//	"Add new Category / Item"=>"expense/addCategory"
 						),
+					"Learning" => Array(
+									"Learning Page " => Array("../lms/"),
+						),					
 					"Attendance" => Array(
 									"Attendance Page" => Array("../attendance/")
 						)	
