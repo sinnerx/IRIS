@@ -61,7 +61,7 @@ Class Controller_Site
 		->where('activityType', 2)
 		->where('activityApprovalStatus', 1)
 		->where('activity.siteID', $siteID)
-		->where('activity_date.activityID IN (SELECT activityID FROM activity_user WHERE activity_user.activityID = activity.activityID)') // rsvp
+		->where('activity_date.activityID IN (SELECT activityID FROM activity_user)') // rsvp
 		->where('MONTH(activity.activityStartDate) = ? AND YEAR(activity.activityStartDate) = ?', array($month, $year))
 		->join('activity', 'activity.activityID = activity_date.activityID', 'INNER JOIN')
 		->get()->result();

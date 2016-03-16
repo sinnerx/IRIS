@@ -65,7 +65,7 @@ Class Controller_Kpi
 			->where('activityApprovalStatus', 1)
 			->where('activity.siteID', $siteIDs)
 			// ->where('activity_date.activityID IN (SELECT activity_article.activityID FROM activity_article)')
-			->where('activity_date.activityID IN (SELECT activityID FROM activity_user WHERE activity_user.activityID = activity.activityID)') // rsvp
+			->where('activity_date.activityID IN (SELECT activityID FROM activity_user)') // rsvp
 			->where('MONTH(activity.activityStartDate) = ? AND YEAR(activity.activityStartDate) = ?', array($month, $year))
 			->join('activity', 'activity.activityID = activity_date.activityID', 'INNER JOIN')
 			// ->join('activity_article', 'activity_article.activityID = activity.activityID', 'INNER JOIN')
