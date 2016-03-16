@@ -74,7 +74,7 @@ Class Controller_Site
 
 		// active member percentage
 		// active member / total member * 100
-		$totalMembers = db::select('count(userID) as total')->where('siteID', $siteID)->get('site_member')->row('total');
+		// $totalMembers = db::select('count(userID) as total')->where('siteID', $siteID)->get('site_member')->row('total');
 
 		/*$activeMembers = db::select('count(site_member.userID) as total')
 		->where('siteID', $siteID)
