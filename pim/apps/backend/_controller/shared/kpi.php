@@ -34,8 +34,8 @@ Class Controller_Kpi
 			->where('siteID', $siteIDs)
 			->where('activityType', 1)
 			->where('activityApprovalStatus', 1)
+			->where('activityID IN (SELECT activityID FROM activity_article WHERE activity_article.activityID = activity.activityID)')
 			->where('MONTH(activityStartDate) = ? AND YEAR(activityStartDate) = ?', array($month, $year))
-			->join('activity_article', 'activity_article.activityID = activity.activityID', 'INNER JOIN')
 			->get()->result('siteID', true);
 
 			// 2. enterpreneuship class
@@ -45,11 +45,18 @@ Class Controller_Kpi
 			->where('activityApprovalStatus', 1)
 			->where('MONTH(activityStartDate) = ? AND YEAR(activityStartDate) = ?', array($month, $year))
 			->where('training_type.trainingTypeName LIKE ?', '%Entrepreneurship%')
+			// ->join('activity_article', 'activity_article.activityID = activity.activityID', 'INNER JOIN')
 			->join('training', 'activity.activityID = training.activityID', 'INNER JOIN')
 			->join('training_type', 'training.trainingType = training_type.trainingTypeID', 'INNER JOIN')
 			->get()->result('siteID', true);
 
 			// 3. entrepreneurship program (accumulated amounts of sales)
+			$groupedSales = db::from('billing_transaction_item')
+			->where('billing_transaction.siteID = ?', array($siteIDs))
+			->where('MONTH(billingTransactionDate) = ? AND YEAR(billingTransactionDate) = ?', array($month, $year))
+			->where('billing_transaction_item.billingItemID IN (SELECT billingItemID FROM billing_item WHERE billingItemCode = ?)', array('lms_item'))
+			->join('billing_transaction', 'billing_transaction.billingTransactionID = billing_transaction_item.billingTransactionID')
+			->get()->result('siteID', true);
 
 			// 4. training hours
 			$groupedTrainingHours = db::from('activity_date')
@@ -57,7 +64,8 @@ Class Controller_Kpi
 			->where('activityType', 2)
 			->where('activityApprovalStatus', 1)
 			->where('activity.siteID', $siteIDs)
-			->where('activity_date.activityID IN (SELECT activity_article.activityID FROM activity_article)')
+			// ->where('activity_date.activityID IN (SELECT activity_article.activityID FROM activity_article)')
+			->where('activity_date.activityID IN (SELECT activityID FROM activity_user WHERE activity_user.activityID = activity.activityID)') // rsvp
 			->where('MONTH(activity.activityStartDate) = ? AND YEAR(activity.activityStartDate) = ?', array($month, $year))
 			->join('activity', 'activity.activityID = activity_date.activityID', 'INNER JOIN')
 			// ->join('activity_article', 'activity_article.activityID = activity.activityID', 'INNER JOIN')
@@ -109,7 +117,17 @@ Class Controller_Kpi
 				}
 
 				// 3. entrepreneurship sales
+				// $total['entrepreneurship_sales'] = 0;
 				$total['entrepreneurship_sales'] = 0;
+
+				if(isset($groupedSales[$siteID]))
+				{
+					foreach($groupedSales[$siteID] as $billingItem)
+					{
+						$total = $billingItem['billingTransactionItemQuantity'] * $billingItem['billingTransactionItemPrice'];
+						$total['entrepreneurship_sales'] += $total;
+					}
+				}
 
 				// 4. training hours
 				$total['training_hours'] = 0;
