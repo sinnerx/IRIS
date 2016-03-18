@@ -38,7 +38,7 @@ Class Controller_Site
 		->where('activityApprovalStatus', 1)
 		->where('MONTH(activityStartDate) = ? AND YEAR(activityStartDate) = ?', array($month, $year))
 		->where('training_type.trainingTypeName LIKE ?', array('%Entrepreneurship%'))
-		->join('activity_article', 'activity_article.activityID = activity.activityID', 'INNER JOIN')
+		// ->join('activity_article', 'activity_article.activityID = activity.activityID', 'INNER JOIN')
 		->join('training', 'activity.activityID = training.activityID', 'INNER JOIN')
 		->join('training_type', 'training.trainingType = training_type.trainingTypeID', 'INNER JOIN')
 		->get()->row('total');
