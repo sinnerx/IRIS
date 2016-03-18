@@ -47,6 +47,7 @@ function confirmation(){
 
 </script>
 <div class="modal-dialog">
+
 	<div class="modal-content">
 		<div class="modal-header">
 			<button type="button" class="close" data-dismiss="modal"><i class="fa fa-times"></i></button>
@@ -54,7 +55,7 @@ function confirmation(){
 			<span><span class='fa fa-user'></span> Member Information</span>
 			<span>: <?php echo ucwords($user['userProfileFullName']." ".$user['userProfileLastName']); ?></span>
 			<?php if($user['siteMemberStatus'] != 1):?>
-			<?php if(authData('site.siteID') == $user['siteID']):?>
+			<?php if(authData('site.siteID') == $user['siteID']):;?>
 			<a href='?toggle=<?php echo $user['userID'];?>' onclick='return confirmation();' class='label label-primary pull-right' style='position:relative;right:10px;' >Approve Membership</a><?php endif;?>
 			<?php endif;?>
 			</h4>
@@ -163,6 +164,18 @@ function confirmation(){
 				</div>
 				<div class='ajxgal-albums'> <!-- By albums -->
 				</div>
+				<div class='row'>
+	<div class='col-sm-12'>
+
+		<div>
+		<?php
+		if($user['siteMemberStatus'] == 1):
+		?>
+		<center><a href="printm?userIC=<?php echo $user['userIC']?>&userProfileFullName=<?php echo $user['userProfileFullName']?>&userProfileLastName=<?php echo $user['userProfileLastName']?>&userID=<?php echo $user['userID']?>" target="_blank"><input type="Submit" class='btn btn-primary' value="Print" /></a></center>
+		<?php endif;?>
+		</div>
+	</div>
+</div> 
 			</div>
 		</div>
 	</div>

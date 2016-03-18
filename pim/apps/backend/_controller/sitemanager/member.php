@@ -78,4 +78,22 @@ class Controller_Member
 
 		view::render("sitemanager/member/changePassword");
 	}
+
+	public function printm()	
+	{
+		// db::select("*");
+		// db::from("site_member");
+		// db::where("userID","site_member.userID = 172");
+		// $userR		= db::get()->result("userID");
+		// print_r($userR);
+		$siteid = $_GET['userID'];
+		db::select("site_member.userID,site_member.siteID,site.siteName");
+		//db::from("site_member");
+		db::where("site_member.userID",$_GET['userID']);
+		db::join("site","site.siteID = site_member.siteID");
+		$data['site']	= db::get("site_member")->result();
+		//print_r($registeredR);
+		view::render("sitemanager/member/printm", $data);
+	}
+
 }
