@@ -38,7 +38,7 @@ Class Controller_Site
 		->where('activityApprovalStatus', 1)
 		->where('MONTH(activityStartDate) = ? AND YEAR(activityStartDate) = ?', array($month, $year))
 		->where('training_type.trainingTypeName LIKE ?', array('%Entrepreneurship%'))
-		->join('activity_article', 'activity_article.activityID = activity.activityID', 'INNER JOIN')
+		// ->join('activity_article', 'activity_article.activityID = activity.activityID', 'INNER JOIN')
 		->join('training', 'activity.activityID = training.activityID', 'INNER JOIN')
 		->join('training_type', 'training.trainingType = training_type.trainingTypeID', 'INNER JOIN')
 		->get()->row('total');
@@ -61,7 +61,7 @@ Class Controller_Site
 		->where('activityType', 2)
 		->where('activityApprovalStatus', 1)
 		->where('activity.siteID', $siteID)
-		->where('activity_date.activityID IN (SELECT activityID FROM activity_user WHERE activity_user.activityID = activity.activityID)') // rsvp
+		->where('activity_date.activityID IN (SELECT activityID FROM activity_user)') // rsvp
 		->where('MONTH(activity.activityStartDate) = ? AND YEAR(activity.activityStartDate) = ?', array($month, $year))
 		->join('activity', 'activity.activityID = activity_date.activityID', 'INNER JOIN')
 		->get()->result();
@@ -74,7 +74,7 @@ Class Controller_Site
 
 		// active member percentage
 		// active member / total member * 100
-		$totalMembers = db::select('count(userID) as total')->where('siteID', $siteID)->get('site_member')->row('total');
+		// $totalMembers = db::select('count(userID) as total')->where('siteID', $siteID)->get('site_member')->row('total');
 
 		/*$activeMembers = db::select('count(site_member.userID) as total')
 		->where('siteID', $siteID)
