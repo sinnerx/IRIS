@@ -63,7 +63,7 @@ Class Model_Schema
 				$type		= $row['Type'];
 
 				$tableR[$table]['columns'][]		= $col_name;
-				$tableR[$table]['type'][$column]	= $type;
+				$tableR[$table]['type'][$col_name]	= $type;
 			}
 		}
 

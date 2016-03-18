@@ -18,8 +18,8 @@ apps::run(ROOT_FOLDER,function($router)
 			model\server::setAnnouncement($text);
 		}
 
-		if(file_exists('env.php'))
-			require_once 'env.php';
+		//if(file_exists('env.php'))
+		//	require_once 'env.php';
 
 		## db connection.
 		db::connect(apps::config('db_host'),apps::config('db_user'),apps::config('db_pass'),apps::config("db_name"));
@@ -33,7 +33,7 @@ apps::run(ROOT_FOLDER,function($router)
 		}
 
 		## if current domain is localhost and exedra.
-		if(in_array($param['domain_name'], Array(LOCALHOST,"localhost","p1m.gaia.my","www.celcom1cbc.com","celcom1cbc.com","dev.celcom1cbc.com","pro.celcom1cbc.com")))
+		if(in_array($param['domain_name'], Array(LOCALHOST,"localhost","p1m.gaia.my","www.celcom1cbc.com","celcom1cbc.com","dev.celcom1cbc.com","pro.celcom1cbc.com", "cloud.fulkrum.net")))
 		{
 			## require exedra docs application only in localhost.
 			if($param['domain_name'] == "localhost")

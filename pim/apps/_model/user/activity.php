@@ -286,4 +286,201 @@ class Activity
 
 		return $link;
 	}
+
+	public function getModuleByUser($userID)
+	{
+		// db::select("P.packageid as packageID");
+		// db::where("AU.userID", $userID);
+		// db::innerjoin("training AS TR", "TR.activityID = AU.activityID");
+		// db::innerjoin("training_lms AS L", "TR.trainingID = L.trainingid");
+		// db::innerjoin("lms_module AS M", "M.id = L.packagemoduleID");
+		// db::innerjoin("lms_package_module AS LPM", "LPM.moduleid = M.id");
+		// db::innerjoin("lms_package AS P", "P.packageid = LPM.packageid");
+		// db::group_by("packageID");
+		// $resultgroupdb = db::get("activity_user AS AU")->result();		
+
+		db::select("P.packageid as packageID");
+		db::where("AU.userID", $userID);
+		db::innerjoin("training AS TR", "TR.activityID = AU.activityID");
+		db::innerjoin("training_lms AS L", "TR.trainingID = L.trainingid");
+		db::innerjoin("lms_module AS M", "M.id = L.packagemoduleID");
+		db::innerjoin("lms_package_module AS LPM", "LPM.moduleid = M.id");
+		db::innerjoin("lms_package AS P", "P.packageid = LPM.packageid");
+		
+
+		db::group_by("packageID");
+		$resultgroupdb = db::get("activity_user AS AU")->result();	
+		//print_r($resultgroupdb);
+		//die;
+
+		//grouping list of package and payment of user for that package
+		$arrayGroup = array();
+		$arrayPayment = array();
+		$c = 0;
+		$in_string = "(";
+		foreach ($resultgroupdb as $value) {
+			# code...
+			//print_r($value);
+			//$in_string .= implode(", ", $value);
+			//array_push($arrayPayment, $this->getPayment($userID, $value["packageID"]));
+			$arrayPayment[$c]['packageID'] = $value['packageID'];
+			$arrayPayment[$c]['billingItemID'] = $this->getPayment($userID, $value["packageID"])[0]["billingitemID"];
+			array_push($arrayGroup, $value["packageID"]);
+			$c++;
+		}
+		
+		//print_r($arrayPayment);
+		//die;
+		$in_string .= implode(", ", $arrayGroup);
+		$in_string .= ")";
+		//print_r($in_string);
+
+		db::select("P.name as packageName, P.packageid as packageID, M.name as moduleName, M.id as moduleID, R.status, R.datecreated");
+		db::where("AU.userID", $userID);
+		db::innerjoin("training AS TR", "TR.activityID = AU.activityID");
+		db::innerjoin("training_lms AS L", "TR.trainingID = L.trainingid");
+		db::innerjoin("lms_module AS M", "M.id = L.packagemoduleID");
+		db::innerjoin("lms_package_module AS LPM", "LPM.moduleid = M.id");
+		db::innerjoin("lms_package AS P", "P.packageid = LPM.packageid");
+		db::join("lms_result as R", "(R.userid = '$userID' AND R.moduleid = M.id)");
+		db::order_by("R.datecreated", "ASC");				
+		$resultdb = db::get("activity_user AS AU")->result();
+		//print_r($resultdb);
+		//die;		
+
+
+		// db::select("P.name as packageName, P.packageid as packageID, M.name as moduleName, M.id as moduleID");
+		// db::where("AU.userID", $userID);
+		// db::innerjoin("training AS TR", "TR.activityID = AU.activityID");
+		// db::innerjoin("training_lms AS L", "TR.trainingID = L.trainingid");
+		// db::innerjoin("lms_package_module AS LPM", "LPM.id = L.packageModuleID");
+		// db::innerjoin("lms_module AS M", "M.id = LPM.moduleid");
+		// db::innerjoin("lms_package AS P", "P.packageid = LPM.packageid");		
+		// $resultdb = db::get("activity_user AS AU")->result();
+		//print_r($resultdb);
+		//die;
+
+
+		//print_r($userID);
+		//print_r($resultdb);
+		//$result = array();
+		$resultdb["packageInclude"] = $in_string;
+		$resultdb["paymentInclude"] = $arrayPayment;
+		//array_push($resultdb, $in_string);
+
+		if(empty($resultgroupdb))
+			$result = null;
+		else
+			$result = $this->getModuleInPackage($resultdb);
+		//print_r($result);	
+		//return $resultdb;
+		//die;
+		return $result;
+
+	}
+
+	public function getPayment($userID, $packageID)
+	{
+		db::select("BTI.billingitemID");
+		db::innerjoin("billing_transaction_user AS BTU", "BTU.billingTransactionUser = AU.userID");
+		db::innerjoin("billing_transaction AS BT", "BT.billingTransactionID = BTU.billingTransactionID");
+		db::innerjoin("billing_transaction_item AS BTI", "BTI.billingTransactionID = BT.billingTransactionID");
+		db::innerjoin("billing_item AS BI", "BI.billingitemID = BTI.billingitemID");
+		db::innerjoin("lms_package AS LP", "LP.billing_item_id = BI.billingitemID");
+		db::where("AU.userID", $userID);
+		db::where("LP.packageid", $packageID);
+		db::group_by("billingitemID");
+
+		$result = db::get("activity_user AS AU")->result();
+		//print_r($result);
+		//die;
+		return $result;
+	}
+
+	public function getModuleInPackage($results)
+	{
+			//print_r($results);
+			//die;
+		//$x = 0;
+			db::select("P.packageid, P.name as PackageName");
+			db::where("P.packageid IN ", $results["packageInclude"]);
+			$resultPackage = db::get("lms_package AS P")->result();	
+			unset($results["packageInclude"]);	
+			$x=0;
+			foreach ($resultPackage as $key) {
+
+					db::select("M.id, M.name");
+					//db::where("M.packageid", $key["packageid"]);
+					db::join("lms_package_module AS LPM", "LPM.moduleid = M.id");
+					db::where("LPM.packageid", $key["packageid"]);					
+					$countModule = db::get("lms_module AS M")->num_rows();
+
+					//print_r($key["packageid"]);
+					db::select("M.id, M.name");
+					//db::where("M.packageid", $key["packageid"]);
+					db::join("lms_package_module AS LPM", "LPM.moduleid = M.id");
+					db::where("LPM.packageid", $key["packageid"]);
+					$resultModule = db::get("lms_module AS M")->result();
+
+					//$resultPackage["modules"] = array();
+						//print_r($resultModule);
+					 	//print_r($results);
+							$y = 0;
+							$taken = 0;
+					 		foreach ($resultModule as $keyModule) {
+					 			# code...
+					 			//print_r($keyModule);
+					 			//if(in_array())
+					 			
+					 			foreach ($results as $keyModuleSelected) {
+						 			# code...
+						 			//print_r($keyModuleSelected["status"].$y." ");
+						 			//print_r($keyModule["id"]);
+						 			//print_r($resultPackage[$x]);
+						 			if(($keyModuleSelected["moduleID"] == $keyModule["id"]) && ($keyModuleSelected["packageID"] == $key["packageid"])){
+						 				//print_r( $key["packageid"] ." ". $keyModuleSelected["packageID"] . " ". $keyModuleSelected["moduleName"] . "selected ");
+						 				//array_push($resultModule, ["selected"]);
+						 				$resultModule[$y]["selected"] = 1;
+						 				$resultModule[$y]["status"] = $keyModuleSelected["status"] ;
+						 				//$keyModule["selected"] = 1;
+						 				//print_r($resultModule[$y]);
+						 				//print_r($keyModule);
+						 				//[$y]["selected"] = 1;
+						 				$taken++;
+									}//if
+									
+									
+									//print_r($resultModule);
+					 			}//foreach
+					 			$y++;
+					 		}
+					 		//print_r($resultModule);
+					 		//die;
+					 		//print_r($taken);
+					 		//print_r($countModule);
+					 		if ($taken == $countModule)
+					 			$resultPackage[$x]["complete"] = 1;
+					 		else
+					 			$resultPackage[$x]["complete"] = 0;
+
+					 		foreach ($results["paymentInclude"] as $keypayment) {
+					 			# code...
+					 			if ($key["packageid"] == $keypayment["packageID"])
+					 				if($keypayment["billingItemID"])
+					 					$resultPackage[$x]["completepayment"] = 1;
+					 				else
+					 					$resultPackage[$x]["completepayment"] = 0;
+
+					 		}//foreach
+					 		//die;
+					$resultPackage[$x]["modules"] =  $resultModule;	 	
+					$x++;
+				}//foreach	
+					//print_r($resultPackage);
+				//var_dump($results);
+					return $resultPackage;
+	}
+
+//830512105141    172
+
 }

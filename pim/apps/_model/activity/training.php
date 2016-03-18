@@ -73,6 +73,34 @@ class Training
 	{
 		return db::select($select)->where("trainingType",$id)->get("training")->result("trainingType",true);
 	}
+
+	public function getTrainingModule($id)
+	{
+		//echo $id;
+		db::select("P.name as packageName, P.packageid as packageID, M.name as moduleName, M.id as moduleID");
+		//
+		db::where("TR.trainingID", $id);
+		db::join("training_lms AS L", "TR.trainingID = L.trainingid");
+		db::join("lms_package_module AS LPM", "LPM.id = L.packageModuleID");
+		db::join("lms_module AS M", "LPM.moduleID = M.id");
+		db::join("lms_package AS P", "LPM.packageid = P.packageid");
+		//db::from("training as TR");
+		return db::get("training AS TR")->result();
+	}
+
+	public function getLearningSelection($no = null)
+	{
+				## temporarily empty.
+		$arr	= Array(
+			1=>"No",
+			2=>"Yes"
+			);
+
+		## type.
+		//$res_type = db::select("trainingTypeID,trainingTypeName")->where("trainingTypeStatus",1)->get("training_type")->result();
+
+		return $no != null?$arr[$no]:$arr;
+	}
 }
 
 

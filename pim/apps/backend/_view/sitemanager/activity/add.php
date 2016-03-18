@@ -1,7 +1,71 @@
+
 <script type="text/javascript">
 	
 var activity	= function()
 {
+
+	this.showPackage = function(yesno){
+		var y = yesno;
+
+		if (y == "2"){
+			$("#packagediv").show();
+			$("#learningPackage").val('1');
+			activity.showModule(1);
+			activity.showModuleDetail(1);
+		}
+		else{
+			$("#packagediv").hide();
+			$("#modulediv").hide();
+			
+		}	
+
+	}
+
+
+
+	this.showModuleDetail = function (module_id){
+		//alert(module_id);
+		$.ajax({
+			url: pim.base_url +"ajax/activity/getModuleByID/"+ module_id, success: function (result){
+				//console.log(result);
+				//var result = result.substring(3, result.length);
+				result = $.parseJSON(result);
+				console.log(result);
+				$('#trainingType').empty();
+				 $.each(result, function(i, value) {  
+				  	$('<option></option>', {html:this.type_name}).attr('value', this.type_id).appendTo('#trainingType');
+				
+					$('#activityDescription').text(this.description);
+					$('#activityName').val(this.name);
+					//$('#trainingType select').val(this.typeid);
+				});
+
+				$('#typediv').show();
+			}
+		});
+	}	
+
+	this.showModule = function (package){
+		var pid = package;
+
+		 $.ajax({
+		 	url: pim.base_url +"ajax/activity/getModuleByPackageID/"+ pid, success: function (result){
+		 		//console.log(pim.base_url +"ajax/activity/getModuleByPackageID/"+ pid);
+		 		//var result = result.substring(3, result.length); 
+		 		//console.log(result);
+		 		result = $.parseJSON(result);
+		 		
+		 		//console.log(result);
+		 		$('#learningModule').empty();
+				 $.each(result, function(i, value) {  
+				  	$('<option></option>', {html:this.name}).attr('value', this.id).appendTo('#learningModule');
+				});	
+				$("#modulediv").show();
+				activity.showModuleDetail(1);	 		
+		 	}
+		 });
+		
+	}
 	this.showTypeDetail	= function(type)
 	{
 		var r	= {1:"event",2:"training",99:"others"};
@@ -467,10 +531,23 @@ var activity = new activity();
 
 $(document).ready(function()
 {
+	var selected = '<?php echo $learningIsSelected; ?>';
+	if( selected == 1){
+		alert("Selected");
+	}
+
+	if ($("#learningSelect").val() == 2){
+		//alert("Selected");
+		activity.showPackage(2);
+	}
 	if($("#activityDateTime").val() != "")
 	{
 		activity.datePicker.initiateData();
 	}
+
+	// if($("#learningselect").val() == 2){
+	// 	;
+	// }
 });
 
 pim.uriHash.addCallback({"event":function(){activity.showTypeDetail(1)},"training":function(){activity.showTypeDetail(2)},"others":function(){activity.showTypeDetail(99)}});
@@ -514,6 +591,7 @@ pim.uriHash.addCallback({"event":function(){activity.showTypeDetail(1)},"trainin
 <h3 class='m-b-xs text-black'>
 Add Activity 
 </h3>
+
 <div class='well well-sm'>
 Add an activity to your site. All new activities will not be published until they are approved by your cluster lead.
 </div>
@@ -617,6 +695,20 @@ Add an activity to your site. All new activities will not be published until the
 					</div>
 					<div class='panel-body'>
 						<div class='form-group'>
+							<label>Learning? <?php echo flash::data("learningSelect");?></label>
+							<?php echo form::select("learningSelect",Array(1=>"No",2=>"Yes"),"onchange='activity.showPackage(this.value);' class='form-control'");?>						
+						</div>
+						<div class='form-group' id="packagediv" style="display:none">
+							<label>Package of LMS <?php echo flash::data("learningPackage");?></label>
+							<?php //echo form::select("learningPackage",$learningPackage,"class='form-control'");?>
+							<?php echo form::select("learningPackage",$learningPackage,"onchange='activity.showModule(this.value);' class='form-control'",$conv[request::get("package")]);?>
+						</div>
+						<div class='form-group' id="modulediv" style="display:none">
+							<label>Module of LMS <?php echo flash::data("learningModule");?></label>
+							<?php //echo form::select("learningPackage",$learningPackage,"class='form-control'");?>
+							<?php echo form::select("learningModule",$learningModule,"onchange='activity.showModuleDetail(this.value);' class='form-control'",$conv[request::get("module_id")]);?>
+						</div>						
+						<div class='form-group' id="typediv">
 							<label>Training Type <?php echo flash::data("trainingType");?></label>
 							<?php echo form::select("trainingType",$trainingTypeR,"class='form-control'",null);?>
 						</div>

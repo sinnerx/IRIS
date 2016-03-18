@@ -14,6 +14,22 @@ class db
 {
 	static $instance	= Null;
 
+	/**
+	 * Instanctiate new db_instance
+	 * But statically coupled with apps class. bad idea.
+	 */
+	public static function create($table = null)
+	{
+		$db = new Db_instance;
+
+		$db->connect(apps::config('db_host'), apps::config('db_user'), apps::config('db_pass'), apps::config('db_name'));
+
+		if($table)
+			$db->from($table);
+
+		return $db;
+	}
+
 	public static function __callStatic($method,$args)
 	{
 		if(!self::$instance)
@@ -298,6 +314,14 @@ class Db_instance
 		return $this;
 	}
 
+	public function innerjoin($table,$cond,$type = "INNER JOIN")
+	{
+		$this->clearResult();
+
+		$this->joinR[]	= "$type $table ON $cond";
+
+		return $this;
+	}
 	### SQL SELECT BUILDER, END ###
 	### 2. SQL PREPARATION ###
 	public function prepareSQL($count = false)
@@ -382,6 +406,8 @@ class Db_instance
 	## Main execution method.
 	private function execute($flag = true)
 	{
+		$params = $this->param;
+		
 		## clear sql, only with true flag.
 		if($flag === true)
 		{
@@ -393,10 +419,10 @@ class Db_instance
 		$statement		= $this->db->prepare($this->sql);
 
 		## if got a pending prepared statement
-		if(count($this->param) > 0)
+		if(count($params) > 0)
 		{
 			$no = 1;
-			foreach($this->param as &$value)
+			foreach($params as &$value)
 			{
 				$statement->bindParam($no,$value);
 				$no++;
@@ -411,7 +437,7 @@ class Db_instance
 
 		if(!$execution)
 		{
-			error::set("PDO Error",Array($statement->errorInfo(),$this->sql,$this->param));
+			error::set("PDO Error",Array($statement->errorInfo(),$this->sql,$params));
 			return;
 		}
 
@@ -450,6 +476,13 @@ class Db_instance
 		}
 
 		$this->clear();
+
+		return $this;
+	}
+
+	public function getLastInsertID()
+	{
+		return $this->db->lastInsertId();
 	}
 
 	public function update($table,$data)
@@ -728,6 +761,7 @@ class Db_instance
 		$this->orderbyR	= Array();
 		$this->limit	= "";
 		$this->groupBy	= null;
+		$this->param = array();
 	}
 
 	## clear result. ran in every query selection builder

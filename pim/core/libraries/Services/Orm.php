@@ -8,9 +8,12 @@ class Orm
 	protected $tableName;
 	protected $primary;
 	protected $anonymous;
+	protected $db;
 
-	public function __construct($model, $primaryKey = null)
+	public function __construct($model, $primaryKey = null, $db = null)
 	{
+		$this->db = !$db ? \db::create() : $db;
+
 		if(is_array($model) || strpos($model, 'table:') === 0)
 		{
 			$this->anonymous = true;
@@ -49,9 +52,14 @@ class Orm
 		$this->model->modelData['name'] = $model;
 	}
 
+	public function setDbInstance($db)
+	{
+		$this->db = $db;
+	}
+
 	public function __call($func, $args)
 	{
-		call_user_func_array(array(db::$instance, $func), $args);
+		call_user_func_array(array($this->db, $func), $args);
 
 		return $this;
 	}
@@ -86,7 +94,7 @@ class Orm
 
 	public function count()
 	{
-		$db = db::$instance;
+		$db = $this->db;
 
 		$total = $db->from($this->tableName)->select('count(*) as total')->get()->row('total');
 
@@ -127,12 +135,12 @@ class Orm
 	 */
 	public function paginate(array $config)
 	{
-		db::$instance->from($this->tableName);
-		$config['totalRow'] = db::$instance->num_rows();
+		$this->db->from($this->tableName);
+		$config['totalRow'] = $this->db->num_rows();
 		pagination::initiate($config);
 
 		if(isset($config['limit']))
-			db::$instance->limit($config['limit'], pagination::recordNo() - 1);
+			$this->db->limit($config['limit'], pagination::recordNo() - 1);
 
 		return $this;
 	}
@@ -161,11 +169,11 @@ class Orm
 
 				$localID = strpos($localID, '.') !== false ? $localID : $table.'.'.$localID;
 				$foreignID = strpos($foreignID, '.') !== false ? $foreignID : $foreignTable.'.'.$foreignID;
-				db::join($foreignTable, $localID.' = '.$foreignID);
+				$this->db->join($foreignTable, $localID.' = '.$foreignID);
 			}
 		}
 
-		$dbResult = db::get($table);
+		$dbResult = $this->db->get($table);
 
 		$result = $dbResult->result($primary);
 

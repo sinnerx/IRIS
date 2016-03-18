@@ -124,4 +124,20 @@ class Controller_Main
 	{
 		view::render("faq");
 	}
+
+	public function page($slug)
+	{
+		$page = model::load('page/page')->findDefaultPageBySlug(authData("current_site.siteID"), $slug);
+
+		if(!$page)
+			redirect::to('{site-slug}');
+
+		$data['pageTitle'] = $page->getPageDefault()->pageDefaultName;
+
+		$data['pageImage'] = $page->pagePhoto;
+
+		$data['pageText'] = $page->pageText;
+
+		view::render('page', $data);
+	}
 }

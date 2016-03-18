@@ -6,6 +6,8 @@ class Controller_Cafe
 {
 	public function __construct()
 	{
+		header("Access-Control-Allow-Origin: *");
+
 		$this->site = model::orm('site/site')->where('siteID', request::named('siteID'))->execute()->getFirst();
 
 		if(!$this->site)
@@ -207,6 +209,21 @@ class Controller_Cafe
 	 */
 	public function lastTransactionDate()
 	{
+		$reuploadRequest = db::where('billingReuploadRequestStatus', 0)
+			->where('siteID', $this->site->siteID)
+			->get('billing_reupload_request')->row();
+
+		if($reuploadRequest)
+		{
+			$date = $reuploadRequest['billingReuploadRequestBeginDate'];
+
+			return json_encode(array(
+				'status' => 'success',
+				'data' => $date
+				));
+		}
+
+
 		$row = db::from('billing_transaction')
 		->where('siteID', $this->site->siteID)
 		->limit(1)
@@ -235,6 +252,27 @@ class Controller_Cafe
 			));
 	}*/
 
+	protected function getPendingUpload()
+	{
+		return db::where('billingTransactionUploadStatus', 0)->get('billing_transaction_upload')->num_rows();
+	}
+
+	protected function getUploadableDay()
+	{
+		$day = floor($this->site->siteID / 26) + 1;
+		
+		return $day;
+	}
+
+	protected function transactionLock()
+	{
+		return json_encode(array(
+			'status' => 'success',
+			'message' => 'Transaction upload is being locked for the time being, be try again after 30 minutes.',
+			'total_transactions' => 0
+			));
+	}
+
 	/**
 	 * Upload transactions.
 	 * @param $_POST[transactions]
@@ -255,44 +293,112 @@ class Controller_Cafe
 	 */
 	public function uploadTransactions()
 	{
-		$transactions = request::post('transactions');
+		// to handle both case from not-updated yet cafe..
+		if($uploadData = request::post('uploadData'))
+			$transactions = unserialize(base64_decode($uploadData));
+		else
+			$transactions = request::post('transactions');
+
+		// lock to do billing reset
+		// return $this->transactionLock();
+
+		/*if(($uploadableDay = $this->getUploadableDay()) != date('N'))
+		{
+			$days = array(
+				1 => 'Monday',
+				2 => 'Tuesday',
+				3 => 'Wednesday',
+				4 => 'Thursday',
+				5 => 'Friday'
+				);
+
+			$interval = (date('N') > $uploadableDay ? 7 + $uploadableDay : $uploadableDay) - 1;
+
+			$date = date('d/m/Y', strtotime("+$interval days", time()));
+
+			return json_encode(array(
+				'status' => 'success',
+				'message' => "We are currently doing a transaction reset on pi1m server. However, in order to cater the load of microsites upload on the server, we have rescheduled your transaction uploading day to $days[$uploadableDay] $date.\n\nYou may however continue uploading your transaction normally after this period. (this week)",
+				'total_transactions' => 0
+				));
+		}*/
+
+		$pendingUpload = $this->getPendingUpload();
+
+		// if there's currently 10 pending upload. lessen the server load.
+		if($pendingUpload > 10)
+		{
+			return json_encode(array(
+				'status' => 'success',
+				'message' => $pendingUpload.' site(s) are currently uploading their transactions. Please try again after '.($pendingUpload*2).' minutes.',
+				'total_transactions' => 0
+				));
+		}
+
+		// begin upload record
+		db::insert('billing_transaction_upload', array(
+			'siteID' => $this->site->siteID,
+			'billingTransactionUploadStatus' => 0,
+			'billingTransactionUploadStartDate' => now(),
+			'billingTransactionUploadCreatedDate' => now()
+			));
+
+		// $transactionUploadId = db::getLastID('billing_transaction_upload', 'billingTransactionUploadID');
+		$transactionUploadId = db::getLastInsertId();
 
 		if(!$transactions)
+		{
+			db::where('billingTransactionUploadID', $transactionUploadId)->update('billing_transaction_upload', array(
+				'billingTransactionUploadStatus' => 2,
+				'billingTransactionUploadTotal' => 0,
+				'billingTransactionUploadCompletedDate' => now()
+			));
+
 			return json_encode(array(
 				'status' => 'success',
 				'total_transactions' => 0
 				));
+		}
 
-		$allIds = array_keys($transactions);
+		// $allIds = array_keys($transactions);
+		$allIds = array();
+
+		// get all unique ids
+		foreach($transactions as $row)
+			$allIds[] = $row['unique'];
 
 		// existing.
 		$existing = db::from('billing_transaction')
 		->where('siteID', $this->site->siteID)
-		->where('billingTransactionLocalID', $allIds)->get()->result('billingTransactionLocalID');
-		$localIds = array_keys($existing);
+		->where('billingTransactionUnique', $allIds)->get()->result('billingTransactionUnique');
+
+		$uniqueIds = array_keys($existing);
 
 		$totalTransactions = 0;
 
 		foreach($transactions as $row_transaction)
 		{
 			$localId = $row_transaction['transaction_id'];
+			$uniqueId = $row_transaction['unique'];
 
 			// update
-			if(in_array($localId, $localIds))
+			if(in_array($uniqueId, $uniqueIds) && $uniqueId != null)
 			{
+				$totalTransactions++;
+
 				$transaction = model::orm('billing/transaction')
 									->where('siteID', $this->site->siteID)
 									->where('billingTransactionLocalID', $localId)
 									->execute()->getFirst();
 
-				/*$totalTransactions++;
-
-				$transaction->billingTransactionTotalQuantity = $row_transaction['quantity'];
-				$transaction->billingTransactionTotal = $row_transaction['total'];
+				// only update date if there's changes. since currently only date can be updated. and status
 				$transaction->billingTransactionDate = $row_transaction['datetime'];
-				$transaction->billingTransactionCreatedDate = $row_transaction['datetime'];
-				$transaction->billingTransactionUpdatedDate = $row_transaction['datetime'];
-				$transaction->save();*/
+				$transaction->billingTransactionUpdatedDate = $row_transaction['updatedDate'];
+
+				if(isset($row_transaction['status']))
+					$transaction->billingTransactionStatus = $row_transaction['status'];
+				
+				$transaction->save();
 			}
 			else
 			{
@@ -302,8 +408,8 @@ class Controller_Cafe
 				$transaction->siteID = $this->site->siteID;
 				$transaction->billingTransactionLocalID = $localId;
 				$transaction->billingTransactionTotalQuantity = $row_transaction['quantity'];
-				$transaction->billingTransactionUnique = $row_transaction['unique'];
-				$transaction->billingTransactionStatus = 1;
+				$transaction->billingTransactionUnique = $uniqueId ? $uniqueId : strtotime($row_transaction['createdDate'])*1000;
+				$transaction->billingTransactionStatus = $row_transaction['status'] ? : 1;
 				$transaction->billingTransactionTotal = $row_transaction['total'];
 				$transaction->billingTransactionDate = $row_transaction['datetime'];
 				// $transaction->billingTransactionCreatedDate = $row_transaction['datetime'];
@@ -354,6 +460,20 @@ class Controller_Cafe
 			}
 		}
 
+		// if site has reupload request, update to success.
+		db::where('siteID', $this->site->siteID)->where('billingReuploadRequestStatus', 0)->update('billing_reupload_request', array('billingReuploadRequestStatus' => 1));
+
+		// log the upload date.
+		db::where('billingTransactionUploadID', $transactionUploadId)->update('billing_transaction_upload', array(
+			'billingTransactionUploadStatus' => 1,
+			'billingTransactionUploadTotal' => $totalTransactions,
+			'billingTransactionUploadCompletedDate' => now()
+			));
+		/*db::insert('billing_transaction_upload', array(
+			'siteID' => $this->site->siteID,
+			'billingTransactionUploadCreatedDate' => now()
+			));*/
+
 		return json_encode(array(
 			'status' => 'success',
 			'total_transactions' => $totalTransactions
@@ -368,25 +488,37 @@ class Controller_Cafe
 		{
 			db::insert('site_cafe', array(
 				'siteID' => $this->site->siteID,
-				'siteCafeIpAddress' => $_REQUEST['REMOTE_ADDR'],
+				'siteCafeIpAddress' => $_SERVER['REMOTE_ADDR'],
 				'siteCafeLastAccess' => date('Y-m-d H:i:s')
 				));
 		}
 		else
 		{
-			db::where('siteCafeID', $siteCafe['siteCafeID'])
-			->update('site_cafe', array(
-				'siteCafeIpAddress' => $_REQUEST['REMOTE_ADDR'],
-				'siteCafeLastAccess' => date('Y-m-d H:i:s')
-				));
+			// only insert at least per minute
+			if(time() > (strtotime($siteCafe['siteCafeLastAccess']) + 60))
+			{
+				db::where('siteCafeID', $siteCafe['siteCafeID'])
+				->update('site_cafe', array(
+					'siteCafeIpAddress' => $_SERVER['REMOTE_ADDR'],
+					'siteCafeLastAccess' => date('Y-m-d H:i:s')
+					));
+			}
 		}
 
+		$lastUpdatedDate = db::select('userUpdatedDate')
+		->where('userID IN (SELECT userID FROM site_member WHERE siteID = ?)', array($this->site->siteID))
+		->limit(1)
+		->order_by('userUpdatedDate DESC')
+		->get('user')->row('userUpdatedDate');
+
 		return json_encode(array(
-			'status' => 'success'
+			'status' => 'success',
+			'cafe_version' => $this->getCafeVersion(),
+			'mlu' => $lastUpdatedDate ? : 0 // member last update in a timestamp
 			));
 	}
 
-	protected function getCafeVersion()
+	protected function getAbsoluteCafeVersion()
 	{
 		$path = apps::$root.'../repo/cafe/.git/refs/heads/master';
 		// $cafeRoot = apps::$root.'../repo/cafe';
@@ -394,6 +526,19 @@ class Controller_Cafe
 		$currentVersion = file_get_contents($path);
 
 		return trim($currentVersion);
+	}
+
+	protected function isFullUpdateNeeded()
+	{
+		return db::where('siteID', $this->site->siteID)->where('billingUpdateRequestStatus', 0)->get('billing_update_request')->row() ? true : false;
+	}
+
+	protected function getCafeVersion()
+	{
+		if($this->isFullUpdateNeeded())
+			return 1;
+
+		return $this->getAbsoluteCafeVersion();
 	}
 
 	public function getVersion()
@@ -413,7 +558,19 @@ class Controller_Cafe
 		// $path = apps::$root.'../repo/cafe/.git/refs/heads/master';
 		$cafeRoot = apps::$root.'../repo/cafe';
 
-		$currentVersion = $this->getCafeVersion();
+		// check if there's a forced update request
+		if($this->isFullUpdateNeeded())
+		{
+			$version = '76a59b79e7a6a4c580784e9d7f2c87ac5f37d1fb';
+
+			// update billing_update_request if any.
+			db::where('siteID', $this->site->siteID)->where('billingUpdateRequestStatus', 0)->update('billing_update_request', array(
+				'billingUpdateRequestStatus' => 1,
+				'billingUpdateRequestUpdatedDate' => now()
+				));
+		}
+
+		$currentVersion = $this->getAbsoluteCafeVersion();
 
 		/*if($version == $currentVersion)
 		{

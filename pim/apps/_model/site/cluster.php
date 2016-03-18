@@ -20,6 +20,37 @@ class Cluster extends \Origami
 		return model::orm('site/site')->where('siteID IN (SELECT siteID FROM cluster_site WHERE clusterID = ?)', array($this->clusterID))->execute();
 	}
 
+	/**
+	 * @orm Get all ops manager of this cluster.
+	 * @return \model\user\user
+	 */
+	public function getOpsManager()
+	{
+		return orm('user/user')->where('userID IN (SELECT userID FROM cluster_opsmanager WHERE clusterID = ?)', array($this->clusterID))->find();
+	}
+
+	public function assignOpsmanager(\model\user\user $user)
+	{
+		if(!$this->hasOpsmanager())
+		{
+			db::insert('cluster_opsmanager', array(
+				'clusterID' => $this->clusterID,
+				'userID' => $user->userID,
+				'clusterOpsmanagerCreatedDate' => now(),
+				'clusterOpsmanagerCreatedUser' => session::get('userID')
+				));
+
+			return true;
+		}
+
+		return false;
+	}
+
+	public function hasOpsmanager()
+	{
+		return $this->getOpsManager() ? true : false;
+	}
+
 	public function getClusterID($siteID)
 	{
 		db::from("cluster_site");

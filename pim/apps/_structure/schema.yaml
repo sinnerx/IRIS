@@ -409,6 +409,13 @@ cluster_lead:
 	clusterLeadCreatedDate [datetime]
 	clusterLeadCreatedUser [int]
 
+cluster_opsmanager:
+	clusterOpsmanagerID [int]
+	clusterID [int]
+	userID [int]
+	clusterOpsmanagerCreatedDate [datetime]
+	clusterOpsmanagerCreatedUser [int]
+
 album:
 	albumID [int]
 	albumName [varchar]
@@ -738,7 +745,7 @@ billing_transaction_item:
 	billingItemID [int]
 	billingTransactionID [int]
 	billingTransactionItemDescription [text]
-	billingTransactionItemQuantity [int]
+	billingTransactionItemQuantity [float]
 	billingTransactionItemUnit [float] ## unit or hours
 	billingTransactionItemPrice [float] ## unit price.
 
@@ -762,8 +769,16 @@ billing_transaction:
 	billingTransactionUnique [varchar] ## a unique timestamp, used possibly for unique id
 	billingTransactionCreatedDate [datetime]
 	billingTransactionUpdatedDate [datetime]
-	billingTransactionStatus [int]  ##  1 = active 0 = deleted
+	billingTransactionStatus [int]  ##  1 = active, 2 = cancelled (only in localbilling), 3 = deleted
 	billingTransactionUploaded [int] ## 1 = uploaded by cafe, 0 = created on pi1m.
+
+billing_reupload_request:
+	billingReuploadRequestID [int]
+	siteID [int]
+	billingReuploadRequestStatus [int] ## 0 = pending, 1 = success
+	billingReuploadRequestBeginDate [datetime]
+	billingReuploadRequestCreatedDate [datetime]
+	billingReuploadRequestUpdatedDate [datetime]
 
 billing_pc_usage:
 	billingPcUsageID [int]
@@ -777,6 +792,10 @@ billing_pc_usage:
 billing_transaction_upload:
 	billingTransactionUploadID [int]
 	siteID [int]
+	billingTransactionUploadStatus [int] ## 0 = uploading, 1 = completed
+	billingTransactionUploadTotal [int] ## total transactions uploaded
+	billingTransactionUploadStartDate [datetime]
+	billingTransactionUploadCompletedDate [datetime]
 	billingTransactionUploadCreatedDate [datetime]
 
 billing_log:
@@ -823,11 +842,18 @@ billing_finance_transaction:
 	billingFinanceTransactionCreatedDate [datetime]
 	billingFinanceTransactionUpdatedDate [datetime]  ## backdated
 
+billing_update_request:
+	billingUpdateRequestID [int]
+	siteID [int]
+	billingUpdateRequestStatus [int] ## 0 = pending, 1 = patch given
+	billingUpdateRequestCreatedDate [datetime]
+	billingUpdateRequestUpdatedDate [datetime]
+
 pr:
 	prID [int]
 	userID [int]
 	siteID [int]
-	prStatus [int] ## 0 = pending, 1 = closed, 2 = rejected
+	prStatus [int] ## 0 = pending, 1 = closed, 2 = rejected, 3 = deleted
 	prStatusPendingLevel [int] ## if prStatus = 0, which level its currently pending at 
 	prStatusApprovalLevel [int] ## current approval level
 	prStatusRejectionLevel [int] ## if prStatus = 2, which level its rejected by
@@ -842,6 +868,21 @@ pr:
 	prCreatedDate [datetime]
 	prUpdatedDate [datetime]
 	prUpdatedUser [int]
+
+pr_rejection:
+	prRejectionID [int]
+	prID [int]
+	userLevel [int]
+	prRejectionReason [text]
+	prRejectionCreatedDate [datetime]
+	prRejectionCreatedUser [int]
+
+pr_expenditure:
+	prExpenditureID [int]
+	prID [int]
+	expenseExpenditureID [int]
+	prExpenditureCreatedDate [datetime]
+	prExpenditureCreatedUser [int]
 
 pr_remark:
 	prRemarkID [int]
@@ -899,23 +940,38 @@ expense_item:
 
 expense_expenditure:
 	expenseExpenditureID [int]
-	expenseExpenditureSet [int]
+	expenseExpenditureSet [varchar]
 	expenseExpenditureName [varchar]
 	expenseExpenditureStatus [int]
-	expenseExpenditureCreatedDate [int]
+	expenseExpenditureCreatedDate [datetime]
 	expenseExpenditureCreatedUser [int]
 
 pr_reconcilation:
 	prReconcilationID [int]
 	prID [int]
-	prReconcilationStatus [int] ## 1 = opened, 2 = closed
+	prReconcilationStatus [int] ## 0 = pending, 1 = closed, 2 = rejected, 3 = deleted
+	prReconcilationPendingLevel [int]
+	prReconcilationApprovalLevel [int]
+	prReconcilationRejectionLevel [int]
+	prReconcilationCreatedUser [int]
 	prReconcilationCreatedDate [datetime]
+	prReconcilationUpdatedDate [datetime]
+	prReconcilationUpdatedUser [int]
+	prReconcilationSubmitted [int] ## if this rl has been initiated.
+	prReconcilationSubmittedUser [int]
+	prReconcilationSubmittedDate [datetime]
+
+pr_reconcilation_rejection:
+	prReconcilationRejectionID [int]
+	prReconcilationID [int]
+	prReconcilationRejectionReason [text]
+	prReconcilationRejectionCreatedDate [datetime]
+	prReconcilationRejectionCreatedUser [int]
 
 pr_reconcilation_file:
 	prReconcilationFileID [int]
 	prReconcilationID [int]
-	expenseCategoryID [int]
-	siteID [int]
+	prReconcilationCategoryID [int]
 	prReconcilationFileName [varchar]
 	prReconcilationFileType [varchar]
 	prReconcilationFileSize [float]
@@ -927,6 +983,41 @@ pr_reconcilation_file:
 	prReconcilationFileCreatedUser [int]
 	prReconcilationFileCreatedDate [datetime]
 	prReconcilationFileUpdatedDate [datetime]
+
+pr_reconcilation_category:
+	prReconcilationCategoryID [int]
+	prReconcilationID [int]
+	expenseCategoryID [int]
+
+pr_reconcilation_item:
+	prReconcilationItemID [int]
+	prReconcilationID [int]
+	prReconcilationCategoryID [int]
+	prItemID [int]
+	expenseItemID [int]
+	prReconcilationItemName [varchar]
+	prReconcilationItemAmount [float]
+	prReconcilationItemGst [float]
+	prReconcilationItemTotal [float]
+	prReconcilationItemStatus [int] ## 1 = reconciled, 2 = deleted
+	prReconcilationItemCreatedDate [datetime]
+	prReconcilationItemCreatedUser [int]
+	prReconcilationItemUpdatedDate [datetime]
+	prReconcilationItemUpdatedUser [int]
+
+pr_item:
+	prItemID [int]
+	prID [int]
+	expenseItemID [int]
+	prItemDescription [text]
+	prItemPrice [float]
+	prItemQuantity [int]
+	prItemTotal [float]
+	prItemRemark [text]
+	prItemEdit [varchar]
+	prItemCreatedDate [datetime]
+	prItemUpdatedDate [datetime]
+	prItemUpdatedUser [int]
 
 pr_approval: ## created on each transaciton
 	prApprovalID [int]
@@ -952,3 +1043,112 @@ task_log:
 	taskLogStatus [int] ## 0 = pending, 1 = success
 	taskLogCreatedDate [datetime]
 	taskLogCreatedUser [int]
+
+### attendance tables
+att_attendancedetails:
+	attID [int]
+	managerID [int]
+	activityDate [varchar(20)]
+	activityTime [varchar(20)]
+	activityDateTime [datetime]
+	activityStatus [text]
+	outstationStatus [text]
+	attendanceStatus [text]
+	latLongIn [varchar(255)]
+	latLongOut [varchar(255)]
+	imgIn [varchar(255)]
+	imgOut [varchar(255)]
+	managerName [varchar(255)]
+	siteName [varchar(255)]
+	siteID [int]
+	clusterID [int]
+	userEmail [varchar(100)]
+	hours [float]
+	lateIn [int]
+	earlyOut [int]
+	anomaly [int]
+	accuracy [double]
+
+### lms
+lms_module:
+	id [int]
+	code [varchar(100)]
+	name [varchar(100)]
+	description [varchar(200)]
+	typeid [int(11)]
+	createdate [datetime]
+	createby [varchar(100)]
+	deletedate [datetime]
+	deleteby [varchar(100)]
+	updatedate [datetime]
+	updateby [varchar(100)]
+	status [int(11)]
+
+lms_module_type:
+	id [int]
+	name [varchar(100)]
+	code [varchar(10)]
+	createdate [datetime]
+	createby [varchar(100)]
+	deletedate [datetime]
+	deleteby [varchar(100)]
+	updatedate [datetime]
+	updateby [varchar(100)]
+	status [int(11)]
+
+lms_result:
+	id [int]
+	userid [int(11)]
+	result [int(11)]
+	datecreated [datetime]
+	status [varchar(100)]
+	moduleid [int(11)]
+	sessionid [varchar(100)]
+
+training_lms:
+	id [int]
+	trainingID [int(11)]
+	packageModuleID [int(11)]
+
+lms_package:
+	packageid [int]
+	name [varchar(100)]
+	code [varchar(10)]
+	createdate [datetime]
+	createby [varchar(100)]
+	deletedate [datetime]
+	deleteby [varchar(100)]
+	updatedate [datetime]
+	updateby [varchar(100)]
+	status [int(11)]
+	billing_item_id [int(11)]
+
+lms_package_module:
+	id [int(11)]
+	packageid [int(11)]
+	moduleid [int(11)]
+
+lms_user_answer:
+	u_id [int]
+	q_id [int(11)]
+	a_id [int(11)]
+
+lms_question_user:
+	qn_id [int]
+	userid [int(11)]
+	sessionid [varchar(100)]
+	q_id [int(11)]
+	a_id [int(11)]
+	marks [int(11)]
+
+lms_answer:
+	a_id [int]
+	q_id [int(11)]
+	a_text [varchar(100)]
+
+lms_questions_bank:
+	q_id [int]
+	id [int(11)]
+	type [varchar(100)]
+	q_text [varchar(200)]
+	correct [varchar(11)]

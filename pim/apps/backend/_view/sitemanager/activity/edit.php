@@ -2,6 +2,65 @@
 	
 var activity	= function()
 {
+
+	this.showPackage = function(yesno){
+		var y = yesno;
+
+		if (y == "2"){
+			$("#packagediv").show();
+			$("#modulediv").show();
+			
+			//activity.showModule($("#learningPackage").val());
+			//activity.showModuleDetail($("#learningModule").val());
+		}
+		else{
+			$("#packagediv").hide();
+		}	
+
+	}
+
+
+
+	this.showModuleDetail = function (module_id){
+		$.ajax({
+			url: pim.base_url +"ajax/activity/getModuleByID/"+ module_id, success: function (result){
+				//console.log(result);
+				//var result = result.substring(3, result.length);
+				result = $.parseJSON(result);
+				console.log(result);
+				$('#trainingType').empty();
+				 $.each(result, function(i, value) {  
+				  	$('<option></option>', {html:this.type_name}).attr('value', this.type_id).appendTo('#trainingType');
+				
+					$('#activityDescription').text(this.description);
+				});
+				$('#typediv').show();
+			}
+		});
+	}	
+
+	this.showModule = function (package){
+		var pid = package;
+
+		 $.ajax({
+		 	url: pim.base_url +"ajax/activity/getModuleByPackageID/"+ pid, success: function (result){
+		 		
+		 		//var result = result.substring(3, result.length); 
+		 		//console.log(result);
+		 		result = $.parseJSON(result);
+		 		
+		 		//console.log(result);
+		 		$('#learningModule').empty();
+				 $.each(result, function(i, value) {  
+				  	$('<option></option>', {html:this.name}).attr('value', this.id).appendTo('#learningModule');
+				});	
+				$("#modulediv").show();
+				activity.showModuleDetail($("#learningModule").val());	 		
+		 	}
+		 });
+		
+	}
+
 	this.showTypeDetail	= function(type)
 	{
 		var r	= {1:"event",2:"training",99:"others"};
@@ -9,6 +68,13 @@ var activity	= function()
 		$("#type-event, #type-training").hide();
 		$("#type-"+r[type]).show();
 
+		var learning = $("#learningSelect").val();
+
+		if ( learning == 2){
+			activity.showPackage(learning);
+		}
+
+		//alert($("#learningSelect").val());
 		pim.uriHash.set(r[type]);
 	}
 
@@ -526,6 +592,7 @@ Content is waiting for approval
 		<div class='row'>
 			<div class='col-sm-6'>
 				<div class='form-group'>
+					<?php //print_r($learningModule); ?>
 					<label>
 						Activity Name <?php echo flash::data("activityName");?>
 					</label>
@@ -625,12 +692,27 @@ Content is waiting for approval
 					</div>
 				</section>
 			</div>
+			
 			<div class='col-sm-12' id='type-training' style="display:none;">
 				<section class='panel panel-default'>
 					<div class='panel-heading'>
 					<h5>Training's detail</h5>
 					</div>
 					<div class='panel-body'>
+						<div class='form-group'>
+							<label>Learning? <?php echo flash::data("learningSelect");?></label>
+							<?php echo form::select("learningSelect",$learningSelection,"onchange='activity.showPackage(this.value);' class='form-control'",$row['learningSelection']);?>						
+						</div>
+						<div class='form-group' id="packagediv" style="display:none">
+							<label>Package of LMS <?php echo flash::data("learningPackage");?></label>
+							<?php //echo form::select("learningPackage",$learningPackage,"class='form-control'");?>
+							<?php echo form::select("learningPackage",$learningPackage,"onchange='activity.showModule(this.value);' class='form-control'",$row['package']);?>
+						</div>
+						<div class='form-group' id="modulediv" style="display:none">
+							<label>Module of LMS <?php echo flash::data("learningModule");?></label>
+							<?php //echo form::select("learningPackage",$learningPackage,"class='form-control'");?>
+							<?php echo form::select("learningModule",$learningModule,"onchange='activity.showModuleDetail(this.value);' class='form-control'",$row['module']);?>
+						</div>
 						<div class='form-group'>
 							<label>Training Type <?php echo flash::data("trainingType");?></label>
 							<?php echo form::select("trainingType",$trainingTypeR,"class='form-control'",$row['trainingType']);?>

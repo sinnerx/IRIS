@@ -9,6 +9,7 @@ class Origami
 	protected $prefix;
 	protected $exception = array();
 	protected $relationCaches = array();
+	protected $db;
 
 	public $modelData = array(
 		'name'=> null,
@@ -46,14 +47,16 @@ class Origami
 
 		if(!$this->modelData['isNew'])
 		{
-			db::where($primaryCol, $this->$primaryCol)->update($this->table, $data);
+			db::create()->where($primaryCol, $this->$primaryCol)->update($this->table, $data);
 
 			return $this;
 		}
 		else
 		{
-			db::insert($this->table, $data);
-			$lastID = db::getLastID($this->table, $primaryCol);
+			// db::create()->insert($this->table, $data);
+			// $lastID = db::create()->getLastID($this->table, $primaryCol);
+			// insert and get last insert id
+			$lastID = db::create()->insert($this->table, $data)->getLastInsertID();
 
 			$this->modelData['isNew'] = false;
 			$this->$primaryCol = $lastID;
@@ -90,7 +93,7 @@ class Origami
 		}
 	}
 
-	private function isNotOrmProperties()
+	private function isNotOrmProperties($column)
 	{
 		return !in_array($column, array('modelData'));
 	}
@@ -132,7 +135,7 @@ class Origami
 	{
 		$primary = $this->getPrimary();
 
-		db::delete($this->getTable(), array(
+		db::create()->delete($this->getTable(), array(
 			$primary => $this->getAttribute($primary)
 			));
 
@@ -182,27 +185,42 @@ class Origami
 
 	/**
 	 * Relational function
+	 * Bad singletonian method.
 	 */
 	public function withQuery($callback)
 	{
-		$callback(db::$instance);
+		if(!$this->db)
+			$this->db = \db::create();
+
+		$callback($this->db);
 
 		return $this;
+	}
+
+	public function clearQuery()
+	{
+		$this->db = null;
 	}
 
 	/**
 	 * @return \Origami
 	 */
-	public function getOne($model, $ref)
+	public function getOne($model, $ref, $foreignKey = null)
 	{
+		if($foreignKey)
+			$ref = array('local' => $ref, 'foreign' => $foreignKey);
+
 		return $this->relate($model, $ref, 'one');
 	}
 
 	/**
 	 * @return \Origamis
 	 */
-	public function getMany($model, $ref)
+	public function getMany($model, $ref, $foreignKey = null)
 	{
+		if($foreignKey)
+			$ref = array('local' => $ref, 'foreign' => $foreignKey);
+		
 		return $this->relate($model, $ref, 'many');
 	}
 
@@ -211,28 +229,62 @@ class Origami
 	 * @param mixed.
 	 *	- string (model name)
 	 *  - array (create origami anonymously : first is table name, second is it's primary key)
-	 * @param string foreign key
+	 * @param string|array foreign key
 	 * @param string type of relation
 	 * @return mixed. if relation type is one, return model object, else return \Origamis
 	 */
 	public function relate($model, $ref, $type)
 	{
-		$modelKey = is_array($model) ? serialize($model) : $model;
+		$baseTable = $this->table;
+		$modelKey = is_array($model) ? serialize(array_merge(array($baseTable), $model)) : $baseTable.'_'.$model;
 
-		if(isset($this->relationCaches[$type][$modelKey][$ref]))
-			return $this->relationCaches[$type][$modelKey][$ref];
+		if(is_string($ref))
+		{
+			$localKey = $ref;
+			$foreignKey = $ref;
+		}
+		else
+		{
+			$localKey = $ref['local'];
+			$foreignKey = $ref['foreign'];
+		}
+
+		// global caches
+		if(\RuntimeCaches::has($cacheHash = md5($modelKey.'_'.$this->$localKey.'_'.$type)))
+		{
+			// db::clear();
+			$this->clearQuery();
+			return \RuntimeCaches::get($cacheHash);
+		}
+
+		if(isset($this->relationCaches[$type][$modelKey][$localKey]))
+			return $this->relationCaches[$type][$modelKey][$localKey];
 
 		$primary = $this->primary;
 
 		$model = model::orm($model);
+
+		if($this->db)
+			$model->setDbInstance($this->db);
+
 		$foreignTable = $model->model->getTable();
 
-		$collection = $model->where($foreignTable.'.'.$ref, $this->$ref)->execute();
+		$collection = $model->where($foreignTable.'.'.$foreignKey, $this->$localKey)->execute();
+
+		$this->clearQuery();
 
 		if($type == 'one')
-			return $collection->getFirst();
+		{
+			$result = $collection->getFirst();
+		}
 		else
-			return $collection;
+		{
+			$result = $collection;
+		}
+
+		\RuntimeCaches::set($cacheHash, $result);
+
+		return $result;
 	}
 }
 

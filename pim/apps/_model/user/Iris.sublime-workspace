@@ -1,0 +1,1136 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"keyMode",
+				"$keyModuleSelected〔variable〕"
+			],
+			[
+				"result",
+				"$resultPackage〔variable〕"
+			],
+			[
+				"arrayp",
+				"$arrayPayment〔variable〕"
+			],
+			[
+				"print",
+				"print_r〔function〕"
+			],
+			[
+				"use",
+				"userID"
+			],
+			[
+				"user",
+				"userid"
+			],
+			[
+				"jso",
+				"parseJSON〔function〕"
+			],
+			[
+				"pritn",
+				"print_r〔function〕"
+			],
+			[
+				"data",
+				"$datapost〔variable〕"
+			],
+			[
+				"keymo",
+				"$keyModule〔variable〕"
+			],
+			[
+				"array",
+				"array_push〔function〕"
+			],
+			[
+				"pack",
+				"packageid"
+			],
+			[
+				"prin",
+				"print_r〔function〕"
+			],
+			[
+				"get",
+				"getModuleInPackage〔function〕"
+			],
+			[
+				"showMo",
+				"showModule"
+			],
+			[
+				"packa",
+				"$package〔variable〕"
+			],
+			[
+				"page",
+				"$package〔variable〕"
+			],
+			[
+				"session_de",
+				"session_destroy"
+			],
+			[
+				"_SE",
+				"$_SESSION〔variable〕"
+			],
+			[
+				"con",
+				"$content〔variable〕"
+			],
+			[
+				"In",
+				"Input::get"
+			],
+			[
+				"site",
+				"$sitetable〔variable〕"
+			],
+			[
+				"json",
+				"json_encode〔function〕"
+			],
+			[
+				"end",
+				"end_datetime"
+			],
+			[
+				"location",
+				"$locationid〔variable〕"
+			],
+			[
+				"arr",
+				"$array2〔variable〕"
+			],
+			[
+				"fi",
+				"find"
+			],
+			[
+				"Sites",
+				"Site〔namespace〕"
+			],
+			[
+				"access",
+				"accessory_id"
+			],
+			[
+				"invalid_de",
+				"invalid_dept"
+			],
+			[
+				"inv",
+				"inv_loc"
+			],
+			[
+				"invali",
+				"invalid_supplier〔variable〕"
+			],
+			[
+				"invalid",
+				"invalid_location〔variable〕"
+			],
+			[
+				"inva",
+				"invalid_supplier"
+			],
+			[
+				"invalid_",
+				"invalid_type"
+			],
+			[
+				"ch",
+				"$checkedoutLocation〔variable〕"
+			],
+			[
+				"created",
+				"created_at"
+			],
+			[
+				"mar",
+				"margin-left: 〔property〕"
+			],
+			[
+				"acce",
+				"accessories_locations"
+			],
+			[
+				"acc",
+				"accessory"
+			],
+			[
+				"check",
+				"checkedout_to"
+			],
+			[
+				"delivery",
+				"delivery_order"
+			],
+			[
+				"che",
+				"checkoutLocation"
+			],
+			[
+				"accLo",
+				"$accLocation〔variable〕"
+			],
+			[
+				"Acc",
+				"AccessoryLocation〔namespace〕"
+			],
+			[
+				"Acce",
+				"AccessoryLocation〔class〕"
+			],
+			[
+				"emp",
+				"$emptyClusterColumns〔variable〕"
+			],
+			[
+				"delete",
+				"$delete_file〔variable〕"
+			],
+			[
+				"tr",
+				"true"
+			],
+			[
+				"is_",
+				"$is_exist〔variable〕"
+			],
+			[
+				"var_",
+				"var_dump〔function〕"
+			],
+			[
+				"sql",
+				"$sqlinsertfiles〔variable〕"
+			],
+			[
+				"arrayfil",
+				"$arrayfileshashes〔variable〕"
+			],
+			[
+				"arra",
+				"$arrayfileshashes〔variable〕"
+			],
+			[
+				"mysqli_fet",
+				"mysqli_fetch_assoc〔function〕"
+			],
+			[
+				"row",
+				"$row〔variable〕"
+			],
+			[
+				"mysql_fet",
+				"mysql_fetch_assoc"
+			],
+			[
+				"md5",
+				"md5_file"
+			],
+			[
+				"num",
+				"num_rows_folder"
+			],
+			[
+				"mysql",
+				"mysql_connect〔function〕"
+			],
+			[
+				"up",
+				"$uploads〔variable〕"
+			],
+			[
+				"hash",
+				"hashDirectory〔function〕"
+			],
+			[
+				"displ",
+				"display: 〔property〕"
+			],
+			[
+				"bac",
+				"background: 〔property〕"
+			],
+			[
+				"dis",
+				"display: 〔property〕"
+			],
+			[
+				"navbar-fi",
+				"navbar-fixed-top"
+			],
+			[
+				"Asse",
+				"Asset::where"
+			],
+			[
+				"url",
+				"urlreader〔variable〕"
+			],
+			[
+				"hea",
+				"$headerLog〔variable〕"
+			],
+			[
+				"action",
+				"actionlog"
+			],
+			[
+				"assigned",
+				"assigned_to"
+			],
+			[
+				"pu",
+				"purchaseYear"
+			],
+			[
+				"purcha",
+				"purchaseDate"
+			],
+			[
+				"mari",
+				"margin-left"
+			],
+			[
+				"one",
+				"$oneasset〔variable〕"
+			],
+			[
+				"for",
+				"foreach	foreach …"
+			],
+			[
+				"field",
+				"$fields_string〔variable〕"
+			],
+			[
+				"fiel",
+				"fields_string"
+			],
+			[
+				"base",
+				"base_path〔function〕"
+			],
+			[
+				"Barryv",
+				"Barryvdh\\Snappy\\Facades\\SnappyImage"
+			],
+			[
+				"View",
+				"View::make"
+			],
+			[
+				"fon",
+				"font-weight: 〔property〕"
+			],
+			[
+				"backg",
+				"background-color"
+			],
+			[
+				"var",
+				"var_dump〔function〕"
+			],
+			[
+				"Sentry",
+				"Sentry::getUser"
+			],
+			[
+				"Depart",
+				"Departments"
+			],
+			[
+				"dupli",
+				"$duplicates〔variable〕"
+			],
+			[
+				"dup",
+				"$duplicates〔variable〕"
+			],
+			[
+				"loca",
+				"$location_list〔variable〕"
+			],
+			[
+				"division",
+				"divisions"
+			],
+			[
+				"divisi",
+				"division"
+			],
+			[
+				"divis",
+				"divisions"
+			],
+			[
+				"di",
+				"divisions"
+			],
+			[
+				"back",
+				"backend/divisions/view"
+			],
+			[
+				"divi",
+				"$divisions〔variable〕"
+			],
+			[
+				"Rou",
+				"Route::get"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "/Applications/MAMP/htdocs/digitalgaia/iris/attendance/application/config/config.php",
+			"settings":
+			{
+				"buffer_size": 18383,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/Applications/MAMP/htdocs/digitalgaia/iris/attendance/application/views/clusterleadHeader_view.php",
+			"settings":
+			{
+				"buffer_size": 7923,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/Applications/MAMP/htdocs/digitalgaia/iris/attendance/application/controllers/Reporting.php",
+			"settings":
+			{
+				"buffer_size": 5689,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/Applications/MAMP/htdocs/digitalgaia/iris/attendance/application/models/Reporting_Model.php",
+			"settings":
+			{
+				"buffer_size": 9778,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/Applications/MAMP/htdocs/digitalgaia/iris/attendance/application/views/clusterlead_report_result_view.php",
+			"settings":
+			{
+				"buffer_size": 10607,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/Applications/MAMP/htdocs/digitalgaia/iris/pim/apps/_structure/schema.yaml",
+			"settings":
+			{
+				"buffer_size": 30849,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "",
+	"command_palette":
+	{
+		"height": 367.0,
+		"selected_items":
+		[
+			[
+				"Package Control: ",
+				"Package Control: Install Package"
+			],
+			[
+				"package",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 449.0
+	},
+	"console":
+	{
+		"height": 0.0
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/Applications/MAMP/htdocs/digitalgaia/iris/pim/apps/_structure/schema.yaml",
+		"/Applications/MAMP/htdocs/digitalgaia/iris/attendance/application/views/clusterleadHeader_view.php.orig",
+		"/Applications/MAMP/htdocs/digitalgaia/iris/pim/assets/frontend_facade/css/styles.css",
+		"/Applications/MAMP/htdocs/digitalgaia/iris/pim/apps/frontend/_view/member/profile.php",
+		"/Applications/MAMP/htdocs/digitalgaia/iris/pim/apps/frontend/_controller/member.php",
+		"/Applications/MAMP/htdocs/digitalgaia/iris/pim/apps/_model/user/activity.php",
+		"/Applications/MAMP/htdocs/digitalgaia/iris.ORI/pim/core/libraries/Services/Db.php",
+		"/Applications/MAMP/htdocs/digitalgaia/iris/pim/apps/_model/activity/learning/packagemodule.php",
+		"/Applications/MAMP/htdocs/digitalgaia/iris/pim/apps/_model/activity/learning/module.php",
+		"/Applications/MAMP/htdocs/digitalgaia/iris/pim/apps/_model/activity/learning.php",
+		"/Applications/MAMP/htdocs/digitalgaia/iris/pim/apps/_model/activity/activity.php",
+		"/Applications/MAMP/htdocs/digitalgaia/iris/pim/apps/backend/_controller/sitemanager/activity.php",
+		"/Applications/MAMP/htdocs/digitalgaia/iris/pim/apps/backend/_view/sitemanager/activity/add.php",
+		"/Applications/MAMP/htdocs/digitalgaia/iris/pim/apps/backend/_controller/sitemanager/ajax_activity.php",
+		"/Applications/MAMP/htdocs/digitalgaia/iris/pim/apps/_model/activity/learning/package.php",
+		"/Applications/MAMP/htdocs/cafe-master/vendor/rosengate/exedra/Exedra/Application/Execution/Builder/Url.php",
+		"/Applications/MAMP/htdocs/digitalgaia/iris/pim/apps/api/_controller/cafe.php",
+		"/Applications/MAMP/htdocs/cafe-master/App/View/layout/default.php",
+		"/Applications/MAMP/htdocs/cafe-master/App/Controller/Landing.php",
+		"/Applications/MAMP/htdocs/cafe-master/vendor/rosengate/exedra/Exedra/Console/Wizard/Arcanist.php",
+		"/Applications/MAMP/htdocs/cafe-master/App/Controller/Menu.php",
+		"/Applications/MAMP/htdocs/cafe-master/App/Controller/Base.php",
+		"/Applications/MAMP/htdocs/cafe-master/App/Controller/Billing.php",
+		"/Applications/MAMP/htdocs/cafe-master/App/View/main/menu.php",
+		"/Applications/MAMP/htdocs/cafe-master/vendor/rosengate/exedra/Exedra/Application/Execution/Exec.php",
+		"/Applications/MAMP/htdocs/cafe-master/App/Config/config.php",
+		"/Applications/MAMP/htdocs/cafe-master/vendor/rosengate/exedra/Exedra/Application/Map/Route.php",
+		"/Applications/MAMP/htdocs/cafe/vendor/rosengate/exedra/Exedra/Loader.php",
+		"/Applications/MAMP/htdocs/cafe-master/vendor/rosengate/exedra/Exedra/Loader.php",
+		"/Applications/MAMP/htdocs/cafe-master/App/Config/db.php",
+		"/Applications/MAMP/htdocs/digitalgaia/iris/pim/apps/frontend/_controller/activity.php",
+		"/Applications/MAMP/htdocs/digitalgaia/iris/attendance/application/models/Clusterlead_model.php",
+		"/Applications/MAMP/htdocs/digitalgaia/iris/attendance/application/views/nav_view.php",
+		"/Applications/MAMP/htdocs/digitalgaia/iris/attendance/application/views/adminHeader_view.php",
+		"/Applications/MAMP/htdocs/digitalgaia/iris/pim/apps/backend/_view/sitemanager/site/overview.php",
+		"/Applications/MAMP/htdocs/digitalgaia/iris/pim/apps/backend/_controller/sitemanager/site.php",
+		"/Applications/MAMP/htdocs/digitalgaia/iris/attendance/application/models/Site_model.php",
+		"/Applications/MAMP/htdocs/digitalgaia/iris/attendance/application/models/User_Model.php",
+		"/Applications/MAMP/htdocs/digitalgaia/iris/pim/apps/backend/_view/sitemanager/activity/rsvp.php",
+		"/Applications/MAMP/htdocs/digitalgaia/iris/pim/apps/backend/_view/sitemanager/activity/ajax/attendees.php",
+		"/Applications/MAMP/htdocs/digitalgaia/iris/attendance/css/dropdown.css",
+		"/Applications/MAMP/htdocs/digitalgaia/iris/attendance/js/dropdown.js",
+		"/Users/mohdnorazlanmohdnoh/Downloads/jquery-ui-1.11.4.custom/jquery-ui.min.js",
+		"/Users/mohdnorazlanmohdnoh/Downloads/jquery-ui-1.11.4.custom/jquery-ui.js",
+		"/Applications/MAMP/htdocs/digitalgaia/iris/attendance/js/jquery-ui-1.10.3.custom.min.js",
+		"/Applications/MAMP/htdocs/digitalgaia/iris/pim/apps/backend/_view/shared/site/announcement.php",
+		"/Applications/MAMP/htdocs/digitalgaia/iris/pim/apps/_model/activity/training.php",
+		"/Applications/MAMP/htdocs/digitalgaia/iris/pim/apps/backend/_view/sitemanager/activity/edit.php",
+		"/Applications/MAMP/htdocs/digitalgaia/iris/attendance/js/jquery.min.js",
+		"/Applications/MAMP/htdocs/digitalgaia/iris/attendance/js/jquery.ui.touch-punch.min.js",
+		"/Applications/MAMP/htdocs/digitalgaia/iris/attendance/js/datepicker/datepicker.css",
+		"/Applications/MAMP/htdocs/digitalgaia/iris/attendance/js/datepicker/bootstrap-datepicker.js",
+		"/Applications/MAMP/htdocs/digitalgaia/iris/attendance/application/views/manager_view.php",
+		"/Applications/MAMP/htdocs/digitalgaia/iris/attendance/application/views/admin_view.php",
+		"/Applications/MAMP/htdocs/digitalgaia/iris/attendance/application/views/clusterlead_view.php",
+		"/Applications/MAMP/htdocs/digitalgaia/iris/attendance/application/views/clusterleadHeader_view.php",
+		"/Applications/MAMP/htdocs/digitalgaia/iris/attendance/application/controllers/Clusterlead.php",
+		"/Applications/MAMP/htdocs/digitalgaia/iris/attendance/application/controllers/Admin.php",
+		"/Applications/MAMP/htdocs/digitalgaia/iris/attendance/application/views/snap_header_view.php",
+		"/Applications/MAMP/htdocs/digitalgaia/iris/attendance/application/views/opmanager_view.php",
+		"/Applications/MAMP/htdocs/digitalgaia/iris/attendance/application/views/clusterleadFooter_view.php",
+		"/Applications/MAMP/htdocs/digitalgaia/iris/pim/apps/_model/access/menu.php",
+		"/Applications/MAMP/htdocs/digitalgaia/iris/attendance/application/config/constants.php",
+		"/Applications/MAMP/htdocs/october/plugins/acme/demo/Plugin.php",
+		"/Applications/MAMP/htdocs/october/plugins/acme/demo/components/Todo.php",
+		"/Applications/MAMP/htdocs/october/plugins/acme/demo/updates/create_tasks_table.php",
+		"/Applications/MAMP/htdocs/digitalgaia/iris/lms/application/views/packages/index.php",
+		"/Applications/MAMP/htdocs/digitalgaia/iris/lms/application/views/main/index.php",
+		"/Applications/MAMP/htdocs/digitalgaia/iris/lms/application/config/database.php",
+		"/Applications/MAMP/htdocs/digitalgaia/iris/lms/application/config/config.php",
+		"/Applications/MAMP/htdocs/digitalgaia/iris/lms/application/config/routes.php",
+		"/Applications/MAMP/htdocs/digitalgaia/iris/lms/application/controllers/Main.php",
+		"/Applications/MAMP/htdocs/digitalgaia/iris/lms/application/controllers/Package.php",
+		"/Applications/MAMP/htdocs/digitalgaia/iris/lms/application/views/templates/head.php",
+		"/Applications/MAMP/htdocs/digitalgaia/iris/lms/.gitignore",
+		"/Applications/MAMP/htdocs/digitalgaia/iris/lms/application/views/templates/header.php",
+		"/Applications/MAMP/conf/php5.6.2/php.ini",
+		"/Applications/MAMP/htdocs/october/config/app.php",
+		"/Applications/MAMP/htdocs/october/plugins/acme/demo/updates/version.yaml",
+		"/Applications/MAMP/htdocs/october/config/database.php",
+		"/Applications/MAMP/htdocs/digitalgaia/iris/attendance/placeholder",
+		"/Applications/MAMP/htdocs/digitalgaia/iris/.gitignore",
+		"/Applications/MAMP/htdocs/digitalgaia/iris/pim/apps/backend/_controller/auth.php",
+		"/Applications/MAMP/htdocs/digitalgaia/iris.LMS/pim/apps/backend/_controller/auth.php",
+		"/Users/mohdnorazlanmohdnoh/Library/Application Support/Sublime Text 2/Packages/Default/Default (OSX).sublime-keymap",
+		"/Users/mohdnorazlanmohdnoh/Library/Application Support/Sublime Text 2/Packages/FileDiffs/FileDiffs.sublime-settings",
+		"/Applications/MAMP/htdocs/digitalgaia/iris.LMS/pim/apps/_model/access/menu.php",
+		"/Applications/MAMP/htdocs/digitalgaia/iris/.htaccess",
+		"/Applications/MAMP/htdocs/digitalgaia/iris/pim/apps/frontend/_controller/main.php",
+		"/Applications/MAMP/htdocs/digitalgaia/iris/pim/apps/frontend/_view/page/index.php",
+		"/Applications/MAMP/htdocs/digitalgaia/iris/pim/apps/frontend/_view/main/landing.php",
+		"/Applications/MAMP/htdocs/digitalgaia/iris/pim/apps/_model/activity/event.php",
+		"/Applications/MAMP/htdocs/digitalgaia/iris/lms/application/views/welcome_message.php",
+		"/Applications/MAMP/htdocs/digitalgaia/iris/lms/application/libraries/Nativesession.php",
+		"/Applications/MAMP/htdocs/digitalgaia/iris/lms/application/controllers/Welcome.php",
+		"/Applications/MAMP/htdocs/digitalgaia/iris/lms/.htaccess",
+		"/Applications/MAMP/htdocs/digitalgaia/iris/pim/apps/_model/activity/learning/type.php",
+		"/Applications/MAMP/htdocs/digitalgaia/iris/pim/apps/_model/user/user.php",
+		"/Applications/MAMP/htdocs/digitalgaia/iris/pim/core/routing.php",
+		"/Applications/MAMP/htdocs/digitalgaia/iris/pim/apps/_config/database.php",
+		"/Applications/MAMP/htdocs/digitalgaia/iris/dev_docs/runningpim.txt",
+		"/Applications/MAMP/htdocs/digitalgaia/iris/index.php",
+		"/Applications/MAMP/htdocs/digitalgaia/iris/pim/apps/_config/config.php",
+		"/Applications/MAMP/htdocs/digitalgaia/iris/pim/apps/_model/video/album.php",
+		"/Applications/MAMP/htdocs/digitalgaia/iris/pim/apps/api/_controller/redirect.php",
+		"/Applications/MAMP/htdocs/digitalgaia/iris/pim/apps/backend/_controller/sitemanager/facebook.php",
+		"/Applications/MAMP/htdocs/digitalgaia/iris/pim/apps/frontend/_template/default.php",
+		"/Applications/MAMP/htdocs/digitalgaia/iris/pim/apps/frontend/_template/default_facade.php",
+		"/Applications/MAMP/htdocs/digitalgaia/iris/pim/apps/frontend/_view/main/landing_about.php",
+		"/Applications/MAMP/htdocs/digitalgaia/iris/pim/apps/frontend/_view/main/landing_contact.php",
+		"/Applications/MAMP/htdocs/digitalgaia/iris/pim/apps_other/exedra_docs/_config/config.php",
+		"/Applications/MAMP/htdocs/digitalgaia/iris/pim/apps_other/exedra_docs/_config/database.php",
+		"/Applications/MAMP/htdocs/digitalgaia/iris/pim/apps_other/exedra_docs/exedra/_structure/routes.php",
+		"/Applications/MAMP/htdocs/digitalgaia/iris/pim/apps_other/exedra_docs/exedra/_view/documentation/core/flash.php",
+		"/Applications/MAMP/htdocs/digitalgaia/iris/pim/apps_other/exedra_docs/exedra/_view/documentation/mvc/router.php",
+		"/Applications/MAMP/htdocs/digitalgaia/iris/pim/apps_other/exedra_docs/exedra/_view/documentation/pathurl/url.php",
+		"/Applications/MAMP/htdocs/digitalgaia/iris/pim/apps_other/galileo/_config/config.php",
+		"/Applications/MAMP/htdocs/digitalgaia/iris/pim/apps_other/galileo/_config/database.php",
+		"/Applications/MAMP/htdocs/digitalgaia/iris/pim/assets/_scale/less/readme.txt",
+		"/Applications/MAMP/htdocs/digitalgaia/iris/pim/assets/frontend/video/js/api3.1/jquery.aprvp.min.js",
+		"/Applications/MAMP/htdocs/digitalgaia/iris/pim/core/libraries/Services/Pagination.php",
+		"/Applications/MAMP/htdocs/digitalgaia/iris/pim/index.php",
+		"/Applications/MAMP/htdocs/digitalgaia/iris/pim/vendor/phpmailer/phpmailer/.travis.yml",
+		"/Applications/MAMP/htdocs/digitalgaia/iris/pim/vendor/phpmailer/phpmailer/class.phpmailer.php",
+		"/Applications/MAMP/htdocs/digitalgaia/iris/pim/vendor/phpmailer/phpmailer/docs/extending.html",
+		"/Applications/MAMP/htdocs/digitalgaia/iris/pim/vendor/phpmailer/phpmailer/examples/code_generator.phps",
+		"/Applications/MAMP/htdocs/digitalgaia/iris/pim/vendor/phpmailer/phpmailer/examples/gmail_xoauth.phps",
+		"/Applications/MAMP/htdocs/digitalgaia/iris/pim/vendor/phpmailer/phpmailer/examples/mailing_list.phps"
+	],
+	"find":
+	{
+		"height": 35.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+			"/Applications/MAMP/htdocs/cafe-master/App/View",
+			"/Applications/MAMP/htdocs/cafe-master",
+			"/Applications/MAMP/htdocs/cafe",
+			"/Applications/MAMP/htdocs/digitalgaia/iris/pim/apps/backend/_controller/sitemanager",
+			"/Applications/MAMP/htdocs/digitalgaia/iris/lms",
+			"/Applications/MAMP/htdocs/digitalgaia/iris/lms/application",
+			"/Applications/MAMP/htdocs/october",
+			"/Applications/MAMP/htdocs/digitalgaia/iris/pim",
+			"/Applications/MAMP/htdocs/digitalgaia/iris",
+			"/Applications/MAMP/htdocs/iris",
+			"",
+			"/Applications/MAMP/htdocs/snipeit",
+			"/Applications/MAMP/htdocs/snipeit/app/views/backend/hardware",
+			"/Applications/MAMP/htdocs/snipeit/app/lang/en",
+			"/Applications/MAMP/htdocs/snipeit/app/views/backend/reports",
+			"",
+			"/Applications/MAMP/htdocs/snipeit/public/assets/css",
+			"/Applications/MAMP/htdocs/iris/pim",
+			"/Applications/MAMP/htdocs/snipeit/app",
+			"/Applications/MAMP/htdocs/snipeit/app/controllers",
+			"/Applications/MAMP/htdocs/snipeit/app/config",
+			"/Applications/MAMP/htdocs/snipeit/app/controllers/admin",
+			"/Applications/MAMP/htdocs/iris/pim",
+			"/Applications/MAMP/htdocs/iris",
+			"/Applications/MAMP/htdocs/iris/pim",
+			"/Applications/MAMP/htdocs/snipeit/app/controllers/admin",
+			"/Applications/MAMP/htdocs/snipeit/app",
+			"/Applications/MAMP/htdocs/snipeit/public/assets/js",
+			"/Applications/MAMP/htdocs/snipeit/app/views",
+			"/Applications/MAMP/htdocs/snipeit/app/views/frontend",
+			"",
+			"/Applications/MAMP/htdocs/snipeit/public",
+			"/Applications/MAMP/htdocs/iris/pim",
+			"/Applications/MAMP/htdocs/snipeit/public",
+			"/Applications/MAMP/htdocs/snipeit/app/config",
+			"/Applications/MAMP/htdocs/snipeit/app/controllers",
+			"/Applications/MAMP/htdocs/iris/pim",
+			"/Applications/MAMP/htdocs/snipeit",
+			"/Applications/MAMP/htdocs/snipeit/app",
+			"/Applications/MAMP/htdocs/snipeit",
+			"/Applications/MAMP/htdocs/snipeit/app/controllers",
+			"/Applications/MAMP/htdocs/snipeit/app/controllers/admin",
+			"/Applications/MAMP/htdocs/snipeit/app/controllers",
+			"/Applications/MAMP/htdocs/snipeit/app/controllers/admin",
+			"/Applications/MAMP/htdocs/snipeit/app/models",
+			"/Applications/MAMP/htdocs/snipeit/app/views/backend",
+			"/Applications/MAMP/htdocs/snipeit/app/views/frontend/account",
+			"/Applications/MAMP/htdocs/snipeit/app",
+			"/Applications/MAMP/htdocs/snipeit/app/views/backend",
+			"/Applications/MAMP/htdocs/snipeit",
+			"/Applications/MAMP/htdocs/snipeit/app/controllers",
+			"/Applications/MAMP/htdocs/snipeit/app/views",
+			"/Applications/MAMP/htdocs/snipeit/app/views/backend/users",
+			"/Applications/MAMP/htdocs/snipeit",
+			"/Applications/MAMP/htdocs/snipeit/app/database",
+			"/Applications/MAMP/htdocs/BlogAlan/app",
+			"/Applications/MAMP/htdocs/BlogAlan"
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"att",
+			"billingitemI",
+			"db",
+			"learningModule",
+			"login into",
+			"getUri",
+			"throwFailedExecution",
+			"route not found",
+			"route",
+			"://",
+			"darwin",
+			"attendance",
+			"package",
+			"userid",
+			"user",
+			"atten",
+			"cluster",
+			"cluster_list",
+			"get_cluster",
+			"ann",
+			"announ",
+			"post",
+			"get_datatables",
+			"autocomplete",
+			"getTrainingModule",
+			"training_lms",
+			"moduleid",
+			"add",
+			"autocomplete",
+			"searchByObj",
+			"add",
+			"datepicker-input",
+			"announcementExpiredDate",
+			"add",
+			"dropdown",
+			"mutliSelect",
+			"multiSelect",
+			"dropdown",
+			"return",
+			"group",
+			"inner",
+			"join",
+			"showPackage",
+			"route",
+			"lms_module",
+			"redirect",
+			"extension",
+			"php_mysql",
+			"mysql",
+			"$env = $app->detectEnvironment(function()",
+			"$env",
+			"();\n",
+			"packageID",
+			"edit",
+			"LOCALHOST",
+			"$_SESSION['userid']",
+			"session",
+			"package",
+			"submit",
+			"post",
+			"learningModule",
+			"activityModule",
+			"getModuleByPackageID",
+			"trainin",
+			"conf",
+			"env",
+			"tra",
+			"showTypeDetail",
+			"type-event",
+			"eventTypeR",
+			"trainingType",
+			"eventType",
+			"type-training",
+			"type-learning",
+			"type-event",
+			"event",
+			"showTypeDetail",
+			"activityType",
+			"showTypeDetail",
+			"activitytype",
+			"localhost",
+			"localhost/",
+			"localhost/digitalgaia/",
+			"localhost:8888",
+			"post",
+			"trainingType",
+			"session",
+			"thread",
+			"create_user",
+			"str",
+			"check_permissions",
+			"example",
+			"bulkedit",
+			"example",
+			"setting",
+			"sentry",
+			"Sites",
+			"admin/",
+			"admin/settings",
+			"model",
+			"->nullable()",
+			"location",
+			"duplicates",
+			"department",
+			"selected_dept",
+			"div",
+			"Division",
+			"div",
+			"Department",
+			"department",
+			"\n      ",
+			"Department",
+			"department",
+			"Department",
+			"department",
+			"Department",
+			"department",
+			"checkout",
+			"location",
+			"RTD",
+			"$logaction->site_id = $assigned_to;",
+			"assigned_to",
+			"getdeletepage",
+			"delete",
+			"do",
+			"serial",
+			"delete",
+			"getdelete"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"GET",
+			"dropdownCustom",
+			"localhost:8888",
+			"localhost:8888/",
+			"Site",
+			"hardware",
+			"site",
+			"",
+			"site",
+			"loc",
+			"Loc",
+			"Location",
+			"loc",
+			"Site",
+			"site",
+			"Site",
+			"site",
+			"Site",
+			"site",
+			"Site",
+			"site",
+			"Type",
+			"//echo",
+			"<span style=\"font-weight: bold \"",
+			"{{-- <b class=\"fa fa-chevron-down\"></b> --}}",
+			"div",
+			"Department",
+			"department",
+			"Department",
+			"department",
+			"departments",
+			"department",
+			"departments",
+			"Department",
+			"department",
+			"departments",
+			"Departments",
+			"departmentID",
+			"departmentId",
+			"departments",
+			"Departments",
+			"type",
+			"Types",
+			"types",
+			"typeID",
+			"typeId",
+			"type",
+			"Types",
+			"types",
+			"type",
+			"types",
+			"type",
+			"types",
+			"type",
+			"types",
+			"Asset Type",
+			"divisions",
+			"division",
+			"Division",
+			"division",
+			"divisions",
+			"division",
+			"Divisions",
+			"divisions",
+			"backend",
+			"division",
+			"divisions"
+		],
+		"reverse": false,
+		"show_context": false,
+		"use_buffer2": false,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 3,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "/Applications/MAMP/htdocs/digitalgaia/iris/attendance/application/config/config.php",
+					"settings":
+					{
+						"buffer_size": 18383,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "/Applications/MAMP/htdocs/digitalgaia/iris/attendance/application/views/clusterleadHeader_view.php",
+					"settings":
+					{
+						"buffer_size": 7923,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1602,
+								1602
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "/Applications/MAMP/htdocs/digitalgaia/iris/attendance/application/controllers/Reporting.php",
+					"settings":
+					{
+						"buffer_size": 5689,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								4389,
+								4389
+							]
+						],
+						"settings":
+						{
+							"auto_complete": false,
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1494.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "/Applications/MAMP/htdocs/digitalgaia/iris/attendance/application/models/Reporting_Model.php",
+					"settings":
+					{
+						"buffer_size": 9778,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								5731,
+								5731
+							]
+						],
+						"settings":
+						{
+							"auto_complete": false,
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1819.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "/Applications/MAMP/htdocs/digitalgaia/iris/attendance/application/views/clusterlead_report_result_view.php",
+					"settings":
+					{
+						"buffer_size": 10607,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1132,
+								1132
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 103.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "/Applications/MAMP/htdocs/digitalgaia/iris/pim/apps/_structure/schema.yaml",
+					"settings":
+					{
+						"buffer_size": 30849,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								29042,
+								29042
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/YAML/YAML.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 15053.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 0.0
+	},
+	"input":
+	{
+		"height": 31.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.find_results":
+	{
+		"height": 234.0
+	},
+	"replace":
+	{
+		"height": 64.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+			[
+				"framework",
+				"pim/core/libraries/Framework.php"
+			],
+			[
+				"homecon",
+				"app/Http/Controllers/HomeController.php"
+			],
+			[
+				"",
+				"app/Http/Controllers/PagesController.php"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"selected_items":
+		[
+		],
+		"width": 380.0
+	},
+	"show_minimap": false,
+	"show_open_files": true,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 309.0,
+	"status_bar_visible": true
+}

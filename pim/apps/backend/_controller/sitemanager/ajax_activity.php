@@ -225,5 +225,21 @@ class Controller_Ajax_Activity
 			}
 		}
 	}
+
+	public function getModuleByPackageID($packageid)
+	{
+		//echo "test controller " . $packageid;
+		$module = model::load("activity/learning/packagemodule")->getModuleByPackageID($packageid);
+		$module = json_encode($module);
+		echo $module;
+	}
+
+	public function getModuleByID($id)
+	{
+		//echo "test controller " . $packageid;
+		$module = model::load("activity/learning/packagemodule")->getModuleByID($id);
+		$module = json_encode($module);
+		echo $module;
+	}
 }
 ?>

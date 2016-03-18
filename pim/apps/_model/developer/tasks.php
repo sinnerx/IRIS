@@ -27,6 +27,16 @@ class Tasks
 			'description' => 'Reset billing'
 			));
 
+		$manager->addTask('billingTransactionReset', array(
+			'repeatable' => true,
+			'description' => 'Reset billing Transaction'
+			));
+
+		$manager->addTask('expenseReset', array(
+			'repeatable' => true,
+			'description' => 'Expense Reset'
+			));
+
 		$manager->addTask('updateBillingItemUpdatedDate', array(
 			'description' => 'Update billing item updated date'
 			));
@@ -68,8 +78,53 @@ class Tasks
 			));
 
 		$manager->addTask('updateUserUpdatedDate', array(
-			'description' => 'Update User Updated Date With User Created Date'
+			'repeatable' => true,
+			'description' => 'Update null User Updated Date With Current date'
 			));
+
+		$manager->addTask('pageAddDefault', array(
+			'repeatable' => true,
+			'description' => 'Add another 6 page_default for skmm'
+			));
+
+		$manager->addTask('pageLocalDataMigrate', array(
+			'description' => 'Migrate new pages',
+			'repeatable' => true
+			));
+	}
+
+	public function pageAddDefault()
+	{
+		$defaults = array(
+			array(1, 'Mengenai Kami', 'mengenai-kami'),
+			array(2, 'Pengurusan', 'pengurusan'),
+			array(3, 'AJK Pi1M', 'ajk'),
+			array(4, 'Maklumat Tempatan', 'maklumat-tempatan'),
+			array(5, 'Perlancongan & Rekreasi', 'perlancongan-rekreasi'),
+			array(6, 'Kemudahan Awam', 'kemudahan-awam'),
+			array(7, 'Ekonomi dan Keusahawanan', 'ekonomi-keusahawanan'),
+			array(8, 'Komuniti', 'komuniti'),
+			array(9, 'Pendidikan', 'pendidikan'));
+
+		foreach($defaults as $default)
+		{
+			if(db::where('pageDefaultType', $default[0])->get('page_default')->row())
+				continue;
+
+			db::insert('page_default', array(
+				'pageDefaultType' => $default[0],
+				'pageDefaultName' => $default[1],
+				'pageDefaultSlug' => $default[2]
+				));
+		}
+	}
+
+	public function pageLocalDataMigrate()
+	{
+		$defaults = db::get('page_default')->result('pageDefaultType');
+
+		foreach(orm('site/site')->execute() as $site)
+			$site->initiateDefaultPages(orm('page/page_default')->execute());
 	}
 
 	public function billingItem()
@@ -240,6 +295,21 @@ class Tasks
 		// db::where('billingItemName', 'PC Usage')->update('billing_item', array('billingItemCode' => 'pc_usage'));
 	}
 
+	public function billingTransactionReset()
+	{
+		db::query("TRUNCATE `billing_approval`;
+		TRUNCATE `billing_approval_level`;
+		TRUNCATE `billing_finance_transaction`;
+		TRUNCATE `billing_log`;
+		TRUNCATE `billing_transaction`;
+		TRUNCATE `billing_transaction_item`;
+		TRUNCATE `billing_pc_usage`;
+		TRUNCATE `billing_transaction_upload`;
+		TRUNCATE `billing_reupload_request`;
+		TRUNCATE `billing_transaction_user`;
+		TRUNCATE `billing_verification`;");
+	}
+
 	public function billingReset()
 	{
 				db::query("TRUNCATE `billing_approval`;
@@ -252,6 +322,7 @@ class Tasks
 		TRUNCATE `billing_transaction_item`;
 		TRUNCATE `billing_pc_usage`;
 		TRUNCATE `billing_transaction_upload`;
+		TRUNCATE `billing_reupload_request`;
 		TRUNCATE `billing_transaction_user`;
 		TRUNCATE `billing_verification`;");
 
@@ -259,6 +330,24 @@ class Tasks
 		db::delete('task_log', array(
 			'taskCode' => 'billingItem'
 			));
+	}
+
+	public function expenseReset()
+	{
+		db::query('TRUNCATE `pr`;
+			TRUNCATE `pr_approval`;
+			TRUNCATE `pr_rejection`;
+			TRUNCATE `pr_cash_advance`;
+			TRUNCATE `pr_cash_advance_item`;
+			TRUNCATE `pr_item`;
+			TRUNCATE `pr_expenditure`;
+			TRUNCATE `pr_reconcilation`;
+			TRUNCATE `pr_reconcilation_rejection`;
+			TRUNCATE `pr_reconcilation_approval`;
+			TRUNCATE `pr_reconcilation_file`;
+			TRUNCATE `pr_reconcilation_category`;
+			TRUNCATE `pr_reconcilation_item`;
+			TRUNCATE `pr_remark`;');
 	}
 
 	/*public function purchaseRequisitionCategory()
@@ -312,12 +401,12 @@ class Tasks
 	public function prExpenditureNew()
 	{
 		$expenditures['data'] = array(
-			array(1, 'PI1M Expenses'),
-			array(1, 'PI1M Equipment'),
-			array(2, 'Scheduled Event'),
-			array(2, 'Ad hoc Event'),
-			array(3, 'Other'),
-			array(3, '1Citizen')
+			array('budgeted', 'PI1M Expenses'),
+			array('budgeted', 'PI1M Equipment'),
+			array('addition', 'Scheduled Event'),
+			array('addition', 'Ad hoc Event'),
+			array('replacement', 'Other'),
+			array('replacement', '1Citizen')
 		);
 
 		foreach($expenditures['data'] as $row)
@@ -428,7 +517,12 @@ class Tasks
 
 	public function updateUserUpdatedDate()
 	{
-		db::query("UPDATE user SET userUpdatedDate = userCreatedDate");
+		$date = now();
+
+		db::where('userUpdatedDate IS NULL')->update('user', array(
+			'userUpdatedDate' => now()
+			));
+		// db::query("UPDATE user SET userUpdatedDate = userCreatedDate");
 	}
 
 	public function updateBillingItemUpdatedDate()

@@ -130,6 +130,7 @@ Listing the groups of Pi1M sites for administration purpose. Every cluster must 
 			<th width="20">No.</th>
 			<th width='30%'>Cluster Name</th>
 			<th class='site-col'>Cluster Lead</th>
+			<th>Ops Manager</th>
 			<th width="80px"></th>
 		</tr>
 	</thead>
@@ -137,9 +138,9 @@ Listing the groups of Pi1M sites for administration purpose. Every cluster must 
 	<?php
 	if($res_cluster):
 		$no	= 1;
-		foreach($res_cluster as $row):
-			$name	= $row['clusterName'];
-			$clusterID = $row['clusterID'];
+		foreach($res_cluster as $cluster):
+			$name	= $cluster->clusterName;
+			$clusterID = $cluster->clusterID;
 			
 			
 			$clusterLeadR	= $clusterLeadByClusterR[$clusterID];
@@ -157,10 +158,26 @@ Listing the groups of Pi1M sites for administration purpose. Every cluster must 
 			$userEmail	= count($userEmail) == 0?"Null":implode(" ",$userEmail);
 
 			$assignUrl	= url::base("cluster/assign?clusterID=$clusterID");
-			$assignIcon	= "<a href='$assignUrl' class='fa fa-user'></a>";
+			$assignIcon	= "<a href='$assignUrl' class='fa fa-plus'></a>";
 			$deleteUrl = url::base('cluster/delete/'.$clusterID);
+			?>
 
-			echo "<tr><td>$no.</td><td>$name</td><td>$userEmail</td><td>$assignIcon <a href='#' onclick='cluster.show($clusterID);' class='fa fa-list' title='List of monitored site'></a> <a href='$deleteUrl' onclick='return confirm(\"Delete this cluster. Are you sure?\");' class='i i-cross2'></a></td></tr>";
+			<tr>
+				<td><?php echo $no;?>.</td>
+				<td><?php echo $name;?></td>
+				<td><?php echo $userEmail;?> <?php echo $assignIcon;?></td>
+				<td>
+					<?php if($cluster->hasOpsmanager()):?>
+						<?php echo $cluster->getOpsmanager()->userEmail;?> <a href='<?php echo url::base('cluster/deassignOpsmanager/'.$cluster->clusterID);?>' class='i i-cross2'></a>
+					<?php else:?>
+						<a href='<?php echo url::base('cluster/assignOpsmanager/'.$cluster->clusterID);?>' class='fa fa-plus'></a>
+					<?php endif;?>
+				</td>
+				<td></td>
+				<td><a href='#' onclick='cluster.show(<?php echo $clusterID;?>);' class='fa fa-list' title='List of monitored site'></a> <a href='<?php echo $deleteUrl;?>' onclick='return confirm(\"Delete this cluster. Are you sure?\");' class='i i-cross2'></a>
+				</td>
+			</tr>
+			<?php
 			$no++;
 		endforeach;
 	else:

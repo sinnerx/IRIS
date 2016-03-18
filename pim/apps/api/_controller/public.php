@@ -23,6 +23,15 @@ class Controller_Public
 		return json_encode($response);
 	}
 
+	public function uploadLog()
+	{
+		template::set(false);
+		
+		$uploads = db::join('site', 'site.siteID = billing_transaction_upload.siteID')->order_by('billingTransactionUploadCreatedDate', 'DESC')->get('billing_transaction_upload')->result();
+
+		return view::render('public/uploadLog', array('uploads' => $uploads));
+	}
+
 	protected function getCafeVersion()
 	{
 		$path = apps::$root.'../repo/cafe/.git/refs/heads/master';
@@ -31,6 +40,34 @@ class Controller_Public
 		$currentVersion = file_get_contents($path);
 
 		return trim($currentVersion);
+	}
+
+	public function uploadReschedule()
+	{
+		template::set(false);
+
+		$sites = db::get('site')->result();
+
+		$data = array();
+
+		foreach($sites as $row)
+		{
+			$siteID = $row['siteID'];
+
+			$day = floor($siteID / 26) + 1;
+
+			$days = array(
+				1 => 'Monday',
+				2 => 'Tuesday',
+				3 => 'Wednesday',
+				4 => 'Thursday',
+				5 => 'Friday'
+			);
+
+			$data[$days[$day]][] = $row;
+		}
+
+		view::render('public/uploadReschedule', array('sites' => $data));
 	}
 
 	public function ping()

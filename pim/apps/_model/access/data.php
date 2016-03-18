@@ -55,7 +55,29 @@ class Data
 					"expense/viewFile"=>Array("fc"),
 					"expense/fileImage"=>Array("fc"),
 					"expense/fcClose"=>Array("fc"),
-					"expense/generateRLReport"=>Array("sm","cl","om","fc")
+					"expense/generateRLReport"=>Array("sm","cl","om","fc"),
+					'exp/prList' => array('sm', 'cl', 'om', 'fc', 'r'),
+					'exp/rlList' => array('sm', 'cl', 'om', 'fc', 'r'),
+					'exp/prView' => array('sm', 'cl', 'om', 'fc', 'r'),
+					'exp/prEdit' => array('sm', 'cl', 'om', 'fc', 'r'),
+					'exp/prEditCashAdvance' => array('sm', 'cl', 'fc', 'om', 'r'),
+					'exp/prReject' => array('cl', 'om'),
+					'exp/prDelete' => array('sm', 'cl', 'om'),
+					'exp/prRejectForm' => array('cl', 'om'),
+					'exp/prRejectionReason' => array('sm', 'cl', 'om', 'fc'),
+					'exp/listItem' => array('sm', 'cl', 'om', 'r', 'fc'),
+					'exp/submitPrNumber' => array('r'),
+					'exp/rlEdit' => array('sm', 'cl', 'om', 'fc', 'r'),
+					'exp/rlFileUpload' => array('sm'),
+					'exp/rlFile' => array('sm', 'cl', 'om', 'fc', 'r'),
+					'exp/rlApproval' => array('cl', 'om', 'fc'),
+					'exp/rlDelete' => array('sm', 'cl', 'om', 'fc', 'r'),
+					'exp/rlDownload' => array('sm', 'cl', 'om', 'fc', 'r'),
+					'exp/rlRejectForm' => array('cl', 'om', 'fc', 'r'),
+					'exp/rlRejectionReason' => array('sm', 'cl', 'om', 'fc', 'r'),
+					'expExcel/prCashAdvanceDownload' => array('fc', 'r'),
+					'expExcel/rlSummaryGenerate' => array('sm', 'cl', 'om', 'fc', 'r'),
+					// 'exp/rlView' => array('sm', 'cl', 'om', 'fc'),
 							);
 
 		if($level && isset($access["$controller/$method"]))
@@ -98,8 +120,8 @@ class Data
 		$locR	= Array(
 					2=>"site/overview",
 					3=>"cluster/overview",
-					4=>"expense/listStatus",
-					5=>"billing/add",
+					4=>"exp/prList",
+					5=>"exp/prList",
 					99=>"site/index",
 					999=>'task/index'
 							);
