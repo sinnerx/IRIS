@@ -236,7 +236,6 @@ Dashboard overview
               </section>
 			</div>	
 
-			<?php /*
 			<div class="col-lg-4">
                 <section class="panel panel-default">
                   <header class="panel-heading">
@@ -266,7 +265,6 @@ Dashboard overview
                     </div>
                 </section>
             </div>
-            */?>
 		</div>
 	</div>
 </div>

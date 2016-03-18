@@ -78,13 +78,22 @@ Class Controller_Kpi
 			->where('site_member.siteID', $siteIDs)
 			->where('user.userID IN (SELECT userID FROM log_login WHERE MONTH(logLoginCreatedDate) = ? AND YEAR(logLoginCreatedDate) = ?)', array($month, $year))
 			->join('site_member', 'site_member.userID = user.userID', 'INNER JOIN')
-			->get()->result('siteID', true);
+			->get()->result('siteID', true);*/
+
+			$groupedMembers = db::from('site_member')
+			->select('siteID', 'count(userID) as total')
+			->where('siteID', $siteIDs)
+			->where('userID IN (SELECT userID FROM log_login WHERE MONTH(logLoginCreatedDate) = ? AND YEAR(logLoginCreatedDate) = ?)', array($month, $year))
+			->group_by('siteID')
+			->get()->result('siteID');
 
 			// 5.1 total members.
 			$totalMembers = db::from('site_member')
-			->select('userID', 'siteID')
+			->select('siteID', 'count(userID) as total')
 			->where('siteID', $siteIDs)
-			->get()->result('siteID', true);*/
+			->group_by('siteID')
+			->get()->result('siteID');
+
 
 			$data['total'] = array();
 
@@ -142,17 +151,14 @@ Class Controller_Kpi
 				}
 
 				// 5. active members.
-				/*$totalMember = 0;
+				$siteTotalMember = 0;
 				if(isset($groupedMembers[$siteID]))
-				{
-					foreach($groupedMembers[$siteID] as $user)
-						$totalMember++; 
-				}
+					$siteTotalMember = $groupedMembers[$siteID]['total'];
 
-				if($totalMember > 0 && count($totalMembers[$siteID]) > 0)
-					$total['active_member_percentage'] = $totalMember/count($totalMembers[$siteID])*100;
+				if($siteTotalMember > 0 && $totalMembers[$siteID]['total'] > 0)
+					$total['active_member_percentage'] = $siteTotalMember / $totalMembers[$siteID]['total'] * 100;
 				else
-					$total['active_member_percentage'] = 0;*/
+					$total['active_member_percentage'] = 0;
 			}
 		}
 

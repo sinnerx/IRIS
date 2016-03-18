@@ -64,7 +64,7 @@ var site = new function()
 					<th>Entrepreneurship Class </th>	
 					<th>Entrepreneurship Program </th>
 					<th>Training (hours)</th>	
-					<!-- <th>Active member (Login)</th>	 -->
+					<th>Active member (Login)</th>	
 				</tr>
 				<?php $completionClass = function($total, $type) use($max)
 				{
@@ -91,9 +91,9 @@ var site = new function()
 						<td <?php echo $completionClass($report['training_hours'], 'training_hours');?>>
 							<?php echo round($report['training_hours'], 2);?> / <?php echo $max['training_hours'];?>
 						</td>
-						<!-- <td <?php echo $completionClass($report['active_member_percentage'], 'active_member_percentage');?>>
+						<td <?php echo $completionClass($report['active_member_percentage'], 'active_member_percentage');?>>
 							<?php echo number_format($report['active_member_percentage'], 2, '.', '');?>%
-						</td> -->
+						</td>
 					</tr>
 				<?php endforeach;?>
 			</table>

@@ -66,20 +66,16 @@ Class Controller_Site
 		->join('activity', 'activity.activityID = activity_date.activityID', 'INNER JOIN')
 		->get()->result();
 
-		## user login
-		/*$active = db::where('month(logLoginCreatedDate) = ? AND year(logLoginCreatedDate) = ?', array($month, $year))
-		->where('userID IN (SELECT userID FROM site_member WHERE siteID = ?)', array($siteID))
-		->group_by('userID')->get('log_login')->num_rows();
-		$all = db::where('siteID', $siteID)->get('site_member')->num_rows();*/
-
 		// active member percentage
+		// based on at least having 1 login
 		// active member / total member * 100
-		// $totalMembers = db::select('count(userID) as total')->where('siteID', $siteID)->get('site_member')->row('total');
+		$totalMembers = db::select('count(userID) as total')->where('siteID', $siteID)->get('site_member')->row('total');
 
-		/*$activeMembers = db::select('count(site_member.userID) as total')
+		$activeMembers = db::from('site_member')
+		->select('count(userID) as total')
 		->where('siteID', $siteID)
-		->where('MONTH(logLoginCreatedDate) = ? AND YEAR(logLoginCreatedDate) = ?', array($month, $year))
-		->join('log_login', 'log_login.userID = site_member.userID')->get('site_member')->row('total');*/
+		->where('userID IN (SELECT userID FROM log_login WHERE MONTH(logLoginCreatedDate) = ? AND YEAR(logLoginCreatedDate) = ?)', array($month, $year))
+		->get()->row('total');
 
 		$time = 0;
 		
@@ -93,7 +89,7 @@ Class Controller_Site
 			'entrepreneurship_class' => $totalEntrepreneurship,
 			'entrepreneurship_sales' => $sales,
 			'training_hours' => $hours,
-			// 'active_member_percentage' => $activeMembers / $totalMembers * 100
+			'active_member_percentage' => $activeMembers / $totalMembers * 100
 			);
 
 		return view::render('sitemanager/site/overview', $data);
