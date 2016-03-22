@@ -368,10 +368,11 @@ class Activity
 		$resultdb["paymentInclude"] = $arrayPayment;
 		//array_push($resultdb, $in_string);
 
-		if(empty($resultgroupdb))
+		if (empty($resultgroupdb))
 			$result = null;
 		else
 			$result = $this->getModuleInPackage($resultdb);
+		
 		//print_r($result);	
 		//return $resultdb;
 		//die;
