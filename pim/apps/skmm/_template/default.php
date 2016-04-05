@@ -122,7 +122,22 @@
                     
                     Caj Penggunaan:<br> 
                     <div class="bluehilite">RM1.00 sejam (ahli)<br>
-                    RM2.00 sejam (bukan ahli)</div> 
+                    RM2.00 sejam (bukan ahli)</div> <br><br>
+
+                     Pelajar:<br> 
+                    <div class="bluehilite">PERCUMA</div>
+                    -Berumur 20 tahun kebawah; atau <br>
+                    -Mempunyai kad pelajar (Universiti dll)<br><br>
+
+                    Warga Emas:<br> 
+                    <div class="bluehilite">PERCUMA</div>
+                    *berumur 60 tahun keatas<br>
+                    -Perlu mengemukakan kad pengenalan<br><br>
+
+                    Orang Kelainan Upaya (OKU):<br> 
+                    <div class="bluehilite">PERCUMA</div>
+                    -Perlu mengemukakan kad OKU; atau<br>
+                    -atas budibicara Penyelia<br><br>
                 </div>
             <div class="blueBoxRibbon"></div>
             </div>
@@ -130,14 +145,30 @@
             <div class="blueBox">
             <span class="printer">Perkhidmatan Lain</span>
                     <div class="blueBoxContent">
-                    Pencetak dan Fotokopi (hitam/putih)<br>
-                    <div class="bluehilite">RM0.20</div> setiap mukasurat<br><br>
-                    
-                    Pencetak dan Fotokopi (warna)<br>
-                    <div class="bluehilite">RM1.00</div> setiap mukasurat<br><br>
-                    
-                    Pengimbas<br>
-                    <div class="bluehilite">RM0.20</div> setiap mukasurat<br><br>
+                    Mencetak (hitam/putih)<br>
+                    <div class="bluehilite">Ahli RM0.40</div>
+                    <div class="bluehilite">Bukan Ahli RM0.70</div> 1 hingga 5 mukasurat * (A4)<br><br>
+
+                    <div class="bluehilite">Ahli RM0.20</div>
+                    <div class="bluehilite">Bukan Ahli RM0.50</div> 5 dan lebih mukasurat * (A4)<br>
+                    --------------------------------------------
+                    <br><br> Mencetak (warna)<br>
+                    <div class="bluehilite">Ahli RM0.70</div>
+                     <div class="bluehilite">Bukan Ahli RM1.00</div> 1 hingga 5 mukasurat * (A4)<br><br>
+
+                     <div class="bluehilite">Ahli RM0.50</div>
+                     <div class="bluehilite">Bukan Ahli RM1.00</div> 5 dan lebih mukasurat * (A4)<br>
+                      --------------------------------------------
+                    <br><br>Pengimbas<br>
+                    <div class="bluehilite">Ahli RM0.10</div>
+                    <div class="bluehilite">Bukan Ahli RM0.30</div> sekeping<br>
+                    --------------------------------------------
+                    <br><br> Laminate (warna)<br>
+                    <div class="bluehilite">Ahli RM2.00</div>
+                     <div class="bluehilite">Bukan Ahli RM2.50</div> saiz A4<br><br>
+
+                     <div class="bluehilite">Ahli RM1.00</div>
+                     <div class="bluehilite">Bukan Ahli RM1.50</div>saiz IC<br>
                     </div>
             <div class="blueBoxRibbon"></div>
             </div>
