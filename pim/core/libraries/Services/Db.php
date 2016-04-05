@@ -14,15 +14,25 @@ class db
 {
 	static $instance	= Null;
 
+	public static $connection = null;
+
+	public static function getConnection()
+	{
+		if(!self::$connection)
+			self::$connection = new PDO("mysql:host=".apps::config('db_host').";dbname=".apps::config('db_name'), apps::config('db_user'), apps::config('db_pass'));
+
+		return self::$connection;
+	}
+
 	/**
 	 * Instanctiate new db_instance
 	 * But statically coupled with apps class. bad idea.
 	 */
 	public static function create($table = null)
 	{
-		$db = new Db_instance;
+		$db = new Db_instance(self::getConnection());
 
-		$db->connect(apps::config('db_host'), apps::config('db_user'), apps::config('db_pass'), apps::config('db_name'));
+		// $db->connect(apps::config('db_host'), apps::config('db_user'), apps::config('db_pass'), apps::config('db_name'));
 
 		if($table)
 			$db->from($table);
@@ -33,9 +43,7 @@ class db
 	public static function __callStatic($method,$args)
 	{
 		if(!self::$instance)
-		{
-			self::$instance	= new Db_instance();
-		}
+			self::$instance	= new Db_instance(self::getConnection());
 
 		if($method != "connect")
 		{
@@ -68,14 +76,20 @@ class Db_instance
 	private $frozensql	= Array();
 	private $cached		= Array();
 
+	public function __construct($connection)
+	{
+		$this->db = $connection;
+	}
+
 	public function connect($host,$user,$pass,$db)
 	{
+		$this->db = \db::getConnection();/*
 		try{
-		$this->db = new PDO("mysql:host=$host;dbname=$db", $user, $pass);
+			$this->db = new PDO("mysql:host=$host;dbname=$db", $user, $pass);
 		}catch(PDOException $e)
 		{
 			error::set("PDO Error",$e->getMessage());
-		}
+		}*/
 	}
 
 	public function checkQuery()
@@ -445,6 +459,8 @@ class Db_instance
 		$this->param	= Array();
 
 		$this->result	= $result;
+
+		// clear record.
 	}
 
 	## Execute insert

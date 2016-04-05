@@ -135,14 +135,18 @@ class Controller_ExpExcel
 			);
 		};
 
-		$setBorder = function($sheet, $range, $type)
+		$setBorder = function($sheet, $range, $type, $thick = false)
 		{
 			$borders = $sheet->getStyle($range)->getBorders();
 
 			$method = 'get'.ucwords($type);
 			// $line = $type == 'outline' ? $borders->getOutline() : $borders->getAllBorders();
 			$line = $borders->$method();
-			$line->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+
+			if($thick)
+				$line->setBorderStyle(PHPExcel_Style_Border::BORDER_MEDIUM);
+			else
+				$line->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
 		};
 
 		$setAlign = function($sheet, $range, $type)
@@ -234,7 +238,7 @@ class Controller_ExpExcel
 			$y += 2;
 
 		// <> Table Header
-		$headers = array('No', 'PR Date', 'PR No', 'Particular', 'Amount (RM)', 'Amount (RM)');
+		$headers = array('No', 'PR Date', 'PR No', 'Particular', 'Amount', 'GST', 'Total');
 
 		$x = 'A';
 		foreach($headers as $text)
@@ -249,10 +253,12 @@ class Controller_ExpExcel
 			$sheet->setCellValue($pos($x++, $y), $text);
 		}
 
-		// color header to blue
-		$backgrounds[] = array($sheet, "A$y:G$y", '93CDDD');
+		$highlight($sheet, "A$y:H$y", true);
 
-		$headersStyle = $sheet->getStyle("A$y:G$y");
+		// color header to blue
+		$backgrounds[] = array($sheet, "A$y:H$y", '93CDDD');
+
+		$headersStyle = $sheet->getStyle("A$y:H$y");
 		$headersStyle->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 		$headersStyle->getBorders()->getAllBorders()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
 
@@ -269,6 +275,9 @@ class Controller_ExpExcel
 		// site based pr.
 		$rlSites = array();
 		$sites = array();
+
+		// summary by category (expenseCategoryID)
+		$rlCategorySummary = array();
 
 		foreach($rlList as $rl)
 		{
@@ -302,16 +311,16 @@ class Controller_ExpExcel
 			$sheet->mergeCells("D$y:E$y");
 			$y++;
 
-			$rlCategories = array();
+			$rlCategoryItems = array();
 			$rlCategoryNames = array();
 
 			// Prepare pr_items grouped by categories
 			foreach($rlItems as $rlItem)
 			{
-				if(!isset($rlCategories[$rlItem->prReconcilationCategoryID]))
-					$rlCategories[$rlItem->prReconcilationCategoryID] = array();
+				if(!isset($rlCategoryItems[$rlItem->prReconcilationCategoryID]))
+					$rlCategoryItems[$rlItem->prReconcilationCategoryID] = array();
 
-				$rlCategories[$rlItem->prReconcilationCategoryID][] = $rlItem;
+				$rlCategoryItems[$rlItem->prReconcilationCategoryID][] = $rlItem;
 
 				if(!isset($rlCategoryTotals[$rlItem->prReconcilationCategoryID]))
 					$rlCategoryTotals[$rlItem->prReconcilationCategoryID] = 0;
@@ -323,12 +332,16 @@ class Controller_ExpExcel
 			}
 
 			// <> Item loops.
-			$itemTotal = 0;
+			$rlItemTotal = 0;
 
-			foreach($rlCategories as $categoryID => $rlItems)
+			$rlAmountTotal = 0;
+
+			$rlGstTotal = 0;
+
+			foreach($rlCategoryItems as $prReconcilationCategoryID => $rlItems)
 			{
 				$rlCategoryTotal = 0;
-				$categoryName = $rlCategoryNames[$categoryID];
+				$categoryName = $rlCategoryNames[$prReconcilationCategoryID];
 
 				$sheet->setCellValue($pos('D', $y), $categoryName); // categoryName
 					$sheet->mergeCells("D$y:E$y");
@@ -337,7 +350,7 @@ class Controller_ExpExcel
 				foreach($rlItems as $rlItem)
 					$rlCategoryTotal += $rlItem->prReconcilationItemTotal;
 
-				$sheet->setCellValue($pos('G', $y), $rlCategoryTotal);  // total amount
+				// $sheet->setCellValue($pos('G', $y), $rlCategoryTotal);  // total amount
 				$highlight($sheet, 'G'.$y, true);
 				$y++;
 
@@ -345,31 +358,62 @@ class Controller_ExpExcel
 				{
 					$num = strtolower(numberToRoman($no ? 1 : $no++));
 
-					$itemTotal += $rlItem->prReconcilationItemTotal;
+					// prepare intermediate variables
+					$amountTotal = $rlItem->prReconcilationItemAmount;
+					$gstTotal = $rlItem->prReconcilationItemGst;
+					$itemTotal = $rlItem->prReconcilationItemTotal;
+
+					$rlItemTotal += $rlItem->prReconcilationItemTotal;
+					$rlAmountTotal += $rlItem->prReconcilationItemAmount;
+					$rlGstTotal += $rlItem->prReconcilationItemGst;
 
 					$sheet->setCellValue($pos('D', $y), $num.'. '.$rlItem->prReconcilationItemName); // item name
-					$sheet->setCellValue($pos('F', $y), $rlItem->prReconcilationItemTotal); // item total
+					$sheet->setCellValue($pos('F', $y), $amountTotal); // sub total
+					$sheet->setCellValue($pos('G', $y), $gstTotal); // gst total
+					$sheet->setCellValue($pos('H', $y), $itemTotal); // item total
+
+					$allGstTotal += $gstTotal;
+					$allAmountTotal += $amountTotal;
+					$allRlTotal += $itemTotal;
 
 					$y++;
+					
+					// save rlCategorySummary
+					if(!isset($rlCategorySummary[$rlItem->expenseCategoryID]))
+					{
+						$rlCategorySummary[$rlItem->expenseCategoryID] = array(
+							'amount' => 0,
+							'gst' => 0,
+							'total' => 0
+							);
+					}
+
+					$rlCategorySummary[$rlItem->expenseCategoryID]['amount'] += $amountTotal;
+					$rlCategorySummary[$rlItem->expenseCategoryID]['gst'] += $gstTotal;
+					$rlCategorySummary[$rlItem->expenseCategoryID]['total'] += $itemTotal;
 				}
 
-				$allRlTotal += $rlCategoryTotal;
+
+
+				// $allRlTotal += $rlCategoryTotal;
 			}
 
 			// total ammount.
 			// <> RL total
-			$sheet->setCellValue("F$y", $itemTotal);
-			$sheet->setCellValue("G$y", $itemTotal);
-			$backgrounds[] = array($sheet, "F$y:G$y", "FFFF00");
+			$sheet->setCellValue("F$y", $rlAmountTotal);
+			$sheet->setCellValue("G$y", $rlGstTotal);
+			$sheet->setCellValue("H$y", $rlItemTotal);
+			$backgrounds[] = array($sheet, "F$y:H$y", "FFFF00");
 			$highlight($sheet, 'F'.$y, true);
 			$highlight($sheet, 'G'.$y, true);
-			$setBorder($sheet, "F$y:G$y", 'allBorders');
+			$highlight($sheet, 'H'.$y, true);
+			$setBorder($sheet, "F$y:H$y", 'allBorders');
 
 			$endY = $y;
 
 			// give border to each big column
 			$x = 'A';
-			foreach(range(1, 7) as $xNo)
+			foreach(range(1, 8) as $xNo)
 			{
 				$range = "$x$firstY:$x$endY";
 
@@ -395,18 +439,19 @@ class Controller_ExpExcel
 		// total amount.
 		$y += 2;
 
-		$sheet->setCellValue("E$y", 'Total amount :');
+		$sheet->setCellValue("E$y", 'Grand Amount ');
 			$sheet->getStyle("E$y")->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
-		$sheet->setCellValue("F$y", $allRlTotal);
-		$sheet->setCellValue("G$y", $allRlTotal);
-		$setBorder($sheet, "F$y:G$y", 'allBorders');
+		$sheet->setCellValue("F$y", $allAmountTotal);
+		$sheet->setCellValue("G$y", $allGstTotal);
+		$sheet->setCellValue("H$y", $allRlTotal);
+		$setBorder($sheet, "F$y:H$y", 'allBorders', true);
 
 		$y += 2;
 
 		$signatureAdd($sheet, $y);
 
 		// background-color the whole sheet.
-		$sheet->getStyle('A1:'."G$y")->applyFromArray(
+		$sheet->getStyle('A1:'."H$y")->applyFromArray(
 		    array
 		    (
 		        'fill' => array(
@@ -446,8 +491,13 @@ class Controller_ExpExcel
 
 		$sheet->setCellValue("A$y", 'No.');
 		$sheet->setCellValue("B$y", "Particular");
-			$sheet->mergeCells("B$y:F$y");
-		$sheet->setCellValue("G$y", 'Amount (RM)');
+			$sheet->mergeCells("B$y:D$y");
+
+		$sheet->setCellValue("E$y", 'Amount (RM)');
+		$sheet->setCellValue("F$y", 'Gst 6% (RM)');
+		$sheet->setCellValue("G$y", 'Total (RM)');
+
+		$setAlign($sheet, "E$y:G$y", 'center');
 
 		$highlight($sheet, "A$y:G$y", true); // bold
 
@@ -459,7 +509,22 @@ class Controller_ExpExcel
 		// <> RL category summaries
 		$no = 1;
 		$categoryY = $y;
-		foreach($rlCategoryTotals as $categoryID => $amount)
+
+		foreach($expenseCategories as $expenseCategoryID => $name)
+		{
+			$summary = $rlCategorySummary[$expenseCategoryID];
+
+			$sheet->setCellValue('A'.$y, ($no ? $no++ : 1).'.');
+			$sheet->setCellValue('B'.$y, $name);
+				$sheet->mergeCells('B'.$y.':D'.$y);
+			$sheet->setCellValue('E'.$y, $summary['amount'] ? : 0);
+			$sheet->setCellValue('F'.$y, $summary['gst'] ? : 0);
+			$sheet->setCellValue('G'.$y, $summary['total'] ? : 0);
+
+			$y++;
+		}
+
+		/*foreach($rlCategoryTotals as $categoryID => $amount)
 		{
 			$sheet->setCellValue('A'.$y, ($no ? $no++ : 1).'.');
 			$sheet->setCellValue('B'.$y, $rlCategoryNames[$categoryID]);
@@ -467,20 +532,20 @@ class Controller_ExpExcel
 			$sheet->setCellValue('G'.$y, $amount);
 
 			$y++;
-		}
+		}*/
 
 		$setAlign($sheet, "A$categoryY:A$y", 'center');
 		$setAlign($sheet, "B$categoryY:B$y", 'left');
-		$setAlign($sheet, "G$categoryY:G$y", 'center');
+		$setAlign($sheet, "G$categoryY:H$y", 'center');
 
 		// <> additional rows
 		foreach(range(1, 25 - count($rlCategoryTotals)) as $no)
 		{
-			$sheet->mergeCells("B$y:F$y");
+			$sheet->mergeCells("B$y:D$y");
 			$y++;
 		}
 
-		$sheet->mergeCells("B$y:F$y");
+		$sheet->mergeCells("B$y:D$y");
 
 		$tableStyle = $sheet->getStyle("A$firstY:G$y");
 		// $tableStyle->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER); // align
@@ -488,11 +553,14 @@ class Controller_ExpExcel
 
 		$y++;
 
-		$sheet->setCellValue('F'.$y, 'Total Amount :');
+		$sheet->setCellValue('D'.$y, 'Grand Amount :');
+		$sheet->setCellValue('E'.$y, $allAmountTotal);
+		$sheet->setCellValue('F'.$y, $allGstTotal);
 		$sheet->setCellValue('G'.$y, $allRlTotal);
-		$backgrounds[] = array($sheet, "G$y", 'FFFF00');
+		$backgrounds[] = array($sheet, "E$y:G$y", 'FFFF00');
+		$setBorder($sheet, "E$y:G$y", 'allBorders');
 
-		$highlight($sheet, 'F'.$y, true);
+		$highlight($sheet, "E$y:G$y", true);
 
 		$y += 2;
 
@@ -521,8 +589,8 @@ class Controller_ExpExcel
 				$y = 11;
 
 				// <> info
-				$sheet->getCell("A$y")->setValue('RECONCILIATION LIST - Slip of Payment/Bill/Reciept')->getStyle()->getFont()->setBold(true);
-				$sheet->setCellValue("A$y", 'RECONCILIATION LIST - Summary');
+				$sheet->getCell("A$y")->setValue('RECONCILIATION LIST - Slip of Payment/Bill/Receipt - '.strtoupper($types[$prType]))->getStyle()->getFont()->setBold(true);
+				// $sheet->setCellValue("A$y", 'RECONCILIATION LIST - Summary');
 					$sheet->mergeCells("A$y:G$y");
 					$y += 2;
 
@@ -543,12 +611,14 @@ class Controller_ExpExcel
 				$sheet->setCellValue("B$y", "Category");
 				$sheet->setCellValue("C$y", 'Particular');
 					$sheet->mergeCells("C$y:F$y");
-				$sheet->setCellValue("G$y", 'Amount (RM)');
+				$sheet->setCellValue("G$y", 'GST');
+				$sheet->setCellValue("H$y", 'Amount (RM)');
 
-				$highlight($sheet, "A$y:G$y", true); // bold
-				$background($sheet, "A$y:G$y", '93CDDD');
+				$highlight($sheet, "A$y:H$y", true); // bold
+				// $background($sheet, "A$y:H$y", '93CDDD');
+				$backgrounds[] = array($sheet, "A$y:H$y", '93CDDD');
 
-				$setBorder($sheet, 'A'.$y.':G'.$y, 'outline');
+				$setBorder($sheet, 'A'.$y.':H'.$y, 'allBorders');
 
 				$y++;
 
@@ -558,6 +628,8 @@ class Controller_ExpExcel
 				$startY = $y;
 
 				$total = 0;
+
+				$gstTotal = 0;
 
 				foreach($rl->getReconciledCategories() as $category)
 				{
@@ -571,9 +643,15 @@ class Controller_ExpExcel
 
 					$categoryTotal = $category->getTotal();
 
+					$categoryGstTotal = $category->getGst();
+
 					$total += $categoryTotal;
 
-					$sheet->setCellValue('G'.$y, $categoryTotal);
+					$gstTotal += $categoryGstTotal;
+
+					$sheet->setCellValue('G'.$y, $categoryGstTotal);
+
+					$sheet->setCellValue('H'.$y, $categoryTotal);
 
 					foreach($category->getFiles() as $file)
 					{
@@ -614,6 +692,7 @@ class Controller_ExpExcel
 					$setBorder($sheet, "B$categoryY:B$y", 'outline');
 					$setBorder($sheet, "C$categoryY:F$y", 'outline');
 					$setBorder($sheet, "G$categoryY:G$y", 'outline');
+					$setBorder($sheet, "H$categoryY:H$y", 'outline');
 
 					$y++;
 				}
@@ -621,15 +700,18 @@ class Controller_ExpExcel
 				// total amount.
 				$sheet->setCellValue('F'.$y, 'Total Amount :');
 					$setAlign($sheet, "F$y", 'right');
-				$sheet->setCellValue('G'.$y, $total);
-					$setAlign($sheet, "G$firstY:G$y", 'center');
+				$sheet->setCellValue('G'.$y, $categoryGstTotal);
+				$sheet->setCellValue('H'.$y, $total);
+					$setAlign($sheet, "G$firstY:H$y", 'center');
 				$highlight($sheet, "F$y:G$y", true);
+				$backgrounds[] = array($sheet, "G$y:H$y", "FFFF00");
 
 				$y += 2;
 				$sheet->setCellValue('A'.$y, 'Disclaimer : This excel is computer generated. No signature is required.');
 				
 				// color
-				$backgrounds[] = array($sheet, 'A1:G'.$y, 'FFFFFF');
+				$background($sheet, "A1:H".$y, 'FFFFFF');
+				// $backgrounds[] = array($sheet, 'A1:H'.$y, 'FFFFFF');
 			}
 		}
 
@@ -668,7 +750,7 @@ class Controller_ExpExcel
 				$y++;
 			}
 
-			foreach(array('B', 'C', 'D', 'E', 'F', 'G') as $x)
+			foreach(array('B', 'C', 'D', 'E', 'F', 'G', 'H') as $x)
 				$sht->getColumnDimension($x)->setWidth('18');
 
 			

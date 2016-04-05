@@ -739,7 +739,7 @@ float:left;
 }
 
 .maps-container{
-height:200px;
+
 
 }
 .maps-label{
@@ -3546,6 +3546,12 @@ display:block !important;
 
 .blog-container{
 	
+}
+
+.blog-container ul {
+    margin: 0px;
+    padding: 0px;
+    list-style: none;
 }
 
 /*.blog-container ul{

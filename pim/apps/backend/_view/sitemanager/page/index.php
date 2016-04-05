@@ -375,6 +375,7 @@ function showFilter()
 				$pageName	= $type == 1?$pageDefault[$row['pageDefaultType']]['pageDefaultName']:$row['pageName'];
 				$pageText	= $row['pageText']?$row['pageText']:"<span style='opacity:0.5;'>Empty</span>";
 				$pageText	= preg_replace("/<[^>]*>/","",$pageText);	## remove any html markup.
+				$pageText   = substr($pageText, 0, 100);
 
 				$updatedDate	= !$row['pageUpdatedDate']?strtotime($row['pageCreatedDate']):strtotime($row['pageUpdatedDate']);
 				$pageID			= $row['pageID'];
