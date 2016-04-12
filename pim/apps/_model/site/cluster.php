@@ -142,6 +142,33 @@ class Cluster extends \Origami
 							);
 
 			db::insert("cluster_site",$data);
+
+			// *** Start API to update cluster in AVEO ***
+
+		    $id = $siteID;
+		    $cluster_id = $clusterID;
+
+			$url = 'http://localhost/aveo/app/controllers/api/location.php';
+
+		    //1: create, 2: update, 3: update cluster
+		    $process = 3;
+
+		    $myvars = 'process=' . $process;
+		    $myvars .= '&id=' . $id;
+		    $myvars .= '&cluster_id=' . $cluster_id;
+
+		    //echo 'id: ' . $id . ' test';
+
+		    $ch = curl_init( $url );
+		    curl_setopt( $ch, CURLOPT_POST, 1);
+		    curl_setopt( $ch, CURLOPT_POSTFIELDS, $myvars);
+		    curl_setopt( $ch, CURLOPT_FOLLOWLOCATION, 1);
+		    curl_setopt( $ch, CURLOPT_HEADER, 0);
+		    curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1);
+
+		    $response = curl_exec( $ch );
+
+			// *** End API for AVEO ***
 		}
 	}
 
@@ -150,6 +177,33 @@ class Cluster extends \Origami
 	{
 		if(db::delete("cluster_site",Array("clusterID"=>$clusterID,"siteID"=>$siteID)))
 		{
+			// *** Start API to update cluster in AVEO ***
+
+		    $id = $siteID;
+		    $cluster_id = 0;
+
+			$url = 'http://localhost/aveo/app/controllers/api/location.php';
+
+		    //1: create, 2: update, 3: update cluster
+		    $process = 3;
+
+		    $myvars = 'process=' . $process;
+		    $myvars .= '&id=' . $id;
+		    $myvars .= '&cluster_id=' . $cluster_id;
+
+		    //echo 'id: ' . $id . ' test';
+
+		    $ch = curl_init( $url );
+		    curl_setopt( $ch, CURLOPT_POST, 1);
+		    curl_setopt( $ch, CURLOPT_POSTFIELDS, $myvars);
+		    curl_setopt( $ch, CURLOPT_FOLLOWLOCATION, 1);
+		    curl_setopt( $ch, CURLOPT_HEADER, 0);
+		    curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1);
+
+		    $response = curl_exec( $ch );
+
+			// *** End API for AVEO ***
+
 			return true;
 		}
 

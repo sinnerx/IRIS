@@ -148,6 +148,39 @@ class Site extends \Origami
 		## else, directly update.
 		else
 		{
+			// *** Start API to update site in AVEO ***
+
+		    //$id = $siteID;
+		    $name = $data['siteName'];
+		    $address = $data['siteInfoAddress'];
+		    $code = $data['siteRefID'];
+		    $state_id = $data['stateID'];
+
+			$url = 'http://localhost/aveo/app/controllers/api/location.php';
+
+		    //1: create, 2: update
+		    $process = 2;
+
+		    $myvars = 'process=' . $process;
+		    $myvars .= '&id=' . $id;
+		    $myvars .= '&name=' . $name;
+		    $myvars .= '&address=' . $address;
+		    $myvars .= '&code=' . $code;
+		    $myvars .= '&state_id=' . $state_id;
+
+		    //echo 'id: ' . $id . ' test';
+
+		    $ch = curl_init( $url );
+		    curl_setopt( $ch, CURLOPT_POST, 1);
+		    curl_setopt( $ch, CURLOPT_POSTFIELDS, $myvars);
+		    curl_setopt( $ch, CURLOPT_FOLLOWLOCATION, 1);
+		    curl_setopt( $ch, CURLOPT_HEADER, 0);
+		    curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1);
+
+		    $response = curl_exec( $ch );
+
+			// *** End API to update site in AVEO ***
+
 			db::where("siteID",$id);
 			db::update("site",Array(
 							"siteName"=>$data['siteName'],
@@ -172,6 +205,7 @@ class Site extends \Origami
 
 			db::where("siteID",$id);
 			db::update("site_info",$data);
+
 		}
 	}
 
@@ -407,6 +441,63 @@ class Site extends \Origami
 		$defaultPages = orm('page/page_default')->execute();
 		orm('site/site')->find($siteID)->initiateDefaultPages($defaultPages);
 
+		// *** Start API to create new site in AVEO ***
+
+		// Create new location & site
+
+		$url = 'http://localhost/aveo/app/controllers/api/location.php';
+
+	    //1: create, 2: update
+	    $process = 1;
+
+	    $id = $siteID;
+	    $name = $data['siteName'];
+	    $address = $data['siteInfoAddress'];
+	    $code = $data['siteRefID'];
+	    $state_id = $data['stateID'];
+
+	    $myvars = 'process=' . $process;
+	    $myvars .= '&id=' . $id;
+	    $myvars .= '&name=' . $name;
+	    $myvars .= '&address=' . $address;
+	    $myvars .= '&code=' . $code;
+	    $myvars .= '&state_id=' . $state_id;
+
+	    $ch = curl_init( $url );
+	    curl_setopt( $ch, CURLOPT_POST, 1);
+	    curl_setopt( $ch, CURLOPT_POSTFIELDS, $myvars);
+	    curl_setopt( $ch, CURLOPT_FOLLOWLOCATION, 1);
+	    curl_setopt( $ch, CURLOPT_HEADER, 0);
+	    curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1);
+
+	    $response = curl_exec( $ch );
+
+	    // Update manager
+
+	    $url = 'http://localhost/aveo/app/controllers/api/user.php';
+
+	    //1: create, 2: update, 3: change password, 4: delete, 5: update location
+	    $process = 5;
+
+	    $id = $userID;
+	    $location_id = $siteID;
+
+	    $myvars = 'process=' . $process;
+	    $myvars .= '&id=' . $id;
+	    $myvars .= '&location_id=' . $location_id;
+
+	    $ch = curl_init( $url );
+	    curl_setopt( $ch, CURLOPT_POST, 1);
+	    curl_setopt( $ch, CURLOPT_POSTFIELDS, $myvars);
+	    curl_setopt( $ch, CURLOPT_FOLLOWLOCATION, 1);
+	    curl_setopt( $ch, CURLOPT_HEADER, 0);
+	    curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1);
+
+	    $response = curl_exec( $ch );
+
+
+		// *** End API to create new site in AVEO ***
+
 		return $this->getSite($siteID);
 	}
 
@@ -471,6 +562,31 @@ class Site extends \Origami
 
 		## just update.
 		db::update("site_manager",Array("siteManagerStatus"=>0,"siteManagerUpdatedUser"=>session::get("userID"),"siteManagerUpdatedDate"=>now()));
+
+		// *** Start API to update user location in AVEO ***
+
+	    $url = 'http://localhost/aveo/app/controllers/api/user.php';
+
+	    //1: create, 2: update, 3: change password, 4: delete, 5: update location
+	    $process = 5;
+
+	    $id = $userID;
+	    $location_id = $siteID;
+
+	    $myvars = 'process=' . $process;
+	    $myvars .= '&id=' . $id;
+	    $myvars .= '&location_id=0';
+
+	    $ch = curl_init( $url );
+	    curl_setopt( $ch, CURLOPT_POST, 1);
+	    curl_setopt( $ch, CURLOPT_POSTFIELDS, $myvars);
+	    curl_setopt( $ch, CURLOPT_FOLLOWLOCATION, 1);
+	    curl_setopt( $ch, CURLOPT_HEADER, 0);
+	    curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1);
+
+	    $response = curl_exec( $ch );
+
+		// *** End API to update user location in AVEO ***
 	}
 
 	public function assignManager($siteID,$userID)
@@ -483,6 +599,31 @@ class Site extends \Origami
 						"userID"=>$userID,
 						"siteManagerCreatedDate"=>now(),
 						"siteManagerCreatedUser"=>session::get("userID"));
+
+		// *** Start API to update user location in AVEO ***
+
+	    $url = 'http://localhost/aveo/app/controllers/api/user.php';
+
+	    //1: create, 2: update, 3: change password, 4: delete, 5: update location
+	    $process = 5;
+
+	    $id = $userID;
+	    $location_id = $siteID;
+
+	    $myvars = 'process=' . $process;
+	    $myvars .= '&id=' . $id;
+	    $myvars .= '&location_id=' . $location_id;
+
+	    $ch = curl_init( $url );
+	    curl_setopt( $ch, CURLOPT_POST, 1);
+	    curl_setopt( $ch, CURLOPT_POSTFIELDS, $myvars);
+	    curl_setopt( $ch, CURLOPT_FOLLOWLOCATION, 1);
+	    curl_setopt( $ch, CURLOPT_HEADER, 0);
+	    curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1);
+
+	    $response = curl_exec( $ch );
+
+		// *** End API to update user location in AVEO ***
 
 		if($siteManagerID)
 		{
