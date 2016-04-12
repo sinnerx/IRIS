@@ -686,6 +686,7 @@ height:200px;
 <div class="maps-label"></div>
 </div>
 </div>
+</div>
 <div class="bttm-2"> 
 <div class="news-bottom">
 <h3 class="bottom-heading">Berita Terkini</h3>
@@ -709,6 +710,7 @@ height:200px;
 </div>
 </div>
  </div>
+
 <div class="bttm-3 foto-wrapper">
 <h3 class="bottom-heading">Foto Terkini</h3>
 <div class="bottom-content foto-bottom">
@@ -721,9 +723,19 @@ height:200px;
   <?php endif;?>
 </div>
 </div>
+
+
+
+
+
+
 </div>
 </div>
 </div>
+
+
+
+
 <div class="footer">
 
 

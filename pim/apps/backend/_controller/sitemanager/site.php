@@ -1,7 +1,101 @@
 <?php
 Class Controller_Site
 {
-	public function overview($year = null,$month = null)
+	public function overview($year = null, $month = null)
+	{
+		$siteID = site()->siteID;
+
+		$data['year'] = $year = $year ? : date('Y');
+		$data['month'] = $month = $month ? : date('n');
+
+		$data['max'] = array(
+			'event' => 2,
+			'entrepreneurship_class' => 1,
+			'entrepreneurship_sales' => 300,
+			'training_hours' => 48,
+			'active_member_percentage' => 80
+			);
+
+		// event
+		// activity : event
+		// has at least 1 article
+		$totalEvents = db::from('activity')
+		->select('count(activity.activityID) as total')
+		->where('siteID', $siteID)
+		->where('activityType', 1)
+		->where('activityApprovalStatus', 1)
+		->where('activityID IN (SELECT activityID FROM activity_article WHERE activity_article.activityID = activity.activityID)')
+		->where('MONTH(activityStartDate) = ? AND YEAR(activityStartDate) = ?', array($month, $year))
+		->get()->row('total');
+
+		// total entrepreneurship class
+		// activity : training
+		// has at least 1 article
+		$totalEntrepreneurship = db::from('activity')
+		->select('count(activity.activityID) as total')
+		->where('siteID', $siteID)
+		->where('activityType', 2)
+		->where('activityApprovalStatus', 1)
+		->where('MONTH(activityStartDate) = ? AND YEAR(activityStartDate) = ?', array($month, $year))
+		->where('training_type.trainingTypeName LIKE ?', array('%Entrepreneurship%'))
+		// ->join('activity_article', 'activity_article.activityID = activity.activityID', 'INNER JOIN')
+		->join('training', 'activity.activityID = training.activityID', 'INNER JOIN')
+		->join('training_type', 'training.trainingType = training_type.trainingTypeID', 'INNER JOIN')
+		->get()->row('total');
+
+		// entrepreneurship program
+		// table : billing_transaction_item 
+		// billingItemCode = lms_item
+		$sales = db::from('billing_transaction_item')
+		->select('SUM(billingTransactionItemPrice) * SUM(billingTransactionItemQuantity) as total')
+		->where('billing_transaction.siteID = ?', array($siteID))
+		->where('MONTH(billingTransactionDate) = ? AND YEAR(billingTransactionDate) = ?', array($month, $year))
+		->where('billing_transaction_item.billingItemID IN (SELECT billingItemID FROM billing_item WHERE billingItemCode = ?)', array('lms_item'))
+		->join('billing_transaction', 'billing_transaction.billingTransactionID = billing_transaction_item.billingTransactionID')
+		->get()->row('total') ? : 0;
+
+		// total training hours
+		// activity : training
+		// has at least one rsvp
+		$trainingHours = db::from('activity_date')
+		->where('activityType', 2)
+		->where('activityApprovalStatus', 1)
+		->where('activity.siteID', $siteID)
+		->where('activity_date.activityID IN (SELECT activityID FROM activity_user)') // rsvp
+		->where('MONTH(activity.activityStartDate) = ? AND YEAR(activity.activityStartDate) = ?', array($month, $year))
+		->join('activity', 'activity.activityID = activity_date.activityID', 'INNER JOIN')
+		->get()->result();
+
+		// active member percentage
+		// based on at least having 1 login
+		// active member / total member * 100
+		$totalMembers = db::select('count(userID) as total')->where('siteID', $siteID)->get('site_member')->row('total');
+
+		$activeMembers = db::from('site_member')
+		->select('count(userID) as total')
+		->where('siteID', $siteID)
+		->where('userID IN (SELECT userID FROM log_login WHERE MONTH(logLoginCreatedDate) = ? AND YEAR(logLoginCreatedDate) = ?)', array($month, $year))
+		->get()->row('total');
+
+		$time = 0;
+		
+		foreach($trainingHours as $activityDate)
+			$time += strtotime($activityDate['activityDateEndTime']) - strtotime($activityDate['activityDateStartTime']);
+
+		$hours = floor($time / 3600);
+
+		$data['kpi'] = array(
+			'event' => $totalEvents,
+			'entrepreneurship_class' => $totalEntrepreneurship,
+			'entrepreneurship_sales' => $sales,
+			'training_hours' => $hours,
+			'active_member_percentage' => $activeMembers / $totalMembers * 100
+			);
+
+		return view::render('sitemanager/site/overview', $data);
+	}
+
+	public function overview_old($year = null,$month = null)
 	{
 		$data['year'] = $year = $year ? : date("Y");
 		$data['month'] = $month = $month ? : date("n");

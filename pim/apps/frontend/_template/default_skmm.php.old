@@ -103,8 +103,12 @@
             <div class="blueBox">
             <span class="printer">Perkhidmatan Lain</span>
                     <div class="blueBoxContent">
-                    Pencetak dan Fotokopi (hitam/putih)<br>
-                    <div class="bluehilite">RM0.20</div> setiap mukasurat<br><br>
+                    Mencetak (hitam/putih)<br>
+                    <div class="bluehilite">Ahli RM0.40</div>
+                    <div class="bluehilite">Bukan Ahli RM0.70</div> 1 hingga 5 mukasurat * (A4)<br><br>
+
+                    <div class="bluehilite">Ahli RM0.20</div>
+                    <div class="bluehilite">Bukan Ahli RM0.50</div> 5 dan lebih mukasurat * (A4)<br><br>
                     
                     Pencetak dan Fotokopi (warna)<br>
                     <div class="bluehilite">RM1.00</div> setiap mukasurat<br><br>
