@@ -157,12 +157,18 @@ class Controller_Report
 		$ExcelHelper->execute();
 	}
 
-	public function generateMasterListing($month,$year,$totalMonth = 12)
+	public function generateMasterListing($month = null, $year = null, $totalMonth = 12)
 	{
-		// $endDate	= date("Y-m-d");
-		$endDate	= "$year-$month-".date("t",strtotime("$year-$month-01"))." 23:59:59";
-		// $startDate	= date("Y-m-d",strtotime("-$month months",strtotime($endDate)));
-		$startDate	= date("Y-m-d",strtotime("-$totalMonth month",strtotime("+1 day",strtotime($endDate))));
+		if(!$month || !$year)
+		{
+			$startDate = request::get('start').' 00:00:00';
+			$endDate = request::get('end').' 23:59:59';
+		}
+		else
+		{
+			$endDate	= "$year-$month-".date("t",strtotime("$year-$month-01"))." 23:59:59";
+			$startDate	= date("Y-m-d",strtotime("-$totalMonth month",strtotime("+1 day",strtotime($endDate))));
+		}
 
 		$data = model::load("report/report")->getMasterListing($startDate,$endDate);
 
