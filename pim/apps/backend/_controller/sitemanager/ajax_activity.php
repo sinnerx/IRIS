@@ -241,5 +241,12 @@ class Controller_Ajax_Activity
 		$module = json_encode($module);
 		echo $module;
 	}
+
+	public function getDefaultTrainingType()
+	{
+		$data	= model::load("activity/training")->type();
+		$data 	= json_encode($data);
+		echo $data;
+	}
 }
 ?>

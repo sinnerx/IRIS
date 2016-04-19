@@ -16,9 +16,31 @@ var activity	= function()
 		else{
 			$("#packagediv").hide();
 			$("#modulediv").hide();
+			$.ajax({
+			url: pim.base_url +"ajax/activity/getDefaultTrainingType/", success: function (result){
+				//console.log(this);
+				//var result = result.substring(3, result.length);
+				result = $.parseJSON(result);
+				//console.log(result);
+				$('#trainingType').empty();
+				$('<option></option>', {html:'[PLEASE CHOOSE]'}).attr('value', '').appendTo('#trainingType');
+				 $.each(result, function(i, value) {  
+				 	console.log(i);
+				  	$('<option></option>', {html:value}).attr('value', i).appendTo('#trainingType');
+				
+					$('#activityDescription').text("");
+					$('#activityName').val("");
+					//$('#trainingType select').val(this.typeid);
+				});
+
+				$('#typediv').show();
+			}
+		});
 			
 		}	
 
+		
+		
 	}
 
 
@@ -27,7 +49,7 @@ var activity	= function()
 		//alert(module_id);
 		$.ajax({
 			url: pim.base_url +"ajax/activity/getModuleByID/"+ module_id, success: function (result){
-				//console.log(result);
+				console.log(result);
 				//var result = result.substring(3, result.length);
 				result = $.parseJSON(result);
 				console.log(result);
@@ -695,7 +717,7 @@ Add an activity to your site. All new activities will not be published until the
 					</div>
 					<div class='panel-body'>
 						<div class='form-group'>
-							<label>Learning? <?php echo flash::data("learningSelect");?></label>
+							<label>Is it training for LMS ? <?php echo flash::data("learningSelect");?></label>
 							<?php echo form::select("learningSelect",Array(1=>"No",2=>"Yes"),"onchange='activity.showPackage(this.value);' class='form-control'");?>						
 						</div>
 						<div class='form-group' id="packagediv" style="display:none">

@@ -1,10 +1,15 @@
 <?php
 ## only used as a hook, unless login, and logout.
+//require_once "asset_integration.php";
+
+
 Class Controller_Auth
 {
 	## hooked in routes as for logged in user.
+	
 	private function index()
 	{
+		
 		## if page was public, no need for further check.
 		if(model::load("access/services")->checkPublicBackend())
 		{
@@ -61,9 +66,14 @@ Class Controller_Auth
 	## accessed by : dashboard/login.
 	public function login()
 	{
+		//print_r($_SERVER['DOCUMENT_ROOT'].'/snipeit/bootstrap/autoload.php');
+		
+		//print_r($app);
+		//die;
+		//print_r(Session::get("userLevel"));
 		#echo model::load("helper")->hashPassword("OG63QKKLGM");die();
 		$this->template	= false;
-
+		//Session::put('key', 'value');
 		## if logged member tried to go to backed, redirect to his site.
 		if(session::get("userLevel") == 1)
 		{
@@ -142,6 +152,40 @@ Class Controller_Auth
 				$email		= input::get("userEmail");
 				$pass		= input::get("userPassword");
 
+				//require_once $_SERVER['DOCUMENT_ROOT'].'/snipeit/bootstrap/autoload.php';
+				//$app = require_once $_SERVER['DOCUMENT_ROOT'].'/snipeit/bootstrap/start.php';
+
+// 				$included_files = get_included_files();
+
+// foreach ($included_files as $filename) {
+//     echo "$filename <br>";
+// }
+				// if (isset($_COOKIE[$app['config']['session.cookie']])) {
+				//     $id = $app['encrypter']->decrypt($_COOKIE[$app['config']['session.cookie']]);
+				//     //print_r($id);
+				//     $app['session']->driver()->setId($id);
+				// }
+				//     $app->boot();
+
+				//     $app['session']->driver()->start();
+				//     //print_r($app['session']->driver());
+				//     // Login credentials
+				//     // $credentials = array(
+				//     //     'email'    => 'root@gmail.com',
+				//     //     'password' => '12345',
+				//     // );
+				//         $credentials = array(
+				//         'email'    => urldecode($_POST['userEmail']),
+				//         'password' => urldecode($_POST['userPassword']),
+				//     );
+
+				//     // Authenticate the user
+				//     $user = Sentry::authenticate($credentials, false);    
+				//     //Session::put('test','alan');
+				//     //Session::save();
+				//     die;
+
+
 				## login check
 				$backendLoginCheck	= $accessAuth->backendLoginCheck($email,$pass);
 
@@ -173,9 +217,28 @@ Class Controller_Auth
 				}
 
 				## login.
+				//exec(getcwd()."/pim/apps/backend/_controller/asset_integration.php");
 				$accessAuth->login($backendLoginCheck->userID,$backendLoginCheck->userLevel);
 				$_SESSION['userid'] = $backendLoginCheck->userID;
 				$_SESSION['userLevel'] = $backendLoginCheck->userLevel;
+				$_SESSION['userIC'] = $backendLoginCheck->userIC;
+
+
+				//$url = "http://localhost/sentry/api.php";
+				
+
+				// $http = new HttpRequest($url, HttpRequest::METH_POST);
+				// $http->setOptions(array(
+				//     'timeout' => 10,
+				//     'redirect' => 4
+				// ));
+				// $http->addPostFields(array(
+				//     'userEmail' 	=> $email,
+				//     'userPassword' 	=> $pass,
+				//     'method' 		=> '1',
+				// ));
+
+				// $response = $http->send();
 				
 
 				## go to home/index
@@ -240,6 +303,21 @@ Class Controller_Auth
 
 		## redirect to login
 		redirect::to("login");
+	}
+
+	public function check_login($email = null,$pass = null)
+	{
+		//echo "abc";
+		//die;
+				$email		= $_POST['userEmail'];
+				$pass		= $_POST['userPassword'];
+				//echo $pass;
+				//die;		
+				$accessAuth	= model::load("access/auth");
+		$backendLoginCheck	= $accessAuth->backendLoginCheck($email,$pass);
+		print_r($backendLoginCheck->modelData['attributes']['userID']);
+		die;
+		return $backendLoginCheck;
 	}
 }
 

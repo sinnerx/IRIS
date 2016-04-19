@@ -700,7 +700,7 @@ Content is waiting for approval
 					</div>
 					<div class='panel-body'>
 						<div class='form-group'>
-							<label>Learning? <?php echo flash::data("learningSelect");?></label>
+							<label>Is it training for LMS? <?php echo flash::data("learningSelect");?></label>
 							<?php echo form::select("learningSelect",$learningSelection,"onchange='activity.showPackage(this.value);' class='form-control'",$row['learningSelection']);?>						
 						</div>
 						<div class='form-group' id="packagediv" style="display:none">
