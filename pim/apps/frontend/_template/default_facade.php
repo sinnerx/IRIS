@@ -565,25 +565,56 @@ var $c = jQuery.noConflict();
                     (tertakluk kepada terma dan syarat)<br><br>
                     <strong>Caj Penggunaan:</strong><br> 
                     <div class="bluehilite">RM1.00 sejam (ahli)<br>
-                    RM2.00 sejam (bukan ahli)</div> 
+                    RM2.00 sejam (bukan ahli)</div><br/>
+                    <strong>Pelajar:</strong><br> 
+                    <div class="bluehilite">PERCUMA</div>
+                    -berumur 20 thn kebawah; atau<br>
+                    -mempunyai kad pelajar (Universiti dll)
+                    <br> <br> 
+                    <strong>Warga Emas:</strong><br> 
+                    <div class="bluehilite">PERCUMA</div>
+                    *berumur 60 thn keatas;<br>
+                    -perlu mengemukakan kad pengenalan
+                    <br> <br> 
+                    <strong>Orang Kelainan Upaya (OKU):</strong><br> 
+                    <div class="bluehilite">PERCUMA</div>
+                    -perlu mengemukakan kad OKU; atau<br>
+                    -atas budibicara Penyelia
+                    <br> 
                 </div>
                 </div>
             <div class="blueBoxRibbon"></div>
         	</div>
-            <div class="blueBox">
-            <span class="activity"><i class="fa fa-print"></i> Perkhidmatan Lain</span>
-                <div class="blueBoxContent1-right">
-                <div class="blueBoxContent">
-                    <strong>Pencetak dan Fotokopi (hitam/putih)</strong><br>
-                    <div class="bluehilite">RM0.20</div> setiap mukasurat<br><br>
-                    <strong>Pencetak dan Fotokopi (warna)</strong><br>
-                    <div class="bluehilite">RM1.00</div> setiap mukasurat<br><br>
-                    <strong>Pengimbas</strong><br>
-                    <div class="bluehilite">RM0.20</div> setiap mukasurat<br><br>
+         <div class="blueBox">
+            <span class="printer">Perkhidmatan Lain</span>
+                    <div class="blueBoxContent">
+                    Mencetak (hitam/putih)<br>
+                    <div class="bluehilite">Ahli RM0.40</div>
+                    <div class="bluehilite">Bukan Ahli RM0.70</div> 1 hingga 5 mukasurat * (A4)<br><br>
+
+                    <div class="bluehilite">Ahli RM0.20</div>
+                    <div class="bluehilite">Bukan Ahli RM0.50</div> 5 dan lebih mukasurat * (A4)<br>
+                    --------------------------------------------
+                    <br><br> Mencetak (warna)<br>
+                    <div class="bluehilite">Ahli RM0.70</div>
+                     <div class="bluehilite">Bukan Ahli RM1.00</div> 1 hingga 5 mukasurat * (A4)<br><br>
+
+                     <div class="bluehilite">Ahli RM0.50</div>
+                     <div class="bluehilite">Bukan Ahli RM1.00</div> 5 dan lebih mukasurat * (A4)<br>
+                      --------------------------------------------
+                    <br><br>Pengimbas<br>
+                    <div class="bluehilite">Ahli RM0.10</div>
+                    <div class="bluehilite">Bukan Ahli RM0.30</div> sekeping<br>
+                    --------------------------------------------
+                    <br><br> Laminate (warna)<br>
+                    <div class="bluehilite">Ahli RM2.00</div>
+                     <div class="bluehilite">Bukan Ahli RM2.50</div> saiz A4<br><br>
+
+                     <div class="bluehilite">Ahli RM1.00</div>
+                     <div class="bluehilite">Bukan Ahli RM1.50</div>saiz IC<br>
                     </div>
-                </div>
             <div class="blueBoxRibbon"></div>
-        	</div>
+            </div>
 <div class="normalBox">
             <h1>Capaian Pantas</h1>
             <a href="#">Universal Service Provision</a><br> 

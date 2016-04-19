@@ -1,12 +1,23 @@
+<script src="<?php echo url::asset("_scale/js/datepicker/bootstrap-datepicker.js");?>"></script>
 <script type="text/javascript">
 	
 var report = new function()
 {
 	this.generate = function()
 	{
-		var month	= $("#month").val();
-		var year	= $("#year").val();
-		window.location.href = pim.base_url+"report/generateMasterListing/"+month+"/"+year;
+
+		if($("#startDate").val() != '' && $('#endDate').val() != '')
+		{
+
+			window.location.href = pim.base_url+'report/generateMasterListing?start='+$("#startDate").val()+'&end='+$("#endDate").val();
+		}
+		else
+		{
+			var month	= $("#month").val();
+			var year	= $("#year").val();
+			
+			window.location.href = pim.base_url+"report/generateMasterListing/"+month+"/"+year;
+		}
 	}
 }
 
@@ -25,6 +36,13 @@ var report = new function()
 					<td width='150px'>Active Data By End Of</td><td>: 
 					<?php echo form::select("month",model::load("helper")->monthYear("month"),null,date("m"),"[Month]");?>
 					<?php echo form::select("year",model::load("helper")->monthYear("year"),null,date("Y"));?> for 1 year.
+					</td>
+				</tr>
+				<tr>
+					<td>Or by date range</td>
+					<td>:
+						<input name="startDate" id="startDate" type="text" data-date-format="yyyy-mm-dd" class="datepicker-input"> until
+						<input name="endDate" id="endDate" type="text" data-date-format="yyyy-mm-dd" class="datepicker-input">
 					</td>
 				</tr>
 				<!-- <tr>
