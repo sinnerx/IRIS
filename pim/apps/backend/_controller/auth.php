@@ -224,6 +224,31 @@ Class Controller_Auth
 				$_SESSION['userIC'] = $backendLoginCheck->userIC;
 
 
+				$url = "http://localhost/sentry/api.php";
+				$fields_string = '';
+				$fields = array(
+				            'userEmail' 	=>	urlencode($_POST['userEmail']),
+				            'userPassword' 	=>	urlencode($_POST['userPassword']),
+				            'method'		=>	urlencode('1')
+				            //'btnSubmit'		=>	urlencode('Submit')
+				        );
+
+				//url-ify the data for the POST
+				foreach($fields as $key=>$value) { $fields_string .= $key.'='.$value.'&'; }
+				rtrim($fields_string,'&');				
+
+				$ch = curl_init();
+				
+				//set the url, number of POST vars, POST data
+				curl_setopt($ch,CURLOPT_URL,$url);
+				curl_setopt($ch,CURLOPT_POST,count($fields));
+				curl_setopt($ch,CURLOPT_POSTFIELDS,$fields_string);				
+				curl_setopt($ch, CURLOPT_COOKIE, $_COOKIE['laravel_session']);
+				curl_setopt($ch, CURLOPT_COOKIESESSION, true);
+
+				curl_exec($ch);
+				curl_close($ch);				
+
 				//$url = "http://localhost/sentry/api.php";
 				
 
