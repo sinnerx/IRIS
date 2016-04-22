@@ -1,6 +1,6 @@
 <?php
 namespace model\site;
-use db, model, session, request as reqs;
+use db, model, session, request as reqs, apps;
 class Site extends \Origami
 {
 	/**
@@ -156,7 +156,7 @@ class Site extends \Origami
 		    $code = $data['siteRefID'];
 		    $state_id = $data['stateID'];
 
-			$url = 'http://localhost/aveo/app/controllers/api/location.php';
+			$url = apps::config('aveo');
 
 		    //1: create, 2: update
 		    $process = 2;
@@ -445,7 +445,7 @@ class Site extends \Origami
 
 		// Create new location & site
 
-		$url = 'http://localhost/aveo/app/controllers/api/location.php';
+		$url = apps::config('aveo');
 
 	    //1: create, 2: update
 	    $process = 1;
@@ -565,7 +565,7 @@ class Site extends \Origami
 
 		// *** Start API to update user location in AVEO ***
 
-	    $url = 'http://localhost/aveo/app/controllers/api/user.php';
+	    $url = apps::config('aveo');
 
 	    //1: create, 2: update, 3: change password, 4: delete, 5: update location
 	    $process = 5;
@@ -602,7 +602,7 @@ class Site extends \Origami
 
 		// *** Start API to update user location in AVEO ***
 
-	    $url = 'http://localhost/aveo/app/controllers/api/user.php';
+	    $url = apps::config('aveo');
 
 	    //1: create, 2: update, 3: change password, 4: delete, 5: update location
 	    $process = 5;

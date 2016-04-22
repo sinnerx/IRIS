@@ -61,7 +61,7 @@ class Controller_User
 				$userInfo = model::load("user/user")->get(request::get('userID'));
 				// *** Start API to create new user in AVEO ***
 				if (request::get('userLevel') == 2) {
-				    $url = 'http://localhost/aveo/app/controllers/api/user.php';
+				    $url = apps::config('aveo');
 
 				    //1: create, 2: update, 3: change password, 4: delete
 				    $process = 1;
@@ -214,7 +214,7 @@ class Controller_User
 		$user->delete();
 		// *** Start API for AVEO ***
 
-	    $url = 'http://localhost/aveo/app/controllers/api/user.php';
+	    $url = apps::config('aveo');
 
 	    //1: create, 2: update, 3: change password, 4: delete
 	    $process = 4;
@@ -243,6 +243,7 @@ class Controller_User
 		$user			= model::load("user/user");
 		$data['row']	= $user->get($userID);
 		$data['userLevelR']	= $this->userLevelR;
+		
 
 		if(form::submitted())
 		{

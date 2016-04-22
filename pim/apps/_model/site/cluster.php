@@ -1,6 +1,6 @@
 <?php
 namespace model\site;
-use db, session, model;
+use db, session, model, apps;
 
 /**
  * This is supposedly object for cluster/cluster (but since it was placed here, i'll just use this class here.)
@@ -148,7 +148,7 @@ class Cluster extends \Origami
 		    $id = $siteID;
 		    $cluster_id = $clusterID;
 
-			$url = 'http://localhost/aveo/app/controllers/api/location.php';
+			$url = apps::config('aveo');
 
 		    //1: create, 2: update, 3: update cluster
 		    $process = 3;
@@ -182,7 +182,7 @@ class Cluster extends \Origami
 		    $id = $siteID;
 		    $cluster_id = 0;
 
-			$url = 'http://localhost/aveo/app/controllers/api/location.php';
+			$url = apps::config('aveo');
 
 		    //1: create, 2: update, 3: update cluster
 		    $process = 3;

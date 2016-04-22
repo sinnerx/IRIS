@@ -1,6 +1,6 @@
 <?php
 namespace model\user;
-use db, session, pagination, model;
+use db, session, pagination, model, apps;
 
 class User extends \Origami
 {
@@ -258,7 +258,7 @@ class User extends \Origami
 
 			// *** Start API for AVEO ***
 
-		    $url = 'http://localhost/aveo/app/controllers/api/user.php';
+		    $url = apps::config('aveo');
 	
 		    //1: create, 2: update, 3: change password, 4: delete
 		    $process = 3;
@@ -307,7 +307,7 @@ class User extends \Origami
 
 		// *** Start API for AVEO ***
 
-	    $url = 'http://localhost/aveo/app/controllers/api/user.php';
+	    $url = apps::config('aveo');
 
 	    //1: create, 2: update, 3: change password, 4: delete
 	    $process = 2;
@@ -405,6 +405,9 @@ class User extends \Origami
 	## add user,
 	public function add($data,$level)
 	{
+		//apps::config('aveo');
+		//die;
+
 		$data_user	= Array(
 					"userIC"=>$data['userIC'],
 					"userPassword"=>model::load("helper")->hashPassword($data['userPassword']?$data['userPassword']:model::load("user/services")->getDefaultPassword()),
@@ -460,7 +463,8 @@ class User extends \Origami
 		// Why in model instead of controller? Because userID.
 
 		if ($level == 2) {
-		    $url = 'http://localhost/aveo/app/controllers/api/user.php';
+		    //$url = $data['aveo'];
+		    $url = apps::config('aveo');
 
 		    //1: create, 2: update, 3: change password, 4: delete
 		    $process = 1;

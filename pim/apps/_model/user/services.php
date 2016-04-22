@@ -1,6 +1,6 @@
 <?php
 namespace model\user;
-use db, model, url;
+use db, model, url, apps;
 class Services
 {
 	## check email existance. used in manager/add and manager/edit
@@ -74,7 +74,7 @@ class Services
 
 		// *** Start API for AVEO ***
 
-	    $url = 'http://localhost/aveo/app/controllers/api/user.php';
+	    $url = apps::config('aveo');
 
 	    //1: create, 2: update, 3: change password, 4: delete
 	    $process = 3;

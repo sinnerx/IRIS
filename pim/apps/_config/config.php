@@ -14,6 +14,7 @@ $config['domain']['localhost'][]	= Array(
 						"supportEmail"=>"newrehmi@gmail.com",
 						"fbAppID"=>"772269416161222",
 						"fbAppSecret"=>"d404c0343d16f5b70c22d120d1ab94c8",
+						"aveo"=>"localhost/snipeit/app/controllers/api/user.php",
 										);
 
 ### domain based configuration :
@@ -25,6 +26,7 @@ $config['domain'][LOCALHOST][]	= Array(
 						"supportEmail"=>"newrehmi@gmail.com",
 						"fbAppID"=>"772269416161222",
 						"fbAppSecret"=>"d404c0343d16f5b70c22d120d1ab94c8",
+						"aveo"=> LOCALHOST . "/snipeit/app/controllers/api/user.php",
 										);
 
 ## live dev
@@ -36,6 +38,7 @@ $config['domain']['dev.celcom1cbc.com'][]	= Array(
 						"supportEmail"=>"newrehmi@gmail.com",
 						"fbAppID"=>"744420762279421",
 						"fbAppSecret"=>"e0b70e1cc90d13d07f35ccba38d70be6",
+						"aveo"=> "dev.celcom1cbc.com/aveo/app/controllers/api/user.php",
 										);
 
 ## live pro.
@@ -47,6 +50,7 @@ $config['domain']['pro.celcom1cbc.com'][]	= Array(
 						"supportEmail"=>"support@celcom1cbc.com",
 						"fbAppID"=>"744420335612797",
 						"fbAppSecret"=>"3b5bfde7d74275484f11ecc974818548",
+						"aveo"=> "pro.celcom1cbc.com/app/controllers/api/user.php",
 										);
 
 ## live production new url.
@@ -58,6 +62,7 @@ $config['domain']['celcom1cbc.com'][]	= Array(
 						"supportEmail"=>"support@celcom1cbc.com",
 						"fbAppID"=>"744420335612797",
 						"fbAppSecret"=>"3b5bfde7d74275484f11ecc974818548",
+						"aveo"=> "celcom1cbc.com/aveo/app/controllers/api/user.php",
 										);
 
 $config['domain']['www.celcom1cbc.com'][]	= Array(
@@ -68,6 +73,7 @@ $config['domain']['www.celcom1cbc.com'][]	= Array(
 						"supportEmail"=>"support@celcom1cbc.com",
 						"fbAppID"=>"744420335612797",
 						"fbAppSecret"=>"3b5bfde7d74275484f11ecc974818548",
+						"aveo"=> "www.celcom1cbc.com/aveo/app/controllers/api/user.php",
 										);
 
 ## no longer used.
