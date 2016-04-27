@@ -9,15 +9,16 @@ Class Controller_Auth
 	
 	private function index()
 	{
-		
 		## if page was public, no need for further check.
 		if(model::load("access/services")->checkPublicBackend())
 		{
+			\Iris\Sso::logout();
 			return;
 		}
 
 		## use didn't log in.
-		if(!session::has("userLevel"))
+		// if(!session::has("userLevel"))
+		if(!\Iris\Sso::isLoggedIn())
 		{
 			redirect::to("login","Please log in.","error");
 		}
@@ -83,7 +84,8 @@ Class Controller_Auth
 		}
 
 		## if is logged in.
-		if(session::has("userID"))
+		// if(session::has("userID"))
+		if(\Iris\Sso::isLoggedIn())
 		{
 			redirect::to(model::load("access/data")->firstLoginLocation(session::get("userLevel")));
 		}
@@ -187,7 +189,9 @@ Class Controller_Auth
 
 
 				## login check
-				$backendLoginCheck	= $accessAuth->backendLoginCheck($email,$pass);
+				// $backendLoginCheck	= $accessAuth->backendLoginCheck($email,$pass);
+
+				$backendLoginCheck = \Iris\Sso::logIn($email, $pass);
 
 				## login failed.
 				if(!$backendLoginCheck)
@@ -197,16 +201,17 @@ Class Controller_Auth
 					redirect::to("","Wrong log-in detail.","error");
 				}
 
+
 				## if site manager
-				if($backendLoginCheck->userLevel == 2)
+				if($backendLoginCheck['userLevel'] == 2)
 				{
-					if($backendLoginCheck->userStatus == 3)
+					if($backendLoginCheck['userStatus'] == 3)
 					{
 						input::repopulate();
 						redirect::to('', 'Your account has been disabled', 'error');
 					}
 
-					$site	= $site->getSiteByManager($backendLoginCheck->userID);
+					$site	= $site->getSiteByManager($backendLoginCheck['userID']);
 
 					## and he didn't have any site yet.
 					if(!$site)
@@ -218,10 +223,10 @@ Class Controller_Auth
 
 				## login.
 				//exec(getcwd()."/pim/apps/backend/_controller/asset_integration.php");
-				$accessAuth->login($backendLoginCheck->userID,$backendLoginCheck->userLevel);
-				$_SESSION['userid'] = $backendLoginCheck->userID;
-				$_SESSION['userLevel'] = $backendLoginCheck->userLevel;
-				$_SESSION['userIC'] = $backendLoginCheck->userIC;
+				$accessAuth->login($backendLoginCheck['userID'],$backendLoginCheck['userLevel']);
+				$_SESSION['userid'] = $backendLoginCheck['userID'];
+				$_SESSION['userLevel'] = $backendLoginCheck['userLevel'];
+				$_SESSION['userIC'] = $backendLoginCheck['userIC'];
 
 
 				$url = "http://localhost/sentry/api.php";
@@ -267,7 +272,7 @@ Class Controller_Auth
 				
 
 				## go to home/index
-				redirect::to(model::load("access/data")->firstLoginLocation($backendLoginCheck->userLevel));
+				redirect::to(model::load("access/data")->firstLoginLocation($backendLoginCheck['userLevel']));
 			}
 		}
 

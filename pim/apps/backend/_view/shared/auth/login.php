@@ -177,9 +177,9 @@ $(document).ready(function()
 		$(".box-changepass").slideDown();
 	}
 
-	var win = window.open("http://localhost/snipeit/public/auth/signin", '1366002941508','width=1,height=1,left=375,top=330');
+	// var win = window.open("http://localhost/snipeit/public/auth/signin", '1366002941508','width=1,height=1,left=375,top=330');
 
-	setTimeout(function () { win.close();}, 1000);	
+	// setTimeout(function () { win.close();}, 1000);	
 });
 
 function resetPassword()

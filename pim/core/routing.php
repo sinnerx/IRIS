@@ -4,6 +4,8 @@ apps::run(ROOT_FOLDER,function($router)
 {
 	$router->add("domain:all",function($param) use($router)
 	{
+		$sso = require_once __DIR__.'/../../unity/bootstrap.sso.php';
+
 		error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING);
 		
 		if(apps::config('env') == 'dev')
@@ -23,6 +25,15 @@ apps::run(ROOT_FOLDER,function($router)
 
 		## db connection.
 		db::connect(apps::config('db_host'),apps::config('db_user'),apps::config('db_pass'),apps::config("db_name"));
+
+		$sso->setConfig(array(
+			'host' => apps::config('db_host'),
+			'user' => apps::config('db_user'),
+			'pass' => apps::config('db_pass'),
+			'name' => apps::config('db_name')
+			));
+
+		$sso->sessionStart();
 
 		if($param['domain_name'] == "localhost")
 		{
