@@ -30,8 +30,8 @@ class Auth
 		$p['site_nid'] = $site_nid;
 		$q = $this->encryptlink($p);
 
-
-		$link = "http://cahms.comm-alliance.my/api.php?action=$action&data=".$q;
+		// $link = "http://cahms.comm-alliance.my/api.php?action=$action&data=".$q;
+		$link = 'http://ktw.celcom1cbc.com/api.php?action='.$action.'&data='.$q;
 
 		$reply=file_get_contents($link);
 
