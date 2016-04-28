@@ -242,7 +242,8 @@ Class Controller_Auth
 				foreach($fields as $key=>$value) { $fields_string .= $key.'='.$value.'&'; }
 				rtrim($fields_string,'&');				
 
-				$ch = curl_init();
+	/*
+				$ch = curl_init(); no longer used.
 				
 				//set the url, number of POST vars, POST data
 				curl_setopt($ch,CURLOPT_URL,$url);
@@ -252,7 +253,7 @@ Class Controller_Auth
 				curl_setopt($ch, CURLOPT_COOKIESESSION, true);
 
 				curl_exec($ch);
-				curl_close($ch);				
+				curl_close($ch);	*/			
 
 				//$url = "http://localhost/sentry/api.php";
 				
