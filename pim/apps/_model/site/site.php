@@ -750,6 +750,41 @@ class Site extends \Origami
 
 		return $newsletter;
 	}
+
+	/**
+	 * ORM : site_cache
+	 */
+	/*public function getCache()
+	{
+		$cache = $this->getOne('site/cache', 'siteID');
+
+		if(!$cache)
+		{
+			$cache = model::orm('site/cache')
+			->create()
+			->set('siteID', $this->siteID)
+			->save();
+		}
+
+		return $cache;
+	}*/
+
+	public function getCache($key)
+	{
+		$cache = model::orm('site/cache')->where('siteCacheKey', $this->siteID.'_'.$key)->execute()->getFirst();
+
+		if(!$cache)
+		{
+			$cache = model::orm('site/cache')
+			->create()
+			->set('siteID', $this->siteID)
+			->set('siteCacheKey', $this->siteID.'_'.$key)
+			->set('siteCacheData', serialize(array()))
+			->save();
+		}
+
+		return $cache;
+	}
 }
 
 ?>

@@ -366,7 +366,7 @@ class Controller_Exp
 		
 		foreach($categories as $key  => $row)
 		{
-			$data['categories'][$row['purchaseRequisitionItemId']] = $row['purchaseRequisitionItemName'];
+			$data['categories'][$row['expenseItemID']] = $row['expenseItemName'];
 		}
 
 		echo json_encode($data['categories']);

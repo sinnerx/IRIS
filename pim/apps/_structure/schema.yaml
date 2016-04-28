@@ -209,6 +209,14 @@ site:
 	siteRefID [int]				## the site_id for old pi1m site.
 	siteCafeToken [varchar]
 
+site_cache:
+	siteCacheID [int]
+	siteID [int]
+	siteCacheQueried [int]
+	siteCacheKey [varchar]
+	siteCacheData [text]
+	siteCacheUpdatedDate [datetime]
+
 site_cafe:
 	siteCafeID [int]
 	siteID [int]

@@ -11,7 +11,7 @@ class item extends \Origami
 	public function getList($id)
 	{
 		
-		db::from("purchase_requisition_item")->where("purchaseRequisitionCategoryId = '$id'");
+		db::from("expense_item")->where("expenseCategoryID", $id);
 
 		return db::get()->result();
 	}

@@ -505,11 +505,26 @@ class Controller_Cafe
 			}
 		}
 
-		$lastUpdatedDate = db::select('userUpdatedDate')
-		->where('userID IN (SELECT userID FROM site_member WHERE siteID = ?)', array($this->site->siteID))
-		->limit(1)
-		->order_by('userUpdatedDate DESC')
-		->get('user')->row('userUpdatedDate');
+		$time = microtime(true);
+
+		$cache = $this->site->getCache('mlu');
+
+		if(!$cache->refreshed())
+		{
+			$lastUpdatedDate = db::select('userUpdatedDate')
+			->where('userID IN (SELECT userID FROM site_member WHERE siteID = ?)', array($this->site->siteID))
+			->limit(1)
+			->order_by('userUpdatedDate DESC')
+			->get('user')->row('userUpdatedDate');
+
+			$cache->persist(array(
+				'date' => $lastUpdatedDate,
+				));
+		}
+		else
+		{
+			$lastUpdatedDate = $cache->get('date');
+		}
 
 		return json_encode(array(
 			'status' => 'success',
