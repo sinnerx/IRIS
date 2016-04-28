@@ -65,7 +65,7 @@ class Controller_Member
 
 			## do celcom api user update.
 			$siteRefID	= $login['siteRefID'];				
-			$updated	= model::load("celcom/auth")->update_user($ic,$password,$siteRefID);
+			$updated	= model::load("celcom/auth")->update_user(input::get('userIC'),input::get('userPassword'),$siteRefID);
 
 			## change password.
 			model::load("user/user")->changePasswordByIC(input::get("userIC"),input::get("userPassword"));
