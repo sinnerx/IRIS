@@ -62,7 +62,11 @@ class Sso
 
 		$pdo = $pdo ? $pdo : new \Pdo('mysql:host='.$config['host'].';dbname='.$config['name'], $config['user'], $config['pass']);
 
-		$statement = $pdo->prepare('SELECT * FROM user INNER JOIN user_profile ON user.userID = user_profile.userID WHERE userEmail = ? AND userPassword = ?');
+		$statement = $pdo->prepare('SELECT U.userID, U.userIC, U.userEmail, U.userLevel, U.userStatus, U.userPassword, UP.userProfileFullName, UP.userProfileLastName ,SM.siteID 
+			FROM user U 
+			INNER JOIN user_profile UP ON U.userID = UP.userID 
+			LEFT OUTER JOIN site_manager SM ON U.userID = SM.userID  
+			WHERE U.userEmail = ? AND U.userPassword = ?');
 
 		$statement->bindValue(1, $email);
 
@@ -101,7 +105,11 @@ class Sso
 	{
 		$pdo = $this->getConnection();
 
-		$statement = $pdo->prepare('SELECT * FROM user INNER JOIN user_profile ON user.userID = user_profile.userID WHERE user.userID = ?');
+		$statement = $pdo->prepare('SELECT U.userID, U.userIC, U.userEmail, U.userLevel, U.userStatus, U.userPassword, UP.userProfileFullName, UP.userProfileLastName ,SM.siteID 
+			FROM user U 
+			INNER JOIN user_profile UP ON U.userID = UP.userID 
+			LEFT OUTER JOIN site_manager SM ON U.userID = SM.userID 
+			WHERE U.userID = ?');
 
 		$statement->bindValue(1, $_SESSION['sso_user']['user_id']);
 
