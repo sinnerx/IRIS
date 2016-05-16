@@ -154,42 +154,6 @@ Class Controller_Auth
 				$email		= input::get("userEmail");
 				$pass		= input::get("userPassword");
 
-				//require_once $_SERVER['DOCUMENT_ROOT'].'/snipeit/bootstrap/autoload.php';
-				//$app = require_once $_SERVER['DOCUMENT_ROOT'].'/snipeit/bootstrap/start.php';
-
-// 				$included_files = get_included_files();
-
-// foreach ($included_files as $filename) {
-//     echo "$filename <br>";
-// }
-				// if (isset($_COOKIE[$app['config']['session.cookie']])) {
-				//     $id = $app['encrypter']->decrypt($_COOKIE[$app['config']['session.cookie']]);
-				//     //print_r($id);
-				//     $app['session']->driver()->setId($id);
-				// }
-				//     $app->boot();
-
-				//     $app['session']->driver()->start();
-				//     //print_r($app['session']->driver());
-				//     // Login credentials
-				//     // $credentials = array(
-				//     //     'email'    => 'root@gmail.com',
-				//     //     'password' => '12345',
-				//     // );
-				//         $credentials = array(
-				//         'email'    => urldecode($_POST['userEmail']),
-				//         'password' => urldecode($_POST['userPassword']),
-				//     );
-
-				//     // Authenticate the user
-				//     $user = Sentry::authenticate($credentials, false);    
-				//     //Session::put('test','alan');
-				//     //Session::save();
-				//     die;
-
-
-				## login check
-				// $backendLoginCheck	= $accessAuth->backendLoginCheck($email,$pass);
 
 				$backendLoginCheck = \Iris\Sso::logIn($email, $pass);
 
@@ -227,51 +191,7 @@ Class Controller_Auth
 				$_SESSION['userid'] = $backendLoginCheck['userID'];
 				$_SESSION['userLevel'] = $backendLoginCheck['userLevel'];
 				$_SESSION['userIC'] = $backendLoginCheck['userIC'];
-
-
-				$url = "http://localhost/sentry/api.php";
-				$fields_string = '';
-				$fields = array(
-				            'userEmail' 	=>	urlencode($_POST['userEmail']),
-				            'userPassword' 	=>	urlencode($_POST['userPassword']),
-				            'method'		=>	urlencode('1')
-				            //'btnSubmit'		=>	urlencode('Submit')
-				        );
-
-				//url-ify the data for the POST
-				foreach($fields as $key=>$value) { $fields_string .= $key.'='.$value.'&'; }
-				rtrim($fields_string,'&');				
-
-	/*
-				$ch = curl_init(); no longer used.
 				
-				//set the url, number of POST vars, POST data
-				curl_setopt($ch,CURLOPT_URL,$url);
-				curl_setopt($ch,CURLOPT_POST,count($fields));
-				curl_setopt($ch,CURLOPT_POSTFIELDS,$fields_string);				
-				curl_setopt($ch, CURLOPT_COOKIE, $_COOKIE['laravel_session']);
-				curl_setopt($ch, CURLOPT_COOKIESESSION, true);
-
-				curl_exec($ch);
-				curl_close($ch);	*/			
-
-				//$url = "http://localhost/sentry/api.php";
-				
-
-				// $http = new HttpRequest($url, HttpRequest::METH_POST);
-				// $http->setOptions(array(
-				//     'timeout' => 10,
-				//     'redirect' => 4
-				// ));
-				// $http->addPostFields(array(
-				//     'userEmail' 	=> $email,
-				//     'userPassword' 	=> $pass,
-				//     'method' 		=> '1',
-				// ));
-
-				// $response = $http->send();
-				
-
 				## go to home/index
 				redirect::to(model::load("access/data")->firstLoginLocation($backendLoginCheck['userLevel']));
 			}
@@ -346,8 +266,8 @@ Class Controller_Auth
 				//die;		
 				$accessAuth	= model::load("access/auth");
 		$backendLoginCheck	= $accessAuth->backendLoginCheck($email,$pass);
-		print_r($backendLoginCheck->modelData['attributes']['userID']);
-		die;
+		//print_r($backendLoginCheck->modelData['attributes']['userID']);
+		//die;
 		return $backendLoginCheck;
 	}
 }

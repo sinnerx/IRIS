@@ -67,7 +67,7 @@
     <div id="nav">
             <ul>
                 <li><a href="<?php echo url::base("{site-slug}");?>">Utama</a></li>
-                <li><a href="<?php echo url::base("{site-slug}/mengenai-kami");?>">Mengenai PI1M</a>
+                <li><a href="<?php echo url::base("{site-slug}/mengenai-kami");?>">Maklumat Setempat</a>
                 <ul>
                     <?php foreach($pages as $page):
                     if($page['pageDefaultType'] == 1)
