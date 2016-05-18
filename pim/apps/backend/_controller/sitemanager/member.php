@@ -56,6 +56,7 @@ class Controller_Member
 						)
 							);
 
+			print_r(site());die;
 			if($error = input::validate($rules))
 			{
 				input::repopulate();
@@ -63,9 +64,9 @@ class Controller_Member
 				redirect::to("member/changePassword","Please complete the field.","error");
 			}
 
+
 			## do celcom api user update.
-			$siteRefID	= $login['siteRefID'];				
-			$updated	= model::load("celcom/auth")->update_user(input::get('userIC'),input::get('userPassword'),$siteRefID);
+			$updated	= model::load("celcom/auth")->update_user(input::get('userIC'),input::get('userPassword'),site()->siteRefID);
 
 			## change password.
 			model::load("user/user")->changePasswordByIC(input::get("userIC"),input::get("userPassword"));
