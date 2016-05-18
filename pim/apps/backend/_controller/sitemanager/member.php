@@ -56,7 +56,6 @@ class Controller_Member
 						)
 							);
 
-			print_r(site());die;
 			if($error = input::validate($rules))
 			{
 				input::repopulate();
