@@ -69,7 +69,7 @@ class Controller_Member
 			// check member existnce.
 			$row = db::from('site')->where('siteID IN (SELECT siteID FROM site_member WHERE userID IN (SELECT userID FROM user WHERE userIC = ?))', array(input::get('userIC')))->get()->row();
 
-			if($row['siteID'] != site()->siteID && site()->siteID != 85) // site pengurus
+			if(!$row || ($row['siteID'] != site()->siteID && site()->siteID != 85)) // site pengurus
 				return redirect::to('member/changePassword', 'Unable to find the member information.', 'error');
 
 			## do celcom api user update.
