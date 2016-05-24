@@ -225,6 +225,155 @@ class Report
 		return $data;
 		
 	}
+
+	public function getQuarterlyReport($quarter = null){
+		## select all site.
+		$siteR = db::select("siteID,stateID,siteName")->get("site")->result("siteID");
+
+		$arrayActivitiesOnSite = array();
+
+		##loop in site
+		foreach ($siteR as $keySite) {
+			# code...
+			$arrayActivitiesOnSite[$keySite['siteID']] = $keySite;
+			//echo $key['siteID'];
+			## select training only
+			$training =  
+			//db::select("*, count(activity_date.activityDateID) as duration, count(activity_user.activityUserID) as attendees ");
+			// db::join("activity_date ", " activity.activityID = activity_date.activityID");
+			// db::join("activity_user ", " activity.activityID = activity_user.activityID");
+			db::select("*, DATE(activityStartDate) as startDate");
+			db::where("activityType",2);
+			db::where("YEAR(activityStartDate) ", "2016");
+			db::where("MONTH(activityStartDate) IN ", "(1,2,3)");
+
+			db::where("activity.siteID",$keySite['siteID']);
+
+			//db::where("year(activityStartDate) = ? AND month(activityStartDate) = ?",Array($year,$month));
+			$trainingR	= db::get("activity")->result();
+			//var_dump(db::lastQuery());
+			//die;
+			//var_dump($trainingR);
+
+			$hourTraining = 0;
+			foreach ($trainingR as $keyTraining) {
+				# code...
+				if ($keyTraining['activityID']){
+					$arrayActivitiesOnSite[$keySite['siteID']]['Training'][$keyTraining['activityID']] = $keyTraining;
+					//var_dump($arrayActivitiesOnSite);
+					//var_dump($keyTraining['activityID']);
+
+					##calculate total hours
+					//db::select("activityID, TIMESTAMPDIFF(HOUR, activityDateStartTime, activityDateEndTime) AS totalhours");
+					db::select("activityID, SUM(Hour(TIMEDIFF(activityDateEndTime, activityDateStartTime))) AS totalhours");
+					db::group_by("activityID");
+					db::where("activity_date.activityID", $keyTraining['activityID']);
+					$resultHourTraining = db::get("activity_date ")->result();
+					//var_dump($resultHourTraining);
+					//var_dump($keyTraining['activityID'] . "======" . $arrayActivitiesOnSite[$keySite['siteID']]['Training'][$keyTraining['activityID']]['activityID']);
+					// if($keyTraining['activityID'] == $arrayActivitiesOnSite[$keySite['siteID']]['Training'][$keyTraining['activityID']]['activityID']){
+					// 	$hourTraining += $resultHourTraining[0]['totalhours'];
+					// }
+					// else{
+					 	$hourTraining = $resultHourTraining[0]['totalhours'];
+					// }
+
+						//$tempActivityID = 	$keyTraining['activityID'];
+
+					$arrayActivitiesOnSite[$keySite['siteID']]['Training'][$keyTraining['activityID']]['HourTraining'] = $hourTraining;
+					//var_dump($resultHourTraining[0]['totalhours']);
+					//var_dump($keyTraining['activityID'] . db::lastQuery());
+					//die;
+					//db::join("activity_user ", " activity.activityID = activity_user.activityID");
+
+					db::select("trainingMaxPax");
+					db::where("training.activityID", $keyTraining['activityID']);
+					$resultAttendees = db::get('training')->result();
+					//var_dump($resultAttendees);
+					$arrayActivitiesOnSite[$keySite['siteID']]['Training'][$keyTraining['activityID']]['attendees'] = $resultAttendees[0]['trainingMaxPax'];
+
+					
+					//$album = db::lastQuery();
+					//var_dump($album);	
+				}//end if
+
+			}//end-foreach training
+			//$arrayActivitiesOnSite[$keySite['siteID']]['HourTraining'] = $hourTraining;
+
+
+
+
+			## select event only
+			db::select("*, DATE(activityStartDate) as startDate");
+			db::where("activityType",1);
+			db::where("YEAR(activityStartDate) ", "2016");
+			db::where("MONTH(activityStartDate) IN ", "(1,2,3)");			
+			db::where("siteID",$keySite['siteID']);
+			//db::where("year(activityStartDate) = ? AND month(activityStartDate) = ?",Array($year,$month));
+			$eventR		= db::get("activity")->result();		
+			//var_dump($eventR);
+			$dayEvent = 0;
+			foreach ($eventR as $keyEvent) {
+				# code...
+				$arrayActivitiesOnSite[$keySite['siteID']]['Event'][$keyEvent['activityID']] = $keyEvent;
+
+				db::select("count(activityID) as totaldays");
+				db::where("activity_date.activityID", $keyTraining['activityID']);
+				$resultDayEvent = db::get("activity_date ")->result();
+
+				$dayEvent = $resultDayEvent[0]['totaldays'];
+				$arrayActivitiesOnSite[$keySite['siteID']]['Event'][$keyEvent['activityID']]['dayEvent'] = $dayEvent;	
+
+				db::select("trainingMaxPax");
+				db::where("training.activityID", $keyEvent['activityID']);
+				$resultAttendees = db::get('training')->result();
+				$arrayActivitiesOnSite[$keySite['siteID']]['Event'][$keyEvent['activityID']]['attendees'] = $resultAttendees[0]['trainingMaxPax'];				
+
+
+			}//end foreach event
+			//$arrayActivitiesOnSite[$keySite['siteID']]['DayEvent'] = $dayEvent;
+			
+
+
+
+			## select AJK Pi1M photo
+			db::where('siteID', $keySite['siteID']);
+			db::where('pageDefaultType', 3);
+			$ajkresult = db::get('page')->result();
+
+			$arrayActivitiesOnSite[$keySite['siteID']]['ajk']= $ajkresult[0]['pagePhoto'];
+
+			## select photo gallery
+			db::select('activityID');
+			db::where("activity.siteID",$keySite['siteID']);
+			$activityAlbum	= db::get("activity")->result();
+
+			foreach ($activityAlbum as $keyAlbum) {
+				# code...
+				db::select("albumCoverImageName, DATE(albumCreatedDate) as albumDate");
+				db::join("activity_album AA", "AA.activityID =  " . $keyAlbum['activityID']);
+				db::join("site_album SA", " SA.siteID =  AA.siteAlbumID");
+				db::where("album.albumID = SA.albumID");
+				//db::limit(1);
+				$album = db::get("album")->result();
+
+
+				$arrayActivitiesOnSite[$keySite['siteID']]['album'][$keyAlbum['activityID']]['albumName'] =  $album[0]['albumCoverImageName'];
+				$arrayActivitiesOnSite[$keySite['siteID']]['album'][$keyAlbum['activityID']]['albumDate'] =  $album[0]['albumDate'];
+			}//end foreach activityAlbum
+					
+			## put result into array
+			
+			//$arrayActivitiesOnSite['siteID'][$trainingR['trID']] = $trainingR; 
+			//$arrayActivitiesOnSite['siteID'][$activityR['evID']] = $activityR; 
+	}//end foreach site
+		##end loop site
+
+		##return array
+		return $arrayActivitiesOnSite;
+
+
+	}
 }
 
 
