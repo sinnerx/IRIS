@@ -376,12 +376,12 @@ class Controller_Exp
 	{
 		$pr = orm('expense/pr/pr')->find($prID);
 
-		if($pr->isClosed())
-			redirect::to('exp/prList', 'This PR has already been closed. Unable to delete.', 'error');
+		// if($pr->isClosed())
+		// 	redirect::to('exp/prList', 'This PR has already been closed. Unable to delete.', 'error');
 
-		$pr->delete();
+		// $pr->delete();
 
-		redirect::to('exp/prList', 'Successfully deleted PR record', 'success');
+		redirect::to('exp/prList', 'PR deletion has been disabled', 'error');
 	}
 
 	public function prEditCashAdvance($cashAdvanceID)
@@ -717,12 +717,12 @@ class Controller_Exp
 	{
 		$rl = orm('expense/pr/reconcilation/reconcilation')->find($rlID);
 
-		if($rl->isClosed())
-			redirect::to('exp/rlList', 'This RL has already been closed. Unable to delete.', 'error');
+		// if($rl->isClosed())
+		// 	redirect::to('exp/rlList', 'This RL has already been closed. Unable to delete.', 'error');
 
-		$rl->delete();
+		// $rl->delete();
 
-		redirect::to('exp/rlList', 'Successfully deleted RL record.', 'success');
+		redirect::to('exp/rlList', 'RL deletion has been disabled.', 'error');
 	}
 
 	public function rlDownload()

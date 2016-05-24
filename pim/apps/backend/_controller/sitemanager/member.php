@@ -40,6 +40,9 @@ class Controller_Member
 		view::render("sitemanager/member/lists",$data);
 	}
 
+	/**
+	 * Only allow the change of member password only.
+	 */
 	public function changePassword()
 	{
 		if(form::submitted())
@@ -63,9 +66,14 @@ class Controller_Member
 				redirect::to("member/changePassword","Please complete the field.","error");
 			}
 
+			// check member existnce.
+			$row = db::from('site')->where('siteID IN (SELECT siteID FROM site_member WHERE userID IN (SELECT userID FROM user WHERE userIC = ?))', array(input::get('userIC')))->get()->row();
+
+			if(!$row || ($row['siteID'] != site()->siteID && site()->siteID != 85)) // site pengurus
+				return redirect::to('member/changePassword', 'Unable to find the member information.', 'error');
+
 			## do celcom api user update.
-			$siteRefID	= $login['siteRefID'];				
-			$updated	= model::load("celcom/auth")->update_user(input::get('userIC'),input::get('userPassword'),$siteRefID);
+			$updated	= model::load("celcom/auth")->update_user(input::get('userIC'),input::get('userPassword'), $row['siteRefID']);
 
 			## change password.
 			model::load("user/user")->changePasswordByIC(input::get("userIC"),input::get("userPassword"));
