@@ -226,16 +226,18 @@ class Report
 		
 	}
 
-	public function getQuarterlyReport($quarter = null){
+	public function getQuarterlyReport($siteID = null, $quarter = null){
 		## select all site.
-		$siteR = db::select("siteID,stateID,siteName")->get("site")->result("siteID");
-
+		$keySite = db::select("siteID,stateID,siteName")->where("siteID", $siteID)->get("site")->result();
+		$keySite = $keySite[0];
+		//var_dump($keySite);
+		//die;
 		$arrayActivitiesOnSite = array();
-
+		$arrayActivitiesOnSite = $keySite;
 		##loop in site
-		foreach ($siteR as $keySite) {
+		//foreach ($siteR as $keySite) {
 			# code...
-			$arrayActivitiesOnSite[$keySite['siteID']] = $keySite;
+			//$arrayActivitiesOnSite = $keySite;
 			//echo $key['siteID'];
 			## select training only
 			$training =  
@@ -259,7 +261,7 @@ class Report
 			foreach ($trainingR as $keyTraining) {
 				# code...
 				if ($keyTraining['activityID']){
-					$arrayActivitiesOnSite[$keySite['siteID']]['Training'][$keyTraining['activityID']] = $keyTraining;
+					$arrayActivitiesOnSite['Training'][$keyTraining['activityID']] = $keyTraining;
 					//var_dump($arrayActivitiesOnSite);
 					//var_dump($keyTraining['activityID']);
 
@@ -270,8 +272,8 @@ class Report
 					db::where("activity_date.activityID", $keyTraining['activityID']);
 					$resultHourTraining = db::get("activity_date ")->result();
 					//var_dump($resultHourTraining);
-					//var_dump($keyTraining['activityID'] . "======" . $arrayActivitiesOnSite[$keySite['siteID']]['Training'][$keyTraining['activityID']]['activityID']);
-					// if($keyTraining['activityID'] == $arrayActivitiesOnSite[$keySite['siteID']]['Training'][$keyTraining['activityID']]['activityID']){
+					//var_dump($keyTraining['activityID'] . "======" . $arrayActivitiesOnSite['Training'][$keyTraining['activityID']]['activityID']);
+					// if($keyTraining['activityID'] == $arrayActivitiesOnSite['Training'][$keyTraining['activityID']]['activityID']){
 					// 	$hourTraining += $resultHourTraining[0]['totalhours'];
 					// }
 					// else{
@@ -280,7 +282,7 @@ class Report
 
 						//$tempActivityID = 	$keyTraining['activityID'];
 
-					$arrayActivitiesOnSite[$keySite['siteID']]['Training'][$keyTraining['activityID']]['HourTraining'] = $hourTraining;
+					$arrayActivitiesOnSite['Training'][$keyTraining['activityID']]['HourTraining'] = $hourTraining;
 					//var_dump($resultHourTraining[0]['totalhours']);
 					//var_dump($keyTraining['activityID'] . db::lastQuery());
 					//die;
@@ -290,7 +292,7 @@ class Report
 					db::where("training.activityID", $keyTraining['activityID']);
 					$resultAttendees = db::get('training')->result();
 					//var_dump($resultAttendees);
-					$arrayActivitiesOnSite[$keySite['siteID']]['Training'][$keyTraining['activityID']]['attendees'] = $resultAttendees[0]['trainingMaxPax'];
+					$arrayActivitiesOnSite['Training'][$keyTraining['activityID']]['attendees'] = $resultAttendees[0]['trainingMaxPax'];
 
 					
 					//$album = db::lastQuery();
@@ -298,7 +300,7 @@ class Report
 				}//end if
 
 			}//end-foreach training
-			//$arrayActivitiesOnSite[$keySite['siteID']]['HourTraining'] = $hourTraining;
+			//$arrayActivitiesOnSite['HourTraining'] = $hourTraining;
 
 
 
@@ -315,23 +317,23 @@ class Report
 			$dayEvent = 0;
 			foreach ($eventR as $keyEvent) {
 				# code...
-				$arrayActivitiesOnSite[$keySite['siteID']]['Event'][$keyEvent['activityID']] = $keyEvent;
+				$arrayActivitiesOnSite['Event'][$keyEvent['activityID']] = $keyEvent;
 
 				db::select("count(activityID) as totaldays");
 				db::where("activity_date.activityID", $keyTraining['activityID']);
 				$resultDayEvent = db::get("activity_date ")->result();
 
 				$dayEvent = $resultDayEvent[0]['totaldays'];
-				$arrayActivitiesOnSite[$keySite['siteID']]['Event'][$keyEvent['activityID']]['dayEvent'] = $dayEvent;	
+				$arrayActivitiesOnSite['Event'][$keyEvent['activityID']]['dayEvent'] = $dayEvent;	
 
 				db::select("trainingMaxPax");
 				db::where("training.activityID", $keyEvent['activityID']);
 				$resultAttendees = db::get('training')->result();
-				$arrayActivitiesOnSite[$keySite['siteID']]['Event'][$keyEvent['activityID']]['attendees'] = $resultAttendees[0]['trainingMaxPax'];				
+				$arrayActivitiesOnSite['Event'][$keyEvent['activityID']]['attendees'] = $resultAttendees[0]['trainingMaxPax'];				
 
 
 			}//end foreach event
-			//$arrayActivitiesOnSite[$keySite['siteID']]['DayEvent'] = $dayEvent;
+			//$arrayActivitiesOnSite['DayEvent'] = $dayEvent;
 			
 
 
@@ -341,7 +343,7 @@ class Report
 			db::where('pageDefaultType', 3);
 			$ajkresult = db::get('page')->result();
 
-			$arrayActivitiesOnSite[$keySite['siteID']]['ajk']= $ajkresult[0]['pagePhoto'];
+			$arrayActivitiesOnSite['ajk']= $ajkresult[0]['pagePhoto'];
 
 			## select photo gallery
 			db::select('activityID');
@@ -358,15 +360,15 @@ class Report
 				$album = db::get("album")->result();
 
 
-				$arrayActivitiesOnSite[$keySite['siteID']]['album'][$keyAlbum['activityID']]['albumName'] =  $album[0]['albumCoverImageName'];
-				$arrayActivitiesOnSite[$keySite['siteID']]['album'][$keyAlbum['activityID']]['albumDate'] =  $album[0]['albumDate'];
+				$arrayActivitiesOnSite['album'][$keyAlbum['activityID']]['albumName'] =  $album[0]['albumCoverImageName'];
+				$arrayActivitiesOnSite['album'][$keyAlbum['activityID']]['albumDate'] =  $album[0]['albumDate'];
 			}//end foreach activityAlbum
 					
 			## put result into array
 			
 			//$arrayActivitiesOnSite['siteID'][$trainingR['trID']] = $trainingR; 
 			//$arrayActivitiesOnSite['siteID'][$activityR['evID']] = $activityR; 
-	}//end foreach site
+	//}//end foreach site
 		##end loop site
 
 		##return array
