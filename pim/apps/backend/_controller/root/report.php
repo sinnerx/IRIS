@@ -547,7 +547,7 @@ class Controller_Report
 
 	public function quarterlyReport(){
 
-
+		set_time_limit(0);
 
 		db::select("siteID");
 		$allsite = db::get("site")->result('siteID');
@@ -637,9 +637,16 @@ class Controller_Report
 			$table->addRow();
 			$table->addCell(2000, $cellVCentered)->addText(htmlspecialchars('CashFlow'), null, $cellHCentered);
 			$table->addCell(2000, $cellVCentered)->addText(htmlspecialchars('Revenue'), null, $cellHCentered);
-			$table->addCell(2000, $cellVCentered)->addText(htmlspecialchars(''), null, $cellHCentered);
 			$table->addCell(2000, $cellVCentered)->addText(htmlspecialchars(''), null, $cellHCentered);		
-			$table->addCell(2000, $cellVCentered)->addText(htmlspecialchars(''), null, $cellHCentered);	
+			$table->addCell(2000, $cellVCentered)->addText(htmlspecialchars(''), null, $cellHCentered);			
+			$table->addCell(2000, $cellVCentered)->addText(htmlspecialchars(''), null, $cellHCentered);			
+			// foreach ($siteKey['revenue'] as $keyRevenue) {
+			// 	# code...
+			// 	$table->addCell(2000, $cellVCentered)->addText(htmlspecialchars(''), null, $cellHCentered);
+			// }
+			
+			//$table->addCell(2000, $cellVCentered)->addText(htmlspecialchars(''), null, $cellHCentered);		
+			//$table->addCell(2000, $cellVCentered)->addText(htmlspecialchars(''), null, $cellHCentered);	
 
 			$table->addRow();
 			$table->addCell(2000, $cellVCentered)->addText(htmlspecialchars(''), null, $cellHCentered);

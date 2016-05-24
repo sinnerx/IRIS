@@ -364,6 +364,78 @@ class Report
 				$arrayActivitiesOnSite['album'][$keyAlbum['activityID']]['albumDate'] =  $album[0]['albumDate'];
 			}//end foreach activityAlbum
 					
+
+			//cash flow - revenue
+			db::select("siteName, YEAR(billingTransactionDate) AS yr, MONTH(billingTransactionDate) AS mn,
+SUM(billingTransactionItemPrice * billingTransactionItemQuantity) AS revenue");
+			db::join("billing_transaction_item BTI", "BTI.billingTransactionID = BT.billingTransactionID");
+			db::join("site S", "S.siteID = BT.siteID");
+			db::where("billingTransactionItemPrice >", 0);
+			db::where("BT.siteID", $keySite['siteID']);
+			db::where("YEAR(billingTransactionDate)", 2016);
+			db::where("MONTH(billingTransactionDate) IN ", "(1,2,3)");
+			db::group_by("siteName, yr, mn");
+			$cashflow = db::get("billing_transaction BT")->result();
+			//var_dump($cashflow);
+			//die;
+
+			foreach ($cashflow as $keyCashFlow) {
+				# code...
+				$arrayActivitiesOnSite['revenue'][$keyCashFlow['yr']][$keyCashFlow['mn']] = $keyCashFlow['revenue'];
+			}
+
+			//take up - total member
+			db::select("siteName, YEAR(userCreatedDate) AS yr, MONTH(userCreatedDate) AS mn,
+COUNT(*) AS members");
+			db::join("site_member SM", "U.userID = SM.userID");
+			db::join("site S", "S.siteID = SM.siteID");
+			db::where("YEAR(userCreatedDate)", 2016);
+			db::where("S.siteID", $keySite['siteID']);
+			db::group_by("siteName, yr, mn");
+			$totalmember = db::get("user U")->result();
+			//var_dump($totalmember);
+			//die;
+
+			foreach ($totalmember as $keyTotalMember) {
+				# code...
+				$arrayActivitiesOnSite['totalmember'][$keyTotalMember['yr']][$keyTotalMember['mn']] = $keyTotalMember['members'];
+			}			
+
+// 			//pc usage day total
+			db::select("siteName, YEAR(billingTransactionDate) AS yr, MONTH(billingTransactionDate) AS mn,
+COUNT(DISTINCT billingTransactionUser) AS members");
+			db::join("billing_transaction_item BTI", "BTI.billingTransactionID = BT.billingTransactionID");
+			db::join("billing_transaction_user BTU", "BTU.billingTransactionID = BT.billingTransactionID");
+			db::join("site S", "S.siteID = BT.siteID");
+			db::where("BT.billingItemID", 3);
+			db::where("YEAR(billingTransactionDate)", 2016);
+			db::where("BT.siteID", $keySite['siteID']);
+			db::group_by("siteName, yr, mn");
+			$usagetotal = db::get("billing_transaction BT")->result();
+			// var_dump($usagetotal);
+			// die;
+
+			foreach ($usagetotal as $keyUsagetotal) {
+				# code...
+				$arrayActivitiesOnSite['usagetotal'][$keyUsagetotal['yr']][$keyUsagetotal['mn']] = $keyUsagetotal['members'];
+			}			
+
+// 			//day pc usage hour
+			db::select("siteName, YEAR(billingTransactionDate) AS yr, MONTH(billingTransactionDate) AS mn,
+SUM(billingTransactionItemQuantity) AS hours");
+			db::join("billing_transaction_item BTI", "BTI.billingTransactionID = BT.billingTransactionID");
+			db::join("site S", "S.siteID = BT.siteID");
+			db::where("BT.billingItemID", 3);
+			db::where("YEAR(billingTransactionDate)", 2016);
+			db::group_by("siteName, yr, mn");
+			$usagehour  = db::get("billing_transaction BT")->result();
+			//var_dump($usagehour);
+			//die;
+			foreach ($usagehour as $keyUsageHour) {
+				# code...
+				$arrayActivitiesOnSite['usagehour'][$keyUsageHour['yr']][$keyUsageHour['mn']] = $keyUsageHour['hours'];
+			}	
+
 			## put result into array
 			
 			//$arrayActivitiesOnSite['siteID'][$trainingR['trID']] = $trainingR; 
@@ -373,7 +445,7 @@ class Report
 
 		##return array
 		return $arrayActivitiesOnSite;
-
+		
 
 	}
 }
