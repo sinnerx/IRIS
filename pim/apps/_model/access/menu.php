@@ -193,7 +193,7 @@ class Menu extends Data
 							"Master Listing"=>"report/masterListing",
 							"Google Analytics"=>"googleanalytics/report",
 							"Monthly Activity Report"=>"report/getallActivityReport",
-							"Quarterly Report"=>"report/quarterlyReport",
+							"Quarterly Report"=>"report/showQuarterlyReportPage",
 									),
 					"Learning" => Array(
 									"Learning Page " => Array("../lms/"),

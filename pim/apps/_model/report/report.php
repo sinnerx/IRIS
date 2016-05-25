@@ -288,11 +288,12 @@ class Report
 					//die;
 					//db::join("activity_user ", " activity.activityID = activity_user.activityID");
 
-					db::select("trainingMaxPax");
-					db::where("training.activityID", $keyTraining['activityID']);
-					$resultAttendees = db::get('training')->result();
+					db::select("count(UserID) as attendees");
+					db::where("activity_user.activityID", $keyTraining['activityID']);
+					$resultAttendees = db::get('activity_user')->result();
+					//var_dump($keyTraining['activityID']);
 					//var_dump($resultAttendees);
-					$arrayActivitiesOnSite['Training'][$keyTraining['activityID']]['attendees'] = $resultAttendees[0]['trainingMaxPax'];
+					$arrayActivitiesOnSite['Training'][$keyTraining['activityID']]['attendees'] = $resultAttendees[0]['attendees'];
 
 					
 					//$album = db::lastQuery();
@@ -308,28 +309,38 @@ class Report
 			## select event only
 			db::select("*, DATE(activityStartDate) as startDate");
 			db::where("activityType",1);
-			db::where("YEAR(activityStartDate) ", "2016");
+			db::where("YEAR(activityStartDate) ", 2016);
 			db::where("MONTH(activityStartDate) IN ", "(1,2,3)");			
 			db::where("siteID",$keySite['siteID']);
 			//db::where("year(activityStartDate) = ? AND month(activityStartDate) = ?",Array($year,$month));
 			$eventR		= db::get("activity")->result();		
 			//var_dump($eventR);
 			$dayEvent = 0;
+			//var_dump($keySite['siteID']);
+			//var_dump($eventR);
+			//die;
 			foreach ($eventR as $keyEvent) {
+
 				# code...
 				$arrayActivitiesOnSite['Event'][$keyEvent['activityID']] = $keyEvent;
 
 				db::select("count(activityID) as totaldays");
-				db::where("activity_date.activityID", $keyTraining['activityID']);
+				db::where("activity_date.activityID", $keyEvent['activityID']);
 				$resultDayEvent = db::get("activity_date ")->result();
-
+				//var_dump($keyEvent['activityID']);
+				
+				//die;
 				$dayEvent = $resultDayEvent[0]['totaldays'];
 				$arrayActivitiesOnSite['Event'][$keyEvent['activityID']]['dayEvent'] = $dayEvent;	
 
-				db::select("trainingMaxPax");
-				db::where("training.activityID", $keyEvent['activityID']);
-				$resultAttendees = db::get('training')->result();
-				$arrayActivitiesOnSite['Event'][$keyEvent['activityID']]['attendees'] = $resultAttendees[0]['trainingMaxPax'];				
+				// db::select("count(UserID) as attendees");
+				// db::where("activity_user.activityID", $keyEvent['activityID']);
+				// $resultAttendeesEvent = db::get('activity_user')->result();
+				// //var_dump($keyEvent['activityID']);
+				// //var_dump($resultAttendeesEvent);				
+				// //var_dump($resultAttendeesEvent);
+				// $arrayActivitiesOnSite['Event'][$keyEvent['activityID']]['attendees'] = $resultAttendeesEvent[0]['attendees'];
+				$arrayActivitiesOnSite['Event'][$keyEvent['activityID']]['attendees'] = 0;
 
 
 			}//end foreach event
@@ -349,20 +360,65 @@ class Report
 			db::select('activityID');
 			db::where("activity.siteID",$keySite['siteID']);
 			$activityAlbum	= db::get("activity")->result();
+			
 
-			foreach ($activityAlbum as $keyAlbum) {
+			//var_dump($keySite['siteID']);
+			//$countImage = 0;
+			//foreach ($activityAlbum as $keyAlbum) {
 				# code...
-				db::select("albumCoverImageName, DATE(albumCreatedDate) as albumDate");
-				db::join("activity_album AA", "AA.activityID =  " . $keyAlbum['activityID']);
-				db::join("site_album SA", " SA.siteID =  AA.siteAlbumID");
-				db::where("album.albumID = SA.albumID");
-				//db::limit(1);
-				$album = db::get("album")->result();
+				db::select("photoName, photoDescription, DATE(photoCreatedDate) as photoDate");
+				
+				db::join("site_photo SP", " SP.siteID = ". $keySite['siteID']);				
+				db::where("photo.photoID = SP.photoID");
+				db::where("YEAR(photo.photoCreatedDate)", "2016");
+				db::where("MONTH(photo.photoCreatedDate) IN ", "(1,2,3)");
+				//db::where("photo.photoDescription ", " NOT NULL");
+
+				$album = db::get("photo")->result();
+				//var_dump($album);
+				//die;
+				if($album) {
+					//count($album) > 5 ? $countAlbum = 5 : $countAlbum = count($album);
+					if(count($album) < 5)
+						$random_image = $album;
+					else {
+						$random_keys = array_rand($album, 5);
+						$random_image = array();
+						foreach ($random_keys as $key) {
+							# code...
+							$random_image[$key] = $album[$key]; 
+						}
+						//$random_image = array_rand($album, 5);
+					}
+				//var_dump($keySite['siteID']);
+					//var_dump($random_image);
+					//die;
+					$imagecount = 0;
+					foreach ($random_image as $keyRandom) {
+						# code...
+						//var_dump($album[$keyRandom]);
+						$arrayActivitiesOnSite['album'][$imagecount]['albumCoverImageName'] =  $keyRandom['photoName'];
+						$arrayActivitiesOnSite['album'][$imagecount]['albumDate'] =  $keyRandom['photoDate'];
+						$arrayActivitiesOnSite['album'][$imagecount]['albumName'] =  $keyRandom['photoDescription'];	
+						$imagecount++;
+					}
+					//var_dump($arrayActivitiesOnSite['album']);
+					//die;
+				}
+				//var_dump($album[$random_image]);
+				//var_dump(db::lastQuery());
+				//die;
 
 
-				$arrayActivitiesOnSite['album'][$keyAlbum['activityID']]['albumName'] =  $album[0]['albumCoverImageName'];
-				$arrayActivitiesOnSite['album'][$keyAlbum['activityID']]['albumDate'] =  $album[0]['albumDate'];
-			}//end foreach activityAlbum
+
+				
+
+				// if($countImage > 2)
+				// 	break;
+
+				// $countImage++;
+
+			//}//end foreach activityAlbum
 					
 
 			//cash flow - revenue
@@ -377,11 +433,12 @@ SUM(billingTransactionItemPrice * billingTransactionItemQuantity) AS revenue");
 			db::group_by("siteName, yr, mn");
 			$cashflow = db::get("billing_transaction BT")->result();
 			//var_dump($cashflow);
+			//var_dump(db::lastQuery());
 			//die;
 
 			foreach ($cashflow as $keyCashFlow) {
 				# code...
-				$arrayActivitiesOnSite['revenue'][$keyCashFlow['yr']][$keyCashFlow['mn']] = $keyCashFlow['revenue'];
+				$arrayActivitiesOnSite['revenue'][$keyCashFlow['mn']] = number_format((float)$keyCashFlow['revenue'], 2, '.', '');
 			}
 
 			//take up - total member
@@ -398,7 +455,7 @@ COUNT(*) AS members");
 
 			foreach ($totalmember as $keyTotalMember) {
 				# code...
-				$arrayActivitiesOnSite['totalmember'][$keyTotalMember['yr']][$keyTotalMember['mn']] = $keyTotalMember['members'];
+				$arrayActivitiesOnSite['totalmember'][$keyTotalMember['mn']] = $keyTotalMember['members'];
 			}			
 
 // 			//pc usage day total
@@ -417,7 +474,7 @@ COUNT(DISTINCT billingTransactionUser) AS members");
 
 			foreach ($usagetotal as $keyUsagetotal) {
 				# code...
-				$arrayActivitiesOnSite['usagetotal'][$keyUsagetotal['yr']][$keyUsagetotal['mn']] = $keyUsagetotal['members'];
+				$arrayActivitiesOnSite['usagetotal'][$keyUsagetotal['mn']] = $keyUsagetotal['members'];
 			}			
 
 // 			//day pc usage hour
@@ -433,7 +490,7 @@ SUM(billingTransactionItemQuantity) AS hours");
 			//die;
 			foreach ($usagehour as $keyUsageHour) {
 				# code...
-				$arrayActivitiesOnSite['usagehour'][$keyUsageHour['yr']][$keyUsageHour['mn']] = $keyUsageHour['hours'];
+				$arrayActivitiesOnSite['usagehour'][$keyUsageHour['mn']] = $keyUsageHour['hours'];
 			}	
 
 			## put result into array
@@ -445,7 +502,7 @@ SUM(billingTransactionItemQuantity) AS hours");
 
 		##return array
 		return $arrayActivitiesOnSite;
-		
+
 
 	}
 }
