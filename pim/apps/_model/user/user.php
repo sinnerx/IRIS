@@ -15,6 +15,7 @@ class User extends \Origami
 	const LEVEL_CLUSTERLEAD = 3;
 	const LEVEL_OPERATIONMANAGER = 4;
 	const LEVEL_FINANCIALCONTROLLER = 5;
+	const LEVEL_HQADMIN = 6;
 	const LEVEL_ROOT = 99;
 	const LEVEL_DEVELOPER = 999;
 
@@ -154,6 +155,15 @@ class User extends \Origami
 	public function isClusterLead()
 	{
 		return $this->userLevel == self::LEVEL_CLUSTERLEAD;
+	}
+
+	/**
+	 * ORM : Check if user level is HQ admin
+	 * @return bool
+	 */
+	public function isHQAdmin()
+	{
+		return $this->userLevel == self::LEVEL_HQADMIN;
 	}
 
 	public function getListOfUser($cols = "*",$cond = null)

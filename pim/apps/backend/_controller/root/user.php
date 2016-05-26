@@ -8,7 +8,8 @@ class Controller_User
 						2=>"Site Manager",
 						3=>"Cluster Lead",
 						4=>"Operation Manager",
-						5=>"Financial Controller"
+						5=>"Financial Controller",
+						6=>'HQ Admin'
 									);
 	}
 

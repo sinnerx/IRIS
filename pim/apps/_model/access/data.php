@@ -108,6 +108,7 @@ class Data
 				3=>"clusterlead",
 				4=>"operationmanager",
 				5=>"financialcontroller",
+				6=>'hqadmin',
 				99=>"root",
 				999=>"developer"
 						);
@@ -122,6 +123,7 @@ class Data
 					3=>"cluster/overview",
 					4=>"exp/prList",
 					5=>"exp/prList",
+					6=>'overview/index',
 					99=>"site/index",
 					999=>'task/index'
 							);
@@ -136,6 +138,7 @@ class Data
 				3=>"cl",
 				4=>"om",
 				5=>'fc',
+				6=>'hq',
 				99=>"r",
 				999=>'dv'
 						);
