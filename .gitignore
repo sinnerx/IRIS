@@ -26,3 +26,6 @@ localenvdb.php
 attendance/*
 !attendance/placeholder
 pim/apps/_config/database.php
+.credentials/*
+!.credentials/placeholder
+!.credentials/*.example

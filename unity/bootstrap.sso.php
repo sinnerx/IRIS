@@ -6,8 +6,8 @@ require_once __DIR__.'/Sso.php';
 $sso = new \Iris\Sso;
 
 // set config for iris db
-if(file_exists(__DIR__.'/../credentials/db.php'))
-	$sso->setConfig(require_once __DIR__.'/../credentials/db.php');
+if(file_exists(__DIR__.'/.credentials/db.php'))
+	$sso->setConfig(require_once __DIR__.'/.credentials/db.php');
 
 $sso->onUserLogin(function($row)
 {
@@ -21,8 +21,8 @@ $sso->onUserLogin(function($row)
 	//die;
 	// aveo db config.
 	// need to change to environmental based later.
-	if(file_exists(__DIR__.'/credentials/db.aveo.php'))
-		$config = require_once __DIR__.'/credentials/db.aveo.php';
+	if(file_exists(__DIR__.'/.credentials/db.aveo.php'))
+		$config = require_once __DIR__.'/.credentials/db.aveo.php';
 
 	// create new pdo connection here.
 	// buat update query here.
