@@ -148,10 +148,8 @@ class Site extends \Origami
 		## else, directly update.
 		else
 		{
-			// *** Start API to update site in AVEO ***
-
 		    //$id = $siteID;
-		    $name = $data['siteName'];
+		   /* $name = $data['siteName'];
 		    $address = $data['siteInfoAddress'];
 		    $code = $data['siteRefID'];
 		    $state_id = $data['stateID'];
@@ -177,9 +175,7 @@ class Site extends \Origami
 		    curl_setopt( $ch, CURLOPT_HEADER, 0);
 		    curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1);
 
-		    $response = curl_exec( $ch );
-
-			// *** End API to update site in AVEO ***
+		    $response = curl_exec( $ch );*/
 
 			db::where("siteID",$id);
 			db::update("site",Array(
@@ -206,6 +202,8 @@ class Site extends \Origami
 			db::where("siteID",$id);
 			db::update("site_info",$data);
 
+			// *** Unity Hook : siteSync ***
+			\Iris\Unity::siteSync($id);
 		}
 	}
 
@@ -441,11 +439,9 @@ class Site extends \Origami
 		$defaultPages = orm('page/page_default')->execute();
 		orm('site/site')->find($siteID)->initiateDefaultPages($defaultPages);
 
-		// *** Start API to create new site in AVEO ***
-
 		// Create new location & site
 
-		$url = apps::config('aveo');
+		/*$url = apps::config('aveo');
 
 	    //1: create, 2: update
 	    $process = 1;
@@ -493,10 +489,10 @@ class Site extends \Origami
 	    curl_setopt( $ch, CURLOPT_HEADER, 0);
 	    curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1);
 
-	    $response = curl_exec( $ch );
+	    $response = curl_exec( $ch );*/
 
-
-		// *** End API to create new site in AVEO ***
+	    // *** Unity Hook : siteSync ***
+		\Iris\Unity::siteSync($siteID);
 
 		return $this->getSite($siteID);
 	}
