@@ -1,7 +1,7 @@
 <?php
 namespace Iris;
 
-class Sso
+class Unity
 {
 	const COOKIE_NAME = 'SSO_ID';
 
@@ -11,17 +11,20 @@ class Sso
 
 	protected $config = array();
 
+	/**
+	 * Aveo instance
+	 * @var \Iris\Aveo
+	 */
+	protected $aveo;
+
+	/**
+	 * Iris instance
+	 * @var \Iris\Iris
+	 */
+	protected $iris;
+
 	public function __construct(array $config = array())
 	{
-		if(!$config)
-		{
-			// get iris database.php config
-		}
-		else
-		{
-			$this->config = $config;
-		}
-
 		static::$instance = $this;
 	}
 
@@ -49,6 +52,30 @@ class Sso
 		$this->userLoginEvent[] = $callback;
 	}
 
+	public function getAveo()
+	{
+		if(!$this->aveo)
+		{
+			require_once __DIR__.'/Aveo.php';
+
+			$this->aveo = new \Iris\Aveo($this);
+		}
+
+		return $this->aveo;
+	}
+
+	public function getIris()
+	{
+		if(!$this->iris)
+		{
+			require_once __DIR__.'/Iris.php';
+
+			$this->iris = new \Iris\Iris($this);
+		}
+
+		return $this->iris;
+	}
+
 	/**
 	 * Log user in.
 	 * @param string email
@@ -58,9 +85,7 @@ class Sso
 	 */
 	public function logUserIn($email, $password, \Pdo $pdo = null)
 	{
-		$config = $this->config;
-
-		$pdo = $pdo ? $pdo : new \Pdo('mysql:host='.$config['host'].';dbname='.$config['name'], $config['user'], $config['pass']);
+		$pdo = $pdo ? : $this->getIris()->getConnection();
 
 		$statement = $pdo->prepare('SELECT U.userID, U.userIC, U.userEmail, U.userLevel, U.userStatus, U.userPassword, UP.userProfileFullName, UP.userProfileLastName ,SM.siteID 
 			FROM user U 
@@ -91,11 +116,7 @@ class Sso
 
 	public function getConnection()
 	{
-		$config = $this->config;
-
-		$pdo = new \Pdo('mysql:host='.$config['host'].';dbname='.$config['name'], $config['user'], $config['pass']);
-
-		return $pdo;
+		return $this->getIris()->getConnection();
 	}
 
 	/**
@@ -103,7 +124,7 @@ class Sso
 	*/
 	public function userRefresh()
 	{
-		$pdo = $this->getConnection();
+		$pdo = $this->getIris()->getConnection();
 
 		$statement = $pdo->prepare('SELECT U.userID, U.userIC, U.userEmail, U.userLevel, U.userStatus, U.userPassword, UP.userProfileFullName, UP.userProfileLastName ,SM.siteID 
 			FROM user U 
@@ -140,6 +161,12 @@ class Sso
 		unset($_SESSION['sso_user']);
 	}
 
+	public function siteSyncronize($siteID)
+	{
+		// sync site information to aveo
+		$this->getAveo()->siteSyncronize($siteID);
+	}
+
 	/**
 	 * Check whether user is logged in
 	 * @return bool
@@ -162,6 +189,29 @@ class Sso
 	public static function isLoggedIn()
 	{
 		return static::getInstance()->userIsLoggedIn();
+	}
+
+	public static function iris()
+	{
+		return static::getInstance()->getIris();
+	}
+
+	public static function aveo()
+	{
+		return static::getInstance()->getAveo();
+	}
+
+	public static function siteSync($siteID)
+	{
+		static::getInstance()->siteSyncronize($siteID);
+	}
+}
+
+class AveoBridge
+{
+	public function updateSite()
+	{
+		
 	}
 }
 

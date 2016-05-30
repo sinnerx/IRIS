@@ -12,13 +12,13 @@ Class Controller_Auth
 		## if page was public, no need for further check.
 		if(model::load("access/services")->checkPublicBackend())
 		{
-			// \Iris\Sso::logout();
+			// \Iris\Unity::logout();
 			return;
 		}
 
 		## use didn't log in.
 		// if(!session::has("userLevel"))
-		if(!\Iris\Sso::isLoggedIn())
+		if(!\Iris\Unity::isLoggedIn())
 		{
 			redirect::to("login","Please log in.","error");
 		}
@@ -85,7 +85,7 @@ Class Controller_Auth
 
 		## if is logged in.
 		// if(session::has("userID"))
-		if(\Iris\Sso::isLoggedIn())
+		if(\Iris\Unity::isLoggedIn())
 			redirect::to(model::load("access/data")->firstLoginLocation(session::get("userLevel")));
 
 		if(form::submitted())
@@ -153,7 +153,7 @@ Class Controller_Auth
 				$pass		= input::get("userPassword");
 
 
-				$backendLoginCheck = \Iris\Sso::logIn($email, $pass);
+				$backendLoginCheck = \Iris\Unity::logIn($email, $pass);
 
 				## login failed.
 				if(!$backendLoginCheck)

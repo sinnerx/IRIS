@@ -1,15 +1,11 @@
 <?php
 
 // file ni diguna (shared) oleh mana2 app yang akan guna sso
-require_once __DIR__.'/Sso.php';
+require_once __DIR__.'/Unity.php';
 
-$sso = new \Iris\Sso;
+$unity = new \Iris\Unity;
 
-// set config for iris db
-if(file_exists(__DIR__.'/../.credentials/db.php'))
-	$sso->setConfig(require_once __DIR__.'/../.credentials/db.php');
-
-$sso->onUserLogin(function($row)
+$unity->onUserLogin(function($row) use($unity)
 {
 	$level = $row['userLevel'];
 	
@@ -19,12 +15,22 @@ $sso->onUserLogin(function($row)
 	//die;
 	// aveo db config.
 	// need to change to environmental based later.
-	if(file_exists(__DIR__.'/../.credentials/db.aveo.php'))
-		$config = require_once __DIR__.'/../.credentials/db.aveo.php';
+	// if(file_exists(__DIR__.'/../.credentials/db.aveo.php'))
+		// $config = require_once __DIR__.'/../.credentials/db.aveo.php';
 
 	// create new pdo connection here.
 	// buat update query here.
-	$pdo = isset($GLOBALS['aveoconnection']) ? $GLOBALS['aveoconnection'] : new \Pdo('mysql:host='.$config['host'].';dbname='.$config['name'], $config['user'], $config['pass']);
+	// $pdo = isset($GLOBALS['aveoconnection']) ? $GLOBALS['aveoconnection'] : new \Pdo('mysql:host='.$config['host'].';dbname='.$config['name'], $config['user'], $config['pass']);
+
+	try
+	{
+		$pdo = isset($GLOBALS['aveoconnection']) ? $GLOBALS['aveoconnection'] : $unity->getAveo()->getConnection();
+	}
+	catch(\Exception $e)
+	{
+		// if problem with aveo. skip.
+		return;
+	}
 
 	// create or update new user record.
 	$statement = $pdo->prepare('SELECT * FROM users WHERE email = ?');
@@ -32,7 +38,6 @@ $sso->onUserLogin(function($row)
 	$statement->bindValue(1, $row['userEmail']);
 
 	$statement->execute();
-
 
 	// create aveo user record
 	if(!($aveoRow = $statement->fetch(\PDO::FETCH_ASSOC)))
@@ -107,7 +112,6 @@ $sso->onUserLogin(function($row)
 		//die;
 		// update.. maybe later.
 		$statement = $pdo->prepare("UPDATE users SET email = ?, permissions = ?, first_name = ?,last_name = ?, updated_at = NOW(), employee_num = ?, location_id = ? WHERE username = ?");
-
 		
 		//$statement_group = $pdo->prepare("UPDATE users_group SET user_id = ? , group_id = ?");
 
@@ -174,5 +178,5 @@ $sso->onUserLogin(function($row)
 	}//else
 });
 
-return $sso;
+return $unity;
 

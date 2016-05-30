@@ -389,6 +389,9 @@ class Request extends \Origami
 
 			## update with data.
 			db::where("siteID",$siteID)->update("site_info",$data);
+
+			// *** Unity Hook : siteSync ***
+			\Iris\Unity::siteSync($siteID);
 			break;
 			case "announcement.add": # new site announcement. 
 			db::where("announcementID",$row['announcementID'])->update("announcement",Array("announcementStatus"=>1)); # approved.
