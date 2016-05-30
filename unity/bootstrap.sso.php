@@ -6,23 +6,21 @@ require_once __DIR__.'/Sso.php';
 $sso = new \Iris\Sso;
 
 // set config for iris db
-if(file_exists(__DIR__.'/.credentials/db.php'))
-	$sso->setConfig(require_once __DIR__.'/.credentials/db.php');
+if(file_exists(__DIR__.'/../.credentials/db.php'))
+	$sso->setConfig(require_once __DIR__.'/../.credentials/db.php');
 
 $sso->onUserLogin(function($row)
 {
 	$level = $row['userLevel'];
-	//var_dump($level);
+	
 	if(!in_array($level, array(2, 5, 6, 99))){
-		//var_dump("return array of level");
-		//die;
 		return;
 	}
 	//die;
 	// aveo db config.
 	// need to change to environmental based later.
-	if(file_exists(__DIR__.'/.credentials/db.aveo.php'))
-		$config = require_once __DIR__.'/.credentials/db.aveo.php';
+	if(file_exists(__DIR__.'/../.credentials/db.aveo.php'))
+		$config = require_once __DIR__.'/../.credentials/db.aveo.php';
 
 	// create new pdo connection here.
 	// buat update query here.
@@ -34,6 +32,7 @@ $sso->onUserLogin(function($row)
 	$statement->bindValue(1, $row['userEmail']);
 
 	$statement->execute();
+
 
 	// create aveo user record
 	if(!($aveoRow = $statement->fetch(\PDO::FETCH_ASSOC)))
@@ -87,8 +86,6 @@ $sso->onUserLogin(function($row)
 
 		if(!$statement->execute())
 		{
-			var_dump($values);
-			var_dump($statement);
 			var_dump($statement->errorInfo());
 			die;
 		}
@@ -103,8 +100,6 @@ $sso->onUserLogin(function($row)
 			var_dump($statement_group->errorInfo());
 			die;
 		}
-
-
 	}
 	else
 	{
@@ -181,5 +176,3 @@ $sso->onUserLogin(function($row)
 
 return $sso;
 
-
-?>
