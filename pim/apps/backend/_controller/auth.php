@@ -12,7 +12,7 @@ Class Controller_Auth
 		## if page was public, no need for further check.
 		if(model::load("access/services")->checkPublicBackend())
 		{
-			\Iris\Sso::logout();
+			// \Iris\Sso::logout();
 			return;
 		}
 
@@ -86,9 +86,7 @@ Class Controller_Auth
 		## if is logged in.
 		// if(session::has("userID"))
 		if(\Iris\Sso::isLoggedIn())
-		{
 			redirect::to(model::load("access/data")->firstLoginLocation(session::get("userLevel")));
-		}
 
 		if(form::submitted())
 		{
