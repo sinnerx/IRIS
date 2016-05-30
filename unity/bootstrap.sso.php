@@ -13,7 +13,7 @@ $sso->onUserLogin(function($row)
 {
 	$level = $row['userLevel'];
 	//var_dump($level);
-	if(!in_array($level, array(2, 5, 6))){
+	if(!in_array($level, array(2, 5, 6, 99))){
 		//var_dump("return array of level");
 		//die;
 		return;
@@ -21,8 +21,8 @@ $sso->onUserLogin(function($row)
 	//die;
 	// aveo db config.
 	// need to change to environmental based later.
-	if(file_exists(__DIR__.'/../credentials/db.aveo.php'))
-		$config = require_once __DIR__.'/../credentials/db.aveo.php';
+	if(file_exists(__DIR__.'/credentials/db.aveo.php'))
+		$config = require_once __DIR__.'/credentials/db.aveo.php';
 
 	// create new pdo connection here.
 	// buat update query here.
