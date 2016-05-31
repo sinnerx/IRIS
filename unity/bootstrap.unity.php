@@ -68,7 +68,7 @@ $unity->onUserLogin(function($row) use($unity)
 				$group_id 		= 1;
 			break;
 			case 99: // superadmin
-				$permissions 	= "{" . '"' . "admin" . '"' . ":1, ". '"' . "reports" . '"' . ":1, ". '"' . "finance" . '"' . ":1}";
+				$permissions 	= "{" . '"' . "admin" . '"' . ":1, ". '"' . "reports" . '"' . ":1, ". '"' . "finance" . '"' . ":1, ". '"' . "superuser" . '"' . ":1}";
 				$group_id 		= 5;
 			break;			
 	
@@ -133,7 +133,7 @@ $unity->onUserLogin(function($row) use($unity)
 				$group_id 		= 1;
 			break;
 			case 99: // superadmin
-				$permissions 	= "{" . '"' . "admin" . '"' . ":1, ". '"' . "reports" . '"' . ":1, ". '"' . "finance" . '"' . ":1}";
+				$permissions 	= "{" . '"' . "admin" . '"' . ":1, ". '"' . "reports" . '"' . ":1, ". '"' . "finance" . '"' . ":1, ". '"' . "superuser" . '"' . ":1}";
 				$group_id 		= 5;
 			break;			
 	
