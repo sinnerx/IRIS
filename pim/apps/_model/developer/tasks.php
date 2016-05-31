@@ -539,7 +539,7 @@ class Tasks
 	{
 		foreach(db::select('siteID')->get('site')->result() as $row)
 		{
-			\Iris\Unity::siteSync($row['site']);
+			\Iris\Unity::siteSync($row['siteID']);
 		}
 	}
 }
