@@ -203,7 +203,7 @@ class Site extends \Origami
 			db::update("site_info",$data);
 
 			// *** Unity Hook : siteSync ***
-			\Iris\Unity::siteSync($id);
+			\Iris\Unity::siteUpdateSync($id);
 		}
 	}
 
@@ -492,7 +492,7 @@ class Site extends \Origami
 	    $response = curl_exec( $ch );*/
 
 	    // *** Unity Hook : siteSync ***
-		\Iris\Unity::siteSync($siteID);
+		\Iris\Unity::siteAddSync($siteID);
 
 		return $this->getSite($siteID);
 	}
