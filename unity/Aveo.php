@@ -94,7 +94,7 @@ class Aveo
 					$recordSite['siteName'],
 					'my',
 					$recordSite['siteUser'],
-					$recordSite['siteInfoAddress'],
+					$recordSite['siteInfoAddress']."",
 					$recordSite['siteRefID'],
 					'1',
 					'1',
@@ -112,16 +112,17 @@ class Aveo
 					die;
 				}
 
-				$statementSiteAveo = $aveoPDO->prepare("INSERT INTO sites (name, code, userid, created_at, site_type, location_id) VALUES (?, ?, ?, NOW(),'PIM', ?)");
+				$statementSiteAveo = $aveoPDO->prepare("INSERT INTO sites (name, code, userid, created_at, site_type, location_id, state_id) VALUES (?, ?, ?, NOW(),'PIM', ?,?)");
 
 				$values = array(
 					$recordSite['siteName'],
 					$recordSite['siteRefID']. '_00',
 					$recordSite['siteUser'],
 					$siteId,
+					$recordSite['stateID'],
 					);
 
-				foreach(range(0,3) as $no)
+				foreach(range(0,4) as $no)
 					$statementSiteAveo->bindValue($no+1, $values[$no]);
 
 				if(!$statementSiteAveo->execute())
@@ -146,16 +147,19 @@ class Aveo
 			}	
 			$recordSelectLocation = $statementSelectLocation->fetch(\PDO::FETCH_ASSOC);
 
-			$statementUpdateSiteAveo = $aveoPDO->prepare("UPDATE sites SET name = ?, code = ?, updated_at = NOW() WHERE location_id = ? AND name = ?");
+			$statementUpdateSiteAveo = $aveoPDO->prepare("UPDATE sites SET name = ?, code = ?, updated_at = NOW(), state_id = ? WHERE location_id = ? AND name = ?");
 
+			//var_dump($recordSelectLocation['name']);
+			//die;
 			$values = array(
 				$recordSite['siteName'],
 				$recordSite['siteRefID']. '_00',
+				$recordSite['stateID'],
 				$siteId,
 				$recordSelectLocation['name'],
 				);
 
-			foreach(range(0,3) as $no)
+			foreach(range(0,4) as $no)
 				$statementUpdateSiteAveo->bindValue($no+1, $values[$no]);			
 
 			if(!$statementUpdateSiteAveo->execute())
@@ -172,7 +176,7 @@ class Aveo
 
 			$values = array(
 				$recordSite['siteName'],
-				$recordSite['siteInfoAddress'],
+				$recordSite['siteInfoAddress']."",
 				$recordSite['siteRefID'],
 				$recordSite['clusterID'],
 				$recordSite['stateID'],
@@ -203,7 +207,7 @@ class Aveo
 				$temp_code = $keySite['code'];
 				$temp_code = $recordSite['siteRefID'] . substr($temp_code, -3);
 
-				$rowSite = $aveoPDO->prepare("UPDATE sites SET code = '$temp_code', updated_at = NOW() WHERE id = ". $keySite['id']);
+				$rowSite = $aveoPDO->prepare("UPDATE sites SET code = '$temp_code', updated_at = NOW(), state_id = '".$recordSite['state']."' WHERE id = ". $keySite['id']);
 
 				if(!$rowSite->execute())
 				{
