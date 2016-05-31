@@ -91,6 +91,11 @@ class Tasks
 			'description' => 'Migrate new pages',
 			'repeatable' => true
 			));
+
+		$manager->addTask('unitySiteSync', array(
+			'description' => 'Unity sync',
+			'repeatable' => true
+			));
 	}
 
 	public function pageAddDefault()
@@ -528,6 +533,14 @@ class Tasks
 	public function updateBillingItemUpdatedDate()
 	{
 		db::query('UPDATE billing_item SET billingItemUpdatedDate = billingItemCreatedDate');
+	}
+
+	public function unitySiteSync()
+	{
+		foreach(db::select('siteID')->get('site')->result() as $row)
+		{
+			\Iris\Unity::siteSync($row['site']);
+		}
 	}
 }
 
