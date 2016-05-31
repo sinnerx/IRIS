@@ -161,17 +161,11 @@ class Unity
 		unset($_SESSION['sso_user']);
 	}
 
-	public function siteAddSyncronize($siteID)
+	public function siteSyncronize($siteID)
 	{
 		// sync site information to aveo
-		$this->getAveo()->siteAddSyncronize($siteID);
+		$this->getAveo()->siteSyncronize($siteID);
 	}	
-
-	public function siteUpdateSyncronize($siteID)
-	{
-		// sync site information to aveo
-		$this->getAveo()->siteUpdateSyncronize($siteID);
-	}
 
 	/**
 	 * Check whether user is logged in
@@ -207,15 +201,10 @@ class Unity
 		return static::getInstance()->getAveo();
 	}
 
-	public static function siteAddSync($siteID)
+	public static function siteSync($siteID)
 	{
-		static::getInstance()->siteAddSyncronize($siteID);
+		static::getInstance()->siteSyncronize($siteID);
 	}	
-
-	public static function siteUpdateSync($siteID)
-	{
-		static::getInstance()->siteUpdateSyncronize($siteID);
-	}
 }
 
 class AveoBridge
