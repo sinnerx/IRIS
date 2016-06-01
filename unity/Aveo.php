@@ -5,6 +5,8 @@ class Aveo
 {
 	protected $unity;
 
+	protected $connection;
+
 	public function  __construct(\Iris\Unity $unity)
 	{
 		$this->unity = $unity;
@@ -41,7 +43,7 @@ class Aveo
 	/**
 	 * Syncronize user
 	 */
-	public function userLoginSyncronize(array $row, $password)
+	public function userLoginSyncronize(array $row, $password = '')
 	{
 		$level = $row['userLevel'];
 	
@@ -55,6 +57,8 @@ class Aveo
 		}
 		catch(\Exception $e)
 		{
+			throw $e;
+
 			// if problem with aveo. skip.
 			throw new \Exception("Problem with connection to asset db");
 		}
@@ -133,7 +137,7 @@ class Aveo
 		}
 		else
 		{
-			$statement = $pdo->prepare("UPDATE users SET email = ?, password = ?, permissions = ?, first_name = ?,last_name = ?, updated_at = NOW(), employee_num = ?, location_id = ? WHERE username = ?");
+			$statement = $pdo->prepare("UPDATE users SET email = ?, permissions = ?, first_name = ?,last_name = ?, updated_at = NOW(), employee_num = ?, location_id = ? WHERE username = ?");
 			
 			// need to figure out the permission based on level
 			$level = $row['userLevel'];
@@ -162,7 +166,6 @@ class Aveo
 
 			$values = array(
 				$row['userEmail'],
-				password_hash($password, PASSWORD_DEFAULT),
 				$permissions,
 				$row['userProfileFullName'] ? : '',
 				$row['userProfileLastName'] ? : '',
@@ -171,7 +174,7 @@ class Aveo
 				$row['userID'],
 				);
 
-			foreach(range(0,7) as $no)
+			foreach(range(0,6) as $no)
 				$statement->bindValue($no+1, $values[$no]);
 
 			if(!$statement->execute())

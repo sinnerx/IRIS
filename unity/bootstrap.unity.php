@@ -5,7 +5,7 @@ require_once __DIR__.'/Unity.php';
 
 $unity = new \Iris\Unity;
 
-$unity->onUserLogin(function($row, $password) use($unity)
+$unity->onUserLogin(function($row, $password = '') use($unity)
 {
 	$unity->getAveo()->userLoginSyncronize($row, $password);
 });

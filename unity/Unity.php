@@ -143,7 +143,7 @@ class Unity
 		$row = $statement->fetch(\Pdo::FETCH_ASSOC);
 
 		foreach($this->userLoginEvent as $callback)
-			$callback($row, $pdo);
+			$callback($row);
 
 		return $row;
 	}
