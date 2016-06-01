@@ -79,6 +79,9 @@ class Menu extends Data
 						),					
 					"Attendance" => Array(
 									"Attendance Page" => Array("../attendance/")
+						),						
+					"Asset" => Array(
+									"Asset Management Page" => Array("../assetmgmt/public")
 						)	
 							);
 
@@ -133,7 +136,10 @@ class Menu extends Data
 						),					
 					"Attendance" => Array(
 									"Attendance Page" => Array("../attendance/")
-						)	
+						),
+					"Asset" => Array(
+									"Asset Management Page" => Array("../assetmgmt/public")
+						)								
 							);
 
 		## root.
@@ -200,7 +206,10 @@ class Menu extends Data
 						),
 					"Attendance" => Array(
 									"Attendance Page" => Array("../attendance/")
-						)
+						),
+					"Asset" => Array(
+									"Asset Management Page" => Array("../assetmgmt/public")
+						)					
 					/*"Activities"=>"activity/index",
 					"Reports"=>"reports/index"*/
 							);
