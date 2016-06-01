@@ -19,7 +19,7 @@ class Aveo
 	public function getConfig()
 	{
 		if(!file_exists(__DIR__.'/../.credentials/db.aveo.php'))
-			throw new \Exception('IRIS credentials does not exists.');
+			throw new \Exception('AVEO credentials does not exists.');
 		
 		return require_once __DIR__.'/../.credentials/db.aveo.php';
 	}
