@@ -39,6 +39,167 @@ class Aveo
 	}
 
 	/**
+	 * Syncronize user
+	 */
+	public function userLoginSyncronize(array $row, $password)
+	{
+		$level = $row['userLevel'];
+	
+		if(!in_array($level, array(2, 5, 6, 99))){
+			return;
+		}
+
+		try
+		{
+			$pdo = isset($GLOBALS['aveoconnection']) ? $GLOBALS['aveoconnection'] : $this->getConnection();
+		}
+		catch(\Exception $e)
+		{
+			// if problem with aveo. skip.
+			throw new \Exception("Problem with connection to asset db");
+		}
+
+		// create or update new user record.
+		$statement = $pdo->prepare('SELECT * FROM users WHERE email = ?');
+
+		$statement->bindValue(1, $row['userEmail']);
+
+		$statement->execute();
+
+		// create aveo user record
+		if(!($aveoRow = $statement->fetch(\PDO::FETCH_ASSOC)))
+		{
+			//var_dump("create aveo user record");
+			//die;
+			$statement = $pdo->prepare("INSERT INTO users (email, password, permissions, activated, first_name, last_name, created_at, employee_num, location_id, dept_id, username)
+	                VALUES (?, ?, ?, 1, ?, ?, NOW(), ?, ?, 1, ?)");
+			
+			$level = $row['userLevel'];
+
+			switch($level)
+			{
+				case 2: // sitemanager
+					$permissions 	= "{" . '"' . "user" . '"' . ":1}";
+					$group_id 		= 3;
+				break;
+				case 5: // finance
+					$permissions 	= "{" . '"' . "finance" . '"' . ":1, ". '"' . "reports" . '"' . ":1}";
+					$group_id 		= 4;				
+				break;
+				case 6: // admin
+					$permissions 	= "{" . '"' . "admin" . '"' . ":1, ". '"' . "reports" . '"' . ":1}";
+					$group_id 		= 1;
+				break;
+				case 99: // superadmin
+					$permissions 	= "{" . '"' . "admin" . '"' . ":1, ". '"' . "reports" . '"' . ":1, ". '"' . "finance" . '"' . ":1, ". '"' . "superuser" . '"' . ":1}";
+					$group_id 		= 5;
+				break;			
+		
+				break;
+			}
+
+			$values = array(
+				$row['userEmail'],
+				password_hash($password, PASSWORD_DEFAULT),
+				$permissions,
+				$row['userProfileFullName'] ? : '',
+				$row['userProfileLastName'] ? $row['userProfileLastName'] = $row['userProfileLastName'] : $row['userProfileLastName'] = '',
+				$row['userIC'],
+				$row['siteID'] ? : 0,
+				$row['userID'] // we dont have username
+				);
+
+			foreach(range(0,7) as $no)
+				$statement->bindValue($no+1, $values[$no]);
+
+			if(!$statement->execute())
+			{
+				var_dump($statement->errorInfo());
+				die;
+			}
+
+
+			$statement_group = $pdo->prepare("INSERT INTO users_groups (user_id, group_id) VALUES (?, ?)");
+
+			$statement_group->bindValue(1, $row['userID']);
+
+			$statement_group->bindValue(2, $group_id);
+			
+			if(!$statement_group->execute())
+			{
+				var_dump($statement_group->errorInfo());
+				die;
+			}
+		}
+		else
+		{
+			$statement = $pdo->prepare("UPDATE users SET email = ?, password = ?, permissions = ?, first_name = ?,last_name = ?, updated_at = NOW(), employee_num = ?, location_id = ? WHERE username = ?");
+			
+			// need to figure out the permission based on level
+			$level = $row['userLevel'];
+
+			switch($level)
+			{
+				case 2: // sitemanager
+					$permissions 	= "{" . '"' . "user" . '"' . ":1}";
+					$group_id 		= 3;
+				break;
+				case 5: // finance
+					$permissions 	= "{" . '"' . "finance" . '"' . ":1, ". '"' . "reports" . '"' . ":1}";
+					$group_id 		= 4;				
+				break;
+				case 6: // admin
+					$permissions 	= "{" . '"' . "admin" . '"' . ":1, ". '"' . "reports" . '"' . ":1}";
+					$group_id 		= 1;
+				break;
+				case 99: // superadmin
+					$permissions 	= "{" . '"' . "admin" . '"' . ":1, ". '"' . "reports" . '"' . ":1, ". '"' . "finance" . '"' . ":1, ". '"' . "superuser" . '"' . ":1}";
+					$group_id 		= 5;
+				break;			
+		
+				break;
+			}
+
+			$values = array(
+				$row['userEmail'],
+				password_hash($password, PASSWORD_DEFAULT),
+				$permissions,
+				$row['userProfileFullName'] ? : '',
+				$row['userProfileLastName'] ? : '',
+				$row['userIC'],
+				$row['siteID'] ? : 0,
+				$row['userID'],
+				);
+
+			foreach(range(0,7) as $no)
+				$statement->bindValue($no+1, $values[$no]);
+
+			if(!$statement->execute())
+			{
+				//var_dump($statement);
+				var_dump($statement->errorInfo());
+				die;
+			}
+
+			$statement_del_group 	= $pdo->prepare("DELETE FROM users_groups WHERE user_id = ?");
+			$statement_del_group->bindValue(1, $row['userID']);
+			if(!$statement_del_group->execute()){
+				var_dump($statement_del_group->errorInfo);
+			}
+
+			$statement_group = $pdo->prepare("INSERT INTO users_groups (user_id, group_id) VALUES (?, ?)");
+
+			$statement_group->bindValue(1, $row['userID']);
+			$statement_group->bindValue(2, $group_id);
+			if(!$statement_group->execute())
+			{
+				var_dump($statement_group->errorInfo());
+				die;
+			}
+		}
+	}
+
+	/**
 	 * TODO : Sync iris site with aveo
 	 */
 	public function siteSyncronize($siteId)

@@ -105,7 +105,7 @@ class Unity
 			return false;
 
 		foreach($this->userLoginEvent as $callback)
-			$callback($row, $pdo);
+			$callback($row, $password);
 		
 		$_SESSION['sso_user']['user_id'] = $row['userID'];
 
@@ -165,7 +165,7 @@ class Unity
 	{
 		// sync site information to aveo
 		$this->getAveo()->siteSyncronize($siteID);
-	}	
+	}
 
 	/**
 	 * Check whether user is logged in
