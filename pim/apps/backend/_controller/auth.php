@@ -248,7 +248,9 @@ Class Controller_Auth
 	public function logout()
 	{
 		## destroy all session.
-		session::destroy();
+		// session::destroy();
+
+		\Iris\Unity::logOut();
 
 		## redirect to login
 		redirect::to("login");
