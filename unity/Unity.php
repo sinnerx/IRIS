@@ -159,7 +159,7 @@ class Unity
 	public function logUserOut()
 	{
 		// unset($_SESSION['sso_user']);
-		session_destroy();
+		session_destroy();		
 	}
 
 	public function siteSyncronize($siteID)

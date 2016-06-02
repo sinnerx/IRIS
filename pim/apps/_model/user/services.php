@@ -71,31 +71,6 @@ class Services
 		db::update("user",Array(
 						"userPassword"=>model::load("helper")->hashPassword($newPassword)
 								));
-
-		// *** Start API for AVEO ***
-
-	    $url = apps::config('aveo');
-
-	    //1: create, 2: update, 3: change password, 4: delete
-	    $process = 3;
-
-	    $id = $userID;
-	    $password = $password;
-
-	    $myvars = 'process=' . $process;
-	    $myvars .= '&id=' . $id;
-	    $myvars .= '&password=' . $newPassword;
-
-	    $ch = curl_init( $url );
-	    curl_setopt( $ch, CURLOPT_POST, 1);
-	    curl_setopt( $ch, CURLOPT_POSTFIELDS, $myvars);
-	    curl_setopt( $ch, CURLOPT_FOLLOWLOCATION, 1);
-	    curl_setopt( $ch, CURLOPT_HEADER, 0);
-	    curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1);
-
-	    $response = curl_exec( $ch );
-
-		// *** End API for AVEO ***
 	}
 
 	## return default password for everyone.

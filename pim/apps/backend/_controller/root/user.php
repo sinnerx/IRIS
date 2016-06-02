@@ -60,37 +60,6 @@ class Controller_User
 				$levels = array(2 => 'Manager', 3 => 'Clusterlead');
 
 				$userInfo = model::load("user/user")->get(request::get('userID'));
-				// *** Start API to create new user in AVEO ***
-				if (request::get('userLevel') == 2) {
-				    $url = apps::config('aveo');
-
-				    //1: create, 2: update, 3: change password, 4: delete
-				    $process = 1;
-
-				    $id = $userInfo['userID'];
-				    $email = $userInfo['userEmail'];
-				    $password = $userInfo['userPassword'];
-				    $first_name = $userInfo['userProfileFullName'];
-				    $employee_num = $userInfo['userIC'];
-
-				    $myvars = 'process=' . $process;
-				    $myvars .= '&id=' . $id;
-				    $myvars .= '&email=' . $email;
-				    $myvars .= '&password=' . $password;
-				    $myvars .= '&first_name=' . $first_name;
-				    $myvars .= '&employee_num=' . $employee_num;
-
-				    $ch = curl_init( $url );
-				    curl_setopt( $ch, CURLOPT_POST, 1);
-				    curl_setopt( $ch, CURLOPT_POSTFIELDS, $myvars);
-				    curl_setopt( $ch, CURLOPT_FOLLOWLOCATION, 1);
-				    curl_setopt( $ch, CURLOPT_HEADER, 0);
-				    curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1);
-
-				    $response = curl_exec( $ch );
-				}
-
-				// *** End API to create new user in AVEO ***
 
 				redirect::to('user/upgradeUser', 'Successfully upgraded user '.request::get('ic').' to '.$levels[request::get('userLevel')]);
 			}
@@ -213,28 +182,6 @@ class Controller_User
 
 		// delete this user (actually it just set it status to 3)
 		$user->delete();
-		// *** Start API for AVEO ***
-
-	    $url = apps::config('aveo');
-
-	    //1: create, 2: update, 3: change password, 4: delete
-	    $process = 4;
-
-	    $id = $userID;
-
-	    $myvars = 'process=' . $process;
-	    $myvars .= '&id=' . $id;
-
-	    $ch = curl_init( $url );
-	    curl_setopt( $ch, CURLOPT_POST, 1);
-	    curl_setopt( $ch, CURLOPT_POSTFIELDS, $myvars);
-	    curl_setopt( $ch, CURLOPT_FOLLOWLOCATION, 1);
-	    curl_setopt( $ch, CURLOPT_HEADER, 0);
-	    curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1);
-
-	    $response = curl_exec( $ch );
-
-		// *** End API for AVEO ***
 
 		redirect::to('user/lists', 'User <u>'.$name.'</u> has been deleted.');
 	}

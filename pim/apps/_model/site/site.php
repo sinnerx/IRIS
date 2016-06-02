@@ -558,31 +558,6 @@ class Site extends \Origami
 
 		## just update.
 		db::update("site_manager",Array("siteManagerStatus"=>0,"siteManagerUpdatedUser"=>session::get("userID"),"siteManagerUpdatedDate"=>now()));
-
-		// *** Start API to update user location in AVEO ***
-
-	    $url = apps::config('aveo');
-
-	    //1: create, 2: update, 3: change password, 4: delete, 5: update location
-	    $process = 5;
-
-	    $id = $userID;
-	    $location_id = $siteID;
-
-	    $myvars = 'process=' . $process;
-	    $myvars .= '&id=' . $id;
-	    $myvars .= '&location_id=0';
-
-	    $ch = curl_init( $url );
-	    curl_setopt( $ch, CURLOPT_POST, 1);
-	    curl_setopt( $ch, CURLOPT_POSTFIELDS, $myvars);
-	    curl_setopt( $ch, CURLOPT_FOLLOWLOCATION, 1);
-	    curl_setopt( $ch, CURLOPT_HEADER, 0);
-	    curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1);
-
-	    $response = curl_exec( $ch );
-
-		// *** End API to update user location in AVEO ***
 	}
 
 	public function assignManager($siteID,$userID)
@@ -595,31 +570,6 @@ class Site extends \Origami
 						"userID"=>$userID,
 						"siteManagerCreatedDate"=>now(),
 						"siteManagerCreatedUser"=>session::get("userID"));
-
-		// *** Start API to update user location in AVEO ***
-
-	    $url = apps::config('aveo');
-
-	    //1: create, 2: update, 3: change password, 4: delete, 5: update location
-	    $process = 5;
-
-	    $id = $userID;
-	    $location_id = $siteID;
-
-	    $myvars = 'process=' . $process;
-	    $myvars .= '&id=' . $id;
-	    $myvars .= '&location_id=' . $location_id;
-
-	    $ch = curl_init( $url );
-	    curl_setopt( $ch, CURLOPT_POST, 1);
-	    curl_setopt( $ch, CURLOPT_POSTFIELDS, $myvars);
-	    curl_setopt( $ch, CURLOPT_FOLLOWLOCATION, 1);
-	    curl_setopt( $ch, CURLOPT_HEADER, 0);
-	    curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1);
-
-	    $response = curl_exec( $ch );
-
-		// *** End API to update user location in AVEO ***
 
 		if($siteManagerID)
 		{

@@ -266,30 +266,6 @@ class User extends \Origami
 		{
 			$data_user['userPassword']	= model::load("helper")->hashPassword($data['userPassword']);
 
-			// *** Start API for AVEO ***
-
-		    $url = apps::config('aveo');
-	
-		    //1: create, 2: update, 3: change password, 4: delete
-		    $process = 3;
-
-		    $id = $userID;
-		    $password = $data['userPassword'];
-
-		    $myvars = 'process=' . $process;
-		    $myvars .= '&id=' . $id;
-		    $myvars .= '&password=' . $password;
-
-		    $ch = curl_init( $url );
-		    curl_setopt( $ch, CURLOPT_POST, 1);
-		    curl_setopt( $ch, CURLOPT_POSTFIELDS, $myvars);
-		    curl_setopt( $ch, CURLOPT_FOLLOWLOCATION, 1);
-		    curl_setopt( $ch, CURLOPT_HEADER, 0);
-		    curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1);
-
-		    $response = curl_exec( $ch );
-
-			// *** End API for AVEO ***
 		}
 
 		$data_user['userUpdatedDate'] = date('Y-m-d H:i:s');
@@ -314,35 +290,6 @@ class User extends \Origami
 
 		## update user_profile_additional.
 		$this->updateAdditional($userID,$data);
-
-		// *** Start API for AVEO ***
-
-	    $url = apps::config('aveo');
-
-	    //1: create, 2: update, 3: change password, 4: delete
-	    $process = 2;
-
-	    $id = $userID;
-	    $email = $data['userEmail'];
-	    $first_name = $data['userProfileFullName'];
-	    $employee_num = $data['userIC'];
-
-	    $myvars = 'process=' . $process;
-	    $myvars .= '&id=' . $id;
-	    $myvars .= '&email=' . $email;
-	    $myvars .= '&first_name=' . $first_name;
-	    $myvars .= '&employee_num=' . $employee_num;
-
-	    $ch = curl_init( $url );
-	    curl_setopt( $ch, CURLOPT_POST, 1);
-	    curl_setopt( $ch, CURLOPT_POSTFIELDS, $myvars);
-	    curl_setopt( $ch, CURLOPT_FOLLOWLOCATION, 1);
-	    curl_setopt( $ch, CURLOPT_HEADER, 0);
-	    curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1);
-
-	    $response = curl_exec( $ch );
-
-		// *** End API for AVEO ***
 
 		##
 		model::load("user/activity")->create(null,$userID,"member.edit");
@@ -468,41 +415,6 @@ class User extends \Origami
 
 		## create user account.
 		model::load("account/account")->createAccount(1,$userID);
-
-		// *** Start API to create new user in AVEO ***
-		// Why in model instead of controller? Because userID.
-
-		if ($level == 2) {
-		    //$url = $data['aveo'];
-		    $url = apps::config('aveo');
-
-		    //1: create, 2: update, 3: change password, 4: delete
-		    $process = 1;
-
-		    $id = $userID;
-		    $email = $data['userEmail'];
-		    $password = $data['userPassword'];
-		    $first_name = $data['userProfileFullName'];
-		    $employee_num = $data['userIC'];
-
-		    $myvars = 'process=' . $process;
-		    $myvars .= '&id=' . $id;
-		    $myvars .= '&email=' . $email;
-		    $myvars .= '&password=' . $password;
-		    $myvars .= '&first_name=' . $first_name;
-		    $myvars .= '&employee_num=' . $employee_num;
-
-		    $ch = curl_init( $url );
-		    curl_setopt( $ch, CURLOPT_POST, 1);
-		    curl_setopt( $ch, CURLOPT_POSTFIELDS, $myvars);
-		    curl_setopt( $ch, CURLOPT_FOLLOWLOCATION, 1);
-		    curl_setopt( $ch, CURLOPT_HEADER, 0);
-		    curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1);
-
-		    $response = curl_exec( $ch );
-		}
-
-		// *** End API to create new user in AVEO ***
 
 		## return user record.
 		return $this->get($userID);
