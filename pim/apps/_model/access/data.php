@@ -27,7 +27,7 @@ class Data
 					"site/editAnnouncement"=>Array("sm","r","om"),
 					"manager/edit"=>Array("r","om","sm"),
 					"user/profile"=>Array("r","om","sm","cl", "dv"),
-					"user/changePassword"=>Array("r","om","sm","cl", "dv"),
+					"user/changePassword"=>Array("r","om","sm","cl", "dv", 'fc', 'hq'),
 					"site/message"=>Array("r","om"/*,"sm"*/,"cl"),
 					"site/messageView"=>Array("r","om"/*,"sm"*/,"cl"),
 					"file/index"=>Array("r","om", "sm"),
