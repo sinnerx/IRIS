@@ -213,9 +213,17 @@ class Controller_Ajax_Report
 							}
 						}
 
-						$tx = str_replace('&nbsp;', '', $tx);
+						$tx = str_replace('&nbsp;', ' ', $tx);
 
 						$tx = strip_tags(trim($tx));
+
+						// $tx = htmlspecialchars($tx);
+
+						$search = array('&ldquo;', '&rdquo;', '&lsquo;', '&rsquo;', '&ndash;', '&mdash;', '&hellip;', '&ensp;', '&emsp;');
+
+						$replace = array("'", "'", "'", "'", '-', '-', '...', ' ', ' ');
+
+						$tx = str_replace($search, $replace, $tx);
 
 						\PhpOffice\PhpWord\Shared\Html::addHtml($section, '<p>'.htmlspecialchars($tx).'</p>');
 					}
