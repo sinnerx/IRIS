@@ -21,6 +21,22 @@ class Response
 		header($item);
 	}
 
+	// close and return the content
+	public function close($content)
+	{
+		ob_end_clean();
+		header("Connection: close\r\n");
+		header("Content-Encoding: none\r\n");
+		ignore_user_abort(true); // optional
+		ob_start();
+		echo $content;
+		$size = ob_get_length();
+		header("Content-Length: $size");
+		ob_end_flush();     // Strange behaviour, will not work
+		flush();            // Unless both are called !
+		ob_end_clean();
+	}
+
 	public static function setStatus($code,$customMessage = null)
 	{
 		## http://my1.php.net/http-response-code

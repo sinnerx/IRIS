@@ -198,8 +198,8 @@ class Menu extends Data
 							"Monthly USP Project"=>"report/monthlyActivity",
 							"Master Listing"=>"report/masterListing",
 							"Google Analytics"=>"googleanalytics/report",
-							"Monthly Activity Report"=>"report/getallActivityReport",
-							"Quarterly Report"=>"report/showQuarterlyReportPage",
+							"Monthly Activity Report"=>"report/monthlyActivityReport"
+							// "Quarterly Report"=>"report/showQuarterlyReportPage",
 									),
 					"Learning" => Array(
 									"Learning Page " => Array("../lms/"),

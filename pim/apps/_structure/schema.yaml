@@ -663,6 +663,23 @@ comment:
 	commentCreatedDate [datetime]
 	commentUpdatedDate [datetime]
 
+## blogs report generation 
+report_monthly:
+	reportMonthlyID [int]
+	reportMonthlyMonth [int]
+	reportMonthlyYear [int]
+	reportMonthlyStatus [int] ## 0 = pending, 1 = completed
+	reportMonthlyStatusState [varchar(20)]
+	reportMonthlyArticleCompleted [int] ## completed articles
+	reportMonthlyArticleTotal [int] ## total articles
+	reportMonthlyZipName [varchar]
+	reportMonthlyZipSize [int]
+	reportMonthlyDownloaded [int]
+	reportMonthlyCreatedDate [datetime]
+	reportMonthlyUpdatedDate [datetime]
+	reportMonthlyCreatedUser [int]
+	reportMonthlyUpdatedUser [int]
+
 ga_report:
 	gaReportID [int]
 	siteID [int]
