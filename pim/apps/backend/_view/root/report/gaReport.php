@@ -138,9 +138,9 @@ $('#container').highcharts(options)
 
 </body>
  
-<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
-<script src="http://code.highcharts.com/highcharts.js"></script>
-<script src="http://code.highcharts.com/modules/exporting.js"></script>
+<!-- <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script> -->
+<script src="<?php echo url::asset('backend/js/highcharts/highcharts.js');?>"></script>
+<script src="<?php echo url::asset('backend/js/highcharts/modules/exporting.js');?>"></script>
 
 
 
