@@ -19,7 +19,9 @@ class Ga
 		if($client->isAccessTokenExpired())
 			$client->refreshTokenWithAssertion();
 
-		return $client->getAccessToken();
+		$token = $client->getAccessToken();
+
+		return $token['access_token'];
 	}
 
 	public function downloadReport($startDate, $endDate)

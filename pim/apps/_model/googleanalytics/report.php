@@ -62,7 +62,8 @@ class Report
 		db::select("gaReportDate ");
 	
 		db::limit(1);
-		db::order_by('gaReportDate',DESC);
+		
+		db::order_by('gaReportDate DESC');
 		
 		$row = db::get('ga_report')->row();
 

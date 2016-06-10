@@ -3,6 +3,9 @@ class Controller_Cronjob
 {
 	public function downloadga()
 	{
+		error_reporting(E_ALL & ~E_NOTICE);
+		ini_set('display_errors', 'on');
+		set_time_limit(0);
 
 		$datetoday = date('Y-m-d');
 	    $check	= model::load("googleanalytics/report")->getLastDate();
@@ -21,8 +24,10 @@ class Controller_Cronjob
 
 		}
 
-		model::load("api/ga")->downloadReport($startdate,$datetoday);    //    arini-1, arini 
+		model::load("api/ga")->downloadReport($startdate,$datetoday);    //    arini-1, arini
 
+		// recursive until it's dead.
+		$this->downloadga();
 	}
 
 	public function autoDailyVerify()
