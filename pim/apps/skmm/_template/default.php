@@ -115,7 +115,7 @@
                     Dibuka setiap hari
                     <div class="bluehilite">
                   <?php if(in_array(authData("current_site.stateID"),Array(12,13))):?>
-                    8.00 pagi - 6.00 petang
+                    8.00 pagi - 5.00 petang
                   <?php else:?>
                     9.00 page - 6.00 petang
                   <?php endif;?>
