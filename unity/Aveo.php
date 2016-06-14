@@ -82,14 +82,21 @@ class Aveo
 
 			switch($level)
 			{
-				case 2: // sitemanager
-					$permissions 	= "{" . '"' . "user" . '"' . ":1}";
-					$group_id 		= 3;
-				break;
-				case 5: // finance
+				// case 2: // sitemanager
+				// 	$permissions 	= "{" . '"' . "user" . '"' . ":1}";
+				// 	$group_id 		= 3;
+				// break;
+				// case 5: // finance
+				// 	$permissions 	= "{" . '"' . "finance" . '"' . ":1, ". '"' . "reports" . '"' . ":1}";
+				// 	$group_id 		= 4;				
+				// break;	
+				case 2:			
+				case 5: // finance & site manager Temporarily
 					$permissions 	= "{" . '"' . "finance" . '"' . ":1, ". '"' . "reports" . '"' . ":1}";
 					$group_id 		= 4;				
 				break;
+				case 3:
+				case 4:
 				case 6: // admin
 					$permissions 	= "{" . '"' . "admin" . '"' . ":1, ". '"' . "reports" . '"' . ":1}";
 					$group_id 		= 1;
@@ -144,14 +151,21 @@ class Aveo
 
 			switch($level)
 			{
-				case 2: // sitemanager
-					$permissions 	= "{" . '"' . "user" . '"' . ":1}";
-					$group_id 		= 3;
-				break;
-				case 5: // finance
+				// case 2: // sitemanager
+				// 	$permissions 	= "{" . '"' . "user" . '"' . ":1}";
+				// 	$group_id 		= 3;
+				// break;
+				// case 5: // finance
+				// 	$permissions 	= "{" . '"' . "finance" . '"' . ":1, ". '"' . "reports" . '"' . ":1}";
+				// 	$group_id 		= 4;				
+				// break;	
+				case 2:			
+				case 5: // finance & site manager Temporarily
 					$permissions 	= "{" . '"' . "finance" . '"' . ":1, ". '"' . "reports" . '"' . ":1}";
 					$group_id 		= 4;				
 				break;
+				case 3:
+				case 4:
 				case 6: // admin
 					$permissions 	= "{" . '"' . "admin" . '"' . ":1, ". '"' . "reports" . '"' . ":1}";
 					$group_id 		= 1;
@@ -162,6 +176,7 @@ class Aveo
 				break;			
 		
 				break;
+
 			}
 
 			$values = array(
