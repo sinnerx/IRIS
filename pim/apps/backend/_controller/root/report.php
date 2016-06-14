@@ -395,7 +395,7 @@ class Controller_Report
 
 
 	# gett all activity report -- root 
-	public function getallActivityReport($year = null,$month = null)
+	public function monthlyActivityReport($year = null,$month = null)
 	{
 		$data['year'] = $year = $year ? : date("Y");
 		$data['month'] = $month = $month ? : date("n");
@@ -404,12 +404,8 @@ class Controller_Report
 		$data['totalApprovalPendingReport'] = model::load("blog/article")->getTotalApprovalPendingReport($year, $month);
 		$data['totalNonrecentReport'] = model::load('blog/article')->getTotalOfNonrecentReport($year, $month);
 
-		view::render("root/report/activityReport",$data);
+		view::render("root/report/monthlyActivityReport",$data);
 	}
-
-	 
-
-
 
 	# all site report by month and year
 	public function generateAllActivityReport($year = null,$month = null)
@@ -447,30 +443,21 @@ class Controller_Report
 			$siteName = $siteInfo['siteName'];
 		
 			$fileName = $siteName." - ".$date." - ".$articleName;
-	
-
-	
 
 			$word	= new \PhpOffice\PhpWord\PhpWord();
-			
 	
 			$monthNo = substr($date, 2, 2);  
 			$monthNo = (int)$monthNo;
 			$yearNo = substr($date, 4, 4);  
 	
-				$monthEvent =	model::load("helper")->monthYear("month",$monthNo);
+			$monthEvent =	model::load("helper")->monthYear("month",$monthNo);
 			
 			$title = "LAPORAN AKTIVITI PI1M ".$siteName." ".$monthEvent." ".$yearNo;
-	
-		
 			
 			$word->addTitleStyle('rStyle', array('bold' => true,  'size' => 11, 'allCaps' => true),array('align' => 'center'));
 	
     		$section = $word->addSection();		
 			$section->addTitle(htmlspecialchars($title), 'rStyle');
-	
-	
-								
 	
 			$doc = new DOMDocument();
 			$html = $articleText;	

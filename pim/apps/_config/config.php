@@ -39,6 +39,7 @@ $config['domain']['dev.celcom1cbc.com'][]	= Array(
 						"fbAppID"=>"744420762279421",
 						"fbAppSecret"=>"e0b70e1cc90d13d07f35ccba38d70be6",
 						"aveo"=> "dev.celcom1cbc.com/aveo/app/controllers/api/user.php",
+						'secure' => true
 										);
 
 ## live pro.
@@ -74,6 +75,7 @@ $config['domain']['www.celcom1cbc.com'][]	= Array(
 						"fbAppID"=>"744420335612797",
 						"fbAppSecret"=>"3b5bfde7d74275484f11ecc974818548",
 						"aveo"=> "www.celcom1cbc.com/aveo/app/controllers/api/user.php",
+						'secure' => true
 										);
 
 ## no longer used.

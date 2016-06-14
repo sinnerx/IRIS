@@ -6,7 +6,6 @@ pim/assets/frontend/images/siteImage/*
 pim/assets/frontend/images/slider/*
 pim/assets/frontend/images/photo/*
 pim/vendor/*
-pim/composer.lock
 pim_sta
 pim/logs/access.txt
 pim/php.ini
@@ -29,3 +28,5 @@ pim/apps/_config/database.php
 .credentials/*
 !.credentials/placeholder
 !.credentials/*.example
+pim/assets/backend/reports/monthly-activities/*
+!pim/assets/backend/reports/monthly-activities/placeholder

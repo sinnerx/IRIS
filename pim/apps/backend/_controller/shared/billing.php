@@ -534,6 +534,7 @@ Class Controller_Billing
 		->select('SUM(billingTransactionTotal) as total')
 		->where('siteID', $data['siteID'])
 		->where('billingTransactionDate <', $year.'-'.$month.'-01')
+		->where('billingTransactionStatus', 1)
 		->get()->row('total');
 
 		if($previousTransaction)
@@ -551,6 +552,7 @@ Class Controller_Billing
 		->where('YEAR(billingTransactionDate)', $year)
 		->where('MONTH(billingTransactionDate)', $month)
 		->where('siteID', $data['siteID'])
+		->where('billingTransactionStatus', 1)
 		->join('billing_transaction', 'billing_transaction.billingTransactionID = billing_transaction_item.billingTransactionID', 'INNER JOIN')
 		->join('billing_transaction_user', 'billing_transaction_user.billingTransactionID = billing_transaction.billingTransactionID')
 		->join('billing_item_code', 'billing_item_code.billingItemID = billing_transaction_item.billingItemID')

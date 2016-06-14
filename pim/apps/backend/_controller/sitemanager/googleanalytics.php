@@ -12,7 +12,7 @@ Class Controller_GoogleAnalytics
 
 
 
-	public function test($siteID = null)
+	public function report($siteID = null)
 	{
 		
 		$start = input::get("startDate");
