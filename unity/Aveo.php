@@ -47,7 +47,7 @@ class Aveo
 	{
 		$level = $row['userLevel'];
 	
-		if(!in_array($level, array(2, 5, 6, 99))){
+		if(!in_array($level, array(2, 3, 4, 5, 6, 99))){
 			return;
 		}
 
