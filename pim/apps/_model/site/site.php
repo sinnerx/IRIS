@@ -731,6 +731,15 @@ class Site extends \Origami
 
 		return $cache;
 	}
+
+	public function deleteSite($siteID)
+	{
+		db::where("siteID",$siteID);
+		db::update("site",Array("siteStatus"=>3));
+		
+		##
+		model::load("user/activity")->create($siteID,session::get("userID"),"site.delete");
+	}
 }
 
 ?>

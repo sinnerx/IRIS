@@ -157,11 +157,12 @@ List of all Pi1M sites and related information
 				<td class='site-col'><?php echo !$row['siteSlug']?'null':strtolower($row['siteSlug']);?></td>
 				<td><?php echo $stateR[$row['stateID']];?></td>
 				<td class='site-col'><?php echo implode(", ",$sitemanager);?></td>
-				<td width='90px;'>
-				<a href='<?php echo url::base("site/edit/".$row['siteID']."");?>' class='fa fa-edit pull-right'></a>
-				<a href='javascript:void(0);' onclick="site.index.showDetail(<?php echo $row['siteID'];?>)" class='fa fa-search pull-right'></a>
-				<!-- <a href='<?php echo url::base("site/toggleActive/".$row['siteID']);?>' class='fa fa-power-off'></a> -->
-				<?php echo $assignIcon;?>
+				<td width='90px'>
+					<a href='<?php echo url::base("site/edit/".$row['siteID']."");?>' class='fa fa-edit pull-right'></a>
+					<a href='javascript:void(0);' onclick="site.index.showDetail(<?php echo $row['siteID'];?>)" class='fa fa-search pull-right'></a>
+					<!-- <a href='<?php echo url::base("site/toggleActive/".$row['siteID']);?>' class='fa fa-power-off'></a> -->
+					<?php echo $assignIcon;?>
+					<a onclick='return confirm("Confirm delete?");' class='i i-cross2' href='delete/<?php echo $row['siteID']; ?>'></a>
 				</td>
 			</tr>
 			<?php
