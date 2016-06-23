@@ -1,13 +1,16 @@
 <link rel="stylesheet" href="<?php echo url::asset("_scale/js/datepicker/datepicker.css");?>" type="text/css">
 <script src="<?php echo url::asset("_scale/js/datepicker/bootstrap-datepicker.js");?>"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo url::asset("frontend/tools/CLEditor/jquery.cleditor.css");?>" >
+<script type="text/javascript" src='<?php echo url::asset("frontend/tools/CLEditor/jquery.cleditor.min.js");?>'></script>
 <script src="<?php echo url::asset("_scale/js/qrcode/jquery.qrcode-0.12.0.min.js");?>"></script>
 <script>
 $(document).ready(function(){
-	$("#ic-qr").qrcode({
+$("#ic-qr").qrcode({
     "size": 100,
     "color": "#3a3",
     "text": "<?php echo $row['userIC']; ?>"
 });
+jQuery("#userProfileIntroductional").cleditor();
 });
 </script>
 <h3 class="m-b-xs text-black">
