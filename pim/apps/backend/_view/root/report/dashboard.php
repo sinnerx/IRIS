@@ -1,8 +1,8 @@
 <h3 class="m-b-xs text-black">
-<a href='info'>List of Users</a>
+<a href='info'>Report Dashboard</a>
 </h3>
 <div class='well well-sm'>
-List of all registered users, site managers and cluster leads.
+List of reports.
 </div>
 <?php echo flash::data();?>
 <div class='row'>
@@ -20,51 +20,49 @@ List of all registered users, site managers and cluster leads.
 		</div>
 		</form>
 		</div>
-		<div class='col-sm-3 pull-left'>
-		<button type='button' class='class="btn btn-sm btn-bg btn-default pull-left'><a href='<?php echo url::base("user/add");?>'>Add +</a></button>
-		</div>
 	</div>
 	<div class="table-responsive">
 		<table id='table-site-list' class="table table-striped b-t b-light">
 		<thead>
 			<tr>
 				<th width="20">No.</th>
-				<th>Name</th>
-				<th>I/C</th>
-				<th>Email</th>
-				<th class='site-col'>Level</th>
-				<th width="60px"></th>
+				<th>Report</th>
+				<th>Description</th>
+				<th>Action</th>
 			</tr>
 		</thead>
 		<tbody>
 		<?php
-
-		if($users->count() > 0):
+		//var_dump(($reports));
+		//die;
+		if(count($reports) > 0):
 			$no	= pagination::recordNo();
-			foreach($users as $user):
-				
-				$userID	= $user->userID;
-				$name	= $user->userProfileFullName;
-				$ic		= $user->userIC;
-				$email	= $user->userEmail;
-				$level	= $user->getLevelName();
 
-				$detailIcon	= "<a class='fa fa-user' href='".url::base("user/detail/$userID")."'></a>";
+			foreach($reports as $report):
+				//var_dump($report['reportsID']);
+				$reportID	= $report['reportsID'];
+				$reportName	= $report['reportsName'];
+				$reportDesc		= $report['reportsDesc'];
+
+				if($report['reportsURL'] == "")
+					$detailIcon	= "<a class='fa fa-user' href='".url::base("report/reportFormField/$reportID")."'></a>";
+				else
+					$detailIcon	= "<a class='fa fa-user' href='".url::base($report['reportsURL'])."'></a>";
 				$editIcon	= "<a class='fa fa-edit' href='".url::base("user/edit/$userID")."'></a>";
 				$deleteIcon = '<a onclick="return confirm(\'Are you really sure?\');" class="i i-cross2" href="'.url::base('user/delete/'.$userID).'"></a>';
 				#$resetIcon	= "<a onclick='return confirm(\"Are you sure you want to reset this user password.?\");' class='fa fa-key'  href='".url::base("user/resetPassword/$userID")."'></a>";
 				$resetIcon	= "";
 
-				echo "<tr><td>$no.</td><td>$name</td><td>$ic</td><td>$email</td><td>$level</td><td>$resetIcon $editIcon $deleteIcon</td></tr>";
+				echo "<tr><td>$no.</td><td>$reportName</td><td>$reportDesc</td><td>$detailIcon</td></tr>";
 				$no++;
 			endforeach;
 		else:?>
 		<tr>
 			<td align="center" colspan="5">
 				<?php if(request::get('search')):?>
-					No user found with the search query.
+					No report found with the search query.
 				<?php else:?>
-					No user added yet.
+					No report added yet.
 				<?php endif;?>
 			</td>
 		</tr>

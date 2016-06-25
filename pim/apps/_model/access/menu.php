@@ -195,6 +195,7 @@ class Menu extends Data
 							"File Manager"=>Array("file/index")
 						),
 					"Report"=>Array(
+							"Dashboard"=>"report/reportDashboard",
 							"Monthly USP Project"=>"report/monthlyActivity",
 							"Master Listing"=>"report/masterListing",
 							"Google Analytics"=>"googleanalytics/report",
@@ -231,7 +232,7 @@ class Menu extends Data
 						),					
 					"Attendance" => Array(
 									"Attendance Page" => Array("../attendance/")
-						)	
+						),						
 							);
 
 		$menu['dv'] = array(

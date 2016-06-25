@@ -1,6 +1,6 @@
 <?php
 namespace model\report;
-use db, model;
+use db, model, pagination;
 
 class Report
 {
@@ -504,6 +504,52 @@ SUM(billingTransactionItemQuantity) AS hours");
 		return $arrayActivitiesOnSite;
 
 
+	}
+
+	public function getListReport($where, $pagination){
+		//db::select("reportsID, reportsName, reportsDesc, reportsURL")->from("reports");
+		db::select("*")->from("reports");
+		//var_dump($reportlist);
+		if($where)
+			{
+				$where	= !is_array($where)?Array($where):$where;
+				foreach($where as $key => $wher)
+				{
+					if(is_string($key))
+						where($key, $wher);
+					else
+						db::where($wher);
+				}
+			}
+			//echo $pagination;
+			if($pagination)
+			{
+				$totalRows = db::num_rows();
+				
+				## required property : totalRow, currentPage, limit urlFormat
+				pagination::initiate(Array(
+					"totalRow"=>$totalRows,
+					"currentPage"=>$pagination['currentPage'],
+					"urlFormat"=>$pagination['urlFormat']
+									));
+				
+				//var_dump($pagination['urlFormat']);
+
+				db::limit(pagination::get("limit"), pagination::recordNo()-1);
+			}
+			//var_dump('');
+			$reportlist = db::get()->result('reportsID');
+			return $reportlist;
+	}
+
+	public function getReportForm($idReport){
+		db::select("*");
+		db::from("report_fields");
+		db::where("report_fieldsReportID", $idReport);
+		db::order_by("report_fieldsID");
+		$result = db::get()->result();
+
+		return $result;
 	}
 }
 
