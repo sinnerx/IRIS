@@ -363,6 +363,13 @@ $(document).ready(function()
 							<i class="fa fa-shopping-cart"></i>
 							<?php echo form::text("userProfileEcommerce","class='name icn-lft'",$userProfileEcommerce);?>
 						</div>
+
+						<div class="profile-edit-row clearfix">
+						<label>Pautan Video Youtube:</label>
+							<i class="fa fa-youtube-play"></i>
+							<?php echo form::text("userProfileVideo","class='name icn-lft'",$userProfileVideo);?>
+						</div>
+
 						<div class="profile-edit-row clearfix">
 							<label>Artikel Pengenalan:</label> <a href="javascript:pim_modal.show('container','.content-panduan');" class="panduan">Panduan</a>
 							<?php echo form::textarea("userProfileIntroductional",null,$userProfileIntroductional);?>

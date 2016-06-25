@@ -139,6 +139,7 @@ class Member extends \Origami
 		
 		db::join("user","user.userID = site_member.userID");
 		db::join("user_profile","user_profile.userID = site_member.userID");
+		db::where("userStatus",1);
 
 		db::order_by("siteMemberStatus ASC, siteMemberID DESC");
 

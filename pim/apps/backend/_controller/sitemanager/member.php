@@ -104,4 +104,71 @@ class Controller_Member
 		view::render("sitemanager/member/printm", $data);
 	}
 
+	public function edit($userID)
+	{
+		$user			= model::load("user/user");
+		$data['row']	= $user->get($userID);
+		$data['add']	= $user->getAdditional($userID);
+
+		if(form::submitted())
+		{
+			$emailCheck	= false;
+			## check only if email not same as current email.
+			if(input::get("userEmail") != $data['row']['userEmail'])
+			{
+				$emailCheck	= model::load("user/services")->checkEmail(input::get("userEmail"));
+			}
+
+			$userIC = str_replace('-', '', input::get('userIC'));
+
+			## ic check.
+			$icCheck	= false;
+			if($userIC != $data['row']['userIC'])
+			{
+				$icCheck = model::load("user/services")->checkIC($userIC);
+			}
+
+			$rules	= Array(
+					"userProfileFullName,userIC,userEmail"=>"required:This field is required.",
+					"userEmail"=>Array(
+								"email:Please input a correct email format.",
+								"callback"=>Array(!$emailCheck,"Email already exists.")
+										),
+					"userIC"=>Array(
+								"callback"=>Array(!$icCheck,"IC already exists")
+									)
+							);
+
+			## got error.
+			if($error = input::validate($rules))
+			{
+				input::repopulate();
+				redirect::withFlash(model::load("template/services")->wrap("input-error",$error));
+				redirect::to("","Got some error in your form.","error");
+			}
+
+			## update member data
+			$userProfileLastName = $data['row']['userProfileLastName'];
+			$data	= input::get();
+			$data['userIC'] = $userIC;
+			//$data['userProfileLastName'] = $userProfileLastName;
+			$user->updateMember($userID,$data);
+			$user->updateAdditional($userID,$data);
+
+			redirect::to("","Successfully updated member info.");
+		}
+
+		view::render("sitemanager/member/edit",$data);
+
+		//echo "Editing " . $data['row']['userProfileFullName'] . "<br>";
+		//echo "Level " . $data['userLevelR'] . "<br>";
+	}
+
+	public function delete($userID)
+	{
+		$user = model::load("user/user");
+		$user->deleteMember($userID);
+
+		redirect::to("member/lists","Member id " . $userID . " deleted.");
+	}
 }

@@ -67,6 +67,7 @@ user_profile_additional: ## additional info for user.
 	userProfileEcommerce [varchar]		##
 	userProfileIntroductional [text]	##
 	userProfileEducation [varchar]
+	userProfileVideo [varchar]
 
 user_activity:
 	userActivityID [int]
