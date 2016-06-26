@@ -6,6 +6,7 @@ var cluster	= new function()
 	var addedSite	= [];
 	var clusterID	= null;
 	var context		= this;
+	var is_add_site = false;
 
 	//show list of site of this cluster.
 	this.show	= function(cID)
@@ -21,15 +22,36 @@ var cluster	= new function()
 		});
 	};
 
+	//hide list of site of this cluster.
+	this.hideSiteList	= function()
+	{
+		if (is_add_site) {
+			is_add_site = false;
+			//$("#site-add").hide();
+			$("#site-list").hide();
+			this.show(clusterID);
+		} else {
+			this.maximizeList();
+			$("#site-list").hide();
+		}
+	};
+
 	this.minimizeList	= function()
 	{
 		$("#cluster-list").removeClass("col-sm-12").addClass("col-sm-5");
 		$("#addForm").hide();
 	};
 
+	this.maximizeList	= function()
+	{
+		$("#cluster-list").removeClass("col-sm-5").addClass("col-sm-12");
+		$("#addForm").show();
+	};
+
 	//used in ajax/cluster/siteList
 	this.getAddForm		= function()
 	{
+		is_add_site = true;
 		addedSite	= []; //reset
 		p1mloader.start("#site-add");  //loader start
 		$.ajax({type:"POST",url:base_url+"ajax/cluster/siteAdd/"+clusterID}).done(function(txt)
@@ -173,8 +195,9 @@ Listing the groups of Pi1M sites for administration purpose. Every cluster must 
 						<a href='<?php echo url::base('cluster/assignOpsmanager/'.$cluster->clusterID);?>' class='fa fa-plus'></a>
 					<?php endif;?>
 				</td>
-				<td></td>
-				<td><a href='#' onclick='cluster.show(<?php echo $clusterID;?>);' class='fa fa-list' title='List of monitored site'></a> <a href='<?php echo $deleteUrl;?>' onclick='return confirm(\"Delete this cluster. Are you sure?\");' class='i i-cross2'></a>
+				<td>
+					<a href='#' onclick='cluster.show(<?php echo $clusterID;?>);' class='fa fa-list' title='List of monitored site'></a>
+					<a href='<?php echo $deleteUrl;?>' onclick='return confirm(\"Delete this cluster. Are you sure?\");' class='i i-cross2'></a>
 				</td>
 			</tr>
 			<?php

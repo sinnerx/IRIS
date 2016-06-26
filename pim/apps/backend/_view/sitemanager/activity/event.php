@@ -81,8 +81,8 @@ var activity = new function($)
 				<?php if($status != 2):?>
 					<a href='<?php echo url::base("activity/view/event/$activityID");?>' class='fa fa-search'></a>
 					<a href='<?php echo url::base("activity/edit/$activityID");?>' class='fa fa-edit'></a>
-				<?php endif;?>
 					<a href='javascript:activity.delete(<?php echo $activityID;?>);' class='i i-cross2'></a>
+				<?php endif;?>
 				</td>
 			</tr>
 			<?php 
