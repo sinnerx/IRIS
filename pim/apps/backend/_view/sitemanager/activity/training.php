@@ -55,7 +55,7 @@ List of training activities of your site.
 			if(isset($requestData[$id]))
 			{
 				$row 							= model::load("helper")->replaceArray($row,$requestData[$id]);
-				$row['activityApprovalStatus']	= 4; ## just a decoy.
+				//$row['activityApprovalStatus']	= 4; ## just a decoy.
 			}
 
 			$status		= $row['activityApprovalStatus'];

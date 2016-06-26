@@ -218,8 +218,8 @@ class Controller_Activity
 		$pages = array(1 => 'event', 2 => 'training');
 		
 		// if has already been approved.
-		if($activity->activityApprovalStatus == 1)
-			redirect::to('activity/'.$pages[$type], 'Unable to delete an already approved activity.', 'error');
+		//if($activity->activityApprovalStatus == 1)
+		//	redirect::to('activity/'.$pages[$type], 'Unable to delete an already approved activity.', 'error');
 		
 		// delete.
 		$activity->delete();

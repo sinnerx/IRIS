@@ -11,8 +11,16 @@ class Activity extends \Origami
 	 */
 	public function delete()
 	{
-		if($this->activityApprovalStatus == 1)
+		//if($this->activityApprovalStatus == 1)
+		//	return;
+		if($this->activityApprovalStatus == 1) {
+			model::load("site/request")->create("activity.delete",$this->siteID,$this->activityID,Array());
+
+			$this->activityApprovalStatus = 5;
+			$this->save();
+
 			return;
+		}
 
 		// delete related site_request for activity.add, if the current approval status is 0
 		if($this->activityApprovalStatus == 0)
@@ -468,7 +476,7 @@ class Activity extends \Origami
 	{
 		db::from("activity")
 		->where("siteID",$siteID)
-		->where('activityApprovalStatus', array(0,1,2))
+		->where('activityApprovalStatus', array(0,1,2,5))
 		->where("activityType",$type);
 
 		pagination::setFormat(model::load("template/cssbootstrap")->paginationLink());
