@@ -3,6 +3,7 @@ Class Controller_Site
 {
 	public function overview($year = null, $month = null)
 	{
+
 		$siteID = site()->siteID;
 
 		$data['year'] = $year = $year ? : date('Y');

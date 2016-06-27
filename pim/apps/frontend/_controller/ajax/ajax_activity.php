@@ -13,4 +13,13 @@ class Controller_Ajax_Activity
 		## return true, along with image.
 		return response::json(Array(true,Array("userProfileAvatarPhoto"=>model::load("image/services")->getPhotoUrl(authData("user.userProfileAvatarPhoto")))));
 	}
+
+	public function unjoin($activityID)
+	{
+		$userID = session::get("userID");
+		$result = model::load("activity/activity")->permanentDeleteParticipant($activityID, $userID);
+
+		return response::json(Array(true));
+
+	}
 }

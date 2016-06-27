@@ -10,7 +10,6 @@ class Controller_Expense
 
 	public function listStatus($page=1)
 	{	
-				
 		$data['prTerm'] = model::load('expense/transaction')->getPrTerm();
 		$data['listPR'] = model::load('expense/transaction')->getPRList($allSiteID,$level,$page);
 

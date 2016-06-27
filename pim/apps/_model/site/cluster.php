@@ -224,6 +224,24 @@ class Cluster extends \Origami
 		
 		return db::get("cluster_lead")->result();
 	}
+
+	public function listsForDropDown()
+	{
+		db::select("clusterID, clusterName");
+		#db::join("cluster_lead","cluster.clusterID = cluster_lead.clusterID AND clusterLeadStatus = '1'");
+		#db::join("user","cluster_lead.userID = user.userID");
+		$clusters = db::get('cluster')->result();
+		$fieldsArray = array('0' => 'All');
+		foreach ($clusters as $cluster) {
+			# code...
+			//var_dump($cluster['clusterID']);
+			$fieldsArray[$cluster['clusterID']] = $cluster['clusterName'];
+			//var_dump($result[$form_field['report_fieldsTableID']]);
+			
+		}	
+			
+		return $fieldsArray;
+	}	
 }
 
 

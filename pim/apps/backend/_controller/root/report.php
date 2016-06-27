@@ -35,6 +35,7 @@ class Controller_Report
 		db::join("event E", "E.activityID = A.activityID");
 		db::where("YEAR(A.activityStartDate)", $year);
 		db::where("A.activityType", 1);
+		db::where("A.activityApprovalStatus", 1);
 		//db::where("E.eventType IN ", "(2,3,7)");
 		db::group_by("E.eventType, month");
 		$results = db::get()->result();
@@ -117,10 +118,10 @@ class Controller_Report
 
 	private function reportDashboardTraining ($input){
 
-		//$year = $input['year'];
-		$year = 2015;
-		//$quarter = $input['quarter'];
-		$quarter = 4;
+		$year = $input['year'];
+		//$year = 2015;
+		$quarter = $input['quarter']+1;
+		//$quarter = 4;
 
 		$list_quarters = array();
 
@@ -150,6 +151,7 @@ class Controller_Report
 			db::join("activity_date AD", "AD.activityID = A.activityID");
 			db::where("A.activityType", 2);
 			db::where("YEAR(AD.activityDateValue) =", $year);
+			db::where("A.activityApprovalStatus", 1);
 			// db::where("AD.activityDateValue <=", "2015-12-31");
 			//db::group_by("month");			
 			db::group_by("C.clusterID, month");

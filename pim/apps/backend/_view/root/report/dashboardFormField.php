@@ -142,11 +142,20 @@ Please complete the form below to generate the report.
 				<div class='col-sm-6'>
 				<label><?php echo  $form_field['report_fieldsTitle']; ?></label>
 
- 				<?php echo form::text($form_field['report_fieldsName'],"class='input-sm input-s datepicker-input form-control' date-date-format='dd-mm-yyyy'",date('d-m-Y', strtotime($todayDateStart)));?>	
+ 				<?php echo form::text($form_field['report_fieldsName'],"class='input-sm input-s datepicker-input form-control' date-date-format='dd-mm-yyyy'",date('Y-m-d', strtotime($todayDateStart)));?>	
 				</div>
 			</div>			
 		</div>  
-
+		<script>
+		$(document).ready(function() {
+			var datepicker = "<?php echo $form_field['report_fieldsName'];?>";
+			//console.log(datepicker);
+			$("#"+datepicker).change(function(){
+				$( "#"+datepicker ).datepicker("option","dateFormat","yy-mm-dd");
+			});
+		    
+		  });
+		</script>
  		<?php
  			break;
 
@@ -282,10 +291,15 @@ Please complete the form below to generate the report.
 
  ?>
 		</div>
+
 		</div>
+
 	</div>
+
 </div>
 
-
+<!-- <button name="back" id="backbtn" value="Back" class='btn btn-primary pull-left'>
+ -->
 <?php echo form::submit("Submit","class='btn btn-primary pull-right'");?>
+<input type="button" name="back" id="backbtn" value="Back" class='btn btn-primary' onclick="history.back()">
 </form>

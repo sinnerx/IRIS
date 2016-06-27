@@ -92,6 +92,15 @@ class Controller_Ajax_Gallery
 		return true;
 	}
 
+	public function importToActivity($siteAlbumID, $activityID)
+	{
+		//$siteID	= authData("site.siteID");
+
+		model::load("image/album")->addActivityAlbumOnly($siteAlbumID, $activityID);
+
+		return true;		
+	}
+
 	public function changeDescription($siteAlbumID)
 	{
 		$data['albumDescription']	= input::get("albumDescription");
