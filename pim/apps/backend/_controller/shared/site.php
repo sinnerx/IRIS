@@ -406,6 +406,28 @@ Class Controller_Site
 		view::render("shared/site/editAnnouncement",$data);
 	}
 
+	public function deleteAnnouncement($announceID)
+	{
+		//$announcement = model::load("site/announcement")->getAnnouncement($announceID);
+		$announcement = model::orm('site/announcement')->find($announceID);
+				
+		// delete.
+		$announcement->delete();
+
+		redirect::to("site/announcement", $data);
+	}
+
+	public function undeleteAnnouncement($announceID)
+	{
+		//$announcement = model::load("site/announcement")->getAnnouncement($announceID);
+		$announcement = model::orm('site/announcement')->find($announceID);
+				
+		// delete.
+		$announcement->undelete();
+
+		redirect::to("site/announcement", $data);
+	}
+
 	# view/add article
 	public function article($page = 1)
 	{
@@ -532,6 +554,28 @@ Class Controller_Site
 
 		# echo '<pre>';print_r($data);die;
 		view::render("shared/site/editArticle",$data);
+	}
+
+	public function deleteArticle($articleID)
+	{
+		//$announcement = model::load("site/announcement")->getAnnouncement($announceID);
+		$article = model::orm('blog/article')->find($articleID);
+				
+		// delete.
+		$article->delete();
+
+		redirect::to("site/article", $data);
+	}
+
+	public function undeleteArticle($articleID)
+	{
+		//$announcement = model::load("site/announcement")->getAnnouncement($announceID);
+		$article = model::orm('blog/article')->find($articleID);
+				
+		// delete.
+		$article->undelete();
+
+		redirect::to("site/article", $data);
 	}
 }
 

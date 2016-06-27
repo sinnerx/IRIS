@@ -37,7 +37,11 @@
 	list($typeObject) = explode(".",$type);
 
 	$approveIcon	= "<a href='javascript:cluster.overview.updateApproval($requestID,1);' class='btn-approval text-success pull-right fa fa-check-square-o'></a>";
-	$disapproveIcon	= "<a href='javascript:cluster.overview.updateApproval($requestID,2);' class='btn-approval text-danger pull-right i i-cross2'></a>";
+	if($type == 'activity.delete' || $type == 'announcement.delete' || $type == 'article.delete') {
+		$disapproveIcon	= "<a href='javascript:cluster.overview.updateApproval($requestID,2, true);' class='btn-approval text-danger pull-right i i-cross2'></a>";
+	} else {
+		$disapproveIcon	= "<a href='javascript:cluster.overview.updateApproval($requestID,2);' class='btn-approval text-danger pull-right i i-cross2'></a>";
+	}
 	
 	$urlCorrection	= url::base("ajax/request/correctionDetail/$requestID");
 	$exclamationIcon= "<a data-toggle='ajaxModal' href='$urlCorrection' title='Waiting for correction' class='btn-approval text-danger pull-right fa fa-exclamation-circle'></a>";
@@ -54,7 +58,7 @@
 
 	}
 	## new site announcement
-	else if($type == 'announcement.add')
+	else if($type == 'announcement.add' || $type == "announcement.delete")
 	{
 		view::render("clusterlead/request/ajax/detail_announcement.add",Array("row"=>$row_request));
 	}
@@ -63,7 +67,7 @@
 	{
 		view::render("clusterlead/request/ajax/detail_activity.add",Array("row"=>$row_request,"activityDate"=>$activityDate));
 	}
-	else if($type == "article.add")
+	else if($type == "article.add" || $type == "article.delete")
 	{
 		view::render("clusterlead/request/ajax/detail_article.add",Array("row"=>$row_request));
 	}

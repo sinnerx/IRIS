@@ -102,7 +102,8 @@ cluster.overview.previewRequestDetail = function(requestID)
 				$previewIcon	= "<a href='javascript:cluster.overview.previewRequestDetail($requestID);'  data-toggle='tooltip' data-placement='bottom' data-original-title='Preview update detail' class='fa fa-search'></a>";
 				$approveIcon	= "<a href='javascript:cluster.overview.updateApproval($requestID,1);' class='fa fa-check-square-o'></a>";
 
-				if ($row['siteRequestType'] == "activity.delete")
+				if ($row['siteRequestType'] == "activity.delete" || $row['siteRequestType'] == "announcement.delete"
+					|| $row['siteRequestType'] == "article.delete")
 					$disapproveIcon	= "<a href='javascript:cluster.overview.updateApproval($requestID,2, true);' class='i i-cross2'></a>";
 				else
 					$disapproveIcon	= "<a href='javascript:cluster.overview.updateApproval($requestID,2);' class='i i-cross2'></a>";
