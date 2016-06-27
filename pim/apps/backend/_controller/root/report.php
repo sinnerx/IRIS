@@ -122,7 +122,7 @@ class Controller_Report
 		//$year = 2015;
 		$quarter = $input['quarter']+1;
 		//$quarter = 4;
-
+		//var_dump($year);
 		$list_quarters = array();
 
 		
@@ -140,6 +140,8 @@ class Controller_Report
 				$arrayResult[$cluster['clusterName']][$x] = array();
 			}
 		}
+
+
 
 		//var_dump($arrayResult);
 		//die;
@@ -165,20 +167,42 @@ class Controller_Report
 			foreach ($results as $result) {
 				$arrayResult[$result['clusterName']][$result['month']][0] = $result['totalhours'];
 				$arrayResult[$result['clusterName']][$result['month']][1] = $result['totalsites'];
+				$arrayResult[$result['clusterName']][$result['month']][2] = $result['totalsites'] * 16; //mcmc kpi
+				$arrayResult[$result['clusterName']][$result['month']][3] = $result['totalsites'] * 48; //ntsb kpi
 
 
-			}
+			}			
 
 				$totalHoursQuarter1stAllCluster = 0;
 				$totalHoursQuarter2ndAllCluster = 0;
 				$totalHoursQuarter3rdAllCluster = 0;
 				$totalHoursQuarter4thAllCluster = 0;
 
+				$totalKPIMCMC1stQuarter			= 0;
+				$totalKPIMCMC2ndQuarter 		= 0;
+				$totalKPIMCMC3rdQuarter 		= 0;
+				$totalKPIMCMC4thQuarter 		= 0;
+
+				$totalKPINTSB1stQuarter 		= 0;
+				$totalKPINTSB2ndQuarter 		= 0;
+				$totalKPINTSB3rdQuarter 		= 0;
+				$totalKPINTSB4thQuarter 		= 0;								
+
 			foreach ($arrayResult as $clusterKey => $clusterValue) {
 				$q1 = 0;
 				$q2 = 0;
 				$q3 = 0;
-				$q4 = 0;				
+				$q4 = 0;	
+
+				$q1mcmc = 0;			
+				$q2mcmc = 0;			
+				$q3mcmc = 0;			
+				$q4mcmc = 0;
+
+				$q1ntsb = 0;			
+				$q2ntsb = 0;			
+				$q3ntsb = 0;			
+				$q4ntsb = 0;			
 				# code...
 				//var_dump($clusterKey);
 				//die;
@@ -187,30 +211,63 @@ class Controller_Report
 					//var_dump($key);
 					//var_dump($value[0]);
 					//die;
+
+					// db::select("count(CS.siteID) as ops_pi1m");
+					// db::from("cluster_site CS");
+					// db::join("site S", "S.siteID = CS.siteID");
+					// db::join("cluster C", "C.clusterID = CS.clusterID");
+					// db::where("MONTH(S.siteCreatedDate) <=", $key);
+					// db::where("YEAR(S.siteCreatedDate) <=", $year);
+					// db::where("C.clusterName", $clusterKey);
+
+					// $result_ops_pi1m = db::get()->result();
+					//  //var_dump($result_ops_pi1m);
+					// // die;
+
+					// foreach ($result_ops_pi1m as $value) {
+					// # code...
+					// 	$arrayResult[$clusterKey][$key][2] = $value['ops_pi1m'];
+					// }
+
 					if($key == 1 || $key == 2 || $key == 3){
 						//$q1 = $value = null ? $value = 0 : $value = $value;
 						//var_dump($value[0]);
-						$q1 += $value[0] == null ? $value[0] = 0 : $value[0] = $value[0];
+						$q1 		+= $value[0] == null ? $value[0] = 0 : $value[0] = $value[0];
+						$q1mcmc 	+= $value[2] == null ? $value[2] = 0 : $value[2] = $value[2];
+						$q1ntsb 	+= $value[3] == null ? $value[3] = 0 : $value[3] = $value[3];
 					}	
 					else if ($key == 4 || $key == 5 || $key == 6){
 						//$q1 = $value = null ? $value = 0 : $value = $value;
 						//var_dump($value[0]);
-						$q2 += $value[0] == null ? $value[0] = 0 : $value[0] = $value[0];
+						$q2 		+= $value[0] == null ? $value[0] = 0 : $value[0] = $value[0];
+						$q2mcmc 	+= $value[2] == null ? $value[2] = 0 : $value[2] = $value[2];
+						$q2ntsb 	+= $value[3] == null ? $value[3] = 0 : $value[3] = $value[3];
 					}					
 					else if ($key == 7 || $key == 8 || $key == 9){
 						//$q1 = $value = null ? $value = 0 : $value = $value;
 						//var_dump($value[0]);
-						$q3 += $value[0] == null ? $value[0] = 0 : $value[0] = $value[0];
+						$q3 		+= $value[0] == null ? $value[0] = 0 : $value[0] = $value[0];
+						$q3mcmc 	+= $value[2] == null ? $value[2] = 0 : $value[2] = $value[2];
+						$q3ntsb 	+= $value[3] == null ? $value[3] = 0 : $value[3] = $value[3];
 					}					
 					else if ($key == 10 || $key == 11 || $key == 12){
 						//$q1 = $value = null ? $value = 0 : $value = $value;
 						//var_dump($value[0]);
-						$q4 += $value[0] == null ? $value[0] = 0 : $value[0] = $value[0];
+						$q4 		+= $value[0] == null ? $value[0] = 0 : $value[0] = $value[0];
+						$q4mcmc 	+= $value[2] == null ? $value[2] = 0 : $value[2] = $value[2];
+						$q4ntsb 	+= $value[3] == null ? $value[3] = 0 : $value[3] = $value[3];
 					}			
 					//die;
 				}//foreach clusterValue
-				$arrayResult[$clusterKey]['MCMC'] = '';
-				$arrayResult[$clusterKey]['NTSB'] = '';
+				$arrayResult[$clusterKey]['MCMC1'] = $q1mcmc;
+				$arrayResult[$clusterKey]['MCMC2'] = $q2mcmc;
+				$arrayResult[$clusterKey]['MCMC3'] = $q3mcmc;
+				$arrayResult[$clusterKey]['MCMC4'] = $q4mcmc;
+
+				$arrayResult[$clusterKey]['NTSB1'] = $q1ntsb;
+				$arrayResult[$clusterKey]['NTSB2'] = $q2ntsb;
+				$arrayResult[$clusterKey]['NTSB3'] = $q3ntsb;
+				$arrayResult[$clusterKey]['NTSB4'] = $q4ntsb;
 
 				$arrayResult[$clusterKey]['Quarter1'] = $q1;
 				$arrayResult[$clusterKey]['Quarter2'] = $q2;
@@ -220,7 +277,17 @@ class Controller_Report
 				$totalHoursQuarter1stAllCluster += $q1;
 				$totalHoursQuarter2ndAllCluster += $q2;
 				$totalHoursQuarter3rdAllCluster += $q3;
-				$totalHoursQuarter4thAllCluster += $q4;				
+				$totalHoursQuarter4thAllCluster += $q4;		
+
+				$totalKPIMCMC1stQuarter += $q1mcmc;
+				$totalKPIMCMC2ndQuarter += $q2mcmc;
+				$totalKPIMCMC3rdQuarter += $q3mcmc;
+				$totalKPIMCMC4thQuarter += $q4mcmc;
+
+				$totalKPINTSB1stQuarter += $q1ntsb;
+				$totalKPINTSB2ndQuarter += $q2ntsb;
+				$totalKPINTSB3rdQuarter += $q3ntsb;
+				$totalKPINTSB4thQuarter += $q4ntsb;
 
 				//die;
 			}//foreach arrayResult
@@ -285,21 +352,30 @@ class Controller_Report
 	    if($quarter == 1){
 	    	$header = $headerQ1;
 	    	$sumQuarterHours = $totalHoursQuarter1stAllCluster;
+	    	$sumKPIMCMC	 	 = $totalKPIMCMC1stQuarter;
+	    	$sumKPINTSB	 	 = $totalKPINTSB1stQuarter;
 	    }
 	    	
 	    else if($quarter == 2){
 	    	$header = $headerQ2;
 	    	$sumQuarterHours = $totalHoursQuarter2ndAllCluster;
+			$sumKPIMCMC	 	 = $totalKPIMCMC2ndQuarter;
+			$sumKPINTSB	 	 = $totalKPINTSB2ndQuarter;	    	
+
 	    }
 	    		    
 	    else if($quarter == 3){
 	    	$header = $headerQ3;
 	    	$sumQuarterHours = $totalHoursQuarter3rdAllCluster;
+			$sumKPIMCMC	 	 = $totalKPIMCMC3rdQuarter;
+			$sumKPINTSB	 	 = $totalKPINTSB3rdQuarter;	    	
 	    }
 	    	
 	    else if($quarter == 4){
 	    	$header = $headerQ4;
 	    	$sumQuarterHours = $totalHoursQuarter4thAllCluster;
+			$sumKPIMCMC	 	 = $totalKPIMCMC4thQuarter;
+			$sumKPINTSB	 	 = $totalKPINTSB4thQuarter;	    	
 	    }
 	    	   
 
@@ -337,8 +413,8 @@ class Controller_Report
 					
 	    	}
 	    	$pdf->Cell($w[$i],7,$clustervalue['Quarter'. $quarter],1,0,'C');
-	    	$pdf->Cell($w[$i],7,$clustervalue['MCMC'],1,0,'C');
-	    	$pdf->Cell($w[$i],7,$clustervalue['NTSB'],1,0,'C');
+	    	$pdf->Cell($w[$i],7,$clustervalue['MCMC'. $quarter],1,0,'C');
+	    	$pdf->Cell($w[$i],7,$clustervalue['NTSB'. $quarter],1,0,'C');
 
 	    	//MultiCell(float w, float h, string txt [, mixed border [, string align [, boolean fill]]])
 
@@ -355,9 +431,19 @@ class Controller_Report
 
 	    $pdf->Cell($w[0]+$w[1]+$w[2]+$w[3],7,'',1,0,'C');
 	    $pdf->Cell($w[4],7,$sumQuarterHours,1,0,'C');
-	    $pdf->Cell($w[5],7,'',1,0,'C');
-	    $pdf->Cell($w[6],7,'',1,0,'C');
+	    $pdf->Cell($w[5],7,$sumKPIMCMC,1,0,'C');
+	    $pdf->Cell($w[6],7,$sumKPINTSB,1,0,'C');
 	    $pdf->Cell($w[7],7,'',1,0,'C');
+
+	    $pdf->Ln();
+
+	    $percentKPIMCMC = round($sumQuarterHours / $sumKPIMCMC * 100);
+	    $percentKPINTSB = round($sumQuarterHours / $sumKPINTSB * 100);
+		$pdf->Cell($w[0]+$w[1]+$w[2]+$w[3]+w[4],7,'',1,0,'C');
+		$pdf->Cell($w[4],7,'',1,0,'C');
+	    $pdf->Cell($w[5],7,$percentKPIMCMC. '%',1,0,'C');
+	    $pdf->Cell($w[6],7,$percentKPINTSB. '%',1,0,'C');
+	    $pdf->Cell($w[7],7,'',1,0,'C');	    
 
 
 
