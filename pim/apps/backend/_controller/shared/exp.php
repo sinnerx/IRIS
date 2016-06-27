@@ -28,20 +28,25 @@ class Controller_Exp
 		}
 								
 
-		if(request::get('siteName') != '')
+		if(request::get('siteName'))
 			session::set('prFilter.siteName', request::get('siteName'));		
 
-		if(request::get('cluster') >= 0)
+		//var_dump(request::get('cluster'));
+
+		if(request::get('cluster'))
 			session::set('prFilter.cluster', request::get('cluster'));
+
+		//else
+		//	session::set('prFilter.cluster', '');
 
 		$data['status'] 	= session::get('prFilter.status', 'pending');
 		$data['month'] 		= session::get('prFilter.month', date('n'));
 		$data['year'] 		= session::get('prFilter.year', date('Y'));
-		$data['cluster'] 	= session::get('prFilter.cluster', 0);
+		$data['cluster'] 	= session::get('prFilter.cluster');
 		$data['site'] 		= session::get('prFilter.site', '');
 		$data['siteName'] 		= session::get('prFilter.siteName', '');
 
-		//var_dump(request::get('site'));
+		//var_dump(request::get('year'));
 		//var_dump($data['site']);
 
 		// month query.
@@ -524,10 +529,10 @@ class Controller_Exp
 			session::set('prFilter.siteName', '');
 		}
 								
-		if(request::get('siteName') != '')
+		if(request::get('siteName'))
 			session::set('prFilter.siteName', request::get('siteName'));		
 
-		if(request::get('cluster') >= 0)
+		if(request::get('cluster'))
 			session::set('prFilter.cluster', request::get('cluster'));
 
 
@@ -549,7 +554,7 @@ class Controller_Exp
 		// if manager show non submitted RL OR (date based RL)
 			$data['year'] 		= session::get('rlFilter.year', date('Y'));
 			$data['month'] 		= session::get('rlFilter.month', date('n'));
-			$data['cluster'] 	= session::get('prFilter.cluster', 0);
+			$data['cluster'] 	= session::get('prFilter.cluster', '');
 			$data['site'] 		= session::get('prFilter.site', '');
 			$data['siteName'] 	= session::get('prFilter.siteName', '');			
 		if(user()->isManager())
