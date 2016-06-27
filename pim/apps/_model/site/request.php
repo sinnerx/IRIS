@@ -276,8 +276,10 @@ class Request extends \Origami
 				"site.update"=>"Site information update",
 				"announcement.add"=>"New site announcement",
 				"announcement.update"=>"Announcement Update",
+				"announcement.delete"=>"Announcement Delete",
 				"article.add"=>"New Article",
 				"article.update"=>"Article Update",
+				"article.delete"=>"Article Delete",
 				"activity.add"=>"New Activity",
 				"activity.update"=>"Activity Update",
 				"activity.delete"=>"Activity Delete",
@@ -402,6 +404,9 @@ class Request extends \Origami
 			case "announcement.update": 
 			db::where("announcementID",$row['siteRequestRefID'])->update("announcement",$data);
 			break;
+			case "announcement.delete": # new site announcement. 
+			db::where("announcementID",$row['announcementID'])->update("announcement",Array("announcementStatus"=>2)); # reject.
+			break;
 
 			# new site article.
 			case "article.add":  
@@ -409,6 +414,9 @@ class Request extends \Origami
 			break;
 			case "article.update":
 			db::where("articleID",$row['siteRequestRefID'])->update("article",$data);
+			break;
+			case "article.delete": # new site announcement. 
+			db::where("articleID",$row['articleID'])->update("article",Array("articleStatus"=>2)); # reject.
 			break;
 
 			# activity
@@ -453,15 +461,24 @@ class Request extends \Origami
 			case "announcement.add": ## set announcementStatus to 2.
 			db::where("announcementID",$row['announcementID'])->update("announcement",Array("announcementStatus"=>2));
 			break;
+			case "announcement.delete": ## set announcementStatus to 2.
+			db::where("announcementID",$row['announcementID'])->update("announcement",Array("announcementStatus"=>1));
+			break;
+
 			case "article.add":
 			db::where("articleID",$row['articleID'])->update("article",Array("articleStatus"=>2));
 			break;
+			case "article.delete":
+			db::where("articleID",$row['articleID'])->update("article",Array("articleStatus"=>1));
+			break;
+
 			case "activity.add":
 			db::where("activityID",$row['activityID'])->update("activity",Array("activityApprovalStatus"=>2));
 			break;
 			case "activity.delete":
 			db::where("activityID",$row['activityID'])->update("activity",Array("activityApprovalStatus"=>1));
 			break;
+
 			case "video.add":
 			db::where("videoID",$row['videoID'])->update("video",Array("videoApprovalStatus"=>2));
 			break;
