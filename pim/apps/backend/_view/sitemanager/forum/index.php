@@ -1,3 +1,26 @@
+<script type="text/javascript">
+
+var category = new function($)
+{
+	this.delete = function(id)
+	{
+		if(!confirm('Delete this category?'))
+			return false;
+
+		window.location.href = '<?php echo url::base("forum/deleteCategory/");?>'+id;
+	}
+
+	this.undelete = function(id)
+	{
+		if(!confirm('Cancel deletion of this category?'))
+			return false;
+
+		window.location.href = '<?php echo url::base("forum/undeleteCategory/");?>'+id;
+	}
+}(jQuery);
+
+</script>
+
 <h3 class='m-b-xs text-black'>Forum Management</h3>
 <div class='well well-sm'>
 A module to manage your forum. You may create categories, and etc.
@@ -68,20 +91,26 @@ A module to manage your forum. You may create categories, and etc.
 				<td><?php echo $catName;?></td>
 				<td><?php echo $accessLevel;?></td>
 				<td style="text-align:right;">
+					<?php echo $iconApprovalStatus;?>
 					<?php if($row_cat['forumCategoryApprovalStatus'] != 2):?>
-					<a href='<?php echo url::base("forum/category/$row_cat[forumCategoryID]");?>' class='fa fa-bars'></a>
-					<?php if($row_cat['siteID'] != 0):?>
-					<a href='<?php echo url::base("forum/updateCategory/$row_cat[forumCategoryID]");?>' class='fa fa-edit'></a>
+						<a href='<?php echo url::base("forum/category/$row_cat[forumCategoryID]");?>' class='fa fa-bars'></a>
+						<?php if($row_cat['siteID'] != 0):?>
+							<a href='<?php echo url::base("forum/updateCategory/$row_cat[forumCategoryID]");?>' class='fa fa-edit'></a>
+							<?php if($row_cat['forumCategoryApprovalStatus'] == 5):?>
+								<a href='javascript:category.undelete(<?php echo $row_cat['forumCategoryID'];?>);' class='i i-cross2'></a>
+							<?php else:?>
+								<a href='javascript:category.delete(<?php echo $row_cat['forumCategoryID'];?>);' class='i i-cross2'></a>
+							<?php endif;?>
+						<?php endif;?>
 					<?php endif;?>
-				<?php endif;?>
-				<?php echo $iconApprovalStatus;?></td>
+				</td>
 			</tr>
 
 			<?php endforeach;?>
 			<?php else:?>
 			<tr>
 
-				<td colspan="3" style="text-align:center;">This site appear to have to categories at all.</td>
+				<td colspan="4" style="text-align:center;">This site appear to have to categories at all.</td>
 			</tr>
 			<?php endif;?>
 		</table>

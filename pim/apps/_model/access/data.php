@@ -19,6 +19,7 @@ class Data
 					"site/edit"=>Array("sm","r","om"),
 					"site/slider"=>Array("sm","r","om"),
 					"site/slider_edit"=>Array("sm","r","om"),
+					"site/deleteSlider"=>Array("sm","r","om"),
 					"site/announcement"=>Array("sm","r","om"),
 					"site/article"=>Array("sm","r","om"),
 					"site/addArticle"=>Array("sm","r","om"),

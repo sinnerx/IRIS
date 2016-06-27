@@ -578,6 +578,17 @@ Class Controller_Site
 
 		redirect::to("site/article", $data);
 	}
+
+	public function deleteSlider($sliderID)
+	{
+		//$announcement = model::load("site/announcement")->getAnnouncement($announceID);
+		$article = model::orm('site/slider')->find($sliderID);
+				
+		// delete.
+		$article->delete();
+
+		redirect::to("site/slider", $data);
+	}
 }
 
 

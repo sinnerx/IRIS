@@ -37,7 +37,7 @@
 	list($typeObject) = explode(".",$type);
 
 	$approveIcon	= "<a href='javascript:cluster.overview.updateApproval($requestID,1);' class='btn-approval text-success pull-right fa fa-check-square-o'></a>";
-	if($type == 'activity.delete' || $type == 'announcement.delete' || $type == 'article.delete') {
+	if($type == 'activity.delete' || $type == 'announcement.delete' || $type == 'article.delete' || $type == 'forum_category.delete') {
 		$disapproveIcon	= "<a href='javascript:cluster.overview.updateApproval($requestID,2, true);' class='btn-approval text-danger pull-right i i-cross2'></a>";
 	} else {
 		$disapproveIcon	= "<a href='javascript:cluster.overview.updateApproval($requestID,2);' class='btn-approval text-danger pull-right i i-cross2'></a>";
@@ -71,7 +71,7 @@
 	{
 		view::render("clusterlead/request/ajax/detail_article.add",Array("row"=>$row_request));
 	}
-	else if($type == "forum_category.add")
+	else if($type == "forum_category.add" || $type == 'forum_category.delete')
 	{
 		view::render("clusterlead/request/ajax/detail_forum_category.add",Array("row"=>$row_request));
 	}

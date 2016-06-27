@@ -286,7 +286,8 @@ class Request extends \Origami
 				"video.add"=>"New Video",
 				"video.update"=>"Update Video",
 				"forum_category.add"=>"New Forum Category",
-				"forum_category.update"=>"Forum Category Update"
+				"forum_category.update"=>"Forum Category Update",
+				"forum_category.delete"=>"Forum Category Delete"
 						);
 
 		return !$id?$typeR:$typeR[$id];
@@ -445,6 +446,9 @@ class Request extends \Origami
 			case "forum_category.update":
 			db::where("forumCategoryID",$row['siteRequestRefID'])->update("forum_category",$data);
 			break;
+			case "forum_category.delete":
+			db::where("forumCategoryID",$row['siteRequestRefID'])->update("forum_category",Array("forumCategoryApprovalStatus"=>2));
+			break;
 		}
 	}
 
@@ -482,8 +486,12 @@ class Request extends \Origami
 			case "video.add":
 			db::where("videoID",$row['videoID'])->update("video",Array("videoApprovalStatus"=>2));
 			break;
+
 			case "forum_category.add":
 			db::where('forumCategoryID',$row['forumCategoryID'])->update("forum_category",Array("forumCategoryApprovalStatus"=>2));
+			break;
+			case "forum_category.delete":
+			db::where('forumCategoryID',$row['forumCategoryID'])->update("forum_category",Array("forumCategoryApprovalStatus"=>1));
 			break;
 		}
 	}
