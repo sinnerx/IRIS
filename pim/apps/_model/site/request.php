@@ -238,6 +238,7 @@ class Request extends \Origami
 	{
 		db::from("site_request")
 		->where("siteRequestStatus",0)
+		//->where("siteRequestStatus IN (0, 5)")
 		->where("siteID IN (SELECT siteID FROM cluster_site WHERE clusterID = '$clusterID')");
 
 		return db::get();
@@ -279,6 +280,7 @@ class Request extends \Origami
 				"article.update"=>"Article Update",
 				"activity.add"=>"New Activity",
 				"activity.update"=>"Activity Update",
+				"activity.delete"=>"Activity Delete",
 				"video.add"=>"New Video",
 				"video.update"=>"Update Video",
 				"forum_category.add"=>"New Forum Category",
@@ -309,6 +311,7 @@ class Request extends \Origami
 				"siteID"=>$siteID,
 				"siteRequestStatus"=>0
 						));
+		//db::where("siteRequestStatus IN (0, 5)");
 		db::join("user_profile","user_profile.userID = site_request.siteRequestCreatedUser");
 		db::order_by("siteRequestUpdatedDate","desc");
 		db::order_by("siteRequestID","desc");
@@ -407,11 +410,16 @@ class Request extends \Origami
 			case "article.update":
 			db::where("articleID",$row['siteRequestRefID'])->update("article",$data);
 			break;
+
+			# activity
 			case "activity.add":
 			db::where("activityID",$row['siteRequestRefID'])->update("activity",Array('activityApprovalStatus'=>1));
 			break;
 			case "activity.update":
 			model::load("activity/activity")->_updateActivity($row['activityID'],$row['activityType'],$data);
+			break;
+			case "activity.delete":
+			db::where("activityID",$row['siteRequestRefID'])->update("activity",Array('activityApprovalStatus'=>2));
 			break;
 
 			## video
@@ -450,6 +458,9 @@ class Request extends \Origami
 			break;
 			case "activity.add":
 			db::where("activityID",$row['activityID'])->update("activity",Array("activityApprovalStatus"=>2));
+			break;
+			case "activity.delete":
+			db::where("activityID",$row['activityID'])->update("activity",Array("activityApprovalStatus"=>1));
 			break;
 			case "video.add":
 			db::where("videoID",$row['videoID'])->update("video",Array("videoApprovalStatus"=>2));

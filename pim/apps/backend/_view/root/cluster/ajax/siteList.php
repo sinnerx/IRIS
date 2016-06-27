@@ -23,7 +23,9 @@
 </style>
 <section class='panel panel-default'>
 	<div class='panel-heading'>
-	<h4><?php echo $clusterName;?> : List of site</h4>
+		<h4><?php echo $clusterName;?> : List of site
+		<a style='font-size:1.5em;opacity:0.5;' href='javascript:cluster.hideSiteList();' class='i i-cross2 pull-right'></a>
+		</h4>
 	</div>
 	<div class='panel-body' id='site-add'>
 	<p>

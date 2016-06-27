@@ -59,7 +59,7 @@
 		view::render("clusterlead/request/ajax/detail_announcement.add",Array("row"=>$row_request));
 	}
 	## new activity : render clusterlead/request/ajax/detail_activityadd
-	else if($type == "activity.add")
+	else if($type == "activity.add" || $type == "activity.delete")
 	{
 		view::render("clusterlead/request/ajax/detail_activity.add",Array("row"=>$row_request,"activityDate"=>$activityDate));
 	}
