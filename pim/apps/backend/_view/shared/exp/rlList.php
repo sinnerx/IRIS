@@ -41,6 +41,9 @@ var rlList = new function()
 
   this.updateFilter = function()
   {
+    $("#site_id").val('');
+    $("#site_name").val('');
+    
     var filter = {
       status : $('#status').val(),
       month : $('#month').val(),

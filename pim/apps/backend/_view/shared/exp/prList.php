@@ -32,7 +32,10 @@ var prList = new function()
 
   this.updateFilter = function()
   {
-    var filter = {
+    $("#site_id").val('');
+    $("#site_name").val('');
+
+    var filter = {    
       status : $('#status').val(),
       month : $('#month').val(),
       year : $('#year').val(),
