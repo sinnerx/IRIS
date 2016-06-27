@@ -1,3 +1,5 @@
+<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 <style type="text/css">
   
   label {
@@ -33,7 +35,10 @@ var prList = new function()
     var filter = {
       status : $('#status').val(),
       month : $('#month').val(),
-      year : $('#year').val()
+      year : $('#year').val(),
+      cluster : $('#cluster').val(),
+      site : $("#site_id").val(),
+      siteName : $("#site_name").val(),
     };
 
     pim.redirect('exp/prList', filter);
@@ -56,11 +61,67 @@ var prList = new function()
           </header>
           <div class="row wrapper">
             Filter : 
+            <?php if (user()->isOperationManager() || user()->isRoot()): ?>
+            <?php echo form::select('cluster', model::load('site/cluster')->listsForDropDown(), 'onchange="prList.updateFilter();" class="form-control"', $cluster, false);?>
+            <?php echo form::text("site_name","class='form-control'", $siteName);?>
+            <?php echo form::hidden("site_id","class='form-control'");?>
+
+            <script type="text/javascript">
+            var tempfieldName;
+            var tempfieldID;
+            //console.log('abc');
+             tempfieldName  = $("#site_name" );
+             tempfieldID  = $("#site_id" );
+             //console.log(tempfieldName);
+            $(document).ready(function() {
+              tempfieldName.width(200);
+              tempfieldName.autocomplete({
+                    source: "/digitalgaia/iris/dashboard/report/get_site", // path to the get_user method
+                    select: function (event, ui){
+                      event.preventDefault();
+                      //console.log(ui.item.value);
+
+                      tempfieldName.val(ui.item.label);
+                      //PK.render(ui.item.value);
+                      //console.log(ui.item.value);
+                      tempfieldID.val(ui.item.value);
+
+                      
+                      if(ui.item.label == '')
+                          $("#site_id").val('')
+
+                      prList.updateFilter();
+                      //console.log(tempfieldID.val());
+                      //alert($("#siteid").val());
+                      //alert(tempfieldID.val());
+                      //$("#siteid").val();
+                    }
+
+                });
+
+                tempfieldName.change(function(){
+                    if(tempfieldName.val().length == 0){
+                      tempfieldID.val('');
+                    }
+                  }); 
+
+                tempfieldName.keypress(function(e) {
+                    if(e.which == 13) {
+                        //alert('You pressed enter!');
+                        prList.updateFilter();
+                    }
+                }); 
+                
+                //$(this).data('ui-autocomplete')._trigger('site_name', 'autocompleteselect', {item:{value:$(this).val()}});                    
+            });
+            </script> 
+          <?php endif;?>
             <?php if(!user()->isFinancialController()):?>
             <?php echo form::select('status', array('pending' => 'Pending', 'closed' => 'Closed', 'all' => 'All'), 'onchange="prList.updateFilter(this.value);" class="form-control"', $status, false);?>
             <?php endif;?>
             <?php echo form::select('month', model::load('helper')->monthYear('month'), 'onchange="prList.updateFilter();" class="form-control"', $month, false);?>
             <?php echo form::select('year', model::load('helper')->monthYear('year'), 'onchange="prList.updateFilter();" class="form-control"', $year, false);?>
+            
           <?php if (user()->isManager()) { ?>
             <a href='<?php echo url::base("exp/prAdd");?>' class='btn btn-primary pull-right'><span class='fa fa-plus'></span> Add New Purchase Requisition</a>     
           <?php } ?>

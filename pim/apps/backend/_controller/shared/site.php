@@ -431,6 +431,7 @@ Class Controller_Site
 	# view/add article
 	public function article($page = 1)
 	{
+		
 		$site		= model::load("site/site");
 		$siteArticle	= model::load("blog/article");
 
