@@ -84,7 +84,9 @@ class Report
 	public function getMasterListing($dateStart,$dateEnd)
 	{
 		## select all site.
-		$siteR = db::select("siteID,stateID,siteName")->get("site")->result("siteID");
+		$siteR = db::select("*")
+		->innerJoin('site_info', 'site_info.siteID = site.siteID')
+		->get("site")->result("siteID");
 
 		## total registered member.
 		db::select("userID,siteID");
@@ -114,6 +116,8 @@ class Report
 											"siteName"=>$row['siteName'],
 											"stateName"=>$stateR[$row['stateID']]
 														);
+
+			$data['siteInfo'][$siteID] = $row;
 
 			## initiate datas.
 			$data['totalActive'][$siteID]	= count($userR);
