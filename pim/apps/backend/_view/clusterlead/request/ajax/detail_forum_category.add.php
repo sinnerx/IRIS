@@ -1,5 +1,5 @@
 <div class='request-info'>
-New Forum Category
+New / Delete Forum Category
 </div>
 <div class='table-responsive'>
 <table class='table'>

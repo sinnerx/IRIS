@@ -1,8 +1,11 @@
 <?php
 namespace model\site;
 use db, session;
-class Slider
+class Slider extends \Origami
 {
+	protected $table = 'site_slider';
+	protected $primary = 'siteSliderID';
+
 	public function getSlider($siteID,$all = true)
 	{
 		db::from("site_slider");
@@ -25,6 +28,7 @@ class Slider
 			db::or_where("siteID",$siteID);*/
 		}
 
+		db::where("siteSliderStatus != 99");
 		db::order_by("siteSliderType DESC, siteSliderID DESC");
 
 		return db::get()->result();
@@ -80,4 +84,11 @@ class Slider
 		db::where("siteSliderID",$id);
 		db::update("site_slider",Array("siteSliderStatus"=>$status));
 	}
+
+	public function delete()
+	{
+		$this->siteSliderStatus = 99;
+		$this->save();
+	}
+
 }

@@ -103,7 +103,7 @@ cluster.overview.previewRequestDetail = function(requestID)
 				$approveIcon	= "<a href='javascript:cluster.overview.updateApproval($requestID,1);' class='fa fa-check-square-o'></a>";
 
 				if ($row['siteRequestType'] == "activity.delete" || $row['siteRequestType'] == "announcement.delete"
-					|| $row['siteRequestType'] == "article.delete")
+					|| $row['siteRequestType'] == "article.delete" || $row['siteRequestType'] == "forum_category.delete")
 					$disapproveIcon	= "<a href='javascript:cluster.overview.updateApproval($requestID,2, true);' class='i i-cross2'></a>";
 				else
 					$disapproveIcon	= "<a href='javascript:cluster.overview.updateApproval($requestID,2);' class='i i-cross2'></a>";
