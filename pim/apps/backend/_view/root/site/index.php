@@ -162,7 +162,8 @@ List of all Pi1M sites and related information
 					<!-- <a href='<?php echo url::base("site/toggleActive/".$row['siteID']);?>' class='fa fa-power-off'></a> -->
 					<?php echo $assignIcon;?>
 					<a href='<?php echo url::base("site/edit/".$row['siteID']."");?>' class='fa fa-edit'></a>
-					<a onclick='return confirm("Confirm delete?");' class='fa fa-times' href='delete/<?php echo $row['siteID']; ?>'></a>
+					<!--<a onclick='return confirm("Confirm delete?");' class='fa fa-times' href='delete/<?php echo $row['siteID']; ?>'></a>-->
+					<a onclick='return confirm("Confirm delete?");' class='fa fa-times' href='<?php echo url::base("site/delete/".$row['siteID']."");?>'></a>
 				</td>
 			</tr>
 			<?php
