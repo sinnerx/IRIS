@@ -10,8 +10,10 @@ class Controller_Ajax_Gallery
 
 	public function photoUpload($siteAlbumID = 0)
 	{
-		if(form::submitted())
-		{
+		//if(form::submitted())
+		//{
+
+
 			$file	= input::file("photoName");
 
 			## checking-checkinggg
@@ -31,7 +33,60 @@ class Controller_Ajax_Gallery
 			$imgUrl	= model::load("image/services")->getPhotoUrl($path);
 
 			echo "<script type='text/javascript'>parent.pimgallery.photopicker.setNewPhotoUrl('$imgUrl','$path')</script>";
-		}
+		//}
+	}
+
+	public function uploadPhoto($siteAlbumID){
+		//if(form::submitted())
+		//{
+		//echo "string";
+			//var_dump( input::get());
+			//die;
+			$file			= input::file("photoName");
+			//$file = input::get("uploadPic");
+
+			$photoUpload = false;
+
+			## checking-checkinggg
+			$photoUpload	= !$file?"Please choose a photo":false;
+
+			// size cannot be bigger than.
+			if(!$photoUpload && $file->get('size') > $data['maxSize'])
+				$photoUpload = 'File size cannot be bigger than '.($data['maxSize']/1000000).'mb';
+
+			$photoUpload	= !$photoUpload?(!$file->isExt("jpg,jpeg,png")?"Please choose the right photo":false):$photoUpload;
+
+			## no photo uploaded.
+			if($photoUpload)
+			{
+				input::repopulate();
+				//redirect::to("",$photoUpload,"error");
+			}
+
+			## win.
+			# upload.
+			$imagePhoto	= model::load("image/photo");
+
+			## add photo to db.
+			$path	= $imagePhoto->addSitePhoto($siteAlbumID,$file->get("name"),input::get("photoDescription"));
+
+			## update cover photo if they aint exists yet.
+			if(!$data['row']['albumCoverImageName'])
+			{
+				## update cover photo.
+				model::load("image/album")->updateCoverPhoto($data['row']['albumID'],$path);
+			}
+
+			## move uploaded file.
+			$upload	= $file->move(model::load("image/services")->getPhotoPath($path));
+
+			if(!$upload)
+			{
+				var_dump($upload);die();
+			}
+
+			//redirect::to("image/albumPhotos/$siteAlbumID#");
+		//}
 	}
 
 	public function photoList($siteAlbumID = 0,$page = 1)

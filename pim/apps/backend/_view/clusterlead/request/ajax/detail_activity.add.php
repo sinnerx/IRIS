@@ -1,6 +1,13 @@
+<?php
+$activityID = $row['activityID'];
+$activityEditUrl = url::base("cluster/edit/".$activityID);
+?>
 <div class='request-info'>
 	New Activity : <u><?php echo $row['activityName'];?></u>
 </div>
+<script>
+$( "#btnPanel" ).append( "<a href='<?php echo $activityEditUrl;?>' class='btn-approval pull-right fa fa-pencil-square-o'></a>" );
+</script>
 <div class='row'>
 	<div class='col-sm-12'>
 		<div class='table-responsive'>
