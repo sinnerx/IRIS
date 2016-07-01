@@ -439,7 +439,7 @@ class Controller_Report
 
 	    $percentKPIMCMC = round($sumQuarterHours / $sumKPIMCMC * 100);
 	    $percentKPINTSB = round($sumQuarterHours / $sumKPINTSB * 100);
-		$pdf->Cell($w[0]+$w[1]+$w[2]+$w[3]+w[4],7,'',1,0,'C');
+		$pdf->Cell($w[0]+$w[1]+$w[2]+$w[3]+$w[4],7,'',1,0,'C');
 		$pdf->Cell($w[4],7,'',1,0,'C');
 	    $pdf->Cell($w[5],7,$percentKPIMCMC. '%',1,0,'C');
 	    $pdf->Cell($w[6],7,$percentKPINTSB. '%',1,0,'C');
@@ -838,13 +838,15 @@ class Controller_Report
 		$no = 0;
 		foreach($data['siteData'] as $siteID=>$row)
 		{
+			$siteInfo = $data['siteInfo'][$siteID];
+
 			$no++;
 			$cellData = Array(
 					"no"=>$no,
 					"RO"=>"",
 					"state"=>$row['stateName'],
-					"district"=>"",
-					"ust"=>"",
+					"district"=>$siteInfo['siteInfoDistrict'],
+					"ust"=>$siteInfo['siteInfoUst'],
 					"siteName"=>$row['siteName'],
 					"sp"=>"Celcom",
 					"status"=>"On Air",
