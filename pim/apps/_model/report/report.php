@@ -228,6 +228,31 @@ class Report
 
 	public function getQuarterlyReport($siteID = null, $quarter = null){
 		## select all site.
+		$year = 2016;
+		$quarter = 1;
+		switch ($quarter) {
+			case '1':
+				# code...
+				$month = "(1,2,3)";
+				break;
+			case '2':
+				# code...
+				$month = "(4,5,6)";
+				break;			
+			case '3':
+				# code...
+				$month = "(7,8,9)";
+				break;			
+			case '4':
+				# code...
+				$month = "(10,11,12)";
+				break;
+			
+			default:
+				# code...
+				break;
+		}
+
 		$keySite = db::select("siteID,stateID,siteName")->where("siteID", $siteID)->get("site")->result();
 		$keySite = $keySite[0];
 		//var_dump($keySite);
@@ -246,8 +271,8 @@ class Report
 			// db::join("activity_user ", " activity.activityID = activity_user.activityID");
 			db::select("*, DATE(activityStartDate) as startDate");
 			db::where("activityType",2);
-			db::where("YEAR(activityStartDate) ", "2016");
-			db::where("MONTH(activityStartDate) IN ", "(1,2,3)");
+			db::where("YEAR(activityStartDate) ", $year);
+			db::where("MONTH(activityStartDate) IN ", $month);
 
 			db::where("activity.siteID",$keySite['siteID']);
 
@@ -309,8 +334,8 @@ class Report
 			## select event only
 			db::select("*, DATE(activityStartDate) as startDate");
 			db::where("activityType",1);
-			db::where("YEAR(activityStartDate) ", 2016);
-			db::where("MONTH(activityStartDate) IN ", "(1,2,3)");			
+			db::where("YEAR(activityStartDate) ", $year);
+			db::where("MONTH(activityStartDate) IN ", $month);			
 			db::where("siteID",$keySite['siteID']);
 			//db::where("year(activityStartDate) = ? AND month(activityStartDate) = ?",Array($year,$month));
 			$eventR		= db::get("activity")->result();		
@@ -370,8 +395,8 @@ class Report
 				
 				db::join("site_photo SP", " SP.siteID = ". $keySite['siteID']);				
 				db::where("photo.photoID = SP.photoID");
-				db::where("YEAR(photo.photoCreatedDate)", "2016");
-				db::where("MONTH(photo.photoCreatedDate) IN ", "(1,2,3)");
+				db::where("YEAR(photo.photoCreatedDate)", $year);
+				db::where("MONTH(photo.photoCreatedDate) IN ", $month);
 				//db::where("photo.photoDescription ", " NOT NULL");
 
 				$album = db::get("photo")->result();
@@ -428,8 +453,8 @@ SUM(billingTransactionItemPrice * billingTransactionItemQuantity) AS revenue");
 			db::join("site S", "S.siteID = BT.siteID");
 			db::where("billingTransactionItemPrice >", 0);
 			db::where("BT.siteID", $keySite['siteID']);
-			db::where("YEAR(billingTransactionDate)", 2016);
-			db::where("MONTH(billingTransactionDate) IN ", "(1,2,3)");
+			db::where("YEAR(billingTransactionDate)", $year);
+			db::where("MONTH(billingTransactionDate) IN ", $month);
 			db::group_by("siteName, yr, mn");
 			$cashflow = db::get("billing_transaction BT")->result();
 			//var_dump($cashflow);
@@ -446,7 +471,7 @@ SUM(billingTransactionItemPrice * billingTransactionItemQuantity) AS revenue");
 COUNT(*) AS members");
 			db::join("site_member SM", "U.userID = SM.userID");
 			db::join("site S", "S.siteID = SM.siteID");
-			db::where("YEAR(userCreatedDate)", 2016);
+			db::where("YEAR(userCreatedDate)", $year);
 			db::where("S.siteID", $keySite['siteID']);
 			db::group_by("siteName, yr, mn");
 			$totalmember = db::get("user U")->result();
@@ -465,7 +490,7 @@ COUNT(DISTINCT billingTransactionUser) AS members");
 			db::join("billing_transaction_user BTU", "BTU.billingTransactionID = BT.billingTransactionID");
 			db::join("site S", "S.siteID = BT.siteID");
 			db::where("BTI.billingItemID", 3);
-			db::where("YEAR(billingTransactionDate)", 2016);
+			db::where("YEAR(billingTransactionDate)", $year);
 			db::where("BT.siteID", $keySite['siteID']);
 			db::group_by("siteName, yr, mn");
 			$usagetotal = db::get("billing_transaction BT")->result();
@@ -483,7 +508,7 @@ SUM(billingTransactionItemQuantity) AS hours");
 			db::join("billing_transaction_item BTI", "BTI.billingTransactionID = BT.billingTransactionID");
 			db::join("site S", "S.siteID = BT.siteID");
 			db::where("BTI.billingItemID", 3);
-			db::where("YEAR(billingTransactionDate)", 2016);
+			db::where("YEAR(billingTransactionDate)", $year);
 			db::group_by("siteName, yr, mn");
 			$usagehour  = db::get("billing_transaction BT")->result();
 			//var_dump($usagehour);
