@@ -1476,3 +1476,4 @@ class Controller_Report
 }
 
 ?>
+ No newline at end of file
