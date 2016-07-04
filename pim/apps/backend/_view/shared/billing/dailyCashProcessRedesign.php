@@ -8,6 +8,96 @@
 		$('.row').floatingScrollbar();
 
 		// table.toggleExpand();
+
+		// show hide column
+		$('.showhidecol').click(function(){
+
+			//change color button
+			$(this).toggleClass( 'btn-warning', 'add' );
+
+			var row  = $(this).data('row');
+			var col  = $(this).data('col');
+
+			// separate col data
+			eachCol = col.split(",");
+
+			// row 1
+			// split column data
+			var colData1 = eachCol[0].split(":"); // eg: 2:4 / 2 - start / 4 - end
+			
+			// if only 1 column
+			if (colData1[1] == 1) {
+				$('.custom-table tr:nth-child(1) th:nth-child('+colData1[0]+')').toggle();
+			} else {
+				var colEnd1 = 1+Number(colData1[1]); // eg: 1 + 4 = 5 / Total Loop
+
+				//loop for total column
+				for (var i = colData1[0]; i < colEnd1; i++) {
+					$('.custom-table tr:nth-child(1) th:nth-child('+i+')').toggle();
+				};
+			}
+
+			// row 2
+			// split column data
+			var colData2 = eachCol[1].split(":"); // eg: 2:4 / 2 - start / 4 - end
+
+			// if only 1 column
+			if (colData2[1] == 1) {
+				$('.custom-table tr:nth-child(2) th:nth-child('+colData2[0]+')').toggle();
+			} else {
+				var colEnd2 = 1+Number(colData2[1]); // eg: 1 + 4 = 5 / Total Loop
+
+				//loop for total column
+				for (var i = colData2[0]; i < colEnd2; i++) {
+					$('.custom-table tr:nth-child(2) th:nth-child('+i+')').toggle();
+				};
+			}
+
+			// row 3
+			// split column data
+			var colData3 = eachCol[2].split(":"); // eg: 2:4 / 2 - start / 4 - end
+			
+			// if only 1 column
+			if (colData3[1] == 1) {
+				$('.custom-table tr:nth-child(3) th:nth-child('+colData3[0]+')').toggle();
+			} else {
+				var colEnd3 = 1+Number(colData3[1]); // eg: 1 + 4 = 5 / Total Loop
+
+				//loop for total column
+				for (var i = colData3[0]; i < colEnd3; i++) {
+					$('.custom-table tr:nth-child(3) th:nth-child('+i+')').toggle();
+				};
+			}
+
+			// get all row
+			var rowCount = $('.custom-table tr').length;
+			// minus 7 row
+			// 3 bottom row
+			// 4 top row
+			var totalRow = rowCount - 7;
+
+			// row loop data
+			// loop for total column
+			for (var i = 5; i < 5+totalRow+1; i++) {
+				if (colData3[1] == 1) {
+					$('.custom-table tr:nth-child('+i+') td:nth-child('+colData3[0]+')').toggle();
+				} else {
+					for (var ii = colData3[0]; ii < colEnd3; ii++) {
+						$('.custom-table tr:nth-child('+i+') td:nth-child('+ii+')').toggle();
+						// last row
+						$('.custom-table tr:nth-child('+rowCount+') td:nth-child('+ii+')').toggle();
+					}
+				}
+			};
+
+			// column 4
+			// get all column
+			var colCount = $('.custom-table tr:nth-child(5) td:visible').length;
+			$('#e1').attr('colspan',colCount-2);
+			//alert(colCount-2);
+
+		});
+
 	});
 	
 	
@@ -172,6 +262,25 @@
 		display: none;
 	}
 
+	/* bold left border for th and td */
+	.custom-table tr th, tr td
+	{
+		border-left: 2px solid #ddd;
+		border-right: 2px solid #ddd;
+	}
+
+	/* remove bottom border for td */
+	.custom-table .skip-top
+	{
+		border-top: none !important;
+	}
+
+	.custom-table .skip-border td
+	{
+		border-top: 1px solid #ddd !important;
+		border-bottom: 1px solid #ddd !important;
+	}
+
 </style>
 
 <h3 class='m-b-xs text-black'>
@@ -204,8 +313,18 @@
 			 <?php 
 			  echo $site->siteName; ?> Monthly Cash Report for <?php echo $selectYear; ?>/<?php echo $selectMonth; ?>
 		</div>
+		<div class='well well-sm'>
+			<a href="#" class="btn btn-info btn-xs showhidecol" role="button" data-row="3" data-col="2:1,2:4,2:7">Member</a>
+			<a href="#" class="btn btn-info btn-xs showhidecol" role="button" data-row="3" data-col="3:1,5:9,8:22">PC Day</a>
+			<a href="#" class="btn btn-info btn-xs showhidecol" role="button" data-row="3" data-col="4:1,10:14,23:37" >PC Night</a>
+			<a href="#" class="btn btn-info btn-xs showhidecol" role="button" data-row="3" data-col="5:1,15:17,38:40" >Print</a>
+			<a href="#" class="btn btn-info btn-xs showhidecol" role="button" data-row="3" data-col="6:1,18:1,41:1" >Scan</a>
+			<a href="#" class="btn btn-info btn-xs showhidecol" role="button" data-row="3" data-col="7:1,19:1,42:1" >Laminate</a>
+			<a href="#" class="btn btn-info btn-xs showhidecol" role="button" data-row="3" data-col="8:10,20:22,43:45" >Other</a>
+			<a href="#" class="btn btn-info btn-xs showhidecol" role="button" data-row="3" data-col="11:1,23:24,46:47" >Day End</a>
+		</div>
 		<div class="table-responsive">
-			<table class='table b-t b-light'>
+			<table class='table b-t b-light custom-table'>
 
 				<tr style="background-color:#ededed">	
 					<th></th> 
@@ -220,8 +339,8 @@
 					<th colspan="2">Day End</th>
 				</tr>			
 
-				<tr bgcolor="#ededed">	
-					<th></th> 		
+				<tr bgcolor="#ededed" >	
+					<th class="skip-top"></th> 		
 					<th colspan="2"><a id ="a2" href="#" onclick='table.toggleExpand();' class='fa fa-plus-square pull-right' style='font-size:13px;'></a>Total</th>
 					<th class="billing-column-member" colspan="2">Student</th>	
 					<th class="billing-column-member" colspan="2">Adult</th>
@@ -245,7 +364,7 @@
 				</tr>			
 
 				<tr bgcolor="#ededed">	
-					<th>Day</th> 
+					<th class="skip-top">Day</th> 
 					<th>RM</th> <th>User</th> 
 					<th class="billing-column-member">RM</th> <th class="billing-column-member">User</th>	
 					<th class="billing-column-member">RM</th> <th class="billing-column-member">User</th> 
@@ -266,7 +385,7 @@
 					<th>RM</th>	<th>Utilities</th>	<th>Description </th>	 <th>Total</th>	<th>Balance</th>
 				</tr>
 
-				<tr>					
+				<tr class="skip-border">					
 					<td><?php echo date('d', strtotime($alldate[0]))  ?></td> 
 					<td  id="e1" colspan="45"> Monthly Revenue (Previous Balance) </td>
 					<td><?php echo number_format($balance, 2, '.', '');
@@ -293,7 +412,7 @@ $total = function($val = null)
 			$date = date('Y-m-d', strtotime($date));
 			$no = 0;
 			?>
-			<tr>
+			<tr class="left-td">
 				<td><?php echo date('d', strtotime($date));?></td>
 				<td><?php echo $amount = $float($report[$date]['Membership']['total']); $totals[$no++] += $amount;?></td>
 				<td><?php echo $amount = $total($report[$date]['Membership']['total_users']); $totals[$no++] += $amount;?></td>

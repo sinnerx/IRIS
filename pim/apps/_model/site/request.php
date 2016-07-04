@@ -238,6 +238,7 @@ class Request extends \Origami
 	{
 		db::from("site_request")
 		->where("siteRequestStatus",0)
+		//->where("siteRequestStatus IN (0, 5)")
 		->where("siteID IN (SELECT siteID FROM cluster_site WHERE clusterID = '$clusterID')");
 
 		return db::get();
@@ -275,14 +276,18 @@ class Request extends \Origami
 				"site.update"=>"Site information update",
 				"announcement.add"=>"New site announcement",
 				"announcement.update"=>"Announcement Update",
+				"announcement.delete"=>"Announcement Delete",
 				"article.add"=>"New Article",
 				"article.update"=>"Article Update",
+				"article.delete"=>"Article Delete",
 				"activity.add"=>"New Activity",
 				"activity.update"=>"Activity Update",
+				"activity.delete"=>"Activity Delete",
 				"video.add"=>"New Video",
 				"video.update"=>"Update Video",
 				"forum_category.add"=>"New Forum Category",
-				"forum_category.update"=>"Forum Category Update"
+				"forum_category.update"=>"Forum Category Update",
+				"forum_category.delete"=>"Forum Category Delete"
 						);
 
 		return !$id?$typeR:$typeR[$id];
@@ -309,6 +314,7 @@ class Request extends \Origami
 				"siteID"=>$siteID,
 				"siteRequestStatus"=>0
 						));
+		//db::where("siteRequestStatus IN (0, 5)");
 		db::join("user_profile","user_profile.userID = site_request.siteRequestCreatedUser");
 		db::order_by("siteRequestUpdatedDate","desc");
 		db::order_by("siteRequestID","desc");
@@ -399,6 +405,9 @@ class Request extends \Origami
 			case "announcement.update": 
 			db::where("announcementID",$row['siteRequestRefID'])->update("announcement",$data);
 			break;
+			case "announcement.delete": # new site announcement. 
+			db::where("announcementID",$row['announcementID'])->update("announcement",Array("announcementStatus"=>2)); # reject.
+			break;
 
 			# new site article.
 			case "article.add":  
@@ -407,11 +416,19 @@ class Request extends \Origami
 			case "article.update":
 			db::where("articleID",$row['siteRequestRefID'])->update("article",$data);
 			break;
+			case "article.delete": # new site announcement. 
+			db::where("articleID",$row['articleID'])->update("article",Array("articleStatus"=>2)); # reject.
+			break;
+
+			# activity
 			case "activity.add":
 			db::where("activityID",$row['siteRequestRefID'])->update("activity",Array('activityApprovalStatus'=>1));
 			break;
 			case "activity.update":
 			model::load("activity/activity")->_updateActivity($row['activityID'],$row['activityType'],$data);
+			break;
+			case "activity.delete":
+			db::where("activityID",$row['siteRequestRefID'])->update("activity",Array('activityApprovalStatus'=>2));
 			break;
 
 			## video
@@ -429,6 +446,9 @@ class Request extends \Origami
 			case "forum_category.update":
 			db::where("forumCategoryID",$row['siteRequestRefID'])->update("forum_category",$data);
 			break;
+			case "forum_category.delete":
+			db::where("forumCategoryID",$row['siteRequestRefID'])->update("forum_category",Array("forumCategoryApprovalStatus"=>2));
+			break;
 		}
 	}
 
@@ -445,17 +465,33 @@ class Request extends \Origami
 			case "announcement.add": ## set announcementStatus to 2.
 			db::where("announcementID",$row['announcementID'])->update("announcement",Array("announcementStatus"=>2));
 			break;
+			case "announcement.delete": ## set announcementStatus to 2.
+			db::where("announcementID",$row['announcementID'])->update("announcement",Array("announcementStatus"=>1));
+			break;
+
 			case "article.add":
 			db::where("articleID",$row['articleID'])->update("article",Array("articleStatus"=>2));
 			break;
+			case "article.delete":
+			db::where("articleID",$row['articleID'])->update("article",Array("articleStatus"=>1));
+			break;
+
 			case "activity.add":
 			db::where("activityID",$row['activityID'])->update("activity",Array("activityApprovalStatus"=>2));
 			break;
+			case "activity.delete":
+			db::where("activityID",$row['activityID'])->update("activity",Array("activityApprovalStatus"=>1));
+			break;
+
 			case "video.add":
 			db::where("videoID",$row['videoID'])->update("video",Array("videoApprovalStatus"=>2));
 			break;
+
 			case "forum_category.add":
 			db::where('forumCategoryID',$row['forumCategoryID'])->update("forum_category",Array("forumCategoryApprovalStatus"=>2));
+			break;
+			case "forum_category.delete":
+			db::where('forumCategoryID',$row['forumCategoryID'])->update("forum_category",Array("forumCategoryApprovalStatus"=>1));
 			break;
 		}
 	}

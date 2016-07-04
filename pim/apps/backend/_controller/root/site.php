@@ -14,6 +14,7 @@ class Controller_Site
 
 		## 1. paginate to list
 		db::from("site");
+		db::where("siteStatus", 1);
 
 		## if got _GET[state]
 		if(request::get("state"))
@@ -311,6 +312,14 @@ class Controller_Site
 
 			redirect::to("","Cluster : ".input::get("cluster")." Added");
 		}
+	}
+
+	public function delete($siteID)
+	{
+		$site = model::load("site/site");
+		$site->deleteSite($siteID);
+
+		redirect::to("site/index","Site id " . $siteID . " deleted.");
 	}
 }
 

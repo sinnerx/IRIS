@@ -3,6 +3,7 @@ Class Controller_Site
 {
 	public function overview($year = null, $month = null)
 	{
+
 		$siteID = site()->siteID;
 
 		$data['year'] = $year = $year ? : date('Y');
@@ -84,12 +85,19 @@ Class Controller_Site
 
 		$hours = floor($time / 3600);
 
+		if ($totalMembers == 0) {
+			$active_member_percentage = 0;
+		} else {
+			$active_member_percentage = $activeMembers / $totalMembers * 100;			
+		}
+
 		$data['kpi'] = array(
 			'event' => $totalEvents,
 			'entrepreneurship_class' => $totalEntrepreneurship,
 			'entrepreneurship_sales' => $sales,
 			'training_hours' => $hours,
-			'active_member_percentage' => $activeMembers / $totalMembers * 100
+			//'active_member_percentage' => $activeMembers / $totalMembers * 100
+			'active_member_percentage' => $active_member_percentage
 			);
 
 		return view::render('sitemanager/site/overview', $data);

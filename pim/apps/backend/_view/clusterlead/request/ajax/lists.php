@@ -101,7 +101,12 @@ cluster.overview.previewRequestDetail = function(requestID)
 
 				$previewIcon	= "<a href='javascript:cluster.overview.previewRequestDetail($requestID);'  data-toggle='tooltip' data-placement='bottom' data-original-title='Preview update detail' class='fa fa-search'></a>";
 				$approveIcon	= "<a href='javascript:cluster.overview.updateApproval($requestID,1);' class='fa fa-check-square-o'></a>";
-				$disapproveIcon	= "<a href='javascript:cluster.overview.updateApproval($requestID,2);' class='i i-cross2'></a>";
+
+				if ($row['siteRequestType'] == "activity.delete" || $row['siteRequestType'] == "announcement.delete"
+					|| $row['siteRequestType'] == "article.delete" || $row['siteRequestType'] == "forum_category.delete")
+					$disapproveIcon	= "<a href='javascript:cluster.overview.updateApproval($requestID,2, true);' class='i i-cross2'></a>";
+				else
+					$disapproveIcon	= "<a href='javascript:cluster.overview.updateApproval($requestID,2);' class='i i-cross2'></a>";
 
 				$urlCorrection	= url::base("ajax/request/correctionDetail/".$requestID);
 				$correctionText = isset($totalCorrection[$requestID])?"And has previously done ".count($totalCorrection[$requestID])." corrections.":"";

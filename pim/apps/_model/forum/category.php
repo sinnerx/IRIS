@@ -10,8 +10,11 @@ thread_category:
 	forumCategoryDescription [text]
 	forumCategoryCreatedUser [int]
 	forumCategoryCreatedDate [datetime]*/
-class Category
+class Category extends \Origami
 {
+	protected $table = 'forum_category';
+	protected $primary = 'forumCategoryID';
+
 	public function create($siteID,$title,$access,$description = null,$parentID = 0)
 	{
 		## slug-and-slug.
@@ -53,6 +56,7 @@ class Category
 				db::where($key,$val);
 			}
 		}
+		db::where("forumCategoryApprovalStatus != 99");
 
 		return db::where('siteID',$siteID)->get("forum_category")->result("forumCategoryID");
 	}
@@ -140,6 +144,49 @@ class Category
 
 		return $no?$accessR[$no]:$accessR;
 	}
+
+	public function delete()
+	{
+		if($this->forumCategoryApprovalStatus == 1) {
+			model::load("site/request")->create("forum_category.delete",$this->siteID,$this->forumCategoryID,Array());
+
+			$this->forumCategoryApprovalStatus = 5;
+			$this->save();
+
+			return;
+		}
+
+		// delete related site_request for activity.add, if the current approval status is 0
+		if($this->forumCategoryApprovalStatus == 0)
+		{
+			$siteRequest = model::orm('site/request')
+			->where('siteRequestRefID', $this->forumCategoryID)
+			->where('siteRequestType', 'forum_category.add')
+			->order_by("siteRequestID","desc")
+			->execute();
+
+			$siteRequest->getFirst()->delete();
+		}
+
+		$this->forumCategoryApprovalStatus = 99;
+		$this->save();
+	}
+
+	public function undelete()
+	{
+		// delete related site_request for activity.add, if the current approval status is 0
+		$siteRequest = model::orm('site/request')
+		->where('siteRequestRefID', $this->forumCategoryID)
+		->where('siteRequestType', 'forum_category.delete')
+		->order_by("siteRequestID","desc")
+		->execute();
+
+		$siteRequest->getFirst()->delete();
+
+		$this->forumCategoryApprovalStatus = 1;
+		$this->save();
+	}
+
 }
 
 

@@ -136,6 +136,17 @@ class album
 		return $siteAlbumID;
 	}
 
+	public function addActivityAlbumOnly($siteAlbumID, $activityID){
+		db::insert("activity_album",Array(
+							"activityID"=>$activityID,
+							"siteAlbumID"=>$siteAlbumID,
+							"activityAlbumCreatedDate"=>now(),
+							"activityAlbumCreatedUser"=>session::get("userID")
+										));
+
+		return $siteAlbumID;		
+	}
+
 	## list all sites allbum.
 	public function getSiteAlbums($siteID,$year = null,$month = null)
 	{

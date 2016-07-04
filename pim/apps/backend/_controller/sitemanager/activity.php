@@ -218,13 +218,33 @@ class Controller_Activity
 		$pages = array(1 => 'event', 2 => 'training');
 		
 		// if has already been approved.
-		if($activity->activityApprovalStatus == 1)
-			redirect::to('activity/'.$pages[$type], 'Unable to delete an already approved activity.', 'error');
+		//if($activity->activityApprovalStatus == 1)
+		//	redirect::to('activity/'.$pages[$type], 'Unable to delete an already approved activity.', 'error');
 		
 		// delete.
 		$activity->delete();
 
 		redirect::to('activity/'.$pages[$type], 'Activity \''.$name.'\' has been deleted.');
+	}
+
+	public function undelete($id)
+	{
+		// db::where('activityID', $id)->update('activity', array('activityDeleted', 1));
+		$activity = model::orm('activity/activity')->find($id);
+
+		// save this record first.
+		$type = $activity->activityType;
+		$name = $activity->activityName;
+		$pages = array(1 => 'event', 2 => 'training');
+		
+		// if has already been approved.
+		//if($activity->activityApprovalStatus == 1)
+		//	redirect::to('activity/'.$pages[$type], 'Unable to delete an already approved activity.', 'error');
+		
+		// delete.
+		$activity->undelete();
+
+		redirect::to('activity/'.$pages[$type], 'Activity \''.$name.'\' deletion has been cancelled.');
 	}
 
 	public function event($page = 1)

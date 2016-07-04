@@ -13,6 +13,8 @@ class Icon
 		$arr[2] = "<span {title} class='fa fa-stop' title='Rejected' style='color:red;'></span>";
 		$arr[3] = "<span {title} class='fa fa-stop' title='As draft' style='color:yellow;'></span>";
 		$arr[4] = "<span {title} class='fa fa-stop' title='Pending' style='color:blue;'></span>";
+		$arr[5] = "<span {title} class='fa fa-stop' title='Pending Delete' style='color:orange;'></span>";
+		$arr[6] = "<span {title} class='fa fa-stop' title='Deleted' style='color:red;'></span>";
 
 		return str_replace('{title}',$title,$arr[$no]);
 	}

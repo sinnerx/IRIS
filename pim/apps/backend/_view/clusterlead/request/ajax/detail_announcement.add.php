@@ -1,5 +1,5 @@
 <div class='request-info'>
-New Site Announcement
+New / Delete Site Announcement
 </div>
 <div class='table-responsive'>
 <table class='table'>

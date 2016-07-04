@@ -1,5 +1,5 @@
 <div class='request-info'>
-	New Activity : <u><?php echo $row['activityName'];?></u>
+	New / Delete Activity : <u><?php echo $row['activityName'];?></u>
 </div>
 <div class='row'>
 	<div class='col-sm-12'>
