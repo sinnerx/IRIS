@@ -1,7 +1,5 @@
-
 <script type="text/javascript">
-
-
+	
 var album	= new function()
 {
 	this.albumID	= <?php echo $row['siteAlbumID'];?>;
@@ -55,28 +53,6 @@ var album	= new function()
 				album.cancelEditDescription();
 			}
 		});
-	}
-
-	this.submitPhoto = function()
-	{
-		var data = $("#photoName").val();
-		//var data = {albumDescription:desc};
-		$.ajax({type:"POST",data:data,url:pim.base_url+"ajax/gallery/photoUpload/"+this.albumID}).done(function()
-		{
-			console.log(data);
-			console.log('success');
-			/*
-			if(desc)
-			{
-				var desc = $.parseJSON(desc);
-
-				//update both span, and textarea.
-				$("#albumDescription_editor textarea").val(desc[0]);
-				$("#albumDescription").html(desc[1]);
-				album.cancelEditDescription();
-			}*/
-		});
-	
 	}
 
 	this.cancelEditDescription = function()
@@ -244,9 +220,8 @@ var album	= new function()
 }
 
 </script>
-
 <style type="text/css">
-
+	
 .panel
 {
 	padding:0px;
@@ -441,28 +416,25 @@ var album	= new function()
 	<div class='col-sm-6'>
 	<div id='photo-add-form' style='display:none;'>
 		<div class='well well-sm'>
-		Please upload only jpg, jpeg, png or bmp. Maximum size limit is <?php echo $maxSize/1000000;?>mb. Wrong upload will not be tolerated and results to a ban.
+		Please upload only jpg, jpeg, png or bmp. Maximum size limit is <?php echo $maxSize/1000000;?>mb. Wrong upload will not be toleranted and results to a ban.
 		</div>
 		<?php echo flash::data();?>
 		<div class='row'>
-		
-		<form method='post' id='uploadForm' enctype="multipart/form-data">
+		<form method='post' enctype="multipart/form-data">
 			<div class='col-sm-6'>
 				<div class='form-group'>
 					<label>Select Photo</label>
-					<?php echo form::fileImage("photoName",/*"multi with-preview",*/"multiple");?>
+					<?php echo form::file("photoName","multiple");?>
 				</div>
-<!--
+
 				<div class='form-group'>
 					<label>Description (optional)</label>
-					<?php //echo form::textarea("photoDescription","class='form-control'");?>
-				</div>-->
+					<?php echo form::textarea("photoDescription","class='form-control'");?>
+				</div>
 				<input type='submit' class='btn btn-primary' />
 				<input type='button' value='Cancel' onclick='javascript:album.addPhotoCancel();' class='btn btn-default' />
 			</div>
-		</form><!--
-		<input type='button' value='Test Ajax Upload' onclick='javascript:album.submitPhoto();' class='btn btn-default' />
-		-->
+		</form>
 		</div>
 	</div>
 	<div id='photo-list' style='padding-top:10px;'>
@@ -472,7 +444,7 @@ var album	= new function()
 		</div>
 		<?php else:?>
 		<div class='well well-sm' id='info-box'>
-		List of all the photo for this album. Or you can <a href='javascript:album.addPhoto();'>add</a> more if you want.
+		List of all the photo for ths album. Or you can <a href='javascript:album.addPhoto();'>add</a> more if you want.
 		</div>
 		
 		<div class='row'>
@@ -547,24 +519,3 @@ var album	= new function()
 		</div> 
 	</div>
 </div>
-<script type="text/javascript">
-$(document).ready(function() {
-$("#uploadForm").on('submit',(function(e) {
-e.preventDefault();
-$.ajax({
-url: pim.base_url+"ajax/gallery/uploadPhoto/"+album.albumID, // Url to which the request is send
-type: "POST",             // Type of request to be send, called as method
-data: new FormData(this), // Data sent to server, a set of key/value pairs (i.e. form fields and values)
-contentType: false,       // The content type used when sending data to the server.
-cache: false,             // To unable request pages to be cached
-processData:false,        // To send DOMDocument or non processed data file it is set to false
-success: function(data)   // A function to be called if request succeeds
-{
-console.log('success');
-}
-});
-}));
-});
-</script>
-<script src="//localhost/iris/pim/assets/backend/tools/multifile/jquery.MultiFile.js" type="text/javascript" language="javascript"></script>
-

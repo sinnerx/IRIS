@@ -58,7 +58,7 @@ class Controller_Image
 
 		$data['siteSlug']	= authData("site.siteSlug");
 
-		/*if(form::submitted())
+		if(form::submitted())
 		{
 			$file			= input::file("photoName");
 
@@ -102,8 +102,8 @@ class Controller_Image
 				var_dump($upload);die();
 			}
 
-			//redirect::to("image/albumPhotos/$siteAlbumID#");
-		}*/
+			redirect::to("image/albumPhotos/$siteAlbumID#");
+		}
 
 		view::render("sitemanager/image/albumPhotos",$data);
 	}

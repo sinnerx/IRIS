@@ -7,16 +7,9 @@
 }
 
 </style>
-<?php
-$articleID = $row['articleID'];
-$articleEditUrl = url::base("cluster/editArticle/".$articleID);
-?>
 <div class='request-info'>
 	New Article : <u><?php echo $row['articleName'];?></u>
 </div>
-<script>
-$( "#btnPanel" ).append( "<a href='<?php echo $articleEditUrl;?>' class='btn-approval pull-right fa fa-pencil-square-o'></a>" );
-</script>
 <div class='row'>
 	<div class='col-sm-12'>
 		<div class='table-responsive'>

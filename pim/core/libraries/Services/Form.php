@@ -88,13 +88,6 @@ class Form
 		return "<input type='file' name='$name' id='$name' $attr />";
 	}
 
-	public static function fileImage($name,$class,$attr = null)
-	{
-		$attr		= self::buildAttr($attr);
-		return "<input type='file' name='$name' id='$name' $attr class='$class'/>";
-	}
-
-
 	public static function radio($name,$array = Array(),$attr = null,$value = null,$wrapper = null)
 	{
 		$array		= is_array($array)?$array:Array();

@@ -29,9 +29,7 @@
 </style>
 <div class='row'>
 	<div class='col-sm-12'>
-	<?php 
-    
-	if($comparedR):
+	<?php if($comparedR):
 	$type		= $comparedR[0];
 	$detailR	= $comparedR[1];
 
@@ -48,7 +46,7 @@
 
 	$totalCorrection	= $totalCorrection == 0?"":"<a href='#' title='Previously has done $totalCorrection correction' style='opacity:0.3;' class='btn-approval text-default pull-right fa fa-wrench'></a>";
 
-	echo "<div class='btn-wrapper' id='btnPanel'>$approvalIcon $totalCorrection</div>";
+	echo "<div class='btn-wrapper'>$approvalIcon $totalCorrection</div>";
 	$fieldNameR	= $colNameR[$typeObject];
 	## new page.
 	if($type == 'page.add')
