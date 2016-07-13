@@ -91,6 +91,7 @@ class Controller_Activity
 
 		$data['eventTypeR']		= model::load("activity/event")->type();
 		$data['trainingTypeR']	= model::load("activity/training")->type();
+		$data['trainingSubTypeR']	= model::load("activity/training")->subtype($row['trainingType']);
 		$data['row']			= $row;
 		$row_site				= model::load("access/auth")->getAuthData("site");
 		$data['siteInfoAddress']	= $row_site['siteInfoAddress'];
@@ -126,6 +127,7 @@ class Controller_Activity
 	{
 		$data['eventTypeR']		= model::load("activity/event")->type();
 		$data['trainingTypeR']	= model::load("activity/training")->type();
+		
 		$row_site				= model::load("access/auth")->getAuthData("site");
 		$data['siteInfoAddress']	= $row_site['siteInfoAddress'];
 		$data['learningPackage'] = model::load("activity/learning")->package();
@@ -170,7 +172,7 @@ class Controller_Activity
 			$data['activityDateTime']		= $datetime['timeList'];
 
 			## win.
-			model::load("activity/activity")->addActivity($row_site['siteID'],input::get("activityType"),$data, input::get("learningSelect"));
+			model::load("activity/activity")->addActivity($row_site['siteID'],input::get("activityType"),$data, input::get("learningSelect"), input::get("activitySubType"));
 
 			redirect::to("","New activity has been submitted, and is pending for cluster lead approval.");
 		}

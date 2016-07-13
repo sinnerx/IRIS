@@ -1,6 +1,6 @@
 <?php
 //use Knp\Snappy\Pdf;
-require_once(getcwd().'/pim/apps/_library/fpdf181/fpdf.php');
+//require_once(getcwd().'/pim/apps/_library/fpdf181/fpdf.php');
 
 
 class Controller_Report
@@ -1035,7 +1035,7 @@ class Controller_Report
 		db::select("siteID");
 		db::order_by("siteID", "ASC");
 		db::where("siteID", 1);
-		//db::limit(30, 1);
+		//db::limit(11, 120);
 		$allsite = db::get("site")->result('siteID');
 		//var_dump($allsite);
 		//die;
@@ -1069,6 +1069,7 @@ class Controller_Report
 			/* Note: any element you append to a document must reside inside of a Section. */
 			$section = $phpWord->addSection(array('orientation' => 'landscape'));
 			$section->addText(htmlspecialchars("PI1M Quarterly Report for MCMC"), 'rStyle', 'pStyle');			
+			$section->addText(htmlspecialchars("(APRIL - JUNE 2016)"), 'rStyle', 'pStyle');			
 
 				//var_dump($siteKey);
 				//die;
@@ -1288,6 +1289,7 @@ class Controller_Report
 			$table->addRow(900);
 			$table->addCell($widthTraining, $styleCell)->addText(htmlspecialchars('Date'), $fontStyle);
 			$table->addCell($widthTraining, $styleCell)->addText(htmlspecialchars('Title'), $fontStyle);
+			//$table->addCell($widthTraining, $styleCell)->addText(htmlspecialchars('Type'), $fontStyle);
 			$table->addCell($widthTraining, $styleCell)->addText(htmlspecialchars('Details'), $fontStyle);
 			$table->addCell($widthTraining, $styleCell)->addText(htmlspecialchars('Duration (Hours)'), $fontStyle);			
 			$table->addCell($widthTraining, $styleCell)->addText(htmlspecialchars('Attendees'), $fontStyle);			
@@ -1298,6 +1300,7 @@ class Controller_Report
 						$table->addRow();
 					    $table->addCell($widthTraining)->addText(htmlspecialchars($keyTraining['startDate']));
 					    $table->addCell($widthTraining+200)->addText(htmlspecialchars($keyTraining['activityName']));
+					    //$table->addCell($widthTraining+200)->addText(htmlspecialchars(''));
 					    $desc = strlen($keyTraining['activityDescription']) > 200 ? substr($keyTraining['activityDescription'],0,200)."..." : $keyTraining['activityDescription'];
 					    $table->addCell($widthTraining+500)->addText(htmlspecialchars($desc));
 					    $table->addCell($widthTraining)->addText(htmlspecialchars($keyTraining['HourTraining']));
@@ -1351,11 +1354,19 @@ class Controller_Report
 					//var_dump(url::asset() . "/frontend/images/photo/" .$keyAlbum);
 					//var_dump($keyAlbum);
 
-					$image = url::asset() . "/frontend/images/photo/" .$keyAlbum['albumCoverImageName'];
-					$image = model::load("image/services")->getResizedPhoto($image);
+					$imagetmp = url::asset() . 
+					"/frontend/images/photo/" .$keyAlbum['albumCoverImageName'];
+					//var_dump($imagetmp);
+					//die;
+
+					$baseUrl	= url::getProtocol().apps::config("base_url:frontend");
+					//var_dump($baseUrl);
+					//die;
+					$image = $baseUrl."/api/photo/small/". $keyAlbum['albumCoverImageName']. "";					
+					//$image = model::load("image/services")->getResizedPhoto($keyAlbum['albumCoverImageName']);
 					//var_dump(url::asset() . "/frontend/images/photo/" .$keyAlbum);
 					//die;
-					//var_dump($keyAlbum);
+					//var_dump($image);
 					//die;
 					# code...http://localhost/digitalgaia/iris/pim/assets/frontend/images/photo/2015/08/17/congkak.jpg
 					//if($keyAlbum && file_exists($image)){
@@ -1450,7 +1461,7 @@ class Controller_Report
 		$folderpath = path::files('reportGeneration/QuarterActivities/tmp/');
 		$path = opendir($folderpath);
 
-		$zipfilename = 'QUARTERLY ACTIVITES REPORT 2016 Jan-March' .'.zip';
+		$zipfilename = 'QUARTERLY ACTIVITES REPORT 2016 April-June' .'.zip';
 		$zippath = path::files('reportGeneration/QuarterActivities/'.$zipfilename);
 
 		$myzip = new ZipArchive;

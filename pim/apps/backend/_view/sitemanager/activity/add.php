@@ -4,6 +4,22 @@
 var activity	= function()
 {
 
+	this.showSubType = function(typeid){
+		$.ajax({
+			url: pim.base_url + "ajax/activity/getTrainingSubType/" + typeid, success: function (result){
+				result = $.parseJSON(result);
+				console.log(result);
+				$('#trainingSubType').empty();
+				 $.each(result, function(i, value) {  
+				  	$('<option></option>', {html:this.type_name}).attr('value', this.type_id).appendTo('#trainingSubType');
+					//$('#trainingType select').val(this.typeid);
+				});
+
+				$('#subtypediv').show();
+			}
+		});
+	}
+
 	this.showPackage = function(yesno){
 		var y = yesno;
 
@@ -34,6 +50,8 @@ var activity	= function()
 				});
 
 				$('#typediv').show();
+				$('#subtypediv').hide();
+				$('#trainingSubType').empty();
 			}
 		});
 			
@@ -60,9 +78,13 @@ var activity	= function()
 					$('#activityDescription').text(this.description);
 					$('#activityName').val(this.name);
 					//$('#trainingType select').val(this.typeid);
+					activity.showSubType(this.type_id);
 				});
 
 				$('#typediv').show();
+				$('#subtypediv').show();
+
+
 			}
 		});
 	}	
@@ -717,7 +739,7 @@ Add an activity to your site. All new activities will not be published until the
 					</div>
 					<div class='panel-body'>
 						<div class='form-group'>
-							<label>Is it training for LMS ? <?php echo flash::data("learningSelect");?></label>
+							<label>Is it training from LMS ? <?php echo flash::data("learningSelect");?></label>
 							<?php echo form::select("learningSelect",Array(1=>"No",2=>"Yes"),"onchange='activity.showPackage(this.value);' class='form-control'");?>						
 						</div>
 						<div class='form-group' id="packagediv" style="display:none">
@@ -732,8 +754,12 @@ Add an activity to your site. All new activities will not be published until the
 						</div>						
 						<div class='form-group' id="typediv">
 							<label>Training Type <?php echo flash::data("trainingType");?></label>
-							<?php echo form::select("trainingType",$trainingTypeR,"class='form-control'",null);?>
+							<?php echo form::select("trainingType",$trainingTypeR,"onchange='activity.showSubType(this.value);' class='form-control'",null);?>
 						</div>
+						<div class='form-group' id="subtypediv" style="display:none">
+							<label>Sub Training Type <?php echo flash::data("trainingSubType");?></label>
+							<?php echo form::select("trainingSubType",$trainingSubTypeR,"class='form-control'",null);?>
+						</div>						
 						<div class='form-group'>
 							<label>Max Pax <span style='opacity:0.5;'>(0 for no-limit)</span></label>
 							<?php echo form::text("trainingMaxPax","class='form-control' style='width:70px;'");?>

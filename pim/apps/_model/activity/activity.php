@@ -376,6 +376,7 @@ class Activity extends \Origami
 			db::where("activityID",$activityID);
 			db::update("training",Array(
 						"trainingType"=>$data['trainingType'],
+						"trainingSubType"=>$data['trainingSubType'],
 						"trainingMaxPax"=>$data['trainingMaxPax']
 									));
 
@@ -433,6 +434,7 @@ class Activity extends \Origami
 				$data_training	= Array(
 						"activityID"=>$activityID,
 						"trainingType"=>$data['trainingType'],
+						"trainingSubType"=>$data['trainingSubType'],
 						"trainingMaxPax"=>$data['trainingMaxPax']
 										);
 

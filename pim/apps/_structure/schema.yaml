@@ -181,6 +181,7 @@ training:
 	trainingID [int]
 	activityID [int]
 	trainingType [int]			## 0 is default
+	trainingSubType [int]
 	trainingMaxPax [int]
 
 training_type:
@@ -1207,21 +1208,13 @@ report_fields:
 	report_fieldsName [varchar(100)]
 	report_fieldsIsMandatory [int]
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+training_SubType:
+	trainingSubTypeID [int]
+	trainingSubTypeName [varchar]
+	trainingSubTypeDescription [text]
+	trainingSubTypeStatus [int]	## 0 inactive, 1 = active.
+	trainingSubTypeParent [int]
+	trainingSubTypeCreatedDate [datetime]
+	trainingSubTypeCreatedUser [int]
+	trainingSubTypeUpdatedDate [datetime]
+	trainingSubTypeUpdatedUser[int]
