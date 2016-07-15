@@ -287,6 +287,12 @@ class Report
 			//var_dump($trainingR);
 
 			$hourTraining = 0;
+			$totalHourTraining = 0;
+			$totalAttendeesTraining = 0;
+			$totalDaysEvent = 0;
+			$totalAttendeesEvent = 0;
+			$countTraining = 0;
+			$countEvent = 0;
 			foreach ($trainingR as $keyTraining) {
 				# code...
 				if ($keyTraining['activityID']){
@@ -307,6 +313,7 @@ class Report
 					// }
 					// else{
 					 	$hourTraining = $resultHourTraining[0]['totalhours'];
+					 	$totalHourTraining += $resultHourTraining[0]['totalhours'];
 					// }
 
 						//$tempActivityID = 	$keyTraining['activityID'];
@@ -323,15 +330,18 @@ class Report
 					//var_dump($keyTraining['activityID']);
 					//var_dump($resultAttendees);
 					$arrayActivitiesOnSite['Training'][$keyTraining['activityID']]['attendees'] = $resultAttendees[0]['attendees'];
+					$totalAttendeesTraining += $resultAttendees[0]['attendees'];
 
-					
+					$countTraining++;					
 					//$album = db::lastQuery();
 					//var_dump($album);	
 				}//end if
 
 			}//end-foreach training
 			//$arrayActivitiesOnSite['HourTraining'] = $hourTraining;
-
+			$arrayActivitiesOnSite['totalHourTraining'] = $totalHourTraining;
+			$arrayActivitiesOnSite['totalAttendeesraining'] = $totalAttendeesTraining;
+			$arrayActivitiesOnSite['countTraining'] = $countTraining;
 
 
 
@@ -361,7 +371,7 @@ class Report
 				//die;
 				$dayEvent = $resultDayEvent[0]['totaldays'];
 				$arrayActivitiesOnSite['Event'][$keyEvent['activityID']]['dayEvent'] = $dayEvent;	
-
+				$totalDaysEvent += $dayEvent;
 				// db::select("count(UserID) as attendees");
 				// db::where("activity_user.activityID", $keyEvent['activityID']);
 				// $resultAttendeesEvent = db::get('activity_user')->result();
@@ -370,11 +380,15 @@ class Report
 				// //var_dump($resultAttendeesEvent);
 				// $arrayActivitiesOnSite['Event'][$keyEvent['activityID']]['attendees'] = $resultAttendeesEvent[0]['attendees'];
 				$arrayActivitiesOnSite['Event'][$keyEvent['activityID']]['attendees'] = 0;
+				$totalAttendeesEvent += 0;
 
+				$countEvent++;
 
 			}//end foreach event
 			//$arrayActivitiesOnSite['DayEvent'] = $dayEvent;
-			
+			$arrayActivitiesOnSite['totalDaysEvent'] = $totalDaysEvent;
+			$arrayActivitiesOnSite['totalAttendeesEVent'] = $totalAttendeesEvent;
+			$arrayActivitiesOnSite['countEvent'] = $countEvent;			
 
 
 
@@ -408,10 +422,10 @@ class Report
 				//die;
 				if($album) {
 					//count($album) > 5 ? $countAlbum = 5 : $countAlbum = count($album);
-					if(count($album) < 5)
+					if(count($album) < 16)
 						$random_image = $album;
 					else {
-						$random_keys = array_rand($album, 5);
+						$random_keys = array_rand($album, 16);
 						$random_image = array();
 						foreach ($random_keys as $key) {
 							# code...

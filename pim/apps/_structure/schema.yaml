@@ -670,6 +670,7 @@ report_monthly:
 	reportMonthlyID [int]
 	reportMonthlyMonth [int]
 	reportMonthlyYear [int]
+	reportMonthlyCategory [int]
 	reportMonthlyStatus [int] ## 0 = pending, 1 = completed
 	reportMonthlyStatusState [varchar(20)]
 	reportMonthlyArticleCompleted [int] ## completed articles

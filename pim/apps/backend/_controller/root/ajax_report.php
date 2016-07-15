@@ -5,8 +5,10 @@ class Controller_Ajax_Report
 	/**
 	 * List of generated reports (and pending)
 	 */
-	public function monthlyActivityReports($year = null, $month = null)
+	public function monthlyActivityReports($year = null, $month = null, $category = null)
 	{
+		//var_dump($category);
+		//die;
 		$query = db::from('report_monthly');
 
 		$query->where('reportMonthlyYear', $year);
@@ -24,15 +26,15 @@ class Controller_Ajax_Report
 			'pending_report' => $report,
 			'month' => $month,
 			'year' => $year,
-			'totalApprovalPendingReport' => model::load("blog/article")->getTotalApprovalPendingReport($year, $month),
-			'totalNonrecentReport' => model::load('blog/article')->getTotalOfNonrecentReport($year, $month)
+			'totalApprovalPendingReport' => model::load("blog/article")->getTotalApprovalPendingReport($year, $month, $category),
+			'totalNonrecentReport' => model::load('blog/article')->getTotalOfNonrecentReport($year, $month, $category)
 			));
 	}
 
 	/**
 	 * Main method to generate report
 	 */
-	public function monthlyActivityGenerate($year, $month)
+	public function monthlyActivityGenerate($year, $month, $category)
 	{
 		set_time_limit(0);
 		error_reporting(E_ALL & ~E_NOTICE);
@@ -51,7 +53,7 @@ class Controller_Ajax_Report
 				));
 		}
 
-		$totalArticle = $this->queryArticle($month, $year)->select('count(*) as total')->get()->row('total');
+		$totalArticle = $this->queryArticle($month, $year, $category)->select('count(*) as total')->get()->row('total');
 
 		if($totalArticle == 0)
 		{
@@ -66,6 +68,7 @@ class Controller_Ajax_Report
 			'reportMonthlyStatusState' => 'initiating',
 			'reportMonthlyMonth' => $month,
 			'reportMonthlyYear' => $year,
+			'reportMonthlyCategory' => $category,
 			'reportMonthlyArticleCompleted' => 0,
 			'reportMonthlyArticleTotal' => $totalArticle,
 			'reportMonthlyCreatedDate' => now(),
@@ -82,17 +85,40 @@ class Controller_Ajax_Report
 		$this->monthlyActivityProcess($id);
 	}
 
-	protected function queryArticle($month, $year)
+	protected function queryArticle($month, $year, $category)
 	{
-		db::from("activity_article");
-		db::join("activity","activity_article.activityID = activity.activityID");
-		db::join("article","activity_article.articleID = article.articleID");
-		db::join('site', 'site.siteID = activity.siteID');
-		db::where('activity_article.articleID IN (SELECT articleID FROM article WHERE articleStatus = ?)', array(1));
-		db::where('activity.activityType', 1);
-		db::where('year(activity.activityStartDate)', $year);
-		$db = db::where('month(activity.activityStartDate)', $month);
+		if($category){
+			db::from("article");
+			db::where('article.articleID IN (SELECT articleID FROM article WHERE articleStatus = ?)', array(1));
 
+			db::join('site', 'site.siteID = article.siteID');
+		
+			//db::where('article.activityType', 1);
+			db::where('article.siteID', 1);	
+
+			db::where('article.articleID IN (SELECT article.articleID FROM article 
+			LEFT OUTER JOIN article_category ON article.articleID = article_category.articleID 
+			WHERE categoryID = ?) ', array($category));
+
+			db::where('(year(article.PublishedDate', $year);
+			$db = db::where('(month(article.PublishedDate', $month);					
+		}
+		else{
+			db::from("activity_article");
+			db::join("activity","activity_article.activityID = activity.activityID");
+			db::join("article","activity_article.articleID = article.articleID");
+
+			db::where('activity_article.articleID IN (SELECT articleID FROM article WHERE articleStatus = ?)', array(1));
+
+			db::join('site', 'site.siteID = activity.siteID');
+		
+			db::where('activity.activityType', 1);
+			db::where('activity.siteID', 1);	
+
+			db::where('year(activity.activityStartDate)', $year);
+			$db = db::where('month(activity.activityStartDate)', $month);					
+		}
+		
 		return $db;
 	}
 
@@ -110,6 +136,8 @@ class Controller_Ajax_Report
 		$year = $report->reportMonthlyYear;
 
 		$month = $report->reportMonthlyMonth;
+
+		$category = $report->reportMonthlyCategory;
 
 		if($report->reportMonthlyStatusState != 'initiating')
 			return;
@@ -131,7 +159,7 @@ class Controller_Ajax_Report
 			if(!is_dir($imageFolder))
 				mkdir($imageFolder);
 
-			$articles = $this->queryArticle($month, $year)->get()->result();
+			$articles = $this->queryArticle($month, $year, $category)->get()->result();
 
 			$report->reportMonthlyArticleTotal = count($articles);
 

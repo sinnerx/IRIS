@@ -447,11 +447,26 @@ if ($articleID) {
 	 * Get all of approval pending report for the given year/month.
 	 * @return int
 	 */
-	public function getTotalApprovalPendingReport($year, $month)
+	public function getTotalApprovalPendingReport($year, $month, $category)
 	{
-		db::from('activity_article');
+		
+		//db::join('article_category', 'activity_article.activityID = article_category.activityID');
+		if($category){
+			db::from('article');
+			db::where('articleID IN (SELECT article.articleID FROM article 
+			LEFT OUTER JOIN article_category ON article.articleID = article_category.articleID 
+			WHERE categoryID = ?) ', array($category));
+
+			db::where('articleID IN (SELECT articleID FROM article WHERE month(articlePublishedDate) = ? AND year(articlePublishedDate) = ?)', array($month, $year));
+		}
+		else{
+			db::from('activity_article');
+			db::where('activityID IN (SELECT activityID FROM activity WHERE month(activityStartDate) = ? AND year(activityStartDate) = ?)', array($month, $year));
+		}
+
 		db::where('articleID IN (SELECT articleID FROM article WHERE articleStatus = ?)', array(0));
-		db::where('activityID IN (SELECT activityID FROM activity WHERE month(activityStartDate) = ? AND year(activityStartDate) = ?)', array($month, $year));
+		//var_dump(db::get());
+		//die;
 		return db::get()->num_rows();
 	}
 
@@ -459,10 +474,20 @@ if ($articleID) {
 	 * Get total of non recent report.
 	 * @return int
 	 */
-	public function getTotalOfNonrecentReport($year, $month)
+	public function getTotalOfNonrecentReport($year, $month, $category)
 	{
-		db::from('activity_article');
-		db::where('activityID IN (SELECT activityID FROM activity WHERE month(activityStartDate) = ? AND year(activityStartDate) = ?)', array($month, $year));
+		if($category){
+			db::from('article');
+			db::where('articleID IN (SELECT article.articleID FROM article 
+			LEFT OUTER JOIN article_category ON article.articleID = article_category.articleID 
+			WHERE categoryID = ?) ', array($category));
+
+			db::where('articleID IN (SELECT articleID FROM article WHERE month(articlePublishedDate) = ? AND year(articlePublishedDate) = ?)', array($month, $year));
+		}	
+		else{
+			db::from('activity_article');
+			db::where('activityID IN (SELECT activityID FROM activity WHERE month(activityStartDate) = ? AND year(activityStartDate) = ?)', array($month, $year));
+		}
 
 		// check if there's existing unapproved site request for article.
 		$result = db::get()->result('articleID');

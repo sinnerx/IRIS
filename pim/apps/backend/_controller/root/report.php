@@ -886,14 +886,21 @@ class Controller_Report
 
 
 	# gett all activity report -- root 
-	public function monthlyActivityReport($year = null,$month = null)
+	public function monthlyActivityReport($year = null,$month = null, $category = null)
 	{
+		$categories = model::load("blog/category")->getCategoryList();
+
+		$arr	= Array();
+		if($categories)
+			foreach($categories as $row) $arr[$row['categoryID']] = $row['categoryName'];
+
+		$data['categories'] = $arr;
 		$data['year'] = $year = $year ? : date("Y");
 		$data['month'] = $month = $month ? : date("n");
 
 		// check for non approved report.
-		$data['totalApprovalPendingReport'] = model::load("blog/article")->getTotalApprovalPendingReport($year, $month);
-		$data['totalNonrecentReport'] = model::load('blog/article')->getTotalOfNonrecentReport($year, $month);
+		$data['totalApprovalPendingReport'] = model::load("blog/article")->getTotalApprovalPendingReport($year, $month, $category);
+		$data['totalNonrecentReport'] = model::load('blog/article')->getTotalOfNonrecentReport($year, $month, $category);
 
 		view::render("root/report/monthlyActivityReport",$data);
 	}
@@ -1062,6 +1069,7 @@ class Controller_Report
 			$phpWord->addParagraphStyle('pStyle', array( 'align' => 'center', 'spaceAfter' => 100));
 			$phpWord->addTitleStyle(1, array('bold' => true), array('spaceAfter' => 240));
 
+
 			$header = array('size' => 16, 'bold' => true);
 			//$WordHelper	= new model\report\PHPWordHelper($phpWord,$filename);
 			//$WordHelper->execute();
@@ -1071,11 +1079,17 @@ class Controller_Report
 			$section->addText(htmlspecialchars("PI1M Quarterly Report for MCMC"), 'rStyle', 'pStyle');			
 			$section->addText(htmlspecialchars("(APRIL - JUNE 2016)"), 'rStyle', 'pStyle');			
 
+			
 				//var_dump($siteKey);
 				//die;
 			// Adding an empty Section to the document...
 			
 			$section->addText(htmlspecialchars($siteKey['siteName']),'rStyle', 'pStyle');
+
+			$footer = $section->addFooter();
+			
+			$footer->addPreserveText(htmlspecialchars( $siteKey['siteName'].' CBC, 2016 2nd Quarter Report'), array('align' => 'left'));	
+			$footer->addPreserveText(htmlspecialchars('Page {PAGE} of {NUMPAGES}.'), array('align' => 'right'));
 			$section->addPageBreak();
 
 
@@ -1308,8 +1322,15 @@ class Controller_Report
 					    $table->addCell($widthTraining)->addText(htmlspecialchars(""));
 						}			
 
-
+			$table->addRow(900);
+			$table->addCell($widthTraining, $styleCell)->addText('');
+			$table->addCell($widthTraining, array('gridSpan' => 2, 'valign' => 'center'))->addText(htmlspecialchars("Total Training Program for Community between 01/04/2016 and 30/06/2016 is ".$siteKey['countTraining']));
+			$table->addCell($widthTraining, $styleCell)->addText(htmlspecialchars($siteKey['totalHourTraining']));
+			$table->addCell($widthTraining, $styleCell)->addText(htmlspecialchars($siteKey['totalAttendeesraining']));
+			$table->addCell($widthTraining, $styleCell)->addText('');
 			}//end if
+
+
 			//Events and Activites
 			if ($siteKey['Event']){
 
@@ -1342,17 +1363,43 @@ class Controller_Report
 					    $table->addCell($widthTraining)->addText(htmlspecialchars($keyEvent['attendees']));
 					    $table->addCell($widthTraining)->addText(htmlspecialchars(""));
 						}	
+
+			$table->addRow(900);
+			$table->addCell($widthTraining, $styleCell)->addText('');
+			$table->addCell($widthTraining, array('gridSpan' => 2, 'valign' => 'center'))->addText(htmlspecialchars("Total Promotion Awareness & Marketing Activites between 01/04/2016 and 30/06/2016 is ".$siteKey['countEvent']));
+			$table->addCell($widthTraining, $styleCell)->addText(htmlspecialchars($siteKey['totalDaysEvent']));
+			$table->addCell($widthTraining, $styleCell)->addText(htmlspecialchars($siteKey['totalAttendeesEVent']));
+			$table->addCell($widthTraining, $styleCell)->addText('');						
 			}//end if
 			//Activites Gallery
 			$section->addPageBreak();
 			$section->addText(htmlspecialchars('Activities Gallery'), $header);
 			//var_dump($siteKey);
 			//die;
+
+
+
 			if($siteKey['album']){
+				$tableStyle = array(
+					'cellMarginRight' => 100,
+					//'cellMarginTop' => 100,
+					//'cellMarginBottom' => 100,
+					'cellMarginLeft' => 100,
+				);
+				$phpWord->addTableStyle('Table Image Activities',$tableStyle);
+				$table = $section->addTable('Table Image Activities'); 
+				$table->addRow();
+				$counterImage = 0;				
 				//var_dump($siteKey['album']);
 				foreach ($siteKey['album'] as $keyAlbum) {
 					//var_dump(url::asset() . "/frontend/images/photo/" .$keyAlbum);
 					//var_dump($keyAlbum);
+
+					if($counter == 4){
+						$table->addRow();
+						$counter = 0;
+					}
+
 
 					$imagetmp = url::asset() . 
 					"/frontend/images/photo/" .$keyAlbum['albumCoverImageName'];
@@ -1372,16 +1419,34 @@ class Controller_Report
 					//if($keyAlbum && file_exists($image)){
 					if($keyAlbum && @getimagesize($image)){
 						//var_dump($image);
-						list($width, $height) = getimagesize($image); 
-						$Dwidth = 300;
-						$ratio = $Dwidth / $width;
-						$Dheight = $height * $ratio;
-						//die;
-						$section->addImage($image,array('width' => $Dwidth, 'height' => $Dheight));
-						$section->addText(htmlspecialchars($keyAlbum['albumName']));
-						$section->addText(htmlspecialchars($keyAlbum['albumDate']));
-						$section->addTextBreak();
+						//if($height < $width){
+							list($width, $height) = getimagesize($image); 
+							$Dwidth = 150;
+							$ratio = $Dwidth / $width;
+							$Dheight = $height * $ratio;
+							//die;
+							// $section->addImage($image,array(
+							// 	'width' => $Dwidth, 'height' => $Dheight,
+							// 	//'positioning'      => \PhpOffice\PhpWord\Style\Image::POSITION_RELATIVE,
+						 //        'posHorizontal'    => \PhpOffice\PhpWord\Style\Image::POSITION_HORIZONTAL_CENTER,
+						 //        'posHorizontalRel' => \PhpOffice\PhpWord\Style\Image::POSITION_RELATIVE_TO_COLUMN,
+							// 	));
+							// $section->addText(htmlspecialchars($keyAlbum['albumName']));
+							// $section->addText(htmlspecialchars($keyAlbum['albumDate']));
+
+
+							$cell = $table->addCell(300);
+							$textrun = $cell->createTextRun();
+							
+		        			$textrun->addImage($image,array(
+								'width' => $Dwidth, 'height' => 150));
+							$textrun->addText($keyAlbum['albumName']);
+							$textrun->addText($keyAlbum['albumDate']);									
+						//}// height < width
+											
+						//$section->addTextBreak();
 					}			
+					$counter++;
 				 }//end foreach album
 			}//end if
 			//die;
@@ -1394,7 +1459,7 @@ class Controller_Report
 					// 	//
 						//var_dump($imageajk);
 						list($width, $height) = getimagesize($imageajk); 
-						$Dwidth = 450;
+						$Dwidth = 700;
 						$ratio = $Dwidth / $width;
 						$Dheight = $height * $ratio;					 	
 						$section->addImage($imageajk,array('width' => $Dwidth, 'height' => $Dheight));
