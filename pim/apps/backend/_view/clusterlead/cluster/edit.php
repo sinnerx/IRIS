@@ -1,73 +1,30 @@
-
 <script type="text/javascript">
 	
 var activity	= function()
 {
-
-	this.showSubType = function(typeid){
-		$.ajax({
-			url: pim.base_url + "ajax/activity/getTrainingSubType/" + typeid, success: function (result){
-				result = $.parseJSON(result);
-				console.log(result);
-				$('#trainingSubType').empty();
-				 $.each(result, function(i, value) {  
-				  	$('<option></option>', {html:this.type_name}).attr('value', this.type_id).appendTo('#trainingSubType');
-					//$('#trainingType select').val(this.typeid);
-				});
-
-				$('#subtypediv').show();
-			}
-		});
-	}
 
 	this.showPackage = function(yesno){
 		var y = yesno;
 
 		if (y == "2"){
 			$("#packagediv").show();
-			$("#learningPackage").val('1');
-			activity.showModule(1);
-			activity.showModuleDetail(1);
+			$("#modulediv").show();
+			
+			//activity.showModule($("#learningPackage").val());
+			//activity.showModuleDetail($("#learningModule").val());
 		}
 		else{
 			$("#packagediv").hide();
-			$("#modulediv").hide();
-			$.ajax({
-			url: pim.base_url +"ajax/activity/getDefaultTrainingType/", success: function (result){
-				//console.log(this);
-				//var result = result.substring(3, result.length);
-				result = $.parseJSON(result);
-				//console.log(result);
-				$('#trainingType').empty();
-				$('<option></option>', {html:'[PLEASE CHOOSE]'}).attr('value', '').appendTo('#trainingType');
-				 $.each(result, function(i, value) {  
-				 	console.log(i);
-				  	$('<option></option>', {html:value}).attr('value', i).appendTo('#trainingType');
-				
-					$('#activityDescription').text("");
-					$('#activityName').val("");
-					//$('#trainingType select').val(this.typeid);
-				});
-
-				$('#typediv').show();
-				$('#subtypediv').hide();
-				$('#trainingSubType').empty();
-			}
-		});
-			
 		}	
 
-		
-		
 	}
 
 
 
 	this.showModuleDetail = function (module_id){
-		//alert(module_id);
 		$.ajax({
 			url: pim.base_url +"ajax/activity/getModuleByID/"+ module_id, success: function (result){
-				console.log(result);
+				//console.log(result);
 				//var result = result.substring(3, result.length);
 				result = $.parseJSON(result);
 				console.log(result);
@@ -76,15 +33,8 @@ var activity	= function()
 				  	$('<option></option>', {html:this.type_name}).attr('value', this.type_id).appendTo('#trainingType');
 				
 					$('#activityDescription').text(this.description);
-					$('#activityName').val(this.name);
-					//$('#trainingType select').val(this.typeid);
-					activity.showSubType(this.type_id);
 				});
-
 				$('#typediv').show();
-				$('#subtypediv').show();
-
-
 			}
 		});
 	}	
@@ -94,7 +44,7 @@ var activity	= function()
 
 		 $.ajax({
 		 	url: pim.base_url +"ajax/activity/getModuleByPackageID/"+ pid, success: function (result){
-		 		//console.log(pim.base_url +"ajax/activity/getModuleByPackageID/"+ pid);
+		 		
 		 		//var result = result.substring(3, result.length); 
 		 		//console.log(result);
 		 		result = $.parseJSON(result);
@@ -105,11 +55,12 @@ var activity	= function()
 				  	$('<option></option>', {html:this.name}).attr('value', this.id).appendTo('#learningModule');
 				});	
 				$("#modulediv").show();
-				activity.showModuleDetail(1);	 		
+				activity.showModuleDetail($("#learningModule").val());	 		
 		 	}
 		 });
 		
 	}
+
 	this.showTypeDetail	= function(type)
 	{
 		var r	= {1:"event",2:"training",99:"others"};
@@ -117,10 +68,17 @@ var activity	= function()
 		$("#type-event, #type-training").hide();
 		$("#type-"+r[type]).show();
 
+		var learning = $("#learningSelect").val();
+
+		if ( learning == 2){
+			activity.showPackage(learning);
+		}
+
+		//alert($("#learningSelect").val());
 		pim.uriHash.set(r[type]);
 	}
 
-	this.disableAddress	= function()
+	this.disableAddress	= function(edit)
 	{
 		if($("#activityAddressFlag")[0].checked)
 		{
@@ -130,7 +88,11 @@ var activity	= function()
 		else
 		{
 			$("#activityAddress").removeAttr("disabled");
-			$("#activityAddress").val("");
+
+			if(!edit)
+			{
+				$("#activityAddress").val("");
+			}
 		}
 	}
 
@@ -575,26 +537,16 @@ var activity = new activity();
 
 $(document).ready(function()
 {
-	var selected = '<?php echo $learningIsSelected; ?>';
-	if( selected == 1){
-		alert("Selected");
-	}
-
-	if ($("#learningSelect").val() == 2){
-		//alert("Selected");
-		activity.showPackage(2);
-	}
 	if($("#activityDateTime").val() != "")
 	{
 		activity.datePicker.initiateData();
 	}
 
-	// if($("#learningselect").val() == 2){
-	// 	;
-	// }
+	activity.showTypeDetail(<?php echo $row['activityType'];?>);
+	activity.disableAddress(true);
 });
 
-pim.uriHash.addCallback({"event":function(){activity.showTypeDetail(1)},"training":function(){activity.showTypeDetail(2)},"others":function(){activity.showTypeDetail(99)}});
+pim.uriHash.addCallback({"event":function(){activity.showTypeDetail(1)},"training":function(){activity.showTypeDetail(2)}});
 
 </script>
 <style type="text/css">
@@ -620,42 +572,37 @@ pim.uriHash.addCallback({"event":function(){activity.showTypeDetail(1)},"trainin
 	font-weight: bold;
 }
 
-.form-group .date-button{
-	 font-size: 13px;
-    margin-right: 5px;
-    padding: 5px 9px !important;
-	
-}
-
-.form-group .date-button a.fa.fa-calendar{
-	color:#FFF;
-	
-}
 </style>
 <h3 class='m-b-xs text-black'>
-Add Activity 
+Edit Activity
 </h3>
-
 <div class='well well-sm'>
-Add an activity to your site. All new activities will not be published until they are approved by your cluster lead.
+Edit activity
 </div>
 <?php echo flash::data();?>
-<form method='post' onsubmit="return confirm('Add activity, are you sure.?');">
+<?php
+if(!flash::data() && $requestFlag == true):?>
+<div class='alert alert-danger'>
+Content is waiting for approval
+</div>
+<?php endif;?>
+<form method='post' onsubmit="return confirm('Update activity, are you sure.?');">
 <div class='row'>
 	<div class='col-sm-7'>
 		<div class='row'>
 			<div class='col-sm-6'>
 				<div class='form-group'>
+					<?php //print_r($learningModule); ?>
 					<label>
 						Activity Name <?php echo flash::data("activityName");?>
 					</label>
-					<?php echo form::text("activityName","class='form-control'");?>
+					<?php echo form::text("activityName","class='form-control'",$row['activityName']);?>
 				</div>
 			</div>
 			<div class='col-sm-3'>
 				<div class='form-group'>
 					<label>Participation <?php echo flash::data("activityParticipation");?></label>
-					<?php echo form::select("activityParticipation",Array(1=>"Open for all member",2=>"Only for site member",3=>"Open for all"),"class='form-control'");?>
+					<?php echo form::select("activityParticipation",Array(1=>"Open for all members",2=>"Only for site members",3=>"Open for all"),"class='form-control'",$row['activityParticipation']);?>
 				</div>
 			</div>
 			<div class='col-sm-3'>
@@ -664,7 +611,7 @@ Add an activity to your site. All new activities will not be published until the
 					<?php
 					$conv	= Array("event"=>1,"training"=>2);
 					?>
-					<?php echo form::select("activityType",Array(1=>"Event",2=>"Training",99=>"Others"),"onchange='activity.showTypeDetail(this.value);' class='form-control'",$conv[request::get("type")]);?>
+					<?php echo form::select("activityType",Array(1=>"Event",2=>"Training",99=>"Others"),"disabled onchange='activity.showTypeDetail(this.value);' class='form-control'",$row['activityType']);?>
 				</div>
 			</div>
 		</div>
@@ -672,33 +619,46 @@ Add an activity to your site. All new activities will not be published until the
 			<div class='col-sm-6'>
 				<div class='form-group'>
 				<label>Description</label>
-				<?php echo form::textarea("activityDescription","class='form-control'");?>
+				<?php echo form::textarea("activityDescription","class='form-control'",$row['activityDescription']);?>
 				</div>
 
 				<div class='form-group'>
+				<?php
+				$checked = flash::data("activityAddressFlag",$row['activityAddressFlag']) == 1?"checked":"";
+				?>
 				<label style='display:block;'>Where? (Address) 
-					<span class='pull-right'>Use site address <input onclick='activity.disableAddress();' type='checkbox' id='activityAddressFlag' name='activityAddressFlag' value='1' /></span>
+					<span class='pull-right'>Use site address <input <?php echo $checked;?> onclick='activity.disableAddress();' type='checkbox' id='activityAddressFlag' name='activityAddressFlag' value='1' /></span>
 				</label>
-				<?php echo form::textarea("activityAddress","class='form-control'");?>
+				<?php echo form::textarea("activityAddress","class='form-control'",$row['activityAddress']);?>
 				<div id='siteInfoAddress' style='display:none;'><?php echo $siteInfoAddress;?></div>
 				</div>
 			</div>
 			<div class='col-sm-6'>
-				<div class='form-group' style="position:relative;">
-					<label>
-                    <div href='<?php echo url::base("ajax/activity/datePicker");?>' data-toggle='ajaxModal' class="date-button btn btn-primary">
-                    Date
-						<a href='javascript:void(0);' class='fa fa-calendar'></a>
+				<div class='form-group'>
+					<label>Date
+						<!-- main date button -->
+						<?php 
+						$allDateAttendanceDisabled	= $hasParticipation?"disabled":"";
+						if(!$hasParticipation):
+						?>
+						<a href='<?php echo url::base("ajax/activity/datePicker");?>' data-toggle='ajaxModal' class='fa fa-calendar'></a>
+						<?php endif;?>
 						<?php /*echo flash::data("activityDate");*/?>
-                        </div>
 					</label>
-					<span>
-						<?php echo form::select("activityAllDateAttendance",Array(1=>"All date required",2=>"Participant may choose date"),"style='padding:4px;border:1px solid #d2d2d2;'",null,"[Date obligation]");?>
+					<span style='text-align:right;position:absolute;right:0px;'>
+						<?php echo form::select("activityAllDateAttendance",Array(1=>"All date required",2=>"Participant may choose date"),"$allDateAttendanceDisabled style='padding:4px;border:1px solid #d2d2d2;'",$row['activityAllDateAttendance'],"[Date obligation]");?>
+						<?php if($hasParticipation):?>
+							<?php echo form::hidden("activityAllDateAttendance",null,$row['activityAllDateAttendance']);?> 
+						<?php endif;?>
 					</span>
-					<?php echo form::hidden("activityDateTime");?>
+					<?php echo form::hidden("activityDateTime",null,$datetime);?>
 					<span style='position:relative;left:20px;'><?php echo flash::data("activityDateTime",flash::data("activityAllDateAttendance"));?></span>
 					<div class='summary_title'>Configure the activity date.</div>
 					<div id='activityDateSummary' style="display:none;">
+					<?php
+					if($hasParticipation):?>
+					<span style='color:red;'>This activity already has participation, you may not change date anymore.</span>
+					<?php endif;?>
 					<table id='summary_basic'>
 						<tr>
 							<td>From</td><td>: <span class='summary_from'></span></td>
@@ -727,11 +687,12 @@ Add an activity to your site. All new activities will not be published until the
 					<div class='panel-body'>
 						<div class='form-group'>
 							<label>Type of event <?php echo flash::data("eventType");?></label>
-							<?php echo form::select("eventType",$eventTypeR,"class='form-control'");?>
+							<?php echo form::select("eventType",$eventTypeR,"class='form-control'",$row['eventType']);?>
 						</div>
 					</div>
 				</section>
 			</div>
+			
 			<div class='col-sm-12' id='type-training' style="display:none;">
 				<section class='panel panel-default'>
 					<div class='panel-heading'>
@@ -739,30 +700,26 @@ Add an activity to your site. All new activities will not be published until the
 					</div>
 					<div class='panel-body'>
 						<div class='form-group'>
-							<label>Is it training from LMS ? <?php echo flash::data("learningSelect");?></label>
-							<?php echo form::select("learningSelect",Array(1=>"No",2=>"Yes"),"onchange='activity.showPackage(this.value);' class='form-control'");?>						
+							<label>Is it training for LMS? <?php echo flash::data("learningSelect");?></label>
+							<?php echo form::select("learningSelect",$learningSelection,"onchange='activity.showPackage(this.value);' class='form-control'",$row['learningSelection']);?>						
 						</div>
 						<div class='form-group' id="packagediv" style="display:none">
 							<label>Package of LMS <?php echo flash::data("learningPackage");?></label>
 							<?php //echo form::select("learningPackage",$learningPackage,"class='form-control'");?>
-							<?php echo form::select("learningPackage",$learningPackage,"onchange='activity.showModule(this.value);' class='form-control'",$conv[request::get("package")]);?>
+							<?php echo form::select("learningPackage",$learningPackage,"onchange='activity.showModule(this.value);' class='form-control'",$row['package']);?>
 						</div>
 						<div class='form-group' id="modulediv" style="display:none">
 							<label>Module of LMS <?php echo flash::data("learningModule");?></label>
 							<?php //echo form::select("learningPackage",$learningPackage,"class='form-control'");?>
-							<?php echo form::select("learningModule",$learningModule,"onchange='activity.showModuleDetail(this.value);' class='form-control'",$conv[request::get("module_id")]);?>
-						</div>						
-						<div class='form-group' id="typediv">
-							<label>Training Type <?php echo flash::data("trainingType");?></label>
-							<?php echo form::select("trainingType",$trainingTypeR,"onchange='activity.showSubType(this.value);' class='form-control'",null);?>
+							<?php echo form::select("learningModule",$learningModule,"onchange='activity.showModuleDetail(this.value);' class='form-control'",$row['module']);?>
 						</div>
-						<div class='form-group' id="subtypediv" style="display:none">
-							<label>Sub Training Type <?php echo flash::data("trainingSubType");?></label>
-							<?php echo form::select("trainingSubType",$trainingSubTypeR,"class='form-control'",null);?>
-						</div>						
+						<div class='form-group'>
+							<label>Training Type <?php echo flash::data("trainingType");?></label>
+							<?php echo form::select("trainingType",$trainingTypeR,"class='form-control'",$row['trainingType']);?>
+						</div>
 						<div class='form-group'>
 							<label>Max Pax <span style='opacity:0.5;'>(0 for no-limit)</span></label>
-							<?php echo form::text("trainingMaxPax","class='form-control' style='width:70px;'");?>
+							<?php echo form::text("trainingMaxPax","class='form-control' style='width:70px;'",$row['trainingMaxPax']);?>
 						</div>
 					</div>
 				</section>
@@ -772,8 +729,8 @@ Add an activity to your site. All new activities will not be published until the
 </div>
 <div class='row'>
 	<div class='col-sm-12' style='text-align:center;'>
-		<input type='submit' value='Submit Activity' class='btn btn-primary' />
-		<input type='button' value='Cancel' onclick='window.location.href = "<?php echo url::base("activity/overview");?>"' class='btn btn-default' />
+		<input type='submit' value='Update Activity' class='btn btn-primary' />
+		<input type='button' value='Cancel' onclick='window.location.href = "<?php echo url::base("cluster/overview");?>"' class='btn btn-default' />
 	</div>
 </div>
 </form>
