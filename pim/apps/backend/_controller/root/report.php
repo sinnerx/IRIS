@@ -1424,32 +1424,56 @@ class Controller_Report
 							$Dwidth = 150;
 							$ratio = $Dwidth / $width;
 							$Dheight = $height * $ratio;
-							//die;
-							// $section->addImage($image,array(
-							// 	'width' => $Dwidth, 'height' => $Dheight,
-							// 	//'positioning'      => \PhpOffice\PhpWord\Style\Image::POSITION_RELATIVE,
-						 //        'posHorizontal'    => \PhpOffice\PhpWord\Style\Image::POSITION_HORIZONTAL_CENTER,
-						 //        'posHorizontalRel' => \PhpOffice\PhpWord\Style\Image::POSITION_RELATIVE_TO_COLUMN,
-							// 	));
-							// $section->addText(htmlspecialchars($keyAlbum['albumName']));
-							// $section->addText(htmlspecialchars($keyAlbum['albumDate']));
+
+							if ($width > $height) {
+								//die;
+								// $section->addImage($image,array(
+								// 	'width' => $Dwidth, 'height' => $Dheight,
+								// 	//'positioning'      => \PhpOffice\PhpWord\Style\Image::POSITION_RELATIVE,
+							 //        'posHorizontal'    => \PhpOffice\PhpWord\Style\Image::POSITION_HORIZONTAL_CENTER,
+							 //        'posHorizontalRel' => \PhpOffice\PhpWord\Style\Image::POSITION_RELATIVE_TO_COLUMN,
+								// 	));
+								// $section->addText(htmlspecialchars($keyAlbum['albumName']));
+								// $section->addText(htmlspecialchars($keyAlbum['albumDate']));
 
 
-							$cell = $table->addCell(300);
-							$textrun = $cell->createTextRun();
-							
-		        			$textrun->addImage($image,array(
-								'width' => $Dwidth, 'height' => 150));
-							$textrun->addText($keyAlbum['albumName']);
-							$textrun->addText($keyAlbum['albumDate']);									
+								$cell = $table->addCell(300);
+								$textrun = $cell->createTextRun();
+								
+			        			$textrun->addImage($image,array(
+									'width' => $Dwidth, 'height' => $Dheight));
+								//$textrun->addText($keyAlbum['albumName']);
+
+								$image_text = $cell->addTable('image text'); 
+								$image_text->addRow();
+								$image_date = $image_text->addCell(1300);
+								$textrun_date = $image_date->createTextRun();
+
+								$date = $keyAlbum['albumDate'];
+								$textrun_date->addText(date_format(new DateTime($date), 'd M Y'));									
+
+								$image_title = $image_text->addCell(1700);
+								//$image_title->addText('testing');
+								$image_title->addText($keyAlbum['albumName']);
+
+								$counter++;
+							}
 						//}// height < width
 											
 						//$section->addTextBreak();
 					}			
-					$counter++;
+					//$counter++;
 				 }//end foreach album
 			}//end if
 			//die;
+
+			/*$date = "2016-02-03";
+
+			print_r($date);
+			echo "<br><br>";
+			print_r(new DateTime($date));
+			echo "<br><br>";
+			print_r("Date: " . date_format(new DateTime($date), 'd M Y'));*/
 
 			//AJK PI1M
 			$section->addPageBreak();
