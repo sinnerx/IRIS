@@ -1,6 +1,6 @@
 <?php
 //use Knp\Snappy\Pdf;
-require_once(getcwd().'/pim/apps/_library/fpdf181/fpdf.php');
+//require_once(getcwd().'/pim/apps/_library/fpdf181/fpdf.php');
 
 
 class Controller_Report
@@ -1034,8 +1034,8 @@ class Controller_Report
 		//site list
 		db::select("siteID");
 		db::order_by("siteID", "ASC");
-		//db::where("siteID", 9);
-		db::limit(30, 100);
+		db::where("siteID", 1);
+		//db::limit(11, 120);
 		$allsite = db::get("site")->result('siteID');
 		//var_dump($allsite);
 		//die;
@@ -1062,19 +1062,27 @@ class Controller_Report
 			$phpWord->addParagraphStyle('pStyle', array( 'align' => 'center', 'spaceAfter' => 100));
 			$phpWord->addTitleStyle(1, array('bold' => true), array('spaceAfter' => 240));
 
+
 			$header = array('size' => 16, 'bold' => true);
 			//$WordHelper	= new model\report\PHPWordHelper($phpWord,$filename);
 			//$WordHelper->execute();
 
 			/* Note: any element you append to a document must reside inside of a Section. */
-			$section = $phpWord->addSection();
+			$section = $phpWord->addSection(array('orientation' => 'landscape'));
 			$section->addText(htmlspecialchars("PI1M Quarterly Report for MCMC"), 'rStyle', 'pStyle');			
+			$section->addText(htmlspecialchars("(APRIL - JUNE 2016)"), 'rStyle', 'pStyle');			
 
+			
 				//var_dump($siteKey);
 				//die;
 			// Adding an empty Section to the document...
 			
 			$section->addText(htmlspecialchars($siteKey['siteName']),'rStyle', 'pStyle');
+
+			$footer = $section->addFooter();
+			
+			$footer->addPreserveText(htmlspecialchars( $siteKey['siteName'].' CBC, 2016 2nd Quarter Report'), array('align' => 'left'));	
+			$footer->addPreserveText(htmlspecialchars('Page {PAGE} of {NUMPAGES}.'), array('align' => 'right'));
 			$section->addPageBreak();
 
 
@@ -1095,12 +1103,13 @@ class Controller_Report
 			$cellHCentered = array('align' => 'center');
 			$cellHeaderCentered = array('align' => 'center', 'bold' => true);
 			$cellVCentered = array('valign' => 'center');
+			$widthCell = 4000;
 
 			$phpWord->addTableStyle('Colspan Rowspan', $styleTable, $styleFirstRow);
 			$table = $section->addTable('Colspan Rowspan');
 
 			$table->addRow();
-			$cell1 = $table->addCell(8000, $cellColSpan);
+			$cell1 = $table->addCell(20000, $cellColSpan);
 			$textrun1 = $cell1->addTextRun($cellHCentered);
 			$textrun1->addText(htmlspecialchars('2016'), $cellHeaderCentered);
 
@@ -1112,15 +1121,15 @@ class Controller_Report
 			// $table->addCell(2000, $cellVCentered)->addText(htmlspecialchars('June'), null, $cellHCentered);		
 
 			$table->addRow();
-			$table->addCell(2000, $cellVCentered)->addText(htmlspecialchars(''), $cellHeaderCentered);
-			$table->addCell(2000, $cellVCentered)->addText(htmlspecialchars(''), $cellHeaderCentered, $cellHeaderCentered);
-			$table->addCell(2000, $cellVCentered)->addText(htmlspecialchars('January'), $cellHeaderCentered, $cellHeaderCentered);
-			$table->addCell(2000, $cellVCentered)->addText(htmlspecialchars('February'), $cellHeaderCentered, $cellHeaderCentered);
-			$table->addCell(2000, $cellVCentered)->addText(htmlspecialchars('March'), $cellHeaderCentered, $cellHeaderCentered);
+			$table->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars(''), $cellHeaderCentered);
+			$table->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars(''), $cellHeaderCentered, $cellHeaderCentered);
+			$table->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars('April'), $cellHeaderCentered, $cellHeaderCentered);
+			$table->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars('May'), $cellHeaderCentered, $cellHeaderCentered);
+			$table->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars('June'), $cellHeaderCentered, $cellHeaderCentered);
 
 			$table->addRow();
-			$table->addCell(2000, $cellVCentered)->addText(htmlspecialchars('CashFlow'), null, $cellHCentered);
-			$table->addCell(2000, $cellVCentered)->addText(htmlspecialchars('Revenue (RM)'), null, $cellHCentered);
+			$table->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars('CashFlow'), null, $cellHCentered);
+			$table->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars('Revenue (RM)'), null, $cellHCentered);
 			//var_dump($allSiteKey['siteID']);
 			//var_dump($siteKey['revenue']);
 			
@@ -1128,36 +1137,36 @@ class Controller_Report
 				for($i=1; $i<=3; $i++){
 					$siteKey['revenue'][$i] ? $revenue = $siteKey['revenue'][$i] : $revenue = '0';
 					//var_dump($totalmember);
-					$table->addCell(2000, $cellVCentered)->addText(htmlspecialchars($revenue), null, $cellHCentered);
+					$table->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars($revenue), null, $cellHCentered);
 				}
 			}
 			else {
-				$table->addCell(2000, $cellVCentered)->addText(htmlspecialchars(''), null, $cellHCentered);		
-				$table->addCell(2000, $cellVCentered)->addText(htmlspecialchars(''), null, $cellHCentered);				
-				$table->addCell(2000, $cellVCentered)->addText(htmlspecialchars(''), null, $cellHCentered);				
+				$table->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars(''), null, $cellHCentered);		
+				$table->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars(''), null, $cellHCentered);				
+				$table->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars(''), null, $cellHCentered);				
 			}
 			
 			//$table->addCell(2000, $cellVCentered)->addText(htmlspecialchars(''), null, $cellHCentered);		
 			//$table->addCell(2000, $cellVCentered)->addText(htmlspecialchars(''), null, $cellHCentered);	
 
 			$table->addRow();
-			$table->addCell(2000, $cellVCentered)->addText(htmlspecialchars(''), null, $cellHCentered);
-			$table->addCell(2000, $cellVCentered)->addText(htmlspecialchars('Cost'), null, $cellHCentered);
-			$table->addCell(2000, $cellVCentered)->addText(htmlspecialchars(''), null, $cellHCentered);
-			$table->addCell(2000, $cellVCentered)->addText(htmlspecialchars(''), null, $cellHCentered);		
-			$table->addCell(2000, $cellVCentered)->addText(htmlspecialchars(''), null, $cellHCentered);
+			$table->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars(''), null, $cellHCentered);
+			$table->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars('Cost'), null, $cellHCentered);
+			$table->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars(''), null, $cellHCentered);
+			$table->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars(''), null, $cellHCentered);		
+			$table->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars(''), null, $cellHCentered);
 
 			$table->addRow();
-			$table->addCell(2000, $cellVCentered)->addText(htmlspecialchars(''), null, $cellHCentered);
-			$table->addCell(2000, $cellVCentered)->addText(htmlspecialchars('NetBook'), null, $cellHCentered);
-			$table->addCell(2000, $cellVCentered)->addText(htmlspecialchars(''), null, $cellHCentered);
-			$table->addCell(2000, $cellVCentered)->addText(htmlspecialchars(''), null, $cellHCentered);		
-			$table->addCell(2000, $cellVCentered)->addText(htmlspecialchars(''), null, $cellHCentered);	
+			$table->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars(''), null, $cellHCentered);
+			$table->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars('NetBook'), null, $cellHCentered);
+			$table->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars(''), null, $cellHCentered);
+			$table->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars(''), null, $cellHCentered);		
+			$table->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars(''), null, $cellHCentered);	
 
 			//Take Up
 			$table->addRow();
-			$table->addCell(2000, $cellVCentered)->addText(htmlspecialchars('Take Up'), null, $cellHCentered);
-			$table->addCell(2000, $cellVCentered)->addText(htmlspecialchars('Total Member'), null, $cellHCentered);
+			$table->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars('Take Up'), null, $cellHCentered);
+			$table->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars('Total Member'), null, $cellHCentered);
 			//var_dump($siteKey['totalmember']['2016']['2']);
 			if($siteKey['totalmember']){
 				//var_dump($siteKey['totalmember']);
@@ -1165,13 +1174,13 @@ class Controller_Report
 				for($i=1; $i<=3; $i++){
 					$siteKey['totalmember'][$i] ? $totalmember = $siteKey['totalmember'][$i] : $totalmember = '0';
 					//var_dump($totalmember);
-					$table->addCell(2000, $cellVCentered)->addText(htmlspecialchars($totalmember), null, $cellHCentered);
+					$table->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars($totalmember), null, $cellHCentered);
 				}
 			}	
 			else{
-				$table->addCell(2000, $cellVCentered)->addText(htmlspecialchars(''), null, $cellHCentered);
-				$table->addCell(2000, $cellVCentered)->addText(htmlspecialchars(''), null, $cellHCentered);		
-				$table->addCell(2000, $cellVCentered)->addText(htmlspecialchars(''), null, $cellHCentered);				
+				$table->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars(''), null, $cellHCentered);
+				$table->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars(''), null, $cellHCentered);		
+				$table->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars(''), null, $cellHCentered);				
 			}		
 			
 
@@ -1273,6 +1282,7 @@ class Controller_Report
 			
 
 			//ICT Training
+			$widthTraining = 2200;
 			if ($siteKey['Training']){
 			$section->addPageBreak();
 			$section->addText(htmlspecialchars('ICT Training'), $header);
@@ -1284,27 +1294,36 @@ class Controller_Report
 			$phpWord->addTableStyle('Fancy Table', $styleTable, $styleFirstRow);
 			$table = $section->addTable('Fancy Table');
 			$table->addRow(900);
-			$table->addCell(2200, $styleCell)->addText(htmlspecialchars('Date'), $fontStyle);
-			$table->addCell(2000, $styleCell)->addText(htmlspecialchars('Title'), $fontStyle);
-			$table->addCell(2000, $styleCell)->addText(htmlspecialchars('Details'), $fontStyle);
-			$table->addCell(2000, $styleCell)->addText(htmlspecialchars('Duration (Hours)'), $fontStyle);			
-			$table->addCell(2000, $styleCell)->addText(htmlspecialchars('Attendees'), $fontStyle);			
-			$table->addCell(2000, $styleCell)->addText(htmlspecialchars('Comment'), $fontStyle);
+			$table->addCell($widthTraining, $styleCell)->addText(htmlspecialchars('Date'), $fontStyle);
+			$table->addCell($widthTraining, $styleCell)->addText(htmlspecialchars('Title'), $fontStyle);
+			//$table->addCell($widthTraining, $styleCell)->addText(htmlspecialchars('Type'), $fontStyle);
+			$table->addCell($widthTraining, $styleCell)->addText(htmlspecialchars('Details'), $fontStyle);
+			$table->addCell($widthTraining, $styleCell)->addText(htmlspecialchars('Duration (Hours)'), $fontStyle);			
+			$table->addCell($widthTraining, $styleCell)->addText(htmlspecialchars('Attendees'), $fontStyle);			
+			$table->addCell($widthTraining, $styleCell)->addText(htmlspecialchars('Comment'), $fontStyle);
 
 			foreach ($siteKey['Training'] as $keyTraining) {
 							# code...
 						$table->addRow();
-					    $table->addCell(2200)->addText(htmlspecialchars($keyTraining['startDate']));
-					    $table->addCell(2000)->addText(htmlspecialchars($keyTraining['activityName']));
+					    $table->addCell($widthTraining)->addText(htmlspecialchars($keyTraining['startDate']));
+					    $table->addCell($widthTraining+200)->addText(htmlspecialchars($keyTraining['activityName']));
+					    //$table->addCell($widthTraining+200)->addText(htmlspecialchars(''));
 					    $desc = strlen($keyTraining['activityDescription']) > 200 ? substr($keyTraining['activityDescription'],0,200)."..." : $keyTraining['activityDescription'];
-					    $table->addCell(2000)->addText(htmlspecialchars($desc));
-					    $table->addCell(2000)->addText(htmlspecialchars($keyTraining['HourTraining']));
-					    $table->addCell(2000)->addText(htmlspecialchars($keyTraining['attendees']));
-					    $table->addCell(2000)->addText(htmlspecialchars(""));
+					    $table->addCell($widthTraining+500)->addText(htmlspecialchars($desc));
+					    $table->addCell($widthTraining)->addText(htmlspecialchars($keyTraining['HourTraining']));
+					    $table->addCell($widthTraining)->addText(htmlspecialchars($keyTraining['attendees']));
+					    $table->addCell($widthTraining)->addText(htmlspecialchars(""));
 						}			
 
-
+			$table->addRow(900);
+			$table->addCell($widthTraining, $styleCell)->addText('');
+			$table->addCell($widthTraining, array('gridSpan' => 2, 'valign' => 'center'))->addText(htmlspecialchars("Total Training Program for Community between 01/04/2016 and 30/06/2016 is ".$siteKey['countTraining']));
+			$table->addCell($widthTraining, $styleCell)->addText(htmlspecialchars($siteKey['totalHourTraining']));
+			$table->addCell($widthTraining, $styleCell)->addText(htmlspecialchars($siteKey['totalAttendeesraining']));
+			$table->addCell($widthTraining, $styleCell)->addText('');
 			}//end if
+
+
 			//Events and Activites
 			if ($siteKey['Event']){
 
@@ -1318,58 +1337,136 @@ class Controller_Report
 			$phpWord->addTableStyle('Fancy Table', $styleTable, $styleFirstRow);
 			$table = $section->addTable('Fancy Table');
 			$table->addRow(900);
-			$table->addCell(2200, $styleCell)->addText(htmlspecialchars('Date'), $fontStyle);
-			$table->addCell(2000, $styleCell)->addText(htmlspecialchars('Title'), $fontStyle);
-			$table->addCell(2000, $styleCell)->addText(htmlspecialchars('Details'), $fontStyle);
-			$table->addCell(2000, $styleCell)->addText(htmlspecialchars('Duration (Days)'), $fontStyle);			
-			$table->addCell(2000, $styleCell)->addText(htmlspecialchars('Attendees'), $fontStyle);			
-			$table->addCell(2000, $styleCell)->addText(htmlspecialchars('Comment'), $fontStyle);		
+			$table->addCell($widthTraining, $styleCell)->addText(htmlspecialchars('Date'), $fontStyle);
+			$table->addCell($widthTraining, $styleCell)->addText(htmlspecialchars('Title'), $fontStyle);
+			$table->addCell($widthTraining, $styleCell)->addText(htmlspecialchars('Details'), $fontStyle);
+			$table->addCell($widthTraining, $styleCell)->addText(htmlspecialchars('Duration (Days)'), $fontStyle);			
+			$table->addCell($widthTraining, $styleCell)->addText(htmlspecialchars('Attendees'), $fontStyle);			
+			$table->addCell($widthTraining, $styleCell)->addText(htmlspecialchars('Comment'), $fontStyle);		
 
 
 			foreach ($siteKey['Event'] as $keyEvent) {
 							# code...
 						$table->addRow();
-					    $table->addCell(2200)->addText(htmlspecialchars($keyEvent['startDate']));
-					    $table->addCell(2000)->addText(htmlspecialchars($keyEvent['activityName']));
+					    $table->addCell($widthTraining)->addText(htmlspecialchars($keyEvent['startDate']));
+					    $table->addCell($widthTraining+200)->addText(htmlspecialchars($keyEvent['activityName']));
 					    $desc = strlen($keyEvent['activityDescription']) > 200 ? substr($keyEvent['activityDescription'],0,200)."..." : $keyEvent['activityDescription'];
-					    $table->addCell(2000)->addText(htmlspecialchars($desc));
-					    $table->addCell(2000)->addText(htmlspecialchars($keyEvent['dayEvent']));
-					    $table->addCell(2000)->addText(htmlspecialchars($keyEvent['attendees']));
-					    $table->addCell(2000)->addText(htmlspecialchars(""));
+					    $table->addCell($widthTraining+500)->addText(htmlspecialchars($desc));
+					    $table->addCell($widthTraining)->addText(htmlspecialchars($keyEvent['dayEvent']));
+					    $table->addCell($widthTraining)->addText(htmlspecialchars($keyEvent['attendees']));
+					    $table->addCell($widthTraining)->addText(htmlspecialchars(""));
 						}	
+
+			$table->addRow(900);
+			$table->addCell($widthTraining, $styleCell)->addText('');
+			$table->addCell($widthTraining, array('gridSpan' => 2, 'valign' => 'center'))->addText(htmlspecialchars("Total Promotion Awareness & Marketing Activites between 01/04/2016 and 30/06/2016 is ".$siteKey['countEvent']));
+			$table->addCell($widthTraining, $styleCell)->addText(htmlspecialchars($siteKey['totalDaysEvent']));
+			$table->addCell($widthTraining, $styleCell)->addText(htmlspecialchars($siteKey['totalAttendeesEVent']));
+			$table->addCell($widthTraining, $styleCell)->addText('');						
 			}//end if
 			//Activites Gallery
 			$section->addPageBreak();
 			$section->addText(htmlspecialchars('Activities Gallery'), $header);
 			//var_dump($siteKey);
 			//die;
+
+
+
 			if($siteKey['album']){
+				$tableStyle = array(
+					'cellMarginRight' => 100,
+					//'cellMarginTop' => 100,
+					//'cellMarginBottom' => 100,
+					'cellMarginLeft' => 100,
+				);
+				$phpWord->addTableStyle('Table Image Activities',$tableStyle);
+				$table = $section->addTable('Table Image Activities'); 
+				$table->addRow();
+				$counterImage = 0;				
 				//var_dump($siteKey['album']);
 				foreach ($siteKey['album'] as $keyAlbum) {
 					//var_dump(url::asset() . "/frontend/images/photo/" .$keyAlbum);
 					//var_dump($keyAlbum);
-					$image = url::asset() . "/frontend/images/photo/" .$keyAlbum['albumCoverImageName'];
+
+					if($counter == 4){
+						$table->addRow();
+						$counter = 0;
+					}
+
+
+					$imagetmp = url::asset() . 
+					"/frontend/images/photo/" .$keyAlbum['albumCoverImageName'];
+					//var_dump($imagetmp);
+					//die;
+
+					$baseUrl	= url::getProtocol().apps::config("base_url:frontend");
+					//var_dump($baseUrl);
+					//die;
+					$image = $baseUrl."/api/photo/small/". $keyAlbum['albumCoverImageName']. "";					
+					//$image = model::load("image/services")->getResizedPhoto($keyAlbum['albumCoverImageName']);
 					//var_dump(url::asset() . "/frontend/images/photo/" .$keyAlbum);
 					//die;
-					//var_dump($keyAlbum);
+					//var_dump($image);
 					//die;
 					# code...http://localhost/digitalgaia/iris/pim/assets/frontend/images/photo/2015/08/17/congkak.jpg
 					//if($keyAlbum && file_exists($image)){
 					if($keyAlbum && @getimagesize($image)){
 						//var_dump($image);
-						list($width, $height) = getimagesize($image); 
-						$Dwidth = 300;
-						$ratio = $Dwidth / $width;
-						$Dheight = $height * $ratio;
-						//die;
-						$section->addImage($image,array('width' => $Dwidth, 'height' => $Dheight));
-						$section->addText(htmlspecialchars($keyAlbum['albumName']));
-						$section->addText(htmlspecialchars($keyAlbum['albumDate']));
-						$section->addTextBreak();
+						//if($height < $width){
+							list($width, $height) = getimagesize($image); 
+							$Dwidth = 150;
+							$ratio = $Dwidth / $width;
+							$Dheight = $height * $ratio;
+
+							if ($width > $height) {
+								//die;
+								// $section->addImage($image,array(
+								// 	'width' => $Dwidth, 'height' => $Dheight,
+								// 	//'positioning'      => \PhpOffice\PhpWord\Style\Image::POSITION_RELATIVE,
+							 //        'posHorizontal'    => \PhpOffice\PhpWord\Style\Image::POSITION_HORIZONTAL_CENTER,
+							 //        'posHorizontalRel' => \PhpOffice\PhpWord\Style\Image::POSITION_RELATIVE_TO_COLUMN,
+								// 	));
+								// $section->addText(htmlspecialchars($keyAlbum['albumName']));
+								// $section->addText(htmlspecialchars($keyAlbum['albumDate']));
+
+
+								$cell = $table->addCell(300);
+								$textrun = $cell->createTextRun();
+								
+			        			$textrun->addImage($image,array(
+									'width' => $Dwidth, 'height' => $Dheight));
+								//$textrun->addText($keyAlbum['albumName']);
+
+								$image_text = $cell->addTable('image text'); 
+								$image_text->addRow();
+								$image_date = $image_text->addCell(1300);
+								$textrun_date = $image_date->createTextRun();
+
+								$date = $keyAlbum['albumDate'];
+								$textrun_date->addText(date_format(new DateTime($date), 'd M Y'));									
+
+								$image_title = $image_text->addCell(1700);
+								//$image_title->addText('testing');
+								$image_title->addText($keyAlbum['albumName']);
+
+								$counter++;
+							}
+						//}// height < width
+											
+						//$section->addTextBreak();
 					}			
+					//$counter++;
 				 }//end foreach album
 			}//end if
 			//die;
+
+			/*$date = "2016-02-03";
+
+			print_r($date);
+			echo "<br><br>";
+			print_r(new DateTime($date));
+			echo "<br><br>";
+			print_r("Date: " . date_format(new DateTime($date), 'd M Y'));*/
 
 			//AJK PI1M
 			$section->addPageBreak();
@@ -1379,7 +1476,7 @@ class Controller_Report
 					// 	//
 						//var_dump($imageajk);
 						list($width, $height) = getimagesize($imageajk); 
-						$Dwidth = 450;
+						$Dwidth = 700;
 						$ratio = $Dwidth / $width;
 						$Dheight = $height * $ratio;					 	
 						$section->addImage($imageajk,array('width' => $Dwidth, 'height' => $Dheight));
@@ -1402,7 +1499,8 @@ class Controller_Report
 			$folderpath = path::files('reportGeneration/QuarterActivities/tmp/');
 			if(!is_dir($folderpath))
 			mkdir($folderpath);
-
+			//var_dump($folderpath);
+			//die;
 			//$objWriter->save($folderpath  . $siteKey['siteName'].'.docx');
 			 $objWriter->save($folderpath  . $fileNameReal.'.docx');
 			// 	if($counterSite == 5)
@@ -1445,7 +1543,7 @@ class Controller_Report
 		$folderpath = path::files('reportGeneration/QuarterActivities/tmp/');
 		$path = opendir($folderpath);
 
-		$zipfilename = 'QUARTERLY ACTIVITES REPORT 2016 Jan-March' .'.zip';
+		$zipfilename = 'QUARTERLY ACTIVITES REPORT 2016 April-June' .'.zip';
 		$zippath = path::files('reportGeneration/QuarterActivities/'.$zipfilename);
 
 		$myzip = new ZipArchive;
