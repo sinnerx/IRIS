@@ -5,6 +5,40 @@
 
 	$(document).ready(function() {
 
+		// $('.custom-table tr td').filter(function () {
+  //           return +($.trim($(this).text())) == ".";
+  //       }).css('font-weight', 'bold');
+
+		// $.fn.wrapInTag = function(opts) {
+ 
+		//  var tag = opts.tag || 'strong',
+		//      words = opts.words || [],
+		//      regex = RegExp(words.join('|'), 'gi'),
+		//      replacement = '<'+ tag +'>$&</'+ tag +'>';
+		 
+		//  return this.html(function() {
+		//    return $(this).text().replace(regex, replacement);
+		//  });
+		// };
+
+		// $('td').wrapInTag({
+		//  tag: 'strong',
+		//  words: ['0.00']
+		// });
+
+		// Make 0.00 bold
+		$("td").each(function() {
+		    var dat = $(this).html();
+
+		    if (dat == "0.00" || dat == 0) {
+		    	$(this).css('font-weight', 'bold');
+		    };
+		});
+
+		// Add class for odd and even table row
+		$("tr:odd").addClass("odd");
+		$("tr:even").addClass("even");
+
 		$('.row').floatingScrollbar();
 
 		// table.toggleExpand();
@@ -281,6 +315,21 @@
 		border-bottom: 1px solid #ddd !important;
 	}
 
+	/* Change background color */
+	.thead-bg {
+	   background: #ededed !important;
+	}
+
+	/* Change background color for odd table row */
+	.odd {
+	   background: rgb(242, 244, 248);
+	}
+
+	/* Change background color for even table row */
+	.even {
+	   background: #ffffff;
+	}
+
 </style>
 
 <h3 class='m-b-xs text-black'>
@@ -326,7 +375,7 @@
 		<div class="table-responsive">
 			<table class='table b-t b-light custom-table'>
 
-				<tr style="background-color:#ededed">	
+				<tr class="thead-bg">	
 					<th></th> 
 					<th colspan="6" id="a1">Member</th>
 					<th colspan="15" id="b1">PC Day</th>
@@ -339,7 +388,7 @@
 					<th colspan="2">Day End</th>
 				</tr>			
 
-				<tr bgcolor="#ededed" >	
+				<tr class="thead-bg">	
 					<th class="skip-top"></th> 		
 					<th colspan="2"><a id ="a2" href="#" onclick='table.toggleExpand();' class='fa fa-plus-square pull-right' style='font-size:13px;'></a>Total</th>
 					<th class="billing-column-member" colspan="2">Student</th>	
@@ -363,7 +412,7 @@
 					<th></th><th></th><th></th><th></th><th></th><th></th><th></th>
 				</tr>			
 
-				<tr bgcolor="#ededed">	
+				<tr class="thead-bg">	
 					<th class="skip-top">Day</th> 
 					<th>RM</th> <th>User</th> 
 					<th class="billing-column-member">RM</th> <th class="billing-column-member">User</th>	
