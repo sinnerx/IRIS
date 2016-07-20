@@ -873,7 +873,8 @@ Class Controller_Billing
 		db::order_by("siteName","ASC");
 		
 		$res_site = db::get()->result();
-
+		//var_dump($res_site);
+		//die;
 		foreach($res_site as $row)
 		{
 			$data['siteList'][$row['siteID']]	= $row['siteName'];
@@ -888,6 +889,20 @@ Class Controller_Billing
 			->group_by('billingTransactionDate ASC')
 			->get('billing_transaction')
 			->result('billingTransactionID');
+
+			$siteEnabled = db::from("site")
+			->where("siteID", $siteID)->get()->result();
+			$siteEnabled = $siteEnabled[0];
+			//var_dump(strtotime($siteEnabled['siteUnlockDate']));
+			//var_dump(strtotime('-1 day'));
+			//die;
+			if($siteEnabled['siteUnlockDate'] != '' && strtotime($siteEnabled['siteUnlockDate']) >= strtotime('-1 day')){
+				$data['siteEnabled'] = 1;
+			}
+			else{
+				$data['siteEnabled'] = 0;
+			}
+
 		}
 		else
 		{
@@ -926,7 +941,8 @@ Class Controller_Billing
 				$data['journal'][$journalList['billingTransactionDate']] = $journal;	
 			}
 		}*/
-
+		//var_dump($data);
+		//die;
 		view::render("shared/billing/dailyJournal", $data);
 	}
 
@@ -1002,5 +1018,31 @@ Class Controller_Billing
 		 	$data['previoussum'] = $previousbalance->total;*/
 
 		view::render("shared/billing/transactionJournal", $data);
+	}
+
+	public function editTransaction($transid)
+	{
+
+		$data['transaction'] = model::load("billing/billing")->getBillingTransaction($transid);
+		view::render("shared/billing/editTransaction", $data);
+	}
+
+	public function unlockTransaction()
+	{
+		db::from("site");
+		db::order_by("siteName","ASC");
+		
+		$res_site = db::get()->result();
+
+		foreach($res_site as $row)
+		{
+			$data['siteList'][$row['siteID']]	= $row['siteName'];
+		}		
+
+		$site = model::load("site/site")->listUnlockSite();
+		//var_dump($site);
+		$data['unlockSite'] = $site;
+		//$data[] = "";
+		view::render("shared/billing/unlockTransaction", $data);
 	}
 }

@@ -15,6 +15,7 @@ var report = new function()
 
 		$.ajax({type: 'GET', url: pim.url('ajax/report/monthlyActivityGenerate/'+year+'/'+month+'/'+category), dataType: 'json'}).done(function(result)
 		{
+			console.log(result);
 			if(result.status == 'failed')
 			{
 				alert(result.message);

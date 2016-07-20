@@ -252,5 +252,14 @@ class billing extends \Origami
 		
 		return db::get()->result();
 	}
+
+	public function getBillingTransaction($id)
+	{
+		db::from("billing_transaction")->where("billing_transaction.billingTransactionID", $id);
+		db::join("billing_transaction_item", "billing_transaction_item.billingTransactionID = billing_transaction.billingTransactionID");
+		db::order_by("billingTransactionDate","ASC");
+
+		return db::get()->result();
+	}
 }
 ?>

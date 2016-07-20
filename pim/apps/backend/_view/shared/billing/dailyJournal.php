@@ -80,6 +80,7 @@ var base_url	= "<?php echo url::base();?>/";
 Select Date
 </div>
 <?php echo flash::data();?>
+<?php echo $siteEnabled; ?>
 <div class='row'>
 	<div class='col-sm-10'>
 		<form class="form-inline bs-example" method='post' action='<?php echo url::base('billing/addTransaction/'.$itemSelect->billingItemID);?>'>
@@ -115,6 +116,7 @@ Select Date
 					<th>Transaction Items</th>
 					<th style="width: 100px;">Quantity</th>
 					<th style="width: 100px;">Total (RM)</th>
+					<th style="width: 100px;"></th>
 				</tr>
 				<?php if(count($groupedTransactions) === 0):?>
 				<tr>
@@ -124,10 +126,11 @@ Select Date
 				<?php foreach($groupedTransactions as $date => $transactions):?>
 				<tr>
 					<td style="background: #e4e9ef;"></td>
-					<td style="background: #e4e9ef; font-size: 1.1em;" colspan="4"><?php echo date('d F Y', strtotime($date));?></td>
+					<td style="background: #e4e9ef; font-size: 1.1em;" colspan="5"><?php echo date('d F Y', strtotime($date));?></td>
 				</tr>
 					<?php 
 					foreach($transactions as $transaction):
+						$biltransID = $transaction['billingTransactionID'];
 					?>
 					<tr>
 						<td>#<?php echo $transactionID = $transaction['billingTransactionLocalID'];?></td>
@@ -140,6 +143,7 @@ Select Date
 									<td></td>
 									<td style="text-align: center;"><?php echo (float) $transactionItem['billingTransactionItemQuantity'];?></td>
 									<td style="text-align: center;"><?php echo number_format($transactionItem['billingTransactionItemPrice'] * $transactionItem['billingTransactionItemQuantity'], 2, '.', '');?></td>
+
 								</tr>
 								<?php endforeach;?>
 								<tr>
@@ -150,6 +154,9 @@ Select Date
 								</tr>
 							</table>
 						</td>
+						<?php if($siteEnabled == 1) {?>
+						<td><input type='button' value='Edit' onclick='window.location.href = " <?php echo url::base("billing/editTransaction/$biltransID");?>"' /></td>
+						<?php } ?>
 					</tr>
 					<?php endforeach;?>
 				<?php endforeach;?>

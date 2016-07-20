@@ -1041,8 +1041,8 @@ class Controller_Report
 		//site list
 		db::select("siteID");
 		db::order_by("siteID", "ASC");
-		db::where("siteID", 1);
-		//db::limit(11, 120);
+		db::where("siteID", 5);
+		//db::limit(101, 30);
 		$allsite = db::get("site")->result('siteID');
 		//var_dump($allsite);
 		//die;
@@ -1054,7 +1054,7 @@ class Controller_Report
 		//var_dump($allsite);
 		//die;
 		foreach ($allsite as $allSiteKey) {
-
+			\PhpOffice\PhpWord\Media::resetElements();
 			$data = array();
 			$report	= model::load("report/report")->getQuarterlyReport($allSiteKey['siteID']);
 			$siteKey = $report;
@@ -1324,7 +1324,7 @@ class Controller_Report
 
 			$table->addRow(900);
 			$table->addCell($widthTraining, $styleCell)->addText('');
-			$table->addCell($widthTraining, array('gridSpan' => 2, 'valign' => 'center'))->addText(htmlspecialchars("Total Training Program for Community between 01/04/2016 and 30/06/2016 is ".$siteKey['countTraining']));
+			$table->addCell($widthTraining, array('gridSpan' => 2, 'valign' => 'center'))->addText(htmlspecialchars("Total ".$siteKey['countTraining']));
 			$table->addCell($widthTraining, $styleCell)->addText(htmlspecialchars($siteKey['totalHourTraining']));
 			$table->addCell($widthTraining, $styleCell)->addText(htmlspecialchars($siteKey['totalAttendeesraining']));
 			$table->addCell($widthTraining, $styleCell)->addText('');
@@ -1366,7 +1366,7 @@ class Controller_Report
 
 			$table->addRow(900);
 			$table->addCell($widthTraining, $styleCell)->addText('');
-			$table->addCell($widthTraining, array('gridSpan' => 2, 'valign' => 'center'))->addText(htmlspecialchars("Total Promotion Awareness & Marketing Activites between 01/04/2016 and 30/06/2016 is ".$siteKey['countEvent']));
+			$table->addCell($widthTraining, array('gridSpan' => 2, 'valign' => 'center'))->addText(htmlspecialchars("Total ".$siteKey['countEvent']));
 			$table->addCell($widthTraining, $styleCell)->addText(htmlspecialchars($siteKey['totalDaysEvent']));
 			$table->addCell($widthTraining, $styleCell)->addText(htmlspecialchars($siteKey['totalAttendeesEVent']));
 			$table->addCell($widthTraining, $styleCell)->addText('');						
@@ -1391,6 +1391,8 @@ class Controller_Report
 				$table->addRow();
 				$counterImage = 0;				
 				//var_dump($siteKey['album']);
+				//die;
+				$counter = 0;
 				foreach ($siteKey['album'] as $keyAlbum) {
 					//var_dump(url::asset() . "/frontend/images/photo/" .$keyAlbum);
 					//var_dump($keyAlbum);
@@ -1425,7 +1427,7 @@ class Controller_Report
 							$ratio = $Dwidth / $width;
 							$Dheight = $height * $ratio;
 
-							if ($width > $height) {
+							//if ($width > $height) {
 								//die;
 								// $section->addImage($image,array(
 								// 	'width' => $Dwidth, 'height' => $Dheight,
@@ -1441,7 +1443,7 @@ class Controller_Report
 								$textrun = $cell->createTextRun();
 								
 			        			$textrun->addImage($image,array(
-									'width' => $Dwidth, 'height' => $Dheight));
+									'width' => $Dwidth, 'height' => 150));
 								//$textrun->addText($keyAlbum['albumName']);
 
 								$image_text = $cell->addTable('image text'); 
@@ -1457,11 +1459,12 @@ class Controller_Report
 								$image_title->addText($keyAlbum['albumName']);
 
 								$counter++;
-							}
-						//}// height < width
+							//}// height < width
 											
 						//$section->addTextBreak();
-					}			
+								
+					}	
+
 					//$counter++;
 				 }//end foreach album
 			}//end if
@@ -1483,11 +1486,13 @@ class Controller_Report
 					// 	//
 						//var_dump($imageajk);
 						list($width, $height) = getimagesize($imageajk); 
-						$Dwidth = 700;
+						$Dwidth = 550;
 						$ratio = $Dwidth / $width;
 						$Dheight = $height * $ratio;					 	
 						$section->addImage($imageajk,array('width' => $Dwidth, 'height' => $Dheight));
+
 					}		
+
 
 			// Saving the document as OOXML file...
 			$objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'Word2007');
@@ -1510,12 +1515,15 @@ class Controller_Report
 			//die;
 			//$objWriter->save($folderpath  . $siteKey['siteName'].'.docx');
 			 $objWriter->save($folderpath  . $fileNameReal.'.docx');
+
 			// 	if($counterSite == 5)
 			// 		break;	
 
 			// 	$counterSite++;	
+			 //\PhpOffice\PhpWord\Media::resetElements();
 		}//end site foreach
 		//end site loop
+		
 
 		/*
 		 * Note: it's possible to customize font style of the Text element you add in three ways:

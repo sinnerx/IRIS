@@ -762,6 +762,21 @@ class Site extends \Origami
 		##
 		model::load("user/activity")->create($siteID,session::get("userID"),"site.delete");
 	}
+
+	public function unlockSite($siteID, $date)
+	{
+		db::where("siteID", $siteID);
+		db::update("site", Array("siteUnlockDate"=> $date));
+	}
+
+	public function listUnlockSite()
+	{
+		db::from("site");
+		db::where("siteUnlockDate > (DATE_SUB(NOW(), INTERVAL 24 HOUR))");
+		$result	= db::get()->result();
+
+		return $result;
+	}
 }
 
 ?>
