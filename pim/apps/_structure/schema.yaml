@@ -241,6 +241,11 @@ site_info:
 	siteInfoFacebookPageId [varchar]
 	siteInfoEmail [varchar]
 	siteInfoImage [varchar]
+	siteInfoParliamen [varchar]
+	siteInfoPhase [varchar]
+	siteInfoDistrict [varchar]
+	siteInfoPopulation [varchar]
+	siteInfoLoaDate [datetime]
 
 site_member:
 	siteMemberID [int]
@@ -1220,4 +1225,4 @@ training_SubType:
 	trainingSubTypeCreatedDate [datetime]
 	trainingSubTypeCreatedUser [int]
 	trainingSubTypeUpdatedDate [datetime]
-	trainingSubTypeUpdatedUser [int]
+	trainingSubTypeUpdatedUser[int]
