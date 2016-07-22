@@ -135,6 +135,25 @@ function buttonCheck()
 	return true;
 }
 
+var article = new function($)
+{
+	this.delete = function(id)
+	{
+		if(!confirm('Delete this article?'))
+			return false;
+
+		window.location.href = '<?php echo url::base("site/deleteArticle/");?>'+id;
+	}
+
+	this.undelete = function(id)
+	{
+		if(!confirm('Cancel deletion of this article?'))
+			return false;
+
+		window.location.href = '<?php echo url::base("site/undeleteArticle/");?>'+id;
+	}
+}(jQuery);
+
 </script>
 
 
@@ -226,17 +245,24 @@ List of all your approved and pending blog articles.
 				</div>
 			</td>
 			<td><?php echo date("d-m-Y",strtotime($row['articlePublishedDate']));?></td>
-			<td width="29">
+			<!--<td>
+			</td>
+			<td>
+			</td>-->
+			<td colspan = "3">
 				<a><?php echo model::load('template/icon')->status($row['articleStatus']); ?></a>
+				<?php  if (authData('site.siteInfoFacebookPageId') != ""  ) { ?>
+					<a class="fa fa-facebook-square" style="color:#44609d;" onclick ='return buttonCheck();' href="<?php echo url::base('facebook/getArticleInfo');?>?articleID=<?php echo $row['articleID']; ?>"></a>
+				<?php } ?>			
+				<?php if($row['articleStatus'] != 2):?>
+					<a href='<?php echo url::base("site/editArticle/".$row['articleID']);?>' class='fa fa-edit'></a>
+					<?php if($row['articleStatus'] == 5):?>
+						<a href='javascript:article.undelete(<?php echo $row['articleID'];?>);' class='i i-cross2'></a>
+					<?php else:?>
+						<a href='javascript:article.delete(<?php echo $row['articleID'];?>);' class='i i-cross2'></a>
+					<?php endif;?>				
+				<?php endif; ?>
 			</td>
-			<?php  if (authData('site.siteInfoFacebookPageId') != ""  ) { ?>
-			<td width="29">
-				<a class="fa fa-facebook-square" style="color:#44609d;" onclick ='return buttonCheck();' href="<?php echo url::base('facebook/getArticleInfo');?>?articleID=<?php echo $row['articleID']; ?>"></a>
-			</td>
-			<?php } ?>			
-			<td width="29"><?php if($row['articleStatus'] != 2):?>
-				<a href='<?php echo url::base("site/editArticle/".$row['articleID']);?>' class='fa fa-edit'></a>
-			<?php endif; ?></td>
 		</tr>
 		<?php 
 		endforeach;
@@ -244,7 +270,7 @@ List of all your approved and pending blog articles.
 		<?php
 		else:?>
 			<tr>
-				<td align="center" colspan='4'>No blog was posted yet.</td>
+				<td align="center" colspan='7'>No blog was posted yet.</td>
 			</tr>
 		<?php endif;?>
 	</tbody>

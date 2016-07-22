@@ -201,7 +201,9 @@
                 $href   = $row['siteSliderLink'];
                 ?>
             <li>
+
               <a href='' ><img src="<?php echo $url;?>" /></a>
+
             </li>
             <?php endforeach;?>
             <?php endif;?>   

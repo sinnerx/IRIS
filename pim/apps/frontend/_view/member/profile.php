@@ -125,14 +125,29 @@ $(document).ready(function(){
                         </ul>
                         <div class="resp-tabs-container">
                             <div>
+                            <div class="profile-additional">
+                            <div class="profile-text-container">
                                 <p>
+                                <?php
+                                $pos = strpos($row['userProfileVideo'], "=");
+                                if ($pos) { ?>
+                                    <iframe title="YouTube video player" class="youtube-player" type="text/html"
+                                    width="450" height="300" src="http://www.youtube.com/embed/<?php echo substr($row['userProfileVideo'], $pos + 1); ?>"
+                                    frameborder="0" allowFullScreen></iframe>
+                                <?php }
+                                ?>
+                            </div>
+
+                            <div class="profile-text-container">
                                     <?php
                                     if(strip_tags($row['userProfileIntroductional']) != ""):
                                     echo nl2br($row['userProfileIntroductional']);?>
                                     <?php else:?>
                                     Pengguna ini masih tidak punyai maklumat mengenai dirinya lagi
                                     <?php endif;?>
-                                </p>
+                            </div>
+
+                            </div>
                             </div>
                             <div>
                             <div class="profile-activity-forum">

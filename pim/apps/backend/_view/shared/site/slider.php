@@ -29,6 +29,17 @@ function showPicture(obj)
 	
 }
 
+var slider = new function($)
+{
+	this.delete = function(id)
+	{
+		if(!confirm('Delete this slider?'))
+			return false;
+
+		window.location.href = '<?php echo url::base("site/deleteSlider/");?>'+id;
+	}
+}(jQuery);
+
 </script>
 <style type="text/css">
 	
@@ -142,7 +153,7 @@ List of universal Front-Page Slide on all Pi1M sites. Only root admin can manage
 			?>
 		<tr <?php echo $opacity;?>>
 			<td><?php echo $no;?>.</td>
-			<td width='80%'>
+			<td width='60%'>
 			<?php if($row['siteSliderType'] == 2 && session::get("userLevel") != 99):?>
 			<span class='general-label'>General slider</span>
 			<?php endif;?>
@@ -150,11 +161,12 @@ List of universal Front-Page Slide on all Pi1M sites. Only root admin can manage
 			<img src="<?php echo $imageUrl;?>" height='200px' style='display:none;'>
 			<br>Redirection link : <?php echo $row['siteSliderLink'];?>
 			</td>
-			<td><?php echo date("d-m-Y g:i A",strtotime($row['siteSliderCreatedDate']));?></td>
+			<td width="100"><?php echo date("d-m-Y g:i A",strtotime($row['siteSliderCreatedDate']));?></td>
 			<td>
 				<?php if($row['siteSliderType'] == 1 || session::get("userLevel") == 99):?>
 				<a href='<?php echo url::base("site/slider_edit/".$row['siteSliderID']);?>' class='fa fa-edit'></a>
 				<a href="<?php echo $href;?>" class="<?php echo $active;?>" ><i class="fa fa-check text-success text-active"></i><i class="fa fa-times text-danger text"></i></a>
+				<a href='javascript:slider.delete(<?php echo $row['siteSliderID'];?>);' class='i i-cross2'></a>
 			<?php endif;?>
 			</td>
 		</tr>

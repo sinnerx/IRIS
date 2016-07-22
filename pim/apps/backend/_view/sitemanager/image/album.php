@@ -36,6 +36,16 @@ var album	= new function()
 		});*/
 	}
 
+	this.importToActivity = function (siteAlbumID, activityID){
+		$.ajax({type:"GET",url:pim.base_url+"ajax/gallery/importToActivity/"+ siteAlbumID + "/" + activityID}).done(function(res)
+			{
+				if(res)
+				{
+					history.back();
+				}
+		});		
+	}
+
 	/*this.addPhotoForm	= new function()
 	{
 		this.show 	= function(id)
@@ -158,7 +168,16 @@ Overview of your site albums. You can <a href='javascript:album.addForm.show();'
 							<a href='javascript:album.deleteAlbum(<?php echo $row['siteAlbumID'];?>);' class='i i-cross2 button-delete'></a>
 						</div>
 						</div>
-						<div onclick='album.showDetail(<?php echo $row['siteAlbumID'];?>);'>
+						<?php 
+							$import = $_GET['import'];
+							if($import == 1){ 
+							//echo $_GET['import'];
+
+						?>
+							<div onclick='album.importToActivity(<?php echo $row['siteAlbumID'];?>, <?php echo $activityID;?>);'>
+						<?php } else {?>
+							<div onclick='album.showDetail(<?php echo $row['siteAlbumID'];?>);'>
+						<?php } ?>
 						<img src='<?php echo $coverimageUrl;?>' width='100%' />
 						</div>
 					</section>

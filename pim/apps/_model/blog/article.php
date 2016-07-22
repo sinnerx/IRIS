@@ -117,6 +117,7 @@ class Article extends \Origami
 		{
 			if($frontend == false){
 				db::where("siteID = '$siteID'");
+				db::where("articleStatus != 99");
 				## paginate based on current query built.
 				pagination::setFormat(model::load('template/cssbootstrap')->paginationLink());
 				pagination::initiate(Array(
@@ -737,6 +738,7 @@ if ($articleID) {
 	}
 
 
+
 	public function getFilter($articleID)
 	{
 		//select * from article a, article_category b where a.articleID=b.articleID and categoryID=2
@@ -762,6 +764,52 @@ if ($articleID) {
 	}
 }
 
+	public function delete()
+	{
+		//if($this->activityApprovalStatus == 1)
+		//	return;
+		if($this->articleStatus == 1) {
+			model::load("site/request")->create("article.delete",$this->siteID,$this->articleID,Array());
 
+			$this->articleStatus = 5;
+			$this->save();
+
+			return;
+		}
+
+		// delete related site_request for activity.add, if the current approval status is 0
+		if($this->articleStatus == 0)
+		{
+			$siteRequest = model::orm('site/request')
+			->where('siteRequestRefID', $this->articleID)
+			->where('siteRequestType', 'article.add')
+			->order_by("siteRequestID","desc")
+			->execute();
+
+
+			$siteRequest->getFirst()->delete();
+		}
+
+		$this->articleStatus = 99;
+		$this->save();
+	}
+
+	public function undelete()
+	{
+		// delete related site_request for activity.add, if the current approval status is 0
+		$siteRequest = model::orm('site/request')
+		->where('siteRequestRefID', $this->articleID)
+		->where('siteRequestType', 'article.delete')
+		->order_by("siteRequestID","desc")
+		->execute();
+
+		$siteRequest->getFirst()->delete();
+
+
+
+		$this->articleStatus = 1;
+		$this->save();
+	}
+}
 
 ?>

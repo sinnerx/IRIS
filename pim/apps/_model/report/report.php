@@ -1,6 +1,6 @@
 <?php
 namespace model\report;
-use db, model;
+use db, model, pagination;
 
 class Report
 {
@@ -84,7 +84,9 @@ class Report
 	public function getMasterListing($dateStart,$dateEnd)
 	{
 		## select all site.
-		$siteR = db::select("siteID,stateID,siteName")->get("site")->result("siteID");
+		$siteR = db::select("*")
+		->innerJoin('site_info', 'site_info.siteID = site.siteID')
+		->get("site")->result("siteID");
 
 		## total registered member.
 		db::select("userID,siteID");
@@ -114,6 +116,8 @@ class Report
 											"siteName"=>$row['siteName'],
 											"stateName"=>$stateR[$row['stateID']]
 														);
+
+			$data['siteInfo'][$siteID] = $row;
 
 			## initiate datas.
 			$data['totalActive'][$siteID]	= count($userR);
@@ -228,6 +232,31 @@ class Report
 
 	public function getQuarterlyReport($siteID = null, $quarter = null){
 		## select all site.
+		$year = 2016;
+		$quarter = 1;
+		switch ($quarter) {
+			case '1':
+				# code...
+				$month = "(1,2,3)";
+				break;
+			case '2':
+				# code...
+				$month = "(4,5,6)";
+				break;			
+			case '3':
+				# code...
+				$month = "(7,8,9)";
+				break;			
+			case '4':
+				# code...
+				$month = "(10,11,12)";
+				break;
+			
+			default:
+				# code...
+				break;
+		}
+
 		$keySite = db::select("siteID,stateID,siteName")->where("siteID", $siteID)->get("site")->result();
 		$keySite = $keySite[0];
 		//var_dump($keySite);
@@ -246,8 +275,8 @@ class Report
 			// db::join("activity_user ", " activity.activityID = activity_user.activityID");
 			db::select("*, DATE(activityStartDate) as startDate");
 			db::where("activityType",2);
-			db::where("YEAR(activityStartDate) ", "2016");
-			db::where("MONTH(activityStartDate) IN ", "(1,2,3)");
+			db::where("YEAR(activityStartDate) ", $year);
+			db::where("MONTH(activityStartDate) IN ", $month);
 
 			db::where("activity.siteID",$keySite['siteID']);
 
@@ -258,6 +287,12 @@ class Report
 			//var_dump($trainingR);
 
 			$hourTraining = 0;
+			$totalHourTraining = 0;
+			$totalAttendeesTraining = 0;
+			$totalDaysEvent = 0;
+			$totalAttendeesEvent = 0;
+			$countTraining = 0;
+			$countEvent = 0;
 			foreach ($trainingR as $keyTraining) {
 				# code...
 				if ($keyTraining['activityID']){
@@ -278,6 +313,7 @@ class Report
 					// }
 					// else{
 					 	$hourTraining = $resultHourTraining[0]['totalhours'];
+					 	$totalHourTraining += $resultHourTraining[0]['totalhours'];
 					// }
 
 						//$tempActivityID = 	$keyTraining['activityID'];
@@ -294,23 +330,26 @@ class Report
 					//var_dump($keyTraining['activityID']);
 					//var_dump($resultAttendees);
 					$arrayActivitiesOnSite['Training'][$keyTraining['activityID']]['attendees'] = $resultAttendees[0]['attendees'];
+					$totalAttendeesTraining += $resultAttendees[0]['attendees'];
 
-					
+					$countTraining++;					
 					//$album = db::lastQuery();
 					//var_dump($album);	
 				}//end if
 
 			}//end-foreach training
 			//$arrayActivitiesOnSite['HourTraining'] = $hourTraining;
-
+			$arrayActivitiesOnSite['totalHourTraining'] = $totalHourTraining;
+			$arrayActivitiesOnSite['totalAttendeesraining'] = $totalAttendeesTraining;
+			$arrayActivitiesOnSite['countTraining'] = $countTraining;
 
 
 
 			## select event only
 			db::select("*, DATE(activityStartDate) as startDate");
 			db::where("activityType",1);
-			db::where("YEAR(activityStartDate) ", 2016);
-			db::where("MONTH(activityStartDate) IN ", "(1,2,3)");			
+			db::where("YEAR(activityStartDate) ", $year);
+			db::where("MONTH(activityStartDate) IN ", $month);			
 			db::where("siteID",$keySite['siteID']);
 			//db::where("year(activityStartDate) = ? AND month(activityStartDate) = ?",Array($year,$month));
 			$eventR		= db::get("activity")->result();		
@@ -332,7 +371,7 @@ class Report
 				//die;
 				$dayEvent = $resultDayEvent[0]['totaldays'];
 				$arrayActivitiesOnSite['Event'][$keyEvent['activityID']]['dayEvent'] = $dayEvent;	
-
+				$totalDaysEvent += $dayEvent;
 				// db::select("count(UserID) as attendees");
 				// db::where("activity_user.activityID", $keyEvent['activityID']);
 				// $resultAttendeesEvent = db::get('activity_user')->result();
@@ -341,11 +380,15 @@ class Report
 				// //var_dump($resultAttendeesEvent);
 				// $arrayActivitiesOnSite['Event'][$keyEvent['activityID']]['attendees'] = $resultAttendeesEvent[0]['attendees'];
 				$arrayActivitiesOnSite['Event'][$keyEvent['activityID']]['attendees'] = 0;
+				$totalAttendeesEvent += 0;
 
+				$countEvent++;
 
 			}//end foreach event
 			//$arrayActivitiesOnSite['DayEvent'] = $dayEvent;
-			
+			$arrayActivitiesOnSite['totalDaysEvent'] = $totalDaysEvent;
+			$arrayActivitiesOnSite['totalAttendeesEVent'] = $totalAttendeesEvent;
+			$arrayActivitiesOnSite['countEvent'] = $countEvent;			
 
 
 
@@ -370,8 +413,8 @@ class Report
 				
 				db::join("site_photo SP", " SP.siteID = ". $keySite['siteID']);				
 				db::where("photo.photoID = SP.photoID");
-				db::where("YEAR(photo.photoCreatedDate)", "2016");
-				db::where("MONTH(photo.photoCreatedDate) IN ", "(1,2,3)");
+				db::where("YEAR(photo.photoCreatedDate)", $year);
+				db::where("MONTH(photo.photoCreatedDate) IN ", $month);
 				//db::where("photo.photoDescription ", " NOT NULL");
 
 				$album = db::get("photo")->result();
@@ -379,10 +422,10 @@ class Report
 				//die;
 				if($album) {
 					//count($album) > 5 ? $countAlbum = 5 : $countAlbum = count($album);
-					if(count($album) < 5)
+					if(count($album) < 16)
 						$random_image = $album;
 					else {
-						$random_keys = array_rand($album, 5);
+						$random_keys = array_rand($album, 16);
 						$random_image = array();
 						foreach ($random_keys as $key) {
 							# code...
@@ -428,8 +471,8 @@ SUM(billingTransactionItemPrice * billingTransactionItemQuantity) AS revenue");
 			db::join("site S", "S.siteID = BT.siteID");
 			db::where("billingTransactionItemPrice >", 0);
 			db::where("BT.siteID", $keySite['siteID']);
-			db::where("YEAR(billingTransactionDate)", 2016);
-			db::where("MONTH(billingTransactionDate) IN ", "(1,2,3)");
+			db::where("YEAR(billingTransactionDate)", $year);
+			db::where("MONTH(billingTransactionDate) IN ", $month);
 			db::group_by("siteName, yr, mn");
 			$cashflow = db::get("billing_transaction BT")->result();
 			//var_dump($cashflow);
@@ -446,7 +489,7 @@ SUM(billingTransactionItemPrice * billingTransactionItemQuantity) AS revenue");
 COUNT(*) AS members");
 			db::join("site_member SM", "U.userID = SM.userID");
 			db::join("site S", "S.siteID = SM.siteID");
-			db::where("YEAR(userCreatedDate)", 2016);
+			db::where("YEAR(userCreatedDate)", $year);
 			db::where("S.siteID", $keySite['siteID']);
 			db::group_by("siteName, yr, mn");
 			$totalmember = db::get("user U")->result();
@@ -465,7 +508,7 @@ COUNT(DISTINCT billingTransactionUser) AS members");
 			db::join("billing_transaction_user BTU", "BTU.billingTransactionID = BT.billingTransactionID");
 			db::join("site S", "S.siteID = BT.siteID");
 			db::where("BTI.billingItemID", 3);
-			db::where("YEAR(billingTransactionDate)", 2016);
+			db::where("YEAR(billingTransactionDate)", $year);
 			db::where("BT.siteID", $keySite['siteID']);
 			db::group_by("siteName, yr, mn");
 			$usagetotal = db::get("billing_transaction BT")->result();
@@ -483,7 +526,7 @@ SUM(billingTransactionItemQuantity) AS hours");
 			db::join("billing_transaction_item BTI", "BTI.billingTransactionID = BT.billingTransactionID");
 			db::join("site S", "S.siteID = BT.siteID");
 			db::where("BTI.billingItemID", 3);
-			db::where("YEAR(billingTransactionDate)", 2016);
+			db::where("YEAR(billingTransactionDate)", $year);
 			db::group_by("siteName, yr, mn");
 			$usagehour  = db::get("billing_transaction BT")->result();
 			//var_dump($usagehour);
@@ -504,6 +547,52 @@ SUM(billingTransactionItemQuantity) AS hours");
 		return $arrayActivitiesOnSite;
 
 
+	}
+
+	public function getListReport($where, $pagination){
+		//db::select("reportsID, reportsName, reportsDesc, reportsURL")->from("reports");
+		db::select("*")->from("reports");
+		//var_dump($reportlist);
+		if($where)
+			{
+				$where	= !is_array($where)?Array($where):$where;
+				foreach($where as $key => $wher)
+				{
+					if(is_string($key))
+						where($key, $wher);
+					else
+						db::where($wher);
+				}
+			}
+			//echo $pagination;
+			if($pagination)
+			{
+				$totalRows = db::num_rows();
+				
+				## required property : totalRow, currentPage, limit urlFormat
+				pagination::initiate(Array(
+					"totalRow"=>$totalRows,
+					"currentPage"=>$pagination['currentPage'],
+					"urlFormat"=>$pagination['urlFormat']
+									));
+				
+				//var_dump($pagination['urlFormat']);
+
+				db::limit(pagination::get("limit"), pagination::recordNo()-1);
+			}
+			//var_dump('');
+			$reportlist = db::get()->result('reportsID');
+			return $reportlist;
+	}
+
+	public function getReportForm($idReport){
+		db::select("*");
+		db::from("report_fields");
+		db::where("report_fieldsReportID", $idReport);
+		db::order_by("report_fieldsID");
+		$result = db::get()->result();
+
+		return $result;
 	}
 }
 

@@ -91,6 +91,7 @@ class Controller_Activity
 
 		$data['eventTypeR']		= model::load("activity/event")->type();
 		$data['trainingTypeR']	= model::load("activity/training")->type();
+		$data['trainingSubTypeR']	= model::load("activity/training")->subtype($row['trainingType']);
 		$data['row']			= $row;
 		$row_site				= model::load("access/auth")->getAuthData("site");
 		$data['siteInfoAddress']	= $row_site['siteInfoAddress'];
@@ -126,6 +127,7 @@ class Controller_Activity
 	{
 		$data['eventTypeR']		= model::load("activity/event")->type();
 		$data['trainingTypeR']	= model::load("activity/training")->type();
+		
 		$row_site				= model::load("access/auth")->getAuthData("site");
 		$data['siteInfoAddress']	= $row_site['siteInfoAddress'];
 		$data['learningPackage'] = model::load("activity/learning")->package();
@@ -170,7 +172,7 @@ class Controller_Activity
 			$data['activityDateTime']		= $datetime['timeList'];
 
 			## win.
-			model::load("activity/activity")->addActivity($row_site['siteID'],input::get("activityType"),$data, input::get("learningSelect"));
+			model::load("activity/activity")->addActivity($row_site['siteID'],input::get("activityType"),$data, input::get("learningSelect"), input::get("activitySubType"));
 
 			redirect::to("","New activity has been submitted, and is pending for cluster lead approval.");
 		}
@@ -218,13 +220,33 @@ class Controller_Activity
 		$pages = array(1 => 'event', 2 => 'training');
 		
 		// if has already been approved.
-		if($activity->activityApprovalStatus == 1)
-			redirect::to('activity/'.$pages[$type], 'Unable to delete an already approved activity.', 'error');
+		//if($activity->activityApprovalStatus == 1)
+		//	redirect::to('activity/'.$pages[$type], 'Unable to delete an already approved activity.', 'error');
 		
 		// delete.
 		$activity->delete();
 
 		redirect::to('activity/'.$pages[$type], 'Activity \''.$name.'\' has been deleted.');
+	}
+
+	public function undelete($id)
+	{
+		// db::where('activityID', $id)->update('activity', array('activityDeleted', 1));
+		$activity = model::orm('activity/activity')->find($id);
+
+		// save this record first.
+		$type = $activity->activityType;
+		$name = $activity->activityName;
+		$pages = array(1 => 'event', 2 => 'training');
+		
+		// if has already been approved.
+		//if($activity->activityApprovalStatus == 1)
+		//	redirect::to('activity/'.$pages[$type], 'Unable to delete an already approved activity.', 'error');
+		
+		// delete.
+		$activity->undelete();
+
+		redirect::to('activity/'.$pages[$type], 'Activity \''.$name.'\' deletion has been cancelled.');
 	}
 
 	public function event($page = 1)

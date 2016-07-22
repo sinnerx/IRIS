@@ -248,5 +248,12 @@ class Controller_Ajax_Activity
 		$data 	= json_encode($data);
 		echo $data;
 	}
+
+	public function getTrainingSubType($typeid)
+	{
+		$data	= model::load("activity/training/subtype")->getSubTypeByTypeID($typeid);
+		$data 	= json_encode($data);
+		echo $data;		
+	}
 }
 ?>
