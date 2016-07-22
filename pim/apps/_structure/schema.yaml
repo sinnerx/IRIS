@@ -176,6 +176,7 @@ event:
 	eventRefID [int]				## if eventType == 1
 	eventCreatedUser [int]
 	eventCreatedDate [datetime]
+	eventMaxPax [int]
 
 training:
 	trainingID [int]
