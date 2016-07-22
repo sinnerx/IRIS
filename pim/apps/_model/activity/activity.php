@@ -474,8 +474,8 @@ class Activity extends \Origami
 							"activityID"=>$activityID,
 							"activityDateValue"=>$date,
 							"activityDateStartTime"=>$row['start'],
-							"activityDateEndTime"=>$row['end'],
-							"activityMaxPax"=>$data['activityMaxPax']
+							"activityDateEndTime"=>$row['end']
+							//"activityMaxPax"=>$data['activityMaxPax']
 										));
 		}
 	}
