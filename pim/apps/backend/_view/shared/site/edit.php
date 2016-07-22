@@ -1,6 +1,9 @@
 <script src="<?php echo url::asset("_scale/js/wysiwyg/jquery.hotkeys.js");?>"></script>
 <script src="<?php echo url::asset("_scale/js/wysiwyg/bootstrap-wysiwyg.js");?>"></script>
 <script src="<?php echo url::asset("_scale/js/wysiwyg/demo.js");?>"></script>
+<link rel="stylesheet" href="<?php echo url::asset("_scale/js/datepicker/datepicker.css"); ?>" type="text/css" />
+<script type="text/javascript" src="<?php echo url::asset("_scale/js/datepicker/bootstrap-datepicker.js"); ?>"></script><h3 class="m-b-xs text-black">
+
 <script type="text/javascript">
 	
 function prepareSlug(val)
@@ -70,20 +73,44 @@ endif;
 	</section>
 	</div>
 </div>
+
+<div class='row'>
+<div class='col-sm-12'>
+		<section class='panel panel-default'>
+		<div class='panel-body'>
+		<div class='form-group'>
+		<div class='row'>
+				<div class='col-md-6'>
+				<label>10. Pi1M LOA Date</label>
+				<div class='row'>
+					<div class='col-md-12'>
+						<?php echo form::text("siteInfoLoaDate","style='margin-top: -5px;' class='input-sm input-s datepicker-input form-control' date-date-format='dd-mm-yyyy'",date('d-m-Y', strtotime($row['siteInfoLoaDate'])));?></div>
+				</div>
+				</div>
+
+				
+			</div>
+		</div>
+	
+		</div>
+		</section>
+		</div>
+</div>
+
 <div class='row'>
 	<div class='col-sm-3'>
 		<section class='panel panel-default'>
 		<div class='panel-body'>
 		<div class='form-group'>
-			<label>4. Phone No.</label>
+			<label>3. Phone No.</label>
 			<?php echo form::text("siteInfoPhone","class='form-control'",$row['siteInfoPhone']);?>
 		</div>
 		<div class='form-group'>
-			<label>5. Fax No.</label>
+			<label>4. Fax No.</label>
 			<?php echo form::text("siteInfoFax","class='form-control'",$row['siteInfoFax']);?>
 		</div>
 		<div class='form-group'>
-			<label>6. Site Email.</label>
+			<label>5. Site Email.</label>
 			<?php echo form::text("siteInfoEmail","class='form-control'",$row['siteInfoEmail']);?>
 			<?php echo flash::data("siteInfoEmail");?>
 		</div>
@@ -108,7 +135,7 @@ endif;
 				</div>
 
 				<div class='col-md-6'>
-				<label>6. Coordinates</label>
+				<label>7. Coordinates</label>
 				<div class='row'>
 					<div class='col-md-6'>
 						Latitude : <?php echo form::text("siteInfoLatitude","class='form-control'",$row['siteInfoLatitude']);?>
@@ -123,13 +150,13 @@ endif;
 		<div class='row'>
 			<div class='col-sm-6'>
 			<div class='form-group'>
-				<label>7. Address</label>
+				<label>8. Address</label>
 				<?php echo form::textarea("siteInfoAddress","style='height:90px;' class='form-control'",$row['siteInfoAddress']);?>
 			</div>
 			</div>
 			<div class='col-sm-6'>
 			<div class='form-group'>
-				<label>6. Site Image.</label>
+				<label>9. Site Image.</label>
 				<?php if($row['siteInfoImage']):?>
 					<img width='100%' src='<?php echo url::asset("frontend/images/siteImage/".$row['siteInfoImage']);?>' />
 				<?php endif;?>
@@ -142,11 +169,64 @@ endif;
 	</div>
 </div>
 <div class='row'>
+<div class='col-sm-12'>
+		<section class='panel panel-default'>
+		<div class='panel-body'>
+		<div class='form-group'>
+		<div class='row'>
+				<div class='col-md-6'>
+				<label>10. Parliamen</label>
+				<div class='row'>
+					<div class='col-md-6'>
+						<?php echo form::text("siteInfoParliamen","class='form-control'",$row['siteInfoParliamen']);?>
+			<?php echo flash::data("siteInfoParliamen");?>
+			</div>
+				</div>
+				</div>
+
+				<div class='col-md-6'>
+				<label>11. Phase</label>
+				<div class='row'>
+					<div class='col-md-6'>
+						<?php echo form::text("siteInfoPhase","class='form-control'",$row['siteInfoPhase']);?>
+			<?php echo flash::data("siteInfoPhase");?>
+			</div>
+				</div>
+				</div>
+			</div>
+		</div>
+		<div class='row'>
+			<div class='col-sm-6'>
+			<div class='form-group'>
+				<label>12. District</label>
+				<div class='row'>
+					<div class='col-md-6'>
+						<?php echo form::text("siteInfoDistrict","class='form-control'",$row['siteInfoDistrict']);?>
+			<?php echo flash::data("siteInfoDistrict");?>
+			</div>
+				</div></div>
+			</div>
+			<div class='col-sm-6'>
+			<div class='form-group'>
+				<label>13. Population</label>
+				<div class='row'>
+					<div class='col-md-6'>
+						<?php echo form::text("siteInfoPopulation","class='form-control'",$row['siteInfoPopulation']);?>
+			<?php echo flash::data("siteInfoPopulation");?>
+			</div>
+				</div></div>
+			</div>
+		</div>
+		</div>
+		</section>
+		</div>
+</div>
+<div class='row'>
 	<div class='col-sm-12'>
 		<section class='panel panel-default'>
 		<div class='panel-body'>
 		 <div class="form-group">
-		 <label>8. Site Description</label>
+		 <label>14. Site Description</label>
 	        <div class="btn-toolbar m-b-sm btn-editor" data-role="editor-toolbar" data-target="#editor">
 	          <div class="btn-group">
 	            <!-- <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" title="Font"><i class="fa fa-font"></i><b class="caret"></b></a> -->
