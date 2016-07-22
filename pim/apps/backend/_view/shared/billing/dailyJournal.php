@@ -1,3 +1,4 @@
+
 <link rel="stylesheet" href="<?php echo url::asset("_scale/js/datepicker/datepicker.css"); ?>" type="text/css" />
 <script type="text/javascript" src="<?php echo url::asset("_scale/js/datepicker/bootstrap-datepicker.js"); ?>"></script><h3 class="m-b-xs text-black">
 <script type="text/javascript">
@@ -103,10 +104,42 @@ Select Date
 		<div class='well well-sm'>
 			Transaction Per Item
 		</div>
+
+		<div class="col-sm-12" id="widget-messagelist">
+		<section class="panel panel-default">
+		<div class="panel-heading">
+		Transaction Summary
+		</div>
+		<div class="panel-body">
+		<div class="table-responsive">
+		<table class="table" id="transaction_summary">
+			<tbody>
+			<tr><th>Transaction Items</th><th>Total Quantity</th><th>Total (RM)</th></tr>
+			</tbody>
+		</table>
+		</div>
+		<footer class="pagination-numlink">
+		<ul class="pagination pagination-sm m-t-none m-b-none pull-right"></ul>	</footer>
+		</div>
+		</section>
+		</div>
 		
 		<table>
 			
 		</table>
+		<?php 
+		$emptyTransaction = "<tr><td colspan='5' style='text-align: center;'>No transaction found.</td></tr>";
+		$itemQtyTotal = array();
+
+		db::select("billingItemID","billingItemName");
+		db::from("billing_item");
+		$id_list = db::get()->result();
+
+		foreach ($id_list as $idList => $itemID) {
+		array_push($itemQtyTotal, array("id"=>$itemID['billingItemID'],"quantity"=>0, "totalprice"=>0));							
+		}
+
+		?>
 		<div class="table-responsive">
 			<table class='table'>
 				<tr>
@@ -127,6 +160,7 @@ Select Date
 					<td style="background: #e4e9ef; font-size: 1.1em;" colspan="4"><?php echo date('d F Y', strtotime($date));?></td>
 				</tr>
 					<?php 
+					
 					foreach($transactions as $transaction):
 					?>
 					<tr>
@@ -138,15 +172,43 @@ Select Date
 								<tr>
 									<td><?php echo $transactionItem['billingItemName'];?></td>
 									<td></td>
-									<td style="text-align: center;"><?php echo (float) $transactionItem['billingTransactionItemQuantity'];?></td>
-									<td style="text-align: center;"><?php echo number_format($transactionItem['billingTransactionItemPrice'] * $transactionItem['billingTransactionItemQuantity'], 2, '.', '');?></td>
+									<td style="text-align: center;"><?php 
+									$qtyPC = (float) $transactionItem['billingTransactionItemQuantity'];
+									echo $qtyPC;
+									?></td>
+									<td style="text-align: center;"><?php 
+
+									$totalPC = number_format($transactionItem['billingTransactionItemPrice'] * $transactionItem['billingTransactionItemQuantity'], 2, '.', '');
+									echo $totalPC;
+
+									 ?><?php 
+
+								foreach ($itemQtyTotal as $itemList => $itemVal) {
+									if($transactionItem['billingItemID']==$itemVal['id']){
+									$qtyVal = $itemVal['quantity']+$qtyPC;
+									$totalVal = $itemVal['totalprice']+$totalPC;
+									$itemQtyTotal[$itemList]['quantity']=$qtyVal;
+									$itemQtyTotal[$itemList]['totalprice']=$totalVal;
+									break;
+									}else{
+									}
+								}
+								
+								
+								?>
+									 </td>
 								</tr>
 								<?php endforeach;?>
 								<tr>
 									<td><strong>Total</strong></td>
 									<td></td>
 									<td width="100px"></td>
-									<td width="100px" style="text-align: center; font-weight: bold; font-size: 1.2em;">RM <?php echo number_format($transaction['billingTransactionTotal'], 2, '.', '');?></td>
+									<td width="100px" style="text-align: center; font-weight: bold; font-size: 1.2em;">RM 
+									<?php 
+									echo number_format($transaction['billingTransactionTotal'], 2, '.', '');
+									?></td>
+									
+
 								</tr>
 							</table>
 						</td>
@@ -160,3 +222,15 @@ Select Date
 		</div>
 	</div>
 </div>	
+
+<?php 
+			foreach ($id_list as $idList => $itemID) {
+				if($itemQtyTotal[$idList]['quantity']!=0){
+				$summary_result .= "<tr><td>".$itemID['billingItemName']."</td><td class='qtyItem_".$itemID['billingItemID']."'>".$itemQtyTotal[$idList]['quantity']."</td><td class='totalItem_".$itemID['billingItemID']."'>RM ".number_format($itemQtyTotal[$idList]['totalprice'], 2, '.', '')."</td></tr>";
+				}
+			}
+?>
+
+<script type="text/javascript">
+	$("<?php  if(!$summary_result){echo $emptyTransaction;}else{echo $summary_result;};?>").appendTo($("#transaction_summary"));
+</script>
