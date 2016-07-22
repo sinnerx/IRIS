@@ -244,7 +244,7 @@ site_info:
 	siteInfoParliamen [varchar]
 	siteInfoPhase [varchar]
 	siteInfoDistrict [varchar]
-	siteInfoPopulation [varchar]
+	siteInfoPopulation [int]
 	siteInfoLoaDate [datetime]
 
 site_member:
