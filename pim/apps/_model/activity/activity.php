@@ -401,7 +401,8 @@ class Activity extends \Origami
 						"activityID"=>$activityID,
 						"eventType"=>$data['eventType'],
 						"eventCreatedUser"=>session::get("userID"),
-						"eventCreatedDate"=>now()
+						"eventCreatedDate"=>now(),
+						"eventMaxPax"=>$data['eventMaxPax']
 									);
 
 				db::insert("event",$data_event);
@@ -448,7 +449,8 @@ class Activity extends \Origami
 							"activityID"=>$activityID,
 							"activityDateValue"=>$date,
 							"activityDateStartTime"=>$row['start'],
-							"activityDateEndTime"=>$row['end']
+							"activityDateEndTime"=>$row['end'],
+							"activityMaxPax"=>$data['activityMaxPax']
 										));
 		}
 	}

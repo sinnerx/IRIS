@@ -512,7 +512,7 @@ Class Controller_Billing
 		// 	die;
 
 		// site list
-		if(authData('user.userLevel') == 99)
+		if(authData('user.userLevel') == 99 || authData('user.userLevel') == 5)
 			$data['siteList'] = model::orm('site/site')->execute()->toList('siteID', 'siteName');
 
 		if($data['siteID'])
@@ -586,7 +586,7 @@ Class Controller_Billing
 			$reference = &$report[$date][$code];
 
 			// time
-			$time = date('G', strtotime($row['billingTransactionDate'])) > 12 ? 'night' : 'day';
+			$time = date('G', strtotime($row['billingTransactionDate'])) > 24 ? 'night' : 'day';
 
 			// point to the time
 			if($code == 'PC')

@@ -424,7 +424,7 @@ var album	= new function()
 			<div class='col-sm-6'>
 				<div class='form-group'>
 					<label>Select Photo</label>
-					<?php echo form::file("photoName","multiple");?>
+					<?php echo form::file("photoName[]","multiple");?>
 				</div>
 
 				<div class='form-group'>

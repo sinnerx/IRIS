@@ -409,12 +409,20 @@ Class Controller_Site
 	# view/add article
 	public function article($page = 1)
 	{
+		
+		date('Y-m-d H:i');
+		$data['todayDateStart'] = date('Y-m-d H:i');
+		$data['todayDateEnd'] = date('Y-m-d H:i');
+
+  //var_dump(input::get());
+//die;
+        $input = input::get();
 		$site		= model::load("site/site");
 		$siteArticle	= model::load("blog/article");
 
 		## manager.
 		$siteID = model::load("access/auth")->getAuthData("site", "siteID");
-		$data['article']	= $siteArticle->getArticleList($siteID, false, $page);
+		$data['article']	= $siteArticle->getArticleList($siteID, false, $page,$input);
 		$data['articleTags'] = $siteArticle->getArticleTag(array_keys($data['article']));
 
 		view::render("shared/site/article", $data);

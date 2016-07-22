@@ -44,6 +44,7 @@ var activity = new function($)
 				<th>Participation</th>
 				<th colspan="2" width="20%" style='text-align:center;'>Date</th>
 				<th width='110px'></th>
+				
 			</tr>
 			<?php 
 			if($res_event):

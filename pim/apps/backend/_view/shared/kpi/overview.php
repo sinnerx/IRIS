@@ -50,6 +50,7 @@ var site = new function()
 					<th>Entrepreneurship Program </th>
 					<th>Training </th>	
 					<th>Active member (Login) </th>	
+						
 				</tr>			
 
 			<?php
