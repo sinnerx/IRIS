@@ -2,6 +2,478 @@
 
 class Controller_ExpExcel
 {
+
+
+	public function getDailyCashProcess($siteID, $month, $year)
+	{
+		//$siteID = authData('site.siteID');
+		$data['siteID'] = $siteID;
+
+		$data['selectYear'] = $year ;//= request::get('selectYear', date('Y'));
+		$data['selectMonth'] = $month;// = request::get('selectMonth', date('m'));
+
+		$site = model::load('site/site')->getSite($siteID);
+		// prepare all the required by codes.
+		$codes = model::load('billing/item')->getItemCodes();
+
+		// if(!$data['siteID'])
+		// 	die;
+
+		// get previous month balance.
+		// list($previousYear, $previousMonth) = explode('-', date('Y-n', strtotime('-1 month', strtotime($year.'-'.$month.'-01'))));
+
+		// sum of total for previous month.
+		$previousTransaction = db::from('billing_transaction')
+		->select('SUM(billingTransactionTotal) as total')
+		->where('siteID', $data['siteID'])
+		->where('billingTransactionDate <', $year.'-'.$month.'-01')
+		->where('billingTransactionStatus', 1)
+		->get()->row('total');
+
+		if($previousTransaction)
+			$data['balance'] = $previousTransaction;
+		else
+			$data['balance'] = 0;
+
+		$billingItemCode = model::orm(array('billing_item_code', 'billingItemCodeID'))->execute();
+
+		$billingItems = model::orm('billing/item')->execute();
+
+		$startDate = $year.'-'.$month.'-01';
+		
+		$transactionItems = db::from('billing_transaction_item')
+		->where('YEAR(billingTransactionDate)', $year)
+		->where('MONTH(billingTransactionDate)', $month)
+		->where('siteID', $data['siteID'])
+		->where('billingTransactionStatus', 1)
+		->join('billing_transaction', 'billing_transaction.billingTransactionID = billing_transaction_item.billingTransactionID', 'INNER JOIN')
+		->join('billing_transaction_user', 'billing_transaction_user.billingTransactionID = billing_transaction.billingTransactionID')
+		->join('billing_item_code', 'billing_item_code.billingItemID = billing_transaction_item.billingItemID')
+		->get()->result();
+
+		// Group by date, itemCOde by item codes.
+		$report = array();
+
+		foreach($transactionItems as $row)
+		{
+			$date = date('Y-m-d', strtotime($row['billingTransactionDate']));
+
+			// if no code was configured for this item, set it to other.
+			if($row['billingItemCodeName'])
+				$code = $row['billingItemCodeName'];
+			else
+				$code = 'Other';
+
+			// if age is lower than 18, OR occupation group = 1 (student), set it to student.
+			if($row['billingTransactionUserAge'] < 18 || $row['billingTransactionUserOccupationGroup'] == 1)
+				$userType = 'student';
+			else
+				$userType = 'adult';
+
+			// if membership, status will require no member.
+			if($code == 'Membership')
+				$status = 'nonmember';
+			else
+				$status = $row['billingTransactionUser'] === 0 || !$row['billingTransactionUser'] ? 'nonmember' : 'member';
+
+			$reference = &$report[$date][$code];
+
+			// time
+			$time = date('G', strtotime($row['billingTransactionDate'])) > 12 ? 'night' : 'day';
+
+			// point to the time
+			if($code == 'PC')
+			{
+				if(!isset($reference[$time]))
+					$reference[$time] = array();
+
+				$reference = &$reference[$time];
+			}
+
+			// initiates.
+			if(!isset($reference['total']))
+				$reference['total'] = 0;
+
+			if(!isset($reference['total_users']))
+				$reference['total_users'] = 0;
+
+			if(!isset($reference['total_quantity']))
+				$reference['total_quantity'] = 0;
+
+			if(!isset($reference[$userType][$status]['total']))
+				$reference[$userType][$status]['total'] = 0;
+
+			if(!isset($report[$date]['total']))
+				$report[$date]['total'] = 0;
+
+			// set.
+			$transactionItemTotal = $row['billingTransactionItemPrice'] * $row['billingTransactionItemQuantity'];
+			$reference[$userType][$status]['total'] += $transactionItemTotal;
+			$reference['total'] += $transactionItemTotal;
+			$reference['total_quantity'] += $row['billingTransactionItemQuantity'];
+
+			$report[$date]['total'] += $transactionItemTotal;
+		}
+
+		$data['report'] = $report;
+
+		//var_dump($data['report']['2016-05-02']);
+		//die;
+
+		$filename	= "Daily Cash Process - ". $site['siteName'] ." - ". date("F",strtotime("2014-$month-01"))." $year";
+
+		$excel	= new \PHPExcel;
+		$ExcelHelper	= new model\report\PHPExcelHelper($excel,$filename.".xls");
+
+		## the main working sheet.
+		$sheet	= $excel->getActiveSheet();
+
+		## prepare report.
+
+		# prepare header.
+
+		//first row header
+		$sheet->setCellValue("A1", "Day");
+		$sheet->mergeCells("A1:A3");
+
+		$sheet->mergeCells("B1:G1"); //member
+		$sheet->setCellValue("B1","Member");
+		
+		$sheet->mergeCells("H1:V1"); //pc day
+		$sheet->setCellValue("H1","PC Day");
+
+		$sheet->mergeCells("W1:AK1"); //pc night
+		$sheet->setCellValue("W1","PC Night");
+
+		$sheet->mergeCells("AL1:AN1"); //print
+		$sheet->setCellValue("AL1","Print");
+
+		$sheet->setCellValue("AO1","Scan");
+
+		$sheet->setCellValue("AP1","Laminate");
+
+		$sheet->mergeCells("AQ1:AS1"); //other
+		$sheet->setCellValue("AQ1","Other");
+
+		$sheet->mergeCells("AT1:AU1"); //day end
+		$sheet->setCellValue("AT1","Day End");
+
+
+		//second row header
+		$sheet->mergeCells("B2:C2"); //total
+		$sheet->setCellValue("B2","Total");
+
+		$sheet->mergeCells("D2:E2"); //student
+		$sheet->setCellValue("D2","Student");
+
+		$sheet->mergeCells("F2:G2"); //adult
+		$sheet->setCellValue("F2","Adult");		
+
+
+		$sheet->mergeCells("H2:J2"); //total
+		$sheet->setCellValue("H2","Total");
+
+		$sheet->mergeCells("K2:M2"); //student
+		$sheet->setCellValue("K2","Student Member");
+
+		$sheet->mergeCells("N2:P2"); //
+		$sheet->setCellValue("N2","Student NonMember");	
+
+		$sheet->mergeCells("Q2:S2"); //
+		$sheet->setCellValue("Q2","Adult Member");
+
+		$sheet->mergeCells("T2:V2"); //
+		$sheet->setCellValue("T2","Adult NonMember");			
+
+
+		$sheet->mergeCells("W2:Y2"); //total
+		$sheet->setCellValue("W2","Total");
+
+		$sheet->mergeCells("Z2:AB2"); //student
+		$sheet->setCellValue("Z2","Student Member");
+
+		$sheet->mergeCells("AC2:AE2"); //adult
+		$sheet->setCellValue("AC2","Student NonMember");	
+
+		$sheet->mergeCells("AF2:AH2"); //student
+		$sheet->setCellValue("AF2","Adult Member");
+
+		$sheet->mergeCells("AI2:AK2"); //adult
+		$sheet->setCellValue("AI2","Adult NonMember");
+
+		$sheet->setCellValue("AL2","Total");
+		$sheet->setCellValue("AM2","B/W");
+		$sheet->setCellValue("AN2","Color");	
+
+
+		//third row header
+		$sheet->setCellValue("B3","RM");
+		$sheet->setCellValue("C3","User");
+
+		$sheet->setCellValue("D3","RM");
+		$sheet->setCellValue("E3","User");
+
+		$sheet->setCellValue("F3","RM");
+		$sheet->setCellValue("G3","User");	
+		
+		$sheet->setCellValue("H3","RM");
+		$sheet->setCellValue("I3","User");					
+		$sheet->setCellValue("J3","Hr");					
+
+		$sheet->setCellValue("K3","RM");
+		$sheet->setCellValue("L3","User");					
+		$sheet->setCellValue("M3","Hr");					
+
+		$sheet->setCellValue("N3","RM");
+		$sheet->setCellValue("O3","User");					
+		$sheet->setCellValue("P3","Hr");					
+
+		$sheet->setCellValue("Q3","RM");
+		$sheet->setCellValue("R3","User");					
+		$sheet->setCellValue("S3","Hr");					
+
+		$sheet->setCellValue("T3","RM");
+		$sheet->setCellValue("U3","User");					
+		$sheet->setCellValue("V3","Hr");					
+
+		$sheet->setCellValue("W3","RM");
+		$sheet->setCellValue("X3","User");					
+		$sheet->setCellValue("Y3","Hr");					
+
+		$sheet->setCellValue("Z3","RM");
+		$sheet->setCellValue("AA3","User");					
+		$sheet->setCellValue("AB3","Hr");					
+
+		$sheet->setCellValue("AC3","RM");
+		$sheet->setCellValue("AD3","User");					
+		$sheet->setCellValue("AE3","Hr");					
+
+		$sheet->setCellValue("AF3","RM");
+		$sheet->setCellValue("AG3","User");					
+		$sheet->setCellValue("AH3","Hr");					
+
+		$sheet->setCellValue("AI3","RM");
+		$sheet->setCellValue("AJ3","User");					
+		$sheet->setCellValue("AK3","Hr");					
+
+		$sheet->setCellValue("AL3","RM");
+		$sheet->setCellValue("AM3","RM");
+		$sheet->setCellValue("AN3","RM");
+		$sheet->setCellValue("AO3","RM");
+		$sheet->setCellValue("AP3","RM");
+		$sheet->setCellValue("AQ3","RM");
+
+		$sheet->setCellValue("AR3","Utilities");
+		$sheet->setCellValue("AS3","Description");
+		$sheet->setCellValue("AT3","Total");				
+		$sheet->setCellValue("AU3","Balance");				
+		// foreach($cellHeader as $no=>$headerColname)
+		// {
+		// 	$sheet->setCellValue($currX.$currY,$headerColname);
+
+		// 	## merge cells, except QPO.
+		// 	if(!in_array($currX,Array("O","P","Q")))
+		// 		$sheet->mergeCells($currX.$currY.":".$currX.($currY+3));
+			
+		// 	$currX++;
+		// }
+
+		// ## set performance columns.
+		// $sheet->setCellValue("O3","Total Faulty Equipments");
+		// $sheet->setCellValue("P3","Status (Pending/Resolved)");
+		// $sheet->setCellValue("Q3","Description");
+
+
+		// $allCells->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+		// $allCells->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_TOP);
+		// $allCells->getAlignment()->setWrapText(true);
+		// $allCells->getBorders()->getAllBorders()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+		$sheet->setCellValue("B4", "Monthly Revenue (Previous Balance)");
+		$sheet->setCellValue("AU4", $this->floatVal($data['balance']));
+		
+		$startDataX = "A";
+		$startDataY = "5";
+		//$balance = 0;
+		$sum = 0;
+		$totals = array();
+		
+		$floatArray = array(
+			"B","D","F","H","K","N","Q","T","W","Z","AC","AF", "AI", "AL","AM","AN","AO","AP","AQ","AT","AU",
+			);
+
+		foreach(range(1, date('t', strtotime($year.'-'.$month.'-01'))) as $day){
+			$date = $year.'-'.$month.'-'.$day;
+			$date = date('Y-m-d', strtotime($date));
+			$no = 0;
+		
+			$sheet->setCellValueExplicit($startDataX . $startDataY, date('d', strtotime($date)), PHPExcel_Cell_DataType::TYPE_STRING);
+			
+			//var_dump($this->floatVal($data['balance']));
+			$sum +=	$report[$date]['total'];
+			$balance = $data['balance'] + $sum;
+
+			$totals[$no++] = 	"Total";
+			$totals[$no++] += 	$this->floatVal($report[$date]['Membership']['total']);
+			$totals[$no++] +=	$this->totalVal($report[$date]['Membership']['total_users']);
+			$totals[$no++] +=	$this->floatVal($report[$date]['Membership']['student']['nonmember']['total']);
+			$totals[$no++] +=	$this->totalVal($report[$date]['Membership']['student']['nonmember']['total_users']);
+			$totals[$no++] +=	$this->floatVal($report[$date]['Membership']['adult']['nonmember']['total']);
+			$totals[$no++] +=	$this->totalVal($report[$date]['Membership']['adult']['nonmember']['total_users']);
+
+			$totals[$no++] +=	$this->floatVal($report[$date]['PC']['day']['total']);
+			$totals[$no++] +=	$this->totalVal($report[$date]['PC']['day']['total_users']);
+			$totals[$no++] +=	$this->floatVal($report[$date]['PC']['day']['total_quantity']);
+			$totals[$no++] +=	$this->floatVal($report[$date]['PC']['day']['student']['member']['total']);
+			$totals[$no++] +=	$this->totalVal($report[$date]['PC']['day']['student']['member']['total_users']);
+			$totals[$no++] +=	$this->floatVal($report[$date]['PC']['day']['student']['member']['total_quantity']);
+			$totals[$no++] +=	$this->floatVal($report[$date]['PC']['day']['student']['nonmember']['total']);
+			$totals[$no++] +=	$this->totalVal($report[$date]['PC']['day']['student']['nonmember']['total_users']);
+			$totals[$no++] +=	$this->floatVal($report[$date]['PC']['day']['student']['nonmember']['total_quantity']);
+			$totals[$no++] +=	$this->floatVal($report[$date]['PC']['day']['adult']['member']['total']);
+			$totals[$no++] +=	$this->totalVal($report[$date]['PC']['day']['adult']['member']['total_users']);
+			$totals[$no++] +=	$this->floatVal($report[$date]['PC']['day']['adult']['member']['total_quantity']);
+			$totals[$no++] +=	$this->floatVal($report[$date]['PC']['day']['adult']['nonmember']['total']);
+			$totals[$no++] +=	$this->totalVal($report[$date]['PC']['day']['adult']['nonmember']['total_users']);
+			$totals[$no++] +=	$this->floatVal($report[$date]['PC']['day']['adult']['nonmember']['total_quantity']);			
+
+			$totals[$no++] +=	$this->floatVal($report[$date]['PC']['night']['total']);
+			$totals[$no++] +=	$this->totalVal($report[$date]['PC']['night']['total_users']);
+			$totals[$no++] +=	$this->floatVal($report[$date]['PC']['night']['total_quantity']);
+			$totals[$no++] +=	$this->floatVal($report[$date]['PC']['night']['student']['member']['total']);
+			$totals[$no++] +=	$this->totalVal($report[$date]['PC']['night']['student']['member']['total_users']);
+			$totals[$no++] +=	$this->floatVal($report[$date]['PC']['night']['student']['member']['total_quantity']);
+			$totals[$no++] +=	$this->floatVal($report[$date]['PC']['night']['student']['nonmember']['total']);
+			$totals[$no++] +=	$this->totalVal($report[$date]['PC']['night']['student']['nonmember']['total_users']);
+			$totals[$no++] +=	$this->floatVal($report[$date]['PC']['night']['student']['nonmember']['total_quantity']);
+			$totals[$no++] +=	$this->floatVal($report[$date]['PC']['night']['adult']['member']['total']);
+			$totals[$no++] +=	$this->totalVal($report[$date]['PC']['night']['adult']['member']['total_users']);
+			$totals[$no++] +=	$this->floatVal($report[$date]['PC']['night']['adult']['member']['total_quantity']);
+			$totals[$no++] +=	$this->floatVal($report[$date]['PC']['night']['adult']['nonmember']['total']);
+			$totals[$no++] +=	$this->totalVal($report[$date]['PC']['night']['adult']['nonmember']['total_users']);
+			$totals[$no++] +=	$this->floatVal($report[$date]['PC']['night']['adult']['nonmember']['total_quantity']);
+				
+			$totals[$no++] +=	$this->floatVal(($report[$date]['Print Color']['total'] ? : 0) + ($report[$date]['Black And White']['total'] ? : 0));
+			$totals[$no++] +=	$this->floatVal($report[$date]['Print Color']['total']);
+			$totals[$no++] +=	$this->floatVal($report[$date]['Black And White']['total']);
+
+			$totals[$no++] +=	$this->floatVal($report[$date]['Scan']['total']);
+			$totals[$no++] +=	$this->floatVal($report[$date]['Laminate']['total']);
+
+			$totals[$no++] +=	$this->floatVal($report[$date]['Other']['total']);
+
+			$totals[$no++] =	"";
+			$totals[$no++] =	"";
+			$totals[$no++] +=	$this->floatVal($report[$date]['total']);
+
+			$totals[$no++] =	$this->floatVal($balance);
+
+
+
+			$rowArray = array(
+				$this->floatVal($report[$date]['Membership']['total']),
+				$this->totalVal($report[$date]['Membership']['total_users']),
+				$this->floatVal($report[$date]['Membership']['student']['nonmember']['total']),
+				$this->totalVal($report[$date]['Membership']['student']['nonmember']['total_users']),
+				$this->floatVal($report[$date]['Membership']['adult']['nonmember']['total']),
+				$this->totalVal($report[$date]['Membership']['adult']['nonmember']['total_users']),
+
+				$this->floatVal($report[$date]['PC']['day']['total']),
+				$this->totalVal($report[$date]['PC']['day']['total_users']),
+				$this->floatVal($report[$date]['PC']['day']['total_quantity']),
+				$this->floatVal($report[$date]['PC']['day']['student']['member']['total']),
+				$this->totalVal($report[$date]['PC']['day']['student']['member']['total_users']),
+				$this->floatVal($report[$date]['PC']['day']['student']['member']['total_quantity']),
+				$this->floatVal($report[$date]['PC']['day']['student']['nonmember']['total']),
+				$this->totalVal($report[$date]['PC']['day']['student']['nonmember']['total_users']),
+				$this->floatVal($report[$date]['PC']['day']['student']['nonmember']['total_quantity']),
+				$this->floatVal($report[$date]['PC']['day']['adult']['member']['total']),
+				$this->totalVal($report[$date]['PC']['day']['adult']['member']['total_users']),
+				$this->floatVal($report[$date]['PC']['day']['adult']['member']['total_quantity']),
+				$this->floatVal($report[$date]['PC']['day']['adult']['nonmember']['total']),
+				$this->totalVal($report[$date]['PC']['day']['adult']['nonmember']['total_users']),
+				$this->floatVal($report[$date]['PC']['day']['adult']['nonmember']['total_quantity']),			
+
+				$this->floatVal($report[$date]['PC']['night']['total']),
+				$this->totalVal($report[$date]['PC']['night']['total_users']),
+				$this->floatVal($report[$date]['PC']['night']['total_quantity']),
+				$this->floatVal($report[$date]['PC']['night']['student']['member']['total']),
+				$this->totalVal($report[$date]['PC']['night']['student']['member']['total_users']),
+				$this->floatVal($report[$date]['PC']['night']['student']['member']['total_quantity']),
+				$this->floatVal($report[$date]['PC']['night']['student']['nonmember']['total']),
+				$this->totalVal($report[$date]['PC']['night']['student']['nonmember']['total_users']),
+				$this->floatVal($report[$date]['PC']['night']['student']['nonmember']['total_quantity']),
+				$this->floatVal($report[$date]['PC']['night']['adult']['member']['total']),
+				$this->totalVal($report[$date]['PC']['night']['adult']['member']['total_users']),
+				$this->floatVal($report[$date]['PC']['night']['adult']['member']['total_quantity']),
+				$this->floatVal($report[$date]['PC']['night']['adult']['nonmember']['total']),
+				$this->totalVal($report[$date]['PC']['night']['adult']['nonmember']['total_users']),
+				$this->floatVal($report[$date]['PC']['night']['adult']['nonmember']['total_quantity']),
+				
+				$this->floatVal(($report[$date]['Print Color']['total'] ? : 0) + ($report[$date]['Black And White']['total'] ? : 0)),
+				$this->floatVal($report[$date]['Print Color']['total']),
+				$this->floatVal($report[$date]['Black And White']['total']),
+
+				$this->floatVal($report[$date]['Scan']['total']),
+				$this->floatVal($report[$date]['Laminate']['total']),
+
+				$this->floatVal($report[$date]['Other']['total']),
+
+				"",
+				"",
+
+				$this->floatVal($report[$date]['total']),
+
+				$this->floatVal($balance),				
+				);
+
+			//$columnArray = array_chunk($rowArray, 1);
+
+			$sheet->fromArray( 
+				$rowArray,   // The data to set
+        		NULL,           // Array values with this value will not be set
+        		'B'.$startDataY,            // Top left coordinate of the worksheet range where
+             	true          			 //    we want to set these values (default is A1))
+        	);
+
+        	$sheet->getStyle('B'.$startDataY.":AU".$startDataY)
+		    ->getNumberFormat()
+		    ->setFormatCode(
+		        PHPExcel_Style_NumberFormat::FORMAT_NUMBER
+		    );
+
+		// 	## merge cells, except QPO.
+
+		 	foreach ($floatArray as $key => $value) {
+		 		# code...
+		 		$sheet->getStyle($value.$startDataY)
+			    ->getNumberFormat()
+			    ->setFormatCode(
+			        PHPExcel_Style_NumberFormat::FORMAT_NUMBER_00
+			    );		 		
+		 	}
+        	$startDataY++;
+		}	
+
+		//var_dump($totals);
+		//var_dump($startDataY);
+
+		$sheet->fromArray(
+			$totals, NULL, 'A'.($startDataY), true
+			);			
+
+		 	foreach ($floatArray as $key => $value) {
+		 		# code...
+		 		$sheet->getStyle($value.$startDataY)
+			    ->getNumberFormat()
+			    ->setFormatCode(
+			        PHPExcel_Style_NumberFormat::FORMAT_NUMBER_00
+			    );
+		 	}
+
+
+		$ExcelHelper->execute();			
+	}
+
 	public function prCashAdvanceDownload($prID)
 	{
 		$pr = orm('expense/pr/pr')->find($prID);
@@ -758,6 +1230,20 @@ class Controller_ExpExcel
 
 		$ExcelHelper->execute();
 	}
+
+	private function floatVal($val = null)
+	{
+		if(!$val)
+			return number_format(0, 2, '.', '');
+		else
+			return number_format($val, 2, '.', '');
+	}
+
+	private function totalVal($val = null)
+	{
+		return !$val ? 0 : $val;
+	}
+
 }
 
 

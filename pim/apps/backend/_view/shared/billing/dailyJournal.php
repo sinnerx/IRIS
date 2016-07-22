@@ -154,9 +154,6 @@ Select Date
 								</tr>
 							</table>
 						</td>
-						<?php if($siteEnabled == 1) {?>
-						<td><input type='button' value='Edit' onclick='window.location.href = " <?php echo url::base("billing/editTransaction/$biltransID");?>"' /></td>
-						<?php } ?>
 					</tr>
 					<?php endforeach;?>
 				<?php endforeach;?>

@@ -84,6 +84,7 @@ class Data
 					'exp/rlRejectionReason' => array('sm', 'cl', 'om', 'fc', 'r'),
 					'expExcel/prCashAdvanceDownload' => array('fc', 'r'),
 					'expExcel/rlSummaryGenerate' => array('sm', 'cl', 'om', 'fc', 'r'),
+					'expExcel/getDailyCashProcess' => array('sm', 'cl', 'om', 'fc', 'r'),
 					// 'exp/rlView' => array('sm', 'cl', 'om', 'fc'),
 					'ajax_unlockTransaction/checkSite' => array('sm', 'cl', 'om', 'fc', 'r'),
 							);

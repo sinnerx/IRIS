@@ -210,6 +210,7 @@ site:
 	siteUpdatedDate [datetime]
 	siteRefID [int]				## the site_id for old pi1m site.
 	siteCafeToken [varchar]
+	siteUnlockDate [datetime]
 
 site_cache:
 	siteCacheID [int]
@@ -1218,4 +1219,4 @@ training_SubType:
 	trainingSubTypeCreatedDate [datetime]
 	trainingSubTypeCreatedUser [int]
 	trainingSubTypeUpdatedDate [datetime]
-	trainingSubTypeUpdatedUser[int]
+	trainingSubTypeUpdatedUser [int]
