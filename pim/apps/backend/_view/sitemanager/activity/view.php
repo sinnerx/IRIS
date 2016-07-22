@@ -99,7 +99,7 @@ var sitealbum	= new function()
 			<header class='panel-heading bg-light'>
 				<ul class='nav nav-tabs nav-justified'>
 					<li class='active'><a href='#detail' data-toggle='tab'><?php echo ucwords($typeName);?> Activity's Detail</a></li>
-					<li><a data-toggle='tab' href='#album'>Albums (<?php echo count($res_album);?>)</a></li>
+					<li ><a data-toggle='tab' href='#album'>Albums (<?php echo count($res_album);?>)</a></li>
 					<li><a data-toggle='tab' href='#blog'>Related Blogs (<?php echo count($res_article);?>)</a></li>
 				</ul>
 			</header>
@@ -161,8 +161,11 @@ var sitealbum	= new function()
 					<div class='tab-pane' id='album'>
 					<?php if(!$res_album):?>
 					This activity has no album yet. Do you want to <a href='<?php echo url::base("image/album?activity=$activityID#add");?>'>add</a>?
+					<br>
+					Or choose from existing album, <a href='<?php echo url::base("image/album?activity=$activityID&import=1");?>'>Here</a>?
 					<?php else:?>
 					<p>List of related album added for this <?php echo $typeName;?>. <a href='<?php echo url::base("image/album?activity=$activityID#add");?>'>Do you want to add more?</a></p>
+					Or choose from existing album, <a href='<?php echo url::base("image/album?activity=$activityID&import=1");?>'>Here</a>?
 					<?php
 					foreach($res_album as $row):?>
 					<div class='row album-list'>

@@ -38,9 +38,11 @@ List of all registered users, site managers and cluster leads.
 		</thead>
 		<tbody>
 		<?php
+
 		if($users->count() > 0):
 			$no	= pagination::recordNo();
 			foreach($users as $user):
+				
 				$userID	= $user->userID;
 				$name	= $user->userProfileFullName;
 				$ic		= $user->userIC;

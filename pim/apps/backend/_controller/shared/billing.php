@@ -512,7 +512,7 @@ Class Controller_Billing
 		// 	die;
 
 		// site list
-		if(authData('user.userLevel') == 99)
+		if(authData('user.userLevel') == 99 || authData('user.userLevel') == 5)
 			$data['siteList'] = model::orm('site/site')->execute()->toList('siteID', 'siteName');
 
 		if($data['siteID'])
@@ -534,6 +534,7 @@ Class Controller_Billing
 		->select('SUM(billingTransactionTotal) as total')
 		->where('siteID', $data['siteID'])
 		->where('billingTransactionDate <', $year.'-'.$month.'-01')
+		->where('billingTransactionStatus', 1)
 		->get()->row('total');
 
 		if($previousTransaction)
@@ -551,6 +552,7 @@ Class Controller_Billing
 		->where('YEAR(billingTransactionDate)', $year)
 		->where('MONTH(billingTransactionDate)', $month)
 		->where('siteID', $data['siteID'])
+		->where('billingTransactionStatus', 1)
 		->join('billing_transaction', 'billing_transaction.billingTransactionID = billing_transaction_item.billingTransactionID', 'INNER JOIN')
 		->join('billing_transaction_user', 'billing_transaction_user.billingTransactionID = billing_transaction.billingTransactionID')
 		->join('billing_item_code', 'billing_item_code.billingItemID = billing_transaction_item.billingItemID')
@@ -584,7 +586,7 @@ Class Controller_Billing
 			$reference = &$report[$date][$code];
 
 			// time
-			$time = date('G', strtotime($row['billingTransactionDate'])) > 12 ? 'night' : 'day';
+			$time = date('G', strtotime($row['billingTransactionDate'])) > 24 ? 'night' : 'day';
 
 			// point to the time
 			if($code == 'PC')

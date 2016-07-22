@@ -41,7 +41,7 @@ List of member registered in for site.
 				<th>I.C.</th>
 				<th style="text-align:center;">KTW Synced</th>
 				<th width='200px'>Date registered</th>
-				<th width='65px'></th>
+				<th width='95px'></th>
 			</tr>
 			<?php if(!$user):?>
 			<tr>
@@ -79,6 +79,8 @@ List of member registered in for site.
 	                <a href="<?php echo url::base('ajax/member/detail'); ?>?userID=<?php echo $row['userID']; ?>" data-toggle="ajaxModal">
 						<i class="fa fa-user"></i>
 					</a>
+					<a class='fa fa-edit' href='edit/<?php echo $row['userID']; ?>'></a>
+					<a onclick='return confirm("Confirm delete?");' class="i i-cross2" href="delete/<?php echo $row['userID']; ?>"></a>
 					</center>
 				</td>
 			</tr>

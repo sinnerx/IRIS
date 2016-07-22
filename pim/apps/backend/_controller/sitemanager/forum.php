@@ -123,6 +123,31 @@ class Controller_Forum
 
 		view::render("sitemanager/forum/updateCategory",$data);
 	}
+
+	public function deleteCategory($catID)
+	{
+		$category = model::orm('forum/category')->find($catID);
+				
+		// delete.
+		$category->delete();
+
+		//redirect::to("site/article", $data);
+
+		redirect::to("forum/index","Category deleted, waiting for approval.");
+	}
+
+	public function undeleteCategory($catID)
+	{
+		$category = model::orm('forum/category')->find($catID);
+				
+		// delete.
+		$category->undelete();
+
+		//redirect::to("site/article", $data);
+
+		redirect::to("forum/index","Category deletion cancelled.");
+	}
+
 }
 
 

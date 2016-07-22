@@ -5,27 +5,33 @@ use db,gapi;
 // google analytic class
 class Ga
 {
-	// shown email.
-	public $email = "";
-
-	// auth email
-	private $authEmail = "support@digitalgaia.com";
-	private $password = "Random12345%";
 	public $profileid = "96215040";
 	public $gaid = "UA-58456563-1";
 
+	protected function getAccessToken()
+	{
+		$client = new \Google_Client;
+
+		$client->setAuthConfig(\path::files('googleapiservicekey.json'));
+
+		$client->setScopes(\Google_Service_Analytics::ANALYTICS);
+
+		if($client->isAccessTokenExpired())
+			$client->refreshTokenWithAssertion();
+
+		$token = $client->getAccessToken();
+
+		return $token['access_token'];
+	}
+
 	public function downloadReport($startDate, $endDate)
 	{
-		$email 		= $this->authEmail;
-		$password 	= $this->password;
-		$profileid 	= $this->profileid;
-
 		// apps/_library/gapi.php
-		$ga = new gapi($email, $password);
+		$ga = new gapi(null, null, $this->getAccessToken());
 
 		$reportTypes = array('pageviews','users');
 
-		$ga->requestReportData($profileid, array('dateHour', 'pagePath'), $reportTypes, 'dateHour', null, $startDate, $endDate, 1, 1000);
+		$ga->requestReportData($this->profileid, array('dateHour', 'pagePath'), $reportTypes, 'dateHour', null, $startDate, $endDate, 1, 1000);
 
 
 		foreach($ga->getResults() as $result)
@@ -38,16 +44,14 @@ class Ga
 			$siteID = db::where("siteSlug", $siteSlug)->get("site")->row('siteID');
 
 			if ($siteID != null){
-
-
-			db::insert("ga_report", array(
-				'siteID'=> $siteID,
-				'gaReportDate'=> $date,
-				'gaReportSiteSlug'=> $siteSlug,
-				'gaReportSitePage'=> $this->getSegment("page",$result->getPagePath()),
-				'gaReportSitePageViews'=> $result->getPageviews(),
-				'gaReportSiteUsers'=> $result->getusers(),
-				));
+				db::insert("ga_report", array(
+					'siteID'=> $siteID,
+					'gaReportDate'=> $date,
+					'gaReportSiteSlug'=> $siteSlug,
+					'gaReportSitePage'=> $this->getSegment("page",$result->getPagePath()),
+					'gaReportSitePageViews'=> $result->getPageviews(),
+					'gaReportSiteUsers'=> $result->getusers(),
+					));
 			}
 		}
 	}

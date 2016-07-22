@@ -71,7 +71,7 @@ class Menu extends Data
 							
 					"Report "=>Array(
 									
-									"Google Analytics"=>Array("googleanalytics/test"),
+									"Google Analytics"=>Array("googleanalytics/report"),
 									/*"Monthly Activity Report"=>Array("report/activityReport")*/
 												),
 					"Learning" => Array(
@@ -195,11 +195,12 @@ class Menu extends Data
 							"File Manager"=>Array("file/index")
 						),
 					"Report"=>Array(
+							"Dashboard"=>"report/reportDashboard",
 							"Monthly USP Project"=>"report/monthlyActivity",
 							"Master Listing"=>"report/masterListing",
 							"Google Analytics"=>"googleanalytics/report",
-							"Monthly Activity Report"=>"report/getallActivityReport",
-							"Quarterly Report"=>"report/showQuarterlyReportPage",
+							"Monthly Activity Report"=>"report/monthlyActivityReport"
+							// "Quarterly Report"=>"report/showQuarterlyReportPage",
 									),
 					"Learning" => Array(
 									"Learning Page " => Array("../lms/"),
@@ -231,7 +232,7 @@ class Menu extends Data
 						),					
 					"Attendance" => Array(
 									"Attendance Page" => Array("../attendance/")
-						)	
+						),						
 							);
 
 		$menu['dv'] = array(

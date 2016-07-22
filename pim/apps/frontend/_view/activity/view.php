@@ -109,6 +109,46 @@ var activity = new function()
 	this.activityName	= "<?php echo $activityName;?>";
 	this.activityID		= "<?php echo $activityID;?>";
 	var $		= jQuery;
+
+	this.unjoin = function(date){
+		if(!confirm("Remove user from activity?")){
+			return false;
+		}
+
+		var url = pim.base_url + "ajax/activity/unjoin/"+this.activityID;
+
+		working = true;
+		$.ajax({type:"GET",url:url}).done(function(r)
+		{
+			var r = $.parseJSON(r);
+
+			if(!r[0])
+			{
+				alert("Problems, we're refreshing the browser.");
+				window.location.href = "";
+			}
+
+			// change icon and remove href.
+			var e = $("#activityDate"+date);
+			e.removeClass("pim-icon-checkbox-checked").addClass("pim-icon-checkbox-unchecked").attr("href","#");
+
+			// change image.
+			// if($("#userJoined").val() != "true")
+			// {
+			// 	$("#members-attend-list-none").remove();
+			// 	$("#userJoined").val("true");
+			// 	$("#rsvp-message-box").remove();
+			// 	$(".members-attend-list ul").append("<li><img style='height:63px;' alt='' src='"+r[1]['userProfileAvatarPhoto']+"' /></li>");
+
+			// 	$(".joinTotal").html(Number($(".joinTotal").html())-1);
+			// }
+
+			working = false;
+			location.reload();
+		});
+
+	}
+
 	this.join = function(date)
 	{
 		if(working)
@@ -169,6 +209,7 @@ var activity = new function()
 			}
 
 			working = false;
+			location.reload();
 		});
 	}
 }
@@ -275,7 +316,8 @@ echo model::load("template/frontend")
 										{
 											if(isset($joinedDate[$row['activityDateValue']]))
 											{
-												$attr	= "href='#' class='joinbutton pim-icon-checkbox-checked'";
+												$href	= "javascript:activity.unjoin(\"$row[activityDateValue]\");";
+												$attr	= "href='$href' class='joinbutton pim-icon-checkbox-checked'";
 											}
 										}
 										?>

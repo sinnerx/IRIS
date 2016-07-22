@@ -406,15 +406,47 @@ Class Controller_Site
 		view::render("shared/site/editAnnouncement",$data);
 	}
 
+	public function deleteAnnouncement($announceID)
+	{
+		//$announcement = model::load("site/announcement")->getAnnouncement($announceID);
+		$announcement = model::orm('site/announcement')->find($announceID);
+				
+		// delete.
+		$announcement->delete();
+
+		redirect::to("site/announcement", $data);
+	}
+
+	public function undeleteAnnouncement($announceID)
+	{
+		//$announcement = model::load("site/announcement")->getAnnouncement($announceID);
+		$announcement = model::orm('site/announcement')->find($announceID);
+				
+		// delete.
+		$announcement->undelete();
+
+		redirect::to("site/announcement", $data);
+	}
+
 	# view/add article
 	public function article($page = 1)
 	{
+		
+
+		date('Y-m-d H:i');
+		$data['todayDateStart'] = date('Y-m-d H:i');
+		$data['todayDateEnd'] = date('Y-m-d H:i');
+
+  //var_dump(input::get());
+//die;
+        $input = input::get();
+
 		$site		= model::load("site/site");
 		$siteArticle	= model::load("blog/article");
 
 		## manager.
 		$siteID = model::load("access/auth")->getAuthData("site", "siteID");
-		$data['article']	= $siteArticle->getArticleList($siteID, false, $page);
+		$data['article']	= $siteArticle->getArticleList($siteID, false, $page,$input);
 		$data['articleTags'] = $siteArticle->getArticleTag(array_keys($data['article']));
 
 		view::render("shared/site/article", $data);
@@ -532,6 +564,39 @@ Class Controller_Site
 
 		# echo '<pre>';print_r($data);die;
 		view::render("shared/site/editArticle",$data);
+	}
+
+	public function deleteArticle($articleID)
+	{
+		//$announcement = model::load("site/announcement")->getAnnouncement($announceID);
+		$article = model::orm('blog/article')->find($articleID);
+				
+		// delete.
+		$article->delete();
+
+		redirect::to("site/article", $data);
+	}
+
+	public function undeleteArticle($articleID)
+	{
+		//$announcement = model::load("site/announcement")->getAnnouncement($announceID);
+		$article = model::orm('blog/article')->find($articleID);
+				
+		// delete.
+		$article->undelete();
+
+		redirect::to("site/article", $data);
+	}
+
+	public function deleteSlider($sliderID)
+	{
+		//$announcement = model::load("site/announcement")->getAnnouncement($announceID);
+		$article = model::orm('site/slider')->find($sliderID);
+				
+		// delete.
+		$article->delete();
+
+		redirect::to("site/slider", $data);
 	}
 }
 

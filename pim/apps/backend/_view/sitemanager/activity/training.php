@@ -24,6 +24,14 @@ var activity = new function($)
 
 		window.location.href = '<?php echo url::base("activity/delete/");?>'+id;
 	}
+
+	this.undelete = function(id)
+	{
+		if(!confirm('Cancel deletion of this activity?'))
+			return false;
+
+		window.location.href = '<?php echo url::base("activity/undelete/");?>'+id;
+	}
 }(jQuery);
 
 </script>
@@ -55,7 +63,7 @@ List of training activities of your site.
 			if(isset($requestData[$id]))
 			{
 				$row 							= model::load("helper")->replaceArray($row,$requestData[$id]);
-				$row['activityApprovalStatus']	= 4; ## just a decoy.
+				//$row['activityApprovalStatus']	= 4; ## just a decoy.
 			}
 
 			$status		= $row['activityApprovalStatus'];
@@ -82,9 +90,13 @@ List of training activities of your site.
 					<?php echo $statusIcon;?>
 					<a class="fa fa-facebook-square" style="color:#44609d;" onclick ='return buttonCheck();' href="<?php echo url::base('facebook/getActivityInfo');?>?activityID=<?php echo $id; ?>&activityType=training"></a>
 					<?php if($status != 2):?>
-					<a href='<?php echo url::base("activity/view/training/$id");?>' class='fa fa-search'></a>
-					<a href='<?php echo url::base("activity/edit/$id");?>' class='fa fa-edit'></a>
-					<a href='javascript:activity.delete(<?php echo $id;?>);' class='i i-cross2'></a>
+						<a href='<?php echo url::base("activity/view/training/$id");?>' class='fa fa-search'></a>
+						<a href='<?php echo url::base("activity/edit/$id");?>' class='fa fa-edit'></a>
+						<?php if($status == 5):?>
+							<a href='javascript:activity.undelete(<?php echo $id;?>);' class='i i-cross2'></a>
+						<?php else:?>
+							<a href='javascript:activity.delete(<?php echo $id;?>);' class='i i-cross2'></a>
+						<?php endif;?>
 					<?php endif;?>
 				</td>
 			</tr>
