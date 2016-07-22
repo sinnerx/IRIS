@@ -119,7 +119,7 @@
             this.applyClass = 'btn-success';
             this.cancelClass = 'btn-default';
 
-            this.format = 'MM/DD/YYYY';
+            this.format = 'MM-DD-YYYY';
             this.separator = ' - ';
 
             this.locale = {

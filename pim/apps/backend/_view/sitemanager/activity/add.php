@@ -736,9 +736,27 @@ Add an activity to your site. All new activities will not be published until the
 							<label>Type of event <?php echo flash::data("eventType");?></label>
 							<?php echo form::select("eventType",$eventTypeR,"class='form-control'");?>
 						</div>
+						<div class='form-group'>
+							<label>Max Pax <span style='opacity:0.5;'>(0 for no-limit)</span></label>
+							<?php echo form::text("eventMaxPax","class='form-control' style='width:70px;'");?>
+						</div>
 					</div>
 				</section>
 			</div>
+		<!-- 	<div class='col-sm-12' id='type-others' style="display:none;">
+				<section class='panel panel-default'>
+					<div class='panel-heading'>
+					<h5>Others detail</h5>
+					</div>
+					<div class='panel-body'>
+						
+						<div class='form-group'>
+							<label>Max Pax <span style='opacity:0.5;'>(0 for no-limit)</span></label>
+							<?php echo form::text("eventMaxPax","class='form-control' style='width:70px;'");?>
+						</div>
+					</div>
+				</section>
+			</div> -->
 			<div class='col-sm-12' id='type-training' style="display:none;">
 				<section class='panel panel-default'>
 					<div class='panel-heading'>
@@ -774,6 +792,7 @@ Add an activity to your site. All new activities will not be published until the
 					</div>
 				</section>
 			</div>
+			
 		</div>
 	</div>
 </div>
