@@ -1225,4 +1225,4 @@ training_SubType:
 	trainingSubTypeCreatedDate [datetime]
 	trainingSubTypeCreatedUser [int]
 	trainingSubTypeUpdatedDate [datetime]
-	trainingSubTypeUpdatedUser[int]
+	trainingSubTypeUpdatedUser [int]

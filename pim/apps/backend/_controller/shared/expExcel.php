@@ -6,7 +6,14 @@ class Controller_ExpExcel
 
 	public function getDailyCashProcess($siteID, $month, $year)
 	{
-		//$siteID = authData('site.siteID');
+
+		if(!(session::get("userLevel") == \model\user\user::LEVEL_ROOT) || (session::get("userLevel") == \model\user\user::LEVEL_CLUSTERLEAD)  || (session::get("userLevel") == \model\user\user::LEVEL_FINANCIALCONTROLLER)){
+			$siteID = authData('site.siteID');
+		}
+		
+
+		//var_dump($siteID. " ". $month. " ". $year);
+		//die;		
 		$data['siteID'] = $siteID;
 
 		$data['selectYear'] = $year ;//= request::get('selectYear', date('Y'));

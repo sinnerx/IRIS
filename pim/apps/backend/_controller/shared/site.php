@@ -84,14 +84,18 @@ Class Controller_Site
 
 				}
 			}
-
+			//var_dump($rules);
+			//die;
 			## error.
-			if($error = input::validate($rules))
-			{
-				input::repopulate();
-				redirect::withFlash(model::load("template/services")->wrap("input-error",$error));
-				redirect::to("","Got some error with the form.","error");
+			if ($rules){
+				if($error = input::validate($rules))
+				{
+					input::repopulate();
+					redirect::withFlash(model::load("template/services")->wrap("input-error",$error));
+					redirect::to("","Got some error with the form.","error");
+				}
 			}
+			
 
 			## if got file upload.
 			if($file	= input::file("siteInfoImage"))
