@@ -546,18 +546,22 @@ $total = function($val = null)
 		</div>
 
 		<div class="table-responsive">
-		<form class="form-inline bs-example" method='post' action='<?php echo url::base('billing/dailyCashProcess/'.$siteID);?>'>
+		<!--<form class="form-inline bs-example" method='post' action='<?php echo url::base('billing/dailyCashProcess/'.$siteID);?>'>-->
+		<form class="form-inline bs-example" method='post' action='<?php echo url::base('billing/dailyCashProcess');?>'>
 			<table class='table ' border='0'>
 					<input type="hidden" name="siteID" value="<?php echo $siteID?>"> 
 					<input type="hidden" name="year" value="<?php echo $selectYear?>"> 
 					<input type="hidden" name="month" value="<?php echo $selectMonth?>"> 
 				<tr style="background-color:#ededed">	
-					<th></th> 
+					<th><!--<?php echo "Level: " . session::get("userLevel") . " . " . $checked . " . " . $approved?>--></th> 
 					<th>Site Manager</th>
 					<th>Cluster Lead</th>
 					<th>Financial Controller</th>
-				</tr>		
-				<?php if(count($list) > 0):?>
+				</tr>
+				<?php
+					//if(true):
+					if(count($list) > 0):
+				?>
 				<tr>	
 					<td>Month Total</td> 
 					<td><?php $dailytotal = $beginningbalance - $balance;
