@@ -176,6 +176,7 @@ event:
 	eventRefID [int]				## if eventType == 1
 	eventCreatedUser [int]
 	eventCreatedDate [datetime]
+	eventMaxPax [int]
 
 training:
 	trainingID [int]
@@ -210,6 +211,7 @@ site:
 	siteUpdatedDate [datetime]
 	siteRefID [int]				## the site_id for old pi1m site.
 	siteCafeToken [varchar]
+	siteUnlockDate [datetime]
 
 site_cache:
 	siteCacheID [int]
@@ -239,6 +241,11 @@ site_info:
 	siteInfoFacebookPageId [varchar]
 	siteInfoEmail [varchar]
 	siteInfoImage [varchar]
+	siteInfoParliamen [varchar]
+	siteInfoPhase [varchar]
+	siteInfoDistrict [varchar]
+	siteInfoPopulation [int]
+	siteInfoLoaDate [datetime]
 
 site_member:
 	siteMemberID [int]
@@ -670,6 +677,7 @@ report_monthly:
 	reportMonthlyID [int]
 	reportMonthlyMonth [int]
 	reportMonthlyYear [int]
+	reportMonthlyCategory [int]
 	reportMonthlyStatus [int] ## 0 = pending, 1 = completed
 	reportMonthlyStatusState [varchar(20)]
 	reportMonthlyArticleCompleted [int] ## completed articles

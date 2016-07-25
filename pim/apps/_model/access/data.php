@@ -42,6 +42,8 @@ class Data
 					"billing/addItem"=>Array("r","om", "sm"),
 					"billing/editItem"=>Array("r","om", "sm"),
 					"billing/addTransaction"=>Array("r","om","cl", "sm"),
+					"billing/editTransaction"=>Array("r","om","cl", "sm"),
+					"billing/unlockTransaction"=>Array("r","om","cl"),
 					"billing/edit"=>Array("r","om", "cl", "sm"),
 					"billing/dailyCashProcess"=>Array("r","om", "cl", "sm", "fc"),
 					"billing/dailyCashProcessOld"=>Array("r","om", "cl", "sm", "fc"),
@@ -83,7 +85,9 @@ class Data
 					'exp/rlRejectionReason' => array('sm', 'cl', 'om', 'fc', 'r'),
 					'expExcel/prCashAdvanceDownload' => array('fc', 'r'),
 					'expExcel/rlSummaryGenerate' => array('sm', 'cl', 'om', 'fc', 'r'),
+					'expExcel/getDailyCashProcess' => array('sm', 'cl', 'om', 'fc', 'r'),
 					// 'exp/rlView' => array('sm', 'cl', 'om', 'fc'),
+					'ajax_unlockTransaction/checkSite' => array('sm', 'cl', 'om', 'fc', 'r'),
 							);
 
 		if($level && isset($access["$controller/$method"]))

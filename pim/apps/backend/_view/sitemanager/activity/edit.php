@@ -38,16 +38,20 @@ var activity	= function()
 
 
 	this.showModuleDetail = function (module_id){
+		var packageid;
+		packageid = $('#learningPackage').val();
+		//alert(packageid);		
 		$.ajax({
-			url: pim.base_url +"ajax/activity/getModuleByID/"+ module_id, success: function (result){
+			url: pim.base_url +"ajax/activity/getModuleByID/"+ module_id + "/" + packageid, success: function (result){
 				//console.log(result);
 				//var result = result.substring(3, result.length);
 				result = $.parseJSON(result);
 				console.log(result);
 				$('#trainingType').empty();
+				$('#trainingSubType').empty();
 				 $.each(result, function(i, value) {  
 				  	$('<option></option>', {html:this.type_name}).attr('value', this.type_id).appendTo('#trainingType');
-				
+					$('<option></option>', {html:this.subtype_name}).attr('value', this.subtype_id).appendTo('#trainingSubType');
 					$('#activityDescription').text(this.description);
 				});
 				$('#typediv').show();
@@ -553,6 +557,14 @@ var activity = new activity();
 
 $(document).ready(function()
 {
+
+	if ($("#learningSelect").val() == 2){
+		//alert("Selected");
+		//$('#trainingType').empty();
+		//$('#trainingSubType').empty();
+		//activity.showPackage($('#learningPackage').val());
+		activity.showModuleDetail($("#learningModule").val());
+	}
 	if($("#activityDateTime").val() != "")
 	{
 		activity.datePicker.initiateData();
@@ -612,6 +624,7 @@ Content is waiting for approval
 			<div class='col-sm-6'>
 				<div class='form-group'>
 					<?php //print_r($learningModule); ?>
+					<?php //print_r($row); ?>
 					<label>
 						Activity Name <?php echo flash::data("activityName");?>
 					</label>

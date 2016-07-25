@@ -5,6 +5,11 @@
 
 	$(document).ready(function() {
 
+		if($("#siteID").val() == "")
+			$("#export_excel_btn").hide();
+		else
+			$("#export_excel_btn").show();
+
 		// $('.custom-table tr td').filter(function () {
   //           return +($.trim($(this).text())) == ".";
   //       }).css('font-weight', 'bold');
@@ -130,6 +135,11 @@
 			$('#e1').attr('colspan',colCount-2);
 			//alert(colCount-2);
 
+		});
+
+		$('#export_excel_btn').click(function () {
+			console.log($("#siteID").val());
+			window.location.href = pim.url('expExcel/getDailyCashProcess/' + $("#siteID").val() + '/' + $("#selectMonth").val() + '/' + $("#selectYear").val());
 		});
 
 	});
@@ -349,7 +359,8 @@
 			<?php endif;?>
 			<div class="form-group" style="margin-left:10px">
 				<?php echo form::select("selectMonth",model::load("helper")->monthYear("monthE"),"onchange='billing.select();'",$selectMonth);?>
-				<?php echo form::select("selectYear",model::load("helper")->monthYear("year"),"onchange='billing.select();'",$selectYear);?>			
+				<?php echo form::select("selectYear",model::load("helper")->monthYear("year"),"onchange='billing.select();'",$selectYear);?>
+				<input type="button" id="export_excel_btn" class="btn btn-sm btn-default" value="Export to Excel">			
 			</div>			
 		</form>	
 	</div>

@@ -2,6 +2,94 @@
 <script type="text/javascript" src="<?php echo url::asset("_scale/js/datepicker/bootstrap-datepicker.js"); ?>"></script>
 <link rel="stylesheet" href="<?php echo url::asset("backend/tools/bootstrap-tokenizer/tokenizer.css"); ?>" type="text/css" />
 <link rel="stylesheet" href="<?php echo url::asset("backend/tools/bootstrap-tokenizer/bootstrap-tokenizer.css"); ?>" type="text/css" />
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+<link rel="stylesheet" href="<?php echo url::asset("_scale/js/datepicker/datepicker.css"); ?>" type="text/css" />
+<script type="text/javascript" src="<?php echo url::asset("_scale/js/datepicker/bootstrap-datepicker.js"); ?>"></script><h3 class="m-b-xs text-black">
+ <!--<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+ // <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>-->
+
+<script type="text/javascript">
+	
+	var base_url	= "<?php echo url::base();?>/";
+
+	$(document).ready(function() {
+
+	$("#selectDateStart").on("changeDate", function(ev)
+	{
+		var category	= $("#category").val() != ""?"&category="+$("#category").val():"";  		
+		var selectDateStart	= $("#selectDateStart").val() != ""?"&selectDateStart="+$("#selectDateStart").val():"";		
+		var selectDateEnd	= $("#selectDateEnd").val() != ""?"&selectDateEnd="+$("#selectDateEnd").val():"";
+	
+			if (!$("#category")[0]) {
+        		var category = "<?php echo $category ?>";
+	   		}
+
+	   		window.location.href	= base_url+"site/article?"+category+selectDateStart+selectDateEnd;
+		});
+
+	$("#selectDateEnd").on("changeDate", function(ev)
+		{
+
+			var category	= $("#category").val() != ""?"&category="+$("#category").val():"";  		
+			var selectDateStart	= $("#selectDateStart").val() != ""?"&selectDateStart="+$("#selectDateStart").val():"";		
+			var selectDateEnd	= $("#selectDateEnd").val() != ""?"&selectDateEnd="+$("#selectDateEnd").val():"";
+	
+			if (!$("#category")[0]) {
+        		var category = "<?php echo $category ?>";
+	   		}
+
+	   		window.location.href	= base_url+"site/article?"+category+selectDateStart+selectDateEnd;
+		});
+
+		function getParameterByName(name) {
+    		name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+    		var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+        	results = regex.exec(location.search);
+    		return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+		}
+	});
+	
+
+	var site	= new function()
+	{	
+		this.select	= function()
+		{					
+			var category	= $("#category").val() != ""?"&category="+$("#category").val():"";  			
+			var selectDateStart	= $("#selectDateStart").val() != ""?"&selectDateStart="+$("#selectDateStart").val():"";		
+			var selectDateEnd	= $("#selectDateEnd").val() != ""?"&selectDateEnd="+$("#selectDateEnd").val():"";
+	
+			if (!$("#category")[0]) {
+        		var category = "<?php echo $category ?>";
+	   		}
+
+	   		window.location.href	= base_url+"site/article?"+category+selectDateStart+selectDateEnd;
+		}
+	}
+// $(document).ready(function()
+// {
+// 	var selected = '<?php echo $learningIsSelected; ?>';
+// 	if( selected == 1){
+// 		alert("Selected");
+// 	}
+
+
+
+// 	// if($("#learningselect").val() == 2){
+// 	// 	;
+// 	// }
+// 	$("#startdate").change(function(){
+// 		$( "#startdate").datepicker("option","dateFormat","yy-mm-dd");
+// 	});
+
+// 	$("#enddate").change(function(){
+// 		$( "#enddate").datepicker("option","dateFormat","yy-mm-dd");
+// 	});
+// });
+
+pim.uriHash.addCallback({"event":function(){activity.showTypeDetail(1)},"training":function(){activity.showTypeDetail(2)},"others":function(){activity.showTypeDetail(99)}});
+
+</script>
+
 <style type="text/css">
 
 #table-slider td
@@ -76,7 +164,30 @@ var article = new function($)
 List of all your approved and pending blog articles.
 </div>
 	<?php echo flash::data();?>
+
 <section class="panel panel-default">
+	<div class='row'>
+	<div class='col-sm-10'>
+	<form method='post' action='article' class="form-inline bs-example">
+                 
+			
+			<div  class="form-group" style="margin-left:10px">
+			<?php echo form::select("category",Array(1=>"News",2=>"Rencana"),"class='input-sm form-control input-s-sm inline v-middle' onchange='article.select($category);'",request::get("category"),"[SELECT CATEGORY]");?>
+			
+			</div>
+			
+			<div  class="form-group" style="margin-left:10px">
+			From <?php echo form::text("selectDateStart","class='input-sm input-s datepicker-input form-control' date-date-format='dd-mm-yyyy'",date('d-m-Y', strtotime($todayDateStart)));?>			
+			</div>
+			<div  class="form-group" style="margin-left:10px">
+			To  <?php echo form::text("selectDateEnd","class='input-sm input-s datepicker-input form-control' date-date-format='dd-mm-yyyy'",date('d-m-Y', strtotime($todayDateEnd)));?>			
+			</div>
+		
+            </form> 
+            <br/>
+            </div>
+</div>           
+
 <div class="table-responsive">
 	<table id='table-slider' class="table table-striped b-t b-light">
 	<thead>
@@ -97,6 +208,7 @@ List of all your approved and pending blog articles.
 			array_merge($article,$data);
 		}echo '<pre>';print_r($data);die;*/
 		$no	= pagination::recordNo();
+		//var_dump($requestdata);
 		foreach($article as $row):
 		
 		if(isset($requestdata[$row['articleID']])){

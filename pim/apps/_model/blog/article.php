@@ -37,10 +37,77 @@ class Article extends \Origami
 	}
 
 	# return an array of article list
+	// public function getArticleList($siteID,$frontend = false,$page = 1,$inputt)
+	// {
+	// 	db::from("article");
+	// 	//
+	// 	//var_dump($inputt);
+	// 	//die;
+	// 	# get by siteID.
+	// 	if ($inputt['category']!="" || $inputt['category']){
+	// 		db::join("article_category","article.articleID = article_category.articleID");
+	// 		db::where("article_category.categoryID", $inputt['category']);
+			
+	// 	}		
+	// 	if($siteID === 0)
+	// 	{
+	// 		db::where("siteID",0);
+	// 	}
+	// 	else
+	// 	{
+	// 		if($frontend == false){
+	// 			db::where("siteID = '$siteID'");
+	// 			## paginate based on current query built.
+	// 			pagination::setFormat(model::load('template/cssbootstrap')->paginationLink());
+	// 			pagination::initiate(Array(
+	// 							"totalRow"=>db::num_rows(), 
+	// 							"limit"=>10,				
+	// 							"urlFormat"=>url::base("site/article/{page}"),
+	// 							"currentPage"=>$page
+	// 									));
+
+	// 			## limit, and offset.
+	// 			db::limit(pagination::get("limit"),pagination::recordNo()-1); 
+	// 		}else{
+	// 			db::where("articleStatus = '1' AND siteID = '$siteID' OR siteID = '0'");
+	// 			db::where("date(articlePublishedDate) <",date('Y-m-d', strtotime(now(). ' + 1 days')));
+	// 		}
+	// 	}
+
+			
+	
+	// 	if ($inputt['startdate']!="" || $inputt['startdate'])
+	// 	db::where("article.articlePublishedDate >=", $inputt['startdate']);
+	// 	if ($inputt['enddate']!="" || $inputt['enddate'])
+	// 	db::where("article.articlePublishedDate <=", $inputt['enddate'] );
+	// 	db::order_by("article.articlePublishedDate ASC");
+
+	// 	$data = db::get()->result("articleID");
+	// 	// var_dump($data);
+	// 	// die;
+	// 	if($frontend == true){
+	// 		foreach ($data as $article => $row) {
+	// 			db::from('user_profile');
+
+	// 			if($article['article.articleCreatedUser']){
+	// 				db::where("userID",$row['article.articleCreatedUser']);
+	// 			}else{
+	// 				db::where("userID",$row['article.articleUpdatedUser']);
+	// 			}
+
+	// 			$user_profile = db::get()->row();
+
+	// 			$data[$article]['article.articleCreatedUser'] = $user_profile['userProfileFullName'];
+	// 		}
+	// 	}
+
+	// 	return $data;
+	// }
+
+	# return an array of article list
 	public function getArticleList($siteID,$frontend = false,$page = 1)
 	{
 		db::from("article");
-
 		# get by siteID.
 		if($siteID === 0)
 		{
@@ -59,7 +126,6 @@ class Article extends \Origami
 								"urlFormat"=>url::base("site/article/{page}"),
 								"currentPage"=>$page
 										));
-
 				## limit, and offset.
 				db::limit(pagination::get("limit"),pagination::recordNo()-1); 
 			}else{
@@ -67,27 +133,20 @@ class Article extends \Origami
 				db::where("date(articlePublishedDate) <",date('Y-m-d', strtotime(now(). ' + 1 days')));
 			}
 		}
-
 		db::order_by("articlePublishedDate DESC, articleID DESC");
-
 		$data = db::get()->result("articleID");
-
 		if($frontend == true){
 			foreach ($data as $article => $row) {
 				db::from('user_profile');
-
 				if($article['articleCreatedUser']){
 					db::where("userID",$row['articleCreatedUser']);
 				}else{
 					db::where("userID",$row['articleUpdatedUser']);
 				}
-
 				$user_profile = db::get()->row();
-
 				$data[$article]['articleCreatedUser'] = $user_profile['userProfileFullName'];
 			}
 		}
-
 		return $data;
 	}
 
@@ -447,11 +506,26 @@ if ($articleID) {
 	 * Get all of approval pending report for the given year/month.
 	 * @return int
 	 */
-	public function getTotalApprovalPendingReport($year, $month)
+	public function getTotalApprovalPendingReport($year, $month, $category)
 	{
-		db::from('activity_article');
+		
+		//db::join('article_category', 'activity_article.activityID = article_category.activityID');
+		if($category){
+			db::from('article');
+			db::where('articleID IN (SELECT article.articleID FROM article 
+			LEFT OUTER JOIN article_category ON article.articleID = article_category.articleID 
+			WHERE categoryID = ?) ', array($category));
+
+			db::where('articleID IN (SELECT articleID FROM article WHERE month(articlePublishedDate) = ? AND year(articlePublishedDate) = ?)', array($month, $year));
+		}
+		else{
+			db::from('activity_article');
+			db::where('activityID IN (SELECT activityID FROM activity WHERE month(activityStartDate) = ? AND year(activityStartDate) = ?)', array($month, $year));
+		}
+
 		db::where('articleID IN (SELECT articleID FROM article WHERE articleStatus = ?)', array(0));
-		db::where('activityID IN (SELECT activityID FROM activity WHERE month(activityStartDate) = ? AND year(activityStartDate) = ?)', array($month, $year));
+		//var_dump(db::get());
+		//die;
 		return db::get()->num_rows();
 	}
 
@@ -459,10 +533,20 @@ if ($articleID) {
 	 * Get total of non recent report.
 	 * @return int
 	 */
-	public function getTotalOfNonrecentReport($year, $month)
+	public function getTotalOfNonrecentReport($year, $month, $category)
 	{
-		db::from('activity_article');
-		db::where('activityID IN (SELECT activityID FROM activity WHERE month(activityStartDate) = ? AND year(activityStartDate) = ?)', array($month, $year));
+		if($category){
+			db::from('article');
+			db::where('articleID IN (SELECT article.articleID FROM article 
+			LEFT OUTER JOIN article_category ON article.articleID = article_category.articleID 
+			WHERE categoryID = ?) ', array($category));
+
+			db::where('articleID IN (SELECT articleID FROM article WHERE month(articlePublishedDate) = ? AND year(articlePublishedDate) = ?)', array($month, $year));
+		}	
+		else{
+			db::from('activity_article');
+			db::where('activityID IN (SELECT activityID FROM activity WHERE month(activityStartDate) = ? AND year(activityStartDate) = ?)', array($month, $year));
+		}
 
 		// check if there's existing unapproved site request for article.
 		$result = db::get()->result('articleID');
@@ -677,6 +761,34 @@ if ($articleID) {
 			"article-slug"=>$articleSlug
 			));
 	}
+
+
+
+	public function getFilter($articleID)
+	{
+		//select * from article a, article_category b where a.articleID=b.articleID and categoryID=2
+		db::from("article");
+		db::where("articleID",$articleID);
+		db::order_by("categoryID",$articleID);
+
+		$article = db::get()->row();
+
+		db::from('user_profile');
+
+		if($article['articleCreatedUser']){
+			db::where("userID",$article['articleCreatedUser']);
+		}else{
+			db::where("userID",$article['articleUpdatedUser']);
+		}
+
+		$user_profile = db::get()->row();
+
+		$article['articleEditedUser'] = $user_profile['userProfileFullName'];
+
+		return $article;
+	}
+}
+
 	public function delete()
 	{
 		//if($this->activityApprovalStatus == 1)
@@ -699,6 +811,7 @@ if ($articleID) {
 			->order_by("siteRequestID","desc")
 			->execute();
 
+
 			$siteRequest->getFirst()->delete();
 		}
 
@@ -717,8 +830,11 @@ if ($articleID) {
 
 		$siteRequest->getFirst()->delete();
 
+
+
 		$this->articleStatus = 1;
 		$this->save();
 	}
 }
+
 ?>

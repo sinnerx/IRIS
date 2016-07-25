@@ -377,13 +377,16 @@ class Activity extends \Origami
 			db::update("training",Array(
 						"trainingType"=>$data['trainingType'],
 						"trainingSubType"=>$data['trainingSubType'],
-						"trainingMaxPax"=>$data['trainingMaxPax']
+						"trainingMaxPax"=>$data['trainingMaxPax'],
 									));
 
+			$packagemodule = model::load("activity/learning/packagemodule")->getModuleByID($data['learningModule'], $data['learningPackage']);
+			//var_dump($packagemodule);
+			//die;
 			$rowTraining = db::select("trainingID")->where("activityID", $activityID)->get("training")->row();
 			db::where("trainingID", $rowTraining['trainingID']);
 			db::update("training_lms", Array(
-					"packageModuleID" => $data["learningModule"]
+					"packageModuleID" => $packagemodule[0]['lpm_id']
 				));
 			break;
 		}
@@ -425,7 +428,8 @@ class Activity extends \Origami
 						"activityID"=>$activityID,
 						"eventType"=>$data['eventType'],
 						"eventCreatedUser"=>session::get("userID"),
-						"eventCreatedDate"=>now()
+						"eventCreatedDate"=>now(),
+						"eventMaxPax"=>$data['eventMaxPax']
 									);
 
 				db::insert("event",$data_event);
@@ -443,9 +447,11 @@ class Activity extends \Origami
 				
 				if ($learningSelect == 2)
 				{
+					$packagemodule = model::load("activity/learning/packagemodule")->getModuleByID($data['learningModule'], $data['learningPackage']);
+
 					$data_learning = Array(
 						"trainingID" => $trainingID,
-						"packageModuleID" => $data['learningModule']
+						"packageModuleID" => $packagemodule[0]['lpm_id']
 					);
 
 					db::insert("training_lms", $data_learning);
@@ -474,6 +480,7 @@ class Activity extends \Origami
 							"activityDateValue"=>$date,
 							"activityDateStartTime"=>$row['start'],
 							"activityDateEndTime"=>$row['end']
+							//"activityMaxPax"=>$data['activityMaxPax']
 										));
 		}
 	}

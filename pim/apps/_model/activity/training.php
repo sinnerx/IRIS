@@ -65,6 +65,8 @@ class Training
 
 	public function getTrainingSubType($where = null)
 	{
+		db::join("training_type AS TT", "TT.trainingTypeID = trainingSubTypeParent");
+
 		if($where)
 			foreach($where as $key=>$v)
 				db::where($key,$v);
@@ -92,11 +94,40 @@ class Training
 			"trainingTypeUpdatedUser"=>session::get("userID"),
 			"trainingTypeUpdatedDate"=>now()
 			));
+	}	
+
+	public function addSubType($name,$desc, $parentid)
+	{
+		db::insert("training_SubType",Array(
+			"trainingSubTypeName"=>$name,
+			"trainingSubTypeDescription"=>$desc,
+			"trainingSubTypeStatus"=>1,
+			"trainingSubTypeParent"=>$parentid,
+			"trainingSubTypeCreatedDate"=>now(),
+			"trainingSubTypeCreatedUser"=>session::get("userID")
+			));
+	}
+
+	public function updateSubType($trainingTypeID,$name,$desc, $parentid)
+	{
+		db::where("trainingSubTypeID",$trainingTypeID);
+		db::update("training_SubType",Array(
+			"trainingSubTypeName"=>$name,
+			"trainingSubTypeParent"=>$parentid,
+			"trainingSubTypeDescription"=>$desc,
+			"trainingSubTypeUpdatedUser"=>session::get("userID"),
+			"trainingSubTypeUpdatedDate"=>now()
+			));
 	}
 
 	public function getTrainingByType($id,$select = "trainingType")
 	{
 		return db::select($select)->where("trainingType",$id)->get("training")->result("trainingType",true);
+	}
+
+	public function getTrainingBySubType($id,$select = "trainingSubType")
+	{
+		return db::select($select)->where("trainingSubType",$id)->get("training")->result("trainingSubType",true);
 	}
 
 	public function getTrainingModule($id)

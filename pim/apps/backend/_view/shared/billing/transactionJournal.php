@@ -123,8 +123,9 @@ var base_url	= "<?php echo url::base();?>/";
 			<?php else:?>
 			<?php foreach($groupedTransactions as $date => $transactions):?>
 			<?php foreach($transactions as $transaction):
-			$time = date('g:i A', strtotime($transaction['billingTransactionDate']));?>
+			$time = date('G:i A', strtotime($transaction['billingTransactionDate']));?>
 				<?php foreach($transactionItems[$transaction['billingTransactionID']] as $transactionItem):?>
+				
 					<tr>
 					<td><?php echo $date.' '.$time;?></td>
 					<td><?php echo $transactionItem['billingItemName'];?></td>
