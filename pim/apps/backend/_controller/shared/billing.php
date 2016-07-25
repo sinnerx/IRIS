@@ -512,8 +512,17 @@ Class Controller_Billing
 		// 	die;
 
 		// site list
-		if(authData('user.userLevel') == 99 || authData('user.userLevel') == 5)
+		if(authData('user.userLevel') == 99 || authData('user.userLevel') == 5 )
 			$data['siteList'] = model::orm('site/site')->execute()->toList('siteID', 'siteName');
+
+		if(authData('user.userLevel') == 3 ){
+			$res_site = model::load('site/site')->getSitesByClusterlead(authData('user.userID'))->result();
+		foreach($res_site as $row)
+		{
+			$data['siteList'][$row['siteID']]	= $row['siteName'];
+		}
+	}
+
 
 		if($data['siteID'])
 			$data['site'] = model::orm('site/site')

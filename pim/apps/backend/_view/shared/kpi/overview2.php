@@ -84,6 +84,19 @@ var site = new function()
 	.disabled {
 		opacity: 0.5;
 	}
+
+
+	
+	label {
+
+    	font-size: 13px;
+    	font-weight: bold;
+	}
+	.input-s-sm {
+
+		width: 180px;
+	}
+
 	</style>
 <h3 class='m-b-xs text-black'>
 	Key Perfomance Index
@@ -96,7 +109,9 @@ var site = new function()
 	<div class='col-sm-10'>		
 		<div class="form-group" style="margin-left:10px">
 			<?php echo form::select("selectMonth",model::load("helper")->monthYear("month"),"onchange='site.overview.updateDate();'",$month);?>
+			
 			<?php echo form::select("selectYear",model::load("helper")->monthYear("year"),"onchange='site.overview.updateDate();'",$year);?>
+			
 			<?php echo form::select("clusterID",$clusterR,"class='input-sm form-control input-s-sm inline v-middle' onchange='site.overview.updateDate();'",request::get("cluster"),"[ALL CLUSTER]");?>			
 		</div>					
 	</div>
@@ -166,7 +181,7 @@ var site = new function()
 		table.append('<thead><tr><th class="number">Number</th></tr></thead>');
 		var tbody = $('<tbody></tbody>');
 
-		for(var i = 0; i<60000; i++) {
+		for(var i = 0; i<6000; i++) {
 			tbody.append('<tr><td>' + Math.floor(Math.random() * 100) + '</td></tr>');
 		}
 		table.append(tbody);
@@ -184,10 +199,10 @@ var site = new function()
 		// 	$('.ex-2 th.number').removeClass("sorted").text('Sorting..');
 		// });
 
-		// $('table.ex-2').on('tablesort:complete', function(event, tablesort) {
-		// 	$('table.ex-2 tbody').removeClass("disabled");
-		// 	$('.ex-2 th.number').text('Number');
-		// });
+		$('table.ex-2').on('tablesort:complete', function(event, tablesort) {
+			$('table.ex-2 tbody').removeClass("disabled");
+			$('.ex-2 th.number').text('Number');
+		});
 
 
 	});
