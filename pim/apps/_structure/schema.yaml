@@ -211,6 +211,7 @@ site:
 	siteUpdatedDate [datetime]
 	siteRefID [int]				## the site_id for old pi1m site.
 	siteCafeToken [varchar]
+	siteStatus [int]
 	siteUnlockDate [datetime]
 
 site_cache:
@@ -255,6 +256,8 @@ site_member:
 	siteMemberOutsider [int]		## 1 = yes, 0 = no.
 	siteMemberImported [int]		##  0 = no (new registration), 1 = yes.
 	siteMemberSynced [int]			## 0 = no, 1 = yes. flag whether user has been synced or not.
+	userMembershipDate [datetime]
+	siteMemberBonus [int]
 
 site_slider:
 	siteSliderID [int]
