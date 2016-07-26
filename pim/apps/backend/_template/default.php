@@ -223,7 +223,11 @@
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
             <span class="thumb-sm avatar pull-left">
-              <img src="<?php echo url::asset("_scale/images/a0.png");?>">
+                <?php if(!$user['userProfileAvatarPhoto'] ){
+                    $user['userProfileAvatarPhoto'] = "../emptyavatar.png";
+                }
+                ?>
+                <img src="<?php echo url::asset("frontend/images/photo/".$user['userProfileAvatarPhoto']);?>">
             </span>
             <?php echo $userFullName;?> <b class="caret"></b>
           </a>
