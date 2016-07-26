@@ -280,7 +280,6 @@
       <div class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown">
     <span class="thumb avatar pull-left m-r">                        
-<!--      <img src="<?php //echo url::asset("_scale/images/a0.png");?>" class="dker">-->
                 <?php if(!$user['userProfileAvatarPhoto'] ){
                     $user['userProfileAvatarPhoto'] = "../emptyavatar.png";
                 }
