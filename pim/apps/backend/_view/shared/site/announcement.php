@@ -18,6 +18,25 @@ $(document).ready(function()
 	}
 });
 
+var announcement = new function($)
+{
+	this.delete = function(id)
+	{
+		if(!confirm('Delete this announcement?'))
+			return false;
+
+		window.location.href = '<?php echo url::base("site/deleteAnnouncement/");?>'+id;
+	}
+
+	this.undelete = function(id)
+	{
+		if(!confirm('Cancel deletion of this announcement?'))
+			return false;
+
+		window.location.href = '<?php echo url::base("site/undeleteAnnouncement/");?>'+id;
+	}
+}(jQuery);
+
 </script>
 <style type="text/css">
 	
@@ -115,7 +134,7 @@ Listing all your request Announcement here.
 			<th>Date Added</th>
 			<th>Date Expired</th>
 			<th width="29"></th>
-			<th width="29"></th>
+			<th></th>
 		</tr>
 	</thead>
 	<tbody>
@@ -152,6 +171,11 @@ Listing all your request Announcement here.
 			</td>
 			<td><?php if($row['announcementStatus'] != 2):?>
 				<a href='<?php echo url::base("site/editAnnouncement/".$row['announcementID']);?>' class='fa fa-edit'></a>
+				<?php if($row['announcementStatus'] == 5):?>
+					<a href='javascript:announcement.undelete(<?php echo $row['announcementID'];?>);' class='i i-cross2'></a>
+				<?php else:?>
+					<a href='javascript:announcement.delete(<?php echo $row['announcementID'];?>);' class='i i-cross2'></a>
+				<?php endif;?>
 				<?php endif; ?></td>
             <?php endif;?>
             

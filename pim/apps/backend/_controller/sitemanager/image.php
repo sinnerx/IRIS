@@ -17,7 +17,37 @@ class Controller_Image
 			#$data['activityName']	= $row['activityName'];
 		}
 
+		$this->addDefaultAlbum();
+
 		view::render("sitemanager/image/album",$data);
+	}
+
+	public function addDefaultAlbum()
+	{
+		$albumRow = model::load("image/album")->_checkDefaultAlbum();
+
+		if (!$albumRow) {
+			## get siteID.
+			$siteID	= model::load("access/auth")->getAuthData("site","siteID");
+			## fixed data
+			$defaultAlbumData = array(
+				'albumCreatedDate' => date("Y").'-01-01 00:00:00',
+				'albumName' => 'Interior Pi1M',
+				'albumName2' => 'Exterior Pi1M',
+				'albumDescription' => 'Interior Pi1M Album',
+				'albumDescription2' => 'Exterior Pi1M Album'
+			);
+			## normal add.
+			$albumID = model::load("image/album")->addDefaultSiteAlbum($siteID,0,$defaultAlbumData);
+
+			if ($albumID) {
+				## win
+				redirect::to("image/album","Default album has successfully been added.");
+			} else {
+				## lose
+				redirect::to("image/album","Failed to add default Album.");
+			}
+		}
 	}
 
 	public function addAlbum()

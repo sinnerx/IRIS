@@ -73,6 +73,20 @@ var site = new function()
 
 
 </script>
+<style type="text/css">
+.kpi-font {
+	font-size: 20px;
+}
+.panel-pd {
+	padding: 0;
+}
+.panelhd-pd {
+	padding: 5px;
+}
+.custom-fa-pad {
+	padding-top:5px;
+}
+</style>
 <h3 class='m-b-xs text-black'>
 Overview
 </h3>
@@ -104,30 +118,29 @@ Dashboard overview
 
 
 <div class='row' style="padding-top: 20px;">
-	<div class='col-lg-12 pull-right'>
-		<div class='row'>
+	<div class='col-lg-12'>
 
-			<div class='col-lg-4' >
-				<section class="panel panel-default">
-					<header  class="panel-heading">
+			<div class='col-sm-6 col-md-4' >
+				<section class="panel panel-default panel-pd">
+					<header  class="panel-heading panelhd-pd">
 					Event  
 					<?php if ($kpi['event'] >= $max['event']) {  ?>
-					<i class="fa fa-check fa-lg" style="color:green;float:right;"></i>
+					<i class="fa fa-check fa-lg pull-right custom-fa-pad" style="color:green"></i>
 					<?php } else { ?>
-					<i class="fa fa-exclamation fa-lg" style="color:red;float:right;"></i>
+					<i class="fa fa-exclamation fa-lg pull-right custom-fa-pad" style="color:red"></i>
 					<?php }  ?>
 					</header>
 					
 
 					<div class="panel-body text-center">
 						<div class="col-md-12">
-                            <a class="block padder-v hover">
+                            <a class="block hover">
                               <span class="i-s i-s-2x pull-left m-r-sm">
                                 <i class="i i-hexagon2 i-s-base text-danger hover-rotate"></i>
                                 <i class="i i-list2 i-1x text-white"></i>
                               </span>
                               <span class="clear">
-                                <span class="h1 block m-t-xs text-danger" style="font-size: 62px; margin-top: -10px;"><?php echo  ($kpi['event']); ?> / <?php echo  $max['event']; ?></span>
+                                <span class="h1 block m-t-xs text-danger kpi-font"><?php echo  ($kpi['event']); ?> / <?php echo  $max['event']; ?></span>
                                 <small class="text-muted text-u-c">Event Created</small>
                               </span>
                             </a>
@@ -140,27 +153,27 @@ Dashboard overview
 				</section>
 			</div>
 
-			<div class='col-lg-4' >
-				<section class="panel panel-default">
-					<header  class="panel-heading">
+			<div class='col-sm-6 col-md-4' >
+				<section class="panel panel-default panel-pd">
+					<header  class="panel-heading panelhd-pd">
 					Entrepreneurship Class
 					<?php if ($kpi['entrepreneurship_class'] >= $max['entrepreneurship_class']) {  ?>
-					<i class="fa fa-check fa-lg" style="color:green;float:right;"></i>
+					<i class="fa fa-check fa-lg pull-right custom-fa-pad" style="color:green"></i>
 					<?php } else { ?>
-					<i class="fa fa-exclamation fa-lg" style="color:red;float:right;"></i>
+					<i class="fa fa-exclamation fa-lg pull-right custom-fa-pad" style="color:red"></i>
 					<?php }  ?>
 
 					</header>
 
 					<div class="panel-body text-center">
 						<div class="col-md-12">
-                            <a  class="block padder-v hover">
+                            <a  class="block hover">
                               <span class="i-s i-s-2x pull-left m-r-sm">
                                 <i class="i i-hexagon2 i-s-base text-success-lt hover-rotate"></i>
                                 <i class="i i-study i-sm text-white"></i>
                               </span>
                               <span class="clear">
-                                <span class="h1 block m-t-xs text-success"  style="font-size: 62px; margin-top: -10px;"><?php echo  ($kpi['entrepreneurship_class']); ?> / <?php echo  $max['entrepreneurship_class']; ?></span>
+                                <span class="h1 block m-t-xs text-success kpi-font"><?php echo  ($kpi['entrepreneurship_class']); ?> / <?php echo  $max['entrepreneurship_class']; ?></span>
                                 <small class="text-muted text-u-c">Class Created </small>
                               </span>
                             </a>
@@ -171,61 +184,56 @@ Dashboard overview
 				</section>
 			</div>
 
-
-
-			<div class='col-lg-4'>
-				<section class="panel panel-default">
-					<header  class="panel-heading">
+			<div class='col-sm-6 col-md-4'>
+				<section class="panel panel-default panel-pd">
+					<header  class="panel-heading panelhd-pd">
 					Entrepreneurship Program 
 					 <?php if ($kpi['entrepreneurship_sales'] >= $max['entrepreneurship_sales']) {  ?>
-					<i class="fa fa-check fa-lg" style="color:green;float:right;"></i>
+					<i class="fa fa-check fa-lg pull-right custom-fa-pad" style="color:green"></i>
 					<?php } else { ?>
-					<i class="fa fa-exclamation fa-lg" style="color:red;float:right;"></i>
+					<i class="fa fa-exclamation fa-lg pull-right custom-fa-pad" style="color:red"></i>
 					<?php }  ?>
 					</header>
 					
 					<div class="panel-body text-center">	
 						<div class="col-md-12">
-                            <a  class="block padder-v hover">
+                            <a  class="block hover">
                               <span class="i-s i-s-2x pull-left m-r-sm">
                                 <i class="i i-hexagon2 i-s-base text-info hover-rotate"></i>
                                 <i class="i i-statistics i-sm text-white"></i>
                               </span>
                               <span class="clear">
-                                <span class="h1 block m-t-xs text-info" style="font-size: 58px; margin-top: -8px;"><?php echo  ($kpi['entrepreneurship_sales']); ?> / <?php echo  $max['entrepreneurship_sales']; ?></span>
+                                <span class="h1 block m-t-xs text-info kpi-font"><?php echo  ($kpi['entrepreneurship_sales']); ?> / <?php echo  $max['entrepreneurship_sales']; ?></span>
                                 <small class="text-muted text-u-c">Sales  ( RM )</small>
                               </span>
                             </a>
+                            <a href='#' class='fa' style="float:right;">&nbsp;</a>
                             <!-- <a href='<?php echo url::base("sales/add");?>'  class='fa  fa-plus-square-o' style="color:green;float:right;"> Insert Sales</a> -->
                         </div>
                     </div>    	
 				</section>	
-			</div>
+			</div>	
 
-	</div>
-	<div class='row'>
-
-
-			<div class='col-lg-4'> 								
-                <section class="panel panel-default">
-                <header class="panel-heading">
+			<div class='col-sm-6 col-md-4'> 								
+                <section class="panel panel-default panel-pd">
+                <header class="panel-heading panelhd-pd">
                 Training
                 <?php if ($kpi['training_hours'] >= $max['training_hours']) {  ?>
-					<i class="fa fa-check fa-lg" style="color:green;float:right;"></i>
+					<i class="fa fa-check fa-lg pull-right custom-fa-pad" style="color:green"></i>
 					<?php } else { ?>
-					<i class="fa fa-exclamation fa-lg" style="color:red;float:right;"></i>
+					<i class="fa fa-exclamation fa-lg pull-right custom-fa-pad" style="color:red"></i>
 					<?php }  ?>
                 </header>
                 		
                 	<div class="panel-body text-center">
                 		<div class="col-md-12">
-                            <a class="block padder-v hover">
+                            <a class="block hover">
                               <span class="i-s i-s-2x pull-left m-r-sm">
                                 <i class="i i-hexagon2 i-s-base text-primary hover-rotate"></i>
                                 <i class="i i-laptop i-sm text-white"></i>
                               </span>
                               <span class="clear">
-                                <span class="h1 block m-t-xs text-primary" style="font-size: 45px; margin-top: -10px;"><?php echo  $kpi['training_hours']; ?> / <?php echo  $max['training_hours']; ?></span>
+                                <span class="h1 block m-t-xs text-primary kpi-font"><?php echo  $kpi['training_hours']; ?> / <?php echo  $max['training_hours']; ?></span>
                                 <small class="text-muted text-u-c">Training Hours</small>
                               </span>
                             </a>
@@ -234,45 +242,44 @@ Dashboard overview
                     </div>
 
               </section>
-			</div>	
+			</div>
 
-			<div class="col-lg-4">
-                <section class="panel panel-default">
-                  <header class="panel-heading">
+			<div class="col-sm-6 col-md-4">
+                <section class="panel panel-default panel-pd">
+                  <header class="panel-heading panelhd-pd">
                     Active member (login) 
                     <?php if ($kpi['active_member_percentage'] >= 40) {  ?>
-					<i class="fa fa-check fa-lg" style="color:green;float:right;"></i>
+					<i class="fa fa-check fa-lg pull-right custom-fa-pad" style="color:green"></i>
 					<?php } else { ?>
-					<i class="fa fa-exclamation fa-lg" style="color:red;float:right;"></i>
+					<i class="fa fa-exclamation fa-lg pull-right custom-fa-pad" style="color:red"></i>
 					<?php }  ?>
                   </header>
                  
                   	<div class="panel-body text-center">
                  		<div class="col-md-12">
-                            <a class="block padder-v hover">
+                            <a class="block hover">
                               <span class="i-s i-s-2x pull-left m-r-sm">
                                 <i class="i i-hexagon2 i-s-base text-primary hover-rotate"></i>
                                 <i class="i i-users2 i-sm text-white"></i>
                               </span>
                               <span class="clear">
                                 
-                                <span class="h1 block m-t-xs text-primary" style="font-size: 62px; margin-top: -10px;"><?php echo  round($kpi['active_member_percentage'], 2); ?>%</span>
+                                <span class="h1 block m-t-xs text-primary kpi-font"><?php echo  round($kpi['active_member_percentage'], 2); ?>%</span>
                                 <small class="text-muted text-u-c">Member login</small>
                               </span>
                             </a>
-
+                            <a href='#' class='fa' style="float:right;">&nbsp;</a>
                         </div>
                     </div>
                 </section>
             </div>
-		</div>
+
 	</div>
 </div>
 </form>
 
 <div class='row'>
-	<div class='col-sm-12 pull-right'>
-		<div class='row'>
+	<div class='col-sm-12'>
 			<div class='col-sm-12' id='widget-requestlist'>
 			<?php
 			## load it first along with the first request;
@@ -283,7 +290,6 @@ Dashboard overview
 			## load it first along with the first request;
 			controller::load("sitemanager/ajax_message","lists");?>
 			</div>
-		</div>
 	</div>
 </div>
 

@@ -1,6 +1,7 @@
 <?php
 namespace model\activity\training;
 
+
 class Type extends \Origami
 {
 	protected $table = 'training_type';

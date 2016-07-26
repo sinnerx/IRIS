@@ -731,6 +731,52 @@ class Site extends \Origami
 
 		return $cache;
 	}
+
+	public function get_list_site($q){
+		//var_dump($q);
+	    db::select('siteID, siteName');
+	    db::where('siteName LIKE ?', "%".$q."%");
+	    db::from('site');
+	    
+	    //var_dump($query);
+	    //var_dump(db::num_rows());
+	    
+	    //var_dump($query->result());
+	    if(db::num_rows() > 0){
+	    	$query = db::get();
+	      foreach ($query->result() as $row){
+	      	//var_dump($query->result());
+	        $new_row['label']=htmlentities(stripslashes($row['siteName']));
+	        $new_row['value']=htmlentities(stripslashes($row['siteID']));
+	        $row_set[] = $new_row; //build an array
+	      }
+	      echo json_encode($row_set); //format the array into json data
+	    }
+	  }	
+
+	public function deleteSite($siteID)
+	{
+		db::where("siteID",$siteID);
+		db::update("site",Array("siteStatus"=>3));
+		
+		##
+		model::load("user/activity")->create($siteID,session::get("userID"),"site.delete");
+	}
+
+	public function unlockSite($siteID, $date)
+	{
+		db::where("siteID", $siteID);
+		db::update("site", Array("siteUnlockDate"=> $date));
+	}
+
+	public function listUnlockSite()
+	{
+		db::from("site");
+		db::where("siteUnlockDate > (DATE_SUB(NOW(), INTERVAL 24 HOUR))");
+		$result	= db::get()->result();
+
+		return $result;
+	}
 }
 
 ?>

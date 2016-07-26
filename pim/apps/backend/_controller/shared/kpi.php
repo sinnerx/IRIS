@@ -3,8 +3,28 @@ Class Controller_Kpi
 {
 	public function kpi_overview($page = null)
 	{
+		  //make it sort
+		   // $sort = $this->uri->segment(4);
+
+     //       if (!$sort) {
+     //        $sort = 'asc';
+     //       }
+
+     //    $this->getList('name, user_group_id', $sort);
+
 		$year = $data['year'] = request::get('year', date('Y'));
 		$month = $data['month'] = request::get('month', date('n'));
+
+		$res_cluster	= model::load("site/cluster")->lists();
+		foreach($res_cluster as $row)
+		{
+			$data['clusterR'][$row['clusterID']]	= $row['clusterName'];
+		}
+
+		if(request::get("cluster"))
+		{
+			db::where("siteID IN (SELECT siteID FROM cluster_site WHERE clusterID = '".request::get("cluster")."')");
+		}
 
 		// test
 
@@ -26,6 +46,7 @@ Class Controller_Kpi
 
 		$sites = $data['sites'] = db::get()->result('siteID');
 		$siteIDs = array_keys($sites);
+		
 
 		if(count($sites) > 0)
 		{
@@ -93,15 +114,30 @@ Class Controller_Kpi
 			->where('siteID', $siteIDs)
 			->group_by('siteID')
 			->get()->result('siteID');
+			//print_r($totalMembers);
+			//population
+			$totalpopulation = db::from('site')
+			->select('site.siteID','site_info.siteInfoPopulation')
+			->join("site_info","site.siteID = site_info.siteID")
+			->where('site_info.siteID', $siteIDs)
+			//->group_by('site_member.siteID')
+			//->get()->result('site_member.siteID');
+			->get()->result('siteID', true);
+
+			
+			
 
 
 			$data['total'] = array();
+			$data['population'] = array();
 
 			// main site loop.
 			foreach($sites as $row_site)
 			{
-				$siteID = $row_site['siteID'];
 
+				$siteID = $row_site['siteID'];
+				// var_dump( $totalpopulation[$siteID][0]["siteInfoPopulation"]);
+				// die;
 				if(!isset($data['total'][$siteID]))
 					$data['total'][$siteID] = array();
 
@@ -150,6 +186,13 @@ Class Controller_Kpi
 					}
 				}
 
+				$total['population'] = 0;
+				if(isset($totalpopulation[$siteID]))
+				{
+					foreach($totalpopulation[$siteID] as $population)
+						$total['population']++;
+				}
+
 				// 5. active members.
 				$siteTotalMember = 0;
 				if(isset($groupedMembers[$siteID]))
@@ -159,11 +202,27 @@ Class Controller_Kpi
 					$total['active_member_percentage'] = $siteTotalMember / $totalMembers[$siteID]['total'] * 100;
 				else
 					$total['active_member_percentage'] = 0;
+
+				// 6. population
+				$siteTotalPopulation = 0;
+				if(isset($totalpopulation[$siteID][0]))
+					$siteTotalPopulation =  $totalpopulation[$siteID][0]['siteInfoPopulation'];
+
+				 if($siteTotalPopulation > 0 && $totalpopulation[$siteID][0]['siteInfoPopulation'] > 0)
+				 	$total['population'] = $totalpopulation[$siteID][0]['siteInfoPopulation'];
+				else
+					$total['population'] = 0;
+
 			}
+
+
 		}
 
+		 
 		view::render('shared/kpi/overview2', $data);
 	}
+
+
 
 	public function kpi_overview_old($page = 1, $month = null,$year = null)
 	{

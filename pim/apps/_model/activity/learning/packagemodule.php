@@ -25,14 +25,17 @@ class PackageModule extends \Origami
 		return db::get("lms_package_module AS LPM")->result();
 	}
 
-	public function getModuleByID($ID)
+	public function getModuleByID($ID, $packageid)
 	{
-		db::select("M.id, M.name AS name, M.description AS description, T.trainingTypeName AS type_name, T.trainingTypeID as type_id ");
-		db::where("LPM.id", $ID);
+		db::select("M.id, M.name AS name, M.description AS description, T.trainingTypeName AS type_name, T.trainingTypeID as type_id, ST.trainingSubTypeName AS subtype_name, ST.trainingSubTypeID AS subtype_id, LPM.id AS lpm_id ");
+		db::where("LPM.moduleid", $ID);
+		db::where("LPM.packageid", $packageid);
 		db::join("lms_module AS M", "M.id = LPM.moduleid");
 		db::join("training_type AS T", "T.trainingTypeID = M.typeid");
+		db::join("training_SubType AS ST", "ST.trainingSubTypeID = M.subtype_id");
 		db::join("lms_package AS P", "P.packageid = LPM.packageid");
 		//print_r( db::get("lms_package_module AS LPM"));
+		//var_dump(db::get("lms_package_module AS LPM"));
 		return db::get("lms_package_module AS LPM")->result();
 	}
 }

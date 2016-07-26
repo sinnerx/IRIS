@@ -7,6 +7,6 @@
 		"phpoffice/phpword": "0.12.0",
 		"suin/php-rss-writer": "1.3",
 		"mailchimp/mailchimp": "2.0.6",
-		"rosengate/exedra": "dev-master"
+	  	"google/apiclient": "^2.0"
 	}
 }

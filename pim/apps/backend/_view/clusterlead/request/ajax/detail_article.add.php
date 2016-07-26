@@ -8,7 +8,7 @@
 
 </style>
 <div class='request-info'>
-	New Article : <u><?php echo $row['articleName'];?></u>
+	New / Delete Article : <u><?php echo $row['articleName'];?></u>
 </div>
 <div class='row'>
 	<div class='col-sm-12'>

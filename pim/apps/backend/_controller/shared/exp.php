@@ -3,6 +3,7 @@ class Controller_Exp
 {
 	public function prList($page = 1)
 	{
+
 		$pr = model::orm('expense/pr/pr')->where('prStatus !=', 3);
 
 		if(request::get('status'))
@@ -16,11 +17,37 @@ class Controller_Exp
 		}
 
 		if(request::get('year'))
-			session::set('prFilter.year', request::get('year'));
+			session::set('prFilter.year', request::get('year'));		
 
-		$data['status'] = session::get('prFilter.status', 'pending');
-		$data['month'] = session::get('prFilter.month', date('n'));
-		$data['year'] = session::get('prFilter.year', date('Y'));
+		if(request::get('site'))
+			session::set('prFilter.site', request::get('site'));
+
+		if(!(request::get('site'))){
+			session::set('prFilter.site', '');
+			session::set('prFilter.siteName', '');
+		}
+								
+
+		if(request::get('siteName'))
+			session::set('prFilter.siteName', request::get('siteName'));		
+
+		//var_dump(request::get('cluster'));
+
+		if(request::get('cluster'))
+			session::set('prFilter.cluster', request::get('cluster'));
+
+		//else
+		//	session::set('prFilter.cluster', '');
+
+		$data['status'] 	= session::get('prFilter.status', 'pending');
+		$data['month'] 		= session::get('prFilter.month', date('n'));
+		$data['year'] 		= session::get('prFilter.year', date('Y'));
+		$data['cluster'] 	= session::get('prFilter.cluster');
+		$data['site'] 		= session::get('prFilter.site', '');
+		$data['siteName'] 		= session::get('prFilter.siteName', '');
+
+		//var_dump(request::get('year'));
+		//var_dump($data['site']);
 
 		// month query.
 		if($data['month'])
@@ -37,6 +64,16 @@ class Controller_Exp
 			else if($data['status'] != 'all')
 				$pr->where('prStatus', array(0, 2));
 		}
+
+		if($data['cluster'] > 0){
+			$pr->where('pr.siteID IN (SELECT siteID FROM cluster_site WHERE clusterID = ?) ', array($data['cluster']) );
+			//$pr->execute();			
+			//var_dump($pr);
+			//die;
+		}
+
+		if($data['site'] != '')
+			$pr->where('pr.siteID', $data['site']);
 
 		if(user()->isManager())
 		{
@@ -63,6 +100,8 @@ class Controller_Exp
 		if(!user()->isManager())
 			$pr->join('site', 'pr.siteID = site.siteID');
 
+
+		
 		// pagination
 		pagination::setFormat(model::load("template/cssbootstrap")->paginationLink());
 
@@ -481,6 +520,22 @@ class Controller_Exp
 		$rl->join('pr', 'pr.prID = pr_reconcilation.prID')->join('site', 'site.siteID = pr.siteID');
 
 		// handles filter change
+
+		if(request::get('site'))
+			session::set('prFilter.site', request::get('site'));
+
+		if(!(request::get('site'))){
+			session::set('prFilter.site', '');
+			session::set('prFilter.siteName', '');
+		}
+								
+		if(request::get('siteName'))
+			session::set('prFilter.siteName', request::get('siteName'));		
+
+		if(request::get('cluster'))
+			session::set('prFilter.cluster', request::get('cluster'));
+
+
 		if(request::get('status'))
 			session::set('rlFilter.status', request::get('status'));
 
@@ -497,8 +552,11 @@ class Controller_Exp
 
 		// handle query filter
 		// if manager show non submitted RL OR (date based RL)
-			$data['year'] = session::get('rlFilter.year', date('Y'));
-			$data['month'] = session::get('rlFilter.month', date('n'));
+			$data['year'] 		= session::get('rlFilter.year', date('Y'));
+			$data['month'] 		= session::get('rlFilter.month', date('n'));
+			$data['cluster'] 	= session::get('prFilter.cluster', '');
+			$data['site'] 		= session::get('prFilter.site', '');
+			$data['siteName'] 	= session::get('prFilter.siteName', '');			
 		if(user()->isManager())
 		{
 			$rl->where('prReconcilationSubmitted = ? OR (prReconcilationSubmitted = ? AND MONTH(prReconcilationSubmittedDate) = ? AND YEAR(prReconcilationSubmittedDate) = ?)', array(0, 1, $data['month'], $data['year']));
@@ -526,6 +584,16 @@ class Controller_Exp
 		// search
 		if($search = request::get('search'))
 			$rl->where('prNumber LIKE ', '%'.$search.'%');
+
+		if($data['cluster'] > 0){
+			$rl->where('site.siteID IN (SELECT siteID FROM cluster_site WHERE clusterID = ?) ', array($data['cluster']) );
+			//$pr->execute();			
+			//var_dump($pr);
+			//die;
+		}
+
+		if($data['site'] != '')
+			$rl->where('site.siteID', $data['site']);
 
 		// pagination
 		pagination::setFormat(model::load("template/cssbootstrap")->paginationLink());

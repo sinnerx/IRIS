@@ -11,8 +11,16 @@ class Activity extends \Origami
 	 */
 	public function delete()
 	{
-		if($this->activityApprovalStatus == 1)
+		//if($this->activityApprovalStatus == 1)
+		//	return;
+		if($this->activityApprovalStatus == 1) {
+			model::load("site/request")->create("activity.delete",$this->siteID,$this->activityID,Array());
+
+			$this->activityApprovalStatus = 5;
+			$this->save();
+
 			return;
+		}
 
 		// delete related site_request for activity.add, if the current approval status is 0
 		if($this->activityApprovalStatus == 0)
@@ -26,6 +34,21 @@ class Activity extends \Origami
 		}
 
 		$this->activityApprovalStatus = 99;
+		$this->save();
+	}
+
+	public function undelete()
+	{
+		// delete related site_request for activity.add, if the current approval status is 0
+		$siteRequest = model::orm('site/request')
+		->where('siteRequestRefID', $this->activityID)
+		->where('siteRequestType', 'activity.delete')
+		->order_by("siteRequestID","desc")
+		->execute();
+
+		$siteRequest->getFirst()->delete();
+
+		$this->activityApprovalStatus = 1;
 		$this->save();
 	}
 
@@ -353,13 +376,17 @@ class Activity extends \Origami
 			db::where("activityID",$activityID);
 			db::update("training",Array(
 						"trainingType"=>$data['trainingType'],
-						"trainingMaxPax"=>$data['trainingMaxPax']
+						"trainingSubType"=>$data['trainingSubType'],
+						"trainingMaxPax"=>$data['trainingMaxPax'],
 									));
 
+			$packagemodule = model::load("activity/learning/packagemodule")->getModuleByID($data['learningModule'], $data['learningPackage']);
+			//var_dump($packagemodule);
+			//die;
 			$rowTraining = db::select("trainingID")->where("activityID", $activityID)->get("training")->row();
 			db::where("trainingID", $rowTraining['trainingID']);
 			db::update("training_lms", Array(
-					"packageModuleID" => $data["learningModule"]
+					"packageModuleID" => $packagemodule[0]['lpm_id']
 				));
 			break;
 		}
@@ -401,7 +428,8 @@ class Activity extends \Origami
 						"activityID"=>$activityID,
 						"eventType"=>$data['eventType'],
 						"eventCreatedUser"=>session::get("userID"),
-						"eventCreatedDate"=>now()
+						"eventCreatedDate"=>now(),
+						"eventMaxPax"=>$data['eventMaxPax']
 									);
 
 				db::insert("event",$data_event);
@@ -410,6 +438,7 @@ class Activity extends \Origami
 				$data_training	= Array(
 						"activityID"=>$activityID,
 						"trainingType"=>$data['trainingType'],
+						"trainingSubType"=>$data['trainingSubType'],
 						"trainingMaxPax"=>$data['trainingMaxPax']
 										);
 
@@ -418,9 +447,11 @@ class Activity extends \Origami
 				
 				if ($learningSelect == 2)
 				{
+					$packagemodule = model::load("activity/learning/packagemodule")->getModuleByID($data['learningModule'], $data['learningPackage']);
+
 					$data_learning = Array(
 						"trainingID" => $trainingID,
-						"packageModuleID" => $data['learningModule']
+						"packageModuleID" => $packagemodule[0]['lpm_id']
 					);
 
 					db::insert("training_lms", $data_learning);
@@ -449,6 +480,7 @@ class Activity extends \Origami
 							"activityDateValue"=>$date,
 							"activityDateStartTime"=>$row['start'],
 							"activityDateEndTime"=>$row['end']
+							//"activityMaxPax"=>$data['activityMaxPax']
 										));
 		}
 	}
@@ -468,7 +500,7 @@ class Activity extends \Origami
 	{
 		db::from("activity")
 		->where("siteID",$siteID)
-		->where('activityApprovalStatus', array(0,1,2))
+		->where('activityApprovalStatus', array(0,1,2,5,6))
 		->where("activityType",$type);
 
 		pagination::setFormat(model::load("template/cssbootstrap")->paginationLink());

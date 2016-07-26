@@ -234,10 +234,10 @@ class Controller_Ajax_Activity
 		echo $module;
 	}
 
-	public function getModuleByID($id)
+	public function getModuleByID($id, $packageid)
 	{
 		//echo "test controller " . $packageid;
-		$module = model::load("activity/learning/packagemodule")->getModuleByID($id);
+		$module = model::load("activity/learning/packagemodule")->getModuleByID($id, $packageid);
 		$module = json_encode($module);
 		echo $module;
 	}
@@ -247,6 +247,13 @@ class Controller_Ajax_Activity
 		$data	= model::load("activity/training")->type();
 		$data 	= json_encode($data);
 		echo $data;
+	}
+
+	public function getTrainingSubType($typeid)
+	{
+		$data	= model::load("activity/training/subtype")->getSubTypeByTypeID($typeid);
+		$data 	= json_encode($data);
+		echo $data;		
 	}
 }
 ?>

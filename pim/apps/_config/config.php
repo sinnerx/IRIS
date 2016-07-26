@@ -8,9 +8,9 @@ $config['frontend_template_default']	= "default_facade";
 ### domain based configuration :
 $config['domain']['localhost'][]	= Array(
 						"env"=>"dev",
-						"base_url:backend"=>"localhost/digitalgaia/iris/dashboard",
-						"base_url:frontend"=>"localhost/digitalgaia/iris",
-						"asset_url"=>"localhost/digitalgaia/iris/pim/assets",
+						"base_url:backend"=>"localhost/iris/dashboard",
+						"base_url:frontend"=>"localhost/iris",
+						"asset_url"=>"localhost/iris/pim/assets",
 						"supportEmail"=>"newrehmi@gmail.com",
 						"fbAppID"=>"772269416161222",
 						"fbAppSecret"=>"d404c0343d16f5b70c22d120d1ab94c8",
@@ -20,9 +20,9 @@ $config['domain']['localhost'][]	= Array(
 ### domain based configuration :
 $config['domain'][LOCALHOST][]	= Array(
 						"env"=>"dev",
-						"base_url:backend"=>LOCALHOST."/digitalgaia/iris/dashboard",
-						"base_url:frontend"=>LOCALHOST."/digitalgaia/iris",
-						"asset_url"=>LOCALHOST."/digitalgaia/iris/pim/assets",
+						"base_url:backend"=>LOCALHOST."/iris/dashboard",
+						"base_url:frontend"=>LOCALHOST."/iris",
+						"asset_url"=>LOCALHOST."/iris/pim/assets",
 						"supportEmail"=>"newrehmi@gmail.com",
 						"fbAppID"=>"772269416161222",
 						"fbAppSecret"=>"d404c0343d16f5b70c22d120d1ab94c8",

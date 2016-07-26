@@ -3,6 +3,22 @@
 var activity	= function()
 {
 
+	this.showSubType = function(typeid){
+		$.ajax({
+			url: pim.base_url + "ajax/activity/getTrainingSubType/" + typeid, success: function (result){
+				result = $.parseJSON(result);
+				console.log(result);
+				$('#trainingSubType').empty();
+				 $.each(result, function(i, value) {  
+				  	$('<option></option>', {html:this.type_name}).attr('value', this.type_id).appendTo('#trainingSubType');
+					//$('#trainingType select').val(this.typeid);
+				});
+
+				$('#subtypediv').show();
+			}
+		});
+	}
+
 	this.showPackage = function(yesno){
 		var y = yesno;
 
@@ -22,16 +38,20 @@ var activity	= function()
 
 
 	this.showModuleDetail = function (module_id){
+		var packageid;
+		packageid = $('#learningPackage').val();
+		//alert(packageid);		
 		$.ajax({
-			url: pim.base_url +"ajax/activity/getModuleByID/"+ module_id, success: function (result){
+			url: pim.base_url +"ajax/activity/getModuleByID/"+ module_id + "/" + packageid, success: function (result){
 				//console.log(result);
 				//var result = result.substring(3, result.length);
 				result = $.parseJSON(result);
 				console.log(result);
 				$('#trainingType').empty();
+				$('#trainingSubType').empty();
 				 $.each(result, function(i, value) {  
 				  	$('<option></option>', {html:this.type_name}).attr('value', this.type_id).appendTo('#trainingType');
-				
+					$('<option></option>', {html:this.subtype_name}).attr('value', this.subtype_id).appendTo('#trainingSubType');
 					$('#activityDescription').text(this.description);
 				});
 				$('#typediv').show();
@@ -537,12 +557,22 @@ var activity = new activity();
 
 $(document).ready(function()
 {
+
+	if ($("#learningSelect").val() == 2){
+		//alert("Selected");
+		//$('#trainingType').empty();
+		//$('#trainingSubType').empty();
+		//activity.showPackage($('#learningPackage').val());
+		activity.showModuleDetail($("#learningModule").val());
+	}
 	if($("#activityDateTime").val() != "")
 	{
 		activity.datePicker.initiateData();
 	}
 
 	activity.showTypeDetail(<?php echo $row['activityType'];?>);
+	//activity.showSubType(<?php echo $row['trainingType'];?>);
+
 	activity.disableAddress(true);
 });
 
@@ -576,6 +606,7 @@ pim.uriHash.addCallback({"event":function(){activity.showTypeDetail(1)},"trainin
 <h3 class='m-b-xs text-black'>
 Edit Activity
 </h3>
+<?php //var_dump($row); ?>
 <div class='well well-sm'>
 Edit activity
 </div>
@@ -593,6 +624,7 @@ Content is waiting for approval
 			<div class='col-sm-6'>
 				<div class='form-group'>
 					<?php //print_r($learningModule); ?>
+					<?php //print_r($row); ?>
 					<label>
 						Activity Name <?php echo flash::data("activityName");?>
 					</label>
@@ -715,8 +747,12 @@ Content is waiting for approval
 						</div>
 						<div class='form-group'>
 							<label>Training Type <?php echo flash::data("trainingType");?></label>
-							<?php echo form::select("trainingType",$trainingTypeR,"class='form-control'",$row['trainingType']);?>
+							<?php echo form::select("trainingType",$trainingTypeR,"onchange='activity.showSubType(this.value);' class='form-control'",$row['trainingType']);?>
 						</div>
+						<div class='form-group' id="subtypediv">
+							<label>Sub Training Type <?php echo flash::data("trainingSubType");?></label>
+							<?php echo form::select("trainingSubType",$trainingSubTypeR,"class='form-control'",$row['trainingSubType']);?>
+						</div>							
 						<div class='form-group'>
 							<label>Max Pax <span style='opacity:0.5;'>(0 for no-limit)</span></label>
 							<?php echo form::text("trainingMaxPax","class='form-control' style='width:70px;'",$row['trainingMaxPax']);?>

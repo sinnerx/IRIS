@@ -34,20 +34,20 @@ class Activity
 		$paramNo	= 1;
 
 		## loop the given paramter. to set the param value sequencely.
-		if(!$parameter && count($paramName) != 0)
+		//if(!($parameter && count($paramName) != 0))
+		if($parameter && count($paramName) != 0)
 		{
-			return false;
-		}
+			foreach($parameter as $key => $val)
+			{
+				## immedietly return false.
+				if(!in_array($key,$paramName))
+					return false;
 
-		foreach($parameter as $key=>$val)
-		{
-			## immedietly return false.
-			if(!in_array($key,$paramName))
-				return false;
+				$data['userActivityParameter'.$paramNo] = $val;
 
-			$data['userActivityParameter'.$paramNo] = $val;
-
-			$paramNo++;
+				$paramNo++;
+			}
+			//return false;
 		}
 
 		db::insert("user_activity",$data);

@@ -296,6 +296,60 @@ class User extends \Origami
 
 	}
 
+	public function updateMember($userID,$data)
+	{
+		if($data['userIC'])
+		{
+			$data_user	= Array(
+					"userIC"=>$data['userIC']
+							);
+		}
+
+		if(isset($data['userEmail']))
+		{
+			$data_user['userEmail']	= $data['userEmail'];
+		}
+
+		if(isset($data['userPassword']) && $data['userPassword'] != "")
+		{
+			$data_user['userPassword']	= model::load("helper")->hashPassword($data['userPassword']);
+
+		}
+
+		$data_user['userUpdatedDate'] = date('Y-m-d H:i:s');
+		$data_user['userUpdatedUser'] = session::get('userID');
+
+		db::where('userID',$userID)->update('user',$data_user);
+		
+		$data_profile = Array(
+					"userProfileFullName"=>$data['userProfileFullName'],
+					//"userProfileLastName"=>$data['userProfileLastName'],
+					"userProfileTitle"=>$data['userProfileTitle'],
+					"userProfileGender"=>$data['userProfileGender'],
+					"userProfileDOB"=>$data['userProfileDOB'],
+					"userProfilePOB"=>$data['userProfilePOB'],
+					"userProfileMarital"=>$data['userProfileMarital'],
+					"userProfilePhoneNo"=>$data['userProfilePhoneNo'],
+					"userProfileMobileNo"=>$data['userProfileMobileNo'],
+					"userProfileMailingAddress"=>$data['userProfileMailingAddress']
+								);
+
+		db::where('userID',$userID)->update("user_profile",$data_profile);
+
+		##
+		model::load("user/activity")->create(null,$userID,"member.edit");
+
+	}
+
+	public function deleteMember($userID)
+	{
+		db::where("userID",$userID);
+		db::update("user",Array("userStatus"=>3));
+
+		##
+		model::load("user/activity")->create(null,$userID,"member.delete");
+	}
+
 	public function updateAvatarPhoto($userID,$path)
 	{
 		db::where("userID",$userID);
@@ -319,7 +373,8 @@ class User extends \Origami
 				"userProfileTwitter"=>$data['userProfileTwitter'],
 				"userProfileWeb"=>$data['userProfileWeb'],
 				"userProfileEcommerce"=>$data['userProfileEcommerce'],
-				"userProfileIntroductional"=>$data['userProfileIntroductional']
+				"userProfileIntroductional"=>$data['userProfileIntroductional'],
+				"userProfileVideo"=>$data['userProfileVideo']
 						);
 
 		if(!$check)

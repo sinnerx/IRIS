@@ -1,5 +1,5 @@
 <div class='request-info'>
-	New Activity : <u><?php echo $row['activityName'];?></u>
+	New / Delete Activity : <u><?php echo $row['activityName'];?></u>
 </div>
 <div class='row'>
 	<div class='col-sm-12'>
@@ -53,6 +53,14 @@
 						<?php else:?>
 						<div><b>Type of training</b></div>
 						<div><?php echo model::load("activity/training")->type($row['trainingType']);?></div>
+						<?php endif;
+						?>
+						<?php
+						if($row['activityType'] == 1):?>
+						<div><b>Max pax</b></div>
+						<div><?php echo $row['eventMaxPax'] == 0?"No-limit":$row['eventMaxPax'];?></div>
+
+						<?php else:?>
 						<div><b>Max pax</b></div>
 						<div><?php echo $row['trainingMaxPax'] == 0?"No-limit":$row['trainingMaxPax'];?></div>
 						<?php endif;

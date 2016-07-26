@@ -67,6 +67,7 @@ user_profile_additional: ## additional info for user.
 	userProfileEcommerce [varchar]		##
 	userProfileIntroductional [text]	##
 	userProfileEducation [varchar]
+	userProfileVideo [varchar]
 
 user_activity:
 	userActivityID [int]
@@ -175,11 +176,13 @@ event:
 	eventRefID [int]				## if eventType == 1
 	eventCreatedUser [int]
 	eventCreatedDate [datetime]
+	eventMaxPax [int]
 
 training:
 	trainingID [int]
 	activityID [int]
 	trainingType [int]			## 0 is default
+	trainingSubType [int]
 	trainingMaxPax [int]
 
 training_type:
@@ -208,6 +211,8 @@ site:
 	siteUpdatedDate [datetime]
 	siteRefID [int]				## the site_id for old pi1m site.
 	siteCafeToken [varchar]
+	siteStatus [int]
+	siteUnlockDate [datetime]
 
 site_cache:
 	siteCacheID [int]
@@ -237,6 +242,11 @@ site_info:
 	siteInfoFacebookPageId [varchar]
 	siteInfoEmail [varchar]
 	siteInfoImage [varchar]
+	siteInfoParliamen [varchar]
+	siteInfoPhase [varchar]
+	siteInfoDistrict [varchar]
+	siteInfoPopulation [int]
+	siteInfoLoaDate [datetime]
 
 site_member:
 	siteMemberID [int]
@@ -246,6 +256,8 @@ site_member:
 	siteMemberOutsider [int]		## 1 = yes, 0 = no.
 	siteMemberImported [int]		##  0 = no (new registration), 1 = yes.
 	siteMemberSynced [int]			## 0 = no, 1 = yes. flag whether user has been synced or not.
+	userMembershipDate [datetime]
+	siteMemberBonus [int]
 
 site_slider:
 	siteSliderID [int]
@@ -662,6 +674,24 @@ comment:
 	commentApprovalStatus [int]	## 0 = pending, 1 = approve, 2 = reject, 3 = deleted
 	commentCreatedDate [datetime]
 	commentUpdatedDate [datetime]
+
+## blogs report generation 
+report_monthly:
+	reportMonthlyID [int]
+	reportMonthlyMonth [int]
+	reportMonthlyYear [int]
+	reportMonthlyCategory [int]
+	reportMonthlyStatus [int] ## 0 = pending, 1 = completed
+	reportMonthlyStatusState [varchar(20)]
+	reportMonthlyArticleCompleted [int] ## completed articles
+	reportMonthlyArticleTotal [int] ## total articles
+	reportMonthlyZipName [varchar]
+	reportMonthlyZipSize [int]
+	reportMonthlyDownloaded [int]
+	reportMonthlyCreatedDate [datetime]
+	reportMonthlyUpdatedDate [datetime]
+	reportMonthlyCreatedUser [int]
+	reportMonthlyUpdatedUser [int]
 
 ga_report:
 	gaReportID [int]
@@ -1160,3 +1190,42 @@ lms_questions_bank:
 	type [varchar(100)]
 	q_text [varchar(200)]
 	correct [varchar(11)]
+
+reports:
+	reportsID [int]
+	reportsName [varchar(200)]
+	reportsDesc [text]
+	reportsOrder [int(5)]
+	reportsURL [varchar(200)]
+	reportsDateCreated [datetime]
+	reportsUserID [int]
+	reportsCode [varchar(11)]
+
+report_fields:
+	report_fieldsID [int]
+	report_fieldsReportID [int]
+	report_fieldsSequence [int]
+	report_fieldsType [int]
+	report_fieldsName [varchar(200)]
+	report_fieldsTitle [text]
+	report_fieldsDesc [text]
+	report_fieldsParentID [int]
+	report_fieldsWidth [int]
+	report_fieldsHeight [int]
+	report_fieldsDateCreated [datetime]
+	report_fieldsUserID [int]
+	report_fieldsTable [varchar(100)]
+	report_fieldsTableID [varchar(100)]
+	report_fieldsName [varchar(100)]
+	report_fieldsIsMandatory [int]
+
+training_SubType:
+	trainingSubTypeID [int]
+	trainingSubTypeName [varchar]
+	trainingSubTypeDescription [text]
+	trainingSubTypeStatus [int]	## 0 inactive, 1 = active.
+	trainingSubTypeParent [int]
+	trainingSubTypeCreatedDate [datetime]
+	trainingSubTypeCreatedUser [int]
+	trainingSubTypeUpdatedDate [datetime]
+	trainingSubTypeUpdatedUser [int]

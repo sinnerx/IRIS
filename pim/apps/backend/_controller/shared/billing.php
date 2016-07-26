@@ -512,8 +512,17 @@ Class Controller_Billing
 		// 	die;
 
 		// site list
-		if(authData('user.userLevel') == 99)
+		if(authData('user.userLevel') == 99 || authData('user.userLevel') == 5 )
 			$data['siteList'] = model::orm('site/site')->execute()->toList('siteID', 'siteName');
+
+		if(authData('user.userLevel') == 3 ){
+			$res_site = model::load('site/site')->getSitesByClusterlead(authData('user.userID'))->result();
+		foreach($res_site as $row)
+		{
+			$data['siteList'][$row['siteID']]	= $row['siteName'];
+		}
+	}
+
 
 		if($data['siteID'])
 			$data['site'] = model::orm('site/site')
@@ -534,6 +543,7 @@ Class Controller_Billing
 		->select('SUM(billingTransactionTotal) as total')
 		->where('siteID', $data['siteID'])
 		->where('billingTransactionDate <', $year.'-'.$month.'-01')
+		->where('billingTransactionStatus', 1)
 		->get()->row('total');
 
 		if($previousTransaction)
@@ -551,6 +561,7 @@ Class Controller_Billing
 		->where('YEAR(billingTransactionDate)', $year)
 		->where('MONTH(billingTransactionDate)', $month)
 		->where('siteID', $data['siteID'])
+		->where('billingTransactionStatus', 1)
 		->join('billing_transaction', 'billing_transaction.billingTransactionID = billing_transaction_item.billingTransactionID', 'INNER JOIN')
 		->join('billing_transaction_user', 'billing_transaction_user.billingTransactionID = billing_transaction.billingTransactionID')
 		->join('billing_item_code', 'billing_item_code.billingItemID = billing_transaction_item.billingItemID')
@@ -584,7 +595,7 @@ Class Controller_Billing
 			$reference = &$report[$date][$code];
 
 			// time
-			$time = date('G', strtotime($row['billingTransactionDate'])) > 12 ? 'night' : 'day';
+			$time = date('G', strtotime($row['billingTransactionDate'])) > 24 ? 'night' : 'day';
 
 			// point to the time
 			if($code == 'PC')
@@ -871,7 +882,8 @@ Class Controller_Billing
 		db::order_by("siteName","ASC");
 		
 		$res_site = db::get()->result();
-
+		//var_dump($res_site);
+		//die;
 		foreach($res_site as $row)
 		{
 			$data['siteList'][$row['siteID']]	= $row['siteName'];
@@ -886,6 +898,20 @@ Class Controller_Billing
 			->group_by('billingTransactionDate ASC')
 			->get('billing_transaction')
 			->result('billingTransactionID');
+
+			$siteEnabled = db::from("site")
+			->where("siteID", $siteID)->get()->result();
+			$siteEnabled = $siteEnabled[0];
+			//var_dump(strtotime($siteEnabled['siteUnlockDate']));
+			//var_dump(strtotime('-1 day'));
+			//die;
+			if($siteEnabled['siteUnlockDate'] != '' && strtotime($siteEnabled['siteUnlockDate']) >= strtotime('-1 day')){
+				$data['siteEnabled'] = 1;
+			}
+			else{
+				$data['siteEnabled'] = 0;
+			}
+
 		}
 		else
 		{
@@ -924,7 +950,8 @@ Class Controller_Billing
 				$data['journal'][$journalList['billingTransactionDate']] = $journal;	
 			}
 		}*/
-
+		//var_dump($data);
+		//die;
 		view::render("shared/billing/dailyJournal", $data);
 	}
 
@@ -1000,5 +1027,31 @@ Class Controller_Billing
 		 	$data['previoussum'] = $previousbalance->total;*/
 
 		view::render("shared/billing/transactionJournal", $data);
+	}
+
+	public function editTransaction($transid)
+	{
+
+		$data['transaction'] = model::load("billing/billing")->getBillingTransaction($transid);
+		view::render("shared/billing/editTransaction", $data);
+	}
+
+	public function unlockTransaction()
+	{
+		db::from("site");
+		db::order_by("siteName","ASC");
+		
+		$res_site = db::get()->result();
+
+		foreach($res_site as $row)
+		{
+			$data['siteList'][$row['siteID']]	= $row['siteName'];
+		}		
+
+		$site = model::load("site/site")->listUnlockSite();
+		//var_dump($site);
+		$data['unlockSite'] = $site;
+		//$data[] = "";
+		view::render("shared/billing/unlockTransaction", $data);
 	}
 }

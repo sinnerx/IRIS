@@ -2,8 +2,11 @@
 namespace model\site;
 use db, session, pagination, url, model;
 
-class Announcement
+class Announcement extends \Origami
 {
+	protected $table = 'announcement';
+	protected $primary = 'announcementID';
+
 	# add an announcement
 	public function addAnnouncement($siteID,$data)
 	{
@@ -64,6 +67,7 @@ class Announcement
 		{
 			if($frontend == false){
 				db::where("siteID = '$siteID'");
+				db::where("announcementStatus != 99");
 				## paginate based on current query built.
 				pagination::setFormat(model::load('template/cssbootstrap')->paginationLink());
 				pagination::initiate(Array(
@@ -117,6 +121,50 @@ class Announcement
 				db::where("announcementID",$announceID)->update("announcement",$data);
 			}
 		}
+	}
+
+	public function delete()
+	{
+		//if($this->activityApprovalStatus == 1)
+		//	return;
+		if($this->announcementStatus == 1) {
+			model::load("site/request")->create("announcement.delete",$this->siteID,$this->announcementID,Array());
+
+			$this->announcementStatus = 5;
+			$this->save();
+
+			return;
+		}
+
+		// delete related site_request for activity.add, if the current approval status is 0
+		if($this->announcementStatus == 0)
+		{
+			$siteRequest = model::orm('site/request')
+			->where('siteRequestRefID', $this->announcementID)
+			->where('siteRequestType', 'announcement.add')
+			->order_by("siteRequestID","desc")
+			->execute();
+
+			$siteRequest->getFirst()->delete();
+		}
+
+		$this->announcementStatus = 99;
+		$this->save();
+	}
+
+	public function undelete()
+	{
+		// delete related site_request for activity.add, if the current approval status is 0
+		$siteRequest = model::orm('site/request')
+		->where('siteRequestRefID', $this->announcementID)
+		->where('siteRequestType', 'announcement.delete')
+		->order_by("siteRequestID","desc")
+		->execute();
+
+		$siteRequest->getFirst()->delete();
+
+		$this->announcementStatus = 1;
+		$this->save();
 	}
 }
 

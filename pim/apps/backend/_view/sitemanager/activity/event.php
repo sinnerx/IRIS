@@ -27,6 +27,14 @@ var activity = new function($)
 
 		window.location.href = '<?php echo url::base("activity/delete/");?>'+id;
 	}
+
+	this.undelete = function(id)
+	{
+		if(!confirm('Cancel deletion of this activity?'))
+			return false;
+
+		window.location.href = '<?php echo url::base("activity/undelete/");?>'+id;
+	}
 }(jQuery);
 
 </script>
@@ -44,6 +52,7 @@ var activity = new function($)
 				<th>Participation</th>
 				<th colspan="2" width="20%" style='text-align:center;'>Date</th>
 				<th width='110px'></th>
+				
 			</tr>
 			<?php 
 			if($res_event):
@@ -81,8 +90,13 @@ var activity = new function($)
 				<?php if($status != 2):?>
 					<a href='<?php echo url::base("activity/view/event/$activityID");?>' class='fa fa-search'></a>
 					<a href='<?php echo url::base("activity/edit/$activityID");?>' class='fa fa-edit'></a>
+					<!--<a href='javascript:activity.delete(<?php echo $activityID;?>);' class='i i-cross2'></a>-->
+					<?php if($status == 5):?>
+						<a href='javascript:activity.undelete(<?php echo $activityID;?>);' class='i i-cross2'></a>
+					<?php else:?>
+						<a href='javascript:activity.delete(<?php echo $activityID;?>);' class='i i-cross2'></a>
+					<?php endif;?>
 				<?php endif;?>
-					<a href='javascript:activity.delete(<?php echo $activityID;?>);' class='i i-cross2'></a>
 				</td>
 			</tr>
 			<?php 
