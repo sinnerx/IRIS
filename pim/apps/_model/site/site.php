@@ -143,6 +143,8 @@ class Site extends \Origami
 		if(session::get("userLevel") != 99)
 		{
 			## approval part. make site request.
+			$data['siteInfoLoaDate'] = date('Y-m-d',strtotime($data['siteInfoLoaDate']));
+
 			model::load("site/request")->create('site.update',$id,$id,$data);
 		}
 		## else, directly update.
