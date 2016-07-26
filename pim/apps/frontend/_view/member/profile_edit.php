@@ -218,7 +218,7 @@ var profile	= new function()
 	}
 };
 
-$(document).ready(function()
+/*$(document).ready(function()
 {
 	if(window.location.hash == "")
 	{
@@ -228,7 +228,7 @@ $(document).ready(function()
 	{
 		selectTab(window.location.hash.split("#").join(""));
 	}
-});
+});*/
 
 </script>
 <div style="display:none;" class='content-panduan'>
@@ -253,6 +253,7 @@ $(document).ready(function()
 			<div class="profile-avatar">
 			<?php $photoUrl	= $userProfileAvatarPhoto?model::load("image/services")->getPhotoUrl($userProfileAvatarPhoto):null;
 			$backgroundUrl	= $photoUrl?";background:url('$photoUrl')":"";
+                        //echo '$userProfileAvatarPhoto: '.$userProfileAvatarPhoto;
 			?>
 				<div class="profile-avatar-upload" style="background-size:200px<?php echo $backgroundUrl;?>;" onmouseover='profile.upload.show();' onmouseout='profile.upload.hide();'>
 					<a id='avatar-upload-button'>

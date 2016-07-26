@@ -211,6 +211,8 @@ site:
 	siteUpdatedDate [datetime]
 	siteRefID [int]				## the site_id for old pi1m site.
 	siteCafeToken [varchar]
+	siteStatus [int]
+	siteUnlockDate [datetime]
 
 site_cache:
 	siteCacheID [int]
@@ -243,7 +245,7 @@ site_info:
 	siteInfoParliamen [varchar]
 	siteInfoPhase [varchar]
 	siteInfoDistrict [varchar]
-	siteInfoPopulation [varchar]
+	siteInfoPopulation [int]
 	siteInfoLoaDate [datetime]
 
 site_member:
@@ -254,6 +256,8 @@ site_member:
 	siteMemberOutsider [int]		## 1 = yes, 0 = no.
 	siteMemberImported [int]		##  0 = no (new registration), 1 = yes.
 	siteMemberSynced [int]			## 0 = no, 1 = yes. flag whether user has been synced or not.
+	userMembershipDate [datetime]
+	siteMemberBonus [int]
 
 site_slider:
 	siteSliderID [int]
@@ -676,6 +680,7 @@ report_monthly:
 	reportMonthlyID [int]
 	reportMonthlyMonth [int]
 	reportMonthlyYear [int]
+	reportMonthlyCategory [int]
 	reportMonthlyStatus [int] ## 0 = pending, 1 = completed
 	reportMonthlyStatusState [varchar(20)]
 	reportMonthlyArticleCompleted [int] ## completed articles
@@ -1223,4 +1228,4 @@ training_SubType:
 	trainingSubTypeCreatedDate [datetime]
 	trainingSubTypeCreatedUser [int]
 	trainingSubTypeUpdatedDate [datetime]
-	trainingSubTypeUpdatedUser[int]
+	trainingSubTypeUpdatedUser [int]

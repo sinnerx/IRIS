@@ -164,9 +164,26 @@ Overview of your site albums. You can <a href='javascript:album.addForm.show();'
 					<section class='panel panel-default'>
 						<div class='panel-heading'>
 						<?php echo $row['albumName'];?>
-						<div class='album-list-buttons'>
+							<div class='album-list-buttons'>
+							<?php
+							// separate 2017-01-01 with 00:00:00
+							$separateTimestamp = explode(' ', $row['albumCreatedDate']);
+
+							// separate 2017-01-01 by '-'
+							$monthAndDay = explode('-', $separateTimestamp[0]);
+
+							//combine => 01-01 00:00:00
+							$thisDate = $monthAndDay[1].'-'.$monthAndDay[2].' '.$separateTimestamp[1];
+
+							// if 01-01 00:00:00 no delete
+							if ($thisDate != '01-01 00:00:00') {
+								// if name is 'Exterior Pi1M' or 'Interior Pi1M'
+								if ($row['albumName'] != 'Exterior Pi1M' || $row['albumName'] != 'Interior Pi1M') {
+
+							?>
 							<a href='javascript:album.deleteAlbum(<?php echo $row['siteAlbumID'];?>);' class='i i-cross2 button-delete'></a>
-						</div>
+							<?php } } ?>
+							</div>
 						</div>
 						<?php 
 							$import = $_GET['import'];

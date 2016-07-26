@@ -105,6 +105,79 @@ class album
 		return $slug."-".(count($result)+1);
 	}
 
+	public function _checkDefaultAlbum()
+	{
+		db::where("albumCreatedUser",session::get("userID"));
+		db::where("albumCreatedDate",date("Y").'-01-01 00:00:00');
+		db::where("albumName",'Interior Pi1M');
+   		db::limit(1);
+		return db::get("album")->row();
+	}
+
+	public function addDefaultSiteAlbum($siteID,$siteAlbumType,$data)
+	{
+		$albumID	= $this->_addDefaultAlbum($data);
+		$albumID2	= $this->_addDefaultAlbum($data,'2');
+
+		$originalSlug	= model::load("helper")->slugify($data['albumName']);
+		$originalSlug2	= model::load("helper")->slugify($data['albumName2']);
+
+		$siteAlbumSlug	= $this->refineSiteAlbumSlug($originalSlug,now());
+		$siteAlbumSlug2	= $this->refineSiteAlbumSlug($originalSlug2,now());
+
+		## insert site_album 1
+		$data_sitealbum	= Array(
+				"siteID"=>$siteID,
+				"siteAlbumType"=>$siteAlbumType,
+				"albumID"=>$albumID,
+				"siteAlbumSlugOriginal"=>$originalSlug,
+				"siteAlbumSlug"=>$siteAlbumSlug,
+				"siteAlbumStatus"=>1
+		);
+
+		## insert site_album 2
+		$data_sitealbum2	= Array(
+				"siteID"=>$siteID,
+				"siteAlbumType"=>$siteAlbumType,
+				"albumID"=>$albumID2,
+				"siteAlbumSlugOriginal"=>$originalSlug2,
+				"siteAlbumSlug"=>$siteAlbumSlug2,
+				"siteAlbumStatus"=>1
+		);
+
+		db::insert("site_album",$data_sitealbum);
+		db::insert("site_album",$data_sitealbum2);
+
+		if ($albumID > 0 && $albumID2 > 0) {
+			return TRUE;
+		}
+	}
+
+	private function _addDefaultAlbum($data,$if2 = NULL)
+	{
+		$inData = Array(
+			"albumName"=>$data['albumName'],
+			"albumDescription"=>$data['albumDescription'],
+			"albumCreatedDate"=>$data['albumCreatedDate'],
+			"albumCreatedUser"=>session::get("userID")
+		);
+
+		$exData = Array(
+			"albumName"=>$data['albumName2'],
+			"albumDescription"=>$data['albumDescription2'],
+			"albumCreatedDate"=>$data['albumCreatedDate'],
+			"albumCreatedUser"=>session::get("userID")
+		);
+
+		if ($if2 == 2) {
+			db::insert("album",$exData);
+		} else {
+			db::insert("album",$inData);
+		}
+
+		return db::getLastID("album","albumID");
+	}
+
 	private function _addAlbum($data)
 	{
 		$data 	= Array(

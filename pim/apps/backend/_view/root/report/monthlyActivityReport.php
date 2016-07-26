@@ -6,14 +6,16 @@ var report = new function()
 	{
 		var year	= $("#year").val();
 		var month	= $("#month").val();
+		var category	= $("#category").val();
 		// window.location.href = pim.base_url+"report/generateAllActivityReport/"+year+"/"+month;
 
 		// pim.loader.start('#main-content-wrapper');
 
 		this.loader.start();
 
-		$.ajax({type: 'GET', url: pim.url('ajax/report/monthlyActivityGenerate/'+year+'/'+month), dataType: 'json'}).done(function(result)
+		$.ajax({type: 'GET', url: pim.url('ajax/report/monthlyActivityGenerate/'+year+'/'+month+'/'+category), dataType: 'json'}).done(function(result)
 		{
+			console.log(result);
 			if(result.status == 'failed')
 			{
 				alert(result.message);
@@ -40,12 +42,15 @@ var report = new function()
 		});
 	};
 
+
+
 	this.listReports = function()
 	{
 		var year = $('#year').val();
 		var month = $('#month').val();
+		var category	= $("#category").val();
 
-		return $.ajax({type: 'GET', url: pim.url('ajax/report/monthlyActivityReports/'+year+'/'+month)}).done(function(result)
+		return $.ajax({type: 'GET', url: pim.url('ajax/report/monthlyActivityReports/'+year+'/'+month+'/'+category)}).done(function(result)
 		{
 			$('.generated-reports-container').html(result);
 
@@ -108,6 +113,9 @@ var report = new function()
 				<tr>
 					<td>Year</td><td>: <?php echo form::select("year",model::load("helper")->monthYear("year"), 'onchange="report.dateChange();"', $year);?></td>
 				</tr>
+				<tr>
+					<td width="150px">Category</td><td>: <?php echo form::select("category",$categories, 'onchange="report.dateChange();"', null);?></td>
+				</tr>				
 				<tr>
 					 <td>Generate report</td><td>: <input type='button' class='btn btn-primary' onclick='report.generate();' value='GENERATE' /></td> 
 				</tr>

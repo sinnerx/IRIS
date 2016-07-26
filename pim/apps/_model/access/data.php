@@ -32,6 +32,8 @@ class Data
 					"site/undeleteAnnouncement"=>Array("sm","r","om"),
 					"manager/edit"=>Array("r","om","sm"),
 					"user/profile"=>Array("r","om","sm","cl", "dv"),
+                                        "user/changeProfileImage"=>Array("r","om","sm","cl", "dv"),
+                                        "user/profileUploadAvatar"=>Array("r","om","sm","cl", "dv"),
 					"user/changePassword"=>Array("r","om","sm","cl", "dv", 'fc', 'hq'),
 					"site/message"=>Array("r","om"/*,"sm"*/,"cl"),
 					"site/messageView"=>Array("r","om"/*,"sm"*/,"cl"),
@@ -42,8 +44,11 @@ class Data
 					"billing/addItem"=>Array("r","om", "sm"),
 					"billing/editItem"=>Array("r","om", "sm"),
 					"billing/addTransaction"=>Array("r","om","cl", "sm"),
+					"billing/editTransaction"=>Array("r","om","cl", "sm"),
+					"billing/unlockTransaction"=>Array("r","om","cl"),
 					"billing/edit"=>Array("r","om", "cl", "sm"),
 					"billing/dailyCashProcess"=>Array("r","om", "cl", "sm", "fc"),
+					"billing/dailyCashProcessOld"=>Array("r","om", "cl", "sm", "fc"),
 					"billing/dailyJournal"=>Array("r","om", "sm"),
 					"billing/transactionJournal"=>Array("r","om", "sm"),
 					"billing/editForm"=>Array("r","om", "cl", "sm"),
@@ -82,7 +87,9 @@ class Data
 					'exp/rlRejectionReason' => array('sm', 'cl', 'om', 'fc', 'r'),
 					'expExcel/prCashAdvanceDownload' => array('fc', 'r'),
 					'expExcel/rlSummaryGenerate' => array('sm', 'cl', 'om', 'fc', 'r'),
+					'expExcel/getDailyCashProcess' => array('sm', 'cl', 'om', 'fc', 'r'),
 					// 'exp/rlView' => array('sm', 'cl', 'om', 'fc'),
+					'ajax_unlockTransaction/checkSite' => array('sm', 'cl', 'om', 'fc', 'r'),
 							);
 
 		if($level && isset($access["$controller/$method"]))

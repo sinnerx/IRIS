@@ -237,8 +237,11 @@ class Controller_User
 
 			redirect::to("","Successfully updated user info.");
 		}
-
-		view::render("root/user/edit",$data);
+                //$data['user'] = model::load("access/auth")->getAuthData("user");
+		//var_dump($data['row']);
+                //die
+                $data['user'] = $data['row'];
+                view::render("root/user/edit",$data);
 	}
 
 	public function resetPassword($userID)

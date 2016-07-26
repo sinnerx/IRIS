@@ -233,7 +233,7 @@ class Report
 	public function getQuarterlyReport($siteID = null, $quarter = null){
 		## select all site.
 		$year = 2016;
-		$quarter = 1;
+		$quarter = 2;
 		switch ($quarter) {
 			case '1':
 				# code...
@@ -400,24 +400,36 @@ class Report
 			$arrayActivitiesOnSite['ajk']= $ajkresult[0]['pagePhoto'];
 
 			## select photo gallery
-			db::select('activityID');
-			db::where("activity.siteID",$keySite['siteID']);
-			$activityAlbum	= db::get("activity")->result();
+			//db::select('activityID');
+			//db::where("activity.siteID",$keySite['siteID']);
+			//$activityAlbum	= db::get("activity")->result();
 			
 
 			//var_dump($keySite['siteID']);
 			//$countImage = 0;
 			//foreach ($activityAlbum as $keyAlbum) {
 				# code...
-				db::select("photoName, photoDescription, DATE(photoCreatedDate) as photoDate");
+				// db::select("photoName, photoDescription, DATE(photoCreatedDate) as photoDate");
 				
-				db::join("site_photo SP", " SP.siteID = ". $keySite['siteID']);				
-				db::where("photo.photoID = SP.photoID");
+				// db::join("site_photo SP", " SP.siteID = ". $keySite['siteID']);				
+				// db::where("photo.photoID = SP.photoID");
+				// db::where("YEAR(photo.photoCreatedDate)", $year);
+				// db::where("MONTH(photo.photoCreatedDate) IN ", $month);
+				//$album = db::get("album")->result();
+
+				db::select("photoName, albumName, DATE(photoCreatedDate) as photoDate");
+				//db::from("album");
+				db::join("site_album", "site_album.albumID = album.albumID");
+				db::join("site_photo", "site_photo.siteAlbumID = site_album.siteAlbumID");
+				db::join("photo", "photo.photoID = site_photo.photoID");
+				db::where("site_photo.siteID ", $keySite['siteID']);
 				db::where("YEAR(photo.photoCreatedDate)", $year);
-				db::where("MONTH(photo.photoCreatedDate) IN ", $month);
+				db::where("MONTH(photo.photoCreatedDate) IN ", $month);				
+
+				$album = db::get("album")->result();
 				//db::where("photo.photoDescription ", " NOT NULL");
 
-				$album = db::get("photo")->result();
+				
 				//var_dump($album);
 				//die;
 				if($album) {
@@ -442,7 +454,7 @@ class Report
 						//var_dump($album[$keyRandom]);
 						$arrayActivitiesOnSite['album'][$imagecount]['albumCoverImageName'] =  $keyRandom['photoName'];
 						$arrayActivitiesOnSite['album'][$imagecount]['albumDate'] =  $keyRandom['photoDate'];
-						$arrayActivitiesOnSite['album'][$imagecount]['albumName'] =  $keyRandom['photoDescription'];	
+						$arrayActivitiesOnSite['album'][$imagecount]['albumName'] =  $keyRandom['albumName'];	
 						$imagecount++;
 					}
 					//var_dump($arrayActivitiesOnSite['album']);
