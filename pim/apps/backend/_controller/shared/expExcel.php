@@ -7,7 +7,8 @@ class Controller_ExpExcel
 	public function getDailyCashProcess($siteID, $month, $year)
 	{
 
-		if(!(session::get("userLevel") == \model\user\user::LEVEL_ROOT) || (session::get("userLevel") == \model\user\user::LEVEL_CLUSTERLEAD)  || (session::get("userLevel") == \model\user\user::LEVEL_FINANCIALCONTROLLER)){
+		if(!((session::get("userLevel") == \model\user\user::LEVEL_ROOT) || (session::get("userLevel") == \model\user\user::LEVEL_CLUSTERLEAD)  || (session::get("userLevel") == \model\user\user::LEVEL_FINANCIALCONTROLLER))){
+			//var_dump(session::get("userLevel"). " " . \model\user\user::LEVEL_CLUSTERLEAD);
 			$siteID = authData('site.siteID');
 		}
 		
