@@ -787,7 +787,7 @@ if ($articleID) {
 
 		return $article;
 	}
-}
+
 
 	public function delete()
 	{
