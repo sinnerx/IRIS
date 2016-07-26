@@ -223,7 +223,7 @@
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
             <span class="thumb-sm avatar pull-left">
-                <?php if($user['userProfileAvatarPhoto'] === 'NULL' ){
+                <?php if(!$user['userProfileAvatarPhoto'] ){
                     $user['userProfileAvatarPhoto'] = "../emptyavatar.png";
                 }
                 ?>
