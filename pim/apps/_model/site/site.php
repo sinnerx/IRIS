@@ -143,6 +143,8 @@ class Site extends \Origami
 		if(session::get("userLevel") != 99)
 		{
 			## approval part. make site request.
+			$data['siteInfoLoaDate'] = date('Y-m-d',strtotime($data['siteInfoLoaDate']));
+
 			model::load("site/request")->create('site.update',$id,$id,$data);
 		}
 		## else, directly update.
@@ -774,7 +776,8 @@ class Site extends \Origami
 		db::from("site");
 		db::where("siteUnlockDate > (DATE_SUB(NOW(), INTERVAL 24 HOUR))");
 		$result	= db::get()->result();
-
+		//var_dump($result);
+		//die;
 		return $result;
 	}
 }

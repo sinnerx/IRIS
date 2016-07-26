@@ -80,7 +80,7 @@ var base_url	= "<?php echo url::base();?>/";
 Select Date
 </div>
 <?php echo flash::data();?>
-<?php echo $siteEnabled; ?>
+<?php //echo $siteEnabled; ?>
 <div class='row'>
 	<div class='col-sm-10'>
 		<form class="form-inline bs-example" method='post' action='<?php echo url::base('billing/addTransaction/'.$itemSelect->billingItemID);?>'>

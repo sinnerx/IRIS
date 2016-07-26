@@ -73,30 +73,73 @@ endif;
 	</section>
 	</div>
 </div>
-
 <div class='row'>
 <div class='col-sm-12'>
 		<section class='panel panel-default'>
 		<div class='panel-body'>
-		<div class='form-group'>
+	
+
 		<div class='row'>
-				<div class='col-md-6'>
-				<label>10. Pi1M LOA Date</label>
+		<div class='col-sm-4'>
+			<div class='form-group'>
+				<label>Pi1M LOA Date</label>
 				<div class='row'>
 					<div class='col-md-12'>
-						<?php echo form::text("siteInfoLoaDate","style='margin-top: -5px;' class='input-sm input-s datepicker-input form-control' date-date-format='dd-mm-yyyy'",date('d-m-Y', strtotime($row['siteInfoLoaDate'])));?></div>
-				</div>
-				</div>
-
-				
+						<?php echo form::text("siteInfoLoaDate","class='input-sm input-s datepicker-input form-control' date-date-format='dd-mm-yyyy'",date('d-m-Y', strtotime($row['siteInfoLoaDate'])));?>
+					<?php echo flash::data("siteInfoLoaDate");?>
+			</div>
+				</div></div>
+			</div>
+			<div class='col-sm-4'>
+			<div class='form-group'>
+				<label>Parliamen</label>
+				<div class='row'>
+					<div class='col-md-12'>
+						<?php echo form::text("siteInfoParliamen","class='form-control'",$row['siteInfoParliamen']);?>
+			<?php echo flash::data("siteInfoParliamen");?>
+			</div>
+				</div></div>
+			</div>
+			<div class='col-sm-4'>
+			<div class='form-group'>
+				<label>Phase</label>
+				<div class='row'>
+					<div class='col-md-12'>
+						<?php echo form::text("siteInfoPhase","class='form-control'",$row['siteInfoPhase']);?>
+			<?php echo flash::data("siteInfoPhase");?>
+			</div>
+				</div></div>
 			</div>
 		</div>
-	
+
+
+
+		<div class='row'>
+			<div class='col-sm-4'>
+			<div class='form-group'>
+				<label>District</label>
+				<div class='row'>
+					<div class='col-md-12'>
+						<?php echo form::text("siteInfoDistrict","class='form-control'",$row['siteInfoDistrict']);?>
+			<?php echo flash::data("siteInfoDistrict");?>
+			</div>
+				</div></div>
+			</div>
+			<div class='col-sm-4'>
+			<div class='form-group'>
+				<label>Population</label>
+				<div class='row'>
+					<div class='col-md-12'>
+						<?php echo form::text("siteInfoPopulation","class='form-control'",$row['siteInfoPopulation']);?>
+			<?php echo flash::data("siteInfoPopulation");?>
+			</div>
+				</div></div>
+			</div>
+		</div>
 		</div>
 		</section>
 		</div>
 </div>
-
 <div class='row'>
 	<div class='col-sm-3'>
 		<section class='panel panel-default'>
@@ -168,59 +211,7 @@ endif;
 		</section>
 	</div>
 </div>
-<div class='row'>
-<div class='col-sm-12'>
-		<section class='panel panel-default'>
-		<div class='panel-body'>
-		<div class='form-group'>
-		<div class='row'>
-				<div class='col-md-6'>
-				<label>10. Parliamen</label>
-				<div class='row'>
-					<div class='col-md-6'>
-						<?php echo form::text("siteInfoParliamen","class='form-control'",$row['siteInfoParliamen']);?>
-			<?php echo flash::data("siteInfoParliamen");?>
-			</div>
-				</div>
-				</div>
 
-				<div class='col-md-6'>
-				<label>11. Phase</label>
-				<div class='row'>
-					<div class='col-md-6'>
-						<?php echo form::text("siteInfoPhase","class='form-control'",$row['siteInfoPhase']);?>
-			<?php echo flash::data("siteInfoPhase");?>
-			</div>
-				</div>
-				</div>
-			</div>
-		</div>
-		<div class='row'>
-			<div class='col-sm-6'>
-			<div class='form-group'>
-				<label>12. District</label>
-				<div class='row'>
-					<div class='col-md-6'>
-						<?php echo form::text("siteInfoDistrict","class='form-control'",$row['siteInfoDistrict']);?>
-			<?php echo flash::data("siteInfoDistrict");?>
-			</div>
-				</div></div>
-			</div>
-			<div class='col-sm-6'>
-			<div class='form-group'>
-				<label>13. Population</label>
-				<div class='row'>
-					<div class='col-md-6'>
-						<?php echo form::text("siteInfoPopulation","class='form-control'",$row['siteInfoPopulation']);?>
-			<?php echo flash::data("siteInfoPopulation");?>
-			</div>
-				</div></div>
-			</div>
-		</div>
-		</div>
-		</section>
-		</div>
-</div>
 <div class='row'>
 	<div class='col-sm-12'>
 		<section class='panel panel-default'>
