@@ -51,7 +51,8 @@ class Controller_Member
 		$additional				= model::load("user/user")->getAdditional($data['row']['userID']);
 		$data['row']			= array_merge($data['row'],$additional);
 		$data['userActivity']	= $userActivity;
-
+                //var_dump($data);
+                //die;
 		view::render("member/profile",$data);
 	}
 
@@ -62,6 +63,7 @@ class Controller_Member
 
 	public function profile_edit()
 	{
+            
 		if(session::get("userLevel") != 1)
 			redirect::to("dashboard/user/profile");
 
@@ -109,7 +111,8 @@ class Controller_Member
 
 			redirect::to("","<div class='msgbox success'>Maklumat anda telah berjaya dikemaskini.</div>");
 		}
-
+                //var_dump($row);
+                //die;
 		view::render("member/profile_edit",$row);
 	}
 
@@ -181,7 +184,7 @@ class Controller_Member
 			$services	= model::load("image/services");
 
 			$photoUrl	= $services->getPhotoUrl($path);
-
+                        
 			## move upload
 			$file->move($services->getPhotoPath($path));
 

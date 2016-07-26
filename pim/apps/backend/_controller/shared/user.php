@@ -56,7 +56,7 @@ class Controller_User
 
 			redirect::to("","Successfully updated user info.");
 		}
-
+                $data['user'] = model::load("access/auth")->getAuthData("user");
 		view::render("shared/user/profile",$data);
 	}
 
@@ -107,4 +107,47 @@ class Controller_User
 
 		view::render("shared/user/changePassword");
 	}
+        public function changeProfileImage(){
+            $data['user'] = model::load("access/auth")->getAuthData("user");
+            view::render("shared/user/changeProfileImage", $data);
+        }
+        public function profileUploadAvatar()
+	{
+               
+		$this->template	= false;
+		if(form::submitted())
+		{
+			## upload.
+			$file	= input::file("avatarPhoto");
+
+			## if not jpg, png or gif.
+			if(!$file->isExt("jpg,png,gif,jpeg"))
+			{
+				echo "<script type='text/javascript'>";
+				echo "alert('Please choose jpg, png, or gif only');";
+				echo "</script>";
+
+				return;
+			}
+
+			$fileName	= $file->get("name");
+
+			## add photo.
+			$path		= model::load("image/photo")->addUserPhoto(0,$fileName);
+			$services	= model::load("image/services");
+
+			$photoUrl	= $services->getPhotoUrl($path);
+                        
+			## move upload
+			$file->move($services->getPhotoPath($path));
+
+			## update avatar.
+			model::load("user/user")->updateAvatarPhoto(model::load("access/auth")->getAuthData("user","userID"),$path);
+
+			echo "<script type='text/javascript'>";
+			echo "parent.profile.upload.updateAvatar('$photoUrl');";
+			echo "</script>";
+		}
+	}
 }
+?>

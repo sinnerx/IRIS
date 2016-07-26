@@ -248,6 +248,9 @@
             <li>
               <a href="<?php echo url::base("user/profile");?>">My Profile</a>
             </li>
+<!--            <li>
+              <a href="<?php echo url::base("user/changeProfileImage");?>">Change Profile's Image</a>
+            </li>-->
             <li>
               <a href="<?php echo url::base("user/changePassword");?>">Change Password</a>
             </li>
