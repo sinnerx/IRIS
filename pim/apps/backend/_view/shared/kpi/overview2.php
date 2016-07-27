@@ -196,7 +196,13 @@ var site = new function()
 		
 		$("#ntable").tablesorter({
 			headers : { 
-				0 : { sorter: false }
+				0 : { sorter: false },
+				2 : { sorter: 'digit' },
+				3 : { sorter: 'digit' },
+				4 : { sorter: 'digit' },
+				5 : { sorter: 'digit' },
+				6 : { sorter: 'digit' },
+				7 : { sorter: 'digit' }
 			}
 		});
 
