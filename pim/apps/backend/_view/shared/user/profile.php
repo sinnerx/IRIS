@@ -211,6 +211,7 @@ var profile	= new function()
                     console.log('URL: '+url);
 			$(".profile-avatar-upload").css("background","url('"+url+"')");
 			$(".upload-button").hide();
+                        location.reload();
 		}
 
 	}

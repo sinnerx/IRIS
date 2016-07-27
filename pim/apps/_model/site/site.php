@@ -776,7 +776,8 @@ class Site extends \Origami
 		db::from("site");
 		db::where("siteUnlockDate > (DATE_SUB(NOW(), INTERVAL 24 HOUR))");
 		$result	= db::get()->result();
-
+		//var_dump($result);
+		//die;
 		return $result;
 	}
 }
