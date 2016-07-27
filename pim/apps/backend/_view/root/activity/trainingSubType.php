@@ -51,7 +51,7 @@ Listing sub type of training. <a href='<?php echo url::base("activity/trainingSu
 							<td>
 								<?php if($row['trainingSubTypeStatus'] == 1):?>
 									<a href='<?php echo url::base("activity/trainingSubTypeEdit/".$row['trainingSubTypeID']);?>' class='fa fa-edit'></a>
-									<a href='<?php echo url::base("activity/trainingSubTypeDelete/".$row['trainingSubTypeID']);?>' class='i i-cross2' onclick='return trainingType.deleteConfirm();'></a>
+									<!--<a href='<?php //echo url::base("activity/trainingSubTypeDelete/".$row['trainingSubTypeID']);?>' class='i i-cross2' onclick='return trainingType.deleteConfirm();'></a>-->
 								<?php endif;?>
 							</td>
 						</tr>

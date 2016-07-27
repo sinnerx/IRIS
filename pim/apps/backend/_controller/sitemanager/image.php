@@ -87,21 +87,29 @@ class Controller_Image
 		$data['maxSize']	= 2000000;
 
 		$data['siteSlug']	= authData("site.siteSlug");
-
+		//die;
 		if(form::submitted())
 		{
 			$file			= input::file("photoName");
-
+			//var_dump($file);
 			$photoUpload = false;
-
+			//$file = $file->get()[0];
+			//var_dump($file);
 			## checking-checkinggg
 			$photoUpload	= !$file?"Please choose a photo":false;
-
+			//var_dump($photoUpload);
 			// size cannot be bigger than.
-			if(!$photoUpload && $file->get('size') > $data['maxSize'])
+			if(!$photoUpload && $file->get('size') > $data['maxSize']){
 				$photoUpload = 'File size cannot be bigger than '.($data['maxSize']/1000000).'mb';
-
+				//var_dump('123');
+			}
+			else{
+				//var_dump($file);
+			}
+				
+			//var_dump($file->get());
 			$photoUpload	= !$photoUpload?(!$file->isExt("jpg,jpeg,png")?"Please choose the right photo":false):$photoUpload;
+
 
 			## no photo uploaded.
 			if($photoUpload)
@@ -115,6 +123,7 @@ class Controller_Image
 			$imagePhoto	= model::load("image/photo");
 
 			## add photo to db.
+
 			$path	= $imagePhoto->addSitePhoto($siteAlbumID,$file->get("name"),input::get("photoDescription"));
 
 			## update cover photo if they aint exists yet.

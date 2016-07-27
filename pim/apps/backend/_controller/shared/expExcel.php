@@ -87,7 +87,7 @@ class Controller_ExpExcel
 			$reference = &$report[$date][$code];
 
 			// time
-			$time = date('G', strtotime($row['billingTransactionDate'])) > 12 ? 'night' : 'day';
+			$time = date('G', strtotime($row['billingTransactionDate'])) > 24 ? 'night' : 'day';
 
 			// point to the time
 			if($code == 'PC')
