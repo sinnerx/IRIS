@@ -242,7 +242,7 @@ site_info:
 	siteInfoFacebookPageId [varchar]
 	siteInfoEmail [varchar]
 	siteInfoImage [varchar]
-	siteInfoParliamen [varchar]
+	siteInfoParliament [varchar]
 	siteInfoPhase [varchar]
 	siteInfoDistrict [varchar]
 	siteInfoPopulation [int]
