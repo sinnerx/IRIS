@@ -306,12 +306,12 @@ Edit existing user information.
                             ?>
                                     <div class="profile-avatar-upload" style="width:200px;height:230px;<?php echo $backgroundUrl;?>;" onmouseover='profile.upload.show();' onmouseout='profile.upload.hide();'>
 
-                                        <a id='avatar-upload-button'>
+<!--                                        <a id='avatar-upload-button'>
                                                     <div class='upload-button'>
                                                             <input type='file' id='avatarPhoto' style="display:none;" value="Tukar Foto" name='avatarPhoto' onchange='profile.upload.go();' />
                                                             <label for="avatarPhoto">Tukar Foto</label>
                                                     </div>
-                                            </a>
+                                            </a>-->
                                     </div>
                         </div>
 <!--                    </div>

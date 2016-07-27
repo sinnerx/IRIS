@@ -37,7 +37,7 @@ endif;
 	<section class="panel panel-default">
 		<div class="panel-body">
 			<div class="form-group">
-			<label>1. P1m Name</label>
+			<label>1. Pi1m Name</label>
 			<div class='row'>
 				<div class='col-sm-9'>
 				<?php echo form::text("siteName","size='40' $disabled onkeyup='prepareSlug();' class='form-control'",$row['siteName']);?>
@@ -57,7 +57,7 @@ endif;
 	<section class='panel panel-default'>
 		<div class="panel-body">
 			<div class="form-group">
-			<label>2. P1m Slug</label>
+			<label>2. Pi1m Slug</label>
 			<div class='row'>
 				<div class='col-sm-9'>
 				<?php echo form::text("siteSlug","class='form-control' onkeyup='prepareSlug(this.value);' $disabled placeholder=\"A url represents the p1m, make sure it's as clear as possible.\"",$row['siteSlug']);?>
@@ -92,11 +92,11 @@ endif;
 			</div>
 			<div class='col-sm-4'>
 			<div class='form-group'>
-				<label>Parliamen</label>
+				<label>Parliament</label>
 				<div class='row'>
 					<div class='col-md-12'>
-						<?php echo form::text("siteInfoParliamen","class='form-control'",$row['siteInfoParliamen']);?>
-			<?php echo flash::data("siteInfoParliamen");?>
+						<?php echo form::text("siteInfoParliament","class='form-control'",$row['siteInfoParliament']);?>
+			<?php echo flash::data("siteInfoParliament");?>
 			</div>
 				</div></div>
 			</div>
