@@ -263,6 +263,7 @@ class Site extends \Origami
 	{
 		db::from("site");
 		db::where("siteSlug",$slug);
+		db::where("siteStatus",1);
 		db::join("site_info","site_info.siteID = site.siteID");
 
 		return db::get()->row();
@@ -599,6 +600,7 @@ class Site extends \Origami
 		{
 			db::where("stateID",$stateID);
 		}
+		db::where("siteStatus",1);
 
 		return db::get("site")->result("stateID",true);
 	}
