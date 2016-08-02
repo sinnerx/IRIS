@@ -335,14 +335,18 @@ class Activity
 		$in_string .= ")";
 		//print_r($in_string);
 
-		db::select("P.name as packageName, P.packageid as packageID, M.name as moduleName, M.id as moduleID, R.status, R.datecreated");
+		db::select("P.name as packageName, P.packageid as packageID, M.name as moduleName, M.id as moduleID, R.status, R.datecreated, A.activityID");
 		db::where("AU.userID", $userID);
+
 		db::innerjoin("training AS TR", "TR.activityID = AU.activityID");
 		db::innerjoin("training_lms AS L", "TR.trainingID = L.trainingid");
 		db::innerjoin("lms_module AS M", "M.id = L.packagemoduleID");
 		db::innerjoin("lms_package_module AS LPM", "LPM.moduleid = M.id");
 		db::innerjoin("lms_package AS P", "P.packageid = LPM.packageid");
+		db::innerjoin("activity A", "A.activityID = AU.activityID");
 		db::join("lms_result as R", "(R.userid = '$userID' AND R.moduleid = M.id)");
+
+		db::where("A.activityApprovalStatus", 1);
 		db::order_by("R.datecreated", "ASC");				
 		$resultdb = db::get("activity_user AS AU")->result();
 		//print_r($resultdb);
