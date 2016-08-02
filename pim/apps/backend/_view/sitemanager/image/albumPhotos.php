@@ -39,6 +39,7 @@ var album	= new function()
 
 	this.editDescription_submit = function()
 	{
+
 		var desc = $("#albumDescription_editor textarea").val();
 		var data = {albumDescription:desc};
 		$.ajax({type:"POST",data:data,url:pim.base_url+"ajax/gallery/changeDescription/"+this.albumID}).done(function(desc)
@@ -194,6 +195,7 @@ var album	= new function()
 
 	this.editPhotoDescription_submit = function()
 	{
+
 		var data	= {photoDescription:$("#photoDescription_editor textarea").val()};
 		$.ajax({type:"POST",data:data,url:pim.base_url+"ajax/gallery/changePhotoDescription/"+this.currPhotoID}).done(function(res)
 		{

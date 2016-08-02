@@ -68,8 +68,8 @@ class Controller_Main
 
 	public function activity()
 	{
-		$data['res_training']	= db::where("siteID",authData("current_site.siteID"))->where("activityType",1)->limit(10)->order_by("activityStartDate","asc")->get("activity")->result();
-		$data['res_event']		= db::where("siteID",authData("current_site.siteID"))->where("activityType",2)->limit(10)->order_by("activityStartDate","asc")->get("activity")->result();
+		$data['res_training']	= db::where("siteID",authData("current_site.siteID"))->where("activityType",1)->where("activityApprovalStatus", 1)->limit(10)->order_by("activityStartDate","desc")->get("activity")->result();
+		$data['res_event']		= db::where("siteID",authData("current_site.siteID"))->where("activityType",2)->where("activityApprovalStatus", 1)->limit(10)->order_by("activityStartDate","desc")->get("activity")->result();
 
 		view::render("activity",$data);
 	}

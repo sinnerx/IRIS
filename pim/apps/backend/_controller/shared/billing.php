@@ -595,8 +595,10 @@ Class Controller_Billing
 			$reference = &$report[$date][$code];
 
 			// time
-			$time = date('G', strtotime($row['billingTransactionDate'])) > 24 ? 'night' : 'day';
-
+			$time = date('G', strtotime($row['billingTransactionDate'])) >= 19 ? 'night' : 'day';
+			//var_dump($row);
+			//var_dump(date('G', strtotime($row['billingTransactionDate'])));
+			//die;
 			// point to the time
 			if($code == 'PC')
 			{

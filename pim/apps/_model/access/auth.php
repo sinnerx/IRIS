@@ -33,6 +33,7 @@ Class Auth
 		db::where(Array(
 				"userIC"=>$userIC,
 				"userPassword"=>model::load("helper")->hashPassword($userPassword),
+				"userStatus"=>1,
 				"userLevel"=> \model\user\user::LEVEL_MEMBER, # member.
 						));
 
