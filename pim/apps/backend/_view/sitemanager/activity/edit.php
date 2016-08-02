@@ -721,6 +721,11 @@ Content is waiting for approval
 							<label>Type of event <?php echo flash::data("eventType");?></label>
 							<?php echo form::select("eventType",$eventTypeR,"class='form-control'",$row['eventType']);?>
 						</div>
+						<div class='form-group'>
+							<label>Max Pax <span style='opacity:0.5;'>(0 for no-limit)</span></label>
+							<?php //echo flash::data("eventMaxPax");?>
+							<?php echo form::text("eventMaxPax","class='form-control' style='width:70px;'",$row['eventMaxPax']);?>
+						</div>
 					</div>
 				</section>
 			</div>

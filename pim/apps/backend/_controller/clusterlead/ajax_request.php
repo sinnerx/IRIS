@@ -69,7 +69,12 @@ class Controller_Ajax_Request
 											"siteInfoImage"=>"Image",
 											"siteInfoDescription"=>"Site Description",
 											"siteInfoLatitude"=>"Latitude",
-											"siteInfoLongitude"=>"Longitude"
+											"siteInfoLongitude"=>"Longitude",
+											"siteInfoParliament"=>"Parliament",
+											"siteInfoPhase"=>"Phase",
+											"siteInfoDistrict"=>"District",
+											"siteInfoPopulation"=>"Population",
+											"siteInfoLoaDate"=>"LOA Date"
 											);
 
 		$data['colNameR']['announcement']	= Array("announcementText"=>"Announcement Text",
@@ -86,6 +91,7 @@ class Controller_Ajax_Request
 											"activityEndDate"=>"End Date",
 											"trainingType"=>"Type of Training",
 											"trainingMaxPax"=>"Max pax",
+											"eventMaxPax"=>"Max pax",
 											"eventType"=>"Type of Event",
 											"activityAddressFlag"=>"Activity Address : On using site address",
 											"activityAllDateAttendance"=>"All date compulsary (Is this activity require user to attend all?)"

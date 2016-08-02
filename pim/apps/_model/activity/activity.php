@@ -369,7 +369,8 @@ class Activity extends \Origami
 			case 1:
 			db::where('activityID',$activityID);
 			db::update("event",Array(
-						"eventType"=>$data['eventType']
+						"eventType"=>$data['eventType'],
+						"eventMaxPax"=>$data['eventMaxPax'],
 									));
 			break;
 			case 2:

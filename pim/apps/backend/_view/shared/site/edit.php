@@ -82,7 +82,7 @@ endif;
 		<div class='row'>
 		<div class='col-sm-4'>
 			<div class='form-group'>
-				<label>Pi1M LOA Date</label>
+				<label>LOA Date</label>
 				<div class='row'>
 					<div class='col-md-12'>
 						<?php echo form::text("siteInfoLoaDate","class='input-sm input-s datepicker-input form-control' date-date-format='dd-mm-yyyy'",date('d-m-Y', strtotime($row['siteInfoLoaDate'])));?>

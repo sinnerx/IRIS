@@ -279,6 +279,20 @@ echo model::load("template/frontend")
 						<?php
 						endif;
 						?>
+
+
+						<?php
+						if($activityType == 1):?>
+						<li class="clearfix"><span class='label-info'>Jemputan</span><span class="double-dot">:</span><span class="label-details">
+
+						<?php echo $eventMaxPax == 0?"Tiada Had":$eventMaxPax." orang";?>
+						</span></li>
+						<?php
+						endif;
+						?>
+
+
+
 						</ul>
 						</div>
 						<div class="event-short-desc">
