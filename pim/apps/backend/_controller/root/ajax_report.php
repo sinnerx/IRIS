@@ -378,7 +378,7 @@ class Controller_Ajax_Report
 			$reportZip = new ZipArchive;
 
 			$path = path::asset('backend/reports/monthly-activities/'.$report->reportMonthlyZipName);
-			
+
 			$reportZip->open($path, ZIPARCHIVE::CREATE);
 
 			$dirHandle = opendir($docsPath);
@@ -971,6 +971,11 @@ public function quarterlyReport($reportId){
 			$reportQuarterlyTable->updateState('zipping');
 
 			// zip the reports all the reports.
+
+			// begin the process.
+			if(!is_dir(path::asset('backend/reports/quarterly-activities/')))
+				mkdir(path::asset('backend/reports/quarterly-activities/'), 0777, true);
+								
 			$reportZip = new ZipArchive;
 
 			$path = path::asset('backend/reports/quarterly-activities/'.$reportQuarterlyTable->reportQuarterlyZipName);
