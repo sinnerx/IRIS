@@ -512,18 +512,20 @@ if ($articleID) {
 		//db::join('article_category', 'activity_article.activityID = article_category.activityID');
 		if($category){
 			db::from('article');
-			db::where('articleID IN (SELECT article.articleID FROM article 
-			LEFT OUTER JOIN article_category ON article.articleID = article_category.articleID 
-			WHERE categoryID = ?) ', array($category));
+			db::join('article_category', 'article.articleID = article_category.articleID');
+			db::where('categoryID', $category);
 
-			db::where('articleID IN (SELECT articleID FROM article WHERE month(articlePublishedDate) = ? AND year(articlePublishedDate) = ?)', array($month, $year));
+			db::where('month(articlePublishedDate)', $month);
+			db::where('year(articlePublishedDate)', $year);
+			db::where('articleStatus', array(0));
 		}
 		else{
 			db::from('activity_article');
 			db::where('activityID IN (SELECT activityID FROM activity WHERE month(activityStartDate) = ? AND year(activityStartDate) = ?)', array($month, $year));
+			db::where('articleID IN (SELECT articleID FROM article WHERE articleStatus = ?)', array(0));
 		}
 
-		db::where('articleID IN (SELECT articleID FROM article WHERE articleStatus = ?)', array(0));
+		
 		//var_dump(db::get());
 		//die;
 		return db::get()->num_rows();
@@ -537,19 +539,23 @@ if ($articleID) {
 	{
 		if($category){
 			db::from('article');
-			db::where('articleID IN (SELECT article.articleID FROM article 
-			LEFT OUTER JOIN article_category ON article.articleID = article_category.articleID 
-			WHERE categoryID = ?) ', array($category));
+			db::join('article_category', 'article.articleID = article_category.articleID');
+			db::where('categoryID ', $category);
 
-			db::where('articleID IN (SELECT articleID FROM article WHERE month(articlePublishedDate) = ? AND year(articlePublishedDate) = ?)', array($month, $year));
+			db::where('month(articlePublishedDate)', $month);
+			db::where('year(articlePublishedDate)', $year);
+
+			// check if there's existing unapproved site request for article.
+			$result = db::get()->result('article.articleID');			
 		}	
 		else{
 			db::from('activity_article');
 			db::where('activityID IN (SELECT activityID FROM activity WHERE month(activityStartDate) = ? AND year(activityStartDate) = ?)', array($month, $year));
+			// check if there's existing unapproved site request for article.
+			$result = db::get()->result('articleID');
 		}
 
-		// check if there's existing unapproved site request for article.
-		$result = db::get()->result('articleID');
+		
 
 		if(count($result) > 0)
 		{

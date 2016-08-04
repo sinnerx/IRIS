@@ -1229,3 +1229,20 @@ training_SubType:
 	trainingSubTypeCreatedUser [int]
 	trainingSubTypeUpdatedDate [datetime]
 	trainingSubTypeUpdatedUser [int]
+
+## blogs report generation 
+report_quarterly:
+	reportQuarterlyID [int]
+	reportQuarterlyName [int]
+	reportQuarterlyYear [int]
+	reportQuarterlyStatus [int] ## 0 = pending, 1 = completed
+	reportQuarterlyStatusState [varchar(20)]
+	reportQuarterlySiteCompleted [int] ## completed articles
+	reportQuarterlySiteTotal [int] ## total articles
+	reportQuarterlyZipName [varchar]
+	reportQuarterlyZipSize [int]
+	reportQuarterlyDownloaded [int]
+	reportQuarterlyCreatedDate [datetime]
+	reportQuarterlyUpdatedDate [datetime]
+	reportQuarterlyCreatedUser [int]
+	reportQuarterlyUpdatedUser [int]

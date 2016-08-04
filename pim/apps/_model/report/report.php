@@ -230,10 +230,10 @@ class Report
 		
 	}
 
-	public function getQuarterlyReport($siteID = null, $quarter = null){
+	public function getQuarterlyReport($siteID = null, $year = null, $quarter = null){
 		## select all site.
-		$year = 2016;
-		$quarter = 2;
+		//$year = 2016;
+		//$quarter = 2;
 		switch ($quarter) {
 			case '1':
 				# code...
@@ -502,6 +502,7 @@ COUNT(*) AS members");
 			db::join("site_member SM", "U.userID = SM.userID");
 			db::join("site S", "S.siteID = SM.siteID");
 			db::where("YEAR(userCreatedDate)", $year);
+			db::where("MONTH(userCreatedDate) IN ", $month);
 			db::where("S.siteID", $keySite['siteID']);
 			db::group_by("siteName, yr, mn");
 			$totalmember = db::get("user U")->result();
@@ -521,6 +522,7 @@ COUNT(DISTINCT billingTransactionUser) AS members");
 			db::join("site S", "S.siteID = BT.siteID");
 			db::where("BTI.billingItemID", 3);
 			db::where("YEAR(billingTransactionDate)", $year);
+			db::where("MONTH(billingTransactionDate) IN ", $month);
 			db::where("BT.siteID", $keySite['siteID']);
 			db::group_by("siteName, yr, mn");
 			$usagetotal = db::get("billing_transaction BT")->result();
@@ -539,13 +541,16 @@ SUM(billingTransactionItemQuantity) AS hours");
 			db::join("site S", "S.siteID = BT.siteID");
 			db::where("BTI.billingItemID", 3);
 			db::where("YEAR(billingTransactionDate)", $year);
+			db::where("MONTH(billingTransactionDate) IN ", $month);
+			db::where("BT.siteID", $keySite['siteID']);
 			db::group_by("siteName, yr, mn");
 			$usagehour  = db::get("billing_transaction BT")->result();
 			//var_dump($usagehour);
 			//die;
 			foreach ($usagehour as $keyUsageHour) {
 				# code...
-				$arrayActivitiesOnSite['usagehour'][$keyUsageHour['mn']] = $keyUsageHour['hours'];
+				$arrayActivitiesOnSite['usagehour'][$keyUsageHour['mn']] = number_format((float)$keyUsageHour['hours'], 2, '.', '');
+				//$arrayActivitiesOnSite['usagehour'][$keyUsageHour['mn']] = $keyUsageHour['hours'];
 			}	
 
 			## put result into array

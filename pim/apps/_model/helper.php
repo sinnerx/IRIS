@@ -12,6 +12,55 @@ class Helper
 		return $item;
 	}
 
+	public function quarter($type, $no = null)
+	{
+
+		$listQuarter = Array(
+			1 => Array(
+				1 => "First Quarter",
+				2 => "Second Quarter",
+				3 => "Third Quarter",
+				4 => "Fourth Quarter"
+				),
+			2 => Array(
+				1 => "1st",
+				2 => "2nd",
+				3 => "3rd",
+				4 => "4th",
+				),
+			3 => Array(
+				1 => "JANUARY - MARCH",
+				2 => "APRIL - JUNE",
+				3 => "JULY - SEPTEMBER",
+				4 => "OCTOBER - DECEMBER",
+				),
+			4 => Array(
+				1 => Array(
+					1 => "January",
+					2 => "February",
+					3 => "March",
+					),
+				2 => Array(
+					1 => "April",
+					2 => "May",
+					3 => "June",
+					),					
+				3 => Array(
+					1 => "July",
+					2 => "August",
+					3 => "September",
+					),				
+				4 => Array(
+					1 => "October",
+					2 => "November",
+					3 => "December",
+					),				
+				),
+			);		
+
+		return !$no?$listQuarter[$type] : $listQuarter[$type][$no];
+	}
+
 	public function state($no = null)
 	{
 		$state	= Array(
