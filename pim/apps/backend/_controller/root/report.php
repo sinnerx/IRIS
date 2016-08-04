@@ -1037,7 +1037,7 @@ class Controller_Report
 		$data['year']			= $year;
 		
 
-		view::render("root/report/DashboardQuarterlyReport", $data);
+		view::render("root/report/dashboardQuarterlyReport", $data);
 	}
 
 }
