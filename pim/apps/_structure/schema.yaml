@@ -1121,6 +1121,7 @@ lms_module:
 	updatedate [datetime]
 	updateby [varchar(100)]
 	status [int(11)]
+	subtype_id [int(11)]
 
 lms_module_type:
 	id [int]
