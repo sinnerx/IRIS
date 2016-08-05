@@ -1219,7 +1219,7 @@ report_fields:
 	report_fieldsName [varchar(100)]
 	report_fieldsIsMandatory [int]
 
-training_SubType:
+training_subtype:
 	trainingSubTypeID [int]
 	trainingSubTypeName [varchar]
 	trainingSubTypeDescription [text]

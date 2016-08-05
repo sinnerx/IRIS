@@ -43,7 +43,7 @@ class Training
 		// var_dump($no);
 		// die;
 		## type.
-		$res_type = db::select("trainingSubTypeID,trainingSubTypeName")->where("trainingSubTypeStatus",1)->where("trainingSubTypeParent", $no)->get("training_SubType")->result();
+		$res_type = db::select("trainingSubTypeID,trainingSubTypeName")->where("trainingSubTypeStatus",1)->where("trainingSubTypeParent", $no)->get("training_subtype")->result();
 
 		$arr	= Array();
 		if($res_type)
@@ -71,7 +71,7 @@ class Training
 			foreach($where as $key=>$v)
 				db::where($key,$v);
 
-		return db::get("training_SubType")->result();		
+		return db::get("training_subtype")->result();		
 	}
 
 	public function addType($name,$desc)
@@ -98,7 +98,7 @@ class Training
 
 	public function addSubType($name,$desc, $parentid)
 	{
-		db::insert("training_SubType",Array(
+		db::insert("training_subtype",Array(
 			"trainingSubTypeName"=>$name,
 			"trainingSubTypeDescription"=>$desc,
 			"trainingSubTypeStatus"=>1,
@@ -111,7 +111,7 @@ class Training
 	public function updateSubType($trainingTypeID,$name,$desc, $parentid)
 	{
 		db::where("trainingSubTypeID",$trainingTypeID);
-		db::update("training_SubType",Array(
+		db::update("training_subtype",Array(
 			"trainingSubTypeName"=>$name,
 			"trainingSubTypeParent"=>$parentid,
 			"trainingSubTypeDescription"=>$desc,

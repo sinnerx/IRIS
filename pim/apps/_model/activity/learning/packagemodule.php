@@ -32,7 +32,7 @@ class PackageModule extends \Origami
 		db::where("LPM.packageid", $packageid);
 		db::join("lms_module AS M", "M.id = LPM.moduleid");
 		db::join("training_type AS T", "T.trainingTypeID = M.typeid");
-		db::join("training_SubType AS ST", "ST.trainingSubTypeID = M.subtype_id");
+		db::join("training_subtype AS ST", "ST.trainingSubTypeID = M.subtype_id");
 		db::join("lms_package AS P", "P.packageid = LPM.packageid");
 		//print_r( db::get("lms_package_module AS LPM"));
 		//var_dump(db::get("lms_package_module AS LPM"));
