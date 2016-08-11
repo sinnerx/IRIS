@@ -40,7 +40,7 @@ class Controller_Member
 		$userActivity	= model::load("user/activity");
 
 
-		$data['activities']				= $userActivity->getActivities(null,$userID,null,null,10);
+		$data['activities']				= $userActivity->getAllActivities(null,$userID,null,null,10);
 		$data['activities_forum'] 		= $userActivity->getActivities(null,$userID,"forum",null,3);
 		$data['activities_comment'] 	= $userActivity->getActivities(null,$userID,"comment",null,3);
 		$data['activities_activity'] 	= $userActivity->getActivities(null,$userID,"activity",null,3);
