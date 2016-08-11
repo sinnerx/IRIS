@@ -40,14 +40,14 @@ List of reports.
 
 			foreach($reports as $report):
 				//var_dump($report['reportsID']);
-				$reportID	= $report['reportsID'];
-				$reportName	= $report['reportsName'];
-				$reportDesc		= $report['reportsDesc'];
+				$reportID	= $report['reportsFormID'];
+				$reportName	= $report['reportsFormName'];
+				$reportDesc		= $report['reportsFormDesc'];
 
-				if($report['reportsURL'] == "")
+				if($report['reportsFormURL'] == "")
 					$detailIcon	= "<a class='fa fa-user' href='".url::base("report/reportFormField/$reportID")."'></a>";
 				else
-					$detailIcon	= "<a class='fa fa-user' href='".url::base($report['reportsURL'])."'></a>";
+					$detailIcon	= "<a class='fa fa-user' href='".url::base($report['reportsFormURL'])."'></a>";
 				$editIcon	= "<a class='fa fa-edit' href='".url::base("user/edit/$userID")."'></a>";
 				$deleteIcon = '<a onclick="return confirm(\'Are you really sure?\');" class="i i-cross2" href="'.url::base('user/delete/'.$userID).'"></a>';
 				#$resetIcon	= "<a onclick='return confirm(\"Are you sure you want to reset this user password.?\");' class='fa fa-key'  href='".url::base("user/resetPassword/$userID")."'></a>";

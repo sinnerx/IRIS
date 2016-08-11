@@ -46,7 +46,7 @@ $(document).ready(function() {
     //var_dump(model::load("site/cluster")->lists());
 ?>
 <h3 class="m-b-xs text-black">
-<a href='info'>Title of Report</a>
+<a href='info'><?php echo $model_report_form['reportsFormName'];?></a>
 </h3>
 <div class='well well-sm'>
 Please complete the form below to generate the report.

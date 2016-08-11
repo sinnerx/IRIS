@@ -476,6 +476,7 @@ $(document).ready(function()
 
                   
                     <?php 
+                   // var_dump($rl->getLevelApproval('sm'));
                     if($rl->isManagerPending() && user()->isManager()):?>
                       <a href='javascript: void(0);' onclick='return rl.ManagerSubmit();' class='btn btn-primary'>Submit</a>
                     <?php else:?>
@@ -485,8 +486,11 @@ $(document).ready(function()
 
                   <td>
                     <?php
+                    
+                    //die;
                     $clApproval = $rl->getLevelApproval('cl');
-
+                    //var_dump($clApproval);
+                    //die;
                     if($clApproval->isPending() && user()->isClusterLead() && $rl->isPendingFor(user())):?>
                       <a href='<?php echo url::base('exp/rlApproval/'.$rl->prReconcilationID.'/approve');?>' class='btn btn-primary' onclick='return rl.approveCheck();'>Approve</a>
                       <a href='<?php echo url::base('exp/rlRejectForm/'.$rl->prReconcilationID);?>' class='btn btn-danger' data-toggle='ajaxModal'>Reject</a>
@@ -565,9 +569,22 @@ $(document).ready(function()
                 </tr>                
 
                 <tr>
-                  <td><?php echo $siteName['siteName']; ?></td>
-                  <td><?php echo $clusterName ?></td>
-                  <td>Semenanjung Malaysia</td>
+                  <!-- <td><?php //echo $siteName['siteName']; ?></td> -->
+                  <td>
+                    <?php if(!$rl->isManagerPending()):?>
+                    <?php echo $pr->getSite()->siteName; ?>
+                    <?php endif;?>
+                  </td>
+                  <td>
+                    <?php if(!$clApproval->isPending()):?>
+                    <?php echo $pr->getCluster()->clusterName; ?>
+                    <?php endif; ?>
+                  </td>
+                  <td>
+                    <?php if(!$omApproval->isPending()):?>
+                    <?php echo $pr->getOps(); ?>
+                    <?php endif; ?>
+                  </td>
                   <td></td>
                 </tr>
 

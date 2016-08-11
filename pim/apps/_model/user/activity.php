@@ -150,6 +150,7 @@ class Activity
 			break;
 			case "activity.join":
 				db::join("activity","activity.activityID = activity_user.activityID");
+				//db::where("activity.activityApprovalStatus", 1);
 				$row	= db::where("activityUserID",$params['activityUserID'])->get("activity_user")->row();
 
 				$data	= Array("user"=>$userProfile['userProfileFullName'],"activity"=>$row['activityName']);
@@ -196,23 +197,33 @@ class Activity
 	## return text row.
 	public function getActivities($siteID = null,$userID = null,$type = null,$action = null,$limit = null)
 	{
+
+		db::join("activity_user", "activity_user.activityUserID = user_activity.userActivityParameter1");
+		db::join("activity","activity.activityID = activity_user.activityID");
+		db::where("activity.activityApprovalStatus", 1);
+
 		if($siteID)
 			db::where("siteID",$siteID);
 
-		if($type)
+		if($type){
 			db::where("userActivityType",$type);
+		}
+			
 
 		if($action)
 			db::where("userActivityAction",$action);
 
 		if($userID)
-			db::where("userID",$userID);
+			db::where("user_activity.userID",$userID);
 
 		if($limit)
 			db::limit($limit);
 
+
 		db::order_by("userActivityID","DESC");
 		db::get("user_activity");
+		//var_dump($res);
+		//die;
 		$res	= db::result("userActivityID");
 
 		## group typeAction.
@@ -238,6 +249,7 @@ class Activity
 			$params	= $this->parameterName($typeAction,Array($p1,$p2,$p3,$p4));
 
 			$text	= $this->prepareText($typeAction,$params,Array("user_profile"=>$res_profile[$row['userID']]));
+			//$text = "";
 
 			$activities[] = Array("text"=>$text,"url"=>"","row"=>$row);
 		}

@@ -466,7 +466,8 @@ class Controller_Report
 	public function reportFormField($idReport){
 
 		$data['todayDateStart'] 	= date('Y-m-d H:i');
-		$data['model_form_fields'] 	= model::load("report/report")->getReportForm($idReport);
+		$data['model_form_fields'] 	= model::load("report/report")->getReportFormField($idReport);
+		$data['model_report_form']	= model::load("report/report")->getReportForm($idReport);
 		$data['idreport']			= $idReport;
 		//var_dump($data);
 		view::render('root/report/dashboardFormField',$data);
@@ -478,7 +479,7 @@ class Controller_Report
 		if(request::get("search"))
 		{
 			$searchText = request::get('search');
-			$where['reportsName LIKE ? OR reportsDesc LIKE ?'] = array('%'.$searchText.'%', '%'.$searchText . '%');
+			$where['reportsFormName LIKE ? OR reportsFormDesc LIKE ?'] = array('%'.$searchText.'%', '%'.$searchText . '%');
 		}
 
 		## get paginated user list.
@@ -720,6 +721,8 @@ class Controller_Report
 					""
 								);
 
+
+
 		foreach($tableHeader as $no=>$headerColname)
 		{
 			$sheet->setCellValue($x.$y,$headerColname);
@@ -839,7 +842,8 @@ class Controller_Report
 		foreach($data['siteData'] as $siteID=>$row)
 		{
 			$siteInfo = $data['siteInfo'][$siteID];
-
+			//var_dump($siteInfo);
+			//die;
 			$no++;
 			$cellData = Array(
 					"no"=>$no,
@@ -880,6 +884,135 @@ class Controller_Report
 
 			$y++;
 		}
+
+		## the main working sheet.
+		// $sheet	= $excel->getActiveSheet();
+		// $excel->createSheet(1); 
+		// $excel->getActiveSheet(1);
+		// $excel->setTitle("Entrepreneurship");
+
+		$sheetTrain = $excel->createSheet(2); 
+		//$sheetTrain = $excel->getActiveSheet(2);
+		$sheetTrain->setTitle("Training");
+		
+		#1 create main title.
+		$sheetTrain->setCellValue("F1","TRAINING DATA");
+		$sheetTrain->getStyle("F1")->getFont()->setSize(18);
+		$sheetTrain->getRowDimension(1)->setRowHeight(25);
+		$sheetTrain->getRowDimension(4)->setRowHeight(20);
+		$sheetTrain->getRowDimension(5)->setRowHeight(20);
+
+		#2 date.
+		$sheetTrain->setCellValue("A2","DATE : ".date("j F Y",strtotime($startDate))." - ".date("j F Y",strtotime($endDate)));
+		$sheetTrain->getStyle("A2")->getFont()->setSize(16);
+		$sheetTrain->getRowDimension(2)->setRowHeight(22);		
+
+		$tableHeaderTraining = Array(
+				"SP",
+				"Gender",
+				"",
+				"Group",
+				"",
+				"Age Group",
+				"",
+				"",
+				"",
+				"Occupation", # 5 split
+				"",
+				"",
+				"",
+				"",
+				"",
+				"Total class hours",
+			);
+
+		$subcolumnTraining	= Array(
+					"B"=>"Male",
+					"C"=>"Female",
+					"D"=>"Bumi",
+					"E"=>"Non Bumi",
+					"F"=>"Under 18",
+					"G"=>"18 - 35",
+					"H"=>"36 - 55",
+					"I"=>"Over 55",
+					"J"=>"Students",
+					"K"=>"Housewives",
+					"L"=>"Self-employed",
+					"M"=>"Employed",
+					"N"=>"Not-employed",
+					"O"=>"Retiree"
+							);		
+
+		
+		//$yTraining = 1;
+		$rowCountTraining = 4;
+
+		//echo ++$xTraining;
+		//die;
+
+		//var_dump($data['TrainingInfo']);
+		// die;
+
+		$TrainingInfo = $data['TrainingInfo'];
+		foreach ($TrainingInfo as $keyTraining => $rowTraining) {
+			# code...
+			//var_dump($rowTraining);
+			//die;
+			$xTraining = 'A';
+			$yTraining = 1;
+			$sheetTrain->mergeCells("A".$rowCountTraining.":"."P".$rowCountTraining); //total
+			$sheetTrain->setCellValue("A".$rowCountTraining, $rowTraining['trainingTypeName']);
+
+			foreach ($tableHeaderTraining as $key => $valueHeader) {
+				# code...
+				$sheetTrain->setCellValue($xTraining . ($rowCountTraining+1), $valueHeader);
+				++$xTraining;
+				//$rowCountTraining++;
+			}
+
+			foreach ($subcolumnTraining as $key => $valueSubColumn) {
+				# code...
+				$sheetTrain->setCellValue($key . ($rowCountTraining+2), $valueSubColumn);
+				++$key;
+			}
+
+			$cellData = Array(
+					"sp"=>"Celcom",
+					"gender_male"			=>$data['Tgender'][$keyTraining]['male'],
+					"gender_female"			=>$data['Tgender'][$keyTraining]['female'],
+					"group_bumi"			=>$data['Tgroup'][$keyTraining]['bumi'],
+					"group_nonbumi"			=>$data['Tgroup'][$keyTraining]['non-bumi'],
+					"age_18"				=>$data['TageRange'][$keyTraining]['under18'],
+					"age_over18"			=>$data['TageRange'][$keyTraining]['18-35'],
+					"age_over35"			=>$data['TageRange'][$keyTraining]['36-55'],
+					"age_over55"			=>$data['TageRange'][$keyTraining]['over55'],
+					"occ_students"			=>$data['Toccupation'][$keyTraining]['students'],
+					"occ_housewives"		=>$data['Toccupation'][$keyTraining]['housewives'],
+					"occ_selfemployed"		=>$data['Toccupation'][$keyTraining]['self-employed'],
+					"employed"				=>$data['Toccupation'][$keyTraining]['employed'],
+					"not-employed"			=>$data['Toccupation'][$keyTraining]['not-employed'],
+					"retiree"				=>$data['Toccupation'][$keyTraining]['retiree'],
+					"total_hours"			=>$data['TclassHour'][$keyTraining],
+							);
+
+			//var_dump($cellData);
+			//die;
+			## reset.
+			$x	= 'A';
+			foreach($cellData as $key=>$val)
+			{
+				$sheetTrain->setCellValue($x.($rowCountTraining+3),$val);
+				++$x;
+			}
+
+			$rowCountTraining +=5;
+		}
+
+
+
+		// $sheet->createSheet(1);
+		// $sheet->setActiveSheetIndex(2);  
+		// $sheet->getActiveSheet()->setCellValue('A4', 'Training') ;		
 
 		$ExcelHelper->execute();
 	}
