@@ -236,6 +236,12 @@ class Activity
 		db::where("userActivityType <> 'comment'");
 		db::get("user_activity");
 
+		if($userID)
+			db::where("user_activity.userID",$userID);
+
+		if($limit)
+			db::limit($limit);		
+
 		$res	= db::result("userActivityID");
 
 
