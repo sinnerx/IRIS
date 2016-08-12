@@ -312,5 +312,22 @@ class Helper
 	{
 		return date("g:i a",strtotime($time));
 	}
+
+	public function sortBy($field, $array, $direction = 'asc')
+	{
+	    usort($array, create_function('$a, $b', '
+	        $a = $a["' . $field . '"];
+	        $b = $b["' . $field . '"];
+
+	        if ($a == $b)
+	        {
+	            return 0;
+	        }
+
+	        return ($a ' . ($direction == 'desc' ? '>' : '<') .' $b) ? -1 : 1;
+	    '));
+
+	    return $array;
+	}
 }
 ?>

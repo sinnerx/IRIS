@@ -260,7 +260,7 @@ class Activity
 
 		//var_dump(count($res));
 		//die;
-		$this->sortBy("userActivityID", $res, "desc");
+		$res = model::load("helper")->sortBy("userActivityID", $res, "desc");
 		//$res = array_slice($res, 0, 10);
 		//var_dump($res);
 		//die;
@@ -607,22 +607,6 @@ class Activity
 					return $resultPackage;
 	}
 
-function sortBy($field, &$array, $direction = 'asc')
-{
-    usort($array, create_function('$a, $b', '
-        $a = $a["' . $field . '"];
-        $b = $b["' . $field . '"];
-
-        if ($a == $b)
-        {
-            return 0;
-        }
-
-        return ($a ' . ($direction == 'desc' ? '>' : '<') .' $b) ? -1 : 1;
-    '));
-
-    return true;
-}
 //830512105141    172
 
 }

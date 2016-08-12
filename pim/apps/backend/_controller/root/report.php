@@ -1,6 +1,6 @@
 <?php
 //use Knp\Snappy\Pdf;
-//require_once(getcwd().'/pim/apps/_library/fpdf181/fpdf.php');
+require_once(getcwd().'/pim/apps/_library/fpdf181/fpdf.php');
 
 
 class Controller_Report
@@ -439,7 +439,7 @@ class Controller_Report
 
 	    $percentKPIMCMC = round($sumQuarterHours / $sumKPIMCMC * 100);
 	    $percentKPINTSB = round($sumQuarterHours / $sumKPINTSB * 100);
-		$pdf->Cell($w[0]+$w[1]+$w[2]+$w[3]+$w[4],7,'',1,0,'C');
+		$pdf->Cell($w[0]+$w[1]+$w[2]+$w[3],7,'',1,0,'C');
 		$pdf->Cell($w[4],7,'',1,0,'C');
 	    $pdf->Cell($w[5],7,$percentKPIMCMC. '%',1,0,'C');
 	    $pdf->Cell($w[6],7,$percentKPINTSB. '%',1,0,'C');
