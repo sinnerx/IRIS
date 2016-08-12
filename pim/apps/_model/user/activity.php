@@ -205,11 +205,15 @@ class Activity
 		if($userID)
 			db::where("user_activity.userID",$userID);
 
-		if($limit)
-			db::limit($limit);		
+		//if($limit)
+		//	db::limit($limit);		
 
 		db::order_by("userActivityID","DESC");
 		db::get("user_activity");
+		
+		//$res = db::get("user_activity");
+		//var_dump($res);
+		// die;
 		
 		$resActivity = db::result("userActivityID");
 
@@ -234,7 +238,7 @@ class Activity
 		//get all except comments & activity
 		db::where("userActivityType <> 'activity'");
 		db::where("userActivityType <> 'comment'");
-		db::get("user_activity");
+		
 
 		if($userID)
 			db::where("user_activity.userID",$userID);
@@ -242,12 +246,24 @@ class Activity
 		if($limit)
 			db::limit($limit);		
 
-		$res	= db::result("userActivityID");
+		db::get("user_activity");
 
+		$resAll	= db::result("userActivityID");
 
-		$res =array_merge($res,$resComment);
+		//$res = $resActivity;
+		//rsort($res);
+		//var_dump($res);
+		//die;
+
+		$res = array_merge($resAll,$resComment);
 		$res =array_merge($res,$resActivity);
 
+		//var_dump(count($res));
+		//die;
+		$this->sortBy("userActivityID", $res, "desc");
+		//$res = array_slice($res, 0, 10);
+		//var_dump($res);
+		//die;
 		## group typeAction.
 		if(!$res)
 			return false;
@@ -591,6 +607,22 @@ class Activity
 					return $resultPackage;
 	}
 
+function sortBy($field, &$array, $direction = 'asc')
+{
+    usort($array, create_function('$a, $b', '
+        $a = $a["' . $field . '"];
+        $b = $b["' . $field . '"];
+
+        if ($a == $b)
+        {
+            return 0;
+        }
+
+        return ($a ' . ($direction == 'desc' ? '>' : '<') .' $b) ? -1 : 1;
+    '));
+
+    return true;
+}
 //830512105141    172
 
 }
