@@ -150,6 +150,7 @@ class Activity
 			break;
 			case "activity.join":
 				db::join("activity","activity.activityID = activity_user.activityID");
+				//db::where("activity.activityApprovalStatus", 1);
 				$row	= db::where("activityUserID",$params['activityUserID'])->get("activity_user")->row();
 
 				$data	= Array("user"=>$userProfile['userProfileFullName'],"activity"=>$row['activityName']);
@@ -193,26 +194,145 @@ class Activity
 		return $typeAction?$paramLocation[$typeAction]:$paramLocation;
 	}
 
-	## return text row.
-	public function getActivities($siteID = null,$userID = null,$type = null,$action = null,$limit = null)
+	public function getAllActivities($siteID = null,$userID = null,$type = null,$action = null,$limit = null)
 	{
-		if($siteID)
-			db::where("siteID",$siteID);
-
-		if($type)
-			db::where("userActivityType",$type);
-
-		if($action)
-			db::where("userActivityAction",$action);
+		//get activity_user with activityApprovalStatus = 1
+		db::join("activity_user AU", "AU.activityUserID = user_activity.userActivityParameter1");
+		db::join("activity A","A.activityID = AU.activityID");
+		db::where("A.activityApprovalStatus", 1);
+		db::where("userActivityType", "activity");
 
 		if($userID)
-			db::where("userID",$userID);
+			db::where("user_activity.userID",$userID);
+
+		//if($limit)
+		//	db::limit($limit);		
+
+		db::order_by("userActivityID","DESC");
+		db::get("user_activity");
+		
+		//$res = db::get("user_activity");
+		//var_dump($res);
+		// die;
+		
+		$resActivity = db::result("userActivityID");
+
+		//get comments with activityApprovalStatus = 1
+		db::join("comment C", "C.commentID = user_activity.userActivityParameter1");
+		db::join("activity B","B.activityID = C.commentRefID");				
+		db::where("B.activityApprovalStatus", 1);	
+		db::where("userActivityType", "comment");
+
+		if($userID)
+			db::where("user_activity.userID",$userID);
 
 		if($limit)
 			db::limit($limit);
 
 		db::order_by("userActivityID","DESC");
+		db::get("user_activity");	
+
+		$resComment = db::result("userActivityID");
+
+
+		//get all except comments & activity
+		db::where("userActivityType <> 'activity'");
+		db::where("userActivityType <> 'comment'");
+		
+
+		if($userID)
+			db::where("user_activity.userID",$userID);
+
+		if($limit)
+			db::limit($limit);		
+
 		db::get("user_activity");
+
+		$resAll	= db::result("userActivityID");
+
+		//$res = $resActivity;
+		//rsort($res);
+		//var_dump($res);
+		//die;
+
+		$res = array_merge($resAll,$resComment);
+		$res =array_merge($res,$resActivity);
+
+		//var_dump(count($res));
+		//die;
+		$res = model::load("helper")->sortBy("userActivityID", $res, "desc");
+		//$res = array_slice($res, 0, 10);
+		//var_dump($res);
+		//die;
+		## group typeAction.
+		if(!$res)
+			return false;
+
+		## get user data first to ease the query.
+		foreach($res as $row)
+			$userIDr[]	= $row['userID'];
+
+		$res_profile	= db::select("userID","userProfileFullName")->where("userID",$userIDr)->get("user_profile")->result("userID");
+
+		foreach($res as $userActivityID=>$row)
+		{
+			## params
+			$p1	= $row['userActivityParameter1'];
+			$p2	= $row['userActivityParameter2'];
+			$p3 = $row['userActivityParameter3'];
+			$p4 = $row['userActivityParameter4'];
+
+			$typeAction	= $row['userActivityType'].".".$row['userActivityAction'];
+
+			$params	= $this->parameterName($typeAction,Array($p1,$p2,$p3,$p4));
+
+			$text	= $this->prepareText($typeAction,$params,Array("user_profile"=>$res_profile[$row['userID']]));
+			//$text = "";
+
+			$activities[] = Array("text"=>$text,"url"=>"","row"=>$row);
+		}
+
+		return $activities;
+	}
+
+	## return text row.
+	public function getActivities($siteID = null,$userID = null,$type = null,$action = null,$limit = null)
+	{
+
+		if($siteID)
+			db::where("siteID",$siteID);
+
+		if($type){
+			if($type == "activity"){
+				db::join("activity_user", "activity_user.activityUserID = user_activity.userActivityParameter1");
+				db::join("activity","activity.activityID = activity_user.activityID");
+				db::where("activity.activityApprovalStatus", 1);				
+			}
+			else if ($type == "comment"){
+				db::join("comment", "comment.commentID = user_activity.userActivityParameter1");
+				db::join("activity","activity.activityID = comment.commentRefID");
+				db::where("activity.activityApprovalStatus", 1);				
+			}
+			db::where("userActivityType",$type);
+		}
+			
+
+		if($action)
+			db::where("userActivityAction",$action);
+
+		if($userID)
+			db::where("user_activity.userID",$userID);
+
+		if($limit)
+			db::limit($limit);
+
+		db::order_by("userActivityID","DESC");
+		//$res = db::get("user_activity");
+		//var_dump($res);
+		//die;
+		
+		db::get("user_activity");
+
 		$res	= db::result("userActivityID");
 
 		## group typeAction.
@@ -238,6 +358,7 @@ class Activity
 			$params	= $this->parameterName($typeAction,Array($p1,$p2,$p3,$p4));
 
 			$text	= $this->prepareText($typeAction,$params,Array("user_profile"=>$res_profile[$row['userID']]));
+			//$text = "";
 
 			$activities[] = Array("text"=>$text,"url"=>"","row"=>$row);
 		}

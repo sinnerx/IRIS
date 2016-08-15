@@ -95,6 +95,164 @@ class Report
 		$registeredR	= db::get("site_member")->result("siteID",true);
 
 
+		$trainingType = db::select("*")
+		->get("training_type")->result("trainingTypeID");
+
+		foreach ($trainingType as $trainingTypeID => $row) {
+			$hourTraining = 0;
+			# code...
+			db::select("*");
+			db::from("user");
+			db::where("user.userID IN (SELECT userID FROM activity_user WHERE activityID IN (SELECT activityID FROM activity WHERE siteID = ? AND activityStartDate > ? AND activityEndDate < ? AND activityID IN (SELECT activityID FROM training WHERE trainingType = ?)) AND activityUserID IN (SELECT activityUserID FROM activity_user_date WHERE activityUserDateAttendance = ?))",Array($trainingTypeID,$dateStart,$dateEnd,$trainingTypeID,1));
+			db::join("user_profile","user.userID = user_profile.userID");
+			db::join("user_profile_additional","user.userID = user_profile_additional.userID");
+			$userTrainingType		= db::get()->result("userID");
+
+
+			db::select("T.trainingType, SUM((time_to_sec(timediff(activityDateEndTime, activityDateStartTime )) / 3600)) as totalhours");
+			db::from("activity_date AD");
+			db::join("activity A", "A.activityID = AD.activityID");
+			db::join("training T", "T.activityID = A.activityID");
+			db::where("T.trainingType", $trainingTypeID);
+			//db::group_by("T.trainingType");
+			$hour = db::get()->row();
+			//var_dump($hour);
+			//die;
+			$hourTraining = $hour['totalhours'];
+
+			// db::select("*");
+			// db::from("activity");
+			// db::where("activity.activityID IN (SELECT activityID FROM training T WHERE T.trainingType = $trainingTypeID)");
+			// $listActivity = db::get()->result("activityID");
+
+			// foreach ($listActivity as $activityID => $rowActivity) {
+			// 	# code...
+			// 	db::select("activityID, SUM((time_to_sec(timediff(activityDateEndTime, activityDateStartTime )) / 3600)) as totalhours");
+			// 	db::from("activity_date");
+			// 	db::where("activityID = $activityID");
+			// 	db::group_by("activityID");
+			// 	$hour = db::get()->row();
+			// 	//var_dump($hour['totalhours']);
+			// 	//die;
+			// 	$hourTraining += $hour['totalhours'];
+
+			// }
+			//var_dump($row);
+			//die;
+					$data['TrainingInfo'][$trainingTypeID] = Array(
+									'trainingTypeName' => $row['trainingTypeName'],
+									'trainingTypeID' => $trainingTypeID
+					);
+			## gender
+			$data['Tgender'][$trainingTypeID]['male'] = 0;
+			$data['Tgender'][$trainingTypeID]['female'] = 0;
+
+			## bumis
+			$data['Tgroup'][$trainingTypeID]	= Array(
+									"bumi"=>0,
+									"non-bumi"=>0
+											);
+
+			## trained by gender.
+			$data['TtotalTrained'][$trainingTypeID]	= Array(
+									"male"=>0,
+									"female"=>0
+													);
+
+			## age range.
+			$data['TageRange'][$trainingTypeID] = Array(
+									"under18"	=>0,
+									"18-35"		=>0,
+									"36-55"		=>0,
+									"over55"	=>0
+												);
+
+			## occupataion : order should be correlated with helper::occupationGroup
+			$data['Toccupation'][$trainingTypeID] = Array(
+									"students" 		=>0,
+									"housewives" 	=>0,
+									"self-employed"	=>0,
+									"employed"		=>0,
+									"not-employed"	=>0,
+									"retiree"		=>0,
+									"no-group"		=>0
+												);	
+
+			$data['TclassHour'][$trainingTypeID] = 0;
+
+			if($trainingTypeID){
+				foreach($userTrainingType as $row_user)
+				{
+					// $data['TrainingInfo'][$trainingTypeID] = Array(
+					// 				'trainingTypeName' => $row['trainingTypeName'],
+					// 				'trainingTypeID' => $trainingTypeID
+					// );					
+					## find gender.
+					if($row_user['userProfileGender'] == 1) # boy
+					{
+						$data['Tgender'][$trainingTypeID]['male']++;
+					} 
+					else if($row_user['userProfileGender'] == 2)# girl
+					{
+						$data['Tgender'][$trainingTypeID]['female']++;
+					}
+					else
+					{
+						$data['Tgender'][$trainingTypeID]['unsure']++;
+					}
+
+					## bumi. not yet.
+
+					## total trained. no data yet.
+
+					## age group.
+					### get user age based on userProfileDOB
+					$age	= date("Y")-date("Y",strtotime($row_user['userProfileDOB']));
+
+					
+					if($age < 18)
+					{
+						$data['TageRange'][$trainingTypeID]['under18']++;
+					}
+					else if($age >= 18 && $age <= 35)
+					{
+						$data['TageRange'][$trainingTypeID]['18-35']++;
+					}
+					else if($age > 35 && $age <= 55)
+					{
+						$data['TageRange'][$trainingTypeID]['36-55']++;
+					}
+					else ## > 55
+					{
+						$data['TageRange'][$trainingTypeID]['over55']++;
+					}
+
+					## map oocupationGroup with the key set above.
+					$occupationGroupMap = Array(
+						1=>"students",
+						2=>"housewives",
+						3=>"self-employed",
+						4=>"employed",
+						5=>"not-employed",
+						6=>"retiree"
+						);
+
+					if(isset($occupationGroupMap[$row_user['userProfileOccupationGroup']]))
+					{
+						$data['Toccupation'][$trainingTypeID][$occupationGroupMap[$row_user['userProfileOccupationGroup']]]++;
+					}
+					## save it as ungrouped, yet.
+					else
+					{
+						$data['Toccupation'][$trainingTypeID]['no-group']++;
+					}
+				}//foreach
+				$data['TclassHour'][$trainingTypeID] = $hourTraining;				
+			}//if trainingTypeID
+		}
+		//var_dump($data);
+		//die;		
+
 		## get get all member based on activities on the given date.
 		## argh just loop oh yea. and prepare data.
 		$stateR	= model::load("helper")->state();
@@ -225,15 +383,16 @@ class Report
 
 			}
 		}
-
+		//var_dump($data);
+		//die;
 		return $data;
 		
 	}
 
-	public function getQuarterlyReport($siteID = null, $quarter = null){
+	public function getQuarterlyReport($siteID = null, $year = null, $quarter = null){
 		## select all site.
-		$year = 2016;
-		$quarter = 2;
+		//$year = 2016;
+		//$quarter = 2;
 		switch ($quarter) {
 			case '1':
 				# code...
@@ -502,6 +661,7 @@ COUNT(*) AS members");
 			db::join("site_member SM", "U.userID = SM.userID");
 			db::join("site S", "S.siteID = SM.siteID");
 			db::where("YEAR(userCreatedDate)", $year);
+			db::where("MONTH(userCreatedDate) IN ", $month);
 			db::where("S.siteID", $keySite['siteID']);
 			db::group_by("siteName, yr, mn");
 			$totalmember = db::get("user U")->result();
@@ -521,6 +681,7 @@ COUNT(DISTINCT billingTransactionUser) AS members");
 			db::join("site S", "S.siteID = BT.siteID");
 			db::where("BTI.billingItemID", 3);
 			db::where("YEAR(billingTransactionDate)", $year);
+			db::where("MONTH(billingTransactionDate) IN ", $month);
 			db::where("BT.siteID", $keySite['siteID']);
 			db::group_by("siteName, yr, mn");
 			$usagetotal = db::get("billing_transaction BT")->result();
@@ -539,13 +700,16 @@ SUM(billingTransactionItemQuantity) AS hours");
 			db::join("site S", "S.siteID = BT.siteID");
 			db::where("BTI.billingItemID", 3);
 			db::where("YEAR(billingTransactionDate)", $year);
+			db::where("MONTH(billingTransactionDate) IN ", $month);
+			db::where("BT.siteID", $keySite['siteID']);
 			db::group_by("siteName, yr, mn");
 			$usagehour  = db::get("billing_transaction BT")->result();
 			//var_dump($usagehour);
 			//die;
 			foreach ($usagehour as $keyUsageHour) {
 				# code...
-				$arrayActivitiesOnSite['usagehour'][$keyUsageHour['mn']] = $keyUsageHour['hours'];
+				$arrayActivitiesOnSite['usagehour'][$keyUsageHour['mn']] = number_format((float)$keyUsageHour['hours'], 2, '.', '');
+				//$arrayActivitiesOnSite['usagehour'][$keyUsageHour['mn']] = $keyUsageHour['hours'];
 			}	
 
 			## put result into array
@@ -563,7 +727,7 @@ SUM(billingTransactionItemQuantity) AS hours");
 
 	public function getListReport($where, $pagination){
 		//db::select("reportsID, reportsName, reportsDesc, reportsURL")->from("reports");
-		db::select("*")->from("reports");
+		db::select("*")->from("reports_form");
 		//var_dump($reportlist);
 		if($where)
 			{
@@ -593,11 +757,11 @@ SUM(billingTransactionItemQuantity) AS hours");
 				db::limit(pagination::get("limit"), pagination::recordNo()-1);
 			}
 			//var_dump('');
-			$reportlist = db::get()->result('reportsID');
+			$reportlist = db::get()->result('reportsFormID');
 			return $reportlist;
 	}
 
-	public function getReportForm($idReport){
+	public function getReportFormField($idReport){
 		db::select("*");
 		db::from("report_fields");
 		db::where("report_fieldsReportID", $idReport);
@@ -605,6 +769,15 @@ SUM(billingTransactionItemQuantity) AS hours");
 		$result = db::get()->result();
 
 		return $result;
+	}
+
+	public function getReportForm($idReport){
+		db::select("*");
+		db::from("reports_form");
+		db::where("reportsFormID", $idReport);
+		$result = db::get()->row();
+
+		return $result;		
 	}
 }
 

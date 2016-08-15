@@ -268,6 +268,19 @@ class Pr extends \Origami
 		return $this->getOne('site/site', 'siteID');
 	}
 
+	public function getOps(){
+		$cluster = $this->getCluster()->clusterID;
+		//var_dump($cluster->clusterID);
+		$opsEast = array("1", "2", "3", "4");
+		$opsSemenanjung = array("5", "6");
+
+		if (in_array($cluster, $opsSemenanjung) )
+			return "Operation Semenanjung Malaysia";
+
+		else if (in_array($cluster, $opsEast))
+			return "Operation East Malaysia";
+	}
+
 	public function getLevelApproval($level)
 	{
 		$levels = array(

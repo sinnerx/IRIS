@@ -5,31 +5,35 @@ var report = new function()
 	this.generate = function()
 	{
 		var year	= $("#year").val();
-		var month	= $("#month").val();
-		var category	= $("#category").val();
+		var quarter	= $("#quarter").val();
+
 		// window.location.href = pim.base_url+"report/generateAllActivityReport/"+year+"/"+month;
 
 		// pim.loader.start('#main-content-wrapper');
-
-		this.loader.start();
-		console.log(pim.url('ajax/report/monthlyActivityGenerate/'+year+'/'+month+'/'+category));
-		$.ajax({type: 'GET', url: pim.url('ajax/report/monthlyActivityGenerate/'+year+'/'+month+'/'+category), dataType: 'json'}).done(function(result)
-		{
-			console.log(result);
-			if(result.status == 'failed')
+		if(year != '' && quarter != ''){
+			this.loader.start();
+			console.log(pim.url('ajax/report/quarterlyActivityGenerate/'+year+'/'+quarter));
+			$.ajax({type: 'GET', url: pim.url('ajax/report/quarterlyActivityGenerate/'+year+'/'+quarter), dataType: 'json'}).done(function(result)
 			{
-				//alert(result.message);
-
-				report.loader.stop();
-			}
-			else
-			{
-				report.listReports().done(function()
+				console.log(result);
+				if(result.status == 'failed')
 				{
+					alert(result.message);
+
 					report.loader.stop();
-				});
-			}
-		});
+				}
+				else
+				{
+					report.listReports().done(function()
+					{
+						report.loader.stop();
+					});
+				}
+			});
+		}
+		else{
+			alert("Please select both quarter and year respectfully.");
+		}
 	}
 
 	this.dateChange = function()
@@ -46,11 +50,10 @@ var report = new function()
 
 	this.listReports = function()
 	{
-		var year = $('#year').val();
-		var month = $('#month').val();
-		var category	= $("#category").val();
+		var year 	= $('#year').val();
+		var quarter = $('#quarter').val();
 
-		return $.ajax({type: 'GET', url: pim.url('ajax/report/monthlyActivityReports/'+year+'/'+month+'/'+category)}).done(function(result)
+		return $.ajax({type: 'GET', url: pim.url('ajax/report/quarterlyActivityReports/'+year+'/'+quarter)}).done(function(result)
 		{
 			$('.generated-reports-container').html(result);
 
@@ -87,10 +90,10 @@ var report = new function()
 </script>
 <div class='overlay' style="position: absolute; width: 100%; height: 100%; background: white; z-index: 1000; opacity: 0.5; display: none;"></div>
 <h3 class='m-b-xs text-black'>
-	Monthly Activities
+	Quarterly Activities Report
 </h3>
 <div class='well well-sm'>
-	List of generated Pi1M monthly activity report
+	List of generated Pi1M quarterly activity report
 </div>
 <div id='report-errors'>
 
@@ -104,17 +107,15 @@ var report = new function()
 	</div>
 	<div class='col-sm-6'>
 		<div class='panel' style="padding: 0px;">
-		<div class='panel-heading' style="margin-top: 0px;">Generate reports for the selected month</div>
+		<div class='panel-heading' style="margin-top: 0px;">Generate reports for the selected quarter</div>
 		<div class='table-responsive bg-white'>
 			<table class='table'>
 				<tr>
-					<td width="150px">Month</td><td>: <?php echo form::select("month",model::load("helper")->monthYear("month"), 'onchange="report.dateChange();"', $month);?></td>
+					<?php //var_dump( model::load("helper")->quarter(4,1)[1]); ?>
+					<td width="150px">Quarter</td><td>: <?php echo form::select("quarter", model::load("helper")->quarter(1), 'onchange="report.dateChange();"', $quarter);?></td>
 				</tr>
 				<tr>
 					<td>Year</td><td>: <?php echo form::select("year",model::load("helper")->monthYear("year"), 'onchange="report.dateChange();"', $year);?></td>
-				</tr>
-				<tr>
-					<td width="150px">Category</td><td>: <?php echo form::select("category",$categories, 'onchange="report.dateChange();"', null);?></td>
 				</tr>				
 				<tr>
 					 <td>Generate report</td><td>: <input type='button' class='btn btn-primary' onclick='report.generate();' value='GENERATE' /></td> 

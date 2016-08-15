@@ -33,6 +33,7 @@ $(document).ready(function() {
                 'report_fieldsTableID'=>$form_field_raw['report_fieldsTableID'],
                 'report_fieldsTableName'=>$form_field_raw['report_fieldsTableName'],
                 'report_fieldsTable'=>$form_field_raw['report_fieldsTable'],
+                'report_fieldsSequence'=>$form_field_raw['report_fieldsSequence'],
                 'children' => array());
             foreach ($form_fields_raw as $child) {
                 if ($child['report_fieldsParentID'] == $id_parent) {
@@ -46,7 +47,7 @@ $(document).ready(function() {
     //var_dump(model::load("site/cluster")->lists());
 ?>
 <h3 class="m-b-xs text-black">
-<a href='info'>Title of Report</a>
+<a href='info'><?php echo $model_report_form['reportsFormName'];?></a>
 </h3>
 <div class='well well-sm'>
 Please complete the form below to generate the report.
@@ -58,7 +59,13 @@ Please complete the form below to generate the report.
 		<div class='panel panel-default'>
 		<div class='panel-body'>
 
- <?php foreach ($form_fields as $form_field) {
+ <?php 
+ 	//var_dump($form_fields);
+ 	//die;
+ 	$form_fields = model::load("helper")->sortBy("report_fieldsSequence", $form_fields, $direction = 'asc');
+ 	//var_dump($form_fields);
+ 	//die;
+ 	foreach ($form_fields as $form_field) {
  	switch ($form_field['report_fieldsType']) {
  		case 1:
  			# code...

@@ -1126,6 +1126,7 @@ lms_module:
 	updatedate [datetime]
 	updateby [varchar(100)]
 	status [int(11)]
+	subtype_id [int(11)]
 
 lms_module_type:
 	id [int]
@@ -1196,15 +1197,15 @@ lms_questions_bank:
 	q_text [varchar(200)]
 	correct [varchar(11)]
 
-reports:
-	reportsID [int]
-	reportsName [varchar(200)]
-	reportsDesc [text]
-	reportsOrder [int(5)]
-	reportsURL [varchar(200)]
-	reportsDateCreated [datetime]
-	reportsUserID [int]
-	reportsCode [varchar(11)]
+reports_form:
+	reportsFormID [int]
+	reportsFormName [varchar(200)]
+	reportsFormDesc [text]
+	reportsFormOrder [int(5)]
+	reportsFormURL [varchar(200)]
+	reportsFormDateCreated [datetime]
+	reportsFormUserID [int]
+	reportsFormCode [varchar(11)]
 
 report_fields:
 	report_fieldsID [int]
@@ -1224,7 +1225,7 @@ report_fields:
 	report_fieldsName [varchar(100)]
 	report_fieldsIsMandatory [int]
 
-training_SubType:
+training_subtype:
 	trainingSubTypeID [int]
 	trainingSubTypeName [varchar]
 	trainingSubTypeDescription [text]
@@ -1234,3 +1235,20 @@ training_SubType:
 	trainingSubTypeCreatedUser [int]
 	trainingSubTypeUpdatedDate [datetime]
 	trainingSubTypeUpdatedUser [int]
+
+## blogs report generation 
+report_quarterly:
+	reportQuarterlyID [int]
+	reportQuarterlyName [int]
+	reportQuarterlyYear [int]
+	reportQuarterlyStatus [int] ## 0 = pending, 1 = completed
+	reportQuarterlyStatusState [varchar(20)]
+	reportQuarterlySiteCompleted [int] ## completed articles
+	reportQuarterlySiteTotal [int] ## total articles
+	reportQuarterlyZipName [varchar]
+	reportQuarterlyZipSize [int]
+	reportQuarterlyDownloaded [int]
+	reportQuarterlyCreatedDate [datetime]
+	reportQuarterlyUpdatedDate [datetime]
+	reportQuarterlyCreatedUser [int]
+	reportQuarterlyUpdatedUser [int]

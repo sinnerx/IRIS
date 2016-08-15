@@ -5,7 +5,15 @@
 <link rel="stylesheet" href="<?php echo url::asset("backend/tools/bootstrap-tokenizer/bootstrap-tokenizer.css"); ?>" type="text/css" />
 <script src="<?php echo url::asset("backend/tools/bootstrap-tokenizer/bootstrap-tokenizer.js"); ?>"></script>
 <script src="<?php echo url::asset("backend/js/pimgallery.js"); ?>"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo url::asset("frontend/tools/CLEditor/jquery.cleditor.css");?>" >
+<script type="text/javascript" src='<?php echo url::asset("frontend/tools/CLEditor/jquery.cleditor.min.js");?>'></script>
 <script>
+
+		$(document).ready(function()
+		{
+			jQuery("#articleText").cleditor();
+		});
+
 		function removeActivity()
 		{
 			document.getElementById('activity').innerHTML = 'Activity Link&nbsp;&nbsp;&nbsp;<span class="caret"></span>';
@@ -147,7 +155,7 @@ Add an article
 				<input type="hidden" name="activityArticleType" id="activityArticleType" />
 			</div>
 			<div class="form-group">
-				<?php echo form::textarea("articleText","size='40' style='height: 300px;' class='mce'");?>
+				<?php echo form::textarea("articleText","size='40' style='height: 300px;'");?>
 				<?php echo flash::data('articleText');?>
 			</div>
 		</div>

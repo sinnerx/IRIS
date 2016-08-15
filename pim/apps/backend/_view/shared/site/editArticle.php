@@ -5,7 +5,15 @@
 <link rel="stylesheet" href="<?php echo url::asset("backend/tools/bootstrap-tokenizer/bootstrap-tokenizer.css"); ?>" type="text/css" />
 <script src="<?php echo url::asset("backend/tools/bootstrap-tokenizer/bootstrap-tokenizer.js"); ?>"></script>
 <script src="<?php echo url::asset("backend/js/pimgallery.js"); ?>"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo url::asset("frontend/tools/CLEditor/jquery.cleditor.css");?>" >
+<script type="text/javascript" src='<?php echo url::asset("frontend/tools/CLEditor/jquery.cleditor.min.js");?>'></script>
 <script>
+
+		$(document).ready(function()
+		{
+			jQuery("#articleText").cleditor();
+		});
+
 		function removeActivity()
 		{
 			document.getElementById('activity').innerHTML = 'Activity Link&nbsp;&nbsp;&nbsp;<span class="caret"></span>';
@@ -133,7 +141,7 @@ Edit article
 				<input type="hidden" name="activityArticleType" id="activityArticleType" <?php if($activity[0]['activityID']){ echo 'value="'.$activity[0]['activityArticleType'].'"'; } ?> />
 			</div>
 			<div class="form-group">
-				<?php echo form::textarea("articleText","size='40' style='height: 300px;' class='mce'", $row['articleText']);?>
+				<?php echo form::textarea("articleText","size='40' style='height: 300px;'", $row['articleText']);?>
 				<?php echo flash::data('articleText');?>
 			</div>
 		</div>

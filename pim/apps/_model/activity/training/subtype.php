@@ -19,7 +19,7 @@ class SubType extends \Origami
 		db::select("TST.trainingSubTypeID as type_id, TST.trainingSubTypeName as type_name");
 		db::where("TST.trainingSubTypeParent", $ID);
 		//print_r( db::get("lms_package_module AS LPM"));
-		return db::get("training_SubType AS TST")->result();
+		return db::get("training_subtype AS TST")->result();
 	}	
 }
 
