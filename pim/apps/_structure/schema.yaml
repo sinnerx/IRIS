@@ -1217,7 +1217,6 @@ report_fields:
 	report_fieldsUserID [int]
 	report_fieldsTable [varchar(100)]
 	report_fieldsTableID [varchar(100)]
-	report_fieldsName [varchar(100)]
 	report_fieldsIsMandatory [int]
 
 training_subtype:

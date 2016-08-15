@@ -670,7 +670,7 @@ class Controller_Report
 
 		## the main working sheet.
 		$sheet	= $excel->getActiveSheet();
-
+		$sheet->setTitle("MasterListing");
 		#1 create main title.
 		$sheet->setCellValue("F1","MASTER LISTING DATA");
 		$sheet->getStyle("F1")->getFont()->setSize(18);
@@ -885,6 +885,223 @@ class Controller_Report
 			$y++;
 		}
 
+		//ENTREPRENEURSHIP
+		#1 create main title.
+		$sheetEntre = $excel->createSheet(1); 
+		//$sheetTrain = $excel->getActiveSheet(2);
+		$sheetEntre->setTitle("ENTREPRENEURSHIP");
+		$sheetEntre->setCellValue("F1","ENTREPRENEURSHIP DATA");
+		$sheetEntre->getStyle("F1")->getFont()->setSize(18);
+		$sheetEntre->getRowDimension(1)->setRowHeight(25);
+		$sheetEntre->getRowDimension(4)->setRowHeight(20);
+		$sheetEntre->getRowDimension(5)->setRowHeight(20);
+
+		#2 date.
+		$sheetEntre->setCellValue("A2","DATE : ".date("j F Y",strtotime($startDate))." - ".date("j F Y",strtotime($endDate)));
+		$sheetEntre->getStyle("A2")->getFont()->setSize(16);
+		$sheetEntre->getRowDimension(2)->setRowHeight(22);
+
+
+		#3 main table.
+		$startX	= "A";
+		$startY	= 4;
+
+		$x	= $startX;
+		$y	= $startY;
+
+		## create table header.
+		$tableHeader	= Array(
+					"No.",
+					"RO",
+					"State",
+					"District",
+					"UST",
+					"CBC's Name",
+					"SP",
+					"Status",
+					"Gender", # 2 split
+					"",
+					"Group", # 2 split (bumi, non bumi)
+					"",
+					"Age Group", # 2 split
+					"",
+					"",
+					"",
+					"Occupation", # 5 split
+					"",
+					"",
+					"",
+					"",
+					""
+								);
+
+
+
+		foreach($tableHeader as $no=>$headerColname)
+		{
+			$sheetEntre->setCellValue($x.$y,$headerColname);
+
+			## merge cells.
+			if($x <= "H")
+			{
+				$sheetEntre->mergeCells($x."4:$x"."5");
+			}
+
+			if($x == "W"){
+				$sheetEntre->mergeCells($x."4:$x"."5");
+			}
+
+			$x++;
+		}
+
+		## merge parents cells.
+		foreach(Array("i4:j4", "k4:l4","m4:p4","q4:v4") as $coords)
+		{
+			$sheetEntre->mergeCells($coords);
+		}
+
+		$y++;
+
+		## create subcolumn.
+		# gender.
+		$sheetEntre->setCellValue("k$y","Male");
+		$sheetEntre->setCellValue("l$y","Female");
+
+		$subcolumn	= Array(
+					"i"=>"Male",
+					"j"=>"Female",
+					"k"=>"Bumi",
+					"l"=>"Non Bumi",
+					// "m"=>"Male",
+					// "n"=>"Female",
+					"m"=>"Under 18",
+					"n"=>"18 - 35",
+					"o"=>"36 - 55",
+					"p"=>"Over 55",
+					"q"=>"Students",
+					"r"=>"Housewives",
+					"s"=>"Self-employed",
+					"t"=>"Employed",
+					"u"=>"Not-employed",
+					"v"=>"Retiree",
+					"w"=>"Total Hours",
+							);
+
+		foreach($subcolumn as $subcolX=>$colname)
+		{
+			$sheetEntre->setCellValue($subcolX.$y,$colname);
+		}
+		$y++;
+
+		## coloring.
+		$headerStyle	= $sheetEntre->getStyle('A4:H5');
+		$headerStyle->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('FFFF00');
+
+		# color : reg member.
+		$colors		= Array(
+					"A4:H5"=>'FFFF00',
+					"I4:J5"=>"00b0f0",
+					"K4:L5"=>"ccc0d9",
+					"M4:P5"=>"b8cce4",
+					"Q4:V5"=>"fbd4b4",
+					"W4:W5"=>"d6e3bc"
+							);
+
+		foreach($colors as $coords=>$color)
+		{
+			$sheetEntre->getStyle($coords)->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB($color);
+		}
+
+		## all borders
+		$allCells	= $sheetEntre->getStyle("A4:Z".(5+count($data['siteData'])));
+		$allCells->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+		$allCells->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_TOP);
+		$allCells->getAlignment()->setWrapText(true);
+		$allCells->getBorders()->getAllBorders()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+
+		## width dimensional width set.
+		$widthR	= Array(
+				"a"=>"5",
+				"b"=>"10",
+				"c"=>"20",
+				"d"=>"20",
+				"e"=>"20",
+				"f"=>30,
+				"g"=>8,
+				"h"=>8,
+				// "i"=>15,
+				// "j"=>15,
+				"i"=>8,
+				"j"=>8,
+				"k"=>13,
+				"l"=>13,
+				// "o"=>8,
+				// "p"=>8,
+				"m"=>10,
+				"n"=>10,
+				"o"=>10,
+				"p"=>10,
+				"q"=>10,
+				"r"=>14,
+				"s"=>14,
+				"t"=>10,
+				"u"=>14,
+				"v"=>10,
+				"w"=>10,
+						);
+
+		foreach($widthR as $widthX=>$width)
+		{
+			$sheetEntre->getColumnDimension($widthX)->setWidth($width);
+		}
+
+		#3.1 main loop.
+		$no = 0;
+		foreach($data['EsiteData'] as $siteID=>$row)
+		{
+			$siteInfo = $data['EsiteInfo'][$siteID];
+			//var_dump($siteInfo);
+			//die;
+			$no++;
+			$cellData = Array(
+					"no"=>$no,
+					"RO"=>"",
+					"state"=>$row['stateName'],
+					"district"=>$siteInfo['siteInfoDistrict'],
+					"ust"=>$siteInfo['siteInfoUst'],
+					"siteName"=>$row['siteName'],
+					"sp"=>"Celcom",
+					"status"=>"On Air",
+					"gender_male"			=>$data['Egender'][$siteID]['male'],
+					"gender_female"			=>$data['Egender'][$siteID]['female'],
+					"group_bumi"			=>$data['Egroup'][$siteID]['bumi'],
+					"group_nonbumi"			=>$data['Egroup'][$siteID]['non-bumi'],
+					"age_18"				=>$data['EageRange'][$siteID]['under18'],
+					"age_over18"			=>$data['EageRange'][$siteID]['18-35'],
+					"age_over35"			=>$data['EageRange'][$siteID]['36-55'],
+					"age_over55"			=>$data['EageRange'][$siteID]['over55'],
+					"occ_students"			=>$data['Eoccupation'][$siteID]['students'],
+					"occ_housewives"		=>$data['Eoccupation'][$siteID]['housewives'],
+					"occ_selfemployed"		=>$data['Eoccupation'][$siteID]['self-employed'],
+					"employed"				=>$data['Eoccupation'][$siteID]['employed'],
+					"not-employed"			=>$data['Eoccupation'][$siteID]['not-employed'],
+					"retiree"				=>$data['Eoccupation'][$siteID]['retiree'],
+					"totalhours"			=>$data['EclassHour'][$siteID],
+							);
+
+			## reset.
+			$x	= $startX;
+			foreach($cellData as $key=>$val)
+			{
+				$sheetEntre->setCellValue($x.$y,$val);
+				$x++;
+			}
+
+			$y++;
+		}
+
+
+		//TRAINING
 		## the main working sheet.
 		// $sheet	= $excel->getActiveSheet();
 		// $excel->createSheet(1); 
@@ -953,6 +1170,23 @@ class Controller_Report
 		//var_dump($data['TrainingInfo']);
 		// die;
 
+		// $headerStyle	= $sheetEntre->getStyle('A4:H5');
+		// $headerStyle->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('FFFF00');
+
+		// # color : reg member.
+		// $colors		= Array(
+		// 			"A4:H5"=>'FFFF00',
+		// 			"I4:J5"=>"00b0f0",
+		// 			"K4:L5"=>"ccc0d9",
+		// 			"M4:P5"=>"b8cce4",
+		// 			"Q4:V5"=>"fbd4b4",
+		// 			"W4:W5"=>"d6e3bc"
+		// 					);
+		// foreach($colors as $coords=>$color)
+		// {
+		// 	$sheetEntre->getStyle($coords)->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB($color);
+		// }
+
 		$TrainingInfo = $data['TrainingInfo'];
 		foreach ($TrainingInfo as $keyTraining => $rowTraining) {
 			# code...
@@ -962,11 +1196,30 @@ class Controller_Report
 			$yTraining = 1;
 			$sheetTrain->mergeCells("A".$rowCountTraining.":"."P".$rowCountTraining); //total
 			$sheetTrain->setCellValue("A".$rowCountTraining, $rowTraining['trainingTypeName']);
+			$headerStyle	= $sheetTrain->getStyle('A'. $rowCountTraining .':' .'P'. $rowCountTraining);
+			$headerStyle->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('FF7FED');			
+
 
 			foreach ($tableHeaderTraining as $key => $valueHeader) {
 				# code...
 				$sheetTrain->setCellValue($xTraining . ($rowCountTraining+1), $valueHeader);
+				# color : reg member.
+				$colors		= Array(
+							$xTraining . ($rowCountTraining+1) =>'FFFF00',
+							($xTraining+1) . ($rowCountTraining+1) . ":" . ($xTraining+2) . ($rowCountTraining+1) => "ccc0d9",
+							// "K4" . ":" . "L5"=>"00b0f0",
+							// "M4:P5"=>"b8cce4",
+							// "Q4:V5"=>"fbd4b4",
+							// "W4:W5"=>"d6e3bc"
+									);
+				
+				foreach($colors as $coords=>$color)
+				{
+					$sheetTrain->getStyle($coords)->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB($color);
+				}				
+
 				++$xTraining;
+
 				//$rowCountTraining++;
 			}
 
@@ -1008,7 +1261,123 @@ class Controller_Report
 			$rowCountTraining +=5;
 		}
 
+		//SUBTYPE part
+		$sheetSubTrain = $excel->createSheet(3); 
+		//$sheetTrain = $excel->getActiveSheet(2);
+		$sheetSubTrain->setTitle("KDB");
+		
+		#1 create main title.
+		$sheetSubTrain->setCellValue("F1","KDB DATA");
+		$sheetSubTrain->getStyle("F1")->getFont()->setSize(18);
+		$sheetSubTrain->getRowDimension(1)->setRowHeight(25);
+		$sheetSubTrain->getRowDimension(4)->setRowHeight(20);
+		$sheetSubTrain->getRowDimension(5)->setRowHeight(20);
 
+		#2 date.
+		$sheetSubTrain->setCellValue("A2","DATE : ".date("j F Y",strtotime($startDate))." - ".date("j F Y",strtotime($endDate)));
+		$sheetSubTrain->getStyle("A2")->getFont()->setSize(16);
+		$sheetSubTrain->getRowDimension(2)->setRowHeight(22);		
+
+		$tableHeaderSubTraining = Array(
+				"SP",
+				"Gender",
+				"",
+				"Group",
+				"",
+				"Age Group",
+				"",
+				"",
+				"",
+				"Occupation", # 5 split
+				"",
+				"",
+				"",
+				"",
+				"",
+				"Total class hours",
+			);
+
+		$subcolumnSubTraining	= Array(
+					"B"=>"Male",
+					"C"=>"Female",
+					"D"=>"Bumi",
+					"E"=>"Non Bumi",
+					"F"=>"Under 18",
+					"G"=>"18 - 35",
+					"H"=>"36 - 55",
+					"I"=>"Over 55",
+					"J"=>"Students",
+					"K"=>"Housewives",
+					"L"=>"Self-employed",
+					"M"=>"Employed",
+					"N"=>"Not-employed",
+					"O"=>"Retiree"
+							);		
+
+		
+		//$yTraining = 1;
+		$rowCountTraining = 4;
+
+		//echo ++$xTraining;
+		//die;
+
+		//var_dump($data['TrainingInfo']);
+		// die;
+
+		$STrainingInfo = $data['STrainingInfo'];
+		foreach ($STrainingInfo as $keyTraining => $rowTraining) {
+			# code...
+			//var_dump($rowTraining);
+			//die;
+			$xTraining = 'A';
+			$yTraining = 1;
+			$sheetSubTrain->mergeCells("A".$rowCountTraining.":"."P".$rowCountTraining); //total
+			$sheetSubTrain->setCellValue("A".$rowCountTraining, $rowTraining['trainingTypeName']);
+
+			foreach ($tableHeaderTraining as $key => $valueHeader) {
+				# code...
+				$sheetSubTrain->setCellValue($xTraining . ($rowCountTraining+1), $valueHeader);
+				++$xTraining;
+				//$rowCountTraining++;
+			}
+
+			foreach ($subcolumnTraining as $key => $valueSubColumn) {
+				# code...
+				$sheetSubTrain->setCellValue($key . ($rowCountTraining+2), $valueSubColumn);
+				++$key;
+			}
+
+			$cellData = Array(
+					"sp"=>"Celcom",
+					"gender_male"			=>$data['STgender'][$keyTraining]['male'],
+					"gender_female"			=>$data['STgender'][$keyTraining]['female'],
+					"group_bumi"			=>$data['STgroup'][$keyTraining]['bumi'],
+					"group_nonbumi"			=>$data['STgroup'][$keyTraining]['non-bumi'],
+					"age_18"				=>$data['STageRange'][$keyTraining]['under18'],
+					"age_over18"			=>$data['STageRange'][$keyTraining]['18-35'],
+					"age_over35"			=>$data['STageRange'][$keyTraining]['36-55'],
+					"age_over55"			=>$data['STageRange'][$keyTraining]['over55'],
+					"occ_students"			=>$data['SToccupation'][$keyTraining]['students'],
+					"occ_housewives"		=>$data['SToccupation'][$keyTraining]['housewives'],
+					"occ_selfemployed"		=>$data['SToccupation'][$keyTraining]['self-employed'],
+					"employed"				=>$data['SToccupation'][$keyTraining]['employed'],
+					"not-employed"			=>$data['SToccupation'][$keyTraining]['not-employed'],
+					"retiree"				=>$data['SToccupation'][$keyTraining]['retiree'],
+					"total_hours"			=>$data['STclassHour'][$keyTraining],
+							);
+
+			//var_dump($cellData);
+			//die;
+			## reset.
+			$x	= 'A';
+			foreach($cellData as $key=>$val)
+			{
+				$sheetSubTrain->setCellValue($x.($rowCountTraining+3),$val);
+				++$x;
+			}
+
+			$rowCountTraining +=5;
+		}
 
 		// $sheet->createSheet(1);
 		// $sheet->setActiveSheetIndex(2);  

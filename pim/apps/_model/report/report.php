@@ -94,30 +94,179 @@ class Report
 		db::where("userID IN (SELECT userID FROM user WHERE userCreatedDate >= ? AND userCreatedDate <= ?)",Array($dateStart,$dateEnd));
 		$registeredR	= db::get("site_member")->result("siteID",true);
 
-
 		$trainingType = db::select("*")
 		->get("training_type")->result("trainingTypeID");
 
+		$trainingSubType = db::select("*")
+		->where("trainingSubTypeName","KDB")
+		->get("training_subtype")->result("trainingSubTypeID");
+
+
+		//SUBTYPE TRAINING REPORT
+		foreach ($trainingSubType as $trainingSubTypeID => $row) {
+			$hourSubTraining = 0;
+			# code...
+			db::select("*");
+			db::from("user");
+			db::where("user.userID IN (SELECT userID FROM activity_user WHERE activityID IN (SELECT activityID FROM activity WHERE activityStartDate > ? AND activityEndDate < ? AND activityID IN (SELECT activityID FROM training WHERE trainingsubType = ?)) AND activityUserID IN (SELECT activityUserID FROM activity_user_date WHERE activityUserDateAttendance = ?))",Array($dateStart,$dateEnd,$trainingTypeID,1));
+			db::join("user_profile","user.userID = user_profile.userID");
+			db::join("user_profile_additional","user.userID = user_profile_additional.userID");
+			$userTrainingSubType		= db::get()->result("userID");
+
+
+			db::select("T.trainingSubType, SUM((time_to_sec(timediff(activityDateEndTime, activityDateStartTime )) / 3600)) as totalhours");
+			db::from("activity_date AD");
+			db::join("activity A", "A.activityID = AD.activityID");
+			// db::join("activity_user AU", "AU.activityID = A.activityID");
+			db::join("training T", "T.activityID = A.activityID");
+			db::where("T.trainingSubType", $trainingSubTypeID);
+			db::where("A.activityStartDate > $dateStart ");
+			db::where("A.activityEndDate < '$dateEnd' ");
+			db::where("EXISTS (SELECT 1 FROM activity_user WHERE activityID = AD.activityID)");
+
+			//db::group_by("T.trainingType");
+			$hour = db::get()->row();
+			//var_dump($hour);
+			//die;
+			$hourTraining = $hour['totalhours'];
+
+			$data['STrainingInfo'][$trainingSubTypeID] = Array(
+							'trainingTypeName' => $row['trainingTypeName'],
+							'trainingTypeID' => $trainingTypeID
+			);
+			## gender
+			$data['STgender'][$trainingSubTypeID]['male'] = 0;
+			$data['STgender'][$trainingSubTypeID]['female'] = 0;
+
+			## bumis
+			$data['STgroup'][$trainingSubTypeID]	= Array(
+									"bumi"=>0,
+									"non-bumi"=>0
+											);
+
+			## trained by gender.
+			$data['STtotalTrained'][$trainingSubTypeID]	= Array(
+									"male"=>0,
+									"female"=>0
+													);
+
+			## age range.
+			$data['STageRange'][$trainingSubTypeID] = Array(
+									"under18"	=>0,
+									"18-35"		=>0,
+									"36-55"		=>0,
+									"over55"	=>0
+												);
+
+			## occupataion : order should be correlated with helper::occupationGroup
+			$data['SToccupation'][$trainingSubTypeID] = Array(
+									"students" 		=>0,
+									"housewives" 	=>0,
+									"self-employed"	=>0,
+									"employed"		=>0,
+									"not-employed"	=>0,
+									"retiree"		=>0,
+									"no-group"		=>0
+												);	
+
+			$data['STclassHour'][$trainingSubTypeID] = 0;
+
+			if($trainingSubTypeID){
+				foreach($userTrainingSubType as $row_user)
+				{
+					// $data['TrainingInfo'][$trainingTypeID] = Array(
+					// 				'trainingTypeName' => $row['trainingTypeName'],
+					// 				'trainingTypeID' => $trainingTypeID
+					// );					
+					## find gender.
+					if($row_user['userProfileGender'] == 1) # boy
+					{
+						$data['STgender'][$trainingSubTypeID]['male']++;
+					} 
+					else if($row_user['userProfileGender'] == 2)# girl
+					{
+						$data['STgender'][$trainingSubTypeID]['female']++;
+					}
+					else
+					{
+						$data['STgender'][$trainingSubTypeID]['unsure']++;
+					}
+
+					## bumi. not yet.
+
+					## total trained. no data yet.
+
+					## age group.
+					### get user age based on userProfileDOB
+					$age	= date("Y")-date("Y",strtotime($row_user['userProfileDOB']));
+
+					
+					if($age < 18)
+					{
+						$data['STageRange'][$trainingSubTypeID]['under18']++;
+					}
+					else if($age >= 18 && $age <= 35)
+					{
+						$data['STageRange'][$trainingSubTypeID]['18-35']++;
+					}
+					else if($age > 35 && $age <= 55)
+					{
+						$data['STageRange'][$trainingSubTypeID]['36-55']++;
+					}
+					else ## > 55
+					{
+						$data['STageRange'][$trainingSubTypeID]['over55']++;
+					}
+
+					## map oocupationGroup with the key set above.
+					$occupationGroupMap = Array(
+						1=>"students",
+						2=>"housewives",
+						3=>"self-employed",
+						4=>"employed",
+						5=>"not-employed",
+						6=>"retiree"
+						);
+
+					if(isset($occupationGroupMap[$row_user['userProfileOccupationGroup']]))
+					{
+						$data['SToccupation'][$trainingSubTypeID][$occupationGroupMap[$row_user['userProfileOccupationGroup']]]++;
+					}
+					## save it as ungrouped, yet.
+					else
+					{
+						$data['SToccupation'][$trainingSubTypeID]['no-group']++;
+					}
+				}//foreach
+				$data['STclassHour'][$trainingSubTypeID] = $hourTraining;				
+			}//if trainingTypeID
+		}
+
+		//TRAINING REPORT
 		foreach ($trainingType as $trainingTypeID => $row) {
 			$hourTraining = 0;
 			# code...
 			db::select("*");
 			db::from("user");
-			db::where("user.userID IN (SELECT userID FROM activity_user WHERE activityID IN (SELECT activityID FROM activity WHERE siteID = ? AND activityStartDate > ? AND activityEndDate < ? AND activityID IN (SELECT activityID FROM training WHERE trainingType = ?)) AND activityUserID IN (SELECT activityUserID FROM activity_user_date WHERE activityUserDateAttendance = ?))",Array($trainingTypeID,$dateStart,$dateEnd,$trainingTypeID,1));
+			db::where("user.userID IN (SELECT userID FROM activity_user WHERE activityID IN (SELECT activityID FROM activity WHERE activityStartDate > ? AND activityEndDate < ? AND activityID IN (SELECT activityID FROM training WHERE trainingType = ?)) AND activityUserID IN (SELECT activityUserID FROM activity_user_date WHERE activityUserDateAttendance = ?))",Array($dateStart,$dateEnd,$trainingTypeID,1));
 			db::join("user_profile","user.userID = user_profile.userID");
 			db::join("user_profile_additional","user.userID = user_profile_additional.userID");
 			$userTrainingType		= db::get()->result("userID");
-
+			
+			//var_dump($userTrainingType);
+			// die;
 
 			db::select("T.trainingType, SUM((time_to_sec(timediff(activityDateEndTime, activityDateStartTime )) / 3600)) as totalhours");
 			db::from("activity_date AD");
 			db::join("activity A", "A.activityID = AD.activityID");
 			db::join("training T", "T.activityID = A.activityID");
 			db::where("T.trainingType", $trainingTypeID);
+			db::where("A.activityStartDate > $dateStart ");
+			db::where("A.activityEndDate < '$dateEnd' ");
+			db::where("EXISTS (SELECT userID FROM activity_user WHERE activity_user.activityID = A.activityID)");			
 			//db::group_by("T.trainingType");
 			$hour = db::get()->row();
-			//var_dump($hour);
-			//die;
+
 			$hourTraining = $hour['totalhours'];
 
 			// db::select("*");
@@ -139,10 +288,10 @@ class Report
 			// }
 			//var_dump($row);
 			//die;
-					$data['TrainingInfo'][$trainingTypeID] = Array(
-									'trainingTypeName' => $row['trainingTypeName'],
-									'trainingTypeID' => $trainingTypeID
-					);
+			$data['TrainingInfo'][$trainingTypeID] = Array(
+							'trainingTypeName' => $row['trainingTypeName'],
+							'trainingTypeID' => $trainingTypeID
+			);
 			## gender
 			$data['Tgender'][$trainingTypeID]['male'] = 0;
 			$data['Tgender'][$trainingTypeID]['female'] = 0;
@@ -253,9 +402,11 @@ class Report
 		//var_dump($data);
 		//die;		
 
+		//MAIN MASTER LISTING
 		## get get all member based on activities on the given date.
 		## argh just loop oh yea. and prepare data.
 		$stateR	= model::load("helper")->state();
+
 		foreach($siteR as $siteID=>$row)
 		{
 			## select only user whose attend (activityUserDateAttendance =1) events by the given date.
@@ -382,7 +533,139 @@ class Report
 				}
 
 			}
-		}
+
+			//ENTREPRENUERSHIP
+			db::select("*");
+			db::from("user");
+			db::where("user.userID IN (SELECT userID FROM activity_user WHERE activityID IN (SELECT activityID FROM activity WHERE siteID = ? AND activityStartDate > ? AND activityEndDate < ? AND activityID IN (SELECT activityID FROM training WHERE trainingType = 12)) AND activityUserID IN (SELECT activityUserID FROM activity_user_date WHERE activityUserDateAttendance = ?))",Array($siteID,$dateStart,$dateEnd,1));
+			db::join("user_profile","user.userID = user_profile.userID");
+			db::join("user_profile_additional","user.userID = user_profile_additional.userID");
+			$userEntre		= db::get()->result("userID");
+
+			//calculate total hours per site
+			db::select("A.siteID, SUM((time_to_sec(timediff(activityDateEndTime, activityDateStartTime )) / 3600)) as totalhours");
+			db::from("activity_date AD");
+			db::join("activity A", "A.activityID = AD.activityID");
+			db::join("training T", "T.activityID = A.activityID");
+			db::where("T.trainingType", 12);
+			db::where("A.activityStartDate > '$dateStart' ");
+			db::where("A.activityEndDate < '$dateEnd' ");
+			db::where("A.siteID", $siteID);
+			db::where("EXISTS (SELECT userID FROM activity_user WHERE activity_user.activityID = A.activityID)");			
+			//db::group_by("T.trainingType");
+			$hourEntre = db::get()->row();
+			//var_dump($hourEntre);
+			//die;
+			$hourEntre['totalhours'] ? $hourTrainingEntre = $hourEntre['totalhours'] : $hourTrainingEntre = 0;
+			## site data.
+			$data['EsiteData'][$siteID]			= Array(
+											"siteName"=>$row['siteName'],
+											"stateName"=>$stateR[$row['stateID']]
+														);
+
+			$data['EsiteInfo'][$siteID] = $row;
+
+			## gender
+			$data['Egender'][$siteID]['male'] = 0;
+			$data['Egender'][$siteID]['female'] = 0;
+
+			## bumis
+			$data['Egroup'][$siteID]	= Array(
+									"bumi"=>0,
+									"non-bumi"=>0
+											);
+
+			## age range.
+			$data['EageRange'][$siteID] = Array(
+									"under18"	=>0,
+									"18-35"		=>0,
+									"36-55"		=>0,
+									"over55"	=>0
+												);
+
+			## occupataion : order should be correlated with helper::occupationGroup
+			$data['Eoccupation'][$siteID] = Array(
+									"students" 		=>0,
+									"housewives" 	=>0,
+									"self-employed"	=>0,
+									"employed"		=>0,
+									"not-employed"	=>0,
+									"retiree"		=>0,
+									"no-group"		=>0
+												);
+
+			$data['EclassHour'][$siteID] = 0;
+
+			if($userR)
+			{
+
+				foreach($userR as $row_user)
+				{
+					## find gender.
+					if($row_user['userProfileGender'] == 1) # boy
+					{
+						$data['Egender'][$siteID]['male']++;
+					} 
+					else if($row_user['userProfileGender'] == 2)# girl
+					{
+						$data['Egender'][$siteID]['female']++;
+					}
+					else
+					{
+						$data['Egender'][$siteID]['unsure']++;
+					}
+
+					## bumi. not yet.
+
+					## total trained. no data yet.
+
+					## age group.
+					### get user age based on userProfileDOB
+					$age	= date("Y")-date("Y",strtotime($row_user['userProfileDOB']));
+
+					
+					if($age < 18)
+					{
+						$data['EageRange'][$siteID]['under18']++;
+					}
+					else if($age >= 18 && $age <= 35)
+					{
+						$data['EageRange'][$siteID]['18-35']++;
+					}
+					else if($age > 35 && $age <= 55)
+					{
+						$data['EageRange'][$siteID]['36-55']++;
+					}
+					else ## > 55
+					{
+						$data['EageRange'][$siteID]['over55']++;
+					}
+
+					## map oocupationGroup with the key set above.
+					$occupationGroupMap = Array(
+						1=>"students",
+						2=>"housewives",
+						3=>"self-employed",
+						4=>"employed",
+						5=>"not-employed",
+						6=>"retiree"
+						);
+
+					if(isset($occupationGroupMap[$row_user['userProfileOccupationGroup']]))
+					{
+						$data['Eoccupation'][$siteID][$occupationGroupMap[$row_user['userProfileOccupationGroup']]]++;
+					}
+					## save it as ungrouped, yet.
+					else
+					{
+						$data['Eoccupation'][$siteID]['no-group']++;
+					}
+				}
+
+			}
+			$data['EclassHour'][$siteID] = $hourTrainingEntre;	
+
+		}//END LOOP SITE ENTREPRENUERSHIP
 		//var_dump($data);
 		//die;
 		return $data;
