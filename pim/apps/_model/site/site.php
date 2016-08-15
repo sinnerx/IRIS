@@ -144,6 +144,12 @@ class Site extends \Origami
 		{
 			## approval part. make site request.
 			$data['siteInfoLoaDate'] = date('Y-m-d',strtotime($data['siteInfoLoaDate']));
+			$data['siteInfoCommencementDate'] = date('Y-m-d',strtotime($data['siteInfoCommencementDate']));
+			$data['siteInfoActualStartDate'] = date('Y-m-d',strtotime($data['siteInfoActualStartDate']));
+			$data['siteInfoSatDate'] = date('Y-m-d',strtotime($data['siteInfoSatDate']));
+			$data['siteInfoOperationDate'] = date('Y-m-d',strtotime($data['siteInfoOperationDate']));
+			$data['siteInfoCompletionDate'] = date('Y-m-d',strtotime($data['siteInfoCompletionDate']));
+			
 
 			model::load("site/request")->create('site.update',$id,$id,$data);
 		}

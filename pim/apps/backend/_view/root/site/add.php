@@ -78,6 +78,135 @@ At least one manager is required for each site. Please make sure the site manage
 	</div>
 </div>
 <div class='well well-sm'>Optional Fields : Manager can later update below information through his panel.</div>
+
+<div class='row'>
+<div class='col-sm-12'>
+		<section class='panel panel-default'>
+		<div class='panel-body'>
+	
+
+		<div class='row'>
+		<div class='col-sm-4'>
+			<div class='form-group'>
+				<label>LOA Date</label>
+				<div class='row'>
+					<div class='col-md-12'>
+						<?php echo form::text("siteInfoLoaDate","class='input-sm input-s datepicker-input form-control' date-date-format='dd-mm-yyyy'",date('d-m-Y', strtotime($row['siteInfoLoaDate'])));?>
+					
+			</div>
+				</div></div>
+			</div>
+			<div class='col-sm-4'>
+			<div class='form-group'>
+				<label>Commencement Date</label>
+				<div class='row'>
+					<div class='col-md-12'>
+						<?php echo form::text("siteInfoCommencementDate","class='input-sm input-s datepicker-input form-control' date-date-format='dd-mm-yyyy'",date('d-m-Y', strtotime($row['siteInfoCommencementDate'])));?>
+			</div>
+				</div></div>
+			</div>
+			<div class='col-sm-4'>
+			<div class='form-group'>
+				<label>Actual Start Date</label>
+				<div class='row'>
+					<div class='col-md-12'>
+						<?php echo form::text("siteInfoActualStartDate","class='input-sm input-s datepicker-input form-control' date-date-format='dd-mm-yyyy'",date('d-m-Y', strtotime($row['siteInfoActualStartDate'])));?>
+			</div>
+				</div></div>
+			</div>
+		</div>
+
+
+
+		<div class='row'>
+		<div class='col-sm-4'>
+			<div class='form-group'>
+				<label>SAT Date</label>
+				<div class='row'>
+					<div class='col-md-12'>
+						<?php echo form::text("siteInfoSatDate","class='input-sm input-s datepicker-input form-control' date-date-format='dd-mm-yyyy'",date('d-m-Y', strtotime($row['siteInfoSatDate'])));?>
+					
+			</div>
+				</div></div>
+			</div>
+			<div class='col-sm-4'>
+			<div class='form-group'>
+				<label>Operation Date</label>
+				<div class='row'>
+					<div class='col-md-12'>
+						<?php echo form::text("siteInfoOperationDate","class='input-sm input-s datepicker-input form-control' date-date-format='dd-mm-yyyy'",date('d-m-Y', strtotime($row['siteInfoOperationDate'])));?>
+			</div>
+				</div></div>
+			</div>
+			<div class='col-sm-4'>
+			<div class='form-group'>
+				<label>Completion Date</label>
+				<div class='row'>
+					<div class='col-md-12'>
+						<?php echo form::text("siteInfoCompletionDate","class='input-sm input-s datepicker-input form-control' date-date-format='dd-mm-yyyy'",date('d-m-Y', strtotime($row['siteInfoCompletionDate'])));?>
+			</div>
+				</div></div>
+			</div>
+		</div>
+		</div>
+		</section>
+		</div>
+</div>
+
+<div class='row'>
+<div class='col-sm-12'>
+		<section class='panel panel-default'>
+		<div class='panel-body'>
+	
+
+		<div class='row'>
+			<div class='col-sm-4'>
+			<div class='form-group'>
+				<label>Parliament</label>
+				<div class='row'>
+					<div class='col-md-12'>
+						<?php echo form::text("siteInfoParliament","class='form-control'",$row['siteInfoParliament']);?>
+			</div>
+				</div></div>
+			</div>
+			<div class='col-sm-4'>
+			<div class='form-group'>
+				<label>Phase</label>
+				<div class='row'>
+					<div class='col-md-12'>
+						<?php echo form::text("siteInfoPhase","class='form-control'",$row['siteInfoPhase']);?>
+			</div>
+				</div></div>
+			</div>
+		</div>
+
+
+
+		<div class='row'>
+			<div class='col-sm-4'>
+			<div class='form-group'>
+				<label>District</label>
+				<div class='row'>
+					<div class='col-md-12'>
+						<?php echo form::text("siteInfoDistrict","class='form-control'",$row['siteInfoDistrict']);?>
+			</div>
+				</div></div>
+			</div>
+			<div class='col-sm-4'>
+			<div class='form-group'>
+				<label>Population</label>
+				<div class='row'>
+					<div class='col-md-12'>
+						<?php echo form::text("siteInfoPopulation","class='form-control'",$row['siteInfoPopulation']);?>
+			</div>
+				</div></div>
+			</div>
+		</div>
+		</div>
+		</section>
+		</div>
+</div>
+
 <div class='row'>
 	<div class='col-sm-3'>
 		<section class='panel panel-default'>

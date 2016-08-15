@@ -729,7 +729,7 @@ Content is waiting for approval
 </div>
 <div class='row'>
 	<div class='col-sm-12' style='text-align:center;'>
-		<input type='submit' value='Update Activity' class='btn btn-primary' />
+		<input type='submit' value='Save and Approve' class='btn btn-primary' />
 		<input type='button' value='Cancel' onclick='window.location.href = "<?php echo url::base("cluster/overview");?>"' class='btn btn-default' />
 	</div>
 </div>

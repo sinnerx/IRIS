@@ -247,6 +247,11 @@ site_info:
 	siteInfoDistrict [varchar]
 	siteInfoPopulation [int]
 	siteInfoLoaDate [datetime]
+	siteInfoCommencementDate [datetime]
+	siteInfoActualStartDate [datetime]
+	siteInfoSatDate [datetime]
+	siteInfoOperationDate [datetime]
+	siteInfoCompletionDate [datetime]
 
 site_member:
 	siteMemberID [int]
@@ -1217,7 +1222,6 @@ report_fields:
 	report_fieldsUserID [int]
 	report_fieldsTable [varchar(100)]
 	report_fieldsTableID [varchar(100)]
-	report_fieldsName [varchar(100)]
 	report_fieldsIsMandatory [int]
 
 training_subtype:

@@ -73,6 +73,7 @@ endif;
 	</section>
 	</div>
 </div>
+
 <div class='row'>
 <div class='col-sm-12'>
 		<section class='panel panel-default'>
@@ -92,11 +93,80 @@ endif;
 			</div>
 			<div class='col-sm-4'>
 			<div class='form-group'>
+				<label>Commencement Date</label>
+				<div class='row'>
+					<div class='col-md-12'>
+						<?php echo form::text("siteInfoCommencementDate","class='input-sm input-s datepicker-input form-control' date-date-format='dd-mm-yyyy'",date('d-m-Y', strtotime($row['siteInfoCommencementDate'])));?>
+			<?php echo flash::data("siteInfoCommencementDate");?>
+			</div>
+				</div></div>
+			</div>
+			<div class='col-sm-4'>
+			<div class='form-group'>
+				<label>Actual Start Date</label>
+				<div class='row'>
+					<div class='col-md-12'>
+						<?php echo form::text("siteInfoActualStartDate","class='input-sm input-s datepicker-input form-control' date-date-format='dd-mm-yyyy'",date('d-m-Y', strtotime($row['siteInfoActualStartDate'])));?>
+			<?php echo flash::data("siteInfoActualStartDate");?>
+			</div>
+				</div></div>
+			</div>
+		</div>
+
+
+
+		<div class='row'>
+		<div class='col-sm-4'>
+			<div class='form-group'>
+				<label>SAT Date</label>
+				<div class='row'>
+					<div class='col-md-12'>
+						<?php echo form::text("siteInfoSatDate","class='input-sm input-s datepicker-input form-control' date-date-format='dd-mm-yyyy'",date('d-m-Y', strtotime($row['siteInfoSatDate'])));?>
+					<?php echo flash::data("siteInfoSatDate");?>
+			</div>
+				</div></div>
+			</div>
+			<div class='col-sm-4'>
+			<div class='form-group'>
+				<label>Operation Date</label>
+				<div class='row'>
+					<div class='col-md-12'>
+						<?php echo form::text("siteInfoOperationDate","class='input-sm input-s datepicker-input form-control' date-date-format='dd-mm-yyyy'",date('d-m-Y', strtotime($row['siteInfoOperationDate'])));?>
+			<?php echo flash::data("siteInfoOperationDate");?>
+			</div>
+				</div></div>
+			</div>
+			<div class='col-sm-4'>
+			<div class='form-group'>
+				<label>Completion Date</label>
+				<div class='row'>
+					<div class='col-md-12'>
+						<?php echo form::text("siteInfoCompletionDate","class='input-sm input-s datepicker-input form-control' date-date-format='dd-mm-yyyy'",date('d-m-Y', strtotime($row['siteInfoCompletionDate'])));?>
+			<?php echo flash::data("siteInfoCompletionDate");?>
+			</div>
+				</div></div>
+			</div>
+		</div>
+		</div>
+		</section>
+		</div>
+</div>
+
+<div class='row'>
+<div class='col-sm-12'>
+		<section class='panel panel-default'>
+		<div class='panel-body'>
+	
+
+		<div class='row'>
+					<div class='col-sm-4'>
+			<div class='form-group'>
 				<label>Parliament</label>
 				<div class='row'>
 					<div class='col-md-12'>
 						<?php echo form::text("siteInfoParliament","class='form-control'",$row['siteInfoParliament']);?>
-			<?php echo flash::data("siteInfoParliament");?>
+						<?php echo flash::data("siteInfoParliament");?>
+			
 			</div>
 				</div></div>
 			</div>
@@ -106,7 +176,8 @@ endif;
 				<div class='row'>
 					<div class='col-md-12'>
 						<?php echo form::text("siteInfoPhase","class='form-control'",$row['siteInfoPhase']);?>
-			<?php echo flash::data("siteInfoPhase");?>
+						<?php echo flash::data("siteInfoPhase");?>
+			
 			</div>
 				</div></div>
 			</div>
@@ -121,7 +192,8 @@ endif;
 				<div class='row'>
 					<div class='col-md-12'>
 						<?php echo form::text("siteInfoDistrict","class='form-control'",$row['siteInfoDistrict']);?>
-			<?php echo flash::data("siteInfoDistrict");?>
+						<?php echo flash::data("siteInfoDistrict");?>
+			
 			</div>
 				</div></div>
 			</div>
@@ -131,7 +203,7 @@ endif;
 				<div class='row'>
 					<div class='col-md-12'>
 						<?php echo form::text("siteInfoPopulation","class='form-control'",$row['siteInfoPopulation']);?>
-			<?php echo flash::data("siteInfoPopulation");?>
+						<?php echo flash::data("siteInfoPopulation");?>
 			</div>
 				</div></div>
 			</div>

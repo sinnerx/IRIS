@@ -315,6 +315,15 @@ class Activity extends \Origami
 		return $slug."-".(count($res_slug)+1);
 	}
 
+	public function updateAndApproveActivity($activityID,$type,$data,$requestID)
+	{
+		$siteID	= $this->getActivity($activityID,"siteID");
+
+		$this->_updateActivity($activityID,$type,$data);
+		model::load("site/request")->approve($requestID);
+
+	}
+
 	public function updateActivity($activityID,$type,$data)
 	{
 		$siteID	= $this->getActivity($activityID,"siteID");

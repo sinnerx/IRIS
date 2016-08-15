@@ -29,9 +29,16 @@ Edit selected announcement
 			echo $row['announcementStatus'] == 1?"<font color='green'>Active</font>":"<font color='red'>In-Active</font>";
 			?></div>
 			</div>
-			<div class="form-group">
-			<?php echo form::submit("Update announcement","class='btn btn-primary pull-right'");?>
+			
+
+			<div class='row'>
+	<div class='col-sm-12' style='text-align:center;'>
+<div class="form-group">
+			<?php echo form::submit("Update & Approve","class='btn btn-primary'");?>
+			<input type='button' value='Cancel' onclick='window.location.href = "<?php echo url::base("cluster/overview");?>"' class='btn btn-default' />
 			</div>
+	</div>
+	</div>
 			</form>
 		</div>
 	</section>

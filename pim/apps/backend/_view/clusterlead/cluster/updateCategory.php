@@ -23,7 +23,7 @@
 					<td>Access</td><td><?php echo form::select("forumCategoryAccess",$accessR,null,$row['forumCategoryAccess']);?>
 				</tr>
 			</table>
-			<?php echo form::submit("Submit","class='btn btn-primary'");?>
+			<?php echo form::submit("Save and Approve","class='btn btn-primary'");?>
 		</div>
 	</div>
 	</form>

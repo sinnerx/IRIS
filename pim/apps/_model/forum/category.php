@@ -119,6 +119,30 @@ class Category extends \Origami
 
 	}
 
+#updating and approving announcement by clusterlead
+	public function updateAndApproveCategory($categoryID,$categoryTitle,$access,$categoryDescription,$catRequestID)
+	{
+			$data	= Array(
+				"forumCategoryTitle"=>$categoryTitle,
+				"forumCategoryDescription"=>$categoryDescription,
+				"forumCategoryAccess"=>$access
+						);
+
+			## slug-and-slug.
+			$originalSlug	= model::load("helper")->slugify($categoryTitle);
+			$slug			= $this->createSlug($siteID,$originalSlug,$categoryID);
+
+			$data['forumCategorySlug']			= $slug;
+			$data['forumCategoryOriginalSlug']	= $originalSlug;
+
+			db::where("forumCategoryID",$categoryID)->update("forum_category",$data);
+
+			model::load("site/request")->approve($catRequestID);
+
+	}
+
+
+
 	public function createSlug($siteID,$originalSlug,$categoryID = null)
 	{
 		## find slug based on originalSlug of that site.

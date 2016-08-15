@@ -123,6 +123,22 @@ class Announcement extends \Origami
 		}
 	}
 
+
+
+
+	#updating and approving announcement by clusterlead
+	public function updateAndApproveAnnouncement($announceID,$announceRequestID,$data)
+	{
+			db::where("announcementID",$announceID);
+			db::update("announcement",$data);
+			model::load("site/request")->approve($announceRequestID);
+
+	}
+
+
+
+
+
 	public function delete()
 	{
 		//if($this->activityApprovalStatus == 1)
