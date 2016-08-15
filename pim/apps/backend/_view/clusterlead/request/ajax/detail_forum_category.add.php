@@ -1,6 +1,13 @@
+<?php
+$catID = $row['forumCategoryID'];
+$catEditUrl = url::base("cluster/updateCategory/".$catID."/".$requestID);
+?>
 <div class='request-info'>
-New / Delete Forum Category
+New Forum Category
 </div>
+<script>
+$( "#btnPanel" ).append( "<a href='<?php echo $catEditUrl;?>' class='btn-approval pull-right fa fa-pencil-square-o'></a>" );
+</script>
 <div class='table-responsive'>
 <table class='table'>
 	<tr>

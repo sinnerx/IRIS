@@ -1,6 +1,13 @@
+<?php
+$activityID = $row['activityID'];
+$activityEditUrl = url::base("cluster/edit/".$activityID."/".$requestID);
+?>
 <div class='request-info'>
-	New / Delete Activity : <u><?php echo $row['activityName'];?></u>
+	New Activity : <u><?php echo $row['activityName'];?></u>
 </div>
+<script>
+$( "#btnPanel" ).append( "<a href='<?php echo $activityEditUrl;?>' class='btn-approval pull-right fa fa-pencil-square-o'></a>" );
+</script>
 <div class='row'>
 	<div class='col-sm-12'>
 		<div class='table-responsive'>
@@ -53,14 +60,6 @@
 						<?php else:?>
 						<div><b>Type of training</b></div>
 						<div><?php echo model::load("activity/training")->type($row['trainingType']);?></div>
-						<?php endif;
-						?>
-						<?php
-						if($row['activityType'] == 1):?>
-						<div><b>Max pax</b></div>
-						<div><?php echo $row['eventMaxPax'] == 0?"No-limit":$row['eventMaxPax'];?></div>
-
-						<?php else:?>
 						<div><b>Max pax</b></div>
 						<div><?php echo $row['trainingMaxPax'] == 0?"No-limit":$row['trainingMaxPax'];?></div>
 						<?php endif;

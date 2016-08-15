@@ -247,6 +247,11 @@ site_info:
 	siteInfoDistrict [varchar]
 	siteInfoPopulation [int]
 	siteInfoLoaDate [datetime]
+	siteInfoCommencementDate [datetime]
+	siteInfoActualStartDate [datetime]
+	siteInfoSatDate [datetime]
+	siteInfoOperationDate [datetime]
+	siteInfoCompletionDate [datetime]
 
 site_member:
 	siteMemberID [int]
