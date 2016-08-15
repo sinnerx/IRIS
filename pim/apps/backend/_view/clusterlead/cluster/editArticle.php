@@ -146,9 +146,8 @@ Edit article
 		<div class="panel-body">
 			<div class="form-group">
 				<?php if($row['articleStatus'] == 3){echo form::submit("Save as draft","name='articleStatus' class='btn btn-xs btn-default pull-left'");} ?>
-				<?php echo form::submit("Update Blog","name='articleStatus' onclick='return confirmation();' class='btn btn-xs btn-primary pull-right'");?>
+				<?php echo form::submit("Save and Approve","name='articleStatus' onclick='return confirmation();' class='btn btn-xs btn-primary pull-right'");?>
 			</div>
-			<a href='javascript:cluster.overview.updateApproval(346,1);' class='btn-approval text-success pull-right fa fa-check-square-o'></a>
 		</div>
 	</section>
 	<section class="panel panel-default">

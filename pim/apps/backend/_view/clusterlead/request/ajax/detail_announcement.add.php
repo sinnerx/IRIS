@@ -1,6 +1,13 @@
+<?php
+$announcementID = $row['announcementID'];
+$announcementEditUrl = url::base("cluster/editAnnouncement/".$announcementID."/".$requestID);
+?>
 <div class='request-info'>
 New / Delete Site Announcement
 </div>
+<script>
+$( "#btnPanel" ).append( "<a href='<?php echo $announcementEditUrl;?>' class='btn-approval pull-right fa fa-pencil-square-o'></a>" );
+</script>
 <div class='table-responsive'>
 <table class='table'>
 	<tr>

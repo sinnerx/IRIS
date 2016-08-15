@@ -708,6 +708,74 @@ if ($articleID) {
 		// }
 	}
 
+	#updating and approve an article
+	public function updateAndApproveArticle($articleID,$requestID,$data)
+	{
+		if($data['articleTags']){
+			db::delete('article_tag', 'articleID='.$articleID);
+
+			$data['articleTags'] = strtok($data['articleTags'],',');
+
+			while ($data['articleTags'] != false)
+		    {
+				$dataToken = Array(
+					"articleID"=>$articleID,
+					"articleTagName"=>$data['articleTags']
+				);
+
+				db::insert("article_tag",$dataToken);
+
+		    	$data['articleTags'] = strtok(",");
+			}
+			unset($data['articleTags']);
+		}
+		
+		if($data['category']){
+
+			db::delete('article_category', 'articleID='.$articleID);
+			foreach($data['category'] as $category){
+				$dataToken = Array(
+					"articleID"=>$articleID,
+					"categoryID"=>$category
+				);
+
+				db::insert("article_category",$dataToken);
+			}
+			unset($data['category']);
+		}else{
+			db::delete('article_category', 'articleID='.$articleID);
+		}
+
+		if(!is_null($data['activityID'])){
+			db::from('activity_article');
+			db::where('articleID',$articleID);
+
+			if(db::get()->row()){
+				$dataActivity = Array(
+						"activityID" => $data['activityID'],
+						"activityArticleType" => $data['activityArticleType']
+				);
+				db::where("articleID",$articleID)->update("activity_article",$dataActivity);
+			}else{
+				$dataActivity = Array(
+					"articleID" => $articleID,
+					"activityID" => $data['activityID'],
+					"activityArticleType" => $data['activityArticleType'],
+					"activityArticleCreatedDate" => now(),
+					"activityArticleCreatedUser" => session::get("userID")
+				);
+				db::insert("activity_article", $dataActivity);
+			}
+			unset($data['activityID']);
+			unset($data['activityArticleType']);
+		}
+
+		
+		$this->_updateArticle($articleID,$data,true);
+		model::load("site/request")->approve($requestID);
+		
+	}
+
 	public function checkDraft($articleID)
 	{
 		if($row = db::where("articleID",$articleID)->get("article_draft")->row())
