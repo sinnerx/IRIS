@@ -19,6 +19,10 @@ class Controller_Report
 				case 2:
 					# code...
 					$this->reportDashboardEvent($input);
+					break;		
+				case 11:
+					# code...
+					$this->reportDashboardUSPMircosites($input);
 					break;
 				
 				default:
@@ -450,6 +454,126 @@ class Controller_Report
 		$pdf->Output();
 
 		//view::render('root/report/dashboardReportGenerator');		
+	}
+
+	private function reportDashboardUSPMircosites($input){
+
+		$month 	= $input['month'];
+		$year 	= $input['year'];
+
+		db::select('COUNT(A.userID) AS total, D.clusterID AS cluster');
+		db::from('user A');
+		db::join('site_member B', 'B.userID = A.userID');
+		db::join('cluster_site C', 'C.siteID = B.siteID');
+		db::join('cluster D', 'D.clusterID = C.clusterID');
+		db::group_by('D.clusterID');
+		$results = db::get()->result();
+
+		// NEW QUERY WITH LOGIN USER
+		
+		// SELECT COUNT(E.userID) AS logIn, COUNT(DISTINCT(D.userID)) AS Registered, A.clusterID AS ClusterId, A.clusterName AS Cluster
+		// FROM cluster A
+		// LEFT JOIN cluster_site B ON B.clusterID = A.clusterID
+		// LEFT JOIN site_member C ON C.siteID = B.siteID
+		// LEFT JOIN user D ON D.userID = C.userID
+		// LEFT JOIN log_login E ON E.userID = C.userID
+		// GROUP BY A.clusterID
+
+		$sabah_cluster = array();
+		$sarawak_cluster = array();
+		$semenanjung_cluster = array();
+
+		foreach ($results as $key => $value) {
+			// push sabah cluster to array
+			if ($value['cluster'] == 1 || $value['cluster'] == 2 || $value['cluster'] == 3 ) {
+				array_push($sabah_cluster, $value['total']);
+			}
+			// push sarawak cluster to array
+			if ($value['cluster'] == 4 ) {
+				array_push($sarawak_cluster, $value['total']);
+			}
+			// push semenanjung cluster to array
+			if ($value['cluster'] == 5 || $value['cluster'] == 6) {
+				array_push($semenanjung_cluster, $value['total']);
+			}
+		}
+
+		$total_sabah = array_sum($sabah_cluster);
+		$total_sarawak = array_sum($sarawak_cluster);
+		$total_semenanjung = array_sum($semenanjung_cluster);
+
+		$registered_user = array('Total Registered User',$total_sabah,$total_sarawak,$total_semenanjung);
+
+		//var_dump($registered_user);
+		//die();
+
+		// Convert month value to month name
+		$month_text = model::load("helper")->monthYear('monthE');
+
+		// Start convert to PDF
+		$pdf = new FPDF();
+		$pdf->AddPage('L', 'A4');
+		$pdf->SetFont('Arial','B',10);
+
+		// Cell width
+		$w = array(60, 30, 30, 30);
+
+		foreach ($month_text as $key => $value) {
+			if ($key == $month) {
+				$month_text =  $value;
+			}
+		}
+
+	    $pdf->Cell(40,10,'OPERATIONS UPDATE (USP MICROSITES VITAL STATISTICS) ON '. $month_text.' '.$year);
+	    $pdf->Ln();
+
+	    // Header
+		$header = array('','Semenanjung','Sabah','Sarawak');
+
+	    for ($i=0;$i<count($header);$i++) {
+	        $pdf->Cell($w[$i],7,$header[$i],1,0,'C');
+	    }
+
+	    $pdf->Ln();
+
+	    // Total Registered User
+
+	    for ($i=0;$i<count($registered_user);$i++) {
+	        $pdf->Cell($w[$i],7,$registered_user[$i],1,0,'C');
+	    }
+
+	    $pdf->Ln();
+
+	    // Total User Logins
+
+		$user_login = array('Total User Logins','','','');
+
+	    for ($i=0;$i<count($user_login);$i++) {
+	        $pdf->Cell($w[$i],7,$user_login[$i],1,0,'C');
+	    }
+
+	    $pdf->Ln();
+
+	    // Total Content Updated
+
+		$content_updated = array('Total Content Updated','','','');
+
+	    for ($i=0;$i<count($content_updated);$i++) {
+	        $pdf->Cell($w[$i],7,$content_updated[$i],1,0,'C');
+	    }
+
+	    $pdf->Ln();
+
+	    // Total Entrepreneurs Profiled
+
+		$entrepreneur_profile = array('Total Entrepreneurs Profiled','','','');
+
+	    for ($i=0;$i<count($entrepreneur_profile);$i++) {
+	        $pdf->Cell($w[$i],7,$entrepreneur_profile[$i],1,0,'C');
+	    }
+
+		$pdf->Output();
+
 	}
 
     public function get_site(){
