@@ -456,59 +456,229 @@ class Controller_Report
 		//view::render('root/report/dashboardReportGenerator');		
 	}
 
+	private function getREgister($date) {
+		// GET Registered
+		db::select('COUNT(A.userID) AS registered, COUNT(C.siteID) AS site, C.clusterID AS clusterID');
+		db::from('user A');
+		db::join('site_member B', 'B.userID = A.userID');
+		db::join('cluster_site C', 'C.siteID = B.siteID');
+		db::where('A.userCreatedDate LIKE','%'.$date.'%');
+		db::group_by('C.clusterID');
+		$regsitered = db::get()->result();
+
+		// select COUNT(A.userID) AS registered, COUNT(C.siteID) AS site, C.clusterID AS cluster
+		// from user A
+		// join site_member B on B.userID = A.userID
+		// right join cluster_site C on C.siteID = B.siteID
+		// WHERE A.userCreatedDate LIKE '%2015%'
+		// group by C.clusterID
+
+		//Set array for total registered cell
+		$totalRegistered = array();
+
+		//Set default value to 0
+		$reSabah = 0;
+		$reSarawak = 0;
+		$reSemenanjung = 0;
+
+		//Get total value for each State
+		foreach ($regsitered as $key => $value) {
+			if ($value['clusterID'] >= 1 && $value['clusterID'] <= 3) {
+		 		$reSabah += $value['registered'];
+		 	}
+			if ($value['clusterID'] == 4) {
+		 		$reSarawak += $value['registered'];
+
+		 	}
+			if ($value['clusterID'] > 4) {
+		 		$reSemenanjung += $value['registered'];
+		 	}
+		}
+
+		//Push to content registered cell array
+		array_push($totalRegistered, 'Total Registered User', $reSemenanjung, $reSabah, $reSarawak);
+
+		return $totalRegistered;
+	}
+
+	private function getlogIn($date) {
+		// GET Login
+		db::select('COUNT(A.userID) AS totalLogin, COUNT(B.userID) AS User, COUNT(D.siteID) AS Site, D.clusterID AS clusterID');
+		db::from('log_login A');
+		db::join('user B', 'B.userID = A.userID');
+		db::join('site_member C', 'C.userID = B.userID');
+		db::join('cluster_site D', 'D.siteID = C.siteID');
+		db::where('A.logLoginCreatedDate LIKE','%'.$date.'%');
+		db::group_by('D.clusterID');
+		$uLogin = db::get()->result();
+
+		// SELECT COUNT(A.userID) AS totalLogin, COUNT(B.userID) AS User, COUNT(D.siteID) AS Site, D.clusterID AS Cluster
+		// FROM log_login A
+		// RIGHT JOIN user B ON B.userID = A.userID
+		// LEFT JOIN site_member C ON C.userID = B.userID
+		// RIGHT JOIN cluster_site D ON D.siteID = C.siteID
+		// WHERE A.logLoginCreatedDate LIKE '%2016%'
+		// GROUP BY D.clusterID
+
+		//Set array for total login cell
+		$totalLogin	= array();
+
+		//Set default value to 0
+		$loSabah = 0;
+		$loSarawak = 0;
+		$loSemenanjung = 0;
+
+		//Get total value login
+		foreach ($uLogin as $key => $value) {
+			if ($value['clusterID'] >= 1 && $value['clusterID'] <= 3) {
+				//array_push($sumSabah, $value['totalLogin']);
+				$loSabah += $value['totalLogin'];
+		 	}
+			if ($value['clusterID'] == 4) {
+				$loSarawak += $value['totalLogin'];
+
+		 	}
+			if ($value['clusterID'] > 4) {
+				$loSemenanjung += $value['totalLogin'];
+		 	}
+		}
+
+		//Push to login cell array
+		array_push($totalLogin, 'Total User Logins', $loSemenanjung, $loSabah, $loSarawak);
+
+		return $totalLogin;
+	}
+
+	private function getContentUpdate($date) {
+		// GET Content Update
+		db::select('COUNT(C.siteID) AS Request, A.clusterID AS ClusterId, A.clusterName AS Cluster');
+		db::from('cluster A');
+		db::join('cluster_site B', 'B.clusterID = A.clusterID');
+		db::join('site_request C', 'C.siteID = B.siteID');
+		db::where('C.siteRequestCreatedDate LIKE','%'.$date.'%');
+		db::group_by('A.clusterID');
+		$contentUpdate = db::get()->result();
+
+		//Set array for content update cell
+		$totalUpdate = array();
+
+		//Set default value to 0
+		$upSabah = 0;
+		$upSarawak = 0;
+		$upSemenanjung = 0;
+
+		//Get total value for each State
+		foreach ($contentUpdate as $key => $value) {
+			if ($value['ClusterId'] >= 1 && $value['ClusterId'] <= 3) {
+		 		$upSabah += $value['Request'];
+		 	}
+			if ($value['ClusterId'] == 4) {
+		 		$upSarawak += $value['Request'];
+		 	}
+			if ($value['ClusterId'] > 4) {
+		 		$upSemenanjung += $value['Request'];
+		 	}
+		}
+
+		//Push to content update cell array
+		array_push($totalUpdate, 'Total Content Updated', $upSemenanjung, $upSabah, $upSarawak);
+
+		return $totalUpdate;
+	}
+
+	private function getEntrepreneurs($date) {
+		//Get Entrepreneurs
+		db::select('COUNT(A.userID) AS Entrepreneurs, COUNT(C.siteID) AS site, E.clusterID AS clusterID, E.clusterName AS Cluster');
+		db::from('user A');
+		db::join('user_profile_additional B', 'B.userID = A.userID');
+		db::join('site_member C', 'C.userID = B.userID');
+		db::join('cluster_site D', 'D.siteID = C.siteID');
+		db::join('cluster E', 'E.clusterID = D.clusterID');
+		db::where('A.userLevel', '1');
+		db::where('B.userProfileOccupationGroup', '3');
+		db::where('A.userCreatedDate LIKE','%'.$date.'%');
+		db::group_by('E.clusterID');
+		$Entrepreneurs = db::get()->result();
+
+		//Set array for entreprenerus cell
+		$totalEntrepre = array();
+
+		//Set default value to 0
+		$enSabah = 0;
+		$enSarawak = 0;
+		$enSemenanjung = 0;
+
+		//Get total value for each State
+		foreach ($Entrepreneurs as $key => $value) {
+			if ($value['clusterID'] >= 1 && $value['clusterID'] <= 3) {
+		 		$enSabah += $value['Entrepreneurs'];
+		 	}
+			if ($value['clusterID'] == 4) {
+		 		$enSarawak += $value['Entrepreneurs'];
+		 	}
+			if ($value['clusterID'] > 4) {
+		 		$enSemenanjung += $value['Entrepreneurs'];
+		 	}
+		}
+
+		//Push to entreprenerus cell array
+		array_push($totalEntrepre, 'Total Entrepreneurs Profiled', $enSemenanjung, $enSabah, $enSarawak);
+
+		return $totalEntrepre;
+	}
+
 	private function reportDashboardUSPMircosites($input){
 
 		$month 	= $input['month'];
 		$year 	= $input['year'];
-
-		db::select('COUNT(A.userID) AS total, D.clusterID AS cluster');
-		db::from('user A');
-		db::join('site_member B', 'B.userID = A.userID');
-		db::join('cluster_site C', 'C.siteID = B.siteID');
-		db::join('cluster D', 'D.clusterID = C.clusterID');
-		db::group_by('D.clusterID');
-		$results = db::get()->result();
-
-		// NEW QUERY WITH LOGIN USER
-		
-		// SELECT COUNT(E.userID) AS logIn, COUNT(DISTINCT(D.userID)) AS Registered, A.clusterID AS ClusterId, A.clusterName AS Cluster
-		// FROM cluster A
-		// LEFT JOIN cluster_site B ON B.clusterID = A.clusterID
-		// LEFT JOIN site_member C ON C.siteID = B.siteID
-		// LEFT JOIN user D ON D.userID = C.userID
-		// LEFT JOIN log_login E ON E.userID = C.userID
-		// GROUP BY A.clusterID
-
-		$sabah_cluster = array();
-		$sarawak_cluster = array();
-		$semenanjung_cluster = array();
-
-		foreach ($results as $key => $value) {
-			// push sabah cluster to array
-			if ($value['cluster'] == 1 || $value['cluster'] == 2 || $value['cluster'] == 3 ) {
-				array_push($sabah_cluster, $value['total']);
-			}
-			// push sarawak cluster to array
-			if ($value['cluster'] == 4 ) {
-				array_push($sarawak_cluster, $value['total']);
-			}
-			// push semenanjung cluster to array
-			if ($value['cluster'] == 5 || $value['cluster'] == 6) {
-				array_push($semenanjung_cluster, $value['total']);
-			}
-		}
-
-		$total_sabah = array_sum($sabah_cluster);
-		$total_sarawak = array_sum($sarawak_cluster);
-		$total_semenanjung = array_sum($semenanjung_cluster);
-
-		$registered_user = array('Total Registered User',$total_sabah,$total_sarawak,$total_semenanjung);
-
-		//var_dump($registered_user);
-		//die();
+		$endTitle = '';
 
 		// Convert month value to month name
 		$month_text = model::load("helper")->monthYear('monthE');
+
+		foreach ($month_text as $key => $value) {
+			if ($key == $month) {
+				$month_text =  $value;
+			}
+		}
+
+		// Get month value length
+		$Nmonth = strlen($month);
+
+		// Set month value to 2 digit eg: 01,02,03,04,05,06,07,08,09
+		if ($Nmonth == 1) {
+			$months = '0'.$month;
+		} else {
+			$months = $month;
+		}
+
+		// Set date search format & reset month text
+		if ($month == '') {
+			$date = $year;
+			$month_text = '';
+		} else {
+			$date = $year.'-'.$months;
+		}
+
+		// Set end title if select year
+		if ($year != '') {
+			$endTitle = 'ON '.$month_text.' '.$year;
+		}
+
+		// Get Register & Login
+		$totalregister 	= $this->getREgister($date);
+
+		// Get Login
+		$totaLogin 		= $this->getlogIn($date);
+
+		// Get Content Update
+		$contentUpdate 	= $this->getContentUpdate($date);
+
+		// Get Entrepreneurs Profiled
+		$Entrepreneurs 	= $this->getEntrepreneurs($date);
+
+		// var_dump($totalregister);
+		// die();
 
 		// Start convert to PDF
 		$pdf = new FPDF();
@@ -518,13 +688,7 @@ class Controller_Report
 		// Cell width
 		$w = array(60, 30, 30, 30);
 
-		foreach ($month_text as $key => $value) {
-			if ($key == $month) {
-				$month_text =  $value;
-			}
-		}
-
-	    $pdf->Cell(40,10,'OPERATIONS UPDATE (USP MICROSITES VITAL STATISTICS) ON '. $month_text.' '.$year);
+	    $pdf->Cell(40,10,'OPERATIONS UPDATE (USP MICROSITES VITAL STATISTICS) '.$endTitle);
 	    $pdf->Ln();
 
 	    // Header
@@ -537,39 +701,29 @@ class Controller_Report
 	    $pdf->Ln();
 
 	    // Total Registered User
-
-	    for ($i=0;$i<count($registered_user);$i++) {
-	        $pdf->Cell($w[$i],7,$registered_user[$i],1,0,'C');
+	    for ($i=0;$i<count($totalregister);$i++) {
+	        $pdf->Cell($w[$i],7,$totalregister[$i],1,0,'C');
 	    }
 
 	    $pdf->Ln();
 
 	    // Total User Logins
-
-		$user_login = array('Total User Logins','','','');
-
-	    for ($i=0;$i<count($user_login);$i++) {
-	        $pdf->Cell($w[$i],7,$user_login[$i],1,0,'C');
+	    for ($i=0;$i<count($totaLogin);$i++) {
+	        $pdf->Cell($w[$i],7,$totaLogin[$i],1,0,'C');
 	    }
 
 	    $pdf->Ln();
 
 	    // Total Content Updated
-
-		$content_updated = array('Total Content Updated','','','');
-
-	    for ($i=0;$i<count($content_updated);$i++) {
-	        $pdf->Cell($w[$i],7,$content_updated[$i],1,0,'C');
+	    for ($i=0;$i<count($contentUpdate);$i++) {
+	        $pdf->Cell($w[$i],7,$contentUpdate[$i],1,0,'C');
 	    }
 
 	    $pdf->Ln();
 
 	    // Total Entrepreneurs Profiled
-
-		$entrepreneur_profile = array('Total Entrepreneurs Profiled','','','');
-
-	    for ($i=0;$i<count($entrepreneur_profile);$i++) {
-	        $pdf->Cell($w[$i],7,$entrepreneur_profile[$i],1,0,'C');
+	    for ($i=0;$i<count($Entrepreneurs);$i++) {
+	        $pdf->Cell($w[$i],7,$Entrepreneurs[$i],1,0,'C');
 	    }
 
 		$pdf->Output();
@@ -789,7 +943,7 @@ class Controller_Report
 		$filename	= "Pi1M Data (NEW KPI) - ".date("j F Y",strtotime($endDate));
 
 		## initiate both helper and php excel.
-		$excel	= new \PHPExcel;
+		$excel			= new \PHPExcel;
 		$ExcelHelper	= new model\report\PHPExcelHelper($excel,$filename.".xls");
 
 		## the main working sheet.
@@ -1234,17 +1388,26 @@ class Controller_Report
 
 		$sheetTrain = $excel->createSheet(2); 
 		//$sheetTrain = $excel->getActiveSheet(2);
+
+		// set all center and wrap
+		$allCells = $sheetTrain->getStyle("A1:Z".(5+count($data['siteData'])));
+		$allCells->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+		$allCells->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+		$allCells->getAlignment()->setWrapText(true);
+
 		$sheetTrain->setTitle("Training");
 		
 		#1 create main title.
-		$sheetTrain->setCellValue("F1","TRAINING DATA");
-		$sheetTrain->getStyle("F1")->getFont()->setSize(18);
+		$sheetTrain->setCellValue("A1","TRAINING DATA");
+		$sheetTrain->mergeCells("A1:P1"); //merge from A1 to P1
+		$sheetTrain->getStyle("A1")->getFont()->setSize(18);
 		$sheetTrain->getRowDimension(1)->setRowHeight(25);
 		$sheetTrain->getRowDimension(4)->setRowHeight(20);
 		$sheetTrain->getRowDimension(5)->setRowHeight(20);
 
 		#2 date.
 		$sheetTrain->setCellValue("A2","DATE : ".date("j F Y",strtotime($startDate))." - ".date("j F Y",strtotime($endDate)));
+		$sheetTrain->mergeCells("A2:F2"); //merge from A2 to F2
 		$sheetTrain->getStyle("A2")->getFont()->setSize(16);
 		$sheetTrain->getRowDimension(2)->setRowHeight(22);		
 
@@ -1264,7 +1427,7 @@ class Controller_Report
 				"",
 				"",
 				"",
-				"Total class hours",
+				"Total class hours"
 			);
 
 		$subcolumnTraining	= Array(
@@ -1313,68 +1476,45 @@ class Controller_Report
 
 		$TrainingInfo = $data['TrainingInfo'];
 		foreach ($TrainingInfo as $keyTraining => $rowTraining) {
-			# code...
-			//var_dump($rowTraining);
-			//die;
 			$xTraining = 'A';
 			$yTraining = 1;
+
 			$sheetTrain->mergeCells("A".$rowCountTraining.":"."P".$rowCountTraining); //total
 			$sheetTrain->setCellValue("A".$rowCountTraining, $rowTraining['trainingTypeName']);
-			$headerStyle	= $sheetTrain->getStyle('A'. $rowCountTraining .':' .'P'. $rowCountTraining);
-			$headerStyle->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('FF7FED');			
+			$headerStyle = $sheetTrain->getStyle('A'. $rowCountTraining .':' .'P'. $rowCountTraining);
+			$headerStyle->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('FF7FED');
 
 
 			foreach ($tableHeaderTraining as $key => $valueHeader) {
-				# code...
-				$sheetTrain->setCellValue($xTraining . ($rowCountTraining+1), $valueHeader);
-				# color : reg member.
-				$colors		= Array(
-							$xTraining . ($rowCountTraining+1) =>'FFFF00',
-							($xTraining+1) . ($rowCountTraining+1) . ":" . ($xTraining+2) . ($rowCountTraining+1) => "ccc0d9",
-							// "K4" . ":" . "L5"=>"00b0f0",
-							// "M4:P5"=>"b8cce4",
-							// "Q4:V5"=>"fbd4b4",
-							// "W4:W5"=>"d6e3bc"
-									);
-				
-				foreach($colors as $coords=>$color)
-				{
-					$sheetTrain->getStyle($coords)->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB($color);
-				}				
-
+				$sheetTrain->setCellValue($xTraining.($rowCountTraining+1), $valueHeader);
 				++$xTraining;
-
 				//$rowCountTraining++;
 			}
 
 			foreach ($subcolumnTraining as $key => $valueSubColumn) {
-				# code...
 				$sheetTrain->setCellValue($key . ($rowCountTraining+2), $valueSubColumn);
 				++$key;
 			}
 
 			$cellData = Array(
-					"sp"=>"Celcom",
-					"gender_male"			=>$data['Tgender'][$keyTraining]['male'],
-					"gender_female"			=>$data['Tgender'][$keyTraining]['female'],
-					"group_bumi"			=>$data['Tgroup'][$keyTraining]['bumi'],
-					"group_nonbumi"			=>$data['Tgroup'][$keyTraining]['non-bumi'],
-					"age_18"				=>$data['TageRange'][$keyTraining]['under18'],
-					"age_over18"			=>$data['TageRange'][$keyTraining]['18-35'],
-					"age_over35"			=>$data['TageRange'][$keyTraining]['36-55'],
-					"age_over55"			=>$data['TageRange'][$keyTraining]['over55'],
-					"occ_students"			=>$data['Toccupation'][$keyTraining]['students'],
-					"occ_housewives"		=>$data['Toccupation'][$keyTraining]['housewives'],
-					"occ_selfemployed"		=>$data['Toccupation'][$keyTraining]['self-employed'],
-					"employed"				=>$data['Toccupation'][$keyTraining]['employed'],
-					"not-employed"			=>$data['Toccupation'][$keyTraining]['not-employed'],
-					"retiree"				=>$data['Toccupation'][$keyTraining]['retiree'],
-					"total_hours"			=>$data['TclassHour'][$keyTraining],
-							);
+				"sp"=>"Celcom",
+				"gender_male"			=>$data['Tgender'][$keyTraining]['male'],
+				"gender_female"			=>$data['Tgender'][$keyTraining]['female'],
+				"group_bumi"			=>$data['Tgroup'][$keyTraining]['bumi'],
+				"group_nonbumi"			=>$data['Tgroup'][$keyTraining]['non-bumi'],
+				"age_18"				=>$data['TageRange'][$keyTraining]['under18'],
+				"age_over18"			=>$data['TageRange'][$keyTraining]['18-35'],
+				"age_over35"			=>$data['TageRange'][$keyTraining]['36-55'],
+				"age_over55"			=>$data['TageRange'][$keyTraining]['over55'],
+				"occ_students"			=>$data['Toccupation'][$keyTraining]['students'],
+				"occ_housewives"		=>$data['Toccupation'][$keyTraining]['housewives'],
+				"occ_selfemployed"		=>$data['Toccupation'][$keyTraining]['self-employed'],
+				"employed"				=>$data['Toccupation'][$keyTraining]['employed'],
+				"not-employed"			=>$data['Toccupation'][$keyTraining]['not-employed'],
+				"retiree"				=>$data['Toccupation'][$keyTraining]['retiree'],
+				"total_hours"			=>$data['TclassHour'][$keyTraining],
+			);
 
-			//var_dump($cellData);
-			//die;
-			## reset.
 			$x	= 'A';
 			foreach($cellData as $key=>$val)
 			{
@@ -1382,23 +1522,68 @@ class Controller_Report
 				++$x;
 			}
 
+			//all border
+			$sheetTrain->getStyle('A'.($rowCountTraining+1).':P'.($rowCountTraining+3))->getBorders()->getAllBorders()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+
+			//font size
+			$sheetTrain->getStyle('A'.($rowCountTraining+1).':P'.($rowCountTraining+3))->getFont()->setSize(9);
+
+			//merge SP with bottom cell
+			$sheetTrain->mergeCells('A'.($rowCountTraining+1).':A'.($rowCountTraining+2));
+			//color SP cell
+			$sheetTrain->getStyle('A'.($rowCountTraining+1))->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('FFFF00');
+
+			//merge Gender with right cell
+			$sheetTrain->mergeCells('B'.($rowCountTraining+1).':C'.($rowCountTraining+1));
+			//color Gender cell
+			$sheetTrain->getStyle('B'.($rowCountTraining+1).':C'.($rowCountTraining+2))->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('CCC0DA');
+
+			//merge Group with right cell
+			$sheetTrain->mergeCells('D'.($rowCountTraining+1).':E'.($rowCountTraining+1));
+			//color Group cell
+			$sheetTrain->getStyle('D'.($rowCountTraining+1).':E'.($rowCountTraining+2))->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('B8CCE4');
+
+			//merge Age Group with right cell
+			$sheetTrain->mergeCells('F'.($rowCountTraining+1).':I'.($rowCountTraining+1));
+			//color Age Group cell
+			$sheetTrain->getStyle('F'.($rowCountTraining+1).':I'.($rowCountTraining+2))->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('FDE9D9');
+
+			//merge Accoupation Group with right cell
+			$sheetTrain->mergeCells('J'.($rowCountTraining+1).':O'.($rowCountTraining+1));
+			//color Accoupation cell
+			$sheetTrain->getStyle('J'.($rowCountTraining+1).':O'.($rowCountTraining+2))->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('D8E4BC');
+
+			//merge Total Class Hours with bottom cell
+			$sheetTrain->mergeCells('P'.($rowCountTraining+1).':P'.($rowCountTraining+2));
+			//color Total Class cell
+			$sheetTrain->getStyle('P'.($rowCountTraining+1))->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('F2DCDB');
+
 			$rowCountTraining +=5;
 		}
 
 		//SUBTYPE part
 		$sheetSubTrain = $excel->createSheet(3); 
 		//$sheetTrain = $excel->getActiveSheet(2);
+
+		// set all center and wrap
+		$allCells = $sheetSubTrain->getStyle("A1:Z".(5+count($data['siteData'])));
+		$allCells->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+		$allCells->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+		$allCells->getAlignment()->setWrapText(true);
+
 		$sheetSubTrain->setTitle("KDB");
 		
 		#1 create main title.
-		$sheetSubTrain->setCellValue("F1","KDB DATA");
-		$sheetSubTrain->getStyle("F1")->getFont()->setSize(18);
+		$sheetSubTrain->setCellValue("A1","KDB DATA");
+		$sheetSubTrain->mergeCells("A1:P1"); //merge from A1 to P1
+		$sheetSubTrain->getStyle("A1")->getFont()->setSize(18);
 		$sheetSubTrain->getRowDimension(1)->setRowHeight(25);
 		$sheetSubTrain->getRowDimension(4)->setRowHeight(20);
 		$sheetSubTrain->getRowDimension(5)->setRowHeight(20);
 
 		#2 date.
 		$sheetSubTrain->setCellValue("A2","DATE : ".date("j F Y",strtotime($startDate))." - ".date("j F Y",strtotime($endDate)));
+		$sheetSubTrain->mergeCells("A2:F2"); //merge from A2 to G2
 		$sheetSubTrain->getStyle("A2")->getFont()->setSize(16);
 		$sheetSubTrain->getRowDimension(2)->setRowHeight(22);		
 
@@ -1445,28 +1630,21 @@ class Controller_Report
 		//echo ++$xTraining;
 		//die;
 
-		//var_dump($data['TrainingInfo']);
-		// die;
-
 		$STrainingInfo = $data['STrainingInfo'];
+
 		foreach ($STrainingInfo as $keyTraining => $rowTraining) {
-			# code...
-			//var_dump($rowTraining);
-			//die;
 			$xTraining = 'A';
 			$yTraining = 1;
 			$sheetSubTrain->mergeCells("A".$rowCountTraining.":"."P".$rowCountTraining); //total
 			$sheetSubTrain->setCellValue("A".$rowCountTraining, $rowTraining['trainingTypeName']);
 
 			foreach ($tableHeaderTraining as $key => $valueHeader) {
-				# code...
 				$sheetSubTrain->setCellValue($xTraining . ($rowCountTraining+1), $valueHeader);
 				++$xTraining;
 				//$rowCountTraining++;
 			}
 
 			foreach ($subcolumnTraining as $key => $valueSubColumn) {
-				# code...
 				$sheetSubTrain->setCellValue($key . ($rowCountTraining+2), $valueSubColumn);
 				++$key;
 			}
@@ -1490,8 +1668,6 @@ class Controller_Report
 					"total_hours"			=>$data['STclassHour'][$keyTraining],
 							);
 
-			//var_dump($cellData);
-			//die;
 			## reset.
 			$x	= 'A';
 			foreach($cellData as $key=>$val)
@@ -1499,6 +1675,42 @@ class Controller_Report
 				$sheetSubTrain->setCellValue($x.($rowCountTraining+3),$val);
 				++$x;
 			}
+
+			//all border
+			$sheetSubTrain->getStyle('A'.($rowCountTraining+1).':P'.($rowCountTraining+3))->getBorders()->getAllBorders()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+
+			//font size
+			$sheetSubTrain->getStyle('A'.($rowCountTraining+1).':P'.($rowCountTraining+3))->getFont()->setSize(9);
+
+			//merge SP with bottom cell
+			$sheetSubTrain->mergeCells('A'.($rowCountTraining+1).':A'.($rowCountTraining+2));
+			//color SP cell
+			$sheetSubTrain->getStyle('A'.($rowCountTraining+1))->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('FFFF00');
+
+			//merge Gender with right cell
+			$sheetSubTrain->mergeCells('B'.($rowCountTraining+1).':C'.($rowCountTraining+1));
+			//color Gender cell
+			$sheetSubTrain->getStyle('B'.($rowCountTraining+1).':C'.($rowCountTraining+2))->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('CCC0DA');
+
+			//merge Group with right cell
+			$sheetSubTrain->mergeCells('D'.($rowCountTraining+1).':E'.($rowCountTraining+1));
+			//color Group cell
+			$sheetSubTrain->getStyle('D'.($rowCountTraining+1).':E'.($rowCountTraining+2))->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('B8CCE4');
+
+			//merge Age Group with right cell
+			$sheetSubTrain->mergeCells('F'.($rowCountTraining+1).':I'.($rowCountTraining+1));
+			//color Age Group cell
+			$sheetSubTrain->getStyle('F'.($rowCountTraining+1).':I'.($rowCountTraining+2))->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('FDE9D9');
+
+			//merge Accoupation Group with right cell
+			$sheetSubTrain->mergeCells('J'.($rowCountTraining+1).':O'.($rowCountTraining+1));
+			//color Accoupation cell
+			$sheetSubTrain->getStyle('J'.($rowCountTraining+1).':O'.($rowCountTraining+2))->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('D8E4BC');
+
+			//merge Total Class Hours with bottom cell
+			$sheetSubTrain->mergeCells('P'.($rowCountTraining+1).':P'.($rowCountTraining+2));
+			//color Total Class cell
+			$sheetSubTrain->getStyle('P'.($rowCountTraining+1))->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('F2DCDB');
 
 			$rowCountTraining +=5;
 		}
