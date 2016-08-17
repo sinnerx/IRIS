@@ -50,19 +50,20 @@
 	});
 	
 
-	var site	= new function()
+	var articleCategory	= new function()
 	{	
 		this.select	= function()
 		{					
-			var category	= $("#category").val() != ""?"&category="+$("#category").val():"";  			
-			var selectDateStart	= $("#selectDateStart").val() != ""?"&selectDateStart="+$("#selectDateStart").val():"";		
-			var selectDateEnd	= $("#selectDateEnd").val() != ""?"&selectDateEnd="+$("#selectDateEnd").val():"";
+			var category	= $("#category").val() != ""?"&category="+$("#category").val():"";  		
+		var selectDateStart	= $("#selectDateStart").val() != ""?"&selectDateStart="+$("#selectDateStart").val():"";		
+		var selectDateEnd	= $("#selectDateEnd").val() != ""?"&selectDateEnd="+$("#selectDateEnd").val():"";
 	
 			if (!$("#category")[0]) {
         		var category = "<?php echo $category ?>";
 	   		}
 
 	   		window.location.href	= base_url+"site/article?"+category+selectDateStart+selectDateEnd;
+		
 		}
 	}
 // $(document).ready(function()
@@ -172,15 +173,18 @@ List of all your approved and pending blog articles.
                  
 			
 			<div  class="form-group" style="margin-left:10px">
-			<?php echo form::select("category",Array(1=>"News",2=>"Rencana"),"class='input-sm form-control input-s-sm inline v-middle' onchange='article.select($category);'",request::get("category"),"[SELECT CATEGORY]");?>
-			
+			<?php echo form::select("category",$catList,"class='input-sm form-control input-s-sm inline v-middle' onchange='articleCategory.select();'",request::get("category"),"[SELECT CATEGORY]");?>
+
 			</div>
 			
 			<div  class="form-group" style="margin-left:10px">
-			From <?php echo form::text("selectDateStart","class='input-sm input-s datepicker-input form-control' date-date-format='dd-mm-yyyy'",date('d-m-Y', strtotime($todayDateStart)));?>			
+			From <?php echo form::text("selectDateStart","class='input-sm input-s datepicker-input form-control' date-date-format='dd-mm-yyyy'",date('d-m-Y', strtotime($todayDateStart)));?>
+					
 			</div>
 			<div  class="form-group" style="margin-left:10px">
-			To  <?php echo form::text("selectDateEnd","class='input-sm input-s datepicker-input form-control' date-date-format='dd-mm-yyyy'",date('d-m-Y', strtotime($todayDateEnd)));?>			
+			To  <?php echo form::text("selectDateEnd","class='input-sm input-s datepicker-input form-control' date-date-format='dd-mm-yyyy'",date('d-m-Y', strtotime($todayDateEnd)));?>
+
+	
 			</div>
 		
             </form> 
