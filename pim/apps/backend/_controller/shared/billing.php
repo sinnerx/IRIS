@@ -517,12 +517,11 @@ Class Controller_Billing
 
 		if(authData('user.userLevel') == 3 ){
 			$res_site = model::load('site/site')->getSitesByClusterlead(authData('user.userID'))->result();
-		foreach($res_site as $row)
-		{
-			$data['siteList'][$row['siteID']]	= $row['siteName'];
+			foreach($res_site as $row)
+			{
+				$data['siteList'][$row['siteID']]	= $row['siteName'];
+			}
 		}
-	}
-
 
 		if($data['siteID'])
 			$data['site'] = model::orm('site/site')

@@ -288,7 +288,7 @@ var requisition = new function()
                 </tr> 
 
                 <tr >
-                  <td colspan="4">2. Balance Deposit: RM <input type="text" size="5" class="form-control" name="balDeposit" /> (as of 6.00pm, <?php echo date('d F Y',$selectDate); ?>)</td>
+                  <td colspan="4">2. Balance Deposit: RM <input type="text" size="5" class="form-control" name="balDeposit" value='<?php echo $balanceDeposit ?>' /> (as of 6.00pm, <?php echo date('d F Y',$selectDate); ?>)</td>
                   <td colspan="4" style="background-color:#ededed"><b>Terms of Payment (For Nusuara's use only):</b></td>
                 </tr> 
 
