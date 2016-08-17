@@ -107,7 +107,7 @@
 
 		}
 		
-		echo "<div class='request-info'>Total changes for <u>$typeName, $type</u> : </div>";?>
+		echo "<div class='request-info'>Total changes for <u>$typeName</u> : </div>";?>
 		<div class='table-responsive'>
 		<table class='table'>
 			<tr>

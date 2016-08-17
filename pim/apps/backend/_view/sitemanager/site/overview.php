@@ -274,6 +274,37 @@ Dashboard overview
                 </section>
             </div>
 
+
+            <div class="col-sm-6 col-md-4">
+                <section class="panel panel-default panel-pd">
+                  <header class="panel-heading panelhd-pd">
+                    Total of Site Member 
+                    <?php if ($kpi['active_member_percentage'] >= 40) {  ?>
+					<i class="fa fa-check fa-lg pull-right custom-fa-pad" style="color:green"></i>
+					<?php } else { ?>
+					<i class="fa fa-exclamation fa-lg pull-right custom-fa-pad" style="color:red"></i>
+					<?php }  ?>
+                  </header>
+                 
+                  	<div class="panel-body text-center">
+                 		<div class="col-md-12">
+                            <a class="block hover">
+                              <span class="i-s i-s-2x pull-left m-r-sm">
+                                <i class="i i-hexagon2 i-s-base text-primary hover-rotate"></i>
+                                <i class="i i-users2 i-sm text-white"></i>
+                              </span>
+                              <span class="clear">
+                                
+                                <span class="h1 block m-t-xs text-primary kpi-font"><?php echo $kpi['total_members']; ?></span>
+                                <small class="text-muted text-u-c">Members</small>
+                              </span>
+                            </a>
+                            <a href='#' class='fa' style="float:right;">&nbsp;</a>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
 	</div>
 </div>
 </form>
