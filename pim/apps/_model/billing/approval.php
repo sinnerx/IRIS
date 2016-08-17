@@ -30,16 +30,18 @@ class Approval extends \Origami
 
 	public function reject($level)
 	{
+		//echo "Reject " . $level;
 		if($level == \model\user\user::LEVEL_CLUSTERLEAD)
 			$this->setRejectStatus(\model\user\user::LEVEL_SITEMANAGER, 2);
 
-		return $this->setRejectStatus($level, 2);
+		//return $this->setRejectStatus($level, 2);
 	}
 
 	protected function setRejectStatus($level, $status)
 	{
-
+		//echo "Reject " . $level;
 		$row = $this->getLevel($level);
+		//var_dump($row);
 		
 		$data = array(
 			'userID' => authData('user.userID'),
@@ -98,10 +100,12 @@ class Approval extends \Origami
 	 */
 	public function getLevel($level)
 	{
+		//echo "level: " . $level;
 		db::where('billingApprovalID', $this->billingApprovalID);
 		db::where('userLevel', $level);
 
 		$row = db::get('billing_approval_level')->row();
+		//var_dump($row);
 
 		if($row)
 			return $row;

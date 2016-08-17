@@ -105,6 +105,26 @@ class Controller_Cafe
 		return json_encode($response);
 	}
 
+	public function memberBonus()
+	{
+		$members = db::from('site_member')
+		->select(array(
+			'userID',
+			'userMembershipDate',
+			'siteMemberBonus'
+			))
+		->where('siteMemberStatus', 1)
+		->where('siteID', array($this->site->siteID))
+		->get()->result();
+
+		$response = array(
+			'status' => 'success',
+			'data' => $members
+			);
+
+		return json_encode($response);
+	}
+
 	public function managers()
 	{
 		$managers = db::from('user')
