@@ -175,9 +175,8 @@ endif;
 				<label>Phase</label>
 				<div class='row'>
 					<div class='col-md-12'>
-						<?php echo form::text("siteInfoPhase","class='form-control'",$row['siteInfoPhase']);?>
-						<?php echo flash::data("siteInfoPhase");?>
-			
+						<?php //echo form::text("siteInfoPhase","class='form-control'",$row['siteInfoPhase']);?>
+						<?php echo form::select("siteInfoPhase",$batchList,"class='input-sm form-control input-s-sm inline v-middle'",$row['siteInfoPhase'],"[SELECT BATCH]");?>
 			</div>
 				</div></div>
 			</div>

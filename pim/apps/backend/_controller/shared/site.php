@@ -128,6 +128,16 @@ Class Controller_Site
 		## param for non-root..
 		$data['disabled']	= model::load("access/services")->roleCheck("siteEditRoot")?"":"disabled";
 
+		db::from("batch");
+		db::order_by("batchID","ASC");
+		
+		$batch_list = db::get()->result();
+		
+		foreach($batch_list as $row)
+		{
+			$data['batchList'][$row['batchID']]= $row['batchName'];
+		}
+
 		view::render("shared/site/edit",$data);
 	}
 
@@ -435,11 +445,16 @@ Class Controller_Site
 	# view/add article
 	public function article($page = 1)
 	{
-		
+		$category = request::get("category");	
+		$todayDateStart = request::get("selectDateStart");
+		$todayDateEnd = request::get("selectDateEnd");
 
-		date('Y-m-d H:i');
-		$data['todayDateStart'] = date('Y-m-d H:i');
-		$data['todayDateEnd'] = date('Y-m-d H:i');
+		$data['todayDateStart'] = $todayDateStart = $todayDateStart ? :  date('Y-m-d',(strtotime ( '-7 day' , strtotime (date('Y-m-d')) ) ));
+		$data['todayDateEnd'] = $todayDateEnd = $todayDateEnd ? :  date('Y-m-d');
+
+		//date('Y-m-d H:i');
+		//$data['todayDateStart'] = date('Y-m-d H:i');
+		//$data['todayDateEnd'] = date('Y-m-d H:i');
 
   //var_dump(input::get());
 //die;
@@ -452,6 +467,16 @@ Class Controller_Site
 		$siteID = model::load("access/auth")->getAuthData("site", "siteID");
 		$data['article']	= $siteArticle->getArticleList($siteID, false, $page,$input);
 		$data['articleTags'] = $siteArticle->getArticleTag(array_keys($data['article']));
+
+		db::from("category");
+		db::order_by("categoryID","ASC");
+		
+		$category_site = db::get()->result();
+		
+		foreach($category_site as $row)
+		{
+			$data['catList'][$row['categoryID']]= $row['categoryName'];
+		}
 
 		view::render("shared/site/article", $data);
 	}
