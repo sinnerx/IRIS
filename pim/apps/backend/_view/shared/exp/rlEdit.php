@@ -374,7 +374,11 @@ $(document).ready(function()
                   <th>Amount without GST (RM)</th>
                   <th>GST Amount (RM)</th>
                   <th>Total Amount (RM)</th>
-                  <th></th>
+                  <th style="float:right; background-color: white">
+                    <?php if($rl->isEditable()): ?>
+                    <a data-rlcategoryid='<?php echo $rlCategory->prReconcilationCategoryID;?>' href='<?php echo url::base("exp/rlFileUpload/".$rl->prReconcilationID.'/'); ?>' class='rl-file-upload-button fa fa-upload' title='Upload receipt' data-toggle='ajaxModal'></a>
+                    <?php endif;?>
+                  </th>
                 </tr>
             <?php $catNo = 1;?>
             <?php foreach($rl->getCategories() as $rlCategory):
@@ -394,8 +398,9 @@ $(document).ready(function()
               <?php endif;?>
               <?php endif;?>
               <?php if(!$rlCategory->isUploaded()):?>
-                <?php if($rl->isEditable()):?>
-                <a data-rlcategoryid='<?php echo $rlCategory->prReconcilationCategoryID;?>' href='<?php echo url::base("exp/rlFileUpload/".$rl->prReconcilationID.'/'.$rlCategory->prReconcilationCategoryID); ?>' class='rl-file-upload-button fa fa-upload' title='Upload receipt' data-toggle='ajaxModal'></a>
+                <?php if($rl->isEditable()):
+                //.$rlCategory->prReconcilationCategoryID?>
+               
                 <?php endif;?>
               <?php else:?>
                 <a class='fa fa-file' title='Preview Receipt' href="<?php echo url::base('exp/rlFile/'.$rlCategory->getFile()->prReconcilationFileID);?>"  data-toggle="ajaxModal"></a>
