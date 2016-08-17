@@ -26,21 +26,40 @@ var rlFileUpload = new function()
     <p>Upload receipt for this category, and input the reconciled amounts for this category.</p>
     <section class="panel panel-default">
       <div class="panel-body">
-        <form class="bs-example form-horizontal" method='post' action='<?php echo url::base("exp/rlFileUpload/".$rl->prReconcilationID.'/'.$categoryID); ?>' enctype="multipart/form-data" >        
-          <div class="form-group">
-            <label class="col-lg-5 control-label">Item Category</label>
-            <div class="col-lg-7">
-				<?php echo form::select("itemCategory",$categories,"class='input-sm form-control input-s-sm inline v-middle' disabled required", $categoryID,"-SELECT CATEGORY-");?>              
-            </div>
-          </div>
+        <form class="bs-example form-horizontal" method='post' action='<?php echo url::base("exp/rlFileUpload/".$rl->prReconcilationID); ?>' enctype="multipart/form-data" >        
+          
+            <?php 
+            $isCategoryExist = 0;
+            foreach ($rl->getCategories() as $rlCategory) {
+              # code...
+              //var_dump($rlCategory);
+            ?>
+             <?php if(!$rlCategory->isUploaded()):?>
+              <?php if($rl->isEditable()):?>
+                  <div class="form-group">
+                    <label class="col-lg-12 "><?php echo $rlCategory->expenseCategoryName; ?></label>
+                    <div class="col-lg-12">
+                    <?php 
+                    //echo form::select("itemCategory".$rlCategory->prReconcilationCategoryID, $categories,"class='input-sm form-control input-s-sm inline v-middle' readonly ", $rlCategory->prReconcilationCategoryID,"-SELECT CATEGORY-");
+
+                    //echo form::text("itemCategory", 'class="item-amount form-control " disabled style="width:300px"', $rlCategory->expenseCategoryName);
+                    echo form::hidden("itemCategory".$rlCategory->prReconcilationCategoryID, 'class="item-amount form-control"', $rlCategory->prReconcilationCategoryID);
+                    ?>              
+                        
+                    
+                    <?php echo form::file("fileUpload[$rlCategory->prReconcilationCategoryID]");?>
+                    <?php echo flash::data("fileUpload[$rlCategory->prReconcilationCategoryID]");?>
+                    </div>
+                  </div>
+             <?php 
+             $isCategoryExist++;
+             endif;?>
+            <?php endif;?>
+            <?php
+            }?>
         
-          <div class="form-group">
-            <label class="col-lg-5 control-label">Upload File </label>
-             <div class="col-lg-7">
-				<?php echo form::file("fileUpload", 'required');?>
-				<?php echo flash::data("fileUpload");?>
-            </div>
-          </div>
+         
+
         <?php /*
           <div class="form-group">
             <label class="col-lg-5 control-label">Amount Without GST (RM)</label>
@@ -66,7 +85,11 @@ var rlFileUpload = new function()
           <div class="form-group">
             <div class="col-lg-offset-2 col-lg-7">
             <input type="hidden" name="prId" value="<?php echo $prId?>"> 
+              <?php if ($isCategoryExist > 0) : ?>
               <button type="submit" class="btn btn-sm btn-default">Submit</button>              
+            <?php else: ?>
+              <label>Nothing to be uploaded.</label>
+            <?php endif; ?>
             </div>
           </div>
         </form>
