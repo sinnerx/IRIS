@@ -17,12 +17,23 @@ class Controller_Exp
 
 		$data['prTerm'] = model::load('expense/transaction')->getPrTerm();
 
-		$currentCollection = model::load('billing/process')->getCurrentCollection(authData('site.siteID'), $startDate, $lastDate);			
+		$currentCollection = model::load('billing/process')->getCurrentCollection(authData('site.siteID'), $startDate, $lastDate);
+		//echo 'Site: ' . authData('site.siteID') . ' Date: ' . $startDate . ' - ' . $lastDate . ' : ' . $currentCollection['total'];
 		$data['currentCollection'] = number_format($currentCollection['total'], 2, '.', ''); 
+
+		$balanceDeposit = db::from('billing_transaction')
+		->select('SUM(billingTransactionTotal) as total')
+		->where('siteID', authData('site.siteID'))
+		->where('billingTransactionStatus', 1)
+		->get()->row('total');
+		$data['balanceDeposit'] = number_format($balanceDeposit, 2, '.', ''); 
 
 		// expenditure
 		$expenditures = model::orm('expense/expense_expenditure')->execute();
 
+		$data['budgeted'] = array();
+		$data['addition'] = array();
+		$data['replacement'] = array();
 		foreach($expenditures as $expenditure)
 		{
 			$id = $expenditure->expenseExpenditureID;
@@ -39,6 +50,7 @@ class Controller_Exp
 		// category
 		$categories = model::orm('expense/expense_category')->execute();
 		
+		$data['categories'] = array();
 		foreach($categories as $category)
 			$data['categories'][$category->expenseCategoryID] = $category->expenseCategoryName;
 

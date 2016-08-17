@@ -91,13 +91,20 @@ Class Controller_Site
 			$active_member_percentage = $activeMembers / $totalMembers * 100;			
 		}
 
+		$noOfMembers = db::from('site_member')
+		->select('count(userID) as total')
+		->where('siteID', $siteID)
+		->get('site_member')
+		->row('total');
+
 		$data['kpi'] = array(
 			'event' => $totalEvents,
 			'entrepreneurship_class' => $totalEntrepreneurship,
 			'entrepreneurship_sales' => $sales,
 			'training_hours' => $hours,
 			//'active_member_percentage' => $activeMembers / $totalMembers * 100
-			'active_member_percentage' => $active_member_percentage
+			'active_member_percentage' => $active_member_percentage,
+			'total_members' => $noOfMembers
 			);
 
 		return view::render('sitemanager/site/overview', $data);

@@ -43,6 +43,7 @@ class process
 
 	public function getdateList($siteID,$month,$year)
 	{
+		//echo $siteID . "." . $month . "." . $year;
 
 		db::select("billingTransactionDate");
 		db::from("billing_transaction")
@@ -53,6 +54,8 @@ class process
 
 		db::group_by("billingTransactionDate");				
 		db::order_by("billingTransactionDate", "ASC");
+
+		//var_dump(db::get());
 
 		return db::get()->result();
 	}
@@ -122,7 +125,7 @@ class process
 
 	public function getCurrentCollection($siteID,$startDate,$lastDate)
 	{ 
-		db::select("sum(`billingTransactionTotal`) as total");
+		db::select("sum(billingTransactionTotal) as total");
 		db::from("billing_transaction")
 			->where("siteID = '$siteID' AND billingTransactionDate between '$startDate' AND '$lastDate' AND billingTransactionStatus = 1");
 
