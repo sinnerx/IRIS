@@ -25,7 +25,7 @@ class Approval extends \Origami
 		if($level == \model\user\user::LEVEL_FINANCIALCONTROLLER)
 			$this->setApprovalStatus(\model\user\user::LEVEL_CLUSTERLEAD, 2);
 
-		return $this->setApprovalStatus($level, 2);
+		//return $this->setApprovalStatus($level, 2);
 	}
 
 	public function reject($level)
@@ -105,11 +105,11 @@ class Approval extends \Origami
 		db::where('userLevel', $level);
 
 		$row = db::get('billing_approval_level')->row();
-		//var_dump($row);
 
 		if($row)
 			return $row;
 
+		//echo 'ID: ' . $this->billingApprovalID;
 		if ($this->billingApprovalID != ""){
 		db::insert('billing_approval_level', array(
 				'billingApprovalID' => $this->billingApprovalID,
