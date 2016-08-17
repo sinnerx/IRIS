@@ -125,7 +125,7 @@ class process
 
 	public function getCurrentCollection($siteID,$startDate,$lastDate)
 	{ 
-		db::select("sum('billingTransactionTotal') as total");
+		db::select("sum(billingTransactionTotal) as total");
 		db::from("billing_transaction")
 			->where("siteID = '$siteID' AND billingTransactionDate between '$startDate' AND '$lastDate' AND billingTransactionStatus = 1");
 
