@@ -452,21 +452,21 @@ Class Controller_Site
 		$data['todayDateStart'] = $todayDateStart = $todayDateStart ? :  date('Y-m-d',(strtotime ( '-7 day' , strtotime (date('Y-m-d')) ) ));
 		$data['todayDateEnd'] = $todayDateEnd = $todayDateEnd ? :  date('Y-m-d');
 
-		//date('Y-m-d H:i');
-		//$data['todayDateStart'] = date('Y-m-d H:i');
-		//$data['todayDateEnd'] = date('Y-m-d H:i');
 
-  //var_dump(input::get());
-//die;
         $input = input::get();
 
 		$site		= model::load("site/site");
 		$siteArticle	= model::load("blog/article");
 
-		## manager.
 		$siteID = model::load("access/auth")->getAuthData("site", "siteID");
-		$data['article']	= $siteArticle->getArticleList($siteID, false, $page,$input);
+
+
+		## manager.
+		$data['article']	= $siteArticle->getArticleList($siteID, false, $page,$input,$category,$todayDateStart,$todayDateEnd);
 		$data['articleTags'] = $siteArticle->getArticleTag(array_keys($data['article']));
+		$data['articleCat']	= $siteArticle->getCategories(array_keys($data['article']));
+		$data['articleCatName']	= $siteArticle->getCategoriesName();
+
 
 		db::from("category");
 		db::order_by("categoryID","ASC");
@@ -480,6 +480,8 @@ Class Controller_Site
 
 		view::render("shared/site/article", $data);
 	}
+
+	
 
 	# view/add article
 	public function addArticle()

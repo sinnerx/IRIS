@@ -123,13 +123,12 @@ Class Controller_Kpi
 			//->group_by('site_member.siteID')
 			//->get()->result('site_member.siteID');
 			->get()->result('siteID', true);
+			//print_r($totalpopulation);
 
 			
-			
-
-
 			$data['total'] = array();
 			$data['population'] = array();
+			$data['total_members'] = array();
 
 			// main site loop.
 			foreach($sites as $row_site)
@@ -193,6 +192,7 @@ Class Controller_Kpi
 						$total['population']++;
 				}
 
+
 				// 5. active members.
 				$siteTotalMember = 0;
 				if(isset($groupedMembers[$siteID]))
@@ -212,6 +212,16 @@ Class Controller_Kpi
 				 	$total['population'] = $totalpopulation[$siteID][0]['siteInfoPopulation'];
 				else
 					$total['population'] = 0;
+
+				// 7. members.
+				$siteTotalMember = 0;
+				if(isset($totalMembers[$siteID]))
+					$siteTotalMember = $totalMembers[$siteID]['total'];
+
+				if($siteTotalMember > 0 && $totalMembers[$siteID]['total'] > 0)
+					$total['total_members'] = $totalMembers[$siteID]['total'];
+				else
+					$total['total_members'] = 0;
 
 			}
 

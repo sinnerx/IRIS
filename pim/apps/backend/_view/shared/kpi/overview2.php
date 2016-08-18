@@ -135,6 +135,7 @@ var site = new function()
 					<th>Training (hours)</th>	
 					<th>Active member (Login)</th>
 					<th>Population</th>	
+					<th>Number of Members</th>	
 				</tr>
 				</thead>
 				<tbody>
@@ -170,6 +171,11 @@ var site = new function()
 						<?php echo $report['population'];?>
 							
 						</td>
+						<td>
+						<?php echo $report['total_members'];?>
+							
+						</td>
+
 					</tr>
 				<?php endforeach;?>
 				</tbody>
