@@ -675,7 +675,7 @@ class Report
 	public function getQuarterlyReport($siteID = null, $year = null, $quarter = null){
 		## select all site.
 		//$year = 2016;
-		//$quarter = 2;
+		//$quarter = 1;
 		switch ($quarter) {
 			case '1':
 				# code...
@@ -699,10 +699,48 @@ class Report
 				break;
 		}
 
-		$keySite = db::select("siteID,stateID,siteName")->where("siteID", $siteID)->get("site")->result();
+		$keySite = db::select("site.*, site_info.*")
+					 ->innerJoin('site_info', 'site_info.siteID = site.siteID')
+					 // ->innerJoin('site_album', 'site_album.siteID = site.siteID')
+					 // ->innerJoin('album', 'album.albumID = album.albumID')
+					 ->where("site.siteID", $siteID)
+					 // ->where("site_album.siteAlbumSlug IN ('interior-pi1m', 'exterior-pi1m')")
+					 ->get("site")->result();
 		$keySite = $keySite[0];
-		//var_dump($keySite);
-		//die;
+		// var_dump($keySite);
+		// die;
+
+		$siteManager = db::select("SM.*, UP.*")
+						->innerJoin("site_manager SM", "SM.userID = user.userID")
+						->innerJoin("user_profile UP", "UP.userID = user.userID")
+						->where("SM.siteManagerStatus", 1)
+						->where("SM.siteID", $keySite['siteID'])
+						->order_by("SM.siteManagerCreatedDate")
+						->limit("2")
+						->get("user")->result();
+
+		$interior = db::select("photo.*, site_album.*")
+					-> innerJoin('photo', 'site_photo.photoID = photo.photoID')
+					-> innerJoin('site_album', 'site_album.siteAlbumID = site_photo.siteAlbumID')
+					 ->where("site_photo.siteID", $siteID)
+					 ->where("site_album.siteID", $siteID)
+					 ->where("site_album.siteAlbumSlug = 'interior-pi1m'")
+					 ->order_by("photo.photoCreatedDate", "desc")
+					 ->limit("3")
+					 ->get("site_photo")->result();		
+
+		$exterior = db::select("photo.*, site_album.*")
+					-> innerJoin('photo', 'site_photo.photoID = photo.photoID')
+					-> innerJoin('site_album', 'site_album.siteAlbumID = site_photo.siteAlbumID')
+					 ->where("site_photo.siteID", $siteID)
+					 ->where("site_album.siteID", $siteID)
+					 ->where("site_album.siteAlbumSlug = 'exterior-pi1m'")
+					 ->order_by("photo.photoCreatedDate", "desc")
+					 ->limit("3")
+					 ->get("site_photo")->result();
+
+		// var_dump($exterior);
+		// die;
 		$arrayActivitiesOnSite = array();
 		$arrayActivitiesOnSite = $keySite;
 		##loop in site
@@ -1003,6 +1041,12 @@ SUM(billingTransactionItemQuantity) AS hours");
 		##end loop site
 
 		##return array
+			$arrayActivitiesOnSite['siteManager'] = $siteManager;
+			$arrayActivitiesOnSite['exterior'] = $exterior;
+			$arrayActivitiesOnSite['interior'] = $interior;
+
+		//var_dump($arrayActivitiesOnSite);
+		//die;
 		return $arrayActivitiesOnSite;
 
 

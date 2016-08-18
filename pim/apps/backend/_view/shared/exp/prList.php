@@ -32,8 +32,8 @@ var prList = new function()
 
   this.updateFilter = function()
   {
-    $("#site_id").val('');
-    $("#site_name").val('');
+    //$("#site_id").val('');
+    //$("#site_name").val('');
 
     var filter = {    
       status : $('#status').val(),
@@ -78,8 +78,10 @@ var prList = new function()
              //console.log(tempfieldName);
             $(document).ready(function() {
               tempfieldName.width(200);
+              //console.log(pim.url('report/get_site'));
               tempfieldName.autocomplete({
-                    source: "/digitalgaia/iris/dashboard/report/get_site", // path to the get_user method
+                    //source: "/digitalgaia/iris/dashboard/report/get_site", // path to the get_site method
+                    source: pim.url('report/get_site'), // path to the get_site method
                     select: function (event, ui){
                       event.preventDefault();
                       //console.log(ui.item.value);

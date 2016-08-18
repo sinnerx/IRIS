@@ -40,7 +40,8 @@ class Controller_Ajax_Report
 		//die;
 		$query = db::from('report_quarterly');
 
-		$query->where('reportQuarterlyYear', $year);
+		if($year)
+			$query->where('reportQuarterlyYear', $year);
 
 		if($quarter)
 			$query->where('reportQuarterlyName', $quarter);
@@ -119,6 +120,8 @@ class Controller_Ajax_Report
 	 */
 	public function quarterlyActivityGenerate($year, $quarter = null)
 	{
+		//$this->quarterlyReport(1);
+		//die;
 		set_time_limit(0);
 		error_reporting(E_ALL & ~E_NOTICE);
 		ini_set('display_errors', 'on');
@@ -411,7 +414,8 @@ public function quarterlyReport($reportId){
 
 		set_time_limit(0);
 		ini_set('memory_limit','800M');
-
+		//$year = 2014;
+		//$quarter = 1;
 		$reportQuarterlyTable = orm('report/quarterly')->find($reportId);
 		//var_dump($report);
 
@@ -441,7 +445,10 @@ public function quarterlyReport($reportId){
 			//site list
 			db::select("siteID");
 			db::order_by("siteID", "ASC");
+			
+			//testing for 1 site, can be comment out for all site in live
 			//db::where("siteID", 68);
+			
 			//db::limit(101, 30);
 			$allsite = db::get("site")->result('siteID');
 			//var_dump($allsite);
@@ -461,7 +468,7 @@ public function quarterlyReport($reportId){
 				$report	= model::load("report/report")->getQuarterlyReport($allSiteKey['siteID'], $year, $quarter);
 				$siteKey = $report;
 
-				//var_dump($siteKey);
+				// var_dump($siteKey);
 				//die;
 
 				// Creating the new document...
@@ -494,7 +501,272 @@ public function quarterlyReport($reportId){
 				$footer->addPreserveText(htmlspecialchars('Page {PAGE} of {NUMPAGES}.'), array('align' => 'right'));
 				$section->addPageBreak();
 
+				//Site Information
+				// Adding Text element to the Section having font styled by default...
+				$section->addText(htmlspecialchars('Site Information'),'rStyle', 'pStyle');
 
+				$section->addText(
+				    htmlspecialchars(
+				        'Site Information' 
+				    ),$header
+				);				
+
+				// Two columns
+				// $section = $phpWord->addSection(
+				//     array(
+				//         'colsNum'   => 2,
+				//         'colsSpace' => 1440,
+				//         'breakType' => 'continuous',
+				//         'orientation' => 'landscape',
+				//     )
+				// );				
+				//generate table site information
+				//period, year,
+				//site name, district, 
+				//address, website address
+				//state, phase
+				//longitude, latitude
+				//service provider, LOI date
+				//Commencement date, Completion Date
+				//Actual Start Date, Actual Completion Date
+				$styleTable = array('borderSize' => 1, 'borderColor' => '999999');
+				//$styleFirstRow = array('borderBottomSize' => 18, 'borderBottomColor' => '0000FF', 'bgColor' => '66BBFF', 'bold' => true);
+				$cellRowSpan = array('vMerge' => 'restart', 'valign' => 'center', 'bgColor' => '66BBFF');
+				$cellRowContinue = array('vMerge' => 'continue');
+				$cellColSpan = array('gridSpan' => 1, 'valign' => 'center');
+				$cellHCentered = array('align' => 'center');
+				$cellHeaderCentered = array('align' => 'center', 'bold' => true);
+				$cellVCentered = array('valign' => 'center');
+				$widthCell = 400;
+
+
+
+				// $table = $section->addTable(array('width' => 50 * 50, 'unit' => 'pct', 'align' => 'center'));
+				// $cell = $table->addRow()->addCell();
+				// $cell->addText(htmlspecialchars('This cell contains nested table.'));
+				// $innerCell = $cell->addTable(array('align' => 'center'))->addRow()->addCell();
+				// $innerCell->addText(htmlspecialchars('Inside nested table'));
+
+
+
+				$outerTable = $section->addTable('Overall Table');
+				$outerTable->addRow();
+				$cellLeft 	= $outerTable->addCell(10000);
+				$cellMiddle = $outerTable->addCell(300);
+				$cellRight 	= $outerTable->addCell(300); 
+
+				$phpWord->addTableStyle('Site Info', $styleTable);
+				$innerTableLeft = $cellLeft->addTable('Site Info');
+
+				$innerRowLeft = $innerTableLeft->addRow();
+				// $innerCellLeft = $innerRowLeft->addCell($widthCell, $cellVCentered);
+				//$innerLeftCell->addText(htmlspecialchars('Inside Left nested table'));
+				//$innerLeftCell->addText(htmlspecialchars('Inside Left nested table2'));
+
+				//$innerRightCell = $innerRow->addCell();
+				//$innerRightCell->addText(htmlspecialchars('Inside Right nested table'));
+				//$innerRightCell->addText(htmlspecialchars('Inside Right nested table2'));
+
+
+				// $phpWord->addTableStyle('Site Information', $styleTable, $styleFirstRow);
+				// $table = $section->addTable('Site Information');
+
+				// $table->addRow();
+				$innerTableLeft->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars('Period'), $cellHeaderCentered);
+				$innerTableLeft->addCell(4000, $cellVCentered)->addText(htmlspecialchars(model::load("helper")->quarter(2, $quarter)), $cellHeaderCentered);
+				$innerTableLeft->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars('Year'), $cellHeaderCentered);
+				$innerTableLeft->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars($year), $cellHeaderCentered);				
+				$innerTableLeft->addRow();
+				$innerTableLeft->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars('Site Name'), $cellHeaderCentered);
+				$innerTableLeft->addCell(4000, $cellVCentered)->addText(htmlspecialchars($siteKey['siteName']), $cellHeaderCentered);
+				$innerTableLeft->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars('District'), $cellHeaderCentered);
+				$innerTableLeft->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars($siteKey['siteInfoDistrict']), $cellHeaderCentered);
+				$innerTableLeft->addRow();
+				$innerTableLeft->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars('Address'), $cellHeaderCentered);
+				$innerTableLeft->addCell(4000, $cellVCentered)->addText(htmlspecialchars($siteKey['siteInfoAddress']), $cellHeaderCentered);
+				$innerTableLeft->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars('Web Address'), $cellHeaderCentered);
+				$innerTableLeft->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars("http://celcom1cbc.com/".$siteKey['siteSlug']), $cellHeaderCentered);
+				$innerTableLeft->addRow();
+				$innerTableLeft->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars('State'), $cellHeaderCentered);
+				$innerTableLeft->addCell(4000, $cellVCentered)->addText(htmlspecialchars(model::load("helper")->state($siteKey['stateID'])), $cellHeaderCentered);
+				$innerTableLeft->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars('Phase'), $cellHeaderCentered);
+				$innerTableLeft->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars(''), $cellHeaderCentered);
+				$innerTableLeft->addRow();
+				$innerTableLeft->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars('Longitude'), $cellHeaderCentered);
+				$innerTableLeft->addCell(4000, $cellVCentered)->addText(htmlspecialchars($siteKey['siteInfoLongitude']), $cellHeaderCentered);
+				$innerTableLeft->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars('Latitude'), $cellHeaderCentered);
+				$innerTableLeft->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars($siteKey['siteInfoLatitude']), $cellHeaderCentered);
+				$innerTableLeft->addRow();
+				$innerTableLeft->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars('Service Provider'), $cellHeaderCentered);
+				$innerTableLeft->addCell(4000, $cellVCentered)->addText(htmlspecialchars('Celcom (M) Berhad'), $cellHeaderCentered);
+				$innerTableLeft->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars('LOI Date'), $cellHeaderCentered);
+				$innerTableLeft->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars(''), $cellHeaderCentered);
+				$innerTableLeft->addRow();
+				$innerTableLeft->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars('Commencement Date'), $cellHeaderCentered);
+				$innerTableLeft->addCell(4000, $cellVCentered)->addText(htmlspecialchars($siteKey['siteInfoCommencementDate']), $cellHeaderCentered);
+				$innerTableLeft->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars('Completion Date'), $cellHeaderCentered);
+				$innerTableLeft->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars($siteKey['siteInfoCompletionDate']), $cellHeaderCentered);
+				$innerTableLeft->addRow();
+				$innerTableLeft->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars('Actual Start Date'), $cellHeaderCentered);
+				$innerTableLeft->addCell(4000, $cellVCentered)->addText(htmlspecialchars($siteKey['siteInfoOperationDate']), $cellHeaderCentered);
+				$innerTableLeft->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars('Actual Completion Date'), $cellHeaderCentered);
+				$innerTableLeft->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars($siteKey['siteInfoCompletionDate']), $cellHeaderCentered);
+
+				//image of manager and assistant in table
+				//name
+				//manager , assistant manager
+				//no tel
+				// $innerTableLeft->addRow(array('borderSize' => 0));
+				// $innerTableLeft->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars(''), $cellHeaderCentered);
+				$cellLeft->addTextBreak();
+				$phpWord->addTableStyle('Manager Info', array('borderSize' => 1, 'borderColor' => '999999','width' => 50 * 50), $styleFirstRow);
+				$tableManager =  $cellLeft->addTable('Manager Info');
+
+				//$tableManager->addRow();
+
+				//$table = $section->addTable('Manager Info');
+
+
+				$baseUrl	= url::getProtocol().apps::config("base_url:frontend");
+				// $imageManager 	= $baseUrl."/api/photo/small/". $siteManager[0]['albumCoverImageName']. "";
+				// $imageManager2 	= $baseUrl."/api/photo/small/". $siteManager[1]['albumCoverImageName']. "";
+				// $cell = $table->addCell(300);
+				// $textrun = $cell->createTextRun();
+				
+    			// $textrun->addImage($image,array(
+					// 'width' => $Dwidth, 'height' => 150));				
+				//image manager | asst manager
+
+				$tableManager->addRow();
+				
+				// var_dump($imageManager);
+				// die;
+				$imageManager 	= $baseUrl."/api/photo/small/". $siteKey['siteManager'][0]['userProfileAvatarPhoto']. "";
+				if(($siteKey['siteManager'][0]['userProfileAvatarPhoto'] != "") && @getimagesize($imageManager)) {
+					// if(@getimagesize($imageManager)){
+						$cell = $tableManager->addCell(100);
+						$textrun = $cell->createTextRun();
+						$textrun->addImage($imageManager,array(
+							'width' => 150, 'height' => 150));
+					// }
+				}
+				else{
+					$imageManager 	= $baseUrl."/api/photo/small/". "emptyavatar.png";
+					if(@getimagesize($imageManager)){
+						$cell = $tableManager->addCell(100);
+						$textrun = $cell->createTextRun();
+						$textrun->addImage($imageManager,array(
+							'width' => 150, 'height' => 150));
+					}
+				}
+
+				$imageManager2 	= $baseUrl."/api/photo/small/". $siteKey['siteManager'][1]['userProfileAvatarPhoto']. "";
+				if(($siteKey['siteManager'][1]['userProfileAvatarPhoto'] != "") && @getimagesize($imageManager2)) {		
+					if(@getimagesize($imageManager2)){				
+						$cell = $tableManager->addCell(100);
+						$textrun = $cell->createTextRun();
+						$textrun->addImage($imageManager2,array(
+							'width' => 150, 'height' => 150));
+					}
+				}
+				else{
+					$imageManager2 	= $baseUrl."/api/photo/small/". "emptyavatar.png";
+					if(@getimagesize($imageManager2)){				
+						$cell = $tableManager->addCell(100);
+						$textrun = $cell->createTextRun();
+						$textrun->addImage($imageManager2,array(
+							'width' => 150, 'height' => 150));
+					}					
+				}
+
+				//name manager | asst manager
+				$tableManager->addRow();
+				$tableManager->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars($siteKey['siteManager'][0]['userProfileFullName']. " ". $siteKey['siteManager'][0]['userProfileLastName']), $cellHeaderCentered);
+				$tableManager->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars($siteKey['siteManager'][1]['userProfileFullName']. " ". $siteKey['siteManager'][1]['userProfileLastName']), $cellHeaderCentered);				
+
+				//title manager | asst manager
+				$tableManager->addRow();
+				$tableManager->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars('Manager'), $cellHeaderCentered);
+				$tableManager->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars('AssistantManager'), $cellHeaderCentered);
+
+				//no tel manager | asst manager
+				$tableManager->addRow();
+				$tableManager->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars($siteKey['siteManager'][0]['userProfilePhoneNo']), $cellHeaderCentered);
+				$tableManager->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars($siteKey['siteManager'][1]['userProfilePhoneNo']), $cellHeaderCentered);			
+
+
+
+
+				//half side of page
+				//interior view image, exterior view image
+				$phpWord->addTableStyle('Interior Info', $styleTable, $styleFirstRow);
+				$tableInterior =  $cellMiddle->addTable('Interior Info');
+				//$table = $section->addTable('InteriorExterior Info');
+
+				//name interior | asst exterior
+				$tableInterior->addRow();
+				$tableInterior->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars('Interior View'), $cellHeaderCentered);
+				
+				if(count($siteKey['interior']) > 0){
+					foreach ($siteKey['interior'] as $keyInterior => $valueInterior) {
+						// var_dump($siteKey['interior']);
+						// die;
+						$tableInterior->addRow();
+						# code...
+						$imageInterior 	= $baseUrl."/api/photo/small/". $valueInterior['photoName']. "";
+						if(@getimagesize($imageInterior)){				
+							$cell = $tableInterior->addCell(100);
+							$textrun = $cell->createTextRun();
+							$textrun->addImage($imageInterior,array(
+								'width' => 130, 'height' => 130));
+						}									
+					}
+				}
+				else{
+					$tableInterior->addRow();
+					$imageInterior 	= $baseUrl."/api/photo/small/". "emptyBuilding.jpg";
+					if(@getimagesize($imageInterior)){				
+						$cell = $tableInterior->addCell(100);
+						$textrun = $cell->createTextRun();
+						$textrun->addImage($imageInterior,array(
+							'width' => 130, 'height' => 130));
+					}					
+				}
+
+
+				$phpWord->addTableStyle('Exterior Info', $styleTable, $styleFirstRow);
+				$tableExterior = $cellRight->addTable('Exterior Info');
+				$tableExterior->addRow();
+				$tableExterior->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars('Exterior View'), $cellHeaderCentered);
+
+				if(count($siteKey['exterior']) > 0){
+					foreach ($siteKey['exterior'] as $keyInterior => $valueExterior) {
+						// var_dump($siteKey['interior']);
+						// die;
+						$tableExterior->addRow();
+						# code...
+						$imageExterior 	= $baseUrl."/api/photo/small/". $valueExterior['photoName']. "";
+						if(@getimagesize($imageExterior)){				
+							$cell = $tableExterior->addCell(100);
+							$textrun = $cell->createTextRun();
+							$textrun->addImage($imageExterior,array(
+								'width' => 130, 'height' => 130));
+						}										
+					}	
+				}
+				else{
+					$tableExterior->addRow();
+					$imageExterior 	= $baseUrl."/api/photo/small/". "emptyBuilding.jpg";
+						if(@getimagesize($imageExterior)){				
+							$cell = $tableExterior->addCell(100);
+							$textrun = $cell->createTextRun();
+							$textrun->addImage($imageExterior,array(
+								'width' => 130, 'height' => 130));
+						}	
+				}
+			
+
+				$section->addPageBreak();
 				//PI1M Performance
 				// Adding Text element to the Section having font styled by default...
 				$section->addText(
@@ -925,7 +1197,9 @@ public function quarterlyReport($reportId){
 				$objWriter->save($docsPath .'/' . $fileNameReal.'.docx');
 				//var_dump($report);
 
+				//FOR TESTING
 				$reportQuarterlyTable->siteCompletionIncrement();
+				//END TESTING
 
 				// 	if($counterSite == 5)
 				// 		break;	
@@ -998,6 +1272,7 @@ public function quarterlyReport($reportId){
 
 			$reportQuarterlyTable->updateState('completed');
 
+		//FOR TESTING
 		}//end try
 
 		catch(\Exception $e)
@@ -1005,8 +1280,9 @@ public function quarterlyReport($reportId){
 			$reportQuarterlyTable->reportQuarterlyStatus = 2;
 
 			$reportQuarterlyTable->updateState($e->getMessage());
-		}		
-		
+		}	
+
+		//END TESTING
 
 
 		
