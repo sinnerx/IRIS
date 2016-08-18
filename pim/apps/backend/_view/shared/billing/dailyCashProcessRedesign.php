@@ -467,7 +467,9 @@ $total = function($val = null)
 }
 
 ?>
-<?php foreach(range(1, date('t', strtotime($selectYear.'-'.$selectMonth.'-01'))) as $day):
+<?php
+			$beginningbalance = $balance;
+			foreach(range(1, date('t', strtotime($selectYear.'-'.$selectMonth.'-01'))) as $day):
 			$date = $selectYear.'-'.$selectMonth.'-'.$day;
 			$date = date('Y-m-d', strtotime($date));
 			$no = 0;
@@ -570,78 +572,105 @@ $total = function($val = null)
 					<th>Financial Controller</th>
 				</tr>
 				<?php
-					//if(true):
-					if(count($list) > 0):
+					if(true):
+					//if(count($list) > 0):
 				?>
 				<tr>	
 					<td>Month Total</td> 
-					<td><?php $dailytotal = $beginningbalance - $balance;
-							echo $dailytotal = number_format($dailytotal, 2, '.', '');?></td>
-					<td><?php $dailytotal = $beginningbalance - $balance;
-							echo $dailytotal = number_format($dailytotal, 2, '.', '');?></td>
-					<td><?php $dailytotal = $beginningbalance - $balance;
-							echo $dailytotal = number_format($dailytotal, 2, '.', '');?></td>
+					<td>
+						<?php $dailytotal = $balance - $beginningbalance;
+						//$dailytotal = $beginningbalance - $balance;
+						echo $dailytotal = number_format($dailytotal, 2, '.', '');?>
+					</td>
+					<td>
+						<?php //$dailytotal = $beginningbalance - $balance;
+						echo $dailytotal = number_format($dailytotal, 2, '.', '');?>
+					</td>
+					<td>
+						<?php //$dailytotal = $beginningbalance - $balance;
+						echo $dailytotal = number_format($dailytotal, 2, '.', '');?>
+					</td>
 				</tr>	
 
 				<tr>	
 					<td>Balance</td> 
+					<!--<td><?php echo number_format($beginningbalance, 2, '.', '');?></td>
 					<td><?php echo number_format($beginningbalance, 2, '.', '');?></td>
-					<td><?php echo number_format($beginningbalance, 2, '.', '');?></td>
-					<td><?php echo number_format($beginningbalance, 2, '.', '');?></td>
+					<td><?php echo number_format($beginningbalance, 2, '.', '');?></td>-->
+					<td><?php echo number_format($balance, 2, '.', '');?></td>
+					<td><?php echo number_format($balance, 2, '.', '');?></td>
+					<td><?php echo number_format($balance, 2, '.', '');?></td>
 				</tr>	
 
 				<tr>	
 					<td>Status</td> 
-					<td><?php
-					
-					if((session::get("userLevel") == 2) &&  ($checked == 1) && ($approved != 1)) {  
-					
+					<td>
+					<?php
+						/*if((session::get("userLevel") == 2) &&  ($checked == 1) && ($approved != 1)) {  
+							echo $checkedword;
+						} elseif((session::get("userLevel") == 2) &&  ($checked == 1) && ($approved == 1)) {  
+						 	echo $checkedword;
+						} elseif ((session::get("userLevel") == 2) && ($checked != 1)) {  ?>	
+							<button name="submit" type="submit" class="btn btn-sm btn-default" value="1">Check</button>									
+						<?php } elseif ((session::get("userLevel") != 2) && ($checked == 1)) { 
+						
 						echo $checkedword;
-					 } elseif((session::get("userLevel") == 2) &&  ($checked == 1) && ($approved == 1)) {  
-
-					 	echo $checkedword;
-					 } elseif ((session::get("userLevel") == 2) && ($checked != 1)) {  ?>	
-					
-					<button name="submit" type="submit" class="btn btn-sm btn-default" value="1">Check</button>									
-					<?php } elseif ((session::get("userLevel") != 2) && ($checked == 1)) { 
-					
-					echo $checkedword;
-					 } else { ?>
-					
-					not checked					
-					<?php } ?>
+						 } else { ?>
+						
+						not checked*/			
+						echo $checkedword;
+						if (session::get("userLevel") == 2 && $checked != 1) { ?>
+							<button name="submit" type="submit" class="btn btn-sm btn-default" value="1">Check</button>									
+						<?php }
+					?>
 					</td>
 
 					<td>
-					<?php  if((session::get("userLevel") == 3) && ($approved == 1)) { 
+					<?php
+						echo $approvedword;
+						if (session::get("userLevel") == 3 && $checked == 1 && $approved != 1) { ?>
+							<button name="submit" type="submit" class="btn btn-sm btn-default" value="1">Approve</button>
+							<button name="submit" type="submit" class="btn btn-sm btn-default"  value="2">Reject</button>
+						<?php }
+					?>
+					<!--<?php  if((session::get("userLevel") == 3) && ($approved == 1)) { 
 
-					 echo $approvedword;
-					 } elseif((session::get("userLevel") == 3) && ($approved != 1) && ($checked == 1)) {  ?>	
+					echo $approvedword;
+					} elseif((session::get("userLevel") == 3) && ($approved == 0) && ($checked == 1)) {  ?>	
 
-					<button name="submit" type="submit" class="btn btn-sm btn-default" value="1">Approve</button> <button name="submit" type="submit" class="btn btn-sm btn-default"  value="2">Reject</button>
+					<button name="submit" type="submit" class="btn btn-sm btn-default" value="1">Approve</button>
+					<button name="submit" type="submit" class="btn btn-sm btn-default"  value="2">Reject</button>
 					<?php } elseif ((session::get("userLevel") != 3) && ($approved == 1)) { 
 					
 					echo $approvedword;
 					 } else { ?>
 					
-					not verified
-					<?php } ?>
+					Not Verified
+					<?php } ?>-->
 					</td>
 
 					<td>
-					<?php  if((session::get("userLevel") == 5) && ($closed == 1)) { 
+					<?php
+						echo $closedword;
+						if (session::get("userLevel") == 5 && $approved == 1 && $closed != 1) { ?>
+							<button name="submit" type="submit" class="btn btn-sm btn-default" value="1">Close</button>
+							<button name="submit" type="submit" class="btn btn-sm btn-default"  value="2">Reject</button>
+						<?php }
+					?>
+					<!--<?php  if((session::get("userLevel") == 5) && ($closed == 1)) { 
 
 					 echo $closedword;
 					 } elseif((session::get("userLevel") == 5) && ($closed != 1)&& ($approved == 1) && ($checked == 1)) {  ?>	
 
-					<button name="submit" type="submit" class="btn btn-sm btn-default" value="1">Close</button> <button name="submit" type="submit" class="btn btn-sm btn-default"  value="2">Reject</button>
+					<button name="submit" type="submit" class="btn btn-sm btn-default" value="1">Close</button>
+					<button name="submit" type="submit" class="btn btn-sm btn-default"  value="2">Reject</button>
 					<?php } elseif ((session::get("userLevel") != 5) && ($closed == 1)) { 
 					
 					echo $closedword;
 					 } else { ?>
 					
 					
-					<?php } ?>
+					<?php } ?>-->
 					</td>
 				</tr>	
 

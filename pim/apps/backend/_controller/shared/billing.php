@@ -500,7 +500,8 @@ Class Controller_Billing
 	public function dailyCashProcess()
 	{
 		$siteID = authData('site.siteID');
-		$data['siteID'] = $siteID = $siteID ? : request::get("siteID");
+		$data['siteID'] = $siteID = $siteID ? : request::get('siteID');
+		$data['siteID'] = $siteID = $siteID ? : input::get('siteID');
 
 		$data['selectYear'] = $year = request::get('selectYear', date('Y'));
 		$data['selectMonth'] = $month = request::get('selectMonth', date('m'));
@@ -517,12 +518,11 @@ Class Controller_Billing
 
 		if(authData('user.userLevel') == 3 ){
 			$res_site = model::load('site/site')->getSitesByClusterlead(authData('user.userID'))->result();
-		foreach($res_site as $row)
-		{
-			$data['siteList'][$row['siteID']]	= $row['siteName'];
+			foreach($res_site as $row)
+			{
+				$data['siteList'][$row['siteID']]	= $row['siteName'];
+			}
 		}
-	}
-
 
 		if($data['siteID'])
 			$data['site'] = model::orm('site/site')
@@ -645,6 +645,109 @@ Class Controller_Billing
 				$row['billingTransactionItemPrice'] 
 		}*/
 
+		// *** FOR APPROVAL FLOW ***
+
+		//$data['siteID'] = $siteID = request::get("siteID") ? : authData('site.siteID');	
+		$data['selectMonth'] = $selectMonth = request::get("selectMonth") ? :  date('m');
+		$data['selectYear'] = $selectYear = request::get("selectYear") ? :  date('Y');
+
+		$approval = model::load('billing/approval')->getApproval($siteID, $selectMonth, $selectYear);
+		//echo 'Site: ' . $siteID . ' Mn: ' . $selectMonth . ' Yr: ' . $selectYear;
+		//var_dump($approval);
+		if(form::submitted()) {
+			//echo 'User Level: ' . authData('user.userLevel') . ' vs ' . \model\user\user::LEVEL_CLUSTERLEAD;
+			if (authData('user.userLevel') == \model\user\user::LEVEL_SITEMANAGER){
+				$approval->check();	
+			} elseif(authData('user.userLevel') == \model\user\user::LEVEL_CLUSTERLEAD) {
+				if (input::get("submit") == 1){
+					$approval->approve(authData('user.userLevel'));		
+				} else {
+					$approval->reject(authData('user.userLevel'));
+				}
+			} else {
+				if (input::get("submit") == 1){
+					$approval->approve(authData('user.userLevel'));		
+					
+					/*
+					$approvalDetail = $approval->getApprovalDetail($approval->billingApprovalID,\model\user\user::LEVEL_FINANCIALCONTROLLER);
+					$userDetail = model::load('user/user')->getUsersByID($approvalDetail['userID']);
+								 
+					$data['closed'] = 1;
+					$data['closedword'] = "Closed at ".$approvalDetail['billingApprovalLevelCreatedDate']." <br> by ".$userDetail[$approvalDetail['userID']]['userProfileFullName'];
+
+					$approvalDetail = $approval->getApprovalDetail($approval->billingApprovalID,\model\user\user::LEVEL_CLUSTERLEAD);
+					$userDetail = model::load('user/user')->getUsersByID($approvalDetail['userID']);
+								 
+					$data['approved'] = 1;
+					$data['approvedword'] = "Approved at ".$approvalDetail['billingApprovalLevelCreatedDate']." <br> by ".$userDetail[$approvalDetail['userID']]['userProfileFullName'];
+				
+					$approvalDetail = $approval->getApprovalDetail($approval->billingApprovalID,\model\user\user::LEVEL_SITEMANAGER);
+					$userDetail = model::load('user/user')->getUsersByID($approvalDetail['userID']);
+								 
+					$data['checked'] = 1;
+					$data['checkedword'] = "Checked at ".$approvalDetail['billingApprovalLevelCreatedDate']." <br> by ".$userDetail[$approvalDetail['userID']]['userProfileFullName'];
+					*/
+				} else {
+					$approval->disapprove(authData('user.userLevel'));
+
+					/*
+					$approval->reject(\model\user\user::LEVEL_CLUSTERLEAD);
+
+					$approvalDetail = $approval->getApprovalDetail($approval->billingApprovalID,\model\user\user::LEVEL_FINANCIALCONTROLLER);
+					$userDetail = model::load('user/user')->getUsersByID($approvalDetail['userID']);								
+					
+					$data['closedword'] = "Rejected at ".$approvalDetail['billingApprovalLevelCreatedDate']." <br> by ".$userDetail[$approvalDetail['userID']]['userProfileFullName'];
+					*/
+				}
+			}
+			//redirect::to('billing/dailyCashProcess', 'Daily Cash Process checked', 'success');
+		}
+
+		$data['checked'] = 0;
+		$data['checkedword'] = 'Not Checked';
+		$data['approved'] = 0;
+		$data['approvedword'] = 'Not Approved<br>';
+		$data['closed'] = 0;
+		$data['closedword'] = 'Not Closed<br>';
+		$approvalDetail = $approval->getApprovalDetail($approval->billingApprovalID,\model\user\user::LEVEL_SITEMANAGER);
+		if ($approvalDetail != NULL) {
+			$userDetail = model::load('user/user')->getUsersByID($approvalDetail['userID']);
+							 
+			if ($approvalDetail['billingApprovalLevelStatus'] == 1) {
+				$data['checkedword'] = "Checked at ".$approvalDetail['billingApprovalLevelCreatedDate']." <br> by ".$userDetail[$approvalDetail['userID']]['userProfileFullName'];
+				$data['checked'] = 1;
+			} else {
+				$data['checkedword'] = "Rejected by ".$userDetail[$approvalDetail['userID']]['userProfileFullName'] . '<br>';
+				$data['checked'] = 2;
+			}
+		}
+		$approvalDetail = $approval->getApprovalDetail($approval->billingApprovalID,\model\user\user::LEVEL_CLUSTERLEAD);
+		if ($approvalDetail != NULL) {
+			$userDetail = model::load('user/user')->getUsersByID($approvalDetail['userID']);
+						 
+			if ($approvalDetail['billingApprovalLevelStatus'] == 1) {
+				$data['approvedword'] = "Approved at ".$approvalDetail['billingApprovalLevelCreatedDate']." <br> by ".$userDetail[$approvalDetail['userID']]['userProfileFullName'];
+				$data['approved'] = 1;
+			} else {
+				$data['approvedword'] = "Rejected by ".$userDetail[$approvalDetail['userID']]['userProfileFullName'] . '<br>';
+				$data['approved'] = 2;
+			}
+		}
+		$approvalDetail = $approval->getApprovalDetail($approval->billingApprovalID,\model\user\user::LEVEL_FINANCIALCONTROLLER);
+		if ($approvalDetail != NULL) {
+			$userDetail = model::load('user/user')->getUsersByID($approvalDetail['userID']);
+						 
+			if ($approvalDetail['billingApprovalLevelStatus'] == 1) {
+				$data['closedword'] = "Closed at ".$approvalDetail['billingApprovalLevelCreatedDate']." <br> by ".$userDetail[$approvalDetail['userID']]['userProfileFullName'];
+				$data['closed'] = 1;
+			} else {
+				$data['closedword'] = "Rejected by ".$userDetail[$approvalDetail['userID']]['userProfileFullName'] . '<br>';
+				$data['closed'] = 2;
+			}
+			//$data['closed'] = 1;
+			//$data['closedword'] = "Closed at ".$approvalDetail['billingApprovalLevelCreatedDate']." <br> by ".$userDetail[$approvalDetail['userID']]['userProfileFullName'];
+		}
+
 		skipall:
 
 		view::render('shared/billing/dailyCashProcessRedesign', $data);
@@ -662,7 +765,7 @@ Class Controller_Billing
 		
 		if ($siteID != ""){
 
-		$approval = model::load('billing/approval')->getApproval($siteID, $selectMonth, $selectYear);
+			$approval = model::load('billing/approval')->getApproval($siteID, $selectMonth, $selectYear);
 
 			if ($approval->getApprovalStatus(\model\user\user::LEVEL_SITEMANAGER) == 1){		
 						
@@ -693,7 +796,7 @@ Class Controller_Billing
 		}	
 
 		if(form::submitted())
-		{				
+		{
 			$data['selectMonth'] = $selectMonth = input::get("month");
 			$data['selectYear'] = $selectYear = input::get("year");
 			$data['siteID'] = $siteID = input::get("siteID");	
@@ -795,6 +898,7 @@ Class Controller_Billing
 			$data['siteList'][$row['siteID']]	= $row['siteName'];
 		}
 		
+		echo 'Site: ' . $siteID;
 		if ($siteID != ""){
 		
 			$getClusterID = model::load('site/cluster')->getClusterID($siteID);
@@ -804,40 +908,41 @@ Class Controller_Billing
 			$balanceCredit = model::load('billing/process')->getBalanceCredit($siteID,$selectMonth-1,$selectYear);
 
 			$data['balance'] = $balanceDebit['balance'] + $balanceCredit['balance'];
-			$dateList = model::load('billing/process')->getdateList($siteID,$selectMonth,$selectYear);		
+			$dateList = model::load('billing/process')->getdateList($siteID,$selectMonth,$selectYear);
+			var_dump($datelist);
 
 		 	foreach($dateList as $key1 => $row)
 			{
 				$checkDate = date('Y-m-d', strtotime($row['billingTransactionDate'])); 
 				$checkdateList = model::load('billing/process')->getList($siteID,$checkDate);
 
-					foreach($checkdateList as $key2 => $cashProcess) {
+				foreach($checkdateList as $key2 => $cashProcess) {
 
-						$getHour = date("H", strtotime($row['billingTransactionDate'])); 	
+					$getHour = date("H", strtotime($row['billingTransactionDate'])); 	
 
-						if ($getHour > $closingTime){ 
-							$pcType = "Night";
-						} else {
-							$pcType = "Day";
-						}
+					if ($getHour > $closingTime){ 
+						$pcType = "Night";
+					} else {
+						$pcType = "Day";
+					}
 
-						$availableData[$checkDate][$cashProcess['billingItemName']] =  Array(
-			
-							"date"=>$checkDate,
-							"pcType"=>$pcType,
-							"itemName"=>$cashProcess['billingItemName'],
-							"desc"=>$cashProcess['billingTransactionDescription'],
-							"quantity"=>$cashProcess['quantity'],
-							"unit"=>$cashProcess['unit'],
-							"total"=>$cashProcess['total'],			
-						);
-					}	
+					$availableData[$checkDate][$cashProcess['billingItemName']] =  Array(
+		
+						"date"=>$checkDate,
+						"pcType"=>$pcType,
+						"itemName"=>$cashProcess['billingItemName'],
+						"desc"=>$cashProcess['billingTransactionDescription'],
+						"quantity"=>$cashProcess['quantity'],
+						"unit"=>$cashProcess['unit'],
+						"total"=>$cashProcess['total'],			
+					);
+				}	
 					
 				$data['transferList'] = model::load('billing/process')->getTransferList($siteID,$checkDate);
 
-						$availableDate[$checkDate] = array (
-								$checkDate,
-						);
+				$availableDate[$checkDate] = array (
+						$checkDate,
+				);
 			}
 
 			$totalList = model::load('billing/process')->getListTotal($siteID,$selectMonth,$selectYear);

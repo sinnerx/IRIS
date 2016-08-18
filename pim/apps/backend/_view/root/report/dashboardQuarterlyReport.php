@@ -1,5 +1,9 @@
 <script type="text/javascript">
-	
+$( document ).ready(function() {
+   // alert(pim.url('ajax/report/quarterlyActivityGenerate/'+year+'/'+quarter));
+});
+
+
 var report = new function()
 {
 	this.generate = function()
@@ -111,12 +115,12 @@ var report = new function()
 		<div class='table-responsive bg-white'>
 			<table class='table'>
 				<tr>
-					<?php //var_dump( model::load("helper")->quarter(4,1)[1]); ?>
-					<td width="150px">Quarter</td><td>: <?php echo form::select("quarter", model::load("helper")->quarter(1), 'onchange="report.dateChange();"', $quarter);?></td>
+					<td>Year</td><td>: <?php echo form::select("year",model::load("helper")->monthYear("year"), 'onchange="report.dateChange();"', $year);?></td>
 				</tr>
 				<tr>
-					<td>Year</td><td>: <?php echo form::select("year",model::load("helper")->monthYear("year"), 'onchange="report.dateChange();"', $year);?></td>
-				</tr>				
+					<?php //var_dump( model::load("helper")->quarter(4,1)[1]); ?>
+					<td width="150px">Quarter</td><td>: <?php echo form::select("quarter", model::load("helper")->quarter(1), 'onchange="report.dateChange();"', $quarter);?></td>
+				</tr>			
 				<tr>
 					 <td>Generate report</td><td>: <input type='button' class='btn btn-primary' onclick='report.generate();' value='GENERATE' /></td> 
 				</tr>
@@ -129,7 +133,7 @@ var report = new function()
 	
 report.listReports();
 
-// refresh every 5 secs
+//refresh every 5 secs
 setInterval(function()
 {
 	report.listReports();

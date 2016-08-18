@@ -622,7 +622,6 @@ class Controller_Exp
 			return $this->rlEditSubmit($rlID);
 
 		$rl = $data['rl'] = orm('expense/pr/reconcilation/reconcilation')->find($rlID);
-
 		$data['pr'] = $rl->getPr();
 		$data['files'] = $rl->getFiles();
 		$data['rlFileTotalAmount'] = $rl->getFileTotalAmount();
@@ -662,28 +661,58 @@ class Controller_Exp
 		return file_get_contents($path);
 	}
 
-	public function rlFileUpload($rlID, $categoryID)
+	public function rlFileUpload($rlID)
 	{
 		$rl = $data['rl'] = orm('expense/pr/reconcilation/reconcilation')->find($rlID);
 
-		if(form::submitted())
-			return $this->rlFileUploadSubmit($rl, $categoryID);
+		if(form::submitted()){		
+			return $this->rlFileUploadSubmit($rl);
+		}
 
 		$this->template = false;
 
 		$data['categories'] = orm('expense/expense_category')->execute()->toList('expenseCategoryID', 'expenseCategoryName');
+		// var_dump($data['categories']);
+		// die;
 		$data['categories'] = orm('expense/pr/reconcilation/category')
 			->where('prReconcilationID', $rlID)
 			->execute()
 			->toList('prReconcilationCategoryID', 'expenseCategoryName');
 		
-		$data['categoryID'] = $categoryID;
+		// $data['categoryID'] = $categoryID;
 
 		view::render('shared/exp/rlFileUpload', $data);
 	}
 
-	public function rlFileUploadSubmit($rl, $prReconcilationCategoryID)
+	public function rlFileUploadSubmit($rl)
 	{
+		//var_dump(input::file("fileUpload"));
+		$files	=  
+		$_FILES['fileUpload']; 
+		 // input::file("fileUpload");
+		//var_dump(input::get());
+		//var_dump($files);
+		//die;
+
+		$rules	= Array(			
+			"fileUpload"=>Array(
+				"callback"=>Array(!$files?false:true,"Please input an upload file.")
+				)
+						);
+
+		if($error = input::validate($rules))
+		{
+			input::repopulate();
+			redirect::withFlash(model::load("template/services")->wrap("input-error",$error));
+			redirect::to("exp/rlEdit/".$rlID,"Error in your form's field","error");
+		}
+
+		if($files)
+			$file_ary = $this->fixFilesArray($files);
+
+		//var_dump($file_ary);
+		// var_dump(input::get());
+		// die;
 		$rlID = $rl->prReconcilationID;
 
 		$siteID = $rl->getPr()->siteID;
@@ -699,74 +728,126 @@ class Controller_Exp
 				"mov","wmv","avi","mpg",
 				"ogv","3gp","3g2");
 
-		$file	= input::file("fileUpload");
-		
-		$rules	= Array(			
-			"fileUpload"=>Array(
-				"callback"=>Array(!$file?false:true,"Please input an upload file.")
-				)
-						);
+		//$files	= input::file("fileUpload");
+		//var_dump($files->get("name"));
+		//	die;
+		$msg_array 			= array();
+		$msg_array_success 	= array();
+		$msg = "";
+		$resultUpload = array();
 
-		if($error = input::validate($rules))
-		{
-			input::repopulate();
-			redirect::withFlash(model::load("template/services")->wrap("input-error",$error));
-			redirect::to("exp/rlEdit/".$rlID,"Error in your form's field","error");
+		foreach ($file_ary as $key => $file) {
+			# code...
+			//var_dump($key);
+			$approveExist = false;
+			$approveExtension = false;
+			$approveSize = false;
+			
+
+			if($file['error'] == 4){
+				//redirect::to("","File uploaded is empty for ". $empty . ".", "error");
+				array_push($msg_array, "File uploaded is empty");
+			}
+			else{
+				$approveExist = TRUE;
+			}
+			//check extension
+			//var_dump(str_replace("image/", "", $file['type']));
+
+			if(!in_array(str_replace("image/", "", $file['type']), $exts) && $file['error'] != 4){
+				//add into msg array
+				array_push($msg_array, "File Name : ". $file['name']. " have invalid extension file.");
+				//redirect::to("","File Name : ". $file['name']. " have invalid extension file.", "error");
+			}else{
+				$approveExtension = TRUE;
+			}
+
+			//check max size
+			if($file['size'] >= $maxsize){
+				//add into msg array
+				array_push($msg_array, "File Name : ". $file['name']. " have exceeded max size(".($maxsize/1000).").");
+				//redirect::to("","File Name : ". $file['name']. " have exceeded max size(".($maxsize/1000).").", "error");
+			}else{
+				$approveSize = TRUE;
+			}
+
+			if(($approveExtension == TRUE) && ($approveSize == TRUE) && ($approveExist == TRUE)){
+				//upload image & update rl record
+
+				//add into msg array
+
+				//set resultUpload = true
+				// $resultUpload = TRUE;
+
+				$data['fileType']	= $file["type"];
+
+				## use file name.
+				if($data['fileName'] == "")
+				{
+					$fn	= explode(".",$file["name"]);
+					array_pop($fn);
+					$data['fileName']	= implode(".",$fn);
+				}
+
+				$data['fileSize']	= $file["size"];
+				$data['fileExt']	= str_replace("image/", "", $file['type']);			
+
+				$rlFile = orm('expense/pr/reconcilation/file')->create();
+				$rlFile->prReconcilationID = $rlID;
+				// $rlFile->expenseCategoryID = $data['itemCategory'];
+				$rlFile->prReconcilationCategoryID = $key;
+				// $rlFile->prReconcilationFileAmount = $data['amount'];
+				// $rlFile->prReconcilationFileGst = $data['gst'];
+				// $rlFile->prReconcilationFileTotal = $data['total'];
+				$rlFile->prReconcilationFileName = $data['fileName'];
+				$rlFile->prReconcilationFileType = $data['fileType'];
+				$rlFile->prReconcilationFileSize = $data['fileSize'];
+				$rlFile->prReconcilationFileExt = $data['fileExt'];
+				$rlFile->prReconcilationFileStatus = 1;
+				$rlFile->prReconcilationFileUpdatedDate = now();
+				$rlFile->save();
+
+				$category = orm('expense/pr/reconcilation/category')->find($key);
+				$category->reconcileAllItems();
+
+				array_push($msg_array_success, "Success upload for " . $file['name']);
+				//redirect::to('exp/rlEdit/'.$rlID, 'Item file added!', 'success');
+				$path	= path::files("site_requisition/".$siteID);
+				//var_dump($path);
+				//die;
+				if(!is_dir($path))
+				{
+					$mkdir = mkdir($path, 0775, true);
+
+					if(!$mkdir)
+						die;
+				}
+
+				//var_dump($file['name']);
+				array_push($resultUpload, TRUE);
+				move_uploaded_file($file['tmp_name'], $path."/".$rlFile->prReconcilationFileID);				
+			}
+			else{
+				//add into msg array
+
+				array_push($resultUpload, FALSE);
+				//redirect::to('exp/rlEdit/'.$rlID,$msg, "error");
+			}
+
+
+			//die;
 		}
-
-		$data	= input::get();
-
-		$data['fileType']	= $file->get("type");
-
-		if(!$file->isExt($exts))
-			redirect::to("","List of allowed file extension : ". implode(", ", $exts), "error");
-
-		if($file->get('size') > $maxsize)
-			redirect::to("", "File size cannot be bigger than ". ($maxsize/1000) . "kb ", "error");
-
-		## use file name.
-		if($data['fileName'] == "")
-		{
-			$fn	= explode(".",$file->get("name"));
-			array_pop($fn);
-			$data['fileName']	= implode(".",$fn);
-		}
-
-		$data['fileSize']	= $file->get("size");
-		$data['fileExt']	= $file->get("ext");
-		
-		$path	= path::files("site_requisition/".$siteID);
-
-		if(!is_dir($path))
-		{
-			$mkdir = mkdir($path, 0775, true);
-
-			if(!$mkdir)
-				die;
-		}
-
-		// $updateFile	= model::load("expense/file")->editFile($fileID, $data);
-		$rlFile = orm('expense/pr/reconcilation/file')->create();
-		$rlFile->prReconcilationID = $rlID;
-		// $rlFile->expenseCategoryID = $data['itemCategory'];
-		$rlFile->prReconcilationCategoryID = $prReconcilationCategoryID;
-		// $rlFile->prReconcilationFileAmount = $data['amount'];
-		// $rlFile->prReconcilationFileGst = $data['gst'];
-		// $rlFile->prReconcilationFileTotal = $data['total'];
-		$rlFile->prReconcilationFileName = $data['fileName'];
-		$rlFile->prReconcilationFileType = $data['fileType'];
-		$rlFile->prReconcilationFileSize = $data['fileSize'];
-		$rlFile->prReconcilationFileExt = $data['fileExt'];
-		$rlFile->prReconcilationFileStatus = 1;
-		$rlFile->prReconcilationFileUpdatedDate = now();
-		$rlFile->save();
-
-		$category = orm('expense/pr/reconcilation/category')->find($prReconcilationCategoryID);
-		$category->reconcileAllItems();
-
-		$file->move($path.'/'.$rlFile->prReconcilationFileID);
-
-		redirect::to('exp/rlEdit/'.$rlID, 'Item file added!', 'success');
+				foreach ($msg_array as $keyMsg => $valueMsg) {
+					# code...
+					$msg .= $valueMsg . "<br>";
+				}
+			//result
+			if(in_array(FALSE, $resultUpload)){
+				redirect::to('exp/rlEdit/'.$rlID, $msg, 'error');
+			}
+			else{
+				redirect::to('exp/rlEdit/'.$rlID,"All item are successfully uploaded!", "success");
+			}
 	}
 
 	public function rlApproval($rlID, $status)
@@ -865,4 +946,25 @@ class Controller_Exp
 
 		view::render('shared/exp/rejectionReason', $data);
 	}
+
+	function fixFilesArray(&$files)
+	{
+	    $names = array( 'name' => 1, 'type' => 1, 'tmp_name' => 1, 'error' => 1, 'size' => 1);
+	    //var_dump($files);
+	    foreach ($files as $key => $part) {
+	        // only deal with valid keys and multiple files
+	        //var_dump($part);
+	        //die;
+	        $key = (string) $key;
+	        if (isset($names[$key]) && is_array($part)) {
+	            foreach ($part as $position => $value) {
+	                $files[$position][$key] = $value;
+	            }
+	            // remove old key reference
+	            unset($files[$key]);
+	        }
+	    }
+	    return $files;
+	}
+	
 }

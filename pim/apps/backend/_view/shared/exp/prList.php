@@ -32,8 +32,8 @@ var prList = new function()
 
   this.updateFilter = function()
   {
-    $("#site_id").val('');
-    $("#site_name").val('');
+    //$("#site_id").val('');
+    //$("#site_name").val('');
 
     var filter = {    
       status : $('#status').val(),
@@ -66,7 +66,7 @@ var prList = new function()
             Filter : 
             <?php if (user()->isOperationManager() || user()->isRoot()): ?>
             <?php echo form::select('cluster', model::load('site/cluster')->listsForDropDown(), 'onchange="prList.updateFilter();" class="form-control"', $cluster, false);?>
-            <?php echo form::text("site_name","class='form-control'", $siteName);?>
+            <?php echo form::text("site_name","class='form-control' placeholder='Search By Site Name'", $siteName);?>
             <?php echo form::hidden("site_id","class='form-control'");?>
 
             <script type="text/javascript">
@@ -78,8 +78,10 @@ var prList = new function()
              //console.log(tempfieldName);
             $(document).ready(function() {
               tempfieldName.width(200);
+              //console.log(pim.url('report/get_site'));
               tempfieldName.autocomplete({
-                    source: "/digitalgaia/iris/dashboard/report/get_site", // path to the get_user method
+                    //source: "/digitalgaia/iris/dashboard/report/get_site", // path to the get_site method
+                    source: pim.url('report/get_site'), // path to the get_site method
                     select: function (event, ui){
                       event.preventDefault();
                       //console.log(ui.item.value);

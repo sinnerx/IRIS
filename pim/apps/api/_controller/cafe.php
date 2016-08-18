@@ -345,6 +345,18 @@ class Controller_Cafe
 
 		$pendingUpload = $this->getPendingUpload();
 
+		// Check unlock
+		$unlock = db::where('siteID', $this->site->siteID)->get('site')->row();
+		$dateToday = substr(date('Y-m-d H:i:s'), 0, 10);
+		$dateUnlock = substr($unlock['siteUnlockDate'], 0, 10);
+		if (strcmp($dateToday, $dateUnlock) == 0) {
+			$unlockYear = substr($dateUnlock, 0, 4);
+			$unlockMonth = substr($dateUnlock, 5, 2);
+		}
+
+		//$unlock = db::from('site')
+		//->where('siteID', $this->site->siteID)->get()->result('siteUnlockDate');
+
 		// if there's currently 10 pending upload. lessen the server load.
 		if($pendingUpload > 10)
 		{
@@ -376,7 +388,9 @@ class Controller_Cafe
 
 			return json_encode(array(
 				'status' => 'success',
-				'total_transactions' => 0
+				'test_msg' => 'unlock: '. $unlockYear . '.' . $unlockMonth,
+				'total_transactions' => 0,
+				'failed_transactions' => 0
 				));
 		}
 
@@ -395,88 +409,126 @@ class Controller_Cafe
 		$uniqueIds = array_keys($existing);
 
 		$totalTransactions = 0;
+		$failedTransactions = 0;
+		$month = 0;
+		$year = 0;
 
 		foreach($transactions as $row_transaction)
 		{
 			$localId = $row_transaction['transaction_id'];
 			$uniqueId = $row_transaction['unique'];
 
-			// update
-			if(in_array($uniqueId, $uniqueIds) && $uniqueId != null)
-			{
-				$totalTransactions++;
+			// Check if transaction date falls in range of a 'checked' DCP
+			$datetime = $row_transaction['datetime'];
+			$year = substr($datetime, 0, 4);
+			$month = substr($datetime, 5, 2);
 
-				$transaction = model::orm('billing/transaction')
-									->where('siteID', $this->site->siteID)
-									->where('billingTransactionLocalID', $localId)
-									->execute()->getFirst();
-
-				// only update date if there's changes. since currently only date can be updated. and status
-				$transaction->billingTransactionDate = $row_transaction['datetime'];
-				$transaction->billingTransactionUpdatedDate = $row_transaction['updatedDate'];
-
-				if(isset($row_transaction['status']))
-					$transaction->billingTransactionStatus = $row_transaction['status'];
-				
-				$transaction->save();
+			if (!($year == $unlockYear && $month == $unlockMonth)) {
+				$checked = db::from('billing_approval')
+				->join('billing_approval_level', 'billing_approval_level.billingApprovalID = billing_approval.billingApprovalID')
+				->where('userLevel = 2')
+				->where('billingApprovalLevelStatus = 1')
+				->where('siteID', $this->site->siteID)
+				->where('month', $month)
+				->where('year', $year)->get()->result('billingApprovalID');
 			}
-			else
-			{
-				$totalTransactions++;
 
-				$transaction = model::orm('billing/transaction')->create();
-				$transaction->siteID = $this->site->siteID;
-				$transaction->billingTransactionLocalID = $localId;
-				$transaction->billingTransactionTotalQuantity = $row_transaction['quantity'];
-				$transaction->billingTransactionUnique = $uniqueId ? $uniqueId : strtotime($row_transaction['createdDate'])*1000;
-				$transaction->billingTransactionStatus = $row_transaction['status'] ? : 1;
-				$transaction->billingTransactionTotal = $row_transaction['total'];
-				$transaction->billingTransactionDate = $row_transaction['datetime'];
-				// $transaction->billingTransactionCreatedDate = $row_transaction['datetime'];
-				// $transaction->billingTransactionUpdatedDate = $row_transaction['datetime'];
-				$transaction->billingTransactionCreatedDate = $row_transaction['createdDate'] ? : $row_transaction['datetime'];
-				$transaction->billingTransactionUpdatedDate = $row_transaction['updatedDate'] ? : $row_transaction['datetime'];
-				$transaction->billingTransactionUploaded = 1;
-				$transaction->save();
-
-				foreach($row_transaction['transaction_items'] as $localItemId => $row_transactionItem)
+			if (count($checked) > 0) {
+				$failedTransactions++;
+			} else {
+				// update
+				if(in_array($uniqueId, $uniqueIds) && $uniqueId != null)
 				{
-					$transactionItem = model::orm('billing/transaction_item')->create();
-					$transactionItem->billingTransactionID = $transaction->billingTransactionID;
-					$transactionItem->billingItemID = $row_transactionItem['billing_item_id'];
-					$transactionItem->billingTransactionItemPrice = $row_transactionItem['price'];
-					$transactionItem->billingTransactionItemQuantity = $row_transactionItem['quantity'];
-					$transactionItem->billingTransactionItemDescription = $row_transactionItem['description'];
-					$transactionItem->save();
+					// If goes into this loop, means the transaction date is outside 'checked' DCP
+					// Check if transaction is already within 'checked' DCP
+					$checked = db::from('billing_approval')
+					->join('billing_approval_level', 'billing_approval_level.billingApprovalID = billing_approval.billingApprovalID')
+					->join('billing_transaction', '(month = month(billing_transaction.billingTransactionDate) and year = year(billing_transaction.billingTransactionDate))')
+					->where("billingTransactionUnique = $uniqueId")
+					->where('userLevel = 2')
+					->where('billingApprovalLevelStatus = 1')
+					->where("!(month = $unlockMonth AND year = $unlockYear)")
+					->where('billing_approval.siteID', $this->site->siteID)->get()->result('billingApprovalID');
+					//->where("month=month(billingTransactionDate)")
+					//->where("year=year(billingTransactionDate)")->get()->result('billingApprovalID');
+					if (count($checked) > 0) {
+						$failedTransactions++;
+					} else {
+						$totalTransactions++;
 
-					if(isset($row_transactionItem['pc_usage']))
-					{
-						/*
-						billingPcUsageLocalID [int]
-						billingTransactionItemID [int]
-						billingPcUsageAsset [varchar]
-						billingPcUsagePcNo [varchar]
-						billingPcUsageStart [datetime]
-						billingPcUsageEnd [datetime]*/
-						$localPcUsage = $row_transactionItem['pc_usage'];
+						$transaction = model::orm('billing/transaction')
+											->where('siteID', $this->site->siteID)
+											->where('billingTransactionLocalID', $localId)
+											->execute()->getFirst();
 
-						$pcUsage = model::orm('billing/pc_usage')->create();
-						$pcUsage->billingTransactionItemID = $transactionItem->billingTransactionItemID;
-						$pcUsage->billingPcUsageLocalID = $localPcUsage['pc_usage_id'];
-						$pcUsage->billingPcUsageAsset = $localPcUsage['asset'];
-						$pcUsage->billingPcUsagePcNo = $localPcUsage['pc_no'];
-						$pcUsage->billingPcUsageStart = $localPcUsage['start'];
-						$pcUsage->billingPcUsageEnd = $localPcUsage['end'];
-						$pcUsage->save();
+						// only update date if there's changes. since currently only date can be updated. and status
+						$transaction->billingTransactionDate = $row_transaction['datetime'];
+						$transaction->billingTransactionUpdatedDate = $row_transaction['updatedDate'];
+
+						if(isset($row_transaction['status']))
+							$transaction->billingTransactionStatus = $row_transaction['status'];
+						
+						$transaction->save();
 					}
 				}
+				else
+				{
+					$totalTransactions++;
 
-				$transactionUser = model::orm('billing/transaction_user')->create();
-				$transactionUser->billingTransactionID = $transaction->billingTransactionID;
-				$transactionUser->billingTransactionUser = $row_transaction['user']['userID'];
-				$transactionUser->billingTransactionUserAge = $row_transaction['user']['age'];
-				$transactionUser->billingTransactionUserOccupationGroup = $row_transaction['user']['occupation'];
-				$transactionUser->save();
+					$transaction = model::orm('billing/transaction')->create();
+					$transaction->siteID = $this->site->siteID;
+					$transaction->billingTransactionLocalID = $localId;
+					$transaction->billingTransactionTotalQuantity = $row_transaction['quantity'];
+					$transaction->billingTransactionUnique = $uniqueId ? $uniqueId : strtotime($row_transaction['createdDate'])*1000;
+					$transaction->billingTransactionStatus = $row_transaction['status'] ? : 1;
+					$transaction->billingTransactionTotal = $row_transaction['total'];
+					$transaction->billingTransactionDate = $row_transaction['datetime'];
+					// $transaction->billingTransactionCreatedDate = $row_transaction['datetime'];
+					// $transaction->billingTransactionUpdatedDate = $row_transaction['datetime'];
+					$transaction->billingTransactionCreatedDate = $row_transaction['createdDate'] ? : $row_transaction['datetime'];
+					$transaction->billingTransactionUpdatedDate = $row_transaction['updatedDate'] ? : $row_transaction['datetime'];
+					$transaction->billingTransactionUploaded = 1;
+					$transaction->save();
+
+					foreach($row_transaction['transaction_items'] as $localItemId => $row_transactionItem)
+					{
+						$transactionItem = model::orm('billing/transaction_item')->create();
+						$transactionItem->billingTransactionID = $transaction->billingTransactionID;
+						$transactionItem->billingItemID = $row_transactionItem['billing_item_id'];
+						$transactionItem->billingTransactionItemPrice = $row_transactionItem['price'];
+						$transactionItem->billingTransactionItemQuantity = $row_transactionItem['quantity'];
+						$transactionItem->billingTransactionItemDescription = $row_transactionItem['description'];
+						$transactionItem->save();
+
+						if(isset($row_transactionItem['pc_usage']))
+						{
+							/*
+							billingPcUsageLocalID [int]
+							billingTransactionItemID [int]
+							billingPcUsageAsset [varchar]
+							billingPcUsagePcNo [varchar]
+							billingPcUsageStart [datetime]
+							billingPcUsageEnd [datetime]*/
+							$localPcUsage = $row_transactionItem['pc_usage'];
+
+							$pcUsage = model::orm('billing/pc_usage')->create();
+							$pcUsage->billingTransactionItemID = $transactionItem->billingTransactionItemID;
+							$pcUsage->billingPcUsageLocalID = $localPcUsage['pc_usage_id'];
+							$pcUsage->billingPcUsageAsset = $localPcUsage['asset'];
+							$pcUsage->billingPcUsagePcNo = $localPcUsage['pc_no'];
+							$pcUsage->billingPcUsageStart = $localPcUsage['start'];
+							$pcUsage->billingPcUsageEnd = $localPcUsage['end'];
+							$pcUsage->save();
+						}
+					}
+
+					$transactionUser = model::orm('billing/transaction_user')->create();
+					$transactionUser->billingTransactionID = $transaction->billingTransactionID;
+					$transactionUser->billingTransactionUser = $row_transaction['user']['userID'];
+					$transactionUser->billingTransactionUserAge = $row_transaction['user']['age'];
+					$transactionUser->billingTransactionUserOccupationGroup = $row_transaction['user']['occupation'];
+					$transactionUser->save();
+				}
 			}
 		}
 
@@ -496,7 +548,9 @@ class Controller_Cafe
 
 		return json_encode(array(
 			'status' => 'success',
-			'total_transactions' => $totalTransactions
+			'test_msg' => 'unlock: '.$unlock,
+			'total_transactions' => $totalTransactions,
+			'failed_transactions' => $failedTransactions
 			));
 	}
 
