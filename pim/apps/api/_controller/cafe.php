@@ -345,6 +345,18 @@ class Controller_Cafe
 
 		$pendingUpload = $this->getPendingUpload();
 
+		// Check unlock
+		$unlock = db::where('siteID', $this->site->siteID)->get('site')->row();
+		$dateToday = substr(date('Y-m-d H:i:s'), 0, 10);
+		$dateUnlock = substr($unlock['siteUnlockDate'], 0, 10);
+		if (strcmp($dateToday, $dateUnlock) == 0) {
+			$unlockYear = substr($dateUnlock, 0, 4);
+			$unlockMonth = substr($dateUnlock, 5, 2);
+		}
+
+		//$unlock = db::from('site')
+		//->where('siteID', $this->site->siteID)->get()->result('siteUnlockDate');
+
 		// if there's currently 10 pending upload. lessen the server load.
 		if($pendingUpload > 10)
 		{
@@ -376,6 +388,7 @@ class Controller_Cafe
 
 			return json_encode(array(
 				'status' => 'success',
+				'test_msg' => 'unlock: '. $unlockYear . '.' . $unlockMonth,
 				'total_transactions' => 0,
 				'failed_transactions' => 0
 				));
@@ -409,13 +422,16 @@ class Controller_Cafe
 			$datetime = $row_transaction['datetime'];
 			$year = substr($datetime, 0, 4);
 			$month = substr($datetime, 5, 2);
-			$checked = db::from('billing_approval')
-			->join('billing_approval_level', 'billing_approval_level.billingApprovalID = billing_approval.billingApprovalID')
-			->where('userLevel = 2')
-			->where('billingApprovalLevelStatus = 1')
-			->where('siteID', $this->site->siteID)
-			->where('month', $month)
-			->where('year', $year)->get()->result('billingApprovalID');
+
+			if (!($year == $unlockYear && $month == $unlockMonth)) {
+				$checked = db::from('billing_approval')
+				->join('billing_approval_level', 'billing_approval_level.billingApprovalID = billing_approval.billingApprovalID')
+				->where('userLevel = 2')
+				->where('billingApprovalLevelStatus = 1')
+				->where('siteID', $this->site->siteID)
+				->where('month', $month)
+				->where('year', $year)->get()->result('billingApprovalID');
+			}
 
 			if (count($checked) > 0) {
 				$failedTransactions++;
@@ -431,6 +447,7 @@ class Controller_Cafe
 					->where("billingTransactionUnique = $uniqueId")
 					->where('userLevel = 2')
 					->where('billingApprovalLevelStatus = 1')
+					->where("!(month = $unlockMonth AND year = $unlockYear)")
 					->where('billing_approval.siteID', $this->site->siteID)->get()->result('billingApprovalID');
 					//->where("month=month(billingTransactionDate)")
 					//->where("year=year(billingTransactionDate)")->get()->result('billingApprovalID');
@@ -531,7 +548,7 @@ class Controller_Cafe
 
 		return json_encode(array(
 			'status' => 'success',
-			//'test_msg' => 'year: ' . $year . ' month: ' . $month . ' CHECKED: ' . count($checked),
+			'test_msg' => 'unlock: '.$unlock,
 			'total_transactions' => $totalTransactions,
 			'failed_transactions' => $failedTransactions
 			));
