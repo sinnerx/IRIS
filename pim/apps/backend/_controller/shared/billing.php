@@ -500,12 +500,24 @@ Class Controller_Billing
 	public function dailyCashProcess()
 	{
 		$siteID = authData('site.siteID');
-		$data['siteID'] = $siteID = $siteID ? : request::get('siteID');
 		$data['siteID'] = $siteID = $siteID ? : input::get('siteID');
+		$data['siteID'] = $siteID = $siteID ? : request::get('siteID');
 
-		$data['selectYear'] = $year = request::get('selectYear', date('Y'));
-		$data['selectMonth'] = $month = request::get('selectMonth', date('m'));
+		$selectYear = input::get('selectYear');
+		if (!$selectYear) {
+			$selectYear = request::get('selectYear', date('Y'));
+		}
+		$data['selectYear'] = $selectYear;
+		//$data['selectYear'] = $selectYear = $selectYear ? : input::get('selectYear');
+		//$data['selectYear'] = $selectYear = $selectYear ? : request::get('selectYear', date('Y'));
 
+		$selectMonth = input::get('selectMonth');
+		if (!$selectMonth) {
+			$selectMonth = request::get('selectMonth', date('m'));
+		}
+		$data['selectMonth'] = $selectMonth;
+
+		//echo $siteID . ' & ' . $selectYear . ' & ' . $selectMonth;
 		// prepare all the required by codes.
 		$codes = model::load('billing/item')->getItemCodes();
 
@@ -542,7 +554,7 @@ Class Controller_Billing
 		$previousTransaction = db::from('billing_transaction')
 		->select('SUM(billingTransactionTotal) as total')
 		->where('siteID', $data['siteID'])
-		->where('billingTransactionDate <', $year.'-'.$month.'-01')
+		->where('billingTransactionDate <', $selectYear.'-'.$selectMonth.'-01')
 		->where('billingTransactionStatus', 1)
 		->get()->row('total');
 
@@ -555,11 +567,11 @@ Class Controller_Billing
 
 		$billingItems = model::orm('billing/item')->execute();
 
-		$startDate = $year.'-'.$month.'-01';
+		$startDate = $selectYear.'-'.$selectMonth.'-01';
 		
 		$transactionItems = db::from('billing_transaction_item')
-		->where('YEAR(billingTransactionDate)', $year)
-		->where('MONTH(billingTransactionDate)', $month)
+		->where('YEAR(billingTransactionDate)', $selectYear)
+		->where('MONTH(billingTransactionDate)', $selectMonth)
 		->where('siteID', $data['siteID'])
 		->where('billingTransactionStatus', 1)
 		->join('billing_transaction', 'billing_transaction.billingTransactionID = billing_transaction_item.billingTransactionID', 'INNER JOIN')
@@ -648,8 +660,8 @@ Class Controller_Billing
 		// *** FOR APPROVAL FLOW ***
 
 		//$data['siteID'] = $siteID = request::get("siteID") ? : authData('site.siteID');	
-		$data['selectMonth'] = $selectMonth = request::get("selectMonth") ? :  date('m');
-		$data['selectYear'] = $selectYear = request::get("selectYear") ? :  date('Y');
+		//$data['selectMonth'] = $selectMonth = request::get("selectMonth") ? :  date('m');
+		//$data['selectYear'] = $selectYear = request::get("selectYear") ? :  date('Y');
 
 		$approval = model::load('billing/approval')->getApproval($siteID, $selectMonth, $selectYear);
 		//echo 'Site: ' . $siteID . ' Mn: ' . $selectMonth . ' Yr: ' . $selectYear;
@@ -667,37 +679,8 @@ Class Controller_Billing
 			} else {
 				if (input::get("submit") == 1){
 					$approval->approve(authData('user.userLevel'));		
-					
-					/*
-					$approvalDetail = $approval->getApprovalDetail($approval->billingApprovalID,\model\user\user::LEVEL_FINANCIALCONTROLLER);
-					$userDetail = model::load('user/user')->getUsersByID($approvalDetail['userID']);
-								 
-					$data['closed'] = 1;
-					$data['closedword'] = "Closed at ".$approvalDetail['billingApprovalLevelCreatedDate']." <br> by ".$userDetail[$approvalDetail['userID']]['userProfileFullName'];
-
-					$approvalDetail = $approval->getApprovalDetail($approval->billingApprovalID,\model\user\user::LEVEL_CLUSTERLEAD);
-					$userDetail = model::load('user/user')->getUsersByID($approvalDetail['userID']);
-								 
-					$data['approved'] = 1;
-					$data['approvedword'] = "Approved at ".$approvalDetail['billingApprovalLevelCreatedDate']." <br> by ".$userDetail[$approvalDetail['userID']]['userProfileFullName'];
-				
-					$approvalDetail = $approval->getApprovalDetail($approval->billingApprovalID,\model\user\user::LEVEL_SITEMANAGER);
-					$userDetail = model::load('user/user')->getUsersByID($approvalDetail['userID']);
-								 
-					$data['checked'] = 1;
-					$data['checkedword'] = "Checked at ".$approvalDetail['billingApprovalLevelCreatedDate']." <br> by ".$userDetail[$approvalDetail['userID']]['userProfileFullName'];
-					*/
 				} else {
 					$approval->disapprove(authData('user.userLevel'));
-
-					/*
-					$approval->reject(\model\user\user::LEVEL_CLUSTERLEAD);
-
-					$approvalDetail = $approval->getApprovalDetail($approval->billingApprovalID,\model\user\user::LEVEL_FINANCIALCONTROLLER);
-					$userDetail = model::load('user/user')->getUsersByID($approvalDetail['userID']);								
-					
-					$data['closedword'] = "Rejected at ".$approvalDetail['billingApprovalLevelCreatedDate']." <br> by ".$userDetail[$approvalDetail['userID']]['userProfileFullName'];
-					*/
 				}
 			}
 			//redirect::to('billing/dailyCashProcess', 'Daily Cash Process checked', 'success');
