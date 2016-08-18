@@ -120,7 +120,7 @@ class Report
 			// db::join("activity_user AU", "AU.activityID = A.activityID");
 			db::join("training T", "T.activityID = A.activityID");
 			db::where("T.trainingSubType", $trainingSubTypeID);
-			db::where("A.activityStartDate > $dateStart ");
+			db::where("A.activityStartDate > '$dateStart' ");
 			db::where("A.activityEndDate < '$dateEnd' ");
 			db::where("EXISTS (SELECT 1 FROM activity_user WHERE activityID = AD.activityID)");
 
@@ -261,7 +261,7 @@ class Report
 			db::join("activity A", "A.activityID = AD.activityID");
 			db::join("training T", "T.activityID = A.activityID");
 			db::where("T.trainingType", $trainingTypeID);
-			db::where("A.activityStartDate > $dateStart ");
+			db::where("A.activityStartDate > '$dateStart' ");
 			db::where("A.activityEndDate < '$dateEnd' ");
 			db::where("EXISTS (SELECT userID FROM activity_user WHERE activity_user.activityID = A.activityID)");			
 			//db::group_by("T.trainingType");
