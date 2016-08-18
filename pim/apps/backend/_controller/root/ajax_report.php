@@ -638,28 +638,45 @@ public function quarterlyReport($reportId){
 				//image manager | asst manager
 
 				$tableManager->addRow();
-				$imageManager 	= $baseUrl."/api/photo/small/". $siteKey['siteManager'][0]['userProfileAvatarPhoto']. "";
+				
 				// var_dump($imageManager);
 				// die;
-				if(@getimagesize($imageManager)){
-					$cell = $tableManager->addCell(100);
-					$textrun = $cell->createTextRun();
-					$textrun->addImage($imageManager,array(
-						'width' => 150, 'height' => 150));
+				$imageManager 	= $baseUrl."/api/photo/small/". $siteKey['siteManager'][0]['userProfileAvatarPhoto']. "";
+				if(($siteKey['siteManager'][0]['userProfileAvatarPhoto'] != "") && @getimagesize($imageManager)) {
+					// if(@getimagesize($imageManager)){
+						$cell = $tableManager->addCell(100);
+						$textrun = $cell->createTextRun();
+						$textrun->addImage($imageManager,array(
+							'width' => 150, 'height' => 150));
+					// }
 				}
 				else{
-					$tableManager->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars(''), $cellHeaderCentered);
+					$imageManager 	= $baseUrl."/api/photo/small/". "emptyavatar.png";
+					if(@getimagesize($imageManager)){
+						$cell = $tableManager->addCell(100);
+						$textrun = $cell->createTextRun();
+						$textrun->addImage($imageManager,array(
+							'width' => 150, 'height' => 150));
+					}
 				}
 
 				$imageManager2 	= $baseUrl."/api/photo/small/". $siteKey['siteManager'][1]['userProfileAvatarPhoto']. "";
-				if(@getimagesize($imageManager2)){				
-					$cell = $tableManager->addCell(100);
-					$textrun = $cell->createTextRun();
-					$textrun->addImage($imageManager2,array(
-						'width' => 150, 'height' => 150));
+				if(($siteKey['siteManager'][1]['userProfileAvatarPhoto'] != "") && @getimagesize($imageManager2)) {		
+					if(@getimagesize($imageManager2)){				
+						$cell = $tableManager->addCell(100);
+						$textrun = $cell->createTextRun();
+						$textrun->addImage($imageManager2,array(
+							'width' => 150, 'height' => 150));
+					}
 				}
 				else{
-					$tableManager->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars(''), $cellHeaderCentered);
+					$imageManager2 	= $baseUrl."/api/photo/small/". "emptyavatar.png";
+					if(@getimagesize($imageManager2)){				
+						$cell = $tableManager->addCell(100);
+						$textrun = $cell->createTextRun();
+						$textrun->addImage($imageManager2,array(
+							'width' => 150, 'height' => 150));
+					}					
 				}
 
 				//name manager | asst manager
@@ -682,7 +699,6 @@ public function quarterlyReport($reportId){
 
 				//half side of page
 				//interior view image, exterior view image
-				$section->addTextBreak();
 				$phpWord->addTableStyle('Interior Info', $styleTable, $styleFirstRow);
 				$tableInterior =  $cellMiddle->addTable('Interior Info');
 				//$table = $section->addTable('InteriorExterior Info');
@@ -691,45 +707,64 @@ public function quarterlyReport($reportId){
 				$tableInterior->addRow();
 				$tableInterior->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars('Interior View'), $cellHeaderCentered);
 				
-				
-				foreach ($siteKey['interior'] as $keyInterior => $valueInterior) {
-					// var_dump($siteKey['interior']);
-					// die;
+				if(count($siteKey['interior']) > 0){
+					foreach ($siteKey['interior'] as $keyInterior => $valueInterior) {
+						// var_dump($siteKey['interior']);
+						// die;
+						$tableInterior->addRow();
+						# code...
+						$imageInterior 	= $baseUrl."/api/photo/small/". $valueInterior['photoName']. "";
+						if(@getimagesize($imageInterior)){				
+							$cell = $tableInterior->addCell(100);
+							$textrun = $cell->createTextRun();
+							$textrun->addImage($imageInterior,array(
+								'width' => 130, 'height' => 130));
+						}									
+					}
+				}
+				else{
 					$tableInterior->addRow();
-					# code...
-					$imageInterior 	= $baseUrl."/api/photo/small/". $valueInterior['photoName']. "";
+					$imageInterior 	= $baseUrl."/api/photo/small/". "emptyBuilding.jpg";
 					if(@getimagesize($imageInterior)){				
 						$cell = $tableInterior->addCell(100);
 						$textrun = $cell->createTextRun();
 						$textrun->addImage($imageInterior,array(
 							'width' => 130, 'height' => 130));
-					}	
-					else{
-						$tableInterior->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars(''), $cellHeaderCentered);
-					}									
+					}					
 				}
+
 
 				$phpWord->addTableStyle('Exterior Info', $styleTable, $styleFirstRow);
 				$tableExterior = $cellRight->addTable('Exterior Info');
 				$tableExterior->addRow();
 				$tableExterior->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars('Exterior View'), $cellHeaderCentered);
 
-				foreach ($siteKey['exterior'] as $keyInterior => $valueExterior) {
-					// var_dump($siteKey['interior']);
-					// die;
+				if(count($siteKey['exterior']) > 0){
+					foreach ($siteKey['exterior'] as $keyInterior => $valueExterior) {
+						// var_dump($siteKey['interior']);
+						// die;
+						$tableExterior->addRow();
+						# code...
+						$imageExterior 	= $baseUrl."/api/photo/small/". $valueExterior['photoName']. "";
+						if(@getimagesize($imageExterior)){				
+							$cell = $tableExterior->addCell(100);
+							$textrun = $cell->createTextRun();
+							$textrun->addImage($imageExterior,array(
+								'width' => 130, 'height' => 130));
+						}										
+					}	
+				}
+				else{
 					$tableExterior->addRow();
-					# code...
-					$imageExterior 	= $baseUrl."/api/photo/small/". $valueExterior['photoName']. "";
-					if(@getimagesize($imageExterior)){				
-						$cell = $tableExterior->addCell(100);
-						$textrun = $cell->createTextRun();
-						$textrun->addImage($imageExterior,array(
-							'width' => 130, 'height' => 130));
-					}
-					else{
-						$tableExterior->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars(''), $cellHeaderCentered);
-					}										
-				}				
+					$imageExterior 	= $baseUrl."/api/photo/small/". "emptyBuilding.jpg";
+						if(@getimagesize($imageExterior)){				
+							$cell = $tableExterior->addCell(100);
+							$textrun = $cell->createTextRun();
+							$textrun->addImage($imageExterior,array(
+								'width' => 130, 'height' => 130));
+						}	
+				}
+			
 
 				$section->addPageBreak();
 				//PI1M Performance
