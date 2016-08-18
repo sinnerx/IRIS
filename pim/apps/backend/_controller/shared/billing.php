@@ -753,6 +753,19 @@ Class Controller_Billing
 		view::render('shared/billing/dailyCashProcessRedesign', $data);
 	}
 
+        public function dailyCashProcessSummary()
+	{
+//		//select siteName, collection, balance, date2, user2, date3, user3, date5, user5
+//                //from site
+		$data = db::prepareSQL("select siteName from site")
+                
+                ->order_by("siteName","ASC")  
+                ->get()->result();
+var_dump($data);
+die();
+		view::render('shared/billing/dailyCashProcessSummary', $data);
+	}
+        
 	public function dailyCashProcessOld($id = null)
 	{		
 		$data['siteID'] = $siteID = request::get("siteID") ? : authData('site.siteID');	
