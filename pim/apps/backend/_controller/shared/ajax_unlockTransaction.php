@@ -23,7 +23,7 @@ class Controller_ajax_UnlockTransaction {
 			return json_encode(array('status' => 'fail'));
 		}
 		else{
-			$dateToday = date('Y-m-d h:i:s');
+			$dateToday = date('Y-m-d H:i:s');
 			$site = model::load("site/site")->unlockSite($siteid, $dateToday);
 			return json_encode(array('status' => 'success'));
 		}
