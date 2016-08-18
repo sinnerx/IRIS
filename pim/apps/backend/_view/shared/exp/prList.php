@@ -66,7 +66,7 @@ var prList = new function()
             Filter : 
             <?php if (user()->isOperationManager() || user()->isRoot()): ?>
             <?php echo form::select('cluster', model::load('site/cluster')->listsForDropDown(), 'onchange="prList.updateFilter();" class="form-control"', $cluster, false);?>
-            <?php echo form::text("site_name","class='form-control'", $siteName);?>
+            <?php echo form::text("site_name","class='form-control' placeholder='Search By Site Name'", $siteName);?>
             <?php echo form::hidden("site_id","class='form-control'");?>
 
             <script type="text/javascript">
