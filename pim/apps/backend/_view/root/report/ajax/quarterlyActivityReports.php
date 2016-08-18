@@ -10,7 +10,7 @@ $humanFilesize = function($bytes, $decimals = 2)
 };
 
 ?>
-<h3 class='panel panel-heading' style="margin-top: 0px; margin-bottom: 0px;">Generated Reports for <?php echo !$quarter? "": model::load("helper")->quarter(1,$quarter).' '.$year;?></h3>
+<h3 class='panel panel-heading' style="margin-top: 0px; margin-bottom: 0px;">Generated Reports for <?php echo !$quarter? "All": model::load("helper")->quarter(1,$quarter).' '.$year;?></h3>
 <div id='ajax-report-errors' style="display: none;">
 	<?php if($pending_report):?>
 	<div class='alert alert-danger'>
@@ -22,12 +22,14 @@ $humanFilesize = function($bytes, $decimals = 2)
 	<table class='table'>
 		<tr>
 			<th>Date Generated</th>
+			<th>Quarter</th>
 			<th>Status</th>
 			<th style="text-align: center;">Total</th>
 		</tr>
 		<?php foreach($reports as $report):?>
 		<tr>
 			<td><?php echo $report['reportQuarterlyStatus'] == '0' ? '-' : date('d-F-Y g:i A', strtotime($report['reportQuarterlyUpdatedDate'])).' ('.$humanFilesize($report['reportQuarterlyZipSize']).')';?></td>
+			<td><?php echo model::load("helper")->quarter(2, $report['reportQuarterlyName']). " ". $report['reportQuarterlyYear'];?></td>
 			<td><?php echo $report['reportQuarterlyStatusState'];?>
 			<?php if($report['reportQuarterlyStatusState'] == 'completed'):?>
 				<a onclick='report.downloadIncrement(<?php echo $report['reportQuarterlyID'];?>);' href='<?php echo url::asset('backend/reports/quarterly-activities/'.$report['reportQuarterlyZipName']);?>' class='fa fa-download'></a>
