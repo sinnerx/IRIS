@@ -24,6 +24,10 @@ class Controller_Report
 					# code...
 					$this->reportDashboardUSPMircosites($input);
 					break;
+				case 12:
+					# code...
+					$this->reportUSPStaffStrength();
+					break;
 				
 				default:
 					# code...
@@ -456,6 +460,7 @@ class Controller_Report
 		//view::render('root/report/dashboardReportGenerator');		
 	}
 
+	// USP MICROSITES VITAL STATISTICS
 	private function getREgister($date) {
 		// GET Registered
 		db::select('COUNT(A.userID) AS registered, COUNT(C.siteID) AS site, C.clusterID AS clusterID');
@@ -627,7 +632,7 @@ class Controller_Report
 		return $totalEntrepre;
 	}
 
-	private function reportDashboardUSPMircosites($input){
+	private function reportDashboardUSPMircosites($input) {
 
 		$month 	= $input['month'];
 		$year 	= $input['year'];
@@ -693,6 +698,8 @@ class Controller_Report
 
 	    // Header
 		$header = array('','Semenanjung','Sabah','Sarawak');
+	    // Alignment
+		$hAlign = array('L','C','C','C');
 
 	    for ($i=0;$i<count($header);$i++) {
 	        $pdf->Cell($w[$i],7,$header[$i],1,0,'C');
@@ -702,29 +709,151 @@ class Controller_Report
 
 	    // Total Registered User
 	    for ($i=0;$i<count($totalregister);$i++) {
-	        $pdf->Cell($w[$i],7,$totalregister[$i],1,0,'C');
+	        $pdf->Cell($w[$i],7,$totalregister[$i],1,0,$hAlign[$i]);
 	    }
 
 	    $pdf->Ln();
 
 	    // Total User Logins
 	    for ($i=0;$i<count($totaLogin);$i++) {
-	        $pdf->Cell($w[$i],7,$totaLogin[$i],1,0,'C');
+	        $pdf->Cell($w[$i],7,$totaLogin[$i],1,0,$hAlign[$i]);
 	    }
 
 	    $pdf->Ln();
 
 	    // Total Content Updated
 	    for ($i=0;$i<count($contentUpdate);$i++) {
-	        $pdf->Cell($w[$i],7,$contentUpdate[$i],1,0,'C');
+	        $pdf->Cell($w[$i],7,$contentUpdate[$i],1,0,$hAlign[$i]);
 	    }
 
 	    $pdf->Ln();
 
 	    // Total Entrepreneurs Profiled
 	    for ($i=0;$i<count($Entrepreneurs);$i++) {
-	        $pdf->Cell($w[$i],7,$Entrepreneurs[$i],1,0,'C');
+	        $pdf->Cell($w[$i],7,$Entrepreneurs[$i],1,0,$hAlign[$i]);
 	    }
+
+		$pdf->Output();
+
+	}
+
+	// USP STAFF STRENGTH
+	private function getStaffStrength() {
+		// Get TotalManager
+		db::select('COUNT(B.userID) AS Manager, COUNT(DISTINCT(A.siteID)) AS Site');
+		db::from('site A');
+		db::join('site_manager B','B.siteID = A.siteID','RIGHT JOIN');
+		$ResultManager = db::get()->result();
+
+		// Set array for entreprenerus cell
+		$totalManager = array();
+
+		// Get totalManager data
+		foreach ($ResultManager as $key => $value) {
+			// Total Position
+			$position = $value['Site']*2;
+			// Get Total Vacant
+			if ($value['Manager'] != $position) {
+				$totalVacant = $position-$value['Manager'];
+			} else {
+				$totalVacant = '0';
+			}
+			// Get Percentage
+			$filled = floatval(number_format((100.0*$value['Manager'])/$position, 2));
+			// Push to entreprenerus cell array
+			array_push($totalManager,'Total',$value['Site'],$position,$value['Manager'],$totalVacant,$filled.'%');
+		}
+
+		return $totalManager;
+	}
+
+	private function allBatch() {
+		// Get TotalManager
+		db::select("SUM(CASE WHEN B.clusterID IN ('5','6') THEN 1 ELSE 0 END) Semenanjung, SUM(CASE WHEN B.clusterID IN ('1','2','3') THEN 1 ELSE 0 END) Sabah, SUM(CASE WHEN B.clusterID IN ('4') THEN 1 ELSE 0 END) Sarawak, COUNT(A.`userID`) AS totalManager, COUNT(DISTINCT(B.`siteID`))*2 AS Positions, COUNT(DISTINCT(B.`siteID`)) AS totalSite, C.`siteInfoPhase` AS BatchID, E.`batchName` AS Batch");
+		db::from('site_manager A');
+		db::join('cluster_site B', 'B.siteID = A.siteID');
+		db::join('site_info C', 'C.siteID = B.siteID', 'RIGHT JOIN');
+		db::join('cluster D', 'D.clusterID = B.clusterID', 'RIGHT JOIN');
+		db::join('batch E', 'E.batchID = C.siteInfoPhase', 'RIGHT JOIN');
+		db::group_by('C.siteInfoPhase');
+		$ResultBatch = db::get()->result();
+
+		return $ResultBatch;
+	}
+
+	private function reportUSPStaffStrength() {
+
+		// Get Staff Strength
+		$totalStaffStrength = $this->getStaffStrength();
+
+		// Get All batch
+		$totalBatch = $this->allBatch();
+
+		// Start convert to PDF
+		$pdf = new FPDF();
+		$pdf->AddPage('L', 'A4');
+		$pdf->SetFont('Arial','B',10);
+
+	    $pdf->Cell(40,10,'USP STAFF STRENGTH');
+	    $pdf->Ln();
+
+	    // 1st Header
+		$header = array('Staff Strength','PI1Ms','Positions','Filled','Vacant','%Filled');
+		// 1st Cell width
+		$w = array(60, 30, 30, 30, 30, 30);
+		// 1st Cell alignment
+		$hAlign = array('L', 'R', 'R', 'R', 'R', 'R');
+
+	    for ($i=0;$i<count($header);$i++) {
+	        $pdf->Cell($w[$i],7,$header[$i],1,0,$hAlign[$i]);
+	    }
+
+	    $pdf->Ln();
+
+	    for ($i=0;$i<count($header);$i++) {
+	        $pdf->Cell($w[$i],7,$totalStaffStrength[$i],1,0,$hAlign[$i]);
+	    }
+
+	    $pdf->Ln();
+	    $pdf->Ln();
+
+	    // 2nd Header
+		$headers = array('Contract','# Pi1Ms in operation','Staffing');
+
+		// 2nd Cell width
+		$Nw = array(90, 80, 40); //210
+
+	    for ($i=0;$i<count($headers);$i++) {
+	        $pdf->Cell($Nw[$i],7,$header[$i],1,0,'C');
+	    }
+
+	    $pdf->Ln();
+
+	    // 3rd Header
+		$subHeaders = array('Name','End date','Semenanjung','Sabah','Sarawak','Vacant','%Filled');
+		// 3rd Cell width
+		$Nws = array(60, 30, 30, 30, 20, 20, 20); //210
+
+	    for ($i=0;$i<count($subHeaders);$i++) {
+	        $pdf->Cell($Nws[$i],7,$subHeaders[$i],1,0,'C');
+	    }
+
+	    $pdf->Ln();
+
+	    // End date
+		$endDate = array('2015','2016','2016','2017','2017','2017','');
+		
+		for ($i=0; $i < count($subHeaders); $i++) { 
+    		//echo $endDate[$i].'<br/>';
+        	$pdf->Cell($Nws[0],7,$totalBatch[$i]['Batch'].' ('.$totalBatch[$i]['totalSite'].' Pi1M)',1,0,'L');
+        	$pdf->Cell($Nws[1],7,$endDate[$i],1,0,'C');
+        	$pdf->Cell($Nws[2],7,$totalBatch[$i]['Semenanjung'],1,0,'C');
+        	$pdf->Cell($Nws[3],7,$totalBatch[$i]['Sabah'],1,0,'C');
+        	$pdf->Cell($Nws[4],7,$totalBatch[$i]['Sarawak'],1,0,'C');
+        	$pdf->Cell($Nws[5],7,$totalBatch[$i]['Positions']-$totalBatch[$i]['totalManager'],1,0,'C');
+        	$pdf->Cell($Nws[6],7,floatval(number_format((100.0*$totalBatch[$i]['totalManager'])/$totalBatch[$i]['Positions'], 2)).'%',1,0,'C');
+	    	$pdf->Ln();
+        }
 
 		$pdf->Output();
 
