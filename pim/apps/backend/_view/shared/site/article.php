@@ -213,6 +213,7 @@ List of all your approved and pending blog articles.
 		}echo '<pre>';print_r($data);die;*/
 		$no	= pagination::recordNo();
 		//var_dump($requestdata);
+		//print_r($article);
 		foreach($article as $row):
 		
 		if(isset($requestdata[$row['articleID']])){
@@ -288,3 +289,17 @@ List of all your approved and pending blog articles.
 	</div>
 </footer>
 </section>
+<script type="text/javascript">
+
+var url = window.location.href;
+var pageLink = url.substring(url.indexOf('?')+1);
+//alert(pageLink);
+
+	$('.pagination li>a').each(function() {
+   var $this = $(this);       
+   var _href = $this.attr("href"); 
+   $this.attr("href", _href + "?"+pageLink);
+});
+
+
+</script>

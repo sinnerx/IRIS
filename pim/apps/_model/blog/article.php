@@ -105,8 +105,17 @@ class Article extends \Origami
 	// }
 
 	# return an array of article list
-	public function getArticleList($siteID,$frontend = false,$page = 1)
+	public function getArticleList($siteID,$frontend = false,$page = 1,$input,$category,$todayDateStart,$todayDateEnd)
 	{
+		$todayDateStart = date('Y-m-d', strtotime($todayDateStart)); 
+		$todayDateEnd = date('Y-m-d', strtotime($todayDateEnd)); 
+
+		$catList	= $this->getCatArticle($category);
+		$catStr = implode (", ", array_map(function ($entry) {
+  					return $entry['articleID'];
+					}, $catList));
+		//print_r($catStr);
+		
 		db::from("article");
 		# get by siteID.
 		if($siteID === 0)
@@ -116,8 +125,19 @@ class Article extends \Origami
 		else
 		{
 			if($frontend == false){
+
 				db::where("siteID = '$siteID'");
+
+				if($category){
+				db::where("articleID IN", "($catStr)");
+				}
+
+				db::where('articlePublishedDate > ? AND articlePublishedDate < ?', array($todayDateStart.' 00:00:00', $todayDateEnd.' 23:59:59'));
+
 				db::where("articleStatus != 99");
+
+
+
 				## paginate based on current query built.
 				pagination::setFormat(model::load('template/cssbootstrap')->paginationLink());
 				pagination::initiate(Array(
@@ -148,6 +168,8 @@ class Article extends \Origami
 			}
 		}
 		return $data;
+
+
 	}
 
 	public function getArticleList2($siteID,$pageConf = null,$where = null,$join = null)
@@ -399,6 +421,84 @@ class Article extends \Origami
 		}else{
 			return null;
 		}
+
+	}
+
+	function getCategories($articleID){
+		//get article category
+			/*$articleCategories = db::from('article_category')
+			->select('categoryID')
+			->where('articleID', $articleID)
+			->group_by('categoryID')
+			->get()->result('categoryID');
+
+			//print_r($articleCategories);
+			return $articleCategories;*/
+
+			
+			if($articleID){
+			db::from("article_category");
+
+			# get by articleID
+			db::where("articleID", $articleID);
+
+			db::order_by("categoryID ASC");
+
+			if(is_array($articleID)){
+				return db::get()->result("articleID", true);
+			}else{
+				return db::get()->result();
+			}
+		}else{
+			return null;
+		}
+	}
+
+	function getCatArticle($catID){
+		//get article category
+			$catArticle = db::from('article_category')
+			->select('articleID')
+			->where('categoryID', $catID)
+			//->group_by('categoryID')
+			->get()->result();
+
+			//print_r($articleCategories);
+			return $catArticle;
+
+			
+			/*if($catID){
+			
+			db::from("article_category");
+			db::select("article");
+			# get by articleID
+			db::where("categoryID", $catID);
+
+			//db::order_by("articleID ASC");
+
+			if(is_array($articleID)){
+				return db::get()->result("categoryID", true);
+			}else{
+				return db::get()->result();
+			}
+		}else{
+			return null;
+		}*/
+	}
+
+	function getCategoriesName(){
+		db::from("category");
+		db::order_by("categoryID","ASC");
+		
+		$category_site = db::get()->result();
+
+		$articleCat=array();
+		
+		foreach($category_site as $row)
+		{
+			$articleCat[$row['categoryID']]= $row['categoryName'];
+		}
+
+		return $articleCat;
 
 	}
 
