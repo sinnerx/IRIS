@@ -58,6 +58,7 @@ class Controller_Report
 		db::group_by("T.trainingID");
 		db::group_by("MONTH(A.activityCreatedDate)");
 		db::where("BI.billingItemPrice > 0");
+		db::where("YEAR(A.activityCreatedDate)", $year);
 		$resultTrainingPaid = db::get()->result();
 		// var_dump($resultTrainingPaid);
 		// die;
@@ -72,6 +73,7 @@ class Controller_Report
 		db::group_by("T.trainingID");
 		db::group_by("MONTH(A.activityCreatedDate)");
 		db::where("BI.billingItemPrice = 0");
+		db::where("YEAR(A.activityCreatedDate)", $year);
 		$resultTrainingFree = db::get()->result();
 		// var_dump($resultTrainingFree);
 		// die;		
