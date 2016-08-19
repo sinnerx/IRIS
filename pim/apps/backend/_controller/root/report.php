@@ -30,7 +30,11 @@ class Controller_Report
 					break;				
 				case 13:
 					# code...
-					$this->reporEntrepreneurship($input);
+					$this->reportEntrepreneurship($input);
+					break;				
+				case 15:
+					# code...
+					$this->reportLMSTraining($input);
 					break;
 				
 				default:
@@ -39,25 +43,154 @@ class Controller_Report
 			}
 	}
 
-	private function reporEntrepreneurship($input){
+	private function reportLMSTraining($input){
 		//input
 		$year = $input['year'];
 
 		//query
-		$clusterSabahGroup = array(1,2,3);
-		$clusterSarawakGroup = array(4);
-		$clusterSemenanjungGroup = array(5,6);
+		db::select("MONTH(A.activityCreatedDate) as monthly, count(A.activityID) as totalPaid");
+		db::from("training T");
+		db::join("activity A", "A.activityID = T.activityID");
+		db::join("training_lms TLMS", "TLMS.trainingID = T.trainingID");
+		db::join("lms_package_module LPM", "LPM.id = TLMS.packageModuleID");
+		db::join("lms_package P", "P.packageID = LPM.packageID");
+		db::join("billing_item BI", "BI.billingItemID = P.billing_item_id");
+		db::group_by("T.trainingID");
+		db::group_by("MONTH(A.activityCreatedDate)");
+		db::where("BI.billingItemPrice > 0");
+		$resultTrainingPaid = db::get()->result();
+		// var_dump($resultTrainingPaid);
+		// die;
 
-		// select c.clusterID,  month(u.userCreatedDate), count(upa.userID) as totalusahawan 
-		// from cluster c
-		// INNER JOIN cluster_site cs ON c.clusterID = cs.clusterID
-		// INNER JOIN site s ON cs.siteID = s.siteID
-		// INNER JOIN site_member sm ON s.siteid=sm.siteid
-		// INNER JOIN user u ON u.userID=sm.userID
-		// INNER JOIN user_profile_additional upa  ON u.userID=upa.userID 
-		// where upa.userProfileOccupationGroup='3'
-		// GROUP BY c.clusterID
+		db::select("MONTH(A.activityCreatedDate) as monthly, count(A.activityID) as totalFree");
+		db::from("training T");
+		db::join("activity A", "A.activityID = T.activityID");
+		db::join("training_lms TLMS", "TLMS.trainingID = T.trainingID");
+		db::join("lms_package_module LPM", "LPM.id = TLMS.packageModuleID");
+		db::join("lms_package P", "P.packageID = LPM.packageID");
+		db::join("billing_item BI", "BI.billingItemID = P.billing_item_id");
+		db::group_by("T.trainingID");
+		db::group_by("MONTH(A.activityCreatedDate)");
+		db::where("BI.billingItemPrice = 0");
+		$resultTrainingFree = db::get()->result();
+		// var_dump($resultTrainingFree);
+		// die;		
 
+		$arrayResult[0][0]['typeTraining'] 		= "SMART LEARNING (# OF PAID)";
+		$arrayResult[1][0]['typeTraining'] 		= "SMART LEARNING (# OF FREE)";
+		$arrayResult[2][0]['typeTraining'] 		= "INTEL TTT (# OF PERSONNEL)";
+
+		//make skeleton of array
+		for($keyRow = 0; $keyRow <= 2; $keyRow++){
+			//$arrayResult[$keyRow][0]['typeTraining'] 		= "";
+			if($keyRow == 0){
+				for($x = 1; $x <= 12; $x++){
+					$arrayResult[0][1][$x]['totalPaid'] = "";
+				}				
+			}
+			else if ($keyRow == 1){
+				for($x = 1; $x <= 12; $x++){
+					$arrayResult[1][1][$x]['totalFree'] = "";
+				}
+			}			
+			else if ($keyRow == 2){
+				for($x = 1; $x <= 12; $x++){
+					$arrayResult[2][1][$x]['totalIntel'] = "";
+				}
+			}
+
+		}
+		// var_dump($arrayResult);
+		// die;
+		//paid lms training
+		foreach ($resultTrainingPaid as $keyPaid => $valuePaid) {
+			# code...
+			//var_dump($valuePaid);
+			//die;
+			$arrayResult[0][1][$valuePaid['monthly']]['totalPaid'] = $valuePaid['totalPaid'];
+		}//foreach
+
+		//free lms training
+		foreach ($resultTrainingFree as $keyFree => $valueFree) {
+			# code...
+			//var_dump($valuePaid);
+			//die;
+			$arrayResult[1][1][$valueFree['monthly']]['totalFree'] = $valueFree['totalFree'];
+		}//foreach		
+
+		//intel TTT
+		// foreach ($resultTrainingFree as $keyFree => $valueFree) {
+		// 	# code...
+		// 	//var_dump($valuePaid);
+		// 	//die;
+		// 	$arrayResult[2][1][$valueFree['monthly']]['totalFree'] = $valueFree['totalFree'];
+		// }//foreach		
+
+
+
+		// var_dump($arrayResult);
+		// die;
+		//pdf
+		$pdf = new FPDF();
+		$pdf->AddPage('L', 'A4');
+		$pdf->SetFont('Arial','B',10);
+
+		$w = array(90, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15);
+
+		$pdf->Cell(40,10,'OPERATIONS UPDATE (LMS TRAINING) ON '. $year);	
+	    $pdf->Ln();
+
+	    $header = model::load("helper")->monthYear("monthE");
+
+	    foreach ($header as $key => $value) {
+	    	# code...
+	    	$dateObj   = DateTime::createFromFormat('!m', $key);
+			$monthName = $dateObj->format('M'); // March
+
+			$header[$key] = $monthName;
+	    }
+
+	    //var_dump($header);
+	    //die;
+
+	    for($i=0;$i<count($header)+1;$i++){
+	    	$pdf->Cell($w[$i],7,$header[$i],1,0,'C');
+	    }
+	        $pdf->Ln();	
+	        
+	    $counterArray = 0;
+	    foreach ($arrayResult as $keyResult => $valueResult) {
+	    	# code...
+	    	// var_dump($valueResult);
+	    	// die;
+	    	$counter = 1;
+
+	    	$pdf->Cell($w[0],7,$valueResult[0]['typeTraining'],1,0,'C');
+	    	$monthly = $valueResult[1];
+	    	//var_dump($monthly);
+
+	    	foreach ($monthly as $keyMonthly => $valueMonthly) {
+	    		# code...
+	    		//var_dump($valueMonthly);
+	    		if($counterArray == 0)
+	    			$pdf->Cell($w[$counter],7,$valueMonthly['totalPaid'],1,0,'C');	    		
+	    		else if($counterArray == 1)
+	    			$pdf->Cell($w[$counter],7,$valueMonthly['totalFree'],1,0,'C');	    		
+	    		else if($counterArray == 2)
+	    			$pdf->Cell($w[$counter],7,$valueMonthly['totalIntel'],1,0,'C');
+	    		//die;
+	    		$counter++;
+	    	}
+
+	    	$pdf->Ln();
+	    	$counterArray++;	
+	    }
+	    $pdf->Output();		
+	}
+
+	private function reportEntrepreneurship($input){
+		//input
+		$year = $input['year'];
 
 		db::select("clusterID, clusterName");
 		db::from("cluster");
@@ -1165,6 +1298,8 @@ class Controller_Report
 				  'urlFormat'=> url::base("report/reportDashboard/{page}", true)));
 
 		//var_dump($data);
+		pagination::setFormat(model::load("template/cssbootstrap")->paginationLink());
+
 		view::render("root/report/dashboard", $data);
 	}
 
