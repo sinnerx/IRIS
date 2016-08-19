@@ -27,12 +27,281 @@ class Controller_Report
 				case 12:
 					# code...
 					$this->reportUSPStaffStrength();
+					break;				
+				case 13:
+					# code...
+					$this->reporEntrepreneurship($input);
 					break;
 				
 				default:
 					# code...
 					break;
 			}
+	}
+
+	private function reporEntrepreneurship($input){
+		//input
+		$year = $input['year'];
+
+		//query
+		$clusterSabahGroup = array(1,2,3);
+		$clusterSarawakGroup = array(4);
+		$clusterSemenanjungGroup = array(5,6);
+
+		// select c.clusterID,  month(u.userCreatedDate), count(upa.userID) as totalusahawan 
+		// from cluster c
+		// INNER JOIN cluster_site cs ON c.clusterID = cs.clusterID
+		// INNER JOIN site s ON cs.siteID = s.siteID
+		// INNER JOIN site_member sm ON s.siteid=sm.siteid
+		// INNER JOIN user u ON u.userID=sm.userID
+		// INNER JOIN user_profile_additional upa  ON u.userID=upa.userID 
+		// where upa.userProfileOccupationGroup='3'
+		// GROUP BY c.clusterID
+
+
+		db::select("clusterID, clusterName");
+		db::from("cluster");
+		$cluster = db::get()->result("clusterID");
+		//var_dump($cluster);
+		//die;
+		$arrayResult = array();
+		$arrayResultVid = array();
+
+		//$arrayResult ['clusterGroup'] = '';
+		//$arrayResult['clusterGroup']['clusterMonth']['totalEntre'] = 0;
+		//ENTREPRENEURSHIP SQL
+		db::select("c.clusterID, c.clusterName, month(u.userCreatedDate) AS monthly, count(upa.userID) AS totalEntre");
+		db::from("cluster c");
+		db::join("cluster_site cs", "c.clusterID = cs.clusterID");
+		db::join("site s", "cs.siteID = s.siteID");
+		db::join("site_member sm", "s.siteid=sm.siteid");
+		db::join("user u", "u.userID=sm.userID");
+		db::join("user_profile_additional upa", "u.userID=upa.userID ");
+		db::where("upa.userProfileOccupationGroup", 3);
+		db::where("YEAR(u.userCreatedDate)", $year);
+		db::group_by("c.clusterID");
+		db::group_by("month(u.userCreatedDate)");
+		db::order_by("c.clusterID");
+		db::order_by("month(u.userCreatedDate)");
+
+		$resultEntre = db::get()->result();
+		//var_dump($resultEntre);
+		//die;
+
+		db::select("c.clusterID, c.clusterName, month(v.videoCreatedDate) AS monthly, count(v.videoID) AS totalVid");
+		db::from("cluster c");
+		db::join("cluster_site cs", "c.clusterID = cs.clusterID");
+		db::join("site s", "cs.siteID = s.siteID");
+		db::join("video_album va", "s.siteID = va.siteID");
+		db::join("video v", "v.videoAlbumID = va.videoAlbumID");
+		db::where("v.videoName LIKE '%usaha%'");
+		db::where("YEAR(v.videoCreatedDate)", $year);
+		db::group_by("c.clusterID");
+		db::group_by("month(v.videoCreatedDate)");
+		db::order_by("c.clusterID");
+		db::order_by("month(v.videoCreatedDate)");		
+
+		$resultVid = db::get()->result();
+
+		//var_dump($resultVid);
+		//die;
+
+
+		//make skeleton of array
+		for($keyEntre = 1; $keyEntre <= 6; $keyEntre++){
+			$arrayResult[$keyEntre][0]['clusterName'] 		= $cluster[$keyEntre]['clusterName'];
+			$arrayResultVid[$keyEntre][0]['clusterName'] 	= $cluster[$keyEntre]['clusterName'];
+			for($x = 1; $x <= 12; $x++){
+				$arrayResult[$keyEntre][1][$x]['totalEntre'] = "";
+				$arrayResultVid[$keyEntre][1][$x]['totalVid'] = "";
+			}
+		}
+
+		//var_dump($arrayResult);
+		//die;
+
+		foreach ($resultEntre as $keyEntre => $valueEntre) {
+			# code...
+			//var_dump($valueEntre);
+			//die;
+			switch ($valueEntre['clusterID']) {
+				case '1': //sabah cluster A
+					# code...
+					$arrayResult[1][1][$valueEntre['monthly']]['totalEntre'] = $valueEntre['totalEntre'];
+					break;
+				
+				case '2': //sabah cluster B
+					# code...
+					$arrayResult[2][1][$valueEntre['monthly']]['totalEntre'] = $valueEntre['totalEntre'];
+					break;
+
+				case '3': //sabah cluster C
+					# code...					
+					$arrayResult[3][1][$valueEntre['monthly']]['totalEntre'] = $valueEntre['totalEntre'];
+					break;
+
+				case '4': //sarawak
+					# code...
+					$arrayResult[4][1][$valueEntre['monthly']]['totalEntre'] = $valueEntre['totalEntre'];
+					break;
+
+				case '5': //semenanjung
+					# code...
+					$arrayResult[5][1][$valueEntre['monthly']]['totalEntre'] = $valueEntre['totalEntre'];
+					break;
+
+				case '6': //semenanjung N
+					# code...
+					$arrayResult[6][1][$valueEntre['monthly']]['totalEntre'] = $valueEntre['totalEntre'];
+					break;															
+				default:
+					# code...
+					break;
+			}//switch
+		}//foreach
+
+		//var_dump($arrayResult[1][1]);
+		//die;
+		foreach ($resultVid as $keyVid => $valueVid) {
+			# code...
+			//var_dump($valueVid);
+			//die;
+			switch ($valueVid['clusterID']) {
+				case '1': //sabah cluster A
+					# code...
+					$arrayResultVid[1][1][$valueVid['monthly']]['totalVid'] = $valueVid['totalVid'];
+					break;
+				
+				case '2': //sabah cluster B
+					# code...
+					$arrayResultVid[2][1][$valueVid['monthly']]['totalVid'] = $valueVid['totalVid'];
+					break;
+
+				case '3': //sabah cluster C
+					# code...					
+					$arrayResultVid[3][1][$valueVid['monthly']]['totalVid'] = $valueVid['totalVid'];
+					break;
+
+				case '4': //sarawak
+					# code...
+					$arrayResultVid[4][1][$valueVid['monthly']]['totalVid'] = $valueVid['totalVid'];
+					break;
+
+				case '5': //semenanjung
+					# code...
+					$arrayResultVid[5][1][$valueVid['monthly']]['totalVid'] = $valueVid['totalVid'];
+					break;
+
+				case '6': //semenanjung N
+					# code...
+					$arrayResultVid[6][1][$valueVid['monthly']]['totalVid'] = $valueVid['totalVid'];
+					break;															
+				default:
+					# code...
+					break;
+			}//switch
+		}//foreach
+
+		// var_dump($arrayResultVid[2][1]);
+		// die;
+		//pdf
+		$pdf = new FPDF();
+		$pdf->AddPage('L', 'A4');
+		$pdf->SetFont('Arial','B',10);
+
+		$w = array(90, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15);
+
+		$pdf->Cell(40,10,'OPERATIONS UPDATE (ENTREPRENEURSHIP) ON '. $year);	
+	    $pdf->Ln();
+
+	    $header = model::load("helper")->monthYear("monthE");
+
+	    foreach ($header as $key => $value) {
+	    	# code...
+	    	$dateObj   = DateTime::createFromFormat('!m', $key);
+			$monthName = $dateObj->format('M'); // March
+
+			$header[$key] = $monthName;
+	    }
+
+	    //var_dump($header);
+	    //die;
+
+	    for($i=0;$i<count($header)+1;$i++){
+	    	$pdf->Cell($w[$i],7,$header[$i],1,0,'C');
+	    }
+	        $pdf->Ln();
+
+	    $pdf->Cell($w[0],7,'TOTAL PROFILED',1,0,'C');
+
+	    for($i=1;$i<count($header)+1;$i++){
+	    	$totalEmptyWidth += $w[$i];
+	    	//$pdf->Cell($w[$i],7,$header[$i],1,0,'C');
+	    }
+	    $pdf->Cell($totalEmptyWidth,7,'',1,0,'C');
+	    $pdf->Ln();
+
+	    foreach ($arrayResult as $key => $value) {
+	    	# code...
+	    	//var_dump($value);
+	    	//die;
+	    	$pdf->Cell($w[0],7,$value[0]['clusterName'],1,0,'C');
+	    	$counter = 1;
+	    	foreach ($value[1] as $keyIn => $valueIn) {
+
+	    		# code...
+	    		//var_dump($valueIn);
+	    		//die;
+	    		$pdf->Cell($w[$counter],7,$valueIn['totalEntre'],1,0,'C');
+	    		$counter++;
+	    	}
+	    	$pdf->Ln();
+	    }		    
+
+	    $totalEmptyWidth = 0;
+	    $pdf->Cell($w[0],7,'VIDEO DONE',1,0,'C');
+	    for($i=1;$i<count($header)+1;$i++){
+	    	$totalEmptyWidth += $w[$i];
+	    	//$pdf->Cell($w[$i],7,$header[$i],1,0,'C');
+	    }
+	    $pdf->Cell($totalEmptyWidth,7,'',1,0,'C');
+	    $pdf->Ln();	    
+
+	    foreach ($arrayResultVid as $key => $value) {
+	    	# code...
+	    	//var_dump($value);
+	    	//die;
+	    	$pdf->Cell($w[0],7,$value[0]['clusterName'],1,0,'C');
+	    	$counter = 1;
+	    	foreach ($value[1] as $keyIn => $valueIn) {
+
+	    		# code...
+	    		//var_dump($valueIn);
+	    		//die;
+	    		$pdf->Cell($w[$counter],7,$valueIn['totalVid'],1,0,'C');
+	    		$counter++;
+	    	}
+	    	$pdf->Ln();
+	    }
+	    
+	    // foreach ($arrayResults as $Eventkey => $Eventvalue) {
+	    // 	# code...
+	    // 	$i=0;
+	    // 	//var_dump($Eventkey);
+	    // 	$pdf->Cell($w[$i],7,$Eventkey,1,0,'L');
+	    // 	foreach ($Eventvalue as $Monthkey => $Monthvalue) {
+	    // 		# code...
+	    // 		//var_dump($Monthvalue);
+	    // 		//die;
+	    // 		count($Monthvalue) > 0 ? $Monthvalue = $Monthvalue : $Monthvalue = ' ';
+	    // 		$pdf->Cell($w[$i+1],7,$Monthvalue,1,0,'C');
+	    // 	}
+	    // 	$pdf->Ln();
+	    // 	$i++;
+
+	    // }
+
+	    $pdf->Output();		
 	}
 
 	private function reportDashboardEvent($input){
@@ -102,6 +371,7 @@ class Controller_Report
 	    	$pdf->Cell($w[$i],7,$header[$i],1,0,'C');
 	    }
 	        $pdf->Ln();
+
 
 	    
 	    foreach ($arrayResults as $Eventkey => $Eventvalue) {

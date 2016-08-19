@@ -782,7 +782,8 @@ class Site extends \Origami
 	public function listUnlockSite()
 	{
 		db::from("site");
-		db::where("siteUnlockDate > (DATE_SUB(NOW(), INTERVAL 24 HOUR))");
+		//db::where("siteUnlockDate > (DATE_SUB(NOW(), INTERVAL 24 HOUR))");
+		db::where("DATE(siteUnlockDate) = CURDATE()");
 		$result	= db::get()->result();
 		//var_dump($result);
 		//die;

@@ -96,7 +96,8 @@ class Menu extends Data
 					"Billing"=>Array(
 						// "Input Form"=>"billing/add",
 						// "Edit Form"=>"billing/edit",
-						"Daily Cash Process"=>"billing/dailyCashProcess"
+						"Daily Cash Process"=>"billing/dailyCashProcess",
+						"Unlock Site"=>"billing/unlockTransaction"
 						),
 					"PI1M Expense"=>Array(
 						// "List of PR"=>"expense/listStatus",
