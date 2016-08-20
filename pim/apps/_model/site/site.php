@@ -762,7 +762,7 @@ class Site extends \Origami
 	      }
 	      echo json_encode($row_set); //format the array into json data
 	    }
-	  }	
+	}	
 
 	public function deleteSite($siteID)
 	{
