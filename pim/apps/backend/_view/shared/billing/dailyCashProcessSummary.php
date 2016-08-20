@@ -1,6 +1,7 @@
 <link rel="stylesheet" href="<?php echo url::asset("_scale/js/datepicker/datepicker.css"); ?>" type="text/css" />
 <script type="text/javascript" src="<?php echo url::asset("_scale/js/datepicker/bootstrap-datepicker.js"); ?>"></script>
 <script type="text/javascript" src="<?php echo url::asset("_scale/js/jquery.ba-floatingscrollbar.js"); ?>"></script>
+<script type="text/javascript" src="<?php echo url::asset("scripts/jquery.tablesorter.min.js"); ?>"></script>
 <script type="text/javascript">
 
 	$(document).ready(function() {
@@ -159,7 +160,7 @@
         		var siteID = "<?php echo $siteID ?>";
 	   		}
 
-	   		window.location.href	= base_url+"billing/dailyCashProcess?"+siteID+selectMonth+selectYear;	
+	   		window.location.href	= base_url+"billing/dailyCashProcessSummary?"+siteID+selectMonth+selectYear;	
 		}
 	}
 
@@ -227,7 +228,11 @@
 		}
 	}	
 
-
+$(document).ready(function() 
+    { 
+        $("#DCPSummary").tablesorter(); 
+    } 
+); 
 	
 </script>
 
@@ -259,6 +264,8 @@
 	{
 		border-left: 2px solid #ddd;
 		border-right: 2px solid #ddd;
+                border-bottom: 1px solid #ddd !important;
+
 	}
 
 	/* remove bottom border for td */
@@ -276,153 +283,116 @@
 	/* Change background color */
 	.thead-bg {
 	   background: #ededed !important;
+           border-top: 2px solid #ddd !important;
+
 	}
 
 	/* Change background color for odd table row */
 	.odd {
-	   background: rgb(242, 244, 248);
+/*	   background: rgb(242, 244, 248);*/
 	}
 
 	/* Change background color for even table row */
 	.even {
-	   background: #ffffff;
+/*	   background: #ffffff;*/
 	}
         .center {
             text-align:center;
             
+            
         }
 
+            .tablesorter .header,.tablesorter .tablesorter-header {
+                background-image:url(<?php echo url::asset("frontend/images/small.gif"); ?>); 
+                background-position:center right;
+                background-repeat:no-repeat;
+                cursor:pointer;
+                white-space:normal;
+                padding:4px 20px 4px 4px;
+            }
+
+            .tablesorter thead .headerSortUp,.tablesorter thead .tablesorter-headerAsc,.tablesorter thead .tablesorter-headerSortUp {
+                background-image:url(<?php echo url::asset("frontend/images/asc.gif"); ?>); 
+/*                border-bottom:#000 2px solid;*/
+            }
+
+            .tablesorter thead .headerSortDown,.tablesorter thead .tablesorter-headerDesc,.tablesorter thead .tablesorter-headerSortDown {
+                background-image:url(<?php echo url::asset("frontend/images/desc.gif"); ?>); 
+/*                border-bottom:#000 2px solid;*/
+            }
+            th{
+                vertical-align:middle !important;
+            }
+            
 </style>
+<?php echo flash::data();?>
 
 <h3 class='m-b-xs text-black'>
 	Daily Cash Process Summary
 </h3>
-<!--<div class='well well-sm'>
-	Choose month and year
-</div>-->
-<?php echo flash::data();?>
-<!--<div class='row'>
-	<div class='col-sm-10'>
-		<form class="form-inline bs-example" method='post' action=''>
-			<?php  //if((session::get("userLevel") == \model\user\user::LEVEL_ROOT) || (session::get("userLevel") == \model\user\user::LEVEL_CLUSTERLEAD)  || (session::get("userLevel") == \model\user\user::LEVEL_FINANCIALCONTROLLER)): ?>
-			<div class="form-group" style="margin-left:10px">
-				<?php //echo form::select("siteID",$siteList,"class='input-sm form-control input-s-sm inline v-middle' onchange='billing.select();'",$siteID,"[SELECT SITE]");?>			
-			</div>
-			<?php //endif;?>
-			<div class="form-group" style="margin-left:10px">
-				<?php //echo form::select("selectMonth",model::load("helper")->monthYear("monthE"),"onchange='billing.select();'",$selectMonth);?>
-				<?php //echo form::select("selectYear",model::load("helper")->monthYear("year"),"onchange='billing.select();'",$selectYear);?>
-				<input type="button" id="export_excel_btn" class="btn btn-sm btn-default" value="Export to Excel">			
-			</div>			
-		</form>	
-	</div>
-</div>-->
 
-<?php //echo var_dump($data) ?>
+
 <div class='row ov'>
 	<div class="col-sm-12  ">
 		<div class='well well-sm'>
 			 <?php 
-			  //echo $site->siteName; ?> Verification Summary for <?php echo $selectYear; ?>/<?php echo $selectMonth; ?>
+			  //echo $site->siteName; ?> Verification Summary for <?php echo $selectionData[1]; ?>/<?php echo $selectionData['0']; ?>
 		</div>
-		
+                <!-- filter start -->
+		<div class='row'>
+                        <div class='col-sm-10'>
+                                <form class="form-inline bs-example" method='post' action=''>
+                                        <div class="form-group" style="margin-left:10px">
+                                                <?php echo form::select("selectMonth",model::load("helper")->monthYear("monthE"),"onchange='billing.select();'",$selectMonth);?>
+                                                <?php echo form::select("selectYear",model::load("helper")->monthYear("year"),"onchange='billing.select();'",$selectYear);?>
+<!--                                                <input type="button" id="submit_btn" class="btn btn-sm btn-default" value="Submit">			-->
+                                        </div>			
+                                </form>	
+                        </div>
+                </div><br>
+                <!-- filter end-->
 		<div class="table-responsive">
-			<table class='table b-t b-light custom-table'>
-
+			<table id="DCPSummary" class="tablesorter table b-t b-light custom-table">
+                            <thead>
                             <tr class="thead-bg">
                                 <th rowspan="2" class="center">Site</th>
-                                    <th rowspan="2" class="center">RM</th>
+                                    <th rowspan="2" class="center">Collection</th>
                                     <th rowspan="2" class="center">Balance</th>
                                     <th colspan="2" class="center">Site Manager<br></th>
                                     <th colspan="2" class="center">Cluster Lead<br></th>
                                     <th colspan="2" class="center">Finance Controller<br></th>
                                   </tr>
                                   <tr>
-                                    <td class="center">Date</td>
-                                    <td class="center">Approved by<br></td>
-                                    <td class="center">Date</td>
-                                    <td class="center">Approved by<br></td>
-                                    <td class="center">Date</td>
-                                    <td class="center">Approved by<br></td>
+                                    <td class="center" style="background: #ededed;border-bottom: 2px solid #ddd">Date</td>
+                                    <td class="center" style="background: #ededed;border-bottom: 2px solid #ddd">Approved<br></td>
+                                    <td class="center" style="background: #ededed;border-bottom: 2px solid #ddd">Date</td>
+                                    <td class="center" style="background: #ededed;border-bottom: 2px solid #ddd">Approved<br></td>
+                                    <td class="center" style="background: #ededed;border-bottom: 2px solid #ddd">Date</td>
+                                    <td class="center" style="background: #ededed;border-bottom: 2px solid #ddd">Approved<br></td>
                                   </tr>
+                            </thead>
+                            <tbody>
+                                  <?php foreach($allSiteSummary as $siteData):?>
                                   <tr> 
-                                    <td>Site name here</td>
-                                    <td>2</td>
-                                    <td>3</td>
-                                    <td>4</td>
-                                    <td>5</td>
-                                    <td>6</td>
-                                    <td>7</td>
-                                    <td>8</td>
-                                    <td>9</td>
-                                  </tr>
-                                  <tr> 
-                                    <td>site name here</td>
-                                    <td>12</td>
-                                    <td>13</td>
-                                    <td>14</td>
-                                    <td>15</td>
-                                    <td>16</td>
-                                    <td>17</td>
-                                    <td>18</td>
-                                    <td>19</td>
-                                  </tr>
-<!-- Begin master loop. -->
-<?php 
-$float = function($val = null)
-{
-	if(!$val)
-		return number_format(0, 2, '.', '');
-	else
-		return number_format($val, 2, '.', '');
-};
-
-$total = function($val = null)
-{
-	return !$val ? 0 : $val;
-}
-
-?>
-<?php
-			$beginningbalance = $balance;
-			foreach(range(1, date('t', strtotime($selectYear.'-'.$selectMonth.'-01'))) as $day):
-			$date = $selectYear.'-'.$selectMonth.'-'.$day;
-			$date = date('Y-m-d', strtotime($date));
-			$no = 0;
-			?>
-			<tr class="left-td">
-				<td><?php echo "site-name-here"?></td>
-                                
-				<td><?php echo $amount = $float($report[$date]['Membership']['total']); $totals[$no++] += $amount;?></td>
-				<td><?php echo $amount = $total($report[$date]['Membership']['total_users']); $totals[$no++] += $amount;?></td>
-				<td><?php echo $amount = $float($report[$date]['Membership']['student']['nonmember']['total']); $totals[$no++] += $amount;?></td>
-				<td><?php echo $amount = $total($report[$date]['Membership']['student']['nonmember']['total_users']); $totals[$no++] += $amount;?></td>
-				<td><?php echo $amount = $float($report[$date]['Membership']['adult']['nonmember']['total']); $totals[$no++] += $amount;?></td>
-				<td><?php echo $amount = $total($report[$date]['Membership']['adult']['nonmember']['total_users']); $totals[$no++] += $amount;?></td>
-
-				<td><?php echo $amount = $float($report[$date]['PC']['day']['total']); $totals[$no++] += $amount;?></td>
-				<td><?php echo $amount = $total($report[$date]['PC']['day']['total_users']); $totals[$no++] += $amount;?></td>
-				
-			</tr>
-			<?php endforeach;?>
-<!--  End of master loop. -->
-<!--			<tr>
-				<td>Total</td>
-				<?php //foreach($totals as $value):?>
-				<td><?php //echo $float($value);?></td>
-				<?php //endforeach;?>
-				<td></td>
-				<td></td>
-				<td><?php //echo $float($sums);?></td>
-				<td><?php //echo $float($balance);?></td>
+                                    <td><?php echo $siteData['siteName'];?></td>
+                                    <td><?php echo $siteData['collection'] = number_format($siteData['collection'], 2, '.', ''); ?></td>
+                                    <td><?php echo $siteData['balance'] = number_format($siteData['balance'], 2, '.', ''); ?></td>
+                                    <td><?php echo $siteData['date2'];?></td>
+                                    <td><?php echo $siteData['user2'];?></td>
+                                    <td><?php echo $siteData['date3'];?></td>
+                                    <td><?php echo $siteData['user3'];?></td>
+                                    <td><?php echo $siteData['date5'];?></td>
+                                    <td><?php echo $siteData['user5'];?></td>
+                                  </tr><?php endforeach;?>
+                                  
+<!--			<tr>					
+				<th id="f1" colspan="47"></th>
 			</tr>-->
-			<tr>					
-<!--				<th id="f1" colspan="47"></th>-->
-			</tr>
 <!--			<tr style="background-color:#ededed">	
 				<th> </th>
 				<th id="g1" colspan="46"> Bank In </th>
 			</tr>-->
+                            </tbody>
 			</table>			
 		</div>
 	</div>

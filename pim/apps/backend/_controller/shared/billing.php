@@ -738,14 +738,76 @@ Class Controller_Billing
 
         public function dailyCashProcessSummary()
 	{
-//		//select siteName, collection, balance, date2, user2, date3, user3, date5, user5
-//                //from site
-		$data = db::prepareSQL("select siteName from site")
+                //$selectMonth = 8;
+                //$selectYear = 2016;
                 
-                ->order_by("siteName","ASC")  
-                ->get()->result();
-var_dump($data);
-die();
+                
+                $selectYear = input::get('selectYear');
+		if (!$selectYear) {
+			$selectYear = request::get('selectYear', date('Y'));
+		}
+		$data['selectYear'] = $selectYear;
+		//$data['selectYear'] = $selectYear = $selectYear ? : input::get('selectYear');
+		//$data['selectYear'] = $selectYear = $selectYear ? : request::get('selectYear', date('Y'));
+
+		$selectMonth = input::get('selectMonth');
+		if (!$selectMonth) {
+			$selectMonth = request::get('selectMonth', date('m'));
+		}
+		$data['selectMonth'] = $selectMonth;
+                
+                if($selectMonth != 12){
+                    
+                $lastDate = $selectYear.'-'.($selectMonth+1).'-01';
+                
+                } else{
+                    //endof december
+                    $lastDate = ($selectYear+1).'-'.($selectMonth-11).'-01';
+                }
+                
+                
+                $result = db::query("
+                select siteName, collection, balance, date2, user2, date3, user3, date5, user5 from site
+                
+                left join (select siteID, sum(bt.billingTransactionTotal) as collection from billing_transaction bt
+                         where bt.billingTransactionStatus = 1
+                         and month(bt.billingTransactionDate) = ? and year(bt.billingTransactionDate) = ?
+                         group by siteID) as bal on bal.siteID = site.siteID
+
+                left join (select siteID, sum(bt.billingTransactionTotal) as balance from billing_transaction bt
+                         where bt.billingTransactionStatus = 1
+                         and bt.billingTransactionDate < ?
+                         group by siteID) as col on col.siteID = site.siteID
+
+                left join (select siteID, billingApprovalLevelCreatedDate as date2,
+                         up.userProfileFullName as user2
+                         from billing_approval ba, billing_approval_level bal, user_profile up
+                         where bal.billingApprovalID = ba.billingApprovalID
+                          and up.userID = bal.userID
+                         and bal.userLevel = 2
+                        and month = ? and year = ?) as level2 on level2.siteID = site.siteID
+
+                left join (select siteID, billingApprovalLevelCreatedDate as date3,
+                         up.userProfileFullName as user3
+                         from billing_approval ba, billing_approval_level bal, user_profile up
+                         where bal.billingApprovalID = ba.billingApprovalID
+                          and up.userID = bal.userID
+                         and bal.userLevel = 3
+                        and month = ? and year = ?) as level3 on level3.siteID = site.siteID
+
+                left join (select siteID, billingApprovalLevelCreatedDate as date5,
+                         up.userProfileFullName as user5
+                         from billing_approval ba, billing_approval_level bal, user_profile up
+                         where bal.billingApprovalID = ba.billingApprovalID
+                          and up.userID = bal.userID
+                         and bal.userLevel = 5
+                        and month = ? and year = ?) as level5 on level5.siteID = site.siteID
+                order by siteName",array($selectMonth,$selectYear, $lastDate, $selectMonth, $selectYear, $selectMonth, $selectYear, $selectMonth, $selectYear))->result();
+                $data['allSiteSummary'] = $result;
+                $data['selectionData'] = array ($selectMonth, $selectYear, $lastDate);
+                
+//var_dump($result);
+//die();
 		view::render('shared/billing/dailyCashProcessSummary', $data);
 	}
         
