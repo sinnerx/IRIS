@@ -449,7 +449,7 @@ Class Controller_Site
 		$todayDateStart = request::get("selectDateStart");
 		$todayDateEnd = request::get("selectDateEnd");
 
-		$data['todayDateStart'] = $todayDateStart = $todayDateStart ? :  date('Y-m-d',(strtotime ( '-7 day' , strtotime (date('Y-m-d')) ) ));
+		$data['todayDateStart'] = $todayDateStart = $todayDateStart ? :  date('Y-m-d',(strtotime ( '-5 year' , strtotime (date('Y-m-d')) ) ));
 		$data['todayDateEnd'] = $todayDateEnd = $todayDateEnd ? :  date('Y-m-d');
 
 

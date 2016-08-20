@@ -116,6 +116,7 @@ class Article extends \Origami
 					}, $catList));
 		//print_r($catStr);
 		
+		
 		db::from("article");
 		# get by siteID.
 		if($siteID === 0)
@@ -133,7 +134,7 @@ class Article extends \Origami
 				}
 
 				db::where('articlePublishedDate > ? AND articlePublishedDate < ?', array($todayDateStart.' 00:00:00', $todayDateEnd.' 23:59:59'));
-
+				
 				db::where("articleStatus != 99");
 
 
@@ -168,7 +169,6 @@ class Article extends \Origami
 			}
 		}
 		return $data;
-
 
 	}
 
