@@ -563,8 +563,8 @@ $total = function($val = null)
 		<form class="form-inline bs-example" method='post' action='<?php echo url::base('billing/dailyCashProcess');?>'>
 			<table class='table ' border='0'>
 					<input type="hidden" name="siteID" value="<?php echo $siteID?>"> 
-					<input type="hidden" name="year" value="<?php echo $selectYear?>"> 
-					<input type="hidden" name="month" value="<?php echo $selectMonth?>"> 
+					<input type="hidden" name="selectYear" value="<?php echo $selectYear?>">
+					<input type="hidden" name="selectMonth" value="<?php echo $selectMonth?>">
 				<tr style="background-color:#ededed">	
 					<th><!--<?php echo "Level: " . session::get("userLevel") . " . " . $checked . " . " . $approved?>--></th> 
 					<th>Site Manager</th>
