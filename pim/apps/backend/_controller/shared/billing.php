@@ -1203,13 +1203,24 @@ Class Controller_Billing
 
 	public function unlockTransaction()
 	{
-		db::from("site");
-		db::order_by("siteName","ASC");
-		
-		$res_site = db::get()->result();
+
+		//if cl, choose site under cl only
+		if (authData('user.userLevel') == \model\user\user::LEVEL_CLUSTERLEAD){
+				
+			$res_site	= model::load("site/site")->getSitesByClusterLead(session::get("userID"))->result();
+
+		}
+		else{
+			db::from("site");
+			db::order_by("siteName","ASC");
+			
+			$res_site = db::get()->result();			
+		}
 
 		foreach($res_site as $row)
 		{
+			//var_dump($row);
+			//die;
 			$data['siteList'][$row['siteID']]	= $row['siteName'];
 		}		
 
@@ -1217,6 +1228,8 @@ Class Controller_Billing
 		//var_dump($site);
 		$data['unlockSite'] = $site;
 		//$data[] = "";
+		//var_dump($data);
+		//die;
 		view::render("shared/billing/unlockTransaction", $data);
 	}
 }

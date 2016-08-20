@@ -33,7 +33,7 @@
 				});
 		    });	   		 
 
-	   		//console.log(pim.url('ajax/shared/unlockTransaction/checkSite/' + $("#siteID").val()));
+	   		console.log(pim.url('ajax/shared/unlockTransaction/checkSite/' + $("#siteID").val()));
 		$.ajax({
 			url: pim.url('ajax/shared/unlockTransaction/checkSite/' + $("#siteID").val()), success: function (result){
 				result = $.parseJSON(result);
@@ -80,7 +80,7 @@ Select Date
 <div class='row'>
 	<div class='col-sm-10'>
 		<form class="form-inline bs-example" method="post" action="#">
-			<?php  if(session::get("userLevel") == 99): ?>	
+			<?php  if(session::get("userLevel") == 99 || session::get("userLevel") == 3): ?>	
 			<div  class="form-group" style="margin-left:10px">
 			<?php echo form::select("siteID",$siteList,"class='input-sm form-control input-s-sm inline v-middle' onchange='billing.select($itemID);'",request::get("siteID"),"[SELECT SITE]");?>			
 			</div>
