@@ -186,7 +186,7 @@ class Controller_Cluster
 	{
 		$data['row']	= model::load("forum/category")->getCategory($catID);
 
-		//$data['hasRequest'] =  model::load("site/request")->replaceWithRequestData("forum_category.update",$catID,$data['row']);
+		$data['hasRequest'] =  model::load("site/request")->replaceWithRequestData("forum_category.update",$catID,$data['row']);
 
 		if(form::submitted())
 		{
@@ -218,7 +218,7 @@ class Controller_Cluster
 	public function editAnnouncement($announceID,$announceRequestID)
 	{
 		$data['row']	= model::load("site/announcement")->getAnnouncement($announceID);
-		//$siterequest = model::load('site/request')->replaceWithRequestData('announcement.update', $announceID, $data['row']);
+		$siterequest = model::load('site/request')->replaceWithRequestData('announcement.update', $announceID, $data['row']);
 
 		if(form::submitted())
 		{

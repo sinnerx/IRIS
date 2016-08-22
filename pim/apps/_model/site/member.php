@@ -236,6 +236,11 @@ class Member extends \Origami
 				"userMembershipDate"=>now(),
 				"siteMemberBonus"=>90));
 
+		db::where("userID",$userID);
+		db::update("user",
+			Array("userUpdatedDate"=>now(),
+				"userUpdatedUser"=>session::get('userID')));
+
 		## pay registration.
 		$this->payRegistration($userID,$siteID);
 	}
