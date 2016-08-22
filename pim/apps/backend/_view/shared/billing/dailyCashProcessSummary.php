@@ -358,9 +358,9 @@ $(document).ready(function()
                                 <th rowspan="2" class="center">Site</th>
                                     <th rowspan="2" class="center">Collection</th>
                                     <th rowspan="2" class="center">Balance</th>
-                                    <th colspan="2" class="center">Site Manager<br></th>
-                                    <th colspan="2" class="center">Cluster Lead<br></th>
-                                    <th colspan="2" class="center">Finance Controller<br></th>
+                                    <th colspan="2" class="center">Manager<br></th>
+                                    <th colspan="2" class="center">Cluster<br></th>
+                                    <th colspan="2" class="center">Finance<br></th>
                                   </tr>
                                   <tr>
                                     <td class="center" style="background: #ededed;border-bottom: 2px solid #ddd">Date</td>

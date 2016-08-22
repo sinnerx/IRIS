@@ -1289,22 +1289,23 @@ class Controller_Report
 		// $ResultSummary = db::get()->result();
 
 		# New ultimate query from Mr. Moridh
-		$ResultSummary = db::query("SELECT siteName, stateID, Membership, PCUsage, PrintPhotst, OthersSrvc, Scanning, Laminating, OthersCashIn FROM site LEFT JOIN ( SELECT A.siteID,SUM(CASE WHEN B.billingItemID = 1 THEN B.billingTransactionItemPrice ELSE 0 END) AS Membership,SUM(CASE WHEN B.billingItemID = 3 || B.billingItemID = 5 || B.billingItemID = 16 THEN B.billingTransactionItemPrice ELSE 0 END) AS PCUsage,SUM(CASE WHEN B.billingItemID = 4 || B.billingItemID = 6 THEN B.billingTransactionItemPrice ELSE 0 END) AS PrintPhotst,SUM(CASE WHEN B.billingItemID = 5 THEN B.billingTransactionItemPrice ELSE 0 END) AS OthersSrvc,SUM(CASE WHEN B.billingItemID = 7 THEN B.billingTransactionItemPrice ELSE 0 END) AS Scanning,SUM(CASE WHEN B.billingItemID = 8 || B.billingItemID = 17 THEN B.billingTransactionItemPrice ELSE 0 END) AS Laminating,SUM(CASE WHEN B.billingItemID = 2 || B.billingItemID = 9 || B.billingItemID = 12 || B.billingItemID = 13 || B.billingItemID = 14 THEN B.billingTransactionItemPrice ELSE 0 END) AS OthersCashIn FROM billing_transaction A LEFT JOIN billing_transaction_item B ON B.billingTransactionID = A.billingTransactionID WHERE A.billingTransactionStatus = 1 AND A.billingTransactionDate LIKE '%".$date."%' GROUP BY A.siteID) AS figures ON figures.siteID = site.siteID ORDER BY site.stateID ASC")->result();
+		$ResultSummary = db::query("SELECT siteName, stateID, Membership, PCUsage, PrintPhotst, OthersSrvc, Scanning, Laminating, OthersCashIn, Expense FROM site LEFT JOIN ( SELECT A.siteID,SUM(CASE WHEN B.billingItemID = 1 THEN B.billingTransactionItemPrice ELSE 0 END) AS Membership,SUM(CASE WHEN B.billingItemID = 3 || B.billingItemID = 5 || B.billingItemID = 16 THEN B.billingTransactionItemPrice ELSE 0 END) AS PCUsage,SUM(CASE WHEN B.billingItemID = 4 || B.billingItemID = 6 THEN B.billingTransactionItemPrice ELSE 0 END) AS PrintPhotst,SUM(CASE WHEN B.billingItemID = 5 THEN B.billingTransactionItemPrice ELSE 0 END) AS OthersSrvc,SUM(CASE WHEN B.billingItemID = 7 THEN B.billingTransactionItemPrice ELSE 0 END) AS Scanning,SUM(CASE WHEN B.billingItemID = 8 || B.billingItemID = 17 THEN B.billingTransactionItemPrice ELSE 0 END) AS Laminating,SUM(CASE WHEN B.billingItemID = 2 || B.billingItemID = 9 || B.billingItemID = 12 || B.billingItemID = 13 || B.billingItemID = 14 THEN B.billingTransactionItemPrice ELSE 0 END) AS OthersCashIn,SUM(CASE WHEN B.billingItemID = 10 || B.billingItemID = 11 THEN ABS(B.billingTransactionItemPrice) ELSE 0 END) AS Expense FROM billing_transaction A LEFT JOIN billing_transaction_item B ON B.billingTransactionID = A.billingTransactionID WHERE A.billingTransactionStatus = 1 AND A.billingTransactionDate LIKE '%".$date."%' GROUP BY A.siteID) AS figures ON figures.siteID = site.siteID ORDER BY site.stateID ASC")->result();
 
 		# new from Mr. Moridh
 
-		// SELECT siteName, stateID, Membership, PCUsage, PrintPhotst, OthersSrvc, Scanning, Laminating, OthersCashIn
+		// SELECT siteName, stateID, Membership, PCUsage, PrintPhotst, OthersSrvc, Scanning, Laminating, OthersCashIn, Expense
 		// FROM site
 		// LEFT JOIN (
 		// SELECT 
 		// A.`siteID`,
 		// SUM(CASE WHEN B.billingItemID = 1 THEN B.billingTransactionItemPrice ELSE 0 END) AS Membership,
-		// SUM(CASE WHEN B.billingItemID = 3 || B.billingItemID = 5 || B.billingItemID = 16 THEN B.billingTransactionItemPrice ELSE 0 END) AS PCUsage,
+		// SUM(CASE WHEN B.billingItemID = 3 || B.billingItemID = 15 || B.billingItemID = 16 THEN B.billingTransactionItemPrice ELSE 0 END) AS PCUsage,
 		// SUM(CASE WHEN B.billingItemID = 4 || B.billingItemID = 6 THEN B.billingTransactionItemPrice ELSE 0 END) AS PrintPhotst,
 		// SUM(CASE WHEN B.billingItemID = 5 THEN B.billingTransactionItemPrice ELSE 0 END) AS OthersSrvc,
 		// SUM(CASE WHEN B.billingItemID = 7 THEN B.billingTransactionItemPrice ELSE 0 END) AS Scanning,
 		// SUM(CASE WHEN B.billingItemID = 8 || B.billingItemID = 17 THEN B.billingTransactionItemPrice ELSE 0 END) AS Laminating,
-		// SUM(CASE WHEN B.billingItemID = 2 || B.billingItemID = 9 || B.billingItemID = 12 || B.billingItemID = 13 || B.billingItemID = 14 THEN B.billingTransactionItemPrice ELSE 0 END) AS OthersCashIn
+		// SUM(CASE WHEN B.billingItemID = 2 || B.billingItemID = 9 || B.billingItemID = 12 || B.billingItemID = 13 || B.billingItemID = 14 THEN B.billingTransactionItemPrice ELSE 0 END) AS OthersCashIn,
+		// SUM(CASE WHEN B.billingItemID = 10 || B.billingItemID = 11 THEN ABS(B.billingTransactionItemPrice) ELSE 0 END) AS Expense
 		// FROM `billing_transaction` A
 		// LEFT JOIN `billing_transaction_item` B ON B.`billingTransactionID` = A.`billingTransactionID`
   //       WHERE A.billingTransactionStatus = 1
@@ -1551,6 +1552,10 @@ class Controller_Report
 				$value['OthersCashIn'] = 0;
 			}
 
+			if (empty($value['Expense'])) {
+				$value['Expense'] = 0;
+			}
+
 			$sheet->setCellValue('C'.($ii), $value['siteName']);
 			$sheet->setCellValue('D'.($ii), $value['Membership']);
 			$sheet->setCellValue('E'.($ii), $value['PCUsage']);
@@ -1559,12 +1564,12 @@ class Controller_Report
 			$sheet->setCellValue('H'.($ii), $value['Scanning']);
 			$sheet->setCellValue('I'.($ii), $value['Laminating']);
 			$sheet->setCellValue('J'.($ii), $value['OthersCashIn']);
-			$sheet->setCellValue('K'.($ii), $value['Membership']+$value['PCUsage']+$value['PrintPhotst']+$value['OthersSrvc']+$value['Scanning']+$value['Laminating']+$value['OthersCashIn']);
+			$sheet->setCellValue('K'.($ii), '=SUM(D'.($ii).':J'.($ii).')');
 
 			$sheet->setCellValue('L'.($ii), '0');
 			$sheet->setCellValue('M'.($ii), '0');
-			$sheet->setCellValue('N'.($ii), '0');
-			$sheet->setCellValue('O'.($ii), '0');
+			$sheet->setCellValue('N'.($ii), $value['Expense']);
+			$sheet->setCellValue('O'.($ii), '=K'.($ii).'-N'.($ii));
 		}
 
 		# bottom row | total all column
