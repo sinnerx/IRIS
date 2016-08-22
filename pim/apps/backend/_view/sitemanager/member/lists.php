@@ -79,7 +79,7 @@ List of member registered in for site.
 	                <a href="<?php echo url::base('ajax/member/detail'); ?>?userID=<?php echo $row['userID']; ?>" data-toggle="ajaxModal">
 						<i class="fa fa-user"></i>
 					</a>
-					<a class='fa fa-edit' href='edit/<?php echo $row['userID']; ?>'></a>
+					<a class='fa fa-edit' href="<?php echo url::base('member/edit'); ?>/<?php echo $row['userID']; ?>" ></a>
 					<a onclick='return confirm("Confirm delete?");' class="i i-cross2" href="delete/<?php echo $row['userID']; ?>"></a>
 					</center>
 				</td>
