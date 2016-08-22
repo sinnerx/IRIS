@@ -1251,3 +1251,7 @@ report_quarterly:
 	reportQuarterlyUpdatedDate [datetime]
 	reportQuarterlyCreatedUser [int]
 	reportQuarterlyUpdatedUser [int]
+
+batch:
+	batchID [int]
+	batchName [varchar(11)]
