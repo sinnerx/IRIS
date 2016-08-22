@@ -854,15 +854,21 @@ class Controller_Report
 
 	    $pdf->Ln();
 
-	    $percentKPIMCMC = round($sumQuarterHours / $sumKPIMCMC * 100);
-	    $percentKPINTSB = round($sumQuarterHours / $sumKPINTSB * 100);
+	    if($sumKPIMCMC != 0)
+	    	$percentKPIMCMC = round($sumQuarterHours / $sumKPIMCMC * 100);
+	    else
+	    	$percentKPIMCMC = 0;
+
+	    if($sumKPINTSB != 0)
+	    	$percentKPINTSB = round($sumQuarterHours / $sumKPINTSB * 100);
+	    else
+	    	$percentKPINTSB = 0;
+
 		$pdf->Cell($w[0]+$w[1]+$w[2]+$w[3],7,'',1,0,'C');
 		$pdf->Cell($w[4],7,'',1,0,'C');
 	    $pdf->Cell($w[5],7,$percentKPIMCMC. '%',1,0,'C');
 	    $pdf->Cell($w[6],7,$percentKPINTSB. '%',1,0,'C');
 	    $pdf->Cell($w[7],7,'',1,0,'C');	    
-
-
 
 		$pdf->Output();
 
