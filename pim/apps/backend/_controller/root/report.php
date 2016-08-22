@@ -36,6 +36,10 @@ class Controller_Report
 					# code...
 					$this->reportLMSTraining($input);
 					break;
+				case 14:
+					# code...
+					$this->reportCashFlowSummary($input);
+					break;
 				
 				default:
 					# code...
@@ -850,15 +854,21 @@ class Controller_Report
 
 	    $pdf->Ln();
 
-	    $percentKPIMCMC = round($sumQuarterHours / $sumKPIMCMC * 100);
-	    $percentKPINTSB = round($sumQuarterHours / $sumKPINTSB * 100);
+	    if($sumKPIMCMC != 0)
+	    	$percentKPIMCMC = round($sumQuarterHours / $sumKPIMCMC * 100);
+	    else
+	    	$percentKPIMCMC = 0;
+
+	    if($sumKPINTSB != 0)
+	    	$percentKPINTSB = round($sumQuarterHours / $sumKPINTSB * 100);
+	    else
+	    	$percentKPINTSB = 0;
+
 		$pdf->Cell($w[0]+$w[1]+$w[2]+$w[3],7,'',1,0,'C');
 		$pdf->Cell($w[4],7,'',1,0,'C');
 	    $pdf->Cell($w[5],7,$percentKPIMCMC. '%',1,0,'C');
 	    $pdf->Cell($w[6],7,$percentKPINTSB. '%',1,0,'C');
 	    $pdf->Cell($w[7],7,'',1,0,'C');	    
-
-
 
 		$pdf->Output();
 
@@ -1262,6 +1272,311 @@ class Controller_Report
 
 		$pdf->Output();
 
+	}
+
+	// Report Cash Flow Summary
+
+	private function getTotalCashFlow($date) {
+		# Get Cash Flow Summary
+		// db::select("D.siteInfoDistrict,A.stateID,A.siteID,A.siteName,COUNT(B.siteID) AS NumberOfTransaction,SUM(CASE WHEN C.billingItemID = 1 THEN C.billingTransactionItemPrice ELSE 0 END) AS Membership,SUM(CASE WHEN C.billingItemID = 3 || C.billingItemID = 5 || C.billingItemID = 16 THEN C.billingTransactionItemPrice ELSE 0 END) AS PCUsage,SUM(CASE WHEN C.billingItemID = 4 || C.billingItemID = 6 THEN C.billingTransactionItemPrice ELSE 0 END) AS PrintPhotst,SUM(CASE WHEN C.billingItemID = 5 THEN C.billingTransactionItemPrice ELSE 0 END) AS OthersSrvc,SUM(CASE WHEN C.billingItemID = 7 THEN C.billingTransactionItemPrice ELSE 0 END) AS Scanning,SUM(CASE WHEN C.billingItemID = 8 || C.billingItemID = 17 THEN C.billingTransactionItemPrice ELSE 0 END) AS Laminating,SUM(CASE WHEN C.billingItemID = 2 || C.billingItemID = 9 || C.billingItemID = 12 || C.billingItemID = 13 || C.billingItemID = 14 THEN C.billingTransactionItemPrice ELSE 0 END) AS OthersCashIn");
+		// db::from('site A');
+		// db::join('billing_transaction B', 'B.siteID = A.siteID');
+		// db::join('billing_transaction_item C', 'C.billingTransactionID = B.billingTransactionID');
+		// db::join('site_info D', 'D.siteID = A.siteID');
+		// db::where('B.billingTransactionDate LIKE','%'.$date.'%');
+		// db::group_by('A.siteID');
+		// db::order_by('A.StateID');
+		// $ResultSummary = db::get()->result();
+
+		# New ultimate query from Mr. Moridh
+		$ResultSummary = db::query("SELECT siteName, stateID, Membership, PCUsage, PrintPhotst, OthersSrvc, Scanning, Laminating, OthersCashIn FROM site LEFT JOIN ( SELECT A.siteID,SUM(CASE WHEN B.billingItemID = 1 THEN B.billingTransactionItemPrice ELSE 0 END) AS Membership,SUM(CASE WHEN B.billingItemID = 3 || B.billingItemID = 5 || B.billingItemID = 16 THEN B.billingTransactionItemPrice ELSE 0 END) AS PCUsage,SUM(CASE WHEN B.billingItemID = 4 || B.billingItemID = 6 THEN B.billingTransactionItemPrice ELSE 0 END) AS PrintPhotst,SUM(CASE WHEN B.billingItemID = 5 THEN B.billingTransactionItemPrice ELSE 0 END) AS OthersSrvc,SUM(CASE WHEN B.billingItemID = 7 THEN B.billingTransactionItemPrice ELSE 0 END) AS Scanning,SUM(CASE WHEN B.billingItemID = 8 || B.billingItemID = 17 THEN B.billingTransactionItemPrice ELSE 0 END) AS Laminating,SUM(CASE WHEN B.billingItemID = 2 || B.billingItemID = 9 || B.billingItemID = 12 || B.billingItemID = 13 || B.billingItemID = 14 THEN B.billingTransactionItemPrice ELSE 0 END) AS OthersCashIn FROM billing_transaction A LEFT JOIN billing_transaction_item B ON B.billingTransactionID = A.billingTransactionID WHERE A.billingTransactionStatus = 1 AND A.billingTransactionDate LIKE '%".$date."%' GROUP BY A.siteID) AS figures ON figures.siteID = site.siteID ORDER BY site.stateID ASC")->result();
+
+		# new from Mr. Moridh
+
+		// SELECT siteName, stateID, Membership, PCUsage, PrintPhotst, OthersSrvc, Scanning, Laminating, OthersCashIn
+		// FROM site
+		// LEFT JOIN (
+		// SELECT 
+		// A.`siteID`,
+		// SUM(CASE WHEN B.billingItemID = 1 THEN B.billingTransactionItemPrice ELSE 0 END) AS Membership,
+		// SUM(CASE WHEN B.billingItemID = 3 || B.billingItemID = 5 || B.billingItemID = 16 THEN B.billingTransactionItemPrice ELSE 0 END) AS PCUsage,
+		// SUM(CASE WHEN B.billingItemID = 4 || B.billingItemID = 6 THEN B.billingTransactionItemPrice ELSE 0 END) AS PrintPhotst,
+		// SUM(CASE WHEN B.billingItemID = 5 THEN B.billingTransactionItemPrice ELSE 0 END) AS OthersSrvc,
+		// SUM(CASE WHEN B.billingItemID = 7 THEN B.billingTransactionItemPrice ELSE 0 END) AS Scanning,
+		// SUM(CASE WHEN B.billingItemID = 8 || B.billingItemID = 17 THEN B.billingTransactionItemPrice ELSE 0 END) AS Laminating,
+		// SUM(CASE WHEN B.billingItemID = 2 || B.billingItemID = 9 || B.billingItemID = 12 || B.billingItemID = 13 || B.billingItemID = 14 THEN B.billingTransactionItemPrice ELSE 0 END) AS OthersCashIn
+		// FROM `billing_transaction` A
+		// LEFT JOIN `billing_transaction_item` B ON B.`billingTransactionID` = A.`billingTransactionID`
+  //       WHERE A.billingTransactionStatus = 1
+  //   	AND A.billingTransactionDate LIKE '%2016-06%'
+		// GROUP BY A.`siteID`) AS figures ON figures.siteID = site.siteID
+
+		# New Query
+
+		// SELECT 
+		// D.`siteInfoDistrict`,
+		// A.`stateID`,
+		// A.`siteID`,
+		// A.`siteName`,
+		// COUNT(B.siteID) AS NumberOfTransaction,
+		// SUM(CASE WHEN C.billingItemID = 1 THEN C.billingTransactionItemPrice ELSE 0 END) AS Membership,
+		// SUM(CASE WHEN C.billingItemID = 3 || C.billingItemID = 5 || C.billingItemID = 16 THEN C.billingTransactionItemPrice ELSE 0 END) AS PCUsage,
+		// SUM(CASE WHEN C.billingItemID = 4 || C.billingItemID = 6 THEN C.billingTransactionItemPrice ELSE 0 END) AS PrintPhotst,
+		// SUM(CASE WHEN C.billingItemID = 5 THEN C.billingTransactionItemPrice ELSE 0 END) AS OthersSrvc,
+		// SUM(CASE WHEN C.billingItemID = 7 THEN C.billingTransactionItemPrice ELSE 0 END) AS Scanning,
+		// SUM(CASE WHEN C.billingItemID = 8 || C.billingItemID = 17 THEN C.billingTransactionItemPrice ELSE 0 END) AS Laminating,
+		// SUM(CASE WHEN C.billingItemID = 2 || C.billingItemID = 9 || C.billingItemID = 12 || C.billingItemID = 13 || C.billingItemID = 14 THEN C.billingTransactionItemPrice ELSE 0 END) AS OthersCashIn
+		// FROM `site` A
+		// LEFT JOIN `billing_transaction` B ON B.`siteID` = A.`siteID`
+		// LEFT JOIN `billing_transaction_item` C ON C.`billingTransactionID` = B.`billingTransactionID`
+		// LEFT JOIN `site_info` D ON D.`siteID` = A.`siteID`
+		// GROUP BY A.`siteID`
+		// ORDER BY A.`stateID`
+
+		# Old Query
+
+		// SELECT 
+		// D.`siteInfoDistrict`,
+		// A.`stateID`,
+		// A.`siteID`,
+		// A.`siteName`,
+		// COUNT(B.siteID) AS NumberOfTransaction,
+		// SUM(CASE WHEN C.billingItemID = 1 THEN C.billingTransactionItemPrice ELSE 0 END) AS Membership,
+		// SUM(CASE WHEN C.billingItemID = 3 THEN C.billingTransactionItemPrice ELSE 0 END) AS PCUsage,
+		// SUM(CASE WHEN C.billingItemID = 4 THEN C.billingTransactionItemPrice ELSE 0 END) AS PrintPhotstBW,
+		// SUM(CASE WHEN C.billingItemID = 5 THEN C.billingTransactionItemPrice ELSE 0 END) AS OthersSrvc,
+		// SUM(CASE WHEN C.billingItemID = 6 THEN C.billingTransactionItemPrice ELSE 0 END) AS PrintPhotstC,
+		// SUM(CASE WHEN C.billingItemID = 7 THEN C.billingTransactionItemPrice ELSE 0 END) AS Scanning,
+		// SUM(CASE WHEN C.billingItemID = 8 THEN C.billingTransactionItemPrice ELSE 0 END) AS Laminating,
+		// SUM(CASE WHEN C.billingItemID = 12 THEN C.billingTransactionItemPrice ELSE 0 END) AS PackageA,
+		// SUM(CASE WHEN C.billingItemID = 13 THEN C.billingTransactionItemPrice ELSE 0 END) AS PackageB,
+		// SUM(CASE WHEN C.billingItemID = 14 THEN C.billingTransactionItemPrice ELSE 0 END) AS PackageC,
+		// SUM(B.billingTransactionTotal) AS TotalIncome
+		// FROM `site` A
+		// LEFT JOIN `billing_transaction` B ON B.`siteID` = A.`siteID`
+		// LEFT JOIN `billing_transaction_item` C ON C.`billingTransactionID` = B.`billingTransactionID`
+		// LEFT JOIN `site_info` D ON D.`siteID` = A.`siteID`
+		// GROUP BY A.`siteID`
+
+		// var_dump($ResultSummary);
+
+		return $ResultSummary;
+	}
+
+	private function reportCashFlowSummary($input) {
+
+		$month 	= $input['month'];
+		$year 	= $input['year'];
+		$endTitle = '';
+
+		# Get month value length
+		$Nmonth = strlen($month);
+
+		# Set month value to 2 digit eg: 01,02,03,04,05,06,07,08,09
+		if ($Nmonth == 1) {
+			$months = '0'.$month;
+		} else {
+			$months = $month;
+		}
+
+		# Set date search format & reset month text
+		if ($month == '') {
+			$date = $year;
+			$titleDate = $year;
+		} else {
+			$date = $year.'-'.$months;
+			$titleDate = $year.'/'.$months;
+		}
+
+		# Get Total Cash Flow Summary Data
+		$data = $this->getTotalCashFlow($date);
+
+		$month 			= $input['month'];
+		$year 			= $input['year'];
+		// $sheetName 	= $input['sheetName'];
+		$sheetName 		= 'Pi1M';
+
+		$filename		= "CBC Cash Flow Summary, ".$titleDate;
+
+		$excel			= new \PHPExcel;
+		$ExcelHelper	= new model\report\PHPExcelHelper($excel,$filename.".xls");
+
+		# set running alphabet and number.
+		$cellRange = range('A', 'Z');
+		$i = 0;
+
+		# Calling State helper
+		$state = model::load("helper")->state();
+
+		## the main working sheet.
+		$sheet	= $excel->getActiveSheet();
+
+		## prepare report.
+
+		## all cell
+		$allCells = $sheet->getStyle("A1:O".(4+count($data)));
+		$allCells->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_TOP);
+		$allCells->getAlignment()->setWrapText(true);
+		foreach(range('A','O') as $columnID) {
+		    $sheet->getColumnDimension($columnID)->setAutoSize(true);
+		}
+		$allCells->applyFromArray(
+					array(
+						'borders' => array(
+								'allborders' => array(
+										'style' => PHPExcel_Style_Border::BORDER_THIN,
+										'color' => array('rgb' => 'D3D3D3'),
+										'size'  => 11,
+										)
+								)
+						)
+					);
+
+		# prepare header.
+
+		# first row header
+		$sheet->setCellValue("A1", $filename);
+		$sheet->mergeCells("A1:O1");
+
+		# second row header
+		$sheet->setCellValue("A2", $sheetName);
+		$sheet->mergeCells("A2:C2");
+
+		$sheet->setCellValue("D2", 'Generated at '.now());
+		$sheet->mergeCells("D2:O2");
+
+		# set alignment
+		$sheet->getStyle("D1:O2")->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+
+		# third row header
+		$sheet->setCellValue("D3", 'Income');
+		$sheet->mergeCells("D3:K3");
+
+		$sheet->setCellValue("L3", 'Expense');
+		$sheet->mergeCells("L3:N3");
+
+		$sheet->setCellValue("O3", 'Balance');
+
+		# set alignment
+		$sheet->getStyle("D3:O3")->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+
+		# forth row header
+		$forthheader = array('State Name','District Name','Site','Membership Fee','PC Usage','Print Service','Other Service','Scanning','Laminating','Other Cash In','Total Income','Cash Drawer','Bank Account','Total Expense','Balance');
+
+		foreach ($forthheader as $key => $value) {
+			$i++;
+			//echo $cellRange[$i-1];
+			$sheet->setCellValue($cellRange[$i-1].'4', $value);
+		}
+
+		# set alignment
+		$sheet->getStyle("A4:O4")->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+
+		# set background color
+		$sheet->getStyle('A1:O4')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('6495ED');
+
+		# set font
+		$sheet->getStyle('A1:O4')->applyFromArray(
+										array(
+							    			'font'  => array(
+								        		'bold'  => true,
+								        		'color' => array('rgb' => 'FFFFFF')
+							    			)
+							    		)
+									);
+
+		# prepare data cell.
+
+		# set alignment
+		$sheet->getStyle("D5:O".(4+count($data)))->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+
+		# set color
+		$sheet->getStyle("K5:K".(4+count($data)))->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('e0e0e0');
+
+		$sheet->getStyle("N5:O".(4+count($data)))->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('e0e0e0');
+
+		$sheet->getStyle("A".(5+count($data)).":O".(5+count($data)))->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('ADD8E6');
+
+		$sheet->getStyle("D5:O".(5+count($data)))->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_00);
+		
+		/*
+		siteName,
+		stateID,
+		Membership,
+		PCUsage,
+		PrintPhotst,
+		OthersSrvc,
+		Scanning,
+		Laminating,
+		OthersCashIn
+		*/
+
+		// var_dump($data);
+		// die();
+
+		$ii = 4;
+		$currentState = 0;
+		foreach ($data as $key => $value) {
+			$ii++;
+			if ($currentState != $value['stateID']) {
+				$currentState = $value['stateID'];
+				$sheet->setCellValue('A'.($ii), $state[$currentState]);
+			}
+
+			if (empty($value['Membership'])) {
+				$value['Membership'] = 0;
+			}
+
+			if (empty($value['PCUsage'])) {
+				$value['PCUsage'] = 0;
+			}
+
+			if (empty($value['PrintPhotst'])) {
+				$value['PrintPhotst'] = 0;
+			}
+
+			if (empty($value['OthersSrvc'])) {
+				$value['OthersSrvc'] = 0;
+			}
+
+			if (empty($value['Scanning'])) {
+				$value['Scanning'] = 0;
+			}
+
+			if (empty($value['Laminating'])) {
+				$value['Laminating'] = 0;
+			}
+
+			if (empty($value['OthersCashIn'])) {
+				$value['OthersCashIn'] = 0;
+			}
+
+			$sheet->setCellValue('C'.($ii), $value['siteName']);
+			$sheet->setCellValue('D'.($ii), $value['Membership']);
+			$sheet->setCellValue('E'.($ii), $value['PCUsage']);
+			$sheet->setCellValue('F'.($ii), $value['PrintPhotst']);
+			$sheet->setCellValue('G'.($ii), $value['OthersSrvc']);
+			$sheet->setCellValue('H'.($ii), $value['Scanning']);
+			$sheet->setCellValue('I'.($ii), $value['Laminating']);
+			$sheet->setCellValue('J'.($ii), $value['OthersCashIn']);
+			$sheet->setCellValue('K'.($ii), $value['Membership']+$value['PCUsage']+$value['PrintPhotst']+$value['OthersSrvc']+$value['Scanning']+$value['Laminating']+$value['OthersCashIn']);
+
+			$sheet->setCellValue('L'.($ii), '0');
+			$sheet->setCellValue('M'.($ii), '0');
+			$sheet->setCellValue('N'.($ii), '0');
+			$sheet->setCellValue('O'.($ii), '0');
+		}
+
+		# bottom row | total all column
+		$sheet->setCellValue('C'.(5+count($data)), 'Pi1M Total');
+
+		for ($i=3; $i < 15; $i++) {
+			$sheet->setCellValue($cellRange[$i].(5+count($data)),'=SUM('.$cellRange[$i].'5:'.$cellRange[$i].(4+count($data)).')');
+		}
+
+		//die();
+
+		$ExcelHelper->execute();
 	}
 
     public function get_site(){
