@@ -707,7 +707,12 @@ class Controller_Exp
 				"callback"=>Array(!$files?false:true,"Please input an upload file.")
 				)
 						);
-
+		if($error = input::validate($rules))
+		{
+			input::repopulate();
+			redirect::withFlash(model::load("template/services")->wrap("input-error",$error));
+			redirect::to("exp/rlEdit/".$rlID,"Error in your form's field","error");
+		}
 
 		if($files)
 			$file_ary = $this->fixFilesArray($files);
@@ -858,13 +863,6 @@ class Controller_Exp
 				redirect::to('exp/rlEdit/'.$rlID,"All item are successfully uploaded!", "success");
 			}
 
-			
-		if($error = input::validate($rules))
-		{
-			input::repopulate();
-			redirect::withFlash(model::load("template/services")->wrap("input-error",$error));
-			redirect::to("exp/rlEdit/".$rlID,"Error in your form's field","error");
-		}
 	}
 
 	public function rlApproval($rlID, $status)
