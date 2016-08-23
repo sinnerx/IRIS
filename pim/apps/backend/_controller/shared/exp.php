@@ -697,7 +697,10 @@ class Controller_Exp
 		//var_dump(input::get());
 		//var_dump($files);
 		//die;
+		$rlID = $rl->prReconcilationID;
 
+		$siteID = $rl->getPr()->siteID;
+		
 		$rules	= Array(			
 			"fileUpload"=>Array(
 				"callback"=>Array(!$files?false:true,"Please input an upload file.")
@@ -717,9 +720,7 @@ class Controller_Exp
 		//var_dump($file_ary);
 		// var_dump(input::get());
 		// die;
-		$rlID = $rl->prReconcilationID;
 
-		$siteID = $rl->getPr()->siteID;
 
 		$maxsize = 5000000;
 
@@ -980,6 +981,6 @@ class Controller_Exp
 	    return $files;
 	}
 
-	
+
 	
 }
