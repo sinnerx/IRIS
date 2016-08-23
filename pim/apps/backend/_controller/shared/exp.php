@@ -700,19 +700,13 @@ class Controller_Exp
 		$rlID = $rl->prReconcilationID;
 
 		$siteID = $rl->getPr()->siteID;
-		
+
 		$rules	= Array(			
 			"fileUpload"=>Array(
 				"callback"=>Array(!$files?false:true,"Please input an upload file.")
 				)
 						);
 
-		if($error = input::validate($rules))
-		{
-			input::repopulate();
-			redirect::withFlash(model::load("template/services")->wrap("input-error",$error));
-			redirect::to("exp/rlEdit/".$rlID,"Error in your form's field","error");
-		}
 
 		if($files)
 			$file_ary = $this->fixFilesArray($files);
@@ -862,6 +856,14 @@ class Controller_Exp
 			else{
 				redirect::to('exp/rlEdit/'.$rlID,"All item are successfully uploaded!", "success");
 			}
+
+			
+		if($error = input::validate($rules))
+		{
+			input::repopulate();
+			redirect::withFlash(model::load("template/services")->wrap("input-error",$error));
+			redirect::to("exp/rlEdit/".$rlID,"Error in your form's field","error");
+		}
 	}
 
 	public function rlApproval($rlID, $status)
