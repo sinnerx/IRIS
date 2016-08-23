@@ -686,6 +686,10 @@ class Controller_Exp
 
 	public function rlFileUploadSubmit($rl)
 	{
+		// session_write_close();
+
+		set_time_limit(0);
+		ini_set('memory_limit','800M');		
 		//var_dump(input::file("fileUpload"));
 		$files	=  
 		$_FILES['fileUpload']; 
@@ -726,7 +730,16 @@ class Controller_Exp
 				"zip","rar","mp3","m4a",
 				"ogg","wav","mp4","m4v",
 				"mov","wmv","avi","mpg",
-				"ogv","3gp","3g2");
+				"ogv","3gp","3g2");		
+
+		// $exts = array("xls","xlsx",
+		// 		"doc","docx","ppt","pptx",
+		// 		"pps","ppsx","odt","pdf",
+		// 		"png","jpeg","jpg","bmp",
+		// 		"zip","rar","mp3","m4a",
+		// 		"ogg","wav","mp4","m4v",
+		// 		"mov","wmv","avi","mpg",
+		// 		"ogv","3gp","3g2");
 
 		//$files	= input::file("fileUpload");
 		//var_dump($files->get("name"));
@@ -966,5 +979,7 @@ class Controller_Exp
 	    }
 	    return $files;
 	}
+
+	
 	
 }
