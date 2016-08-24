@@ -1266,7 +1266,11 @@ class Controller_Report
         	$pdf->Cell($Nws[3],7,$totalBatch[$i]['Sabah'],1,0,'C');
         	$pdf->Cell($Nws[4],7,$totalBatch[$i]['Sarawak'],1,0,'C');
         	$pdf->Cell($Nws[5],7,$totalBatch[$i]['Positions']-$totalBatch[$i]['totalManager'],1,0,'C');
-        	$pdf->Cell($Nws[6],7,floatval(number_format((100.0*$totalBatch[$i]['totalManager'])/$totalBatch[$i]['Positions'], 2)).'%',1,0,'C');
+			if ($totalBatch[$i]['Positions'] && $totalBatch[$i]['Positions'] > 0) {
+        		$pdf->Cell($Nws[6],7,floatval(number_format((100.0*$totalBatch[$i]['totalManager'])/$totalBatch[$i]['Positions'], 2)).'%',1,0,'C');
+        	} else {
+        		$pdf->Cell($Nws[6],7,0,1,0,'C');
+        	}
 	    	$pdf->Ln();
         }
 
