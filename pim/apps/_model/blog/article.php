@@ -110,12 +110,19 @@ class Article extends \Origami
 		$todayDateStart = date('Y-m-d', strtotime($todayDateStart)); 
 		$todayDateEnd = date('Y-m-d', strtotime($todayDateEnd)); 
 
+		//checking if there is any article related to the category
+
 		$catList	= $this->getCatArticle($category);
+
+		$countCat = count($catList);
+
+		// var_dump(count($catList));
+		// die;
 		$catStr = implode (", ", array_map(function ($entry) {
   					return $entry['articleID'];
 					}, $catList));
-		//print_r($catStr);
-		
+		//var_dump($catStr);
+		//die;
 		
 		db::from("article");
 		# get by siteID.
@@ -125,11 +132,11 @@ class Article extends \Origami
 		}
 		else
 		{
-			if($frontend == false){
+			if($frontend == false ){
 
 				db::where("siteID = '$siteID'");
 
-				if($category){
+				if($category && $catStr != ''){
 				db::where("articleID IN", "($catStr)");
 				}
 
@@ -155,7 +162,13 @@ class Article extends \Origami
 			}
 		}
 		db::order_by("articlePublishedDate DESC, articleID DESC");
-		$data = db::get()->result("articleID");
+		//var_dump($category);
+		//die;
+		if($catStr != '' || !$category)
+			$data = db::get()->result("articleID");
+		else
+			$data = array();
+
 		if($frontend == true){
 			foreach ($data as $article => $row) {
 				db::from('user_profile');

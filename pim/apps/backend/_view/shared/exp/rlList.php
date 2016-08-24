@@ -87,11 +87,12 @@ var rlList = new function()
             //console.log('abc');
              tempfieldName  = $("#site_name" );
              tempfieldID  = $("#site_id" );
-             //console.log(tempfieldName);
+             //console.log(pim.url('report/get_site'));
+             //console.log(pim.url('ajax/shared/exp/get_site'));
             $(document).ready(function() {
               tempfieldName.width(200);
               tempfieldName.autocomplete({
-                    source: pim.url('report/get_site'), // path to the get_user method
+                    source: pim.url('ajax/shared/exp/get_site'), // path to the get_user method
                     select: function (event, ui){
                       event.preventDefault();
                       //console.log(ui.item.value);

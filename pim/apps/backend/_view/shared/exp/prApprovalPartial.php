@@ -69,12 +69,30 @@
         <td>Operation Manager</td>
       </tr>                
 
-      <tr>
-        <td><?php echo $pr->getSite()->siteName; ?></td>
+<!--       <tr>
+        <td><?php //echo $pr->getSite()->siteName; ?></td>
         <td></td>
         <td></td>
-      </tr>
-
+      </tr> -->
+        <tr>
+          <!-- <td><?php //echo $siteName['siteName']; ?></td> -->
+          <td>
+            <?php if(!$pr->isManagerPending()):?>
+            <?php echo $pr->getSite()->siteName; ?>
+            <?php endif;?>
+          </td>
+          <td>
+            <?php if(!$clApproval->isPending()):?>
+            <?php echo $pr->getCluster()->clusterName; ?>
+            <?php endif; ?>
+          </td>
+          <td>
+            <?php if(!$omApproval->isPending()):?>
+            <?php echo $pr->getOps(); ?>
+            <?php endif; ?>
+          </td>
+          <td></td>
+        </tr>
       </tbody>
     </table>
   </div>

@@ -201,11 +201,11 @@ class Menu extends Data
 						),
 					"Report"=>Array(
 							"Dashboard"=>"report/reportDashboard",
-							"Monthly USP Project"=>"report/monthlyActivity",
-							"Master Listing"=>"report/masterListing",
-							"Google Analytics"=>"googleanalytics/report",
-							"Monthly Activity Report"=>"report/monthlyActivityReport",
-							 "Quarterly Report"=>"report/showQuarterlyReportPage",
+							// "Monthly USP Project"=>"report/monthlyActivity",
+							// "Master Listing"=>"report/masterListing",
+							// "Google Analytics"=>"googleanalytics/report",
+							// "Monthly Activity Report"=>"report/monthlyActivityReport",
+							//  "Quarterly Report"=>"report/showQuarterlyReportPage",
 									),
 					"Learning" => Array(
 									"Learning Page " => Array("../lms/"),
@@ -232,6 +232,9 @@ class Menu extends Data
 						'RL List' => array('exp/rlList', 'exp/rlEdit')
 					//	"Add new Category / Item"=>"expense/addCategory"
 						),
+					// "Report"=>Array(
+					// 		"Dashboard"=>"report/reportDashboard",
+					// 	),					
 					"Learning" => Array(
 									"Learning Page " => Array("../lms/"),
 						),					

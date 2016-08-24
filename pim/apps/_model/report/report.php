@@ -1059,10 +1059,11 @@ SUM(billingTransactionItemQuantity) AS hours");
 		if($where)
 			{
 				$where	= !is_array($where)?Array($where):$where;
+				//var_dump($where);
 				foreach($where as $key => $wher)
 				{
 					if(is_string($key))
-						where($key, $wher);
+						db::where($key, $wher);
 					else
 						db::where($wher);
 				}

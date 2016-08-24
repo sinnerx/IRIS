@@ -81,7 +81,7 @@ var prList = new function()
               //console.log(pim.url('report/get_site'));
               tempfieldName.autocomplete({
                     //source: "/digitalgaia/iris/dashboard/report/get_site", // path to the get_site method
-                    source: pim.url('report/get_site'), // path to the get_site method
+                    source: pim.url('ajax/shared/exp/get_site'), // path to the get_site method
                     select: function (event, ui){
                       event.preventDefault();
                       //console.log(ui.item.value);
