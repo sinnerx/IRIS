@@ -462,7 +462,8 @@ class Controller_Cafe
 
 						$transaction = model::orm('billing/transaction')
 											->where('siteID', $this->site->siteID)
-											->where('billingTransactionLocalID', $localId)
+											//->where('billingTransactionLocalID', $localId)
+											->where('billingTransactionUnique', $uniqueId)
 											->execute()->getFirst();
 
 						// only update date if there's changes. since currently only date can be updated. and status
