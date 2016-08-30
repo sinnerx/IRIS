@@ -555,8 +555,10 @@ class Controller_ExpExcel
 		$ExcelHelper->execute();
 	}
 
+	//CHANGE HERE TO  RL able to be downloaded with full imformation once OM verified, thus easier to Finance verify it in 2 method, Hardcopy and on the system.
 	public function rlSummaryGenerate($clusterID, $prType, $month, $year)
 	{
+		//var_dump($clusterID);
 		$time = microtime(true);
 
 		$cluster = orm('site/cluster')->find($clusterID);
@@ -642,19 +644,39 @@ class Controller_ExpExcel
 			->setHorizontal($types[$type]);
 		};
 
-		$signatureAdd = function($sheet, &$y)
+		// var_dump($cluster->getOps($clusterID));
+		// die;
+		$clusterArray = $cluster->getOps($clusterID);
+		$opsName = $clusterArray['name'];
+		//var_dump($opsName);
+		//die;
+
+		if($clusterArray['title'] == "Operation Semenanjung Malaysia")
+			$SignatureImg = imagecreatefromjpeg(path::files('expense/saiful-signature.jpg'));
+		else if ($clusterArray['title'] == "Operation East Malaysia")
+			$SignatureImg = imagecreatefromjpeg(path::files('expense/diana-signature.jpg'));
+
+		$signatureAdd = function($sheet, &$y, &$opsName = null, &$SignatureImg = null)
 		{
+			//var_dump($opsName);
+			//die;
 			// signature.
 			$sheet->setCellValue('B'.$y, 'Acknowledged/Approved By:');
 			$sheet->setCellValue('D'.$y, 'Checked by:');
 
 			$y += 4;
 
-			$saifulSignature = imagecreatefromjpeg(path::files('expense/saiful-signature.jpg'));
-			$lizaSignature = imagecreatefromjpeg(path::files('expense/liza-signature.jpg'));
+			// $saifulSignature = imagecreatefromjpeg(path::files('expense/saiful-signature.jpg'));
+			 $lizaSignature = imagecreatefromjpeg(path::files('expense/liza-signature.jpg'));
 
 			$objDrawing = new PHPExcel_Worksheet_MemoryDrawing();
-			$objDrawing->setImageResource($saifulSignature);
+			// var_dump($clusterID);
+			// die;
+			// if($cluster->getOps($clusterID) == "Operation Semenanjung Malaysia")
+				$objDrawing->setImageResource($SignatureImg);
+			// else if ($cluster->getOps($clusterID) == "Operation East Malaysia")
+				// $objDrawing->setImageResource($lizaSignature);
+
 			$objDrawing->setRenderingFunction(PHPExcel_Worksheet_MemoryDrawing::RENDERING_JPEG);
 			$objDrawing->setMimeType(PHPExcel_Worksheet_MemoryDrawing::MIMETYPE_DEFAULT);
 			$objDrawing->setWidth(160);
@@ -681,7 +703,7 @@ class Controller_ExpExcel
 
 			$y++;
 
-			$sheet->setCellValue('B'.$y, 'Mohamad Saiful Sabran');
+			$sheet->setCellValue('B'.$y, $opsName);
 			$sheet->setCellValue('D'.$y, 'Yusliza Mad Yusop');
 
 			$y++;
@@ -928,7 +950,7 @@ class Controller_ExpExcel
 
 		$y += 2;
 
-		$signatureAdd($sheet, $y);
+		$signatureAdd($sheet, $y, $opsName, $SignatureImg);
 
 		// background-color the whole sheet.
 		$sheet->getStyle('A1:'."H$y")->applyFromArray(
@@ -1044,7 +1066,7 @@ class Controller_ExpExcel
 
 		$y += 2;
 
-		$signatureAdd($sheet, $y);
+		$signatureAdd($sheet, $y, $opsName, $SignatureImg);
 
 		// background-color the whole sheet.
 		$background($sheet, "A1:G$y", 'FFFFFF');

@@ -24,12 +24,12 @@ var rl = new function()
     {
       var catNames = [];
 
-      $(".rl-file-upload-button").each(function(i, e)
-      {
-        var id = $(this).data('rlcategoryid');
+      // $(".rl-file-upload-button").each(function(i, e)
+      // {
+      //   var id = $(this).data('rlcategoryid');
 
-        catNames.push($("#row-rl-category-"+id).find('.rl-category-name').html().trim());
-      });
+      //   catNames.push($("#row-rl-category-"+id).find('.rl-category-name').html().trim());
+      // });
       
       if(!confirm('Missing receipt for category '+catNames.join(', ')+'. Only category with related receipt uploaded will be reconciled. Do you still want to continue?'))
       {

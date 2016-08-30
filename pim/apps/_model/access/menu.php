@@ -223,7 +223,10 @@ class Menu extends Data
 	## operation manager.
 		$menu['om']	= Array(
 					/*"Overview"=>"home/index",*/
-			
+					"Billing"=>Array(
+							"Daily Cash Process"=>"billing/dailyCashProcess",
+							"Daily Cash Process Summary"=>"billing/dailyCashProcessSummary",
+						),			
 
 					"PI1M Expense"=>Array(
 						// "List of PR"=>"expense/listStatus",
