@@ -42,7 +42,7 @@ class Controller_Report
 					break;
 				case 16:
 					# code...
-					$this->reportCashFlowSummaryFull($input);
+					$this->reportCashFlowSummary($input);
 					break;
 				
 				default:
