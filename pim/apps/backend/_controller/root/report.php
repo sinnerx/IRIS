@@ -38,11 +38,11 @@ class Controller_Report
 					break;
 				case 14:
 					# code...
-					$this->reportCashFlowSummary($input);
+					$this->reportCashFlowSummaryFull($input);
 					break;
 				case 16:
 					# code...
-					$this->reportCashFlowSummary($input);
+					$this->reportCashFlowSummaryFull($input);
 					break;
 				
 				default:
@@ -2075,34 +2075,28 @@ class Controller_Report
 
 		// #create new data by month
 
-		// $monthlyData = array();
-		// foreach ($monthList as $key => $val) {
-		// 	# Get month value length
-		// 	$Nmonth = strlen($key);
+		 $monthlyData = array();
+		 foreach ($monthList as $key => $val) {
+		 	# Get month value length
+		 	$Nmonth = strlen($key);
 
-		// 	# Set month value to 2 digit eg: 01,02,03,04,05,06,07,08,09
-		// 	if ($Nmonth == 1) {
-		// 		$monthSite = '0'.$key;
-		// 	} else {
-		// 		$monthSite = $key;
-		// 	}
+		 	# Set month value to 2 digit eg: 01,02,03,04,05,06,07,08,09
+		 	if ($Nmonth == 1) {
+		 		$monthSite = '0'.$key;
+		 	} else {
+		 		$monthSite = $key;
+		 	}
 
-		// 	$data=$this->getTotalCashFlow($year."-".$monthSite);
-		// 	$newData=array();
+		 	$data=$this->getTotalCashFlow($year."-".$monthSite);
+		 	$newData=array();
 
-		// 	foreach($data as $no=>$pim){
-		// 		$newData[$pim['siteID']]=$pim;
-		// 	}
+		 	foreach($data as $no=>$pim){
+		 		$newData[$pim['siteID']]=$pim;
+		 	}
 
-		// 	$monthlyData[$key]=$newData;
-		// }
+		 	$monthlyData[$key]=$newData;
+		 }
 
-		if($month){
-		
-		
-
-		}
-		
 
 		##############################################
 		#  Start create new sheets for pim           #
