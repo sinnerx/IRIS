@@ -2129,16 +2129,16 @@ class Controller_Report
 		// #Start new site tab
 
 		$siteIDs=$sitePim['siteID'];
-		$siteName=$sitePim['siteName'];
+		$siteName=substr($sitePim['siteName'], 0, 15);;
 
 		//$siteIDs=68;
 		//$siteName="Felda Bukit Batu, Johor";
 
-		$arr = explode(",", $siteName, 2);
-		$first = $arr[0];
-		$sheetSite = $excel->createSheet(1);
-		$sheetSite->setTitle($first);
-		$cellRangeSite = range('A', 'Z');
+		// $arr = explode(",", $siteName, 2);
+		// $first = $arr[0];
+		// $sheetSite = $excel->createSheet(1);
+		// $sheetSite->setTitle($first);
+		// $cellRangeSite = range('A', 'Z');
 
 		$endSheetRow=$monCount+5;
 
@@ -2296,24 +2296,24 @@ class Controller_Report
 		// $sheetSite->setTitle($first);
 		// $cellRangeSite = range('A', 'Z');
 
-		// ## all cell
-		// $allCellSite = $sheetSite->getStyle("A1:Q".(17));
-		// $allCellSite->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_TOP);
-		// $allCellSite->getAlignment()->setWrapText(true);
-		// foreach(range('A','Q') as $columnID) {
-		//     $sheetSite->getColumnDimension($columnID)->setAutoSize(true);
-		// }
-		// $allCellSite->applyFromArray(
-		// 			array(
-		// 				'borders' => array(
-		// 						'allborders' => array(
-		// 								'style' => PHPExcel_Style_Border::BORDER_THIN,
-		// 								'color' => array('rgb' => 'D3D3D3'),
-		// 								'size'  => 11,
-		// 								)
-		// 						)
-		// 				)
-		// 			);
+		## all cell
+		$allCellSite = $sheetSite->getStyle("A1:Q".(17));
+		$allCellSite->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_TOP);
+		$allCellSite->getAlignment()->setWrapText(true);
+		foreach(range('A','Q') as $columnID) {
+		    $sheetSite->getColumnDimension($columnID)->setAutoSize(true);
+		}
+		$allCellSite->applyFromArray(
+					array(
+						'borders' => array(
+								'allborders' => array(
+										'style' => PHPExcel_Style_Border::BORDER_THIN,
+										'color' => array('rgb' => 'D3D3D3'),
+										'size'  => 11,
+										)
+								)
+						)
+					);
 
 
 
