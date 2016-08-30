@@ -220,7 +220,7 @@ $(function() {
                     <?php echo $list->getStatusLabel();?>
                   <?php endif;?>
                 </td>
-                <td><?php echo "aaa".number_format((float)$list->prTotal, 2, '.', ''); ?></td>
+                <td><?php echo number_format((float)$list->prTotal, 2, '.', ''); ?></td>
                 <td><?php echo $pr->prNumber; ?></td>
                 <td>
                     <a href='<?php echo url::base('exp/rlDelete/'.$list->prReconcilationID);?>' onclick='return confirm("Delete this RL?");' class='i i-cross2 pull-right'></a>

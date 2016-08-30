@@ -55,7 +55,6 @@ class Controller_Report
 		//input
 		$year = $input['year'];
 
-		//query
 		db::select("MONTH(A.activityCreatedDate) as monthly, count(A.activityID) as totalPaid");
 		db::from("training T");
 		db::join("activity A", "A.activityID = T.activityID");
@@ -2064,227 +2063,227 @@ class Controller_Report
 		# Calling Month helper
 		$monthList = model::load("helper")->monthYear("monthE");
 
-		#create new data by month
+		// #create new data by month
 
-		$monthlyData = array();
-		foreach ($monthList as $key => $val) {
-			# Get month value length
-			$Nmonth = strlen($key);
+		// $monthlyData = array();
+		// foreach ($monthList as $key => $val) {
+		// 	# Get month value length
+		// 	$Nmonth = strlen($key);
 
-			# Set month value to 2 digit eg: 01,02,03,04,05,06,07,08,09
-			if ($Nmonth == 1) {
-				$monthSite = '0'.$key;
-			} else {
-				$monthSite = $key;
-			}
+		// 	# Set month value to 2 digit eg: 01,02,03,04,05,06,07,08,09
+		// 	if ($Nmonth == 1) {
+		// 		$monthSite = '0'.$key;
+		// 	} else {
+		// 		$monthSite = $key;
+		// 	}
 
-			$data=$this->getTotalCashFlow($year."-".$monthSite);
-			$newData=array();
+		// 	$data=$this->getTotalCashFlow($year."-".$monthSite);
+		// 	$newData=array();
 
-			foreach($data as $no=>$pim){
-				$newData[$pim['siteID']]=$pim;
-			}
+		// 	foreach($data as $no=>$pim){
+		// 		$newData[$pim['siteID']]=$pim;
+		// 	}
 
-			$monthlyData[$key]=$newData;
-		}
+		// 	$monthlyData[$key]=$newData;
+		// }
 
-		#start looping each tab (pim)
-		foreach($data as $no=>$sitePim){
+		// #start looping each tab (pim)
+		// foreach($data as $no=>$sitePim){
 
-		#add sheets for each pi1ms
+		// #add sheets for each pi1ms
 
-		#Start new site tab
+		// #Start new site tab
 
 		$siteIDs=$sitePim['siteID'];
 		$siteName=substr($sitePim['siteName'], 0, 15);
 
-		$arr = explode(",", $siteName, 2);
-		$first = $arr[0];
-		$sheetSite = $excel->createSheet(1);
-		$sheetSite->setTitle($first);
-		$cellRangeSite = range('A', 'Z');
+		// $arr = explode(",", $siteName, 2);
+		// $first = $arr[0];
+		// $sheetSite = $excel->createSheet(1);
+		// $sheetSite->setTitle($first);
+		// $cellRangeSite = range('A', 'Z');
 
-		## all cell
-		$allCellSite = $sheetSite->getStyle("A1:Q".(17));
-		$allCellSite->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_TOP);
-		$allCellSite->getAlignment()->setWrapText(true);
-		foreach(range('A','Q') as $columnID) {
-		    $sheetSite->getColumnDimension($columnID)->setAutoSize(true);
-		}
-		$allCellSite->applyFromArray(
-					array(
-						'borders' => array(
-								'allborders' => array(
-										'style' => PHPExcel_Style_Border::BORDER_THIN,
-										'color' => array('rgb' => 'D3D3D3'),
-										'size'  => 11,
-										)
-								)
-						)
-					);
+		// ## all cell
+		// $allCellSite = $sheetSite->getStyle("A1:Q".(17));
+		// $allCellSite->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_TOP);
+		// $allCellSite->getAlignment()->setWrapText(true);
+		// foreach(range('A','Q') as $columnID) {
+		//     $sheetSite->getColumnDimension($columnID)->setAutoSize(true);
+		// }
+		// $allCellSite->applyFromArray(
+		// 			array(
+		// 				'borders' => array(
+		// 						'allborders' => array(
+		// 								'style' => PHPExcel_Style_Border::BORDER_THIN,
+		// 								'color' => array('rgb' => 'D3D3D3'),
+		// 								'size'  => 11,
+		// 								)
+		// 						)
+		// 				)
+		// 			);
 
 
 
-		# prepare header.
+		// # prepare header.
 
-		# first row header
-		$sheetSite->setCellValue("A1", "CBC Cash Flow Details, ".$date);
-		$sheetSite->mergeCells("A1:Q1");
+		// # first row header
+		// $sheetSite->setCellValue("A1", "CBC Cash Flow Details, ".$date);
+		// $sheetSite->mergeCells("A1:Q1");
 
-		# second row header
-		$sheetSite->setCellValue("A2", $siteName);
-		$sheetSite->mergeCells("A2:C2");
+		// # second row header
+		// $sheetSite->setCellValue("A2", $siteName);
+		// $sheetSite->mergeCells("A2:C2");
 
-		$sheetSite->setCellValue("D2", 'Generated at '.now());
-		$sheetSite->mergeCells("D2:Q2");
+		// $sheetSite->setCellValue("D2", 'Generated at '.now());
+		// $sheetSite->mergeCells("D2:Q2");
 
-		# set alignment
-		$sheetSite->getStyle("D2:Q2")->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+		// # set alignment
+		// $sheetSite->getStyle("D2:Q2")->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
 
-		# third row header
-		$sheetSite->setCellValue("D3", 'Income');
-		$sheetSite->mergeCells("D3:L3");
+		// # third row header
+		// $sheetSite->setCellValue("D3", 'Income');
+		// $sheetSite->mergeCells("D3:L3");
 
-		$sheetSite->setCellValue("M3", 'Expense');
-		$sheetSite->mergeCells("M3:P3");
+		// $sheetSite->setCellValue("M3", 'Expense');
+		// $sheetSite->mergeCells("M3:P3");
 
-		$sheetSite->setCellValue("Q3", 'Balance');
+		// $sheetSite->setCellValue("Q3", 'Balance');
 
-		# set alignment
-		$sheetSite->getStyle("D3:Q3")->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+		// # set alignment
+		// $sheetSite->getStyle("D3:Q3")->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 
-		# forth row header
-		$fourthHeaderSite = array('Year','Month','Date','Membership Fee','PC Usage','Print Service','Other Service','Scanning','Laminating','Other Cash In','Other Cash In Description','Total Income','Cash Drawer','Bank Account','Expense Description','Total Expense','Balance');
+		// # forth row header
+		// $fourthHeaderSite = array('Year','Month','Date','Membership Fee','PC Usage','Print Service','Other Service','Scanning','Laminating','Other Cash In','Other Cash In Description','Total Income','Cash Drawer','Bank Account','Expense Description','Total Expense','Balance');
 		
-		foreach ($fourthHeaderSite as $key=>$value) {
-			$sheetSite->setCellValue($cellRange[$key].'4', $value);
-		}
+		// foreach ($fourthHeaderSite as $key=>$value) {
+		// 	$sheetSite->setCellValue($cellRange[$key].'4', $value);
+		// }
 
-		# set alignment
-		$sheetSite->getStyle("A4:Q4")->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+		// # set alignment
+		// $sheetSite->getStyle("A4:Q4")->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 
-		# set background color
-		$sheetSite->getStyle('A1:Q4')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('6495ED');
+		// # set background color
+		// $sheetSite->getStyle('A1:Q4')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('6495ED');
 
-		# set font
-		$sheetSite->getStyle('A1:Q4')->applyFromArray(
-										array(
-							    			'font'  => array(
-								        		'bold'  => true,
-								        		'color' => array('rgb' => 'FFFFFF')
-							    			)
-							    		)
-									);
+		// # set font
+		// $sheetSite->getStyle('A1:Q4')->applyFromArray(
+		// 								array(
+		// 					    			'font'  => array(
+		// 						        		'bold'  => true,
+		// 						        		'color' => array('rgb' => 'FFFFFF')
+		// 					    			)
+		// 					    		)
+		// 							);
 
-		# fifth row header
-		$sheetSite->setCellValue("A5", $year);
-		$sheetSite->mergeCells("A5:A17");
+		// # fifth row header
+		// $sheetSite->setCellValue("A5", $year);
+		// $sheetSite->mergeCells("A5:A17");
 
-		# set alignment
-		$sheetSite->getStyle("D5:Q17")->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+		// # set alignment
+		// $sheetSite->getStyle("D5:Q17")->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
 
-		# set color
-		$sheetSite->getStyle("B5:Q5")->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('add8e6');
+		// # set color
+		// $sheetSite->getStyle("B5:Q5")->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('add8e6');
 
-		$sheetSite->getStyle("D6:Q17")->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('B0C4DE');
+		// $sheetSite->getStyle("D6:Q17")->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('B0C4DE');
 
-		$sheetSite->getStyle("D5:Q17")->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_00);
+		// $sheetSite->getStyle("D5:Q17")->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_00);
 
 
 
-		#All total formula
-		$cellTotal=array('D','E','F','G','H','I','J','L','M','N','P');
-		foreach($cellTotal as $key=>$cell){
-				$sheetSite->setCellValue($cell.'5', '=SUM('.$cell.'6:'.$cell.'17)');
-		}
-		#all total balance formula
-		$sheetSite->setCellValue('Q5', '=L5-P5');
+		// #All total formula
+		// $cellTotal=array('D','E','F','G','H','I','J','L','M','N','P');
+		// foreach($cellTotal as $key=>$cell){
+		// 		$sheetSite->setCellValue($cell.'5', '=SUM('.$cell.'6:'.$cell.'17)');
+		// }
+		// #all total balance formula
+		// $sheetSite->setCellValue('Q5', '=L5-P5');
 
 		
-		$sheetSite->setCellValue("B5", "Total");
-		$noMonth=6;
-		foreach ($monthList as $key => $value) {
-			$sheetSite->setCellValue("B".$noMonth, $value);
-			$sheetSite->setCellValue("C".$noMonth, "Total");
-			$noMonth++;
-		}
+		// $sheetSite->setCellValue("B5", "Total");
+		// $noMonth=6;
+		// foreach ($monthList as $key => $value) {
+		// 	$sheetSite->setCellValue("B".$noMonth, $value);
+		// 	$sheetSite->setCellValue("C".$noMonth, "Total");
+		// 	$noMonth++;
+		// }
 
 	
-		#list data by date or year
-		if($month){
-		#list data by date
-		$cellSiteStart=6;
-		foreach ($monthList as $key => $value) {
+		// #list data by date or year
+		// if($month){
+		// #list data by date
+		// $cellSiteStart=6;
+		// foreach ($monthList as $key => $value) {
 			
-			if($key==$month){
+		// 	if($key==$month){
 
-			$dataSite = $monthlyData[$key][$siteIDs];
-			$sheetSite->setCellValue('D'.$cellSiteStart, empty($dataSite['Membership'])?'0':$dataSite['Membership']);
-			$sheetSite->setCellValue('E'.$cellSiteStart, empty($dataSite['PCUsage'])?'0':$dataSite['PCUsage']);
-			$sheetSite->setCellValue('F'.$cellSiteStart, empty($dataSite['PrintPhotst'])?'0':$dataSite['PrintPhotst']);
-			$sheetSite->setCellValue('G'.$cellSiteStart, empty($dataSite['OthersSrvc'])?'0':$dataSite['OthersSrvc']);
-			$sheetSite->setCellValue('H'.$cellSiteStart, empty($dataSite['Scanning'])?'0':$dataSite['Scanning']);
-			$sheetSite->setCellValue('I'.$cellSiteStart, empty($dataSite['Laminating'])?'0':$dataSite['Laminating']);
-			$sheetSite->setCellValue('J'.$cellSiteStart, empty($dataSite['OthersCashIn'])?'0':$dataSite['OthersCashIn']);
-			$sheetSite->setCellValue('K'.$cellSiteStart, "");
-			$sheetSite->setCellValue('L'.$cellSiteStart, '=SUM(D'.$cellSiteStart.':J'.$cellSiteStart.')');
-			$sheetSite->setCellValue('M'.$cellSiteStart, "0");
-			$sheetSite->setCellValue('N'.$cellSiteStart, "0");
-			$sheetSite->setCellValue('O'.$cellSiteStart, "");
-			$sheetSite->setCellValue('P'.$cellSiteStart, empty($dataSite['Expense'])?'0':$dataSite['Expense']);
-			$sheetSite->setCellValue('Q'.$cellSiteStart, '=L'.$cellSiteStart.'-P'.$cellSiteStart);
+		// 	$dataSite = $monthlyData[$key][$siteIDs];
+		// 	$sheetSite->setCellValue('D'.$cellSiteStart, empty($dataSite['Membership'])?'0':$dataSite['Membership']);
+		// 	$sheetSite->setCellValue('E'.$cellSiteStart, empty($dataSite['PCUsage'])?'0':$dataSite['PCUsage']);
+		// 	$sheetSite->setCellValue('F'.$cellSiteStart, empty($dataSite['PrintPhotst'])?'0':$dataSite['PrintPhotst']);
+		// 	$sheetSite->setCellValue('G'.$cellSiteStart, empty($dataSite['OthersSrvc'])?'0':$dataSite['OthersSrvc']);
+		// 	$sheetSite->setCellValue('H'.$cellSiteStart, empty($dataSite['Scanning'])?'0':$dataSite['Scanning']);
+		// 	$sheetSite->setCellValue('I'.$cellSiteStart, empty($dataSite['Laminating'])?'0':$dataSite['Laminating']);
+		// 	$sheetSite->setCellValue('J'.$cellSiteStart, empty($dataSite['OthersCashIn'])?'0':$dataSite['OthersCashIn']);
+		// 	$sheetSite->setCellValue('K'.$cellSiteStart, "");
+		// 	$sheetSite->setCellValue('L'.$cellSiteStart, '=SUM(D'.$cellSiteStart.':J'.$cellSiteStart.')');
+		// 	$sheetSite->setCellValue('M'.$cellSiteStart, "0");
+		// 	$sheetSite->setCellValue('N'.$cellSiteStart, "0");
+		// 	$sheetSite->setCellValue('O'.$cellSiteStart, "");
+		// 	$sheetSite->setCellValue('P'.$cellSiteStart, empty($dataSite['Expense'])?'0':$dataSite['Expense']);
+		// 	$sheetSite->setCellValue('Q'.$cellSiteStart, '=L'.$cellSiteStart.'-P'.$cellSiteStart);
 
-			}else{
+		// 	}else{
 
-			$sheetSite->setCellValue('D'.$cellSiteStart, "0");
-			$sheetSite->setCellValue('E'.$cellSiteStart, "0");
-			$sheetSite->setCellValue('F'.$cellSiteStart, "0");
-			$sheetSite->setCellValue('G'.$cellSiteStart, "0");
-			$sheetSite->setCellValue('H'.$cellSiteStart, "0");
-			$sheetSite->setCellValue('I'.$cellSiteStart, "0");
-			$sheetSite->setCellValue('J'.$cellSiteStart, "0");
-			$sheetSite->setCellValue('K'.$cellSiteStart, "");
-			$sheetSite->setCellValue('L'.$cellSiteStart, '=SUM(D'.$cellSiteStart.':J'.$cellSiteStart.')');
-			$sheetSite->setCellValue('M'.$cellSiteStart, "0");
-			$sheetSite->setCellValue('N'.$cellSiteStart, "0");
-			$sheetSite->setCellValue('O'.$cellSiteStart, "");
-			$sheetSite->setCellValue('P'.$cellSiteStart, "0");
-			$sheetSite->setCellValue('Q'.$cellSiteStart, '=L'.$cellSiteStart.'-P'.$cellSiteStart);
-			}
+		// 	$sheetSite->setCellValue('D'.$cellSiteStart, "0");
+		// 	$sheetSite->setCellValue('E'.$cellSiteStart, "0");
+		// 	$sheetSite->setCellValue('F'.$cellSiteStart, "0");
+		// 	$sheetSite->setCellValue('G'.$cellSiteStart, "0");
+		// 	$sheetSite->setCellValue('H'.$cellSiteStart, "0");
+		// 	$sheetSite->setCellValue('I'.$cellSiteStart, "0");
+		// 	$sheetSite->setCellValue('J'.$cellSiteStart, "0");
+		// 	$sheetSite->setCellValue('K'.$cellSiteStart, "");
+		// 	$sheetSite->setCellValue('L'.$cellSiteStart, '=SUM(D'.$cellSiteStart.':J'.$cellSiteStart.')');
+		// 	$sheetSite->setCellValue('M'.$cellSiteStart, "0");
+		// 	$sheetSite->setCellValue('N'.$cellSiteStart, "0");
+		// 	$sheetSite->setCellValue('O'.$cellSiteStart, "");
+		// 	$sheetSite->setCellValue('P'.$cellSiteStart, "0");
+		// 	$sheetSite->setCellValue('Q'.$cellSiteStart, '=L'.$cellSiteStart.'-P'.$cellSiteStart);
+		// 	}
 			
-			$cellSiteStart++;
+		// 	$cellSiteStart++;
 			
-		}
-		}else{
-			#list data by month yearly
-		$cellSiteStart=6;
-		foreach ($monthList as $key => $value) {
+		// }
+		// }else{
+		// 	#list data by month yearly
+		// $cellSiteStart=6;
+		// foreach ($monthList as $key => $value) {
 
 			
-			$dataSite = $monthlyData[$key][$siteIDs];
-			$sheetSite->setCellValue('D'.$cellSiteStart, empty($dataSite['Membership'])?'0':$dataSite['Membership']);
-			$sheetSite->setCellValue('E'.$cellSiteStart, empty($dataSite['PCUsage'])?'0':$dataSite['PCUsage']);
-			$sheetSite->setCellValue('F'.$cellSiteStart, empty($dataSite['PrintPhotst'])?'0':$dataSite['PrintPhotst']);
-			$sheetSite->setCellValue('G'.$cellSiteStart, empty($dataSite['OthersSrvc'])?'0':$dataSite['OthersSrvc']);
-			$sheetSite->setCellValue('H'.$cellSiteStart, empty($dataSite['Scanning'])?'0':$dataSite['Scanning']);
-			$sheetSite->setCellValue('I'.$cellSiteStart, empty($dataSite['Laminating'])?'0':$dataSite['Laminating']);
-			$sheetSite->setCellValue('J'.$cellSiteStart, empty($dataSite['OthersCashIn'])?'0':$dataSite['OthersCashIn']);
-			$sheetSite->setCellValue('K'.$cellSiteStart, "");
-			$sheetSite->setCellValue('L'.$cellSiteStart, '=SUM(D'.$cellSiteStart.':J'.$cellSiteStart.')');
-			$sheetSite->setCellValue('M'.$cellSiteStart, "0");
-			$sheetSite->setCellValue('N'.$cellSiteStart, "0");
-			$sheetSite->setCellValue('O'.$cellSiteStart, "");
-			$sheetSite->setCellValue('P'.$cellSiteStart, empty($dataSite['Expense'])?'0':$dataSite['Expense']);
-			$sheetSite->setCellValue('Q'.$cellSiteStart, '=L'.$cellSiteStart.'-P'.$cellSiteStart);
+		// 	$dataSite = $monthlyData[$key][$siteIDs];
+		// 	$sheetSite->setCellValue('D'.$cellSiteStart, empty($dataSite['Membership'])?'0':$dataSite['Membership']);
+		// 	$sheetSite->setCellValue('E'.$cellSiteStart, empty($dataSite['PCUsage'])?'0':$dataSite['PCUsage']);
+		// 	$sheetSite->setCellValue('F'.$cellSiteStart, empty($dataSite['PrintPhotst'])?'0':$dataSite['PrintPhotst']);
+		// 	$sheetSite->setCellValue('G'.$cellSiteStart, empty($dataSite['OthersSrvc'])?'0':$dataSite['OthersSrvc']);
+		// 	$sheetSite->setCellValue('H'.$cellSiteStart, empty($dataSite['Scanning'])?'0':$dataSite['Scanning']);
+		// 	$sheetSite->setCellValue('I'.$cellSiteStart, empty($dataSite['Laminating'])?'0':$dataSite['Laminating']);
+		// 	$sheetSite->setCellValue('J'.$cellSiteStart, empty($dataSite['OthersCashIn'])?'0':$dataSite['OthersCashIn']);
+		// 	$sheetSite->setCellValue('K'.$cellSiteStart, "");
+		// 	$sheetSite->setCellValue('L'.$cellSiteStart, '=SUM(D'.$cellSiteStart.':J'.$cellSiteStart.')');
+		// 	$sheetSite->setCellValue('M'.$cellSiteStart, "0");
+		// 	$sheetSite->setCellValue('N'.$cellSiteStart, "0");
+		// 	$sheetSite->setCellValue('O'.$cellSiteStart, "");
+		// 	$sheetSite->setCellValue('P'.$cellSiteStart, empty($dataSite['Expense'])?'0':$dataSite['Expense']);
+		// 	$sheetSite->setCellValue('Q'.$cellSiteStart, '=L'.$cellSiteStart.'-P'.$cellSiteStart);
 
-			$cellSiteStart++;
+		// 	$cellSiteStart++;
 			
-		}
-		}
+		// }
+		// }
 		
 
 
-		}
+		// }
 
 
 		$ExcelHelper->execute();
