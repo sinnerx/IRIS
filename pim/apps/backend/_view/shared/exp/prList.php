@@ -164,6 +164,7 @@ $(function() {
                   <th width="150px">Type</th>
                   <th>Status</th>
                   <th>PR Number</th>
+                  <th>Amount (RM)</th>
                   <th width="80px"></th>
                 </tr>
               </thead>
