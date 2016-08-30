@@ -200,6 +200,7 @@ $(function() {
                     </form>
                   <?php endif;?>
                 </td>
+                <td><?php echo number_format((float)$list->prTotal, 2, '.', ''); ?></td>
                 <td>
                 <?php if($list->isDeletableBy(user())):?>
                 <a href='<?php echo url::base('exp/prDelete/'.$list->prID);?>' onclick='return confirm("Delete this PR?");' class='pull-right fa fa-trash-o'></a>
