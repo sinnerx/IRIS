@@ -1,5 +1,7 @@
 <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+<script src="<?php echo url::asset("backend/js/jquery.tablesorter.min.js"); ?>"></script>
 <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+<link rel="stylesheet" href="<?php echo url::asset("backend/tools/default/style.css"); ?>" type="text/css" />
 <style type="text/css">
   
   label {
@@ -49,6 +51,25 @@ var prList = new function()
 }
 
 
+</script>
+<?php $isManager = user()->isManager(); ?>
+<script type="text/javascript">
+$(function() {
+
+  $("#ntable").tablesorter({
+    headers : { 
+      0 : { sorter: false },
+      1 : { sorter: 'digit' },
+      // Change column number if not Manager
+      <?php if (!$isManager) { ?>
+      6 : { sorter: false }
+      <?php } else { ?>
+      5 : { sorter: false }
+      <?php } ?>
+    }
+  });
+
+});
 </script>
 <h3 class='m-b-xs text-black'>
   Purchase Requisition <?php if(!user()->isFinancialController()):?> List Open / Closed <?php else:?> Cash Advance<?php endif;?>
@@ -131,13 +152,9 @@ var prList = new function()
             <a href='<?php echo url::base("exp/prAdd");?>' class='btn btn-primary pull-right'><span class='fa fa-plus'></span> Add New Purchase Requisition</a>     
           <?php } ?>
           </div>
-
-          <?php 
-          $isManager = user()->isManager();
-          ?>
           <div class="table-responsive ">
-            <table class="table table-striped b-t b-light">
-              <tbody id="p_scents">
+            <table class="table b-t b-light tablesorter" id="ntable">
+              <thead id="p_scents">
                 <tr>
                   <th width="5%">No.  </th>
                   <th width="200px">Last Update</th>
@@ -149,57 +166,59 @@ var prList = new function()
                   <th>PR Number</th>
                   <th width="80px"></th>
                 </tr>
+              </thead>
+              <tbody>
           
-          <?php 
+              <?php 
 
-          $no = pagination::recordNo();
+              $no = pagination::recordNo();
 
-          foreach ($pr as $key => $list):?>           
-          <tr id = "<?php echo $key ?>">
-            <td><?php echo $no++; ?></td>
-            <td>
-              <?php echo date('g:i A d-M Y', strtotime($list->prUpdatedDate));?>
-            </td>
-            <?php if(!$isManager):?>
-              <td><?php echo $list->siteName;?></td>
-            <?php endif;?>
-            <td><?php echo $list->getTypeLabel();?></td>
-            <td>
-              <?php if($list->isRejected()):?>
-                <a href='<?php echo url::base('exp/prRejectionReason/'.$list->prID);?>' style='color: red;' data-toggle='ajaxModal'><?php echo $list->getStatusLabel();?> [See Reason]</a>
-              <?php else:?>
-                <?php echo $list->getStatusLabel();?>
+              foreach ($pr as $key => $list):?>           
+              <tr id = "<?php echo $key ?>">
+                <td><?php echo $no++; ?></td>
+                <td>
+                  <?php echo date('g:i A d-M Y', strtotime($list->prUpdatedDate));?>
+                </td>
+                <?php if(!$isManager):?>
+                  <td><?php echo $list->siteName;?></td>
+                <?php endif;?>
+                <td><?php echo $list->getTypeLabel();?></td>
+                <td>
+                  <?php if($list->isRejected()):?>
+                    <a href='<?php echo url::base('exp/prRejectionReason/'.$list->prID);?>' style='color: red;' data-toggle='ajaxModal'><?php echo $list->getStatusLabel();?> [See Reason]</a>
+                  <?php else:?>
+                    <?php echo $list->getStatusLabel();?>
+                  <?php endif;?>
+                </td>
+                <td>
+                  <?php if($list->prNumber):?>
+                    <?php echo $list->prNumber;?>
+                  <?php elseif(user()->isRoot() && $list->isWaitingForPrNumber()):?>
+                    <form method="post" action='<?php echo url::base('exp/submitPrNumber/'.$list->prID);?>'>
+                      <input type='text' name='prNumber' id='pr-input-<?php echo $list->prID;?>' class='form-control' style='display: inline;' size='22'  /> <input type='submit' value="Add" class='btn btn-primary'  />
+                    </form>
+                  <?php endif;?>
+                </td>
+                <td>
+                <?php if($list->isDeletableBy(user())):?>
+                <a href='<?php echo url::base('exp/prDelete/'.$list->prID);?>' onclick='return confirm("Delete this PR?");' class='pull-right fa fa-trash-o'></a>
+                <?php endif;?>
+                <?php if($list->cashAdvanceIsDownloadableBy(user())):?>
+                <a href='<?php echo url::base('expExcel/prCashAdvanceDownload/'.$list->prID);?>' class='pull-right fa fa-download'></a>
+                <?php endif;?>
+                <?php if($list->isPendingFor(user()) && !user()->isRoot()):?>
+                <a href="<?php echo url::base('exp/prEdit/'.$list->prID);?>" class='fa fa-external-link pull-right' style="color:green; float:right"></a>
+                <?php else:?>
+                <a href="<?php echo url::base('exp/prEdit/'.$list->prID);?>" class='fa fa-external-link pull-right' style="color:green; float:right"></a>                  
+                <?php endif;?>
+                </td>
+              </tr>
+              <?php endforeach; ?>  
+              <?php if(count($pr) == 0):?>
+              <tr>
+                <td colspan='7' align="center">No PR is available</td>
+              </tr>
               <?php endif;?>
-            </td>
-            <td>
-              <?php if($list->prNumber):?>
-                <?php echo $list->prNumber;?>
-              <?php elseif(user()->isRoot() && $list->isWaitingForPrNumber()):?>
-                <form method="post" action='<?php echo url::base('exp/submitPrNumber/'.$list->prID);?>'>
-                  <input type='text' name='prNumber' id='pr-input-<?php echo $list->prID;?>' class='form-control' style='display: inline;' size='22'  /> <input type='submit' value="Add" class='btn btn-primary'  />
-                </form>
-              <?php endif;?>
-            </td>
-            <td>
-            <?php if($list->isDeletableBy(user())):?>
-            <a href='<?php echo url::base('exp/prDelete/'.$list->prID);?>' onclick='return confirm("Delete this PR?");' class='pull-right fa fa-trash-o'></a>
-            <?php endif;?>
-            <?php if($list->cashAdvanceIsDownloadableBy(user())):?>
-            <a href='<?php echo url::base('expExcel/prCashAdvanceDownload/'.$list->prID);?>' class='pull-right fa fa-download'></a>
-            <?php endif;?>
-            <?php if($list->isPendingFor(user()) && !user()->isRoot()):?>
-            <a href="<?php echo url::base('exp/prEdit/'.$list->prID);?>" class='fa fa-external-link pull-right' style="color:green; float:right"></a>
-            <?php else:?>
-            <a href="<?php echo url::base('exp/prEdit/'.$list->prID);?>" class='fa fa-external-link pull-right' style="color:green; float:right"></a>                  
-            <?php endif;?>
-            </td>
-          </tr>
-        <?php endforeach; ?>  
-        <?php if(count($pr) == 0):?>
-        <tr>
-          <td colspan='7' align="center">No PR is available</td>
-        </tr>
-        <?php endif;?>
                         
               </tbody>
             </table>                  
@@ -220,7 +239,6 @@ var prList = new function()
        
      </div>
 </div>
-
 
 
 

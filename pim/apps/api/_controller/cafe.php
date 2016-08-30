@@ -349,6 +349,10 @@ class Controller_Cafe
 		$unlock = db::where('siteID', $this->site->siteID)->get('site')->row();
 		$dateToday = substr(date('Y-m-d H:i:s'), 0, 10);
 		$dateUnlock = substr($unlock['siteUnlockDate'], 0, 10);
+
+		$unlockYear = 0;
+		$unlockMonth = 0;
+		
 		if (strcmp($dateToday, $dateUnlock) == 0) {
 			$unlockYear = substr($dateUnlock, 0, 4);
 			$unlockMonth = substr($dateUnlock, 5, 2);
@@ -458,7 +462,8 @@ class Controller_Cafe
 
 						$transaction = model::orm('billing/transaction')
 											->where('siteID', $this->site->siteID)
-											->where('billingTransactionLocalID', $localId)
+											//->where('billingTransactionLocalID', $localId)
+											->where('billingTransactionUnique', $uniqueId)
 											->execute()->getFirst();
 
 						// only update date if there's changes. since currently only date can be updated. and status

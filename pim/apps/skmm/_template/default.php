@@ -202,7 +202,7 @@
                 ?>
             <li>
 
-              <a href='' ><img src="<?php echo $url;?>" /></a>
+              <a href="<?php echo $href; ?>" ><img src="<?php echo $url;?>" /></a>
 
             </li>
             <?php endforeach;?>
