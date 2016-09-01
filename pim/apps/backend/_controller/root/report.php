@@ -1866,7 +1866,7 @@ class Controller_Report
     }
 
     private function reportCashFlowSummaryFull($input) {
-
+    	set_time_limit(0);
 		$month 	= $input['month'];
 		$year 	= $input['year'];
 		$endTitle = '';
@@ -2498,6 +2498,7 @@ class Controller_Report
 
 
 		$ExcelHelper->execute();
+		session_write_close();
 	}
 
 	public function reportFormField($idReport){
