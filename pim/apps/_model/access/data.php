@@ -48,7 +48,7 @@ class Data
 					"billing/unlockTransaction"=>Array("r","om","cl"),
 					"billing/edit"=>Array("r","om", "cl", "sm"),
 					"billing/dailyCashProcess"=>Array("r","om", "cl", "sm", "fc"),
-                                        "billing/dailyCashProcessSummary"=>Array("r","fc", "om"),
+                    "billing/dailyCashProcessSummary"=>Array("r","fc", "om", "cl"),
 					"billing/dailyCashProcessOld"=>Array("r","om", "cl", "sm", "fc"),
 					"billing/dailyJournal"=>Array("r","om", "sm"),
 					"billing/transactionJournal"=>Array("r","om", "sm"),
