@@ -1898,7 +1898,14 @@ class Controller_Report
 		// $sheetName 	= $input['sheetName'];
 		$sheetName 		= 'Pi1M';
 
-		$filename		= "CBC Cash Flow Summary, ".$titleDate;
+		if($month){
+			$filename		= "Monthly CBC Cash Flow Summary, ".$titleDate;
+
+		}else{
+			$filename		= "Annual CBC Cash Flow Summary, ".$titleDate;
+
+		}
+		
 
 		$excel			= new \PHPExcel;
 		$ExcelHelper	= new model\report\PHPExcelHelper($excel,$filename.".xls");
@@ -2145,14 +2152,9 @@ class Controller_Report
 		$siteIDs=$sitePim['siteID'];
 		$siteName=substr($sitePim['siteName'], 0, 15);;
 
-		//$siteIDs=68;
-		//$siteName="Felda Bukit Batu, Johor";
-
-		// $arr = explode(",", $siteName, 2);
-		// $first = $arr[0];
-		// $sheetSite = $excel->createSheet(1);
-		// $sheetSite->setTitle($first);
-		// $cellRangeSite = range('A', 'Z');
+		$sheetSite = $excel->createSheet(1);
+		$sheetSite->setTitle($siteName);
+		$cellRangeSite = range('A', 'Z');
 
 		$endSheetRow=$monCount+5;
 
@@ -2304,11 +2306,9 @@ class Controller_Report
 		$siteIDs=$sitePim['siteID'];
 		$siteName=substr($sitePim['siteName'], 0, 15);
 
-		// $arr = explode(",", $siteName, 2);
-		// $first = $arr[0];
-		// $sheetSite = $excel->createSheet(1);
-		// $sheetSite->setTitle($first);
-		// $cellRangeSite = range('A', 'Z');
+		$sheetSite = $excel->createSheet(1);
+		$sheetSite->setTitle($siteName);
+		$cellRangeSite = range('A', 'Z');
 
 		## all cell
 		$allCellSite = $sheetSite->getStyle("A1:Q".(17));
