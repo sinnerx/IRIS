@@ -466,6 +466,7 @@ $total = function($val = null)
 	return !$val ? 0 : $val;
 }
 
+
 ?>
 <?php
 			$beginningbalance = $balance;
