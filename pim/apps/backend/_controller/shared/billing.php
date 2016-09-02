@@ -618,11 +618,14 @@ Class Controller_Billing
 					$reference[$time] = array();
 
 				$reference = &$reference[$time];
+				//var_dump($reference);
 			}
 
 			// initiates.
 			if(!isset($reference['total']))
 				$reference['total'] = 0;
+			// else
+				// $reference['total'] = $row['billingTransactionItemPrice'] * $row['billingTransactionItemQuantity'];
 
 			if(!isset($reference['total_users']))
 				$reference['total_users'] = 0;
@@ -641,6 +644,7 @@ Class Controller_Billing
 			$reference[$userType][$status]['total'] += $transactionItemTotal;
 			$reference['total'] += $transactionItemTotal;
 			$reference['total_quantity'] += $row['billingTransactionItemQuantity'];
+			$reference[$userType][$status]['total_quantity'] += $row['billingTransactionItemQuantity'];
 
 			$report[$date]['total'] += $transactionItemTotal;
 		}
@@ -648,7 +652,7 @@ Class Controller_Billing
 		$data['report'] = $report;
 
 		// echo '<pre>';
-		// print_r($report);
+		// var_dump($report);
 		// die;
 		/*$data['itemTotalCalculator'] = function($rows)
 		{

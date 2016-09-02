@@ -559,12 +559,14 @@ class Controller_Exp
 			$data['siteName'] 	= session::get('prFilter.siteName', '');			
 		if(user()->isManager())
 		{
-			$rl->where('prReconcilationSubmitted = ? OR (prReconcilationSubmitted = ? AND MONTH(prReconcilationSubmittedDate) = ? AND YEAR(prReconcilationSubmittedDate) = ?)', array(0, 1, $data['month'], $data['year']));
+			//$rl->where('prReconcilationSubmitted = ? OR (prReconcilationSubmitted = ? AND MONTH(prReconcilationSubmittedDate) = ? AND YEAR(prReconcilationSubmittedDate) = ?)', array(0, 1, $data['month'], $data['year']));
+			$rl->where('prReconcilationSubmitted = ? OR (prDate = ? AND MONTH(prDate) = ? AND YEAR(prDate) = ?)', array(0, 1, $data['month'], $data['year']));
 		}
 		// show date based submitted RL only
 		else
 		{
-			$rl->where('prReconcilationSubmitted = ? AND MONTH(prReconcilationSubmittedDate) = ? AND YEAR(prReconcilationSubmittedDate) = ?', array(1, $data['month'], $data['year']));
+			//$rl->where('prReconcilationSubmitted = ? AND MONTH(prReconcilationSubmittedDate) = ? AND YEAR(prReconcilationSubmittedDate) = ?', array(1, $data['month'], $data['year']));
+			$rl->where('prReconcilationSubmitted = ? AND MONTH(prDate) = ? AND YEAR(prDate) = ?', array(1, $data['month'], $data['year']));
 		}
 
 		$data['status'] = session::get('rlFilter.status', 'pending');
@@ -605,7 +607,8 @@ class Controller_Exp
 			));
 
 		$rl->order_by('prReconcilationUpdatedDate DESC');
-
+		//var_dump($rl);
+		//die;
 		$data['rl'] = $rl->execute();
 
 		view::render('shared/exp/rlList', $data);
@@ -631,6 +634,25 @@ class Controller_Exp
 
 	public function rlEditSubmit($rlID)
 	{
+	}
+
+	public function rlChangeMonth($prID, $selectMonth)
+	{
+		// $selectMonth = input::get('selectMonth');
+		//print_r($prID . $selectMonth);
+		//die;
+		$pr = model::orm('expense/pr/pr')->find($prID);
+		$dateChange = explode("-",$pr->prDate);
+		$dateChange[1] = sprintf("%02d", $selectMonth);
+
+		$dateChange = implode("-",$dateChange);
+		//var_dump(implode("-",$dateChange));
+		//die;
+
+		$pr->prDate = date('Y-m-d', strtotime($dateChange));
+		$pr->prUpdatedDate = now();
+		$pr->prUpdatedUser = user()->userID;
+		$pr->save();
 	}
 
 	public function rlFile($fileID)
