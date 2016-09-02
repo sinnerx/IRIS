@@ -32,7 +32,7 @@ Class Controller_Kpi
 			'event' => 2,
 			'entrepreneurship_class' => 1,
 			'entrepreneurship_sales' => 300,
-			'training_hours' => 48,
+			'training_hours' => 32,
 			'active_member_percentage' => 80
 			);
 

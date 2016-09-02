@@ -321,7 +321,8 @@ class Site extends \Origami
 					"siteCreatedDate"=>now(),
 					"siteCreatedUser"=>session::get("userID"),
 					"stateID"=>$data['stateID'],
-					"siteRefID"=>$data['siteRefID']
+					"siteRefID"=>$data['siteRefID'],
+					"siteStatus"=> 1,
 							);
 
 		db::insert("site",$data_site);

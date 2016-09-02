@@ -38,7 +38,7 @@ class Controller_Report
 					break;
 				case 14:
 					# code...
-					$this->reportCashFlowSummary($input);
+					$this->reportCashFlowSummaryFull($input);
 					break;
 				case 16:
 					# code...
@@ -55,7 +55,13 @@ class Controller_Report
 		//input
 		$year = $input['year'];
 
-		//query
+		// db::select("MONTH(BT.billingTransactionDate) as monthly, count(BTI.billingTransactionItemID) as totalPaid");
+		// db::from("billing_transaction_item BTI");
+		// db::join("billing_transaction BT", "BT.billingTransactionID = BTI.billingTransactionID", "INNER JOIN");
+		// db::where("BTI.billingItemID IN (12,13,14)");
+		// db::where("YEAR(BT.billingTransactionDate)", $year);
+		// db::group_by("monthly");
+
 		db::select("MONTH(A.activityCreatedDate) as monthly, count(A.activityID) as totalPaid");
 		db::from("training T");
 		db::join("activity A", "A.activityID = T.activityID");
@@ -70,6 +76,13 @@ class Controller_Report
 		$resultTrainingPaid = db::get()->result();
 		// var_dump($resultTrainingPaid);
 		// die;
+
+		// db::select("MONTH(A.activityCreatedDate) as monthly, count(U.userID) as totalFree");
+		// db::from("user U");
+		// db::join("activity_user AU", "AU.userID = U.userID", "INNER JOIN");
+		// db::join("activity A", "A.activityID = AU.activityID", "INNER JOIN");
+		// db::join("training T", "T.activityID = A.activityID", "INNER JOIN");
+		// db::join("training_lms TLMS", "T.trainingID = TLMS.trainingID", "INNER JOIN");
 
 		db::select("MONTH(A.activityCreatedDate) as monthly, count(A.activityID) as totalFree");
 		db::from("training T");
@@ -1374,9 +1387,11 @@ class Controller_Report
 	}
 
 
-	private function getSiteTotalCashFlow($siteID,$date) {
+	private function getMonthTotalCashFlow($year,$month,$day) {
 
-	$ResultSummary = db::query("SELECT siteName, site.siteID, stateID, Membership, PCUsage, PrintPhotst, OthersSrvc, Scanning, Laminating, OthersCashIn, Expense FROM site LEFT JOIN ( SELECT A.siteID,SUM(CASE WHEN B.billingItemID = 1 THEN B.billingTransactionItemPrice ELSE 0 END) AS Membership,SUM(CASE WHEN B.billingItemID = 3 || B.billingItemID = 5 || B.billingItemID = 16 THEN B.billingTransactionItemPrice ELSE 0 END) AS PCUsage,SUM(CASE WHEN B.billingItemID = 4 || B.billingItemID = 6 THEN B.billingTransactionItemPrice ELSE 0 END) AS PrintPhotst,SUM(CASE WHEN B.billingItemID = 5 THEN B.billingTransactionItemPrice ELSE 0 END) AS OthersSrvc,SUM(CASE WHEN B.billingItemID = 7 THEN B.billingTransactionItemPrice ELSE 0 END) AS Scanning,SUM(CASE WHEN B.billingItemID = 8 || B.billingItemID = 17 THEN B.billingTransactionItemPrice ELSE 0 END) AS Laminating,SUM(CASE WHEN B.billingItemID = 2 || B.billingItemID = 9 || B.billingItemID = 12 || B.billingItemID = 13 || B.billingItemID = 14 THEN B.billingTransactionItemPrice ELSE 0 END) AS OthersCashIn,SUM(CASE WHEN B.billingItemID = 10 || B.billingItemID = 11 THEN ABS(B.billingTransactionItemPrice) ELSE 0 END) AS Expense FROM billing_transaction A LEFT JOIN billing_transaction_item B ON B.billingTransactionID = A.billingTransactionID WHERE A.billingTransactionStatus = 1 AND A.billingTransactionDate LIKE '%".$date."%' GROUP BY A.siteID) AS figures ON figures.siteID = site.siteID WHERE site.siteID=$siteID ORDER BY site.stateID ASC")->result();
+	$ResultSummary = db::query("SELECT siteName, site.siteID, stateID, Membership, PCUsage, PrintPhotst, OthersSrvc, Scanning, Laminating, OthersCashIn, Expense FROM site LEFT JOIN ( SELECT A.siteID,SUM(CASE WHEN B.billingItemID = 1 THEN B.billingTransactionItemPrice ELSE 0 END) AS Membership,SUM(CASE WHEN B.billingItemID = 3 || B.billingItemID = 5 || B.billingItemID = 16 THEN B.billingTransactionItemPrice ELSE 0 END) AS PCUsage,SUM(CASE WHEN B.billingItemID = 4 || B.billingItemID = 6 THEN B.billingTransactionItemPrice ELSE 0 END) AS PrintPhotst,SUM(CASE WHEN B.billingItemID = 5 THEN B.billingTransactionItemPrice ELSE 0 END) AS OthersSrvc,SUM(CASE WHEN B.billingItemID = 7 THEN B.billingTransactionItemPrice ELSE 0 END) AS Scanning,SUM(CASE WHEN B.billingItemID = 8 || B.billingItemID = 17 THEN B.billingTransactionItemPrice ELSE 0 END) AS Laminating,SUM(CASE WHEN B.billingItemID = 2 || B.billingItemID = 9 || B.billingItemID = 12 || B.billingItemID = 13 || B.billingItemID = 14 THEN B.billingTransactionItemPrice ELSE 0 END) AS OthersCashIn,SUM(CASE WHEN B.billingItemID = 10 || B.billingItemID = 11 THEN ABS(B.billingTransactionItemPrice) ELSE 0 END) AS Expense FROM billing_transaction A LEFT JOIN billing_transaction_item B ON B.billingTransactionID = A.billingTransactionID WHERE A.billingTransactionStatus = 1 AND YEAR(A.billingTransactionDate)=$year AND MONTH(A.billingTransactionDate)=$month AND DAY(A.billingTransactionDate)=$day GROUP BY A.siteID) AS figures ON figures.siteID = site.siteID ORDER BY site.stateID ASC")->result();
+
+	/*$ResultSummary = db::query("SELECT siteName, site.siteID, stateID, Membership, PCUsage, PrintPhotst, OthersSrvc, Scanning, Laminating, OthersCashIn, Expense FROM site LEFT JOIN ( SELECT A.siteID,SUM(CASE WHEN B.billingItemID = 1 THEN B.billingTransactionItemPrice ELSE 0 END) AS Membership,SUM(CASE WHEN B.billingItemID = 3 || B.billingItemID = 5 || B.billingItemID = 16 THEN B.billingTransactionItemPrice ELSE 0 END) AS PCUsage,SUM(CASE WHEN B.billingItemID = 4 || B.billingItemID = 6 THEN B.billingTransactionItemPrice ELSE 0 END) AS PrintPhotst,SUM(CASE WHEN B.billingItemID = 5 THEN B.billingTransactionItemPrice ELSE 0 END) AS OthersSrvc,SUM(CASE WHEN B.billingItemID = 7 THEN B.billingTransactionItemPrice ELSE 0 END) AS Scanning,SUM(CASE WHEN B.billingItemID = 8 || B.billingItemID = 17 THEN B.billingTransactionItemPrice ELSE 0 END) AS Laminating,SUM(CASE WHEN B.billingItemID = 2 || B.billingItemID = 9 || B.billingItemID = 12 || B.billingItemID = 13 || B.billingItemID = 14 THEN B.billingTransactionItemPrice ELSE 0 END) AS OthersCashIn,SUM(CASE WHEN B.billingItemID = 10 || B.billingItemID = 11 THEN ABS(B.billingTransactionItemPrice) ELSE 0 END) AS Expense FROM billing_transaction A LEFT JOIN billing_transaction_item B ON B.billingTransactionID = A.billingTransactionID WHERE A.billingTransactionStatus = 1 AND A.billingTransactionDate LIKE '%".$date."%' GROUP BY A.siteID) AS figures ON figures.siteID = site.siteID WHERE site.siteID=$siteID ORDER BY site.stateID ASC")->result();*/
 
 
 	return $ResultSummary;
@@ -1416,7 +1431,15 @@ class Controller_Report
 		// $sheetName 	= $input['sheetName'];
 		$sheetName 		= 'Pi1M';
 
-		$filename		= "CBC Cash Flow Summary, ".$titleDate;
+		if($month){
+
+			$filename		= "Monthly CBC Cash Flow Summary, ".$titleDate;
+
+		}else{
+
+			$filename		= "Annual CBC Cash Flow Summary, ".$titleDate;
+
+		}
 
 		$excel			= new \PHPExcel;
 		$ExcelHelper	= new model\report\PHPExcelHelper($excel,$filename.".xls");
@@ -1843,7 +1866,7 @@ class Controller_Report
     }
 
     private function reportCashFlowSummaryFull($input) {
-
+    	set_time_limit(0);
 		$month 	= $input['month'];
 		$year 	= $input['year'];
 		$endTitle = '';
@@ -1875,7 +1898,14 @@ class Controller_Report
 		// $sheetName 	= $input['sheetName'];
 		$sheetName 		= 'Pi1M';
 
-		$filename		= "CBC Cash Flow Summary, ".$titleDate;
+		if($month){
+			$filename		= "Monthly CBC Cash Flow Summary, ".$titleDate;
+
+		}else{
+			$filename		= "Annual CBC Cash Flow Summary, ".$titleDate;
+
+		}
+		
 
 		$excel			= new \PHPExcel;
 		$ExcelHelper	= new model\report\PHPExcelHelper($excel,$filename.".xls");
@@ -2064,29 +2094,207 @@ class Controller_Report
 		# Calling Month helper
 		$monthList = model::load("helper")->monthYear("monthE");
 
-		#create new data by month
+		// #create new data by month
 
-		$monthlyData = array();
-		foreach ($monthList as $key => $val) {
-			# Get month value length
-			$Nmonth = strlen($key);
+		 $monthlyData = array();
+		 foreach ($monthList as $key => $val) {
+		 	# Get month value length
+		 	$Nmonth = strlen($key);
 
-			# Set month value to 2 digit eg: 01,02,03,04,05,06,07,08,09
-			if ($Nmonth == 1) {
-				$monthSite = '0'.$key;
-			} else {
-				$monthSite = $key;
-			}
+		 	# Set month value to 2 digit eg: 01,02,03,04,05,06,07,08,09
+		 	if ($Nmonth == 1) {
+		 		$monthSite = '0'.$key;
+		 	} else {
+		 		$monthSite = $key;
+		 	}
 
-			$data=$this->getTotalCashFlow($year."-".$monthSite);
+		 	$data=$this->getTotalCashFlow($year."-".$monthSite);
+		 	$newData=array();
+
+		 	foreach($data as $no=>$pim){
+		 		$newData[$pim['siteID']]=$pim;
+		 	}
+
+		 	$monthlyData[$key]=$newData;
+		 }
+
+
+		##############################################
+		#  Start create new sheets for pim           #
+		#  if theres month, do monthly, else annual  #
+		##############################################
+
+		if($month){
+		#preparing data
+		#day count in month
+		$daysInMonthData = array();
+		$monCount = cal_days_in_month(CAL_GREGORIAN, $month, $year);
+		for ($i=1; $i <= $monCount; $i++) { 
+			
+			$data=$this->getMonthTotalCashFlow($year,$month,$i);
 			$newData=array();
 
 			foreach($data as $no=>$pim){
 				$newData[$pim['siteID']]=$pim;
 			}
 
-			$monthlyData[$key]=$newData;
+			$daysInMonthData[$i]=$newData;
 		}
+	
+
+		#start looping each tab (pim)
+		foreach($data as $no=>$sitePim){
+
+		// #add sheets for each pi1ms
+
+		// #Start new site tab
+
+		$siteIDs=$sitePim['siteID'];
+		$siteName=substr($sitePim['siteName'], 0, 15);;
+
+		$sheetSite = $excel->createSheet(1);
+		$sheetSite->setTitle($siteName);
+		$cellRangeSite = range('A', 'Z');
+
+		$endSheetRow=$monCount+5;
+
+		## all cell
+		$allCellSite = $sheetSite->getStyle("A1:Q".$endSheetRow);
+		$allCellSite->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_TOP);
+		$allCellSite->getAlignment()->setWrapText(true);
+		foreach(range('A','Q') as $columnID) {
+		    $sheetSite->getColumnDimension($columnID)->setAutoSize(true);
+		}
+		$allCellSite->applyFromArray(
+					array(
+						'borders' => array(
+								'allborders' => array(
+										'style' => PHPExcel_Style_Border::BORDER_THIN,
+										'color' => array('rgb' => 'D3D3D3'),
+										'size'  => 11,
+										)
+								)
+						)
+					);
+
+
+
+		# prepare header.
+
+		# first row header
+		$sheetSite->setCellValue("A1", $filename);
+		$sheetSite->mergeCells("A1:Q1");
+
+		# second row header
+		$sheetSite->setCellValue("A2", $siteName);
+		$sheetSite->mergeCells("A2:C2");
+
+		$sheetSite->setCellValue("D2", 'Generated at '.now());
+		$sheetSite->mergeCells("D2:Q2");
+
+		# set alignment
+		$sheetSite->getStyle("D2:Q2")->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+
+		# third row header
+		$sheetSite->setCellValue("D3", 'Income');
+		$sheetSite->mergeCells("D3:L3");
+
+		$sheetSite->setCellValue("M3", 'Expense');
+		$sheetSite->mergeCells("M3:P3");
+
+		$sheetSite->setCellValue("Q3", 'Balance');
+
+		# set alignment
+		$sheetSite->getStyle("D3:Q3")->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+
+		# forth row header
+		$fourthHeaderSite = array('Year','Month','Date','Membership Fee','PC Usage','Print Service','Other Service','Scanning','Laminating','Other Cash In','Other Cash In Description','Total Income','Cash Drawer','Bank Account','Expense Description','Total Expense','Balance');
+		
+		foreach ($fourthHeaderSite as $key=>$value) {
+			$sheetSite->setCellValue($cellRange[$key].'4', $value);
+		}
+
+		# set alignment
+		$sheetSite->getStyle("A4:Q4")->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+
+		# set background color
+		$sheetSite->getStyle('A1:Q4')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('6495ED');
+
+		# set font
+		$sheetSite->getStyle('A1:Q4')->applyFromArray(
+										array(
+							    			'font'  => array(
+								        		'bold'  => true,
+								        		'color' => array('rgb' => 'FFFFFF')
+							    			)
+							    		)
+									);
+
+		# fifth row header
+		$sheetSite->setCellValue("A5", $year);
+		$sheetSite->mergeCells("A5:A".$endSheetRow);
+
+		# set alignment
+		$sheetSite->getStyle("D5:Q".$endSheetRow)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+
+		# set color
+		$sheetSite->getStyle("B5:Q5")->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('add8e6');
+
+		$sheetSite->getStyle("D6:Q".$endSheetRow)->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('B0C4DE');
+
+		$sheetSite->getStyle("D5:Q".$endSheetRow)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_00);
+
+
+
+		#All total formula
+		$cellTotal=array('D','E','F','G','H','I','J','L','M','N','P');
+		$endDateRow=$monCount+5;
+		foreach($cellTotal as $key=>$cell){
+				$sheetSite->setCellValue($cell.'5', '=SUM('.$cell.'6:'.$cell.$endDateRow.')');
+		}
+		#all total balance formula
+		$sheetSite->setCellValue('Q5', '=L5-P5');
+
+		
+		$sheetSite->setCellValue("B5", "Total");
+		$sheetSite->setCellValue("B6", $monthList[$month]);
+		$dateRowStart=6;
+		for ($i=1; $i <= $monCount; $i++) { 
+			$sheetSite->setCellValue("C".$dateRowStart, $i."/".$month."/".$year);
+			$dateRowStart++;
+		}
+
+
+		#list data by date
+		$cellSiteStart=6;
+		for ($i=1; $i <= $monCount; $i++) {
+
+			
+			$dataSite = $daysInMonthData[$i][$siteIDs];
+			$sheetSite->setCellValue('D'.$cellSiteStart, empty($dataSite['Membership'])?'0':$dataSite['Membership']);
+			$sheetSite->setCellValue('E'.$cellSiteStart, empty($dataSite['PCUsage'])?'0':$dataSite['PCUsage']);
+			$sheetSite->setCellValue('F'.$cellSiteStart, empty($dataSite['PrintPhotst'])?'0':$dataSite['PrintPhotst']);
+			$sheetSite->setCellValue('G'.$cellSiteStart, empty($dataSite['OthersSrvc'])?'0':$dataSite['OthersSrvc']);
+			$sheetSite->setCellValue('H'.$cellSiteStart, empty($dataSite['Scanning'])?'0':$dataSite['Scanning']);
+			$sheetSite->setCellValue('I'.$cellSiteStart, empty($dataSite['Laminating'])?'0':$dataSite['Laminating']);
+			$sheetSite->setCellValue('J'.$cellSiteStart, empty($dataSite['OthersCashIn'])?'0':$dataSite['OthersCashIn']);
+			$sheetSite->setCellValue('K'.$cellSiteStart, "");
+			$sheetSite->setCellValue('L'.$cellSiteStart, '=SUM(D'.$cellSiteStart.':J'.$cellSiteStart.')');
+			$sheetSite->setCellValue('M'.$cellSiteStart, "0");
+			$sheetSite->setCellValue('N'.$cellSiteStart, "0");
+			$sheetSite->setCellValue('O'.$cellSiteStart, "");
+			$sheetSite->setCellValue('P'.$cellSiteStart, empty($dataSite['Expense'])?'0':$dataSite['Expense']);
+			$sheetSite->setCellValue('Q'.$cellSiteStart, '=L'.$cellSiteStart.'-P'.$cellSiteStart);
+
+			$cellSiteStart++;
+			
+		}
+		
+
+		}
+		
+
+		}else{
 
 		#start looping each tab (pim)
 		foreach($data as $no=>$sitePim){
@@ -2098,10 +2306,8 @@ class Controller_Report
 		$siteIDs=$sitePim['siteID'];
 		$siteName=substr($sitePim['siteName'], 0, 15);
 
-		$arr = explode(",", $siteName, 2);
-		$first = $arr[0];
 		$sheetSite = $excel->createSheet(1);
-		$sheetSite->setTitle($first);
+		$sheetSite->setTitle($siteName);
 		$cellRangeSite = range('A', 'Z');
 
 		## all cell
@@ -2125,10 +2331,10 @@ class Controller_Report
 
 
 
-		# prepare header.
+		// # prepare header.
 
 		# first row header
-		$sheetSite->setCellValue("A1", "CBC Cash Flow Details, ".$date);
+		$sheetSite->setCellValue("A1", $filename);
 		$sheetSite->mergeCells("A1:Q1");
 
 		# second row header
@@ -2286,8 +2492,13 @@ class Controller_Report
 
 		}
 
+		}
+		#end if else
+
+
 
 		$ExcelHelper->execute();
+		session_write_close();
 	}
 
 	public function reportFormField($idReport){

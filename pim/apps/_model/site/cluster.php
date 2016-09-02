@@ -241,7 +241,32 @@ class Cluster extends \Origami
 		}	
 			
 		return $fieldsArray;
-	}	
+	}
+
+	public function getOps($clusterID){
+		//$cluster = $this->get($clusterID)->clusterID;
+		//var_dump($this->get($clusterID));
+		//var_dump($cluster->clusterID);
+		$opsEast = array("1", "2", "3", "4");
+		$opsSemenanjung = array("5", "6");
+
+		if (in_array($clusterID, $opsSemenanjung) ){
+			$arrayOps = array(
+				"title" => "Operation Semenanjung Malaysia",
+				"name"  => "Mohamad Saiful Sabran",
+				);			
+		}
+
+
+		else if (in_array($clusterID, $opsEast)){
+			$arrayOps = array(
+				"title" => "Operation East Malaysia",
+				"name"  => "Diana Juhari",
+				);			
+		}
+			return $arrayOps;
+	}
+
 }
 
 

@@ -631,7 +631,6 @@ class Controller_Exp
 
 	public function rlEditSubmit($rlID)
 	{
-		
 	}
 
 	public function rlFile($fileID)
