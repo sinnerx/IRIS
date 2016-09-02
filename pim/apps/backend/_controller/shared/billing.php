@@ -1092,6 +1092,7 @@ Class Controller_Billing
 		{
 			$transactions = db::where('billingTransactionDate > ? AND billingTransactionDate < ?', array($todayDateStart.' 00:00:00', $todayDateEnd.' 23:59:59'))
 			->where('siteID', $siteID)
+			->where('billingTransactionStatus', 1)
 			->group_by('billingTransactionDate ASC')
 			->get('billing_transaction')
 			->result('billingTransactionID');
@@ -1188,6 +1189,7 @@ Class Controller_Billing
 		{
 			$transactions = db::where('billingTransactionDate > ? AND billingTransactionDate < ?', array($todayDateStart.' 00:00:00', $todayDateEnd.' 23:59:59'))
 			->where('siteID', $siteID)
+			->where('billingTransactionStatus', 1)
 			->group_by('billingTransactionDate ASC')
 			->get('billing_transaction')
 			->result('billingTransactionID');
