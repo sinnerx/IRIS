@@ -71,6 +71,7 @@ class Data
 					'exp/rlList' => array('sm', 'cl', 'om', 'fc', 'r'),
 					'exp/prView' => array('sm', 'cl', 'om', 'fc', 'r'),
 					'exp/prEdit' => array('sm', 'cl', 'om', 'fc', 'r'),
+					'exp/rlChangeMonth' => array('fc', 'r'),
 					'exp/prEditCashAdvance' => array('sm', 'cl', 'fc', 'om', 'r'),
 					'exp/prReject' => array('cl', 'om'),
 					'exp/prDelete' => array('sm', 'cl', 'om'),
