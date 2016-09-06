@@ -466,6 +466,7 @@ $total = function($val = null)
 	return !$val ? 0 : $val;
 }
 
+
 ?>
 <?php
 			$beginningbalance = $balance;
@@ -473,6 +474,7 @@ $total = function($val = null)
 			$date = $selectYear.'-'.$selectMonth.'-'.$day;
 			$date = date('Y-m-d', strtotime($date));
 			$no = 0;
+			//var_dump($float($report[$date]['PC']['day']['student']['member']['total_quantity']));
 			?>
 			<tr class="left-td">
 				<td><?php echo date('d', strtotime($date));?></td>

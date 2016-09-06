@@ -119,6 +119,7 @@ class Controller_ExpExcel
 			$reference[$userType][$status]['total'] += $transactionItemTotal;
 			$reference['total'] += $transactionItemTotal;
 			$reference['total_quantity'] += $row['billingTransactionItemQuantity'];
+			$reference[$userType][$status]['total_quantity'] += $row['billingTransactionItemQuantity'];
 
 			$report[$date]['total'] += $transactionItemTotal;
 		}
@@ -569,8 +570,10 @@ class Controller_ExpExcel
 		$rlList = orm('expense/pr/reconcilation/reconcilation')
 		->where('prReconcilationStatus', 1)
 		->where('pr.prType = ? AND pr.siteID IN (SELECT siteID FROM cluster_site WHERE clusterID = ?)', array($prType, $clusterID))
-		->where('MONTH(prReconcilationSubmittedDate)', $month)
-		->where('YEAR(prReconcilationSubmittedDate)', $year)
+		//->where('MONTH(prReconcilationSubmittedDate)', $month)
+		//->where('YEAR(prReconcilationSubmittedDate)', $year)
+		->where('MONTH(prDate)', $month)
+		->where('YEAR(prDate)', $year)
 		->join('pr', 'pr.prID = pr_reconcilation.prID')
 		->execute();
 

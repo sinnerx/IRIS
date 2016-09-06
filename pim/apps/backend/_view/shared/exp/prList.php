@@ -62,9 +62,9 @@ $(function() {
       1 : { sorter: 'digit' },
       // Change column number if not Manager
       <?php if (!$isManager) { ?>
-      6 : { sorter: false }
+      7 : { sorter: false }
       <?php } else { ?>
-      5 : { sorter: false }
+      6 : { sorter: false }
       <?php } ?>
     }
   });

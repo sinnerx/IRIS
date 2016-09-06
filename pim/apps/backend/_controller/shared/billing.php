@@ -618,11 +618,14 @@ Class Controller_Billing
 					$reference[$time] = array();
 
 				$reference = &$reference[$time];
+				//var_dump($reference);
 			}
 
 			// initiates.
 			if(!isset($reference['total']))
 				$reference['total'] = 0;
+			// else
+				// $reference['total'] = $row['billingTransactionItemPrice'] * $row['billingTransactionItemQuantity'];
 
 			if(!isset($reference['total_users']))
 				$reference['total_users'] = 0;
@@ -641,6 +644,7 @@ Class Controller_Billing
 			$reference[$userType][$status]['total'] += $transactionItemTotal;
 			$reference['total'] += $transactionItemTotal;
 			$reference['total_quantity'] += $row['billingTransactionItemQuantity'];
+			$reference[$userType][$status]['total_quantity'] += $row['billingTransactionItemQuantity'];
 
 			$report[$date]['total'] += $transactionItemTotal;
 		}
@@ -648,7 +652,7 @@ Class Controller_Billing
 		$data['report'] = $report;
 
 		// echo '<pre>';
-		// print_r($report);
+		// var_dump($report);
 		// die;
 		/*$data['itemTotalCalculator'] = function($rows)
 		{
@@ -740,9 +744,35 @@ Class Controller_Billing
 	{
                 //$selectMonth = 8;
                 //$selectYear = 2016;
+		if (authData('user.userLevel') == \model\user\user::LEVEL_CLUSTERLEAD){
+			
+			$res_site	= model::load("site/site")->getSitesByClusterLead(session::get("userID"))->result();
+		
+		} else {
+
+			db::from("site");
+			db::order_by("siteName","ASC");
+		
+			$res_site = db::get()->result("siteID");
+		}
                 
-                
-                $selectYear = input::get('selectYear');
+         //var_dump($res_site[0]['siteID']);
+        // die;
+         $stringSite .= " IN (" ;
+		//$stringSite = implode("," , $res_site['siteID']);
+		$arraySite = array();
+        foreach ($res_site as $keySite => $valueSite) {
+        	# code...
+        	//var_dump($valueSite['siteID']);
+        	//$stringSite .= implode("," , $valueSite['siteID']);
+        	array_push($arraySite, $valueSite['siteID']);
+        }
+        $stringSite .= implode("," , $arraySite);
+        $stringSite .= ") ";
+
+        //var_dump($stringSite);
+        //die;
+        $selectYear = input::get('selectYear');
 		if (!$selectYear) {
 			$selectYear = request::get('selectYear', date('Y'));
 		}
@@ -772,42 +802,44 @@ Class Controller_Billing
                 left join (select siteID, sum(bt.billingTransactionTotal) as collection from billing_transaction bt
                          where bt.billingTransactionStatus = 1
                          and month(bt.billingTransactionDate) = ? and year(bt.billingTransactionDate) = ?
-                         group by siteID) as bal on bal.siteID = site.siteID
+                         group by siteID) as bal on bal.siteID = site.siteID "
 
-                left join (select siteID, sum(bt.billingTransactionTotal) as balance from billing_transaction bt
+                ."left join (select siteID, sum(bt.billingTransactionTotal) as balance from billing_transaction bt
                          where bt.billingTransactionStatus = 1
                          and bt.billingTransactionDate < ?
-                         group by siteID) as col on col.siteID = site.siteID
+                         group by siteID) as col on col.siteID = site.siteID "
 
-                left join (select siteID, billingApprovalLevelCreatedDate as date2,
+                ."left join (select siteID, billingApprovalLevelCreatedDate as date2,
                          up.userProfileFullName as user2
                          from billing_approval ba, billing_approval_level bal, user_profile up
                          where bal.billingApprovalID = ba.billingApprovalID
                           and up.userID = bal.userID
                          and bal.userLevel = 2
-                        and month = ? and year = ?) as level2 on level2.siteID = site.siteID
+                        and month = ? and year = ?) as level2 on level2.siteID = site.siteID "
 
-                left join (select siteID, billingApprovalLevelCreatedDate as date3,
+                ."left join (select siteID, billingApprovalLevelCreatedDate as date3,
                          up.userProfileFullName as user3
                          from billing_approval ba, billing_approval_level bal, user_profile up
                          where bal.billingApprovalID = ba.billingApprovalID
                           and up.userID = bal.userID
                          and bal.userLevel = 3
-                        and month = ? and year = ?) as level3 on level3.siteID = site.siteID
+                        and month = ? and year = ?) as level3 on level3.siteID = site.siteID "
 
-                left join (select siteID, billingApprovalLevelCreatedDate as date5,
+                ."left join (select siteID, billingApprovalLevelCreatedDate as date5,
                          up.userProfileFullName as user5
                          from billing_approval ba, billing_approval_level bal, user_profile up
                          where bal.billingApprovalID = ba.billingApprovalID
                           and up.userID = bal.userID
                          and bal.userLevel = 5
-                        and month = ? and year = ?) as level5 on level5.siteID = site.siteID
-                order by siteName",array($selectMonth,$selectYear, $lastDate, $selectMonth, $selectYear, $selectMonth, $selectYear, $selectMonth, $selectYear))->result();
+                        and month = ? and year = ?) as level5 on level5.siteID = site.siteID "
+               ." WHERE site.siteID " . $stringSite
+
+                ." order by siteName ",array($selectMonth,$selectYear, $lastDate, $selectMonth, $selectYear, $selectMonth, $selectYear, $selectMonth, $selectYear))->result();
                 $data['allSiteSummary'] = $result;
                 $data['selectionData'] = array ($selectMonth, $selectYear, $lastDate);
                 
-//var_dump($result);
-//die();
+// var_dump($result);
+// die();
 		view::render('shared/billing/dailyCashProcessSummary', $data);
 	}
         
@@ -1060,6 +1092,7 @@ Class Controller_Billing
 		{
 			$transactions = db::where('billingTransactionDate > ? AND billingTransactionDate < ?', array($todayDateStart.' 00:00:00', $todayDateEnd.' 23:59:59'))
 			->where('siteID', $siteID)
+			->where('billingTransactionStatus', 1)
 			->group_by('billingTransactionDate ASC')
 			->get('billing_transaction')
 			->result('billingTransactionID');
@@ -1156,6 +1189,7 @@ Class Controller_Billing
 		{
 			$transactions = db::where('billingTransactionDate > ? AND billingTransactionDate < ?', array($todayDateStart.' 00:00:00', $todayDateEnd.' 23:59:59'))
 			->where('siteID', $siteID)
+			->where('billingTransactionStatus', 1)
 			->group_by('billingTransactionDate ASC')
 			->get('billing_transaction')
 			->result('billingTransactionID');

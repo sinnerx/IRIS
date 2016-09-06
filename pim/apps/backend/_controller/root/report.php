@@ -55,6 +55,13 @@ class Controller_Report
 		//input
 		$year = $input['year'];
 
+		// db::select("MONTH(BT.billingTransactionDate) as monthly, count(BTI.billingTransactionItemID) as totalPaid");
+		// db::from("billing_transaction_item BTI");
+		// db::join("billing_transaction BT", "BT.billingTransactionID = BTI.billingTransactionID", "INNER JOIN");
+		// db::where("BTI.billingItemID IN (12,13,14)");
+		// db::where("YEAR(BT.billingTransactionDate)", $year);
+		// db::group_by("monthly");
+
 		db::select("MONTH(A.activityCreatedDate) as monthly, count(A.activityID) as totalPaid");
 		db::from("training T");
 		db::join("activity A", "A.activityID = T.activityID");
@@ -69,6 +76,13 @@ class Controller_Report
 		$resultTrainingPaid = db::get()->result();
 		// var_dump($resultTrainingPaid);
 		// die;
+
+		// db::select("MONTH(A.activityCreatedDate) as monthly, count(U.userID) as totalFree");
+		// db::from("user U");
+		// db::join("activity_user AU", "AU.userID = U.userID", "INNER JOIN");
+		// db::join("activity A", "A.activityID = AU.activityID", "INNER JOIN");
+		// db::join("training T", "T.activityID = A.activityID", "INNER JOIN");
+		// db::join("training_lms TLMS", "T.trainingID = TLMS.trainingID", "INNER JOIN");
 
 		db::select("MONTH(A.activityCreatedDate) as monthly, count(A.activityID) as totalFree");
 		db::from("training T");
@@ -1852,7 +1866,7 @@ class Controller_Report
     }
 
     private function reportCashFlowSummaryFull($input) {
-
+    	set_time_limit(0);
 		$month 	= $input['month'];
 		$year 	= $input['year'];
 		$endTitle = '';
@@ -2484,6 +2498,7 @@ class Controller_Report
 
 
 		$ExcelHelper->execute();
+		session_write_close();
 	}
 
 	public function reportFormField($idReport){
