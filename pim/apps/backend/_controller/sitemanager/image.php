@@ -79,8 +79,86 @@ class Controller_Image
 		}
 	}
 
+	public function multipleUploadAlbumPhotos($siteAlbumID)
+	{
+
+		$data['row']		= model::load("image/album")->getSiteAlbum($siteAlbumID);
+		$file			= input::file("photoName");
+		//var_dump($_REQUEST);
+		//var_dump($_FILES);
+		//var_dump($file);
+		//var_dump($file->get('name'));
+		//die;
+		$photoUpload = false;
+		//$file = $file->get()[0];
+		//var_dump($file);
+
+		## win.
+		# upload.
+		$imagePhoto	= model::load("image/photo");
+		//$description = "";
+
+		$description = input::get("photoDescription")[0];
+
+		// var_dump(input::get());
+		// var_dump($description);
+		// die;
+
+		$path	= $imagePhoto->addSitePhoto($siteAlbumID,$file->get("name"),$description);
+
+		// ## update cover photo if they aint exists yet.
+		if(!$data['row']['albumCoverImageName'])
+		{
+			## update cover photo.
+			model::load("image/album")->updateCoverPhoto($data['row']['albumID'],$path);
+		}
+
+		## move uploaded file.
+		$upload	= $file->move(model::load("image/services")->getPhotoPath($path));
+		// {"files": [
+		//   {
+		//     "name": "picture1.jpg",
+		//     "size": 902604,
+		//     "url": "http:\/\/example.org\/files\/picture1.jpg",
+		//     "thumbnailUrl": "http:\/\/example.org\/files\/thumbnail\/picture1.jpg",
+		//     "deleteUrl": "http:\/\/example.org\/files\/picture1.jpg",
+		//     "deleteType": "DELETE"
+		//   },
+		//   {
+		//     "name": "picture2.jpg",
+		//     "size": 841946,
+		//     "url": "http:\/\/example.org\/files\/picture2.jpg",
+		//     "thumbnailUrl": "http:\/\/example.org\/files\/thumbnail\/picture2.jpg",
+		//     "deleteUrl": "http:\/\/example.org\/files\/picture2.jpg",
+		//     "deleteType": "DELETE"
+		//   }
+		// ]}		
+		$baseUrl			= url::getProtocol().apps::config("base_url:frontend");
+		$imagePhotoSmall 	= $baseUrl."/api/photo/small/". $path;
+		$imagePhotoBig	 	= $baseUrl."/api/photo/big/". $path;
+
+		$arrayJSON = array(
+			"files" => 
+				array(
+					array(
+				       'name' => $file->get("name"),
+				       'size' => $file->get("size"),
+				       'url' => $imagePhotoBig,
+				       'thumbnailUrl' => $imagePhotoSmall,
+				       'deleteUrl' => '',
+				       'deleteType' => 'DELETE',
+				    	)
+					),
+			);
+
+		return json_encode($arrayJSON);
+
+	}
+
 	public function albumPhotos($siteAlbumID)
 	{
+		//print_r(input::get());
+		//die;
 		$siteID				= model::load("access/auth")->getAuthData("site","siteID");
 		$data['row']		= model::load("image/album")->getSiteAlbum($siteAlbumID);
 		$data['res_photo']	= model::load("image/album")->getSitePhotos($siteID,$siteAlbumID);
@@ -88,62 +166,9 @@ class Controller_Image
 
 		$data['siteSlug']	= authData("site.siteSlug");
 		//die;
-		if(form::submitted())
-		{
-			$file			= input::file("photoName");
-			//var_dump($file);
-			$photoUpload = false;
-			//$file = $file->get()[0];
-			//var_dump($file);
-			## checking-checkinggg
-			$photoUpload	= !$file?"Please choose a photo":false;
-			//var_dump($photoUpload);
-			// size cannot be bigger than.
-			if(!$photoUpload && $file->get('size') > $data['maxSize']){
-				$photoUpload = 'File size cannot be bigger than '.($data['maxSize']/1000000).'mb';
-				//var_dump('123');
-			}
-			else{
-				//var_dump($file);
-			}
-				
-			//var_dump($file->get());
-			$photoUpload	= !$photoUpload?(!$file->isExt("jpg,jpeg,png")?"Please choose the right photo":false):$photoUpload;
-
-
-			## no photo uploaded.
-			if($photoUpload)
-			{
-				input::repopulate();
-				redirect::to("",$photoUpload,"error");
-			}
-
-			## win.
-			# upload.
-			$imagePhoto	= model::load("image/photo");
-
-			## add photo to db.
-
-			$path	= $imagePhoto->addSitePhoto($siteAlbumID,$file->get("name"),input::get("photoDescription"));
-
-			## update cover photo if they aint exists yet.
-			if(!$data['row']['albumCoverImageName'])
-			{
-				## update cover photo.
-				model::load("image/album")->updateCoverPhoto($data['row']['albumID'],$path);
-			}
-
-			## move uploaded file.
-			$upload	= $file->move(model::load("image/services")->getPhotoPath($path));
-
-			if(!$upload)
-			{
-				var_dump($upload);die();
-			}
-
-			redirect::to("image/albumPhotos/$siteAlbumID#");
-		}
-
+		
+		// var_dump($data);
+		// die;
 		view::render("sitemanager/image/albumPhotos",$data);
 	}
 

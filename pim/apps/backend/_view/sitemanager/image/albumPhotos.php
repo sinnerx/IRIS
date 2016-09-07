@@ -408,6 +408,43 @@ var album	= new function()
 	height:100px;
 }
 </style>
+
+<script src='<?php echo url::asset("_scale/js/upload/jquery.1.11.3.min.js");?>'></script>
+<script src='<?php echo url::asset("_scale/js/upload/tmpl.min.js");?>'></script>
+<!-- blueimp Gallery script -->
+<script src='<?php echo url::asset("_scale/js/upload/jquery.blueimp-gallery.min.js");?>'></script>
+<script type="text/javascript" src='<?php echo url::asset("_scale/js/upload/vendor/jquery.ui.widget.js");?>'></script>
+<!-- The Iframe Transport is required for browsers without support for XHR file uploads -->
+<script type="text/javascript" src='<?php echo url::asset("_scale/js/upload/jquery.iframe-transport.js");?>'></script>
+
+<!-- The basic File Upload plugin -->
+<script type="text/javascript" src='<?php echo url::asset("_scale/js/upload/jquery.fileupload.js");?>'></script>
+
+<!-- The Load Image plugin is included for the preview images and image resizing functionality -->
+<script src='<?php echo url::asset("_scale/js/upload/load-image.all.min.js");?>'></script>
+<!-- The Canvas to Blob plugin is included for image resizing functionality -->
+<script src='<?php echo url::asset("_scale/js/upload/canvas-to-blob.min.js");?>'></script>
+<!-- Bootstrap JS is not required, but included for the responsive demo navigation -->
+<!-- <script src='<?php //echo url::asset("_scale/js/upload/bootstrap.3.2.0.min.js");?>'></script> -->
+
+
+<!-- The File Upload processing plugin -->
+<script src='<?php echo url::asset("_scale/js/upload/jquery.fileupload-process.js");?>'></script>
+<!-- The File Upload image preview & resize plugin -->
+<script src='<?php echo url::asset("_scale/js/upload/jquery.fileupload-image.js");?>'></script>
+<!-- The File Upload audio preview plugin -->
+<script src='<?php echo url::asset("_scale/js/upload/jquery.fileupload-audio.js");?>'></script>
+<!-- The File Upload video preview plugin -->
+<script src='<?php echo url::asset("_scale/js/upload/jquery.fileupload-video.js");?>'></script>
+<!-- The File Upload validation plugin -->
+<script src='<?php echo url::asset("_scale/js/upload/jquery.fileupload-validate.js");?>'></script>
+<!-- The File Upload user interface plugin -->
+<script src='<?php echo url::asset("_scale/js/upload/jquery.fileupload-ui.js");?>' ></script>
+<!-- CSS to style the file input field as button and adjust the Bootstrap progress bars -->
+<script src='<?php echo url::asset("_scale/js/upload/main.js");?>'></script>
+<link rel="stylesheet" href='<?php echo url::asset("_scale/css/upload/jquery.fileupload.css"); ?>'>
+<link rel="stylesheet" href='<?php echo url::asset("_scale/css/upload/jquery.fileupload-ui.css"); ?>'>
+
 <h3 class='m-b-xs text-black'>
 	<a href='<?php echo url::base("image/album");?>'>Album</a> : <?php echo $row['albumName'];?>
 </h3>
@@ -422,21 +459,50 @@ var album	= new function()
 		</div>
 		<?php echo flash::data();?>
 		<div class='row'>
-		<form method='post' enctype="multipart/form-data">
-			<div class='col-sm-6'>
-				<div class='form-group'>
-					<label>Select Photo</label>
-					<?php echo form::file("photoName","multiple");?>
-				</div>
 
-				<div class='form-group'>
-					<label>Description (optional)</label>
-					<?php echo form::textarea("photoDescription","class='form-control'");?>
-				</div>
-				<input type='submit' class='btn btn-primary' />
-				<input type='button' value='Cancel' onclick='javascript:album.addPhotoCancel();' class='btn btn-default' />
-			</div>
-		</form>
+<div class='col-sm-12'>
+	
+<form id="fileupload"  method="POST" enctype="multipart/form-data">
+        <!-- Redirect browsers with JavaScript disabled to the origin page -->
+        <noscript><input type="hidden" name="redirect" value="https://blueimp.github.io/jQuery-File-Upload/"></noscript>
+        <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
+        <div class="row fileupload-buttonbar">
+            <div class="col-lg-12">
+                <!-- The fileinput-button span is used to style the file input field as button -->
+                <span class="btn btn-primary fileinput-button">
+                    <i class="glyphicon glyphicon-plus"></i>
+                    <span>Add files...</span>
+                    <input type="file" name="photoName" id="photoName" multiple>
+                </span>
+                <button type="submit" class="btn btn-primary start">
+                    <i class="glyphicon glyphicon-upload"></i>
+                    <span>Start upload</span>
+                </button>
+                <button type="reset" class="btn btn-primary cancel">
+                    <i class="glyphicon glyphicon-ban-circle"></i>
+                    <span>Cancel upload</span>
+                </button>
+                <input type='button' value='Cancel' onclick='javascript:album.addPhotoCancel();' class='btn btn-default' style="float:right"/>
+                <!-- The global file processing state -->
+                <span class="fileupload-process"></span>
+            </div>
+            <!-- The global progress state -->
+            <div class="col-lg-5 fileupload-progress fade">
+                <!-- The global progress bar -->
+                <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+                    <div class="progress-bar progress-bar-success" style="width:0%;"></div>
+                </div>
+                <!-- The extended global progress state -->
+                <div class="progress-extended">&nbsp;</div>
+            </div>
+        </div>
+        <!-- The table listing the files available for upload/download -->
+        <table role="presentation" class="table table-striped"><tbody class="files"></tbody></table>
+    </form>
+</div>
+
+
+
 		</div>
 	</div>
 	<div id='photo-list' style='padding-top:10px;'>
@@ -521,3 +587,122 @@ var album	= new function()
 		</div> 
 	</div>
 </div>
+
+<!-- The template to display files available for upload -->
+<script id="template-upload" type="text/x-tmpl">
+{% 
+	for (var i=0, file; file=o.files[i]; i++) { 
+%}
+    <tr class="template-upload fade">
+        <td>
+            <span class="preview"></span>
+        </td>
+        <td>
+            <p class="name">{%=file.name%}</p>
+            <textarea name="photoDescription[]" id="photoDescription" class="form-control" placeholder="Enter description here."></textarea>
+            
+            <strong class="error text-danger"></strong>
+        </td>
+        <td>
+            <p class="size">Processing...</p>
+            <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="progress-bar progress-bar-success" style="width:0%;"></div></div>
+        </td>
+        <td>
+            {% if (!i && !o.options.autoUpload) { %}
+                <button class="btn btn-primary start" disabled>
+                    <i class="glyphicon glyphicon-upload"></i>
+                    <span>Start</span>
+                </button>
+            {% } %}
+            {% if (!i) { %}
+                <button class="btn btn-warning cancel">
+                    <i class="glyphicon glyphicon-ban-circle"></i>
+                    <span>Cancel</span>
+                </button>
+            {% } %}
+        </td>
+    </tr>
+{% } %}
+</script>
+<!-- The template to display files available for download -->
+<script id="template-download" type="text/x-tmpl">
+{%
+ for (var i=0, file; file=o.files[i]; i++) { %}
+    <tr class="template-download fade">
+        <td>
+            <span class="preview">
+                {% if (file.thumbnailUrl) { %}
+                    <a href="{%=file.url%}" title="{%=file.name%}" download="{%=file.name%}" data-gallery><img src="{%=file.thumbnailUrl%}"></a>
+                {% } %}
+            </span>
+        </td>
+        <td>
+            <p class="name">
+                {% if (file.url) { %}
+                    <a href="{%=file.url%}" title="{%=file.name%}" download="{%=file.name%}" {%=file.thumbnailUrl?'data-gallery':''%}>{%=file.name%}</a>
+                {% } else { %}
+                    <span>{%=file.name%}</span>
+                {% } %}
+            </p>
+            {% if (file.error) { %}
+                <div><span class="label label-danger">Error</span> {%=file.error%}</div>
+            {% } %}
+        </td>
+        <td>
+            <span class="size">{%=o.formatFileSize(file.size)%}</span>
+        </td>
+    </tr>
+{% } %}
+</script>
+<script>
+$(function () {
+    'use strict';
+    //var pimurl = pim.base_url +"image/albumPhotos/" + <?php echo $row['siteAlbumID']?>;
+    var pimurl = pim.base_url +"image/multipleUploadAlbumPhotos/" + <?php echo $row['siteAlbumID']?>;
+    //alert(pimurl);
+    var fileCount = 0, fails = 0, successes = 0;
+    var _totalCountOfFilesToUpload = -1;
+
+    // Initialize the jQuery File Upload widget:
+    $('#fileupload').fileupload({
+        // Uncomment the following to send cross-domain cookies:
+        //xhrFields: {withCredentials: true},
+       // url: 'server/php/'
+        //url: "http://localhost/digitalgaia/iris/dashboard/image/albumPhotos/8#addPhoto"
+        url: pimurl,
+        maxFileSize: 1999000,
+        acceptFileTypes: /(\.|\/)(gif|jpe?g|png|bmp)$/i        
+        // url: "/image/albumPhotos/8#addPhoto"
+    }).bind('fileuploaddone', function (e, data) {
+        if (_totalCountOfFilesToUpload < 0) {
+             _totalCountOfFilesToUpload = data.getNumberOfFiles();
+        }
+        fileCount++;
+        successes++;
+        if (fileCount === _totalCountOfFilesToUpload) {
+            console.log('all done, successes: ' + successes + ', fails: ' + fails);
+            // refresh page
+            location.reload();
+        }
+    }).bind('fileuploadfail', function(e, data) {
+        fileCount++;
+        fails++;
+        if (fileCount === _totalCountOfFilesToUpload) {
+            console.log('all done, successes: ' + successes + ', fails: ' + fails);
+            // refresh page
+            //location.reload();
+    }
+    });
+
+    $('#fileupload').bind('fileuploadsubmit', function (e, data) {
+        var inputs = data.context.find(':input');
+        if (inputs.filter(function () {
+               // return !this.value && $(this).prop('required');
+            }).first().focus().length) {
+            data.context.find('button').prop('disabled', false);
+            return false;
+        }
+        data.formData = inputs.serializeArray();
+    });    
+});
+</script>
