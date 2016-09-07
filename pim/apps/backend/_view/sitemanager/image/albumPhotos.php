@@ -1,5 +1,4 @@
 <script type="text/javascript">
-	
 var album	= new function()
 {
 	this.albumID	= <?php echo $row['siteAlbumID'];?>;
