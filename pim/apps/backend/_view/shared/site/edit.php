@@ -164,8 +164,10 @@ endif;
 				<label>Parliament</label>
 				<div class='row'>
 					<div class='col-md-12'>
-						<?php echo form::text("siteInfoParliament","class='form-control'",$row['siteInfoParliament']);?>
-						<?php echo flash::data("siteInfoParliament");?>
+					<?php $parliament	= model::load("helper")->parliament($row['stateID']); ?>
+					<?php echo form::select("siteInfoParliament",$parliament,"class='form-control'",$row['siteInfoParliament'],"[SELECT PARLIAMENT]");?>
+						<?php //echo form::text("siteInfoParliament","class='form-control'",$row['siteInfoParliament']);?>
+						<?php //echo flash::data("siteInfoParliament");?>
 			
 			</div>
 				</div></div>
@@ -176,7 +178,7 @@ endif;
 				<div class='row'>
 					<div class='col-md-12'>
 						<?php //echo form::text("siteInfoPhase","class='form-control'",$row['siteInfoPhase']);?>
-						<?php echo form::select("siteInfoPhase",$batchList,"class='input-sm form-control input-s-sm inline v-middle'",$row['siteInfoPhase'],"[SELECT BATCH]");?>
+						<?php echo form::select("siteInfoPhase",$batchList,"class='form-control'",$row['siteInfoPhase'],"[SELECT BATCH]");?>
 			</div>
 				</div></div>
 			</div>
@@ -190,8 +192,10 @@ endif;
 				<label>District</label>
 				<div class='row'>
 					<div class='col-md-12'>
-						<?php echo form::text("siteInfoDistrict","class='form-control'",$row['siteInfoDistrict']);?>
-						<?php echo flash::data("siteInfoDistrict");?>
+					<?php $district	= model::load("helper")->district($row['stateID']); ?>
+					<?php echo form::select("siteInfoDistrict",$district,"class='form-control'",$row['siteInfoDistrict'],"[SELECT DISTRICT]");?>
+						<?php //echo form::text("siteInfoDistrict","class='form-control'",$row['siteInfoDistrict']);?>
+						<?php //echo flash::data("siteInfoDistrict");?>
 			
 			</div>
 				</div></div>

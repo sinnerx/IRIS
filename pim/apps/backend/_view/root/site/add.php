@@ -165,7 +165,9 @@ At least one manager is required for each site. Please make sure the site manage
 				<label>Parliament</label>
 				<div class='row'>
 					<div class='col-md-12'>
-						<?php echo form::text("siteInfoParliament","class='form-control'",$row['siteInfoParliament']);?>
+					<?php //$parliament	= model::load("helper")->parliament(); ?>
+					<?php echo form::select("siteInfoParliament",$parliament,"class='form-control'",$row['siteInfoParliament'],"[SELECT PARLIAMENT]");?>
+						<?php //echo form::text("siteInfoParliament","class='form-control'",$row['siteInfoParliament']);?>
 			</div>
 				</div></div>
 			</div>
@@ -174,7 +176,8 @@ At least one manager is required for each site. Please make sure the site manage
 				<label>Phase</label>
 				<div class='row'>
 					<div class='col-md-12'>
-						<?php echo form::text("siteInfoPhase","class='form-control'",$row['siteInfoPhase']);?>
+					<?php echo form::select("siteInfoPhase",$batchList,"class='form-control'",$row['siteInfoPhase'],"[SELECT BATCH]");?>
+						<?php //echo form::text("siteInfoPhase","class='form-control'",$row['siteInfoPhase']);?>
 			</div>
 				</div></div>
 			</div>
@@ -188,7 +191,9 @@ At least one manager is required for each site. Please make sure the site manage
 				<label>District</label>
 				<div class='row'>
 					<div class='col-md-12'>
-						<?php echo form::text("siteInfoDistrict","class='form-control'",$row['siteInfoDistrict']);?>
+					<?php //$district	= model::load("helper")->district(); ?>
+					<?php echo form::select("siteInfoDistrict",$district,"class='form-control'",$row['siteInfoDistrict'],"[SELECT DISTRICT]");?>
+						<?php //echo form::text("siteInfoDistrict","class='form-control'",$row['siteInfoDistrict']);?>
 			</div>
 				</div></div>
 			</div>
@@ -319,10 +324,43 @@ At least one manager is required for each site. Please make sure the site manage
 	</div>
 </div>
 <script type="text/javascript">
+var base_url	= "<?php echo url::base();?>/";
 	
 $("#siteAddForm").submit(function()
 {
 	$("#siteInfoDescription").val($("#editor").html());
+});
+
+$( "#stateID" ).change(function() {
+
+  $.ajax({
+            type: "GET",
+            url:base_url+"site/parliamentList/"+this.value,
+            dataType: "json",
+            success: function (data) {
+            	$('#siteInfoParliament').empty();
+            	$('#siteInfoParliament').append('<option value="">[SELECT PARLIAMENT]</option>');
+                $.each(data,function(i,obj)
+                {
+                 $('#siteInfoParliament').append($('<option></option>').attr('value', i).text(obj));
+                });  
+                }
+          });
+
+  $.ajax({
+            type: "GET",
+            url:base_url+"site/districtList/"+this.value,
+            dataType: "json",
+            success: function (data) {
+            	$('#siteInfoDistrict').empty();
+            	$('#siteInfoDistrict').append('<option value="">[SELECT DISTRICT]</option>');
+                $.each(data,function(i,obj)
+                {
+                 $('#siteInfoDistrict').append($('<option></option>').attr('value', i).text(obj));
+                });  
+                }
+          });
+					
 });
 
 </script>
