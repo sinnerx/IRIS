@@ -278,7 +278,37 @@ Dashboard overview
             <div class="col-sm-6 col-md-4">
                 <section class="panel panel-default panel-pd">
                   <header class="panel-heading panelhd-pd">
-                    Total of Site Member 
+                    Entrepreneurships
+                    <?php if ($kpi['totalEntArticle'] >= 1) {  ?>
+					<i class="fa fa-check fa-lg pull-right custom-fa-pad" style="color:green"></i>
+					<?php } else { ?>
+					<i class="fa fa-exclamation fa-lg pull-right custom-fa-pad" style="color:red"></i>
+					<?php }  ?>
+                  </header>
+                 
+                  	<div class="panel-body text-center">
+                 		<div class="col-md-12">
+                            <a class="block hover">
+                              <span class="i-s i-s-2x pull-left m-r-sm">
+                                <i class="i i-hexagon2 i-s-base text-primary hover-rotate"></i>
+                                <i class="fa fa-briefcase i-sm text-white"></i>
+                              </span>
+                              <span class="clear">
+                                
+                                <span class="h1 block m-t-xs text-primary kpi-font"><?php echo $kpi['totalEntArticle']; ?>/1</span>
+                                <small class="text-muted text-u-c">Article</small>
+                              </span>
+                            </a>
+                            <a href='#' class='fa' style="float:right;">&nbsp;</a>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <div class="col-sm-6 col-md-4">
+                <section class="panel panel-default panel-pd">
+                  <header class="panel-heading panelhd-pd">
+                    Operation
                     <?php if ($kpi['active_member_percentage'] >= 40) {  ?>
 					<i class="fa fa-check fa-lg pull-right custom-fa-pad" style="color:green"></i>
 					<?php } else { ?>
@@ -291,13 +321,81 @@ Dashboard overview
                             <a class="block hover">
                               <span class="i-s i-s-2x pull-left m-r-sm">
                                 <i class="i i-hexagon2 i-s-base text-primary hover-rotate"></i>
-                                <i class="i i-users2 i-sm text-white"></i>
+                                <i class="fa fa-cog i-sm text-white"></i>
                               </span>
                               <span class="clear">
                                 
-                                <span class="h1 block m-t-xs text-primary kpi-font"><?php echo $kpi['total_members']; ?></span>
-                                <small class="text-muted text-u-c">Members</small>
+                                <span class="h1 block m-t-xs text-primary kpi-font">3/1</span>
+                                <small class="text-muted text-u-c">Outstanding Tickets</small>
                               </span>
+                            </a>
+                            <a href='#' class='fa' style="float:right;">&nbsp;</a>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <div class="col-sm-6 col-md-4">
+                <section class="panel panel-default panel-pd">
+                  <header class="panel-heading panelhd-pd">
+                    Pi1M Audit Score
+                    <?php if ($kpi['active_member_percentage'] >= 40) {  ?>
+					<i class="fa fa-check fa-lg pull-right custom-fa-pad" style="color:green"></i>
+					<?php } else { ?>
+					<i class="fa fa-exclamation fa-lg pull-right custom-fa-pad" style="color:red"></i>
+					<?php }  ?>
+                  </header>
+                 
+                  	<div class="panel-body text-center">
+                 		<div class="col-md-12">
+                            <a class="block hover">
+                              <span class="i-s i-s-2x pull-left m-r-sm">
+                                <i class="i i-hexagon2 i-s-base text-primary hover-rotate"></i>
+                                <i class="i i-pencil i-sm text-white"></i>
+                              </span>
+                              <span class="clear">
+                                
+                                <span class="h1 block m-t-xs text-primary kpi-font">96%</span>
+                                <small class="text-muted text-u-c">aAverage Score</small>
+                              </span>
+                            </a>
+                            <a href='#' class='fa' style="float:right;">&nbsp;</a>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <div class="col-sm-6 col-md-4">
+                <section class="panel panel-default panel-pd">
+                  <header class="panel-heading panelhd-pd">
+                    KDB
+                    <?php if ($kpi['kdb_session'] >= 30 && $kpi['kdb_pax'] >= 300) {  ?>
+					<i class="fa fa-check fa-lg pull-right custom-fa-pad" style="color:green"></i>
+					<?php } else { ?>
+					<i class="fa fa-exclamation fa-lg pull-right custom-fa-pad" style="color:red"></i>
+					<?php }  ?>
+                  </header>
+                 
+                  	<div class="panel-body text-center">
+                 		<div class="col-md-12">
+                            <a class="block hover">
+                              <span class="i-s i-s-2x pull-left m-r-sm">
+                                <i class="i i-hexagon2 i-s-base text-primary hover-rotate"></i>
+                                <i class="fa fa-book i-sm text-white"></i>
+                              </span>
+                              <span class="col-sm-5">
+                                
+                                <span class="h1 block m-t-xs text-primary kpi-font"><?php echo $kpi['kdb_session']; ?>/30</span>
+                                <small class="text-muted text-u-c">Session</small>
+                              </span>
+
+
+                              <span class="col-sm-5">
+                                
+                                <span class="h1 block m-t-xs text-primary kpi-font"><?php echo $kpi['kdb_pax']; ?>/300</span>
+                                <small class="text-muted text-u-c">Pax</small>
+                              </span>
+
                             </a>
                             <a href='#' class='fa' style="float:right;">&nbsp;</a>
                         </div>

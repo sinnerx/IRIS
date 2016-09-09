@@ -75,6 +75,7 @@ Class Controller_Site
 		$activeMembers = db::from('site_member')
 		->select('count(userID) as total')
 		->where('siteID', $siteID)
+		->where('siteMemberStatus',1)
 		->where('userID IN (SELECT userID FROM log_login WHERE MONTH(logLoginCreatedDate) = ? AND YEAR(logLoginCreatedDate) = ?)', array($month, $year))
 		->get()->row('total');
 
@@ -94,8 +95,22 @@ Class Controller_Site
 		$noOfMembers = db::from('site_member')
 		->select('count(userID) as total')
 		->where('siteID', $siteID)
+		->where('siteMemberStatus',1)
 		->get('site_member')
 		->row('total');
+
+		//entrepreneurship article
+		$totalEntArticle =db::query("SELECT COUNT(`articleID`) AS 'total' FROM `article_category` WHERE `categoryID` = 3 
+						AND `articleID` IN (SELECT `articleID` FROM `article` WHERE `siteID` = $siteID AND MONTH(articlePublishedDate)=$month AND YEAR(articlePublishedDate)=$year)")->result();
+		//print_r($totalEntArticle);
+		//die();
+
+		$totalKdbSession = db::query("SELECT COUNT(`activityID`) AS 'total' FROM `activity` WHERE `activityType` =2 AND `activityApprovalStatus`=1 
+			AND YEAR(`activityStartDate`) = $year AND `activityID` IN (SELECT `activityID` FROM `training` WHERE `trainingType` = 7 AND `trainingSubType` = 14)  ")->result();
+
+		$totalKdbPax = db::query("SELECT SUM(`trainingMaxPax`) AS 'totalpax' FROM `training` WHERE `activityID` IN (SELECT `activityID` FROM `activity` WHERE `activityType` =2 
+			AND `activityApprovalStatus`=1 AND YEAR(`activityStartDate`) = $year AND `activityID` IN (SELECT `activityID` FROM `training` WHERE `trainingType` = 7 AND `trainingSubType` = 14))")->result();
+	
 
 		$data['kpi'] = array(
 			'event' => $totalEvents,
@@ -104,7 +119,10 @@ Class Controller_Site
 			'training_hours' => $hours,
 			//'active_member_percentage' => $activeMembers / $totalMembers * 100
 			'active_member_percentage' => $active_member_percentage,
-			'total_members' => $noOfMembers
+			'total_members' => $noOfMembers,
+			'totalEntArticle' => $totalEntArticle[0]['total'],
+			'kdb_session'=>$totalKdbSession[0]['total'],
+			'kdb_pax'=>$totalKdbPax[0]['totalpax']
 			);
 
 		return view::render('sitemanager/site/overview', $data);

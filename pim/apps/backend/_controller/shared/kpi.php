@@ -104,6 +104,7 @@ Class Controller_Kpi
 			$groupedMembers = db::from('site_member')
 			->select('siteID', 'count(userID) as total')
 			->where('siteID', $siteIDs)
+			->where('siteMemberStatus',1)
 			->where('userID IN (SELECT userID FROM log_login WHERE MONTH(logLoginCreatedDate) = ? AND YEAR(logLoginCreatedDate) = ?)', array($month, $year))
 			->group_by('siteID')
 			->get()->result('siteID');
@@ -112,6 +113,7 @@ Class Controller_Kpi
 			$totalMembers = db::from('site_member')
 			->select('siteID', 'count(userID) as total')
 			->where('siteID', $siteIDs)
+			->where('siteMemberStatus',1)
 			->group_by('siteID')
 			->get()->result('siteID');
 			//print_r($totalMembers);
