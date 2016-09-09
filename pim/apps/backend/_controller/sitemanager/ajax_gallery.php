@@ -133,6 +133,13 @@ class Controller_Ajax_Gallery
 
 		return response::json(Array($desc,nl2br($desc)));
 	}
+
+	public function deleteAlbumActivity($albumActivity){
+
+		model::load("image/album")->deleteActivityAlbum($albumActivity);
+
+		return 1;
+	}
 }
 
 

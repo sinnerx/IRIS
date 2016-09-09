@@ -6,6 +6,30 @@ var sitealbum	= new function()
 	{
 
 	}
+
+	this.deletePhotoAlbum	= function(AlbumID)
+	{
+		// set up
+		// if(!pim.func.inArray(photoID,this.deletedList))
+		// {
+			if(confirm("Delete this photo. Are you sure?"))
+			{
+				console.log("delete " + AlbumID);
+				// $("#photo"+photoID).addClass("deleted-photo").addClass("pending");
+				$.ajax({type:"GET",url:pim.base_url+"ajax/gallery/deleteAlbumActivity/"+AlbumID}).done(function(res)
+				{
+					if(res)
+					{
+						//album.deletedList.push(photoID);
+						//$("#photoID"+photoID).removeClass("pending");
+						//console.log(res);
+						location.reload();
+					}
+				});	
+				// add class.
+			}
+		// }
+	}
 }
 
 </script>
@@ -38,6 +62,25 @@ var sitealbum	= new function()
 {
 	border-bottom: 1px solid #cdcdcd;
 }
+
+.panel-default-image
+{
+	padding:0px;
+}
+
+.delete-button, .undelete-button
+{
+	color:red;
+	font-size: 18px;
+}
+
+.photo-panel
+{
+	position: absolute;
+	right:0px;top:0px;
+	background: white;
+}
+
 
 </style>
 <h3>
@@ -164,15 +207,29 @@ var sitealbum	= new function()
 					<br>
 					Or choose from existing album, <a href='<?php echo url::base("image/album?activity=$activityID&import=1");?>'>Here</a>?
 					<?php else:?>
-					<p>List of related album added for this <?php echo $typeName;?>. <a href='<?php echo url::base("image/album?activity=$activityID#add");?>'>Do you want to add more?</a></p>
+					<p>List of related album added for this <?php echo $typeName;?>. <br><br><a href='<?php echo url::base("image/album?activity=$activityID#add");?>'>Do you want to add more?</a></p>
 					Or choose from existing album, <a href='<?php echo url::base("image/album?activity=$activityID&import=1");?>'>Here</a>?
 					<?php
-					foreach($res_album as $row):?>
+					foreach($res_album as $row):
+						//var_dump($row);?>
 					<div class='row album-list'>
 						<div class='col-sm-4'>
-							<a href='<?php echo url::base("image/albumPhotos/".$row['siteAlbumID']);?>'>
+<section class='panel-default-image'>
+				<div class='photo-panel'>
+					<a href='javascript:sitealbum.deletePhotoAlbum(<?php echo $row['activityAlbumID'];?>);' class='i i-cross2 delete-button'></a>
+				</div>
+			<div class='panel-body' style='padding:3px;'>
+											<a href='<?php echo url::base("image/albumPhotos/".$row['siteAlbumID']);?>'>
+								
 							<img style='width:100%;' src="<?php echo $imageServices->getPhotoUrl($row['albumCoverImageName']);?>" />
 							</a>
+			</div>
+			</section>
+				<!-- <a href='<?php //echo url::base("image/albumPhotos/".$row['siteAlbumID']);?>'> -->
+								
+							<!-- <img style='width:100%;' src="<?php //echo $imageServices->getPhotoUrl($row['albumCoverImageName']);?>" /> -->
+							<!-- </a> -->
+
 						</div>
 						<div class='col-sm-8'>
 							<div class='table-responsive'>
