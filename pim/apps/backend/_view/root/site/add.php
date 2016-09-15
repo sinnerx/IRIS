@@ -37,7 +37,7 @@ At least one manager is required for each site. Please make sure the site manage
 	<section class="panel panel-default">
 		<div class="panel-body">
 			<div class="form-group">
-			<label>1. P1m Name</label>
+			<label>1. Pi1M Name</label>
 			<div class='row'>
 				<div class='col-sm-9'>
 				<?php
@@ -52,7 +52,7 @@ At least one manager is required for each site. Please make sure the site manage
 			</div>
 			</div>
 			<div class="form-group">
-			<label>2. P1m Slug</label>
+			<label>2. Pi1M Slug</label>
 			<?php
 			$readOnly	= $siteSlug?"readonly='true'":"";
 			echo form::text("siteSlug","$readOnly class='form-control' placeholder=\"A url represents the p1m, make sure it's as clear as possible.\"",$siteSlug);?>
@@ -70,7 +70,7 @@ At least one manager is required for each site. Please make sure the site manage
 			<?php echo flash::data('manager');?>
 		</div>
 		<div class='form-group'>
-			<label>4. P1m State</label>
+			<label>4. Pi1M State</label>
 			<?php echo form::select("stateID",$stateR,"class='form-control'","","[Select State]");?>
 		</div>
 		</div>
@@ -166,7 +166,7 @@ At least one manager is required for each site. Please make sure the site manage
 				<div class='row'>
 					<div class='col-md-12'>
 					<?php //$parliament	= model::load("helper")->parliament(); ?>
-					<?php echo form::select("siteInfoParliament",$parliament,"class='form-control'",$row['siteInfoParliament'],"[SELECT PARLIAMENT]");?>
+					<?php echo form::select("siteInfoParliament",$parliament,"class='form-control'",$row['siteInfoParliament'],"Please select the Pi1M State");?>
 						<?php //echo form::text("siteInfoParliament","class='form-control'",$row['siteInfoParliament']);?>
 			</div>
 				</div></div>
@@ -192,7 +192,7 @@ At least one manager is required for each site. Please make sure the site manage
 				<div class='row'>
 					<div class='col-md-12'>
 					<?php //$district	= model::load("helper")->district(); ?>
-					<?php echo form::select("siteInfoDistrict",$district,"class='form-control'",$row['siteInfoDistrict'],"[SELECT DISTRICT]");?>
+					<?php echo form::select("siteInfoDistrict",$district,"class='form-control'",$row['siteInfoDistrict'],"Please select the Pi1M State");?>
 						<?php //echo form::text("siteInfoDistrict","class='form-control'",$row['siteInfoDistrict']);?>
 			</div>
 				</div></div>
@@ -331,9 +331,23 @@ $("#siteAddForm").submit(function()
 	$("#siteInfoDescription").val($("#editor").html());
 });
 
+$('#siteInfoParliament').attr('disabled','disabled');
+$('#siteInfoDistrict').attr('disabled','disabled');
+
 $( "#stateID" ).change(function() {
 
-  $.ajax({
+  
+  if(!this.value){
+  	$('#siteInfoParliament').attr('disabled','disabled');
+	$('#siteInfoDistrict').attr('disabled','disabled');
+	$('#siteInfoParliament').empty();
+	$('#siteInfoParliament').append('<option value="">Please select the Pi1M State</option>');
+	$('#siteInfoDistrict').empty();
+	$('#siteInfoDistrict').append('<option value="">Please select the Pi1M State</option>');
+  }else{
+  	
+
+  	$.ajax({
             type: "GET",
             url:base_url+"site/parliamentList/"+this.value,
             dataType: "json",
@@ -344,7 +358,11 @@ $( "#stateID" ).change(function() {
                 {
                  $('#siteInfoParliament').append($('<option></option>').attr('value', i).text(obj));
                 });  
-                }
+                },
+    		complete: function (data) {
+      				$('#siteInfoParliament').removeAttr('disabled');
+     				}
+                
           });
 
   $.ajax({
@@ -358,8 +376,16 @@ $( "#stateID" ).change(function() {
                 {
                  $('#siteInfoDistrict').append($('<option></option>').attr('value', i).text(obj));
                 });  
-                }
+                },
+    		complete: function (data) {
+      				$('#siteInfoDistrict').removeAttr('disabled');
+     				}
+                
           });
+
+
+
+  }
 					
 });
 
