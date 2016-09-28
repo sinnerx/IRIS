@@ -581,6 +581,8 @@ Class Controller_Billing
 
 		// Group by date, itemCOde by item codes.
 		$report = array();
+		//var_dump($transactionItems);
+		//die;
 
 		foreach($transactionItems as $row)
 		{
@@ -594,7 +596,17 @@ Class Controller_Billing
 
 			// if age is lower than 18, OR occupation group = 1 (student), set it to student.
 			if($row['billingTransactionUserAge'] < 18 || $row['billingTransactionUserOccupationGroup'] == 1)
-				$userType = 'student';
+				$userType = 'student';			
+			else if($row['billingTransactionUserAge'] < 18 || $row['billingTransactionUserOccupationGroup'] == 7)
+				$userType = 'nonstudent';
+			// else if($code == 'PC OKU'){
+			// 	$userType = 'OKU';		
+			// 	$status = 'nonmember';
+			// }	
+			// else if($code == 'PC Warga Emas'){
+			// 	$userType = 'WE';
+			// 	$status = 'nonmember';
+			// }
 			else
 				$userType = 'adult';
 
@@ -603,6 +615,14 @@ Class Controller_Billing
 				$status = 'nonmember';
 			else
 				$status = $row['billingTransactionUser'] === 0 || !$row['billingTransactionUser'] ? 'nonmember' : 'member';
+
+			if($code == 'PC OKU'){
+				$code = 'PC';
+				$userType = 'OKU';
+			} else if ($code == 'PC Warga Emas'){
+				$code = 'PC';
+				$userType = 'WE';		
+			}
 
 			$reference = &$report[$date][$code];
 
@@ -652,8 +672,8 @@ Class Controller_Billing
 		$data['report'] = $report;
 
 		// echo '<pre>';
-		// var_dump($report);
-		// die;
+		//print_r($report);
+		//die;
 		/*$data['itemTotalCalculator'] = function($rows)
 		{
 			$total = 0;

@@ -605,7 +605,8 @@ class Helper
 				3=>"Kerja sendiri",
 				4=>"Di bawah majikan",
 				5=>"Tidak bekerja",
-				6=>"Bersara"
+				6=>"Bersara",
+				7=>"Bukan Pelajar",
 						);
 
 		return $no?$occR[$no]:$occR;

@@ -74,7 +74,17 @@ class Controller_ExpExcel
 
 			// if age is lower than 18, OR occupation group = 1 (student), set it to student.
 			if($row['billingTransactionUserAge'] < 18 || $row['billingTransactionUserOccupationGroup'] == 1)
-				$userType = 'student';
+				$userType = 'student';			
+			else if($row['billingTransactionUserAge'] < 18 || $row['billingTransactionUserOccupationGroup'] == 7)
+				$userType = 'nonstudent';
+			// else if($code == 'PC OKU'){
+			// 	$userType = 'OKU';		
+			// 	$status = 'nonmember';
+			// }	
+			// else if($code == 'PC Warga Emas'){
+			// 	$userType = 'WE';
+			// 	$status = 'nonmember';
+			// }
 			else
 				$userType = 'adult';
 
@@ -84,11 +94,21 @@ class Controller_ExpExcel
 			else
 				$status = $row['billingTransactionUser'] === 0 || !$row['billingTransactionUser'] ? 'nonmember' : 'member';
 
+			if($code == 'PC OKU'){
+				$code = 'PC';
+				$userType = 'OKU';
+			} else if ($code == 'PC Warga Emas'){
+				$code = 'PC';
+				$userType = 'WE';		
+			}
+
 			$reference = &$report[$date][$code];
 
 			// time
 			$time = date('G', strtotime($row['billingTransactionDate'])) >= 19 ? 'night' : 'day';
-
+			//var_dump($row);
+			//var_dump(date('G', strtotime($row['billingTransactionDate'])));
+			//die;
 			// point to the time
 			if($code == 'PC')
 			{
@@ -96,11 +116,14 @@ class Controller_ExpExcel
 					$reference[$time] = array();
 
 				$reference = &$reference[$time];
+				//var_dump($reference);
 			}
 
 			// initiates.
 			if(!isset($reference['total']))
 				$reference['total'] = 0;
+			// else
+				// $reference['total'] = $row['billingTransactionItemPrice'] * $row['billingTransactionItemQuantity'];
 
 			if(!isset($reference['total_users']))
 				$reference['total_users'] = 0;
@@ -145,27 +168,31 @@ class Controller_ExpExcel
 		$sheet->setCellValue("A1", "Day");
 		$sheet->mergeCells("A1:A3");
 
-		$sheet->mergeCells("B1:G1"); //member
+		$sheet->mergeCells("B1:I1"); //member
 		$sheet->setCellValue("B1","Member");
 		
-		$sheet->mergeCells("H1:V1"); //pc day
-		$sheet->setCellValue("H1","PC Day");
+		$sheet->mergeCells("J1:AP1"); //pc day
+		$sheet->setCellValue("J1","PC Day");
 
-		$sheet->mergeCells("W1:AK1"); //pc night
-		$sheet->setCellValue("W1","PC Night");
+		$sheet->mergeCells("AQ1:BW1"); //pc night
+		$sheet->setCellValue("AQ1","PC Night");
 
-		$sheet->mergeCells("AL1:AN1"); //print
-		$sheet->setCellValue("AL1","Print");
+		$sheet->mergeCells("BX1:BZ1"); //print
+		$sheet->setCellValue("BX1","Print");
 
-		$sheet->setCellValue("AO1","Scan");
+		$sheet->setCellValue("CA1","Scan");
 
-		$sheet->setCellValue("AP1","Laminate");
+		$sheet->mergeCells("CB1:CC1");
+		$sheet->setCellValue("CB1","Laminate");
 
-		$sheet->mergeCells("AQ1:AS1"); //other
-		$sheet->setCellValue("AQ1","Other");
+		$sheet->mergeCells("CD1:CF1");
+		$sheet->setCellValue("CD1","Package");
 
-		$sheet->mergeCells("AT1:AU1"); //day end
-		$sheet->setCellValue("AT1","Day End");
+		$sheet->mergeCells("CG1:CI1"); //other
+		$sheet->setCellValue("CG1","Other");
+
+		$sheet->mergeCells("CJ1:CK1"); //day end
+		$sheet->setCellValue("CJ1","Day End");
 
 
 		//second row header
@@ -176,106 +203,133 @@ class Controller_ExpExcel
 		$sheet->setCellValue("D2","Student");
 
 		$sheet->mergeCells("F2:G2"); //adult
-		$sheet->setCellValue("F2","Adult");		
+		$sheet->setCellValue("F2","NonStudent");	
 
+		$sheet->mergeCells("H2:I2"); //adult
+		$sheet->setCellValue("H2","Adult");		
+		
 
-		$sheet->mergeCells("H2:J2"); //total
-		$sheet->setCellValue("H2","Total");
+		//PC DAY
+		$sheet->mergeCells("J2:L2"); //total
+		$sheet->setCellValue("J2","Total");
 
-		$sheet->mergeCells("K2:M2"); //student
-		$sheet->setCellValue("K2","Student Member");
+		$sheet->mergeCells("M2:O2"); //student
+		$sheet->setCellValue("Q2","Student Member");
 
-		$sheet->mergeCells("N2:P2"); //
-		$sheet->setCellValue("N2","Student NonMember");	
+		$sheet->mergeCells("P2:R2"); //
+		$sheet->setCellValue("T2","Student NonMember");			
 
-		$sheet->mergeCells("Q2:S2"); //
-		$sheet->setCellValue("Q2","Adult Member");
+		$sheet->mergeCells("S2:U2"); //NONstudent
+		$sheet->setCellValue("W2","NonStudent Member");
 
-		$sheet->mergeCells("T2:V2"); //
-		$sheet->setCellValue("T2","Adult NonMember");			
+		$sheet->mergeCells("V2:X2"); //
+		$sheet->setCellValue("Z2","NonStudent NonMember");	
 
+		$sheet->mergeCells("Y2:AA2"); //
+		$sheet->setCellValue("AC2","Adult Member");
 
-		$sheet->mergeCells("W2:Y2"); //total
-		$sheet->setCellValue("W2","Total");
+		$sheet->mergeCells("AB2:AD2"); //
+		$sheet->setCellValue("AF2","Adult NonMember");			
 
-		$sheet->mergeCells("Z2:AB2"); //student
-		$sheet->setCellValue("Z2","Student Member");
+		$sheet->mergeCells("AE2:AG2"); //
+		$sheet->setCellValue("AI2","OKU Member");			
 
-		$sheet->mergeCells("AC2:AE2"); //adult
-		$sheet->setCellValue("AC2","Student NonMember");	
+		$sheet->mergeCells("AH2:AJ2"); //
+		$sheet->setCellValue("AL2","OKU NonMember");	
 
-		$sheet->mergeCells("AF2:AH2"); //student
-		$sheet->setCellValue("AF2","Adult Member");
+		$sheet->mergeCells("AK2:AM2"); //
+		$sheet->setCellValue("AO2","Elderly Member");		
 
-		$sheet->mergeCells("AI2:AK2"); //adult
-		$sheet->setCellValue("AI2","Adult NonMember");
+		$sheet->mergeCells("AN2:AP2"); //
+		$sheet->setCellValue("AR2","Elderly NonMember");
 
-		$sheet->setCellValue("AL2","Total");
-		$sheet->setCellValue("AM2","B/W");
-		$sheet->setCellValue("AN2","Color");	
+		//PC Night
+		$sheet->mergeCells("AQ2:AS2"); //total
+		$sheet->setCellValue("AU2","Total");
+
+		$sheet->mergeCells("AT2:AV2"); //student
+		$sheet->setCellValue("AX2","Student Member");
+
+		$sheet->mergeCells("AW2:AY2"); //STUDENT
+		$sheet->setCellValue("BA2","Student NonMember");
+
+		$sheet->mergeCells("AZ2:BB2"); //NONstudent
+		$sheet->setCellValue("BD2","NonStudent Member");
+
+		$sheet->mergeCells("BC2:BE2"); //
+		$sheet->setCellValue("BG2","NonStudent NonMember");			
+
+		$sheet->mergeCells("BF2:BH2"); //ADULT
+		$sheet->setCellValue("BJ2","Adult Member");
+
+		$sheet->mergeCells("BI2:BK2"); //adult
+		$sheet->setCellValue("BM2","Adult NonMember");
+
+		$sheet->mergeCells("BL2:BM2"); //
+		$sheet->setCellValue("BP2","OKU Member");			
+
+		$sheet->mergeCells("BO2:BQ2"); //
+		$sheet->setCellValue("BS2","OKU NonMember");	
+
+		$sheet->mergeCells("BR2:BT2"); //
+		$sheet->setCellValue("BV2","Elderly Member");		
+
+		$sheet->mergeCells("BU2:BW2"); //
+		$sheet->setCellValue("BY2","Elderly NonMember");		
+
+		$sheet->setCellValue("BX2","Total");
+		$sheet->setCellValue("BY2","B/W");
+		$sheet->setCellValue("BZ2","Color");	
+
+		$sheet->setCellValue("CB2","Normal");
+		$sheet->setCellValue("CC2","I/C");
+		$sheet->setCellValue("CD2","A");		
+		$sheet->setCellValue("CE2","B");		
+		$sheet->setCellValue("CF2","C");		
 
 
 		//third row header
-		$sheet->setCellValue("B3","RM");
-		$sheet->setCellValue("C3","User");
+		// $sheet->setCellValue("B3","RM");
+		// $sheet->setCellValue("C3","User");				
+		//MEMBER
+		for ($i='B',$x=0; $x<8; $x++,$i++){
+			if($x%2 == 0){
+				//var_dump($i ." RM");
+				$sheet->setCellValue($i."3","RM");
+			}
+			else if($x%2 == 1){
+				//var_dump($i ." User");
+				$sheet->setCellValue($i."3","User");
+			}
+		}
 
-		$sheet->setCellValue("D3","RM");
-		$sheet->setCellValue("E3","User");
+		//PC Day
+		for ($i='J',$x=0; $x<57; $x++,$i++){
+			if($x%3 == 0){
+				//var_dump($i ." RM");
+				$sheet->setCellValue($i."3","RM");
+			}
+			else if($x%3 == 1){
+				//var_dump($i ." User");
+				$sheet->setCellValue($i."3","User");
+			}
+			else{
+				//var_dump($i . " Hr");
+				$sheet->setCellValue($i."3","Hr");
+			}
+		}
 
-		$sheet->setCellValue("F3","RM");
-		$sheet->setCellValue("G3","User");	
-		
-		$sheet->setCellValue("H3","RM");
-		$sheet->setCellValue("I3","User");					
-		$sheet->setCellValue("J3","Hr");					
+		// $sheet->setCellValue("J3","RM");	//Total
+		// $sheet->setCellValue("K3","User");							
+		// $sheet->setCellValue("J3","Hr");												
+		for ($i='BX',$x=0; $x<10; $x++,$i++){
+			$sheet->setCellValue($i."3","RM");
+		}
 
-		$sheet->setCellValue("K3","RM");
-		$sheet->setCellValue("L3","User");					
-		$sheet->setCellValue("M3","Hr");					
-
-		$sheet->setCellValue("N3","RM");
-		$sheet->setCellValue("O3","User");					
-		$sheet->setCellValue("P3","Hr");					
-
-		$sheet->setCellValue("Q3","RM");
-		$sheet->setCellValue("R3","User");					
-		$sheet->setCellValue("S3","Hr");					
-
-		$sheet->setCellValue("T3","RM");
-		$sheet->setCellValue("U3","User");					
-		$sheet->setCellValue("V3","Hr");					
-
-		$sheet->setCellValue("W3","RM");
-		$sheet->setCellValue("X3","User");					
-		$sheet->setCellValue("Y3","Hr");					
-
-		$sheet->setCellValue("Z3","RM");
-		$sheet->setCellValue("AA3","User");					
-		$sheet->setCellValue("AB3","Hr");					
-
-		$sheet->setCellValue("AC3","RM");
-		$sheet->setCellValue("AD3","User");					
-		$sheet->setCellValue("AE3","Hr");					
-
-		$sheet->setCellValue("AF3","RM");
-		$sheet->setCellValue("AG3","User");					
-		$sheet->setCellValue("AH3","Hr");					
-
-		$sheet->setCellValue("AI3","RM");
-		$sheet->setCellValue("AJ3","User");					
-		$sheet->setCellValue("AK3","Hr");					
-
-		$sheet->setCellValue("AL3","RM");
-		$sheet->setCellValue("AM3","RM");
-		$sheet->setCellValue("AN3","RM");
-		$sheet->setCellValue("AO3","RM");
-		$sheet->setCellValue("AP3","RM");
-		$sheet->setCellValue("AQ3","RM");
-
-		$sheet->setCellValue("AR3","Utilities");
-		$sheet->setCellValue("AS3","Description");
-		$sheet->setCellValue("AT3","Total");				
-		$sheet->setCellValue("AU3","Balance");				
+		$sheet->setCellValue("CH3","Utilities");
+		$sheet->setCellValue("CI3","Description");
+		$sheet->setCellValue("CJ3","Total");				
+		$sheet->setCellValue("CK3","Balance");				
 		// foreach($cellHeader as $no=>$headerColname)
 		// {
 		// 	$sheet->setCellValue($currX.$currY,$headerColname);
@@ -298,7 +352,7 @@ class Controller_ExpExcel
 		// $allCells->getAlignment()->setWrapText(true);
 		// $allCells->getBorders()->getAllBorders()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
 		$sheet->setCellValue("B4", "Monthly Revenue (Previous Balance)");
-		$sheet->setCellValue("AU4", $this->floatVal($data['balance']));
+		$sheet->setCellValue("CK4", $this->floatVal($data['balance']));
 		
 		$startDataX = "A";
 		$startDataY = "5";
@@ -307,7 +361,7 @@ class Controller_ExpExcel
 		$totals = array();
 		
 		$floatArray = array(
-			"B","D","F","H","K","N","Q","T","W","Z","AC","AF", "AI", "AL","AM","AN","AO","AP","AQ","AT","AU",
+			"B","D","F","H","J","L", "M","P","S","V","Y","AB","AE","AH", "AK", "AN", "AQ","AT","AW", "AZ", "BC", "BF", "BI", "BL", "BM", "BN", "BO", "BP", "BQ", "BR", "BS", "BT", "BU", "BX", "BY"
 			);
 
 		foreach(range(1, date('t', strtotime($year.'-'.$month.'-01'))) as $day){
@@ -325,9 +379,17 @@ class Controller_ExpExcel
 			$totals[$no++] += 	$this->floatVal($report[$date]['Membership']['total']);
 			$totals[$no++] +=	$this->totalVal($report[$date]['Membership']['total_users']);
 			$totals[$no++] +=	$this->floatVal($report[$date]['Membership']['student']['nonmember']['total']);
-			$totals[$no++] +=	$this->totalVal($report[$date]['Membership']['student']['nonmember']['total_users']);
+			$totals[$no++] +=	$this->totalVal($report[$date]['Membership']['student']['nonmember']['total_users']);			
+			$totals[$no++] +=	$this->floatVal($report[$date]['Membership']['nonstudent']['nonmember']['total']);
+			$totals[$no++] +=	$this->totalVal($report[$date]['Membership']['nonstudent']['nonmember']['total_users']);
 			$totals[$no++] +=	$this->floatVal($report[$date]['Membership']['adult']['nonmember']['total']);
-			$totals[$no++] +=	$this->totalVal($report[$date]['Membership']['adult']['nonmember']['total_users']);
+			$totals[$no++] +=	$this->totalVal($report[$date]['Membership']['adult']['nonmember']['total_users']);			
+
+			// $totals[$no++] +=	$this->floatVal($report[$date]['Membership']['OKU']['nonmember']['total']);
+			// $totals[$no++] +=	$this->totalVal($report[$date]['Membership']['OKU']['nonmember']['total_users']);			
+
+			// $totals[$no++] +=	$this->floatVal($report[$date]['Membership']['WE']['nonmember']['total']);
+			// $totals[$no++] +=	$this->totalVal($report[$date]['Membership']['WE']['nonmember']['total_users']);
 
 			$totals[$no++] +=	$this->floatVal($report[$date]['PC']['day']['total']);
 			$totals[$no++] +=	$this->totalVal($report[$date]['PC']['day']['total_users']);
@@ -337,13 +399,35 @@ class Controller_ExpExcel
 			$totals[$no++] +=	$this->floatVal($report[$date]['PC']['day']['student']['member']['total_quantity']);
 			$totals[$no++] +=	$this->floatVal($report[$date]['PC']['day']['student']['nonmember']['total']);
 			$totals[$no++] +=	$this->totalVal($report[$date]['PC']['day']['student']['nonmember']['total_users']);
-			$totals[$no++] +=	$this->floatVal($report[$date]['PC']['day']['student']['nonmember']['total_quantity']);
+			$totals[$no++] +=	$this->floatVal($report[$date]['PC']['day']['student']['nonmember']['total_quantity']);			
+
+			$totals[$no++] +=	$this->floatVal($report[$date]['PC']['day']['nonstudent']['member']['total']);
+			$totals[$no++] +=	$this->totalVal($report[$date]['PC']['day']['nonstudent']['member']['total_users']);
+			$totals[$no++] +=	$this->floatVal($report[$date]['PC']['day']['nonstudent']['member']['total_quantity']);
+			$totals[$no++] +=	$this->floatVal($report[$date]['PC']['day']['nonstudent']['nonmember']['total']);
+			$totals[$no++] +=	$this->totalVal($report[$date]['PC']['day']['nonstudent']['nonmember']['total_users']);
+			$totals[$no++] +=	$this->floatVal($report[$date]['PC']['day']['nonstudent']['nonmember']['total_quantity']);
+
 			$totals[$no++] +=	$this->floatVal($report[$date]['PC']['day']['adult']['member']['total']);
 			$totals[$no++] +=	$this->totalVal($report[$date]['PC']['day']['adult']['member']['total_users']);
 			$totals[$no++] +=	$this->floatVal($report[$date]['PC']['day']['adult']['member']['total_quantity']);
 			$totals[$no++] +=	$this->floatVal($report[$date]['PC']['day']['adult']['nonmember']['total']);
 			$totals[$no++] +=	$this->totalVal($report[$date]['PC']['day']['adult']['nonmember']['total_users']);
-			$totals[$no++] +=	$this->floatVal($report[$date]['PC']['day']['adult']['nonmember']['total_quantity']);			
+			$totals[$no++] +=	$this->floatVal($report[$date]['PC']['day']['adult']['nonmember']['total_quantity']);	
+
+			$totals[$no++] +=	$this->floatVal($report[$date]['PC']['day']['OKU']['member']['total']);
+			$totals[$no++] +=	$this->totalVal($report[$date]['PC']['day']['OKU']['member']['total_users']);
+			$totals[$no++] +=	$this->floatVal($report[$date]['PC']['day']['OKU']['member']['total_quantity']);			
+			$totals[$no++] +=	$this->floatVal($report[$date]['PC']['day']['OKU']['member']['total']);
+			$totals[$no++] +=	$this->totalVal($report[$date]['PC']['day']['OKU']['nonmember']['total_users']);
+			$totals[$no++] +=	$this->floatVal($report[$date]['PC']['day']['OKU']['nonmember']['total_quantity']);				
+
+			$totals[$no++] +=	$this->floatVal($report[$date]['PC']['day']['WE']['member']['total']);
+			$totals[$no++] +=	$this->totalVal($report[$date]['PC']['day']['WE']['member']['total_users']);
+			$totals[$no++] +=	$this->floatVal($report[$date]['PC']['day']['WE']['member']['total_quantity']);			
+			$totals[$no++] +=	$this->floatVal($report[$date]['PC']['day']['WE']['nonmember']['total']);
+			$totals[$no++] +=	$this->totalVal($report[$date]['PC']['day']['WE']['nonmember']['total_users']);
+			$totals[$no++] +=	$this->floatVal($report[$date]['PC']['day']['WE']['nonmember']['total_quantity']);					
 
 			$totals[$no++] +=	$this->floatVal($report[$date]['PC']['night']['total']);
 			$totals[$no++] +=	$this->totalVal($report[$date]['PC']['night']['total_users']);
@@ -354,12 +438,34 @@ class Controller_ExpExcel
 			$totals[$no++] +=	$this->floatVal($report[$date]['PC']['night']['student']['nonmember']['total']);
 			$totals[$no++] +=	$this->totalVal($report[$date]['PC']['night']['student']['nonmember']['total_users']);
 			$totals[$no++] +=	$this->floatVal($report[$date]['PC']['night']['student']['nonmember']['total_quantity']);
+
+			$totals[$no++] +=	$this->floatVal($report[$date]['PC']['night']['nonstudent']['member']['total']);
+			$totals[$no++] +=	$this->totalVal($report[$date]['PC']['night']['nonstudent']['member']['total_users']);
+			$totals[$no++] +=	$this->floatVal($report[$date]['PC']['night']['nonstudent']['member']['total_quantity']);
+			$totals[$no++] +=	$this->floatVal($report[$date]['PC']['night']['nonstudent']['nonmember']['total']);
+			$totals[$no++] +=	$this->totalVal($report[$date]['PC']['night']['nonstudent']['nonmember']['total_users']);
+			$totals[$no++] +=	$this->floatVal($report[$date]['PC']['night']['nonstudent']['nonmember']['total_quantity']);
+
 			$totals[$no++] +=	$this->floatVal($report[$date]['PC']['night']['adult']['member']['total']);
 			$totals[$no++] +=	$this->totalVal($report[$date]['PC']['night']['adult']['member']['total_users']);
 			$totals[$no++] +=	$this->floatVal($report[$date]['PC']['night']['adult']['member']['total_quantity']);
 			$totals[$no++] +=	$this->floatVal($report[$date]['PC']['night']['adult']['nonmember']['total']);
 			$totals[$no++] +=	$this->totalVal($report[$date]['PC']['night']['adult']['nonmember']['total_users']);
 			$totals[$no++] +=	$this->floatVal($report[$date]['PC']['night']['adult']['nonmember']['total_quantity']);
+
+			$totals[$no++] +=	$this->floatVal($report[$date]['PC']['night']['OKU']['member']['total']);
+			$totals[$no++] +=	$this->totalVal($report[$date]['PC']['night']['OKU']['member']['total_users']);
+			$totals[$no++] +=	$this->floatVal($report[$date]['PC']['night']['OKU']['member']['total_quantity']);			
+			$totals[$no++] +=	$this->floatVal($report[$date]['PC']['night']['OKU']['member']['total']);
+			$totals[$no++] +=	$this->totalVal($report[$date]['PC']['night']['OKU']['nonmember']['total_users']);
+			$totals[$no++] +=	$this->floatVal($report[$date]['PC']['night']['OKU']['nonmember']['total_quantity']);				
+
+			$totals[$no++] +=	$this->floatVal($report[$date]['PC']['night']['WE']['member']['total']);
+			$totals[$no++] +=	$this->totalVal($report[$date]['PC']['night']['WE']['member']['total_users']);
+			$totals[$no++] +=	$this->floatVal($report[$date]['PC']['night']['WE']['member']['total_quantity']);			
+			$totals[$no++] +=	$this->floatVal($report[$date]['PC']['night']['WE']['nonmember']['total']);
+			$totals[$no++] +=	$this->totalVal($report[$date]['PC']['night']['WE']['nonmember']['total_users']);
+			$totals[$no++] +=	$this->floatVal($report[$date]['PC']['night']['WE']['nonmember']['total_quantity']);					
 				
 			$totals[$no++] +=	$this->floatVal(($report[$date]['Print Color']['total'] ? : 0) + ($report[$date]['Black And White']['total'] ? : 0));
 			$totals[$no++] +=	$this->floatVal($report[$date]['Print Color']['total']);
@@ -367,6 +473,11 @@ class Controller_ExpExcel
 
 			$totals[$no++] +=	$this->floatVal($report[$date]['Scan']['total']);
 			$totals[$no++] +=	$this->floatVal($report[$date]['Laminate']['total']);
+			$totals[$no++] +=	$this->floatVal($report[$date]['Laminate IC']['total']);
+
+			$totals[$no++] +=	$this->floatVal($report[$date]['Package A']['total']);
+			$totals[$no++] +=	$this->floatVal($report[$date]['Package B']['total']);
+			$totals[$no++] +=	$this->floatVal($report[$date]['Package C']['total']);
 
 			$totals[$no++] +=	$this->floatVal($report[$date]['Other']['total']);
 
@@ -382,9 +493,15 @@ class Controller_ExpExcel
 				$this->floatVal($report[$date]['Membership']['total']),
 				$this->totalVal($report[$date]['Membership']['total_users']),
 				$this->floatVal($report[$date]['Membership']['student']['nonmember']['total']),
-				$this->totalVal($report[$date]['Membership']['student']['nonmember']['total_users']),
+				$this->totalVal($report[$date]['Membership']['student']['nonmember']['total_users']),				
+				$this->floatVal($report[$date]['Membership']['nonstudent']['nonmember']['total']),
+				$this->totalVal($report[$date]['Membership']['nonstudent']['nonmember']['total_users']),
 				$this->floatVal($report[$date]['Membership']['adult']['nonmember']['total']),
-				$this->totalVal($report[$date]['Membership']['adult']['nonmember']['total_users']),
+				$this->totalVal($report[$date]['Membership']['adult']['nonmember']['total_users']),				
+				// $this->floatVal($report[$date]['Membership']['OKU']['nonmember']['total']),
+				// $this->totalVal($report[$date]['Membership']['OKU']['nonmember']['total_users']),				
+				// $this->floatVal($report[$date]['Membership']['WE']['nonmember']['total']),
+				// $this->totalVal($report[$date]['Membership']['WE']['nonmember']['total_users']),
 
 				$this->floatVal($report[$date]['PC']['day']['total']),
 				$this->totalVal($report[$date]['PC']['day']['total_users']),
@@ -395,12 +512,34 @@ class Controller_ExpExcel
 				$this->floatVal($report[$date]['PC']['day']['student']['nonmember']['total']),
 				$this->totalVal($report[$date]['PC']['day']['student']['nonmember']['total_users']),
 				$this->floatVal($report[$date]['PC']['day']['student']['nonmember']['total_quantity']),
+
+				$this->floatVal($report[$date]['PC']['day']['nonstudent']['member']['total']),
+				$this->totalVal($report[$date]['PC']['day']['nonstudent']['member']['total_users']),
+				$this->floatVal($report[$date]['PC']['day']['nonstudent']['member']['total_quantity']),
+				$this->floatVal($report[$date]['PC']['day']['nonstudent']['nonmember']['total']),
+				$this->totalVal($report[$date]['PC']['day']['nonstudent']['nonmember']['total_users']),
+				$this->floatVal($report[$date]['PC']['day']['nonstudent']['nonmember']['total_quantity']),				
+
 				$this->floatVal($report[$date]['PC']['day']['adult']['member']['total']),
 				$this->totalVal($report[$date]['PC']['day']['adult']['member']['total_users']),
 				$this->floatVal($report[$date]['PC']['day']['adult']['member']['total_quantity']),
 				$this->floatVal($report[$date]['PC']['day']['adult']['nonmember']['total']),
 				$this->totalVal($report[$date]['PC']['day']['adult']['nonmember']['total_users']),
-				$this->floatVal($report[$date]['PC']['day']['adult']['nonmember']['total_quantity']),			
+				$this->floatVal($report[$date]['PC']['day']['adult']['nonmember']['total_quantity']),				
+
+				$this->floatVal($report[$date]['PC']['day']['OKU']['member']['total']),
+				$this->totalVal($report[$date]['PC']['day']['OKU']['member']['total_users']),
+				$this->floatVal($report[$date]['PC']['day']['OKU']['member']['total_quantity']),
+				$this->floatVal($report[$date]['PC']['day']['OKU']['nonmember']['total']),
+				$this->totalVal($report[$date]['PC']['day']['OKU']['nonmember']['total_users']),
+				$this->floatVal($report[$date]['PC']['day']['OKU']['nonmember']['total_quantity']),				
+
+				$this->floatVal($report[$date]['PC']['day']['WE']['member']['total']),
+				$this->totalVal($report[$date]['PC']['day']['WE']['member']['total_users']),
+				$this->floatVal($report[$date]['PC']['day']['WE']['member']['total_quantity']),
+				$this->floatVal($report[$date]['PC']['day']['WE']['nonmember']['total']),
+				$this->totalVal($report[$date]['PC']['day']['WE']['nonmember']['total_users']),
+				$this->floatVal($report[$date]['PC']['day']['WE']['nonmember']['total_quantity']),			
 
 				$this->floatVal($report[$date]['PC']['night']['total']),
 				$this->totalVal($report[$date]['PC']['night']['total_users']),
@@ -411,12 +550,34 @@ class Controller_ExpExcel
 				$this->floatVal($report[$date]['PC']['night']['student']['nonmember']['total']),
 				$this->totalVal($report[$date]['PC']['night']['student']['nonmember']['total_users']),
 				$this->floatVal($report[$date]['PC']['night']['student']['nonmember']['total_quantity']),
+
+				$this->floatVal($report[$date]['PC']['night']['nonstudent']['member']['total']),
+				$this->totalVal($report[$date]['PC']['night']['nonstudent']['member']['total_users']),
+				$this->floatVal($report[$date]['PC']['night']['nonstudent']['member']['total_quantity']),
+				$this->floatVal($report[$date]['PC']['night']['nonstudent']['nonmember']['total']),
+				$this->totalVal($report[$date]['PC']['night']['nonstudent']['nonmember']['total_users']),
+				$this->floatVal($report[$date]['PC']['night']['nonstudent']['nonmember']['total_quantity']),	
+
 				$this->floatVal($report[$date]['PC']['night']['adult']['member']['total']),
 				$this->totalVal($report[$date]['PC']['night']['adult']['member']['total_users']),
 				$this->floatVal($report[$date]['PC']['night']['adult']['member']['total_quantity']),
 				$this->floatVal($report[$date]['PC']['night']['adult']['nonmember']['total']),
 				$this->totalVal($report[$date]['PC']['night']['adult']['nonmember']['total_users']),
 				$this->floatVal($report[$date]['PC']['night']['adult']['nonmember']['total_quantity']),
+
+				$this->floatVal($report[$date]['PC']['night']['OKU']['member']['total']),
+				$this->totalVal($report[$date]['PC']['night']['OKU']['member']['total_users']),
+				$this->floatVal($report[$date]['PC']['night']['OKU']['member']['total_quantity']),
+				$this->floatVal($report[$date]['PC']['night']['OKU']['nonmember']['total']),
+				$this->totalVal($report[$date]['PC']['night']['OKU']['nonmember']['total_users']),
+				$this->floatVal($report[$date]['PC']['night']['OKU']['nonmember']['total_quantity']),				
+
+				$this->floatVal($report[$date]['PC']['night']['WE']['member']['total']),
+				$this->totalVal($report[$date]['PC']['night']['WE']['member']['total_users']),
+				$this->floatVal($report[$date]['PC']['night']['WE']['member']['total_quantity']),
+				$this->floatVal($report[$date]['PC']['night']['WE']['nonmember']['total']),
+				$this->totalVal($report[$date]['PC']['night']['WE']['nonmember']['total_users']),
+				$this->floatVal($report[$date]['PC']['night']['WE']['nonmember']['total_quantity']),					
 				
 				$this->floatVal(($report[$date]['Print Color']['total'] ? : 0) + ($report[$date]['Black And White']['total'] ? : 0)),
 				$this->floatVal($report[$date]['Print Color']['total']),
@@ -424,6 +585,11 @@ class Controller_ExpExcel
 
 				$this->floatVal($report[$date]['Scan']['total']),
 				$this->floatVal($report[$date]['Laminate']['total']),
+				$this->floatVal($report[$date]['Laminate IC']['total']),
+
+				$this->floatVal($report[$date]['Package A']['total']),
+				$this->floatVal($report[$date]['Package B']['total']),
+				$this->floatVal($report[$date]['Package C']['total']),
 
 				$this->floatVal($report[$date]['Other']['total']),
 
@@ -444,7 +610,7 @@ class Controller_ExpExcel
              	true          			 //    we want to set these values (default is A1))
         	);
 
-        	$sheet->getStyle('B'.$startDataY.":AU".$startDataY)
+        	$sheet->getStyle('B'.$startDataY.":CK".$startDataY)
 		    ->getNumberFormat()
 		    ->setFormatCode(
 		        PHPExcel_Style_NumberFormat::FORMAT_NUMBER
@@ -464,8 +630,8 @@ class Controller_ExpExcel
 		}	
 
 		//var_dump($totals);
-		//var_dump($startDataY);
-
+		// var_dump($startDataY);
+// die;
 		$sheet->fromArray(
 			$totals, NULL, 'A'.($startDataY), true
 			);			

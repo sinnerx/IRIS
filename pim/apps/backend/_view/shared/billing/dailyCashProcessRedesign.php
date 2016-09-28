@@ -374,26 +374,29 @@
 			  echo $site->siteName; ?> Monthly Cash Report for <?php echo $selectYear; ?>/<?php echo $selectMonth; ?>
 		</div>
 		<div class='well well-sm'>
-			<a href="#" class="btn btn-info btn-xs showhidecol" role="button" data-row="3" data-col="2:1,2:4,2:7">Member</a>
-			<a href="#" class="btn btn-info btn-xs showhidecol" role="button" data-row="3" data-col="3:1,5:9,8:22">PC Day</a>
-			<a href="#" class="btn btn-info btn-xs showhidecol" role="button" data-row="3" data-col="4:1,10:14,23:37" >PC Night</a>
-			<a href="#" class="btn btn-info btn-xs showhidecol" role="button" data-row="3" data-col="5:1,15:17,38:40" >Print</a>
-			<a href="#" class="btn btn-info btn-xs showhidecol" role="button" data-row="3" data-col="6:1,18:1,41:1" >Scan</a>
-			<a href="#" class="btn btn-info btn-xs showhidecol" role="button" data-row="3" data-col="7:1,19:1,42:1" >Laminate</a>
-			<a href="#" class="btn btn-info btn-xs showhidecol" role="button" data-row="3" data-col="8:10,20:22,43:45" >Other</a>
-			<a href="#" class="btn btn-info btn-xs showhidecol" role="button" data-row="3" data-col="11:1,23:24,46:47" >Day End</a>
+			<a href="#" class="btn btn-info btn-xs showhidecol" role="button" data-row="3" data-col="2:1,2:5,2:9">Member</a>
+			<a href="#" class="btn btn-info btn-xs showhidecol" role="button" data-row="3" data-col="3:1,6:16,10:42">PC Day</a>
+			<a href="#" class="btn btn-info btn-xs showhidecol" role="button" data-row="3" data-col="4:1,17:27,43:75" >PC Night</a>
+			<a href="#" class="btn btn-info btn-xs showhidecol" role="button" data-row="3" data-col="5:1,28:30,76:78" >Print</a>
+			<a href="#" class="btn btn-info btn-xs showhidecol" role="button" data-row="3" data-col="6:1,31:31,79:79" >Scan</a>
+			<a href="#" class="btn btn-info btn-xs showhidecol" role="button" data-row="3" data-col="7:1,32:33,80:81" >Laminate</a>
+			<a href="#" class="btn btn-info btn-xs showhidecol" role="button" data-row="3" data-col="8:1,34:37,82:84" >Package</a>
+			<a href="#" class="btn btn-info btn-xs showhidecol" role="button" data-row="3" data-col="9:11,38:40,85:87" >Other</a>
+			<a href="#" class="btn btn-info btn-xs showhidecol" role="button" data-row="3" data-col="12:1,41:42,88:89" >Day End</a>
 		</div>
 		<div class="table-responsive">
 			<table class='table b-t b-light custom-table'>
 
 				<tr class="thead-bg">	
 					<th></th> 
-					<th colspan="6" id="a1">Member</th>
-					<th colspan="15" id="b1">PC Day</th>
-					<th colspan="15" id="c1">PC Night</th>
+					<th colspan="8" id="a1">Member</th>
+					<th colspan="33" id="b1">PC Day</th>
+					<th colspan="33" id="c1">PC Night</th>
 					<th colspan="3" id="d1">Print</th>
 					<th>Scan</th>	
-					<th>Laminate</th>	
+					<th colspan="2" id="e1">Laminate</th>	
+						
+					<th colspan="3" id="f1">Package</th>	
 					<th>Other</th>		
 					<th></th><th></th>
 					<th colspan="2">Day End</th>
@@ -403,24 +406,40 @@
 					<th class="skip-top"></th> 		
 					<th colspan="2"><a id ="a2" href="#" onclick='table.toggleExpand();' class='fa fa-plus-square pull-right' style='font-size:13px;'></a>Total</th>
 					<th class="billing-column-member" colspan="2">Student</th>	
+					<th class="billing-column-member" colspan="2">Non-Student</th>	
 					<th class="billing-column-member" colspan="2">Adult</th>
+
 
 					<th colspan="3"><a id ="b2" href="#" onclick='table.toggleExpand();' class='fa fa-plus-square pull-right' style='font-size:13px;'></a>Total</th>
 					<th class="billing-column-pc-day" colspan="3">Student Member</th>
-					<th class="billing-column-pc-day" colspan="3">Student nonMember</th>
+					<th class="billing-column-pc-day" colspan="3">Student nonMember</th>					
+					<th class="billing-column-pc-day" colspan="3">Non-Student Member</th>
+					<th class="billing-column-pc-day" colspan="3">Non-Student Non-Member</th>
 					<th class="billing-column-pc-day" colspan="3">Adult Member</th>
 					<th class="billing-column-pc-day" colspan="3">Adult NonMember</th>
+					<th class="billing-column-pc-day" colspan="3">OKU Member</th>
+					<th class="billing-column-pc-day" colspan="3">OKU NonMember</th>
+					<th class="billing-column-pc-day" colspan="3">Elderly Member</th>
+					<th class="billing-column-pc-day" colspan="3">Elderly NonMember</th>
 
-					<th colspan="3"><a id ="c2" href="#" onclick='table.toggleExpand();' class='fa fa-plus-square pull-right' style='font-size:13px;'></a>Total</th>
+					<th colspan="3"><a id ="c2" href="#" onclick='table.toggleExpand();' class='fa fa-plus-square pull-right' style='font-size:13px;'></a>Total NIGHT</th>
 					<th class="billing-column-pc-night" colspan="3">Student Member</th>
-					<th class="billing-column-pc-night" colspan="3">Student nonMember</th>
+					<th class="billing-column-pc-night" colspan="3">Student nonMember</th>					
+					<th class="billing-column-pc-night" colspan="3">Non-Student Member</th>
+					<th class="billing-column-pc-night" colspan="3">Non-Student Non-Member</th>
 					<th class="billing-column-pc-night" colspan="3">Adult Member</th>
 					<th class="billing-column-pc-night" colspan="3">Adult NonMember</th>
+					<th class="billing-column-pc-night" colspan="3">OKU Member</th>
+					<th class="billing-column-pc-night" colspan="3">OKU NonMember</th>
+					<th class="billing-column-pc-night" colspan="3">Elderly Member</th>
+					<th class="billing-column-pc-night" colspan="3">Elderly NonMember</th>
 
 					<th><a id ="d2" href="#" onclick='table.toggleExpand();' class='fa fa-plus-square pull-right' style='font-size:13px;'></a>Total</th>	
 					<th class="billing-column-print">B/W</th>	
 					<th class="billing-column-print">Color</th>	
-					<th></th><th></th><th></th><th></th><th></th><th></th><th></th>
+					<th></th> <th>Normal</th> <th>IC</th>
+					<th>A</th> <th>B</th> <th>C</th>
+					<th></th><th></th><th></th><th></th><th></th>
 				</tr>			
 
 				<tr class="thead-bg">	
@@ -428,26 +447,40 @@
 					<th>RM</th> <th>User</th> 
 					<th class="billing-column-member">RM</th> <th class="billing-column-member">User</th>	
 					<th class="billing-column-member">RM</th> <th class="billing-column-member">User</th> 
+					<th class="billing-column-member">RM</th> <th class="billing-column-member">User</th> 
 					
 					<th>RM</th> <th>User</th> <th>Hr</th> 
 					<th class="billing-column-pc-day">RM</th>	<th class="billing-column-pc-day">User</th> <th class="billing-column-pc-day">Hr</th>	
 					<th class="billing-column-pc-day">RM</th>	<th class="billing-column-pc-day">User</th> <th class="billing-column-pc-day">Hr</th>	
 					<th class="billing-column-pc-day">RM</th>	<th class="billing-column-pc-day">User</th> <th class="billing-column-pc-day">Hr</th>	
 					<th class="billing-column-pc-day">RM</th>	<th class="billing-column-pc-day">User</th> <th class="billing-column-pc-day">Hr</th>	
+					<th class="billing-column-pc-day">RM</th>	<th class="billing-column-pc-day">User</th> <th class="billing-column-pc-day">Hr</th>	
+					<th class="billing-column-pc-day">RM</th>	<th class="billing-column-pc-day">User</th> <th class="billing-column-pc-day">Hr</th>	
+					<th class="billing-column-pc-day">RM</th>	<th class="billing-column-pc-day">User</th> <th class="billing-column-pc-day">Hr</th>	
+					<th class="billing-column-pc-day">RM</th>	<th class="billing-column-pc-day">User</th> <th class="billing-column-pc-day">Hr</th>	
+					<th class="billing-column-pc-day">RM</th>	<th class="billing-column-pc-day">User</th> <th class="billing-column-pc-day">Hr</th>	
+					<th class="billing-column-pc-day">RM</th>	<th class="billing-column-pc-day">User</th> <th class="billing-column-pc-day">Hr</th>	
 					
-					<th>RM</th>	<th>User</th> <th>Hr</th>	
+					<th>RM NIGHT</th>	<th>User</th> <th>Hr</th>	
+					<th class="billing-column-pc-night">RM</th>	<th class="billing-column-pc-night">User</th> <th class="billing-column-pc-night">Hr</th>
+					<th class="billing-column-pc-night">RM</th>	<th class="billing-column-pc-night">User</th> <th class="billing-column-pc-night">Hr</th>
+					<th class="billing-column-pc-night">RM</th>	<th class="billing-column-pc-night">User</th> <th class="billing-column-pc-night">Hr</th>
+					<th class="billing-column-pc-night">RM</th>	<th class="billing-column-pc-night">User</th> <th class="billing-column-pc-night">Hr</th>
+					<th class="billing-column-pc-night">RM</th>	<th class="billing-column-pc-night">User</th> <th class="billing-column-pc-night">Hr</th>
+					<th class="billing-column-pc-night">RM</th>	<th class="billing-column-pc-night">User</th> <th class="billing-column-pc-night">Hr</th>
 					<th class="billing-column-pc-night">RM</th>	<th class="billing-column-pc-night">User</th> <th class="billing-column-pc-night">Hr</th>
 					<th class="billing-column-pc-night">RM</th>	<th class="billing-column-pc-night">User</th> <th class="billing-column-pc-night">Hr</th>
 					<th class="billing-column-pc-night">RM</th>	<th class="billing-column-pc-night">User</th> <th class="billing-column-pc-night">Hr</th>
 					<th class="billing-column-pc-night">RM</th>	<th class="billing-column-pc-night">User</th> <th class="billing-column-pc-night">Hr</th>
 										
-					<th>RM</th>	<th class="billing-column-print">RM</th>	<th class="billing-column-print">RM</th>	<th>RM</th>	<th>RM</th>	
+					<th>RM</th>	<th class="billing-column-print">RM</th>	<th class="billing-column-print">RM</th>	<th>RM</th> <th>RM</th>	<th>RM</th>	
+					<th>RM</th> <th>RM</th> <th>RM</th>
 					<th>RM</th>	<th>Utilities</th>	<th>Description </th>	 <th>Total</th>	<th>Balance</th>
 				</tr>
 
 				<tr class="skip-border">					
 					<td><?php echo date('d', strtotime($alldate[0]))  ?></td> 
-					<td  id="e1" colspan="45"> Monthly Revenue (Previous Balance) </td>
+					<td  id="e1" colspan="87"> Monthly Revenue (Previous Balance) </td>
 					<td><?php echo number_format($balance, 2, '.', '');
 					?></td>
 				</tr>
@@ -481,9 +514,11 @@ $total = function($val = null)
 				<td><?php echo $amount = $float($report[$date]['Membership']['total']); $totals[$no++] += $amount;?></td>
 				<td><?php echo $amount = $total($report[$date]['Membership']['total_users']); $totals[$no++] += $amount;?></td>
 				<td><?php echo $amount = $float($report[$date]['Membership']['student']['nonmember']['total']); $totals[$no++] += $amount;?></td>
-				<td><?php echo $amount = $total($report[$date]['Membership']['student']['nonmember']['total_users']); $totals[$no++] += $amount;?></td>
+				<td><?php echo $amount = $total($report[$date]['Membership']['student']['nonmember']['total_users']); $totals[$no++] += $amount;?></td>				
+				<td><?php echo $amount = $float($report[$date]['Membership']['nonstudent']['nonmember']['total']); $totals[$no++] += $amount;?></td>
+				<td><?php echo $amount = $total($report[$date]['Membership']['nonstudent']['nonmember']['total_users']); $totals[$no++] += $amount;?></td>
 				<td><?php echo $amount = $float($report[$date]['Membership']['adult']['nonmember']['total']); $totals[$no++] += $amount;?></td>
-				<td><?php echo $amount = $total($report[$date]['Membership']['adult']['nonmember']['total_users']); $totals[$no++] += $amount;?></td>
+				<td><?php echo $amount = $total($report[$date]['Membership']['adult']['nonmember']['total_users']); $totals[$no++] += $amount;?></td>			
 
 				<td><?php echo $amount = $float($report[$date]['PC']['day']['total']); $totals[$no++] += $amount;?></td>
 				<td><?php echo $amount = $total($report[$date]['PC']['day']['total_users']); $totals[$no++] += $amount;?></td>
@@ -493,13 +528,35 @@ $total = function($val = null)
 				<td><?php echo $amount = $float($report[$date]['PC']['day']['student']['member']['total_quantity']); $totals[$no++] += $amount;?></td>
 				<td><?php echo $amount = $float($report[$date]['PC']['day']['student']['nonmember']['total']); $totals[$no++] += $amount;?></td>
 				<td><?php echo $amount = $total($report[$date]['PC']['day']['student']['nonmember']['total_users']); $totals[$no++] += $amount;?></td>
-				<td><?php echo $amount = $float($report[$date]['PC']['day']['student']['nonmember']['total_quantity']); $totals[$no++] += $amount;?></td>
+				<td><?php echo $amount = $float($report[$date]['PC']['day']['student']['nonmember']['total_quantity']); $totals[$no++] += $amount;?></td>				
+
+				<td><?php echo $amount = $float($report[$date]['PC']['day']['nonstudent']['member']['total']); $totals[$no++] += $amount;?></td>
+				<td><?php echo $amount = $total($report[$date]['PC']['day']['nonstudent']['member']['total_users']); $totals[$no++] += $amount;?></td>
+				<td><?php echo $amount = $float($report[$date]['PC']['day']['nonstudent']['member']['total_quantity']); $totals[$no++] += $amount;?></td>
+				<td><?php echo $amount = $float($report[$date]['PC']['day']['nonstudent']['nonmember']['total']); $totals[$no++] += $amount;?></td>
+				<td><?php echo $amount = $total($report[$date]['PC']['day']['nonstudent']['nonmember']['total_users']); $totals[$no++] += $amount;?></td>
+				<td><?php echo $amount = $float($report[$date]['PC']['day']['nonstudent']['nonmember']['total_quantity']); $totals[$no++] += $amount;?></td>
+
 				<td><?php echo $amount = $float($report[$date]['PC']['day']['adult']['member']['total']); $totals[$no++] += $amount;?></td>
 				<td><?php echo $amount = $total($report[$date]['PC']['day']['adult']['member']['total_users']); $totals[$no++] += $amount;?></td>
 				<td><?php echo $amount = $float($report[$date]['PC']['day']['adult']['member']['total_quantity']); $totals[$no++] += $amount;?></td>
+
 				<td><?php echo $amount = $float($report[$date]['PC']['day']['adult']['nonmember']['total']); $totals[$no++] += $amount;?></td>
 				<td><?php echo $amount = $total($report[$date]['PC']['day']['adult']['nonmember']['total_users']); $totals[$no++] += $amount;?></td>
 				<td><?php echo $amount = $float($report[$date]['PC']['day']['adult']['nonmember']['total_quantity']); $totals[$no++] += $amount;?></td>
+
+				<td><?php echo $amount = $float($report[$date]['PC']['day']['OKU']['member']['total']); $totals[$no++] += $amount;?></td>
+				<td><?php echo $amount = $total($report[$date]['PC']['day']['OKU']['member']['total_users']); $totals[$no++] += $amount;?></td>
+				<td><?php echo $amount = $float($report[$date]['PC']['day']['OKU']['member']['total_quantity']); $totals[$no++] += $amount;?></td>	
+				<td><?php echo $amount = $float($report[$date]['PC']['day']['OKU']['nonmember']['total']); $totals[$no++] += $amount;?></td>
+				<td><?php echo $amount = $total($report[$date]['PC']['day']['OKU']['nonmember']['total_users']); $totals[$no++] += $amount;?></td>
+				<td><?php echo $amount = $float($report[$date]['PC']['day']['OKU']['nonmember']['total_quantity']); $totals[$no++] += $amount;?></td>				
+				<td><?php echo $amount = $float($report[$date]['PC']['day']['WE']['member']['total']); $totals[$no++] += $amount;?></td>
+				<td><?php echo $amount = $total($report[$date]['PC']['day']['WE']['member']['total_users']); $totals[$no++] += $amount;?></td>
+				<td><?php echo $amount = $float($report[$date]['PC']['day']['WE']['member']['total_quantity']); $totals[$no++] += $amount;?></td>				
+				<td><?php echo $amount = $float($report[$date]['PC']['day']['WE']['nonmember']['total']); $totals[$no++] += $amount;?></td>
+				<td><?php echo $amount = $total($report[$date]['PC']['day']['WE']['nonmember']['total_users']); $totals[$no++] += $amount;?></td>
+				<td><?php echo $amount = $float($report[$date]['PC']['day']['WE']['nonmember']['total_quantity']); $totals[$no++] += $amount;?></td>							
 
 				<td><?php echo $amount = $float($report[$date]['PC']['night']['total']); $totals[$no++] += $amount;?></td>
 				<td><?php echo $amount = $total($report[$date]['PC']['night']['total_users']); $totals[$no++] += $amount;?></td>
@@ -510,6 +567,14 @@ $total = function($val = null)
 				<td><?php echo $amount = $float($report[$date]['PC']['night']['student']['nonmember']['total']); $totals[$no++] += $amount;?></td>
 				<td><?php echo $amount = $total($report[$date]['PC']['night']['student']['nonmember']['total_users']); $totals[$no++] += $amount;?></td>
 				<td><?php echo $amount = $float($report[$date]['PC']['night']['student']['nonmember']['total_quantity']); $totals[$no++] += $amount;?></td>
+
+				<td><?php echo $amount = $float($report[$date]['PC']['night']['nonstudent']['member']['total']); $totals[$no++] += $amount;?></td>
+				<td><?php echo $amount = $total($report[$date]['PC']['night']['nonstudent']['member']['total_users']); $totals[$no++] += $amount;?></td>
+				<td><?php echo $amount = $float($report[$date]['PC']['night']['nonstudent']['member']['total_quantity']); $totals[$no++] += $amount;?></td>
+				<td><?php echo $amount = $float($report[$date]['PC']['night']['nonstudent']['nonmember']['total']); $totals[$no++] += $amount;?></td>
+				<td><?php echo $amount = $total($report[$date]['PC']['night']['nonstudent']['nonmember']['total_users']); $totals[$no++] += $amount;?></td>
+				<td><?php echo $amount = $float($report[$date]['PC']['night']['nonstudent']['nonmember']['total_quantity']); $totals[$no++] += $amount;?></td>
+
 				<td><?php echo $amount = $float($report[$date]['PC']['night']['adult']['member']['total']); $totals[$no++] += $amount;?></td>
 				<td><?php echo $amount = $total($report[$date]['PC']['night']['adult']['member']['total_users']); $totals[$no++] += $amount;?></td>
 				<td><?php echo $amount = $float($report[$date]['PC']['night']['adult']['member']['total_quantity']); $totals[$no++] += $amount;?></td>
@@ -517,12 +582,30 @@ $total = function($val = null)
 				<td><?php echo $amount = $total($report[$date]['PC']['night']['adult']['nonmember']['total_users']); $totals[$no++] += $amount;?></td>
 				<td><?php echo $amount = $float($report[$date]['PC']['night']['adult']['nonmember']['total_quantity']); $totals[$no++] += $amount;?></td>
 
+				<td><?php echo $amount = $float($report[$date]['PC']['night']['OKU']['member']['total']); $totals[$no++] += $amount;?></td>
+				<td><?php echo $amount = $total($report[$date]['PC']['night']['OKU']['member']['total_users']); $totals[$no++] += $amount;?></td>
+				<td><?php echo $amount = $float($report[$date]['PC']['night']['OKU']['member']['total_quantity']); $totals[$no++] += $amount;?></td>	
+				<td><?php echo $amount = $float($report[$date]['PC']['night']['OKU']['nonmember']['total']); $totals[$no++] += $amount;?></td>
+				<td><?php echo $amount = $total($report[$date]['PC']['night']['OKU']['nonmember']['total_users']); $totals[$no++] += $amount;?></td>
+				<td><?php echo $amount = $float($report[$date]['PC']['night']['OKU']['nonmember']['total_quantity']); $totals[$no++] += $amount;?></td>				
+				<td><?php echo $amount = $float($report[$date]['PC']['night']['WE']['member']['total']); $totals[$no++] += $amount;?></td>
+				<td><?php echo $amount = $total($report[$date]['PC']['night']['WE']['member']['total_users']); $totals[$no++] += $amount;?></td>
+				<td><?php echo $amount = $float($report[$date]['PC']['night']['WE']['member']['total_quantity']); $totals[$no++] += $amount;?></td>				
+				<td><?php echo $amount = $float($report[$date]['PC']['night']['WE']['nonmember']['total']); $totals[$no++] += $amount;?></td>
+				<td><?php echo $amount = $total($report[$date]['PC']['night']['WE']['nonmember']['total_users']); $totals[$no++] += $amount;?></td>
+				<td><?php echo $amount = $float($report[$date]['PC']['night']['WE']['nonmember']['total_quantity']); $totals[$no++] += $amount;?></td>					
+
 				<td><?php echo $amount = $float(($report[$date]['Print Color']['total'] ? : 0) + ($report[$date]['Black And White']['total'] ? : 0)); $totals[$no++] += $amount;?></td>
 				<td><?php echo $amount = $float($report[$date]['Print Color']['total']); $totals[$no++] += $amount;?></td>
 				<td><?php echo $amount = $float($report[$date]['Black And White']['total']); $totals[$no++] += $amount;?></td>
 
 				<td><?php echo $amount = $float($report[$date]['Scan']['total']); $totals[$no++] += $amount;?></td>
 				<td><?php echo $amount = $float($report[$date]['Laminate']['total']); $totals[$no++] += $amount;?></td>
+				<td><?php echo $amount = $float($report[$date]['Laminate IC']['total']); $totals[$no++] += $amount;?></td>
+
+				<td><?php echo $amount = $float($report[$date]['Package A']['total']); $totals[$no++] += $amount;?></td>
+				<td><?php echo $amount = $float($report[$date]['Package B']['total']); $totals[$no++] += $amount;?></td>
+				<td><?php echo $amount = $float($report[$date]['Package C']['total']); $totals[$no++] += $amount;?></td>
 
 				<td><?php echo $amount = $float($report[$date]['Other']['total']); $totals[$no++] += $amount;?></td>
 				<td></td>
