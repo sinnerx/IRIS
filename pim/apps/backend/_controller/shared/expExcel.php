@@ -62,10 +62,13 @@ class Controller_ExpExcel
 		// Group by date, itemCOde by item codes.
 		$report = array();
 
+		$users = array();
 		foreach($transactionItems as $row)
 		{
 			$date = date('Y-m-d', strtotime($row['billingTransactionDate']));
 
+			//print_r($row);
+			//die;			
 			// if no code was configured for this item, set it to other.
 			if($row['billingItemCodeName'])
 				$code = $row['billingItemCodeName'];
@@ -137,15 +140,103 @@ class Controller_ExpExcel
 			if(!isset($report[$date]['total']))
 				$report[$date]['total'] = 0;
 
+
 			// set.
+			$userOnThatDay = $row['billingTransactionUser'];
+			if($row['billingTransactionUser'] == 0){
+				$users[$date][$code][$time][$userType][$status][$row['billingTransactionUser']] += 1;
+				if($code == 'PC'){
+					$users[$date][$code][$time][$userType][$status]['total_users'] += 1;
+				}else{
+					$users[$date][$code][$userType][$status]['total_users'] += 1;
+				}
+				
+				//$users[$date][$code][$time]['total_users'] = $users[$date][$code][$time][$userType][$status]['total_users'];
+				
+			}else{
+				if(!isset($users[$date][$code][$time][$userType][$status][$row['billingTransactionUser']])){
+					$users[$date][$code][$time][$userType][$status][$row['billingTransactionUser']] = 1;
+					if($code == 'PC'){
+						$users[$date][$code][$time][$userType][$status]['total_users'] += 1;
+					}else{
+						$users[$date][$code][$userType][$status]['total_users'] += 1;
+					}
+					
+					//$users[$date][$code][$time]['total_users'] = $users[$date][$code][$time][$userType][$status]['total_users'];
+					
+				}
+				
+				
+			}
+
 			$transactionItemTotal = $row['billingTransactionItemPrice'] * $row['billingTransactionItemQuantity'];
 			$reference[$userType][$status]['total'] += $transactionItemTotal;
 			$reference['total'] += $transactionItemTotal;
 			$reference['total_quantity'] += $row['billingTransactionItemQuantity'];
+			// $reference['total_users'] += $counter;
 			$reference[$userType][$status]['total_quantity'] += $row['billingTransactionItemQuantity'];
+			// $reference[$userType][$status]['total_users'] += $counter;
 
 			$report[$date]['total'] += $transactionItemTotal;
 		}
+
+		
+
+		// echo '<pre>';
+		// print_r($report);
+		// print_r($users);
+		// die;
+		foreach ($users as $keyDate => $valueDate) {
+			# code...
+			//print_r($valueDate);
+			foreach ($valueDate as $keyCode => $valueCode) {
+				# code...
+				// print_r($valueCode);
+				if($keyCode == 'PC'){
+					$totalUserPC = 0;
+					foreach ($valueCode as $keyTime => $valueTime) {
+						# code...
+						// print_r($valueTime);
+						foreach ($valueTime as $keyUserType => $valueUserType) {
+							# code...
+							foreach ($valueUserType as $keyStatus => $valueStatus) {
+								# code...
+								//print_r($valueStatus);
+								$totalUserPC += $valueStatus['total_users'];
+								//assign to report array
+								$report[$keyDate][$keyCode][$keyTime][$keyUserType][$keyStatus]['total_users'] = $valueStatus['total_users'];
+							}
+							
+						}//end foreach UserTYpe
+						$users[$keyDate][$keyCode][$keyTime]['total_users'] = $totalUserPC;
+						$report[$keyDate][$keyCode][$keyTime]['total_users'] = $totalUserPC;
+					}//end foreach Time
+				}//end if
+
+				else{
+					$totalUserNonPC= 0;
+					foreach ($valueCode as $keyUserType => $valueUserType) {
+						# code...
+						foreach ($valueUserType as $keyStatus => $valueStatus) {
+								# code...
+								//print_r($valueStatus);
+								$totalUserNonPC += $valueStatus['total_users'];
+								$report[$keyDate][$keyCode][$keyUserType][$keyStatus]['total_users'] = $valueStatus['total_users'];
+							}//end foreach Status
+
+					}//end foreach UserType
+					$users[$keyDate][$keyCode]['total_users'] = $totalUserNonPC;
+					$report[$keyDate][$keyCode]['total_users'] = $totalUserNonPC;
+				}
+
+			}
+		}//end foreach
+		// $data['report'] = $report;
+		// print_r($users);
+
+		 // print_r($report);
+		// print_r(count($users['2016-04-02']['PC']['student']['member']));
+		// die;
 
 		$data['report'] = $report;
 
