@@ -305,68 +305,68 @@ class Controller_ExpExcel
 		$sheet->setCellValue("J2","Total");
 
 		$sheet->mergeCells("M2:O2"); //student
-		$sheet->setCellValue("Q2","Student Member");
+		$sheet->setCellValue("M2","Student Member");
 
 		$sheet->mergeCells("P2:R2"); //
-		$sheet->setCellValue("T2","Student NonMember");			
+		$sheet->setCellValue("P2","Student NonMember");			
 
 		$sheet->mergeCells("S2:U2"); //NONstudent
-		$sheet->setCellValue("W2","NonStudent Member");
+		$sheet->setCellValue("S2","NonStudent Member");
 
 		$sheet->mergeCells("V2:X2"); //
-		$sheet->setCellValue("Z2","NonStudent NonMember");	
+		$sheet->setCellValue("V2","NonStudent NonMember");	
 
 		$sheet->mergeCells("Y2:AA2"); //
-		$sheet->setCellValue("AC2","Adult Member");
+		$sheet->setCellValue("Y2","Adult Member");
 
 		$sheet->mergeCells("AB2:AD2"); //
-		$sheet->setCellValue("AF2","Adult NonMember");			
+		$sheet->setCellValue("AB2","Adult NonMember");			
 
 		$sheet->mergeCells("AE2:AG2"); //
-		$sheet->setCellValue("AI2","OKU Member");			
+		$sheet->setCellValue("AE2","OKU Member");			
 
 		$sheet->mergeCells("AH2:AJ2"); //
-		$sheet->setCellValue("AL2","OKU NonMember");	
+		$sheet->setCellValue("AH2","OKU NonMember");	
 
 		$sheet->mergeCells("AK2:AM2"); //
-		$sheet->setCellValue("AO2","Elderly Member");		
+		$sheet->setCellValue("AK2","Elderly Member");		
 
 		$sheet->mergeCells("AN2:AP2"); //
-		$sheet->setCellValue("AR2","Elderly NonMember");
+		$sheet->setCellValue("AN2","Elderly NonMember");
 
 		//PC Night
 		$sheet->mergeCells("AQ2:AS2"); //total
-		$sheet->setCellValue("AU2","Total");
+		$sheet->setCellValue("AQ2","Total");
 
 		$sheet->mergeCells("AT2:AV2"); //student
-		$sheet->setCellValue("AX2","Student Member");
+		$sheet->setCellValue("AT2","Student Member");
 
 		$sheet->mergeCells("AW2:AY2"); //STUDENT
-		$sheet->setCellValue("BA2","Student NonMember");
+		$sheet->setCellValue("AW2","Student NonMember");
 
 		$sheet->mergeCells("AZ2:BB2"); //NONstudent
-		$sheet->setCellValue("BD2","NonStudent Member");
+		$sheet->setCellValue("AZ2","NonStudent Member");
 
 		$sheet->mergeCells("BC2:BE2"); //
-		$sheet->setCellValue("BG2","NonStudent NonMember");			
+		$sheet->setCellValue("BC2","NonStudent NonMember");			
 
 		$sheet->mergeCells("BF2:BH2"); //ADULT
-		$sheet->setCellValue("BJ2","Adult Member");
+		$sheet->setCellValue("BF2","Adult Member");
 
 		$sheet->mergeCells("BI2:BK2"); //adult
-		$sheet->setCellValue("BM2","Adult NonMember");
+		$sheet->setCellValue("BI2","Adult NonMember");
 
 		$sheet->mergeCells("BL2:BM2"); //
-		$sheet->setCellValue("BP2","OKU Member");			
+		$sheet->setCellValue("BL2","OKU Member");			
 
 		$sheet->mergeCells("BO2:BQ2"); //
-		$sheet->setCellValue("BS2","OKU NonMember");	
+		$sheet->setCellValue("BO2","OKU NonMember");	
 
 		$sheet->mergeCells("BR2:BT2"); //
-		$sheet->setCellValue("BV2","Elderly Member");		
+		$sheet->setCellValue("BR2","Elderly Member");		
 
 		$sheet->mergeCells("BU2:BW2"); //
-		$sheet->setCellValue("BY2","Elderly NonMember");		
+		$sheet->setCellValue("BU2","Elderly NonMember");		
 
 		$sheet->setCellValue("BX2","Total");
 		$sheet->setCellValue("BY2","B/W");
@@ -452,7 +452,7 @@ class Controller_ExpExcel
 		$totals = array();
 		
 		$floatArray = array(
-			"B","D","F","H","J","L", "M","P","S","V","Y","AB","AE","AH", "AK", "AN", "AQ","AT","AW", "AZ", "BC", "BF", "BI", "BL", "BM", "BN", "BO", "BP", "BQ", "BR", "BS", "BT", "BU", "BX", "BY"
+			"B","D","F","H","J", "M","P","S","V","Y","AB","AE","AH", "AK", "AN", "AQ","AT","AW", "AZ", "BC", "BF", "BI", "BL", "BO", "BP", "BQ", "BR", "BS", "BT", "BU", "BX", "BY","BZ", "CA", "CB", "CC", "CD", "CE", "CF", "CG", "CJ", "CK"
 			);
 
 		foreach(range(1, date('t', strtotime($year.'-'.$month.'-01'))) as $day){
