@@ -96,7 +96,7 @@ $(function() {
           <div class="col-sm-9 m-b-xs">
             <span>
             Filter : 
-          <?php if (user()->isOperationManager() || user()->isRoot()): ?>
+          <?php if (user()->isOperationManager() || user()->isRoot()  || user()->isFinancialController()): ?>
           <?php echo form::select('cluster', model::load('site/cluster')->listsForDropDown(), 'onchange="rlList.updateFilter();" class="form-control"', $cluster, false);?>
           <?php echo form::text("site_name","class='form-control' placeholder='Search By Site Name'", $siteName);?>
           <?php echo form::hidden("site_id","class='form-control'");?>

@@ -175,6 +175,16 @@ class Controller_Site
 
 		$data['stateR']	= model::load("helper")->state();
 
+		db::from("batch");
+		db::order_by("batchID","ASC");
+		
+		$batch_list = db::get()->result();
+		
+		foreach($batch_list as $row)
+		{
+			$data['batchList'][$row['batchID']]= $row['batchName'];
+		}
+
 		view::render("root/site/add",$data);
 	}
 
@@ -320,6 +330,18 @@ class Controller_Site
 		$site->deleteSite($siteID);
 
 		redirect::to("site/index","Site id " . $siteID . " deleted.");
+	}
+
+	public function parliamentList($stateID)
+	{
+		$parliament	= model::load("helper")->parliament($stateID);
+		return response::json($parliament);
+	}
+
+	public function districtList($stateID)
+	{
+		$district	= model::load("helper")->district($stateID);
+		return response::json($district);
 	}
 }
 

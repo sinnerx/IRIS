@@ -85,6 +85,518 @@ class Helper
 		return !$no?$state:$state[$no];
 	}
 
+	public function district($state =null)
+	{
+		switch ($state) {
+			case 1:
+				$district	= Array(
+				1=>"Johor Bahru",
+				2=>"Batu Pahat",
+				3=>"Kluang",
+				4=>"Kulai Jaya",
+				5=>"Muar",
+				6=>"Kota Tinggi",
+				7=>"Segamat",
+				8=>"Pontian",
+				9=>"Ledang"
+						);
+				break;
+
+			case 2:
+				$district	= Array(
+				1=>"Sungai Petani",
+				2=>"Alor Setar",
+				3=>"Kulim",
+				4=>"Kubang Pasu",
+				5=>"Baling",
+				6=>"Pendang",
+				7=>"Langkawi",
+				8=>"Yan",
+				9=>"Sik",
+				10=>"Padang Terap",
+				11=>"Pokok Sena",
+				12=>"Bandar Baharu"
+						);
+				break;
+
+			case 3:
+				$district	= Array(
+				1=>"Kota Bharu",
+				2=>"Pasir Mas",
+				3=>"Tumpat",
+				4=>"Bachok",
+				5=>"Tanah Merah",
+				6=>"Pasir Puteh",
+				7=>"Kuala Krai",
+				8=>"Machang",
+				9=>"Gua Musang",
+				10=>"Jeli"
+						);
+				break;
+
+			case 4:
+				$district	= Array(
+				1=>"Melaka Tengah",
+				2=>"Alor Gajah",
+				3=>"Jasin"
+						);
+				break;
+
+			case 5:
+				$district	= Array(
+				1=>"Seremban",
+				2=>"Jempol",
+				3=>"Port Dickson",
+				4=>"Tampin",
+				5=>"Kuala Pilah",
+				6=>"Rembau",
+				7=>"Jelebu"
+						);
+				break;
+
+			case 6:
+				$district	= Array(
+				1=>"Kuantan",
+				2=>"Temerloh",
+				3=>"Bentong",
+				4=>"Maran",
+				5=>"Rompin",
+				6=>"Pekan",
+				7=>"Bera",
+				8=>"Raub",
+				9=>"Jerantut",
+				10=>"Lipis",
+				11=>"Cameron Highlands"
+						);
+				break;
+
+			case 7:
+				$district	= Array(
+				1=>"Timur Laut Pulau Pinang",
+				2=>"Seberang Perai Tengah",
+				3=>"Seberang Perai Utara",
+				4=>"Barat Daya Pulau Pinang",
+				5=>"Seberang Perai Selatan"
+						);
+				break;
+
+			case 8:
+				$district	= Array(
+				1=>"Kinta",
+				2=>"Larut, Matang dan Selama",
+				3=>"Manjung",
+				4=>"Hilir Perak",
+				5=>"Kerian",
+				6=>"Batang Padang",
+				7=>"Kuala Kangsar",
+				8=>"Perak Tengah",
+				9=>"Hulu Perak",
+				10=>"Kampar",
+				11=>"Muallim"
+						);
+				break;
+
+			case 9:
+				$district	= Array(
+				1=>"Perlis"
+					);
+				break;
+
+			case 10:
+				$district	= Array(
+				1=>"Gombak",
+				2=>"Hulu Langat",
+				3=>"Hulu Selangor",
+				4=>"Klang",
+				5=>"Kuala Langat",
+				6=>"Kuala Selangor",
+				7=>"Petaling",
+				8=>"Sabak Bernam",
+				9=>"Sepang"
+						);
+				break;
+
+			case 11:
+				$district	= Array(
+				1=>"Besut",
+				2=>"Dungun",
+				3=>"Hulu Terengganu",
+				4=>"Kemaman",
+				5=>"Kuala Terengganu",
+				6=>"Marang",
+				7=>"Setiu",
+				8=>"Kuala Nerus"
+						);
+				break;
+
+			case 12:
+				$district	= Array(
+				1=>"Pantai Barat (Kota Kinabalu)",
+				2=>"Tawau",
+				3=>"Sandakan",
+				4=>"Pedalaman (Keningau)",
+				5=>"Kudat"
+						);
+				break;
+
+			case 13:
+				$district	= Array(
+				1=>"Kuching",
+				2=>"Miri",
+				3=>"Sibu",
+				4=>"Bintulu",
+				5=>"Samarahan",
+				6=>"Sarikei",
+				7=>"Kapit",
+				8=>"Mukah",
+				9=>"Betong",
+				10=>"Sri Aman",
+				11=>"Serian",
+				12=>"Limbang"
+						);
+				break;
+
+			case 14:
+				$district	= Array(
+				1=>"Kuala Lumpur"
+						);
+				break;
+
+			case 15:
+				$district	= Array(
+				1=>"Labuan"
+						);
+				break;
+
+			case 16:
+				$district	= Array(
+				1=>"Putrajaya"
+						);
+				break;
+
+			default:
+				$district=array();
+				break;
+		}
+
+		return $district;
+	}
+
+	public function parliament($state = null)
+	{
+		switch ($state) {
+			case 9:
+				$parliament	= Array(
+				1=>"Padang Besar",
+				2=>"Arau",
+				3=>"Kangar"
+						);
+				break;
+
+			case 2:
+				$parliament	= Array(
+				1=>"Langkawi",
+				2=>"Jerlun",
+				3=>"Kubang Pasu",
+				4=>"Padang Terap",
+				5=>"Pokok Sena",
+				6=>"Alor Setar",
+				7=>"Kuala Kedah",
+				8=>"Pendang",
+				9=>"Jerai",
+				10=>"Sik",
+				11=>"Merbok",
+				12=>"Sungai Petani",
+				13=>"Baling",
+				14=>"Padang Serai",
+				15=>"Kulim-Bandar Baharu"
+						);
+				break;
+
+			case 3:
+				$parliament	= Array(
+				1=>"Tumpat",
+				2=>"Pengkalan Chepa",
+				3=>"Kota Bharu",
+				4=>"Pasir Mas",
+				5=>"Rantau Panjang",
+				6=>"Kubang Kerian",
+				7=>"Bachok",
+				8=>"Ketereh",
+				9=>"Tanah Merah",
+				10=>"Pasir Puteh",
+				11=>"Machang",
+				12=>"Jeli",
+				13=>"Kuala Krai",
+				14=>"Gua Musang"
+						);
+				break;
+
+			case 11:
+				$parliament	= Array(
+				1=>"Besut",
+				2=>"Setiu",
+				3=>"Kuala Nerus",
+				4=>"Kuala Terengganu",
+				5=>"Marang",
+				6=>"Hulu Terengganu",
+				7=>"Dungun",
+				8=>"Kemaman"
+						);
+				break;
+
+			case 7:
+				$parliament	= Array(
+				1=>"Kepala Batas",
+				2=>"Tasek Gelugor",
+				3=>"Bagan",
+				4=>"Permatang Pauh",
+				5=>"Bukit Mertajam",
+				6=>"Batu Kawan",
+				7=>"Nibong Tebal",
+				8=>"Bukit Bendera",
+				9=>"Tanjong",
+				10=>"Jelutong",
+				11=>"Bukit Gelugor",
+				12=>"Bayan Baru",
+				13=>"Balik Pulau"
+						);
+				break;
+
+			case 8:
+				$parliament	= Array(
+				1=>"Gerik",
+				2=>"Lenggong",
+				3=>"Larut",
+				4=>"Parit Buntar",
+				5=>"Bagan Serai",
+				6=>"Bukit Gantang",
+				7=>"Taiping",
+				8=>"Padang Rengas",
+				9=>"Sungai Siput",
+				10=>"Tambun",
+				11=>"Ipoh Timur",
+				12=>"Ipoh Barat",
+				13=>"Batu Gajah",
+				14=>"Kuala Kangsar",
+				15=>"Pekan Beruas",
+				16=>"Parit",
+				17=>"Kampar",
+				18=>"Gopeng",
+				19=>"Tapah",
+				20=>"Pasir Salak",
+				21=>"Lumut",
+				22=>"Bagan Datoh",
+				23=>"Teluk Intan",
+				24=>"Tanjung Malim"
+						);
+				break;
+
+			case 6:
+				$parliament	= Array(
+				1=>"Cameron Highlands",
+				2=>"Lipis",
+				3=>"Raub",
+				4=>"Jerantut",
+				5=>"Indera Mahkota",
+				6=>"Kuantan",
+				7=>"Paya Besar",
+				8=>"Pekan",
+				9=>"Maran",
+				10=>"Kuala Krau",
+				11=>"Temerloh",
+				12=>"Bentong",
+				13=>"Bera",
+				14=>"Rompin"
+						);
+				break;
+
+			case 10:
+				$parliament	= Array(
+				1=>"Sabak Bernam",
+				2=>"Sungai Besar",
+				3=>"Hulu Selangor",
+				4=>"Tanjong Karang",
+				5=>"Kuala Selangor",
+				6=>"Selayang",
+				7=>"Gombak",
+				8=>"Ampang",
+				9=>"Pandan",
+				10=>"Hulu Langat",
+				11=>"Serdang",
+				12=>"Puchong",
+				13=>"Kelana Jaya",
+				14=>"Petaling Jaya Selatan",
+				15=>"Petaling Jaya Utara",
+				16=>"Subang",
+				17=>"Shah Alam",
+				18=>"Kapar",
+				19=>"Klang",
+				20=>"Kota Raja",
+				21=>"Kuala Langat",
+				22=>"Sepang"
+						);
+				break;
+
+			case 14:
+				$parliament	= Array(
+				1=>"Kepong",
+				2=>"Batu",
+				3=>"Wangsa Maju",
+				4=>"Segambut",
+				5=>"Setiawangsa",
+				6=>"Titiwangsa",
+				7=>"Bukit Bintang",
+				8=>"Lembah Pantai",
+				9=>"Seputeh",
+				10=>"Cheras",
+				11=>"Bandar Tun Razak"
+						);
+				break;
+
+			case 16:
+				$parliament	= Array(
+				1=>"Putrajaya"
+						);
+				break;
+
+			case 5:
+				$parliament	= Array(
+				1=>"Jelebu",
+				2=>"Jempol",
+				3=>"Seremban",
+				4=>"Kuala Pilah",
+				5=>"Rasah",
+				6=>"Rembau",
+				7=>"Telok Kemang",
+				8=>"Tampin"
+						);
+				break;
+
+			case 4:
+				$parliament	= Array(
+				1=>"Masjid Tanah",
+				2=>"Alor Gajah",
+				3=>"Tangga Batu",
+				4=>"Bukit Katil",
+				5=>"Kota Melaka",
+				6=>"Jasin"
+						);
+				break;
+
+			case 1:
+				$parliament	= Array(
+				1=>"Segamat",
+				2=>"Sekijang",
+				3=>"Labis",
+				4=>"Pagoh",
+				5=>"Ledang",
+				6=>"Bakri",
+				7=>"Muar",
+				8=>"Parit Sulong",
+				9=>"Ayer Hitam",
+				10=>"Sri Gading",
+				11=>"Batu Pahat",
+				12=>"Simpang Renggam",
+				13=>"Kluang",
+				14=>"Sembrong",
+				15=>"Mersing",
+				16=>"Tenggara",
+				17=>"Kota Tinggi",
+				18=>"Pengerang",
+				19=>"Tebrau",
+				20=>"Pasir Gudang",
+				21=>"Johor Bahru",
+				22=>"Pulai",
+				23=>"Gelang Patah",
+				24=>"Kulai",
+				25=>"Pontian",
+				26=>"Tanjong Piai"
+						);
+				break;
+
+			case 15:
+				$parliament	= Array(
+				1=>"Labuan"
+						);
+				break;
+
+			case 12:
+				$parliament	= Array(
+				1=>"Kudat",
+				2=>"Kota Marudu",
+				3=>"Kota Belud",
+				4=>"Tuaran",
+				5=>"Sepanggar",
+				6=>"Kota Kinabalu",
+				7=>"Putatan",
+				8=>"Penampang",
+				9=>"Papar",
+				10=>"Kimanis",
+				11=>"Beaufort",
+				12=>"Sipitang",
+				13=>"Ranau",
+				14=>"Keningau",
+				15=>"Tenom",
+				16=>"Pensiangan",
+				17=>"Beluran",
+				18=>"Libaran",
+				19=>"Batu Sapi",
+				20=>"Sandakan",
+				21=>"Kinabatangan",
+				22=>"Silam",
+				23=>"Semporna",
+				24=>"Tawau",
+				25=>"Kalabakan"
+						);
+				break;
+
+			case 13:
+				$parliament	= Array(
+				1=>"Mas Gading",
+				2=>"Santubong",
+				3=>"Petra Jaya",
+				4=>"Bandar Kuching",
+				5=>"Stampin",
+				6=>"Kota Samarahan",
+				7=>"Mambong",
+				8=>"Serian",
+				9=>"Batang Sadong",
+				10=>"Batang Lupar",
+				11=>"Sri Aman",
+				12=>"Lubok Antu",
+				13=>"Betong",
+				14=>"Saratok",
+				15=>"Tanjung Manis",
+				16=>"Igan",
+				17=>"Sarikei",
+				18=>"Julau",
+				19=>"Kanowit",
+				20=>"Lanang",
+				21=>"Sibu",
+				22=>"Mukah",
+				23=>"Selangau",
+				24=>"Kapit",
+				25=>"Hulu Rajang",
+				26=>"Bintulu",
+				27=>"Sibuti",
+				28=>"Miri",
+				29=>"Baram",
+				30=>"Limbang",
+				31=>"Lawas"
+						);
+				break;
+
+			
+			
+			default:
+				$parliament	= array();
+				break;
+		}
+
+		return $parliament;
+	}
+
 	public function occupationGroup($no = null)
 	{
 		$occR	= Array(
@@ -93,7 +605,8 @@ class Helper
 				3=>"Kerja sendiri",
 				4=>"Di bawah majikan",
 				5=>"Tidak bekerja",
-				6=>"Bersara"
+				6=>"Bersara",
+				7=>"Bukan Pelajar",
 						);
 
 		return $no?$occR[$no]:$occR;

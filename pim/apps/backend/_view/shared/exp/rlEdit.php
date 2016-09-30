@@ -71,6 +71,24 @@ var rl = new function()
     return result;
   }
 
+  this.approveCheckMonth = function(prID)
+  {
+    if(!confirm('Change month for this RL?'))
+      return false;
+
+    else {
+      var selMonth = $("#selectMonth").val();
+      $.ajax({
+        url: pim.base_url +"exp/rlChangeMonth/"+ prID + "/" + selMonth, success: function (result){
+        //console.log(result); 
+        alert("Changes succeed"); 
+        }
+      });
+
+    }
+    return true;
+  }
+
   this.approveCheck = function()
   {
     if(!confirm('Approve this RL?'))
@@ -235,8 +253,11 @@ var rl = new function()
         {
           e.checked = false;
         });
+
       }
+
     });
+
   }
 
   this.removeReceipt = function(fileID)
@@ -299,6 +320,7 @@ var rl = new function()
 $(document).ready(function()
 {
   rl.applyKeyupEvent();
+  $("#monthbtn").attr('disabled', false);
 });
 
 </script>
@@ -350,10 +372,20 @@ $(document).ready(function()
                 </tr>                 
                 <tr>
                   <td width="30%"><label>Month    :</label>
-                  <?php if($rl->isSubmitted()):?>
-                    <?php echo date('F Y', strtotime($rl->prReconcilationSubmittedDate));?>
-                  <?php else:?>
-                    <?php echo date('F Y');?>
+                  <?php if (user()->isFinancialController() || user()->isRoot()): ?>
+                    <?php if(!$rl->getLevelApproval('fc')->isPending()):?>
+                      <?php //if($rl->isSubmitted()):?>
+                      <?php echo form::select("selectMonth",model::load("helper")->monthYear("monthE"),"disabled",date('n', strtotime($pr->prDate)));?>
+                      <?php //echo date('F Y', strtotime($rl->prReconcilationSubmittedDate));?>
+                      <?php //echo date('F Y', strtotime($pr->prDate));?>
+                      
+                      <?php //echo date('F Y');?>
+                    <?php else:?>
+                      <?php echo form::select("selectMonth",model::load("helper")->monthYear("monthE"),"'",date('n', strtotime($pr->prDate)));?>
+                      <input type='button' id="monthbtn" name="monthbtn" value='Change Month' onclick='return rl.approveCheckMonth(<?php echo $pr->prID; ?>);' class='btn btn-default'/>
+                    <?php endif; ?> 
+                  <?php else: ?>
+                    <?php echo form::select("selectMonth",model::load("helper")->monthYear("monthE"),"disabled",date('n', strtotime($pr->prDate)));?>                      
                   <?php endif;?>
                   </td>
                 </tr>                 

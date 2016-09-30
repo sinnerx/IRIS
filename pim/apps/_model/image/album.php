@@ -220,6 +220,12 @@ class album
 		return $siteAlbumID;		
 	}
 
+	public function deleteActivityAlbum($activityAlbumID){
+		db::delete('activity_album', 'activityAlbumID='.$activityAlbumID);
+
+		return 1;
+	}
+
 	## list all sites allbum.
 	public function getSiteAlbums($siteID,$year = null,$month = null)
 	{
@@ -260,7 +266,7 @@ class album
 
 	public function getActivityAlbum($activityID)
 	{
-		db::select("album.*,site_album.*,user_profile.userProfileFullName");
+		db::select("album.*,site_album.*,user_profile.userProfileFullName, activity_album.activityAlbumID");
 		db::where("activityID",$activityID);
 		db::join("site_album","site_album.siteAlbumID = activity_album.siteAlbumID");
 		db::join("album","album.albumID = site_album.albumID");

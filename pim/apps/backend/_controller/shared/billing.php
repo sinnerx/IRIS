@@ -572,6 +572,7 @@ Class Controller_Billing
 		$transactionItems = db::from('billing_transaction_item')
 		->where('YEAR(billingTransactionDate)', $selectYear)
 		->where('MONTH(billingTransactionDate)', $selectMonth)
+		// ->where('DAY(billingTransactionDate)', '2')
 		->where('siteID', $data['siteID'])
 		->where('billingTransactionStatus', 1)
 		->join('billing_transaction', 'billing_transaction.billingTransactionID = billing_transaction_item.billingTransactionID', 'INNER JOIN')
@@ -581,11 +582,15 @@ Class Controller_Billing
 
 		// Group by date, itemCOde by item codes.
 		$report = array();
-
+		// var_dump($transactionItems);
+		// die;
+		$users = array();
 		foreach($transactionItems as $row)
 		{
 			$date = date('Y-m-d', strtotime($row['billingTransactionDate']));
 
+			//print_r($row);
+			//die;			
 			// if no code was configured for this item, set it to other.
 			if($row['billingItemCodeName'])
 				$code = $row['billingItemCodeName'];
@@ -594,7 +599,17 @@ Class Controller_Billing
 
 			// if age is lower than 18, OR occupation group = 1 (student), set it to student.
 			if($row['billingTransactionUserAge'] < 18 || $row['billingTransactionUserOccupationGroup'] == 1)
-				$userType = 'student';
+				$userType = 'student';			
+			else if($row['billingTransactionUserAge'] < 18 || $row['billingTransactionUserOccupationGroup'] == 7)
+				$userType = 'nonstudent';
+			// else if($code == 'PC OKU'){
+			// 	$userType = 'OKU';		
+			// 	$status = 'nonmember';
+			// }	
+			// else if($code == 'PC Warga Emas'){
+			// 	$userType = 'WE';
+			// 	$status = 'nonmember';
+			// }
 			else
 				$userType = 'adult';
 
@@ -603,6 +618,14 @@ Class Controller_Billing
 				$status = 'nonmember';
 			else
 				$status = $row['billingTransactionUser'] === 0 || !$row['billingTransactionUser'] ? 'nonmember' : 'member';
+
+			if($code == 'PC OKU'){
+				$code = 'PC';
+				$userType = 'OKU';
+			} else if ($code == 'PC Warga Emas'){
+				$code = 'PC';
+				$userType = 'WE';		
+			}
 
 			$reference = &$report[$date][$code];
 
@@ -618,11 +641,14 @@ Class Controller_Billing
 					$reference[$time] = array();
 
 				$reference = &$reference[$time];
+				//var_dump($reference);
 			}
 
 			// initiates.
 			if(!isset($reference['total']))
 				$reference['total'] = 0;
+			// else
+				// $reference['total'] = $row['billingTransactionItemPrice'] * $row['billingTransactionItemQuantity'];
 
 			if(!isset($reference['total_users']))
 				$reference['total_users'] = 0;
@@ -636,20 +662,105 @@ Class Controller_Billing
 			if(!isset($report[$date]['total']))
 				$report[$date]['total'] = 0;
 
+
 			// set.
+			$userOnThatDay = $row['billingTransactionUser'];
+			if($row['billingTransactionUser'] == 0){
+				$users[$date][$code][$time][$userType][$status][$row['billingTransactionUser']] += 1;
+				if($code == 'PC'){
+					$users[$date][$code][$time][$userType][$status]['total_users'] += 1;
+				}else{
+					$users[$date][$code][$userType][$status]['total_users'] += 1;
+				}
+				
+				//$users[$date][$code][$time]['total_users'] = $users[$date][$code][$time][$userType][$status]['total_users'];
+				
+			}else{
+				if(!isset($users[$date][$code][$time][$userType][$status][$row['billingTransactionUser']])){
+					$users[$date][$code][$time][$userType][$status][$row['billingTransactionUser']] = 1;
+					if($code == 'PC'){
+						$users[$date][$code][$time][$userType][$status]['total_users'] += 1;
+					}else{
+						$users[$date][$code][$userType][$status]['total_users'] += 1;
+					}
+					
+					//$users[$date][$code][$time]['total_users'] = $users[$date][$code][$time][$userType][$status]['total_users'];
+					
+				}
+				
+				
+			}
+
 			$transactionItemTotal = $row['billingTransactionItemPrice'] * $row['billingTransactionItemQuantity'];
 			$reference[$userType][$status]['total'] += $transactionItemTotal;
 			$reference['total'] += $transactionItemTotal;
 			$reference['total_quantity'] += $row['billingTransactionItemQuantity'];
+			// $reference['total_users'] += $counter;
+			$reference[$userType][$status]['total_quantity'] += $row['billingTransactionItemQuantity'];
+			// $reference[$userType][$status]['total_users'] += $counter;
 
 			$report[$date]['total'] += $transactionItemTotal;
 		}
 
-		$data['report'] = $report;
+		
 
 		// echo '<pre>';
 		// print_r($report);
+		// print_r($users);
 		// die;
+		foreach ($users as $keyDate => $valueDate) {
+			# code...
+			//print_r($valueDate);
+			foreach ($valueDate as $keyCode => $valueCode) {
+				# code...
+				// print_r($valueCode);
+				if($keyCode == 'PC'){
+					$totalUserPC = 0;
+					foreach ($valueCode as $keyTime => $valueTime) {
+						# code...
+						// print_r($valueTime);
+						foreach ($valueTime as $keyUserType => $valueUserType) {
+							# code...
+							foreach ($valueUserType as $keyStatus => $valueStatus) {
+								# code...
+								//print_r($valueStatus);
+								$totalUserPC += $valueStatus['total_users'];
+								//assign to report array
+								$report[$keyDate][$keyCode][$keyTime][$keyUserType][$keyStatus]['total_users'] = $valueStatus['total_users'];
+							}
+							
+						}//end foreach UserTYpe
+						$users[$keyDate][$keyCode][$keyTime]['total_users'] = $totalUserPC;
+						$report[$keyDate][$keyCode][$keyTime]['total_users'] = $totalUserPC;
+					}//end foreach Time
+				}//end if
+
+				else{
+					$totalUserNonPC= 0;
+					foreach ($valueCode as $keyUserType => $valueUserType) {
+						# code...
+						foreach ($valueUserType as $keyStatus => $valueStatus) {
+								# code...
+								//print_r($valueStatus);
+								$totalUserNonPC += $valueStatus['total_users'];
+								$report[$keyDate][$keyCode][$keyUserType][$keyStatus]['total_users'] = $valueStatus['total_users'];
+							}//end foreach Status
+
+					}//end foreach UserType
+					$users[$keyDate][$keyCode]['total_users'] = $totalUserNonPC;
+					$report[$keyDate][$keyCode]['total_users'] = $totalUserNonPC;
+				}
+
+			}
+		}//end foreach
+		// $data['report'] = $report;
+		// print_r($users);
+
+		 // print_r($report);
+		// print_r(count($users['2016-04-02']['PC']['student']['member']));
+		// die;
+
+		$data['report'] = $report;
 		/*$data['itemTotalCalculator'] = function($rows)
 		{
 			$total = 0;
@@ -1088,7 +1199,8 @@ Class Controller_Billing
 		{
 			$transactions = db::where('billingTransactionDate > ? AND billingTransactionDate < ?', array($todayDateStart.' 00:00:00', $todayDateEnd.' 23:59:59'))
 			->where('siteID', $siteID)
-			->group_by('billingTransactionDate ASC')
+			->where('billingTransactionStatus', 1)
+			->order_by('billingTransactionDate', "ASC")
 			->get('billing_transaction')
 			->result('billingTransactionID');
 
@@ -1184,7 +1296,8 @@ Class Controller_Billing
 		{
 			$transactions = db::where('billingTransactionDate > ? AND billingTransactionDate < ?', array($todayDateStart.' 00:00:00', $todayDateEnd.' 23:59:59'))
 			->where('siteID', $siteID)
-			->group_by('billingTransactionDate ASC')
+			->where('billingTransactionStatus', 1)
+			->order_by('billingTransactionDate', "ASC")
 			->get('billing_transaction')
 			->result('billingTransactionID');
 		}

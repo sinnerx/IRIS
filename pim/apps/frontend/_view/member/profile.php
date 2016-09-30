@@ -44,6 +44,7 @@ $(document).ready(function(){
 });
 
 </script>
+
 <h3 class="block-heading"><a href='.'>PROFIL AHLI</a> <span class="subforum"> > Pemegang kad</span> 
 
 <?php if($ownPage):?>
@@ -132,7 +133,7 @@ $(document).ready(function(){
                                 $pos = strpos($row['userProfileVideo'], "=");
                                 if ($pos) { ?>
                                     <iframe title="YouTube video player" class="youtube-player" type="text/html"
-                                    width="450" height="300" src="http://www.youtube.com/embed/<?php echo substr($row['userProfileVideo'], $pos + 1); ?>"
+                                    width="450" height="300" src="https://www.youtube.com/embed/<?php echo substr($row['userProfileVideo'], $pos + 1); ?>?rel=0"
                                     frameborder="0" allowFullScreen></iframe>
                                 <?php }
                                 ?>
