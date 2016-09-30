@@ -154,7 +154,7 @@ class Controller_Ajax_Report
 
 		db::select("count(siteID) as total");
 		db::order_by("siteID", "ASC");
-		//db::where("siteID", 68);
+		db::where("siteID", 68);
 					//db::limit(101, 30);
 		$totalSite = db::get("site")->row('total');
 
@@ -447,7 +447,7 @@ public function quarterlyReport($reportId){
 			db::order_by("siteID", "ASC");
 			
 			//testing for 1 site, can be comment out for all site in live
-			//db::where("siteID", 68);
+			db::where("siteID", 68);
 			
 			//db::limit(101, 30);
 			$allsite = db::get("site")->result('siteID');
@@ -572,45 +572,49 @@ public function quarterlyReport($reportId){
 				// $table = $section->addTable('Site Information');
 
 				// $table->addRow();
-				$innerTableLeft->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars('Period'), $cellHeaderCentered);
-				$innerTableLeft->addCell(4000, $cellVCentered)->addText(htmlspecialchars(model::load("helper")->quarter(2, $quarter)), $cellHeaderCentered);
-				$innerTableLeft->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars('Year'), $cellHeaderCentered);
-				$innerTableLeft->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars($year), $cellHeaderCentered);				
+
+				$noSpace = array('spaceAfter' => 0, 'lineHeight'=>1.0);
+				$addressRow = array('exactHeight' => true);
+
+				$innerTableLeft->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars('Period'), $cellHeaderCentered, $noSpace);
+				$innerTableLeft->addCell(4000, $cellVCentered)->addText(htmlspecialchars(model::load("helper")->quarter(2, $quarter)), $cellHeaderCentered, $noSpace);
+				$innerTableLeft->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars('Year'), $cellHeaderCentered, $noSpace);
+				$innerTableLeft->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars($year), $cellHeaderCentered, $noSpace);				
 				$innerTableLeft->addRow();
-				$innerTableLeft->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars('Site Name'), $cellHeaderCentered);
-				$innerTableLeft->addCell(4000, $cellVCentered)->addText(htmlspecialchars($siteKey['siteName']), $cellHeaderCentered);
-				$innerTableLeft->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars('District'), $cellHeaderCentered);
-				$innerTableLeft->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars($siteKey['siteInfoDistrict']), $cellHeaderCentered);
+				$innerTableLeft->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars('Site Name'), $cellHeaderCentered, $noSpace);
+				$innerTableLeft->addCell(4000, $cellVCentered)->addText(htmlspecialchars($siteKey['siteName']), $cellHeaderCentered, $noSpace);
+				$innerTableLeft->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars('District'), $cellHeaderCentered, $noSpace);
+				$innerTableLeft->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars($siteKey['siteInfoDistrict']), $cellHeaderCentered, $noSpace);
+				$innerTableLeft->addRow(600,$addressRow);
+				$innerTableLeft->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars('Address'), $cellHeaderCentered, $noSpace);
+				$innerTableLeft->addCell(4000, $cellVCentered)->addText(htmlspecialchars($siteKey['siteInfoAddress']), $cellHeaderCentered, $noSpace);
+				$innerTableLeft->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars('Web Address'), $cellHeaderCentered, $noSpace);
+				$innerTableLeft->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars("http://celcom1cbc.com/".$siteKey['siteSlug']), $cellHeaderCentered, $noSpace);
 				$innerTableLeft->addRow();
-				$innerTableLeft->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars('Address'), $cellHeaderCentered);
-				$innerTableLeft->addCell(4000, $cellVCentered)->addText(htmlspecialchars($siteKey['siteInfoAddress']), $cellHeaderCentered);
-				$innerTableLeft->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars('Web Address'), $cellHeaderCentered);
-				$innerTableLeft->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars("http://celcom1cbc.com/".$siteKey['siteSlug']), $cellHeaderCentered);
-				$innerTableLeft->addRow();
-				$innerTableLeft->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars('State'), $cellHeaderCentered);
-				$innerTableLeft->addCell(4000, $cellVCentered)->addText(htmlspecialchars(model::load("helper")->state($siteKey['stateID'])), $cellHeaderCentered);
-				$innerTableLeft->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars('Phase'), $cellHeaderCentered);
-				$innerTableLeft->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars(''), $cellHeaderCentered);
+				$innerTableLeft->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars('State'), $cellHeaderCentered, $noSpace);
+				$innerTableLeft->addCell(4000, $cellVCentered)->addText(htmlspecialchars(model::load("helper")->state($siteKey['stateID'])), $cellHeaderCentered, $noSpace);
+				$innerTableLeft->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars('Phase'), $cellHeaderCentered, $noSpace);
+				$innerTableLeft->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars(''), $cellHeaderCentered, $noSpace);
 				$innerTableLeft->addRow();
 				$innerTableLeft->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars('Longitude'), $cellHeaderCentered);
 				$innerTableLeft->addCell(4000, $cellVCentered)->addText(htmlspecialchars($siteKey['siteInfoLongitude']), $cellHeaderCentered);
 				$innerTableLeft->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars('Latitude'), $cellHeaderCentered);
 				$innerTableLeft->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars($siteKey['siteInfoLatitude']), $cellHeaderCentered);
 				$innerTableLeft->addRow();
-				$innerTableLeft->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars('Service Provider'), $cellHeaderCentered);
-				$innerTableLeft->addCell(4000, $cellVCentered)->addText(htmlspecialchars('Celcom (M) Berhad'), $cellHeaderCentered);
-				$innerTableLeft->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars('LOI Date'), $cellHeaderCentered);
-				$innerTableLeft->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars(''), $cellHeaderCentered);
+				$innerTableLeft->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars('Service Provider'), $cellHeaderCentered, $noSpace);
+				$innerTableLeft->addCell(4000, $cellVCentered)->addText(htmlspecialchars('Celcom (M) Berhad'), $cellHeaderCentered, $noSpace);
+				$innerTableLeft->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars('LOI Date'), $cellHeaderCentered, $noSpace);
+				$innerTableLeft->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars(''), $cellHeaderCentered, $noSpace);
 				$innerTableLeft->addRow();
-				$innerTableLeft->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars('Commencement Date'), $cellHeaderCentered);
-				$innerTableLeft->addCell(4000, $cellVCentered)->addText(htmlspecialchars($siteKey['siteInfoCommencementDate']), $cellHeaderCentered);
-				$innerTableLeft->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars('Completion Date'), $cellHeaderCentered);
-				$innerTableLeft->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars($siteKey['siteInfoCompletionDate']), $cellHeaderCentered);
+				$innerTableLeft->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars('Commencement Date'), $cellHeaderCentered, $noSpace);
+				$innerTableLeft->addCell(4000, $cellVCentered)->addText(htmlspecialchars($siteKey['siteInfoCommencementDate']), $cellHeaderCentered, $noSpace);
+				$innerTableLeft->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars('Completion Date'), $cellHeaderCentered, $noSpace);
+				$innerTableLeft->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars($siteKey['siteInfoCompletionDate']), $cellHeaderCentered, $noSpace);
 				$innerTableLeft->addRow();
-				$innerTableLeft->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars('Actual Start Date'), $cellHeaderCentered);
-				$innerTableLeft->addCell(4000, $cellVCentered)->addText(htmlspecialchars($siteKey['siteInfoOperationDate']), $cellHeaderCentered);
-				$innerTableLeft->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars('Actual Completion Date'), $cellHeaderCentered);
-				$innerTableLeft->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars($siteKey['siteInfoCompletionDate']), $cellHeaderCentered);
+				$innerTableLeft->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars('Actual Start Date'), $cellHeaderCentered, $noSpace);
+				$innerTableLeft->addCell(4000, $cellVCentered)->addText(htmlspecialchars($siteKey['siteInfoOperationDate']), $cellHeaderCentered, $noSpace);
+				$innerTableLeft->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars('Actual Completion Date'), $cellHeaderCentered, $noSpace);
+				$innerTableLeft->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars($siteKey['siteInfoCompletionDate']), $cellHeaderCentered, $noSpace);
 
 				//image of manager and assistant in table
 				//name
@@ -681,18 +685,18 @@ public function quarterlyReport($reportId){
 
 				//name manager | asst manager
 				$tableManager->addRow();
-				$tableManager->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars($siteKey['siteManager'][0]['userProfileFullName']. " ". $siteKey['siteManager'][0]['userProfileLastName']), $cellHeaderCentered);
-				$tableManager->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars($siteKey['siteManager'][1]['userProfileFullName']. " ". $siteKey['siteManager'][1]['userProfileLastName']), $cellHeaderCentered);				
+				$tableManager->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars($siteKey['siteManager'][0]['userProfileFullName']. " ". $siteKey['siteManager'][0]['userProfileLastName']), $cellHeaderCentered, $noSpace);
+				$tableManager->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars($siteKey['siteManager'][1]['userProfileFullName']. " ". $siteKey['siteManager'][1]['userProfileLastName']), $cellHeaderCentered, $noSpace);				
 
 				//title manager | asst manager
 				$tableManager->addRow();
-				$tableManager->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars('Manager'), $cellHeaderCentered);
-				$tableManager->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars('AssistantManager'), $cellHeaderCentered);
+				$tableManager->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars('Manager'), $cellHeaderCentered, $noSpace);
+				$tableManager->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars('AssistantManager'), $cellHeaderCentered, $noSpace);
 
 				//no tel manager | asst manager
 				$tableManager->addRow();
-				$tableManager->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars($siteKey['siteManager'][0]['userProfilePhoneNo']), $cellHeaderCentered);
-				$tableManager->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars($siteKey['siteManager'][1]['userProfilePhoneNo']), $cellHeaderCentered);			
+				$tableManager->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars($siteKey['siteManager'][0]['userProfilePhoneNo']), $cellHeaderCentered, $noSpace);
+				$tableManager->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars($siteKey['siteManager'][1]['userProfilePhoneNo']), $cellHeaderCentered, $noSpace);			
 
 
 
