@@ -940,14 +940,20 @@ class Controller_Report
 
 	private function getlogIn($date) {
 		// GET Login
-		db::select('COUNT(A.userID) AS totalLogin, COUNT(B.userID) AS User, COUNT(D.siteID) AS Site, D.clusterID AS clusterID');
+		db::select('COUNT(userID) AS totalLogin, COUNT(DISTINCT userID) AS User, COUNT(DISTINCT siteID) AS Site, clusterID AS clusterID');
+		db::from('OLAP_user_logins');
+		db::where('loginDate LIKE','%'.$date.'%');
+		db::group_by('clusterID');
+		$uLogin = db::get()->result();
+
+		/*db::select('COUNT(A.userID) AS totalLogin, COUNT(B.userID) AS User, COUNT(D.siteID) AS Site, D.clusterID AS clusterID');
 		db::from('log_login A');
 		db::join('user B', 'B.userID = A.userID');
 		db::join('site_member C', 'C.userID = B.userID');
 		db::join('cluster_site D', 'D.siteID = C.siteID');
 		db::where('A.logLoginCreatedDate LIKE','%'.$date.'%');
 		db::group_by('D.clusterID');
-		$uLogin = db::get()->result();
+		$uLogin = db::get()->result();*/
 
 		// SELECT COUNT(A.userID) AS totalLogin, COUNT(B.userID) AS User, COUNT(D.siteID) AS Site, D.clusterID AS Cluster
 		// FROM log_login A
