@@ -895,13 +895,21 @@ class Controller_Report
 	// USP MICROSITES VITAL STATISTICS
 	private function getREgister($date) {
 		// GET Registered
-		db::select('COUNT(A.userID) AS registered, COUNT(C.siteID) AS site, C.clusterID AS clusterID');
+		db::select('COUNT(A.userID) AS registered, stateID');
+		db::from('user A');
+		db::join('site_member B', 'B.userID = A.userID');
+		db::join('site C', 'C.siteID = B.siteID');
+		db::where('A.userCreatedDate LIKE','%'.$date.'%');
+		db::group_by('stateID');
+		$regsitered = db::get()->result();
+
+		/*db::select('COUNT(A.userID) AS registered, COUNT(C.siteID) AS site, C.clusterID AS clusterID');
 		db::from('user A');
 		db::join('site_member B', 'B.userID = A.userID');
 		db::join('cluster_site C', 'C.siteID = B.siteID');
 		db::where('A.userCreatedDate LIKE','%'.$date.'%');
 		db::group_by('C.clusterID');
-		$regsitered = db::get()->result();
+		$regsitered = db::get()->result();*/
 
 		// select COUNT(A.userID) AS registered, COUNT(C.siteID) AS site, C.clusterID AS cluster
 		// from user A
@@ -919,7 +927,7 @@ class Controller_Report
 		$reSemenanjung = 0;
 
 		//Get total value for each State
-		foreach ($regsitered as $key => $value) {
+		/*foreach ($regsitered as $key => $value) {
 			if ($value['clusterID'] >= 1 && $value['clusterID'] <= 3) {
 		 		$reSabah += $value['registered'];
 		 	}
@@ -929,6 +937,16 @@ class Controller_Report
 		 	}
 			if ($value['clusterID'] > 4) {
 		 		$reSemenanjung += $value['registered'];
+		 	}
+		}*/
+
+		foreach ($regsitered as $key => $value) {
+			if ($value['stateID'] == 12) {
+				$reSabah += $value['registered'];
+		 	} else if ($value['stateID'] == 13) {
+				$reSarawak += $value['registered'];
+		 	} else {
+				$reSemenanjung += $value['registered'];
 		 	}
 		}
 
