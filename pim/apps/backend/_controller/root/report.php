@@ -940,10 +940,11 @@ class Controller_Report
 
 	private function getlogIn($date) {
 		// GET Login
-		db::select('COUNT(userID) AS totalLogin, COUNT(DISTINCT userID) AS User, COUNT(DISTINCT siteID) AS Site, clusterID AS clusterID');
+		db::select('COUNT(userID) AS totalLogin, COUNT(DISTINCT userID) AS User, COUNT(DISTINCT OLAP_user_logins.siteID) AS Site, stateID');
 		db::from('OLAP_user_logins');
+		db::join('site S', 'S.siteID = OLAP_user_logins.siteID');
 		db::where('loginDate LIKE','%'.$date.'%');
-		db::group_by('clusterID');
+		db::group_by('stateID');
 		$uLogin = db::get()->result();
 
 		/*db::select('COUNT(A.userID) AS totalLogin, COUNT(B.userID) AS User, COUNT(D.siteID) AS Site, D.clusterID AS clusterID');
@@ -973,7 +974,7 @@ class Controller_Report
 
 		//Get total value login
 		foreach ($uLogin as $key => $value) {
-			if ($value['clusterID'] >= 1 && $value['clusterID'] <= 3) {
+			/*if ($value['clusterID'] >= 1 && $value['clusterID'] <= 3) {
 				//array_push($sumSabah, $value['totalLogin']);
 				$loSabah += $value['totalLogin'];
 		 	}
@@ -982,6 +983,13 @@ class Controller_Report
 
 		 	}
 			if ($value['clusterID'] > 4) {
+				$loSemenanjung += $value['totalLogin'];
+		 	}*/
+			if ($value['stateID'] == 12) {
+				$loSabah += $value['totalLogin'];
+		 	} else if ($value['stateID'] == 13) {
+				$loSarawak += $value['totalLogin'];
+		 	} else {
 				$loSemenanjung += $value['totalLogin'];
 		 	}
 		}
