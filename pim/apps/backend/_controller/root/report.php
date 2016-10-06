@@ -1057,7 +1057,14 @@ class Controller_Report
 
 	private function getEntrepreneurs($date) {
 		//Get Entrepreneurs
-		db::select('COUNT(A.userID) AS Entrepreneurs, COUNT(C.siteID) AS site, E.clusterID AS clusterID, E.clusterName AS Cluster');
+		db::select('stateID, SUM(noOfUsers) AS Entrepreneurs');
+		db::from('OLAP_entrepreneurs A');
+		db::join('site B', 'B.siteID = A.siteID');
+		db::where('A.registerDate LIKE','%'.$date.'%');
+		db::group_by('stateID');
+		$Entrepreneurs = db::get()->result();
+
+		/*db::select('COUNT(A.userID) AS Entrepreneurs, COUNT(C.siteID) AS site, E.clusterID AS clusterID, E.clusterName AS Cluster');
 		db::from('user A');
 		db::join('user_profile_additional B', 'B.userID = A.userID');
 		db::join('site_member C', 'C.userID = B.userID');
@@ -1067,7 +1074,7 @@ class Controller_Report
 		db::where('B.userProfileOccupationGroup', '3');
 		db::where('A.userCreatedDate LIKE','%'.$date.'%');
 		db::group_by('E.clusterID');
-		$Entrepreneurs = db::get()->result();
+		$Entrepreneurs = db::get()->result();*/
 
 		//Set array for entreprenerus cell
 		$totalEntrepre = array();
@@ -1079,7 +1086,7 @@ class Controller_Report
 
 		//Get total value for each State
 		foreach ($Entrepreneurs as $key => $value) {
-			if ($value['clusterID'] >= 1 && $value['clusterID'] <= 3) {
+			/*if ($value['clusterID'] >= 1 && $value['clusterID'] <= 3) {
 		 		$enSabah += $value['Entrepreneurs'];
 		 	}
 			if ($value['clusterID'] == 4) {
@@ -1087,6 +1094,13 @@ class Controller_Report
 		 	}
 			if ($value['clusterID'] > 4) {
 		 		$enSemenanjung += $value['Entrepreneurs'];
+		 	}*/
+			if ($value['stateID'] == 12) {
+				$enSabah += $value['Entrepreneurs'];
+		 	} else if ($value['stateID'] == 13) {
+				$enSarawak += $value['Entrepreneurs'];
+		 	} else {
+				$enSemenanjung += $value['Entrepreneurs'];
 		 	}
 		}
 
