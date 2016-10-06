@@ -1020,13 +1020,20 @@ class Controller_Report
 
 	private function getContentUpdate($date) {
 		// GET Content Update
-		db::select('COUNT(C.siteID) AS Request, A.clusterID AS ClusterId, A.clusterName AS Cluster');
+		db::select('COUNT(A.siteID) AS Request, stateID');
+		db::from('site_request A');
+		db::join('site B', 'B.siteID = A.siteID');
+		db::where('A.siteRequestCreatedDate LIKE','%'.$date.'%');
+		db::group_by('stateID');
+		$contentUpdate = db::get()->result();
+
+		/*db::select('COUNT(C.siteID) AS Request, A.clusterID AS ClusterId, A.clusterName AS Cluster');
 		db::from('cluster A');
 		db::join('cluster_site B', 'B.clusterID = A.clusterID');
 		db::join('site_request C', 'C.siteID = B.siteID');
 		db::where('C.siteRequestCreatedDate LIKE','%'.$date.'%');
 		db::group_by('A.clusterID');
-		$contentUpdate = db::get()->result();
+		$contentUpdate = db::get()->result();*/
 
 		//Set array for content update cell
 		$totalUpdate = array();
@@ -1038,7 +1045,7 @@ class Controller_Report
 
 		//Get total value for each State
 		foreach ($contentUpdate as $key => $value) {
-			if ($value['ClusterId'] >= 1 && $value['ClusterId'] <= 3) {
+			/*if ($value['ClusterId'] >= 1 && $value['ClusterId'] <= 3) {
 		 		$upSabah += $value['Request'];
 		 	}
 			if ($value['ClusterId'] == 4) {
@@ -1046,6 +1053,13 @@ class Controller_Report
 		 	}
 			if ($value['ClusterId'] > 4) {
 		 		$upSemenanjung += $value['Request'];
+		 	}*/
+			if ($value['stateID'] == 12) {
+				$upSabah += $value['Request'];
+		 	} else if ($value['stateID'] == 13) {
+				$upSarawak += $value['Request'];
+		 	} else {
+				$upSemenanjung += $value['Request'];
 		 	}
 		}
 
