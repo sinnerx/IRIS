@@ -20,14 +20,24 @@ Class Controller_Site
 		// event
 		// activity : event
 		// has at least 1 article
-		$totalEvents = db::from('activity')
+		/*$totalEvents = db::from('activity')
 		->select('count(activity.activityID) as total')
 		->where('siteID', $siteID)
 		->where('activityType', 1)
 		->where('activityApprovalStatus', 1)
 		->where('activityID IN (SELECT activityID FROM activity_article WHERE activity_article.activityID = activity.activityID)')
 		->where('MONTH(activityStartDate) = ? AND YEAR(activityStartDate) = ?', array($month, $year))
-		->get()->row('total');
+		->get()->row('total');*/
+
+		$totalEvents = db::from('OLAP_articled_activities')
+		->select('noOfActivities')
+		->where('siteID', $siteID)
+		->where('month = ? AND year = ?', array($month, $year))
+		->get()->row('noOfActivities');
+
+		if ($totalEvents == null) {
+			$totalEvents = 0;
+		}
 
 		// total entrepreneurship class
 		// activity : training
