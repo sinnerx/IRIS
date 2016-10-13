@@ -153,8 +153,8 @@ Class Controller_Site
 			AND (YEAR(activityStartDate) = $year OR YEAR(activityEndDate) = $year)
 			AND activity.activityID = activity_user.activityID AND training.activityID = activity.activityID
 			AND trainingType = 7 AND trainingSubType = 14")->result();
-		$kdb_sessions += $kdbData['sessions'];
-		$kdb_pax += $kdbData['pax'];
+		$kdb_sessions += $kdbData[0]['sessions'];
+		$kdb_pax += $kdbData[0]['pax'];
 
 		$data['kpi'] = array(
 			'event' => $totalEvents,
