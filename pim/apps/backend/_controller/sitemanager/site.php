@@ -145,6 +145,16 @@ Class Controller_Site
 		$totalKdbPax = db::query("SELECT SUM(`trainingMaxPax`) AS 'totalpax' FROM `training` WHERE `activityID` IN (SELECT `activityID` FROM `activity` WHERE `activityType` =2 
 			AND `activityApprovalStatus`=1 AND YEAR(`activityStartDate`) = $year AND `activityID` IN (SELECT `activityID` FROM `training` WHERE `trainingType` = 7 AND `trainingSubType` = 14))")->result();
 	
+		$kdb_sessions = 0;
+		$kdb_pax = 0;
+		$kdbData = db::query("SELECT COUNT(distinct activity.activityID) as sessions, COUNT(activity.activityID) as pax
+			FROM activity_user, activity, training
+			WHERE siteID = $siteID
+			AND (YEAR(activityStartDate) = $year OR YEAR(activityEndDate) = $year)
+			AND activity.activityID = activity_user.activityID AND training.activityID = activity.activityID
+			AND trainingType = 7 AND trainingSubType = 14")->result();
+		$kdb_sessions += $kdbData['sessions'];
+		$kdb_pax += $kdbData['pax'];
 
 		$data['kpi'] = array(
 			'event' => $totalEvents,
@@ -155,8 +165,10 @@ Class Controller_Site
 			'active_member_percentage' => $active_member_percentage,
 			'total_members' => $noOfMembers,
 			'totalEntArticle' => $totalEntArticle[0]['total'],
-			'kdb_session'=>$totalKdbSession[0]['total'],
-			'kdb_pax'=>$totalKdbPax[0]['totalpax']
+			'kdb_session'=>$kdb_sessions,
+			'kdb_pax'=>$kdb_pax
+			//'kdb_session'=>$totalKdbSession[0]['total'],
+			//'kdb_pax'=>$totalKdbPax[0]['totalpax']
 			);
 
 		return view::render('sitemanager/site/overview', $data);
