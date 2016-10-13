@@ -139,11 +139,11 @@ Class Controller_Site
 		//print_r($totalEntArticle);
 		//die();
 
-		$totalKdbSession = db::query("SELECT COUNT(`activityID`) AS 'total' FROM `activity` WHERE `activityType` =2 AND `activityApprovalStatus`=1 
-			AND YEAR(`activityStartDate`) = $year AND `activityID` IN (SELECT `activityID` FROM `training` WHERE `trainingType` = 7 AND `trainingSubType` = 14)  ")->result();
+		//$totalKdbSession = db::query("SELECT COUNT(`activityID`) AS 'total' FROM `activity` WHERE `activityType` =2 AND `activityApprovalStatus`=1 
+		//	AND YEAR(`activityStartDate`) = $year AND `activityID` IN (SELECT `activityID` FROM `training` WHERE `trainingType` = 7 AND `trainingSubType` = 14)  ")->result();
 
-		$totalKdbPax = db::query("SELECT SUM(`trainingMaxPax`) AS 'totalpax' FROM `training` WHERE `activityID` IN (SELECT `activityID` FROM `activity` WHERE `activityType` =2 
-			AND `activityApprovalStatus`=1 AND YEAR(`activityStartDate`) = $year AND `activityID` IN (SELECT `activityID` FROM `training` WHERE `trainingType` = 7 AND `trainingSubType` = 14))")->result();
+		//$totalKdbPax = db::query("SELECT SUM(`trainingMaxPax`) AS 'totalpax' FROM `training` WHERE `activityID` IN (SELECT `activityID` FROM `activity` WHERE `activityType` =2 
+		//	AND `activityApprovalStatus`=1 AND YEAR(`activityStartDate`) = $year AND `activityID` IN (SELECT `activityID` FROM `training` WHERE `trainingType` = 7 AND `trainingSubType` = 14))")->result();
 	
 		$kdb_sessions = 0;
 		$kdb_pax = 0;
