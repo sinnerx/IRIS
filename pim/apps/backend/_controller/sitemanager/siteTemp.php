@@ -20,24 +20,14 @@ Class Controller_Site
 		// event
 		// activity : event
 		// has at least 1 article
-		/*$totalEvents = db::from('activity')
+		$totalEvents = db::from('activity')
 		->select('count(activity.activityID) as total')
 		->where('siteID', $siteID)
 		->where('activityType', 1)
 		->where('activityApprovalStatus', 1)
 		->where('activityID IN (SELECT activityID FROM activity_article WHERE activity_article.activityID = activity.activityID)')
 		->where('MONTH(activityStartDate) = ? AND YEAR(activityStartDate) = ?', array($month, $year))
-		->get()->row('total');*/
-
-		$totalEvents = db::from('OLAP_articled_activities')
-		->select('noOfActivities')
-		->where('siteID', $siteID)
-		->where('month = ? AND year = ?', array($month, $year))
-		->get()->row('noOfActivities');
-
-		if ($totalEvents == null) {
-			$totalEvents = 0;
-		}
+		->get()->row('total');
 
 		// total entrepreneurship class
 		// activity : training
@@ -68,57 +58,36 @@ Class Controller_Site
 		// total training hours
 		// activity : training
 		// has at least one rsvp
-		/*$trainingHours = db::from('activity_date')
-		->where('activityType', 2)
-		->where('activityApprovalStatus', 1)
-		->where('activity.siteID', $siteID)
-		->where('activity_date.activityID IN (SELECT activityID FROM activity_user)') // rsvp
-		->where('MONTH(activity.activityStartDate) = ? AND YEAR(activity.activityStartDate) = ?', array($month, $year))
-		->join('activity', 'activity.activityID = activity_date.activityID', 'INNER JOIN')
-		->get()->result();
 
-		$time = 0;
-		
-		foreach($trainingHours as $activityDate)
-			$time += strtotime($activityDate['activityDateEndTime']) - strtotime($activityDate['activityDateStartTime']);
-
-		$hours = floor($time / 3600);*/
-
-		//  sum(time_to_sec(timediff(endTime, startTime)) / 3600) as total from OLAP_site_activity_date_times
-
-		$trainingHours = db::from('OLAP_site_activity_date_times')
-		->select('sum(time_to_sec(timediff(endTime, startTime)) / 3600) as total')
-		->where('siteID', $siteID)
-		->where('MONTH(activityDate) = ? AND YEAR(activityDate) = ?', array($month, $year))
-		->get()->row('total');
-
-		$hours = 0;
-		$hours += $trainingHours;
-
-		/*$time = 0;
-		
-		foreach($trainingHours as $activityDate)
-			$time += strtotime($activityDate['activityDateEndTime']) - strtotime($activityDate['activityDateStartTime']);
-
-		$hours = floor($time / 3600);*/
+		////30092016 - REMOVE FOR LATER MODIFICATION ( SPEED UP )
+		// $trainingHours = 
+		// db::select('activity_date.activityID, activityDateStartTime, activityDateEndTime')
+		// ->where('activityType', 2)
+		// ->where('activityApprovalStatus', 1)
+		// ->where('activity.siteID', $siteID)
+		// ->where('activity_date.activityID IN (SELECT activityID FROM activity_user)') // rsvp
+		// ->where('MONTH(activity.activityStartDate) = ? AND YEAR(activity.activityStartDate) = ?', array($month, $year))
+		// ->join('activity', 'activity.activityID = activity_date.activityID', 'INNER JOIN')
+		// ->get('activity_date')->result();
 
 		// active member percentage
 		// based on at least having 1 login
 		// active member / total member * 100
 		$totalMembers = db::select('count(userID) as total')->where('siteID', $siteID)->get('site_member')->row('total');
 
-		/*$activeMembers = db::from('site_member')
+		$activeMembers = db::from('site_member')
 		->select('count(userID) as total')
 		->where('siteID', $siteID)
 		->where('siteMemberStatus',1)
 		->where('userID IN (SELECT userID FROM log_login WHERE MONTH(logLoginCreatedDate) = ? AND YEAR(logLoginCreatedDate) = ?)', array($month, $year))
-		->get()->row('total');*/
-
-		$activeMembers = db::from('OLAP_user_logins')
-		->select('count(distinct userID) as total')
-		->where('siteID', $siteID)
-		->where('MONTH(loginDate) = ? AND YEAR(loginDate) = ?', array($month, $year))
 		->get()->row('total');
+
+		$time = 0;
+		
+		// foreach($trainingHours as $activityDate)
+		// 	$time += strtotime($activityDate['activityDateEndTime']) - strtotime($activityDate['activityDateStartTime']);
+
+		// $hours = floor($time / 3600);
 
 		if ($totalMembers == 0) {
 			$active_member_percentage = 0;
@@ -145,34 +114,21 @@ Class Controller_Site
 		$totalKdbPax = db::query("SELECT SUM(`trainingMaxPax`) AS 'totalpax' FROM `training` WHERE `activityID` IN (SELECT `activityID` FROM `activity` WHERE `activityType` =2 
 			AND `activityApprovalStatus`=1 AND YEAR(`activityStartDate`) = $year AND `activityID` IN (SELECT `activityID` FROM `training` WHERE `trainingType` = 7 AND `trainingSubType` = 14))")->result();
 	
-		$kdb_sessions = 0;
-		$kdb_pax = 0;
-		$kdbData = db::query("SELECT COUNT(distinct activity.activityID) as sessions, COUNT(activity.activityID) as pax
-			FROM activity_user, activity, training
-			WHERE siteID = $siteID
-			AND (YEAR(activityStartDate) = $year OR YEAR(activityEndDate) = $year)
-			AND activity.activityID = activity_user.activityID AND training.activityID = activity.activityID
-			AND trainingType = 7 AND trainingSubType = 14")->result();
-		$kdb_sessions += $kdbData['sessions'];
-		$kdb_pax += $kdbData['pax'];
 
 		$data['kpi'] = array(
 			'event' => $totalEvents,
 			'entrepreneurship_class' => $totalEntrepreneurship,
 			'entrepreneurship_sales' => $sales,
-			'training_hours' => $hours,
+			// 'training_hours' => $hours,
 			//'active_member_percentage' => $activeMembers / $totalMembers * 100
 			'active_member_percentage' => $active_member_percentage,
 			'total_members' => $noOfMembers,
 			'totalEntArticle' => $totalEntArticle[0]['total'],
-			'kdb_session'=>$kdb_sessions,
-			'kdb_pax'=>$kdb_pax
-			//'kdb_session'=>$totalKdbSession[0]['total'],
-			//'kdb_pax'=>$totalKdbPax[0]['totalpax']
+			'kdb_session'=>$totalKdbSession[0]['total'],
+			'kdb_pax'=>$totalKdbPax[0]['totalpax']
 			);
 
 		
-
 		return view::render('sitemanager/site/overview', $data);
 	}
 
