@@ -58,14 +58,17 @@ Class Controller_Site
 		// total training hours
 		// activity : training
 		// has at least one rsvp
-		$trainingHours = db::from('activity_date')
-		->where('activityType', 2)
-		->where('activityApprovalStatus', 1)
-		->where('activity.siteID', $siteID)
-		->where('activity_date.activityID IN (SELECT activityID FROM activity_user)') // rsvp
-		->where('MONTH(activity.activityStartDate) = ? AND YEAR(activity.activityStartDate) = ?', array($month, $year))
-		->join('activity', 'activity.activityID = activity_date.activityID', 'INNER JOIN')
-		->get()->result();
+
+		////30092016 - REMOVE FOR LATER MODIFICATION ( SPEED UP )
+		// $trainingHours = 
+		// db::select('activity_date.activityID, activityDateStartTime, activityDateEndTime')
+		// ->where('activityType', 2)
+		// ->where('activityApprovalStatus', 1)
+		// ->where('activity.siteID', $siteID)
+		// ->where('activity_date.activityID IN (SELECT activityID FROM activity_user)') // rsvp
+		// ->where('MONTH(activity.activityStartDate) = ? AND YEAR(activity.activityStartDate) = ?', array($month, $year))
+		// ->join('activity', 'activity.activityID = activity_date.activityID', 'INNER JOIN')
+		// ->get('activity_date')->result();
 
 		// active member percentage
 		// based on at least having 1 login
@@ -81,10 +84,10 @@ Class Controller_Site
 
 		$time = 0;
 		
-		foreach($trainingHours as $activityDate)
-			$time += strtotime($activityDate['activityDateEndTime']) - strtotime($activityDate['activityDateStartTime']);
+		// foreach($trainingHours as $activityDate)
+		// 	$time += strtotime($activityDate['activityDateEndTime']) - strtotime($activityDate['activityDateStartTime']);
 
-		$hours = floor($time / 3600);
+		// $hours = floor($time / 3600);
 
 		if ($totalMembers == 0) {
 			$active_member_percentage = 0;
@@ -116,7 +119,7 @@ Class Controller_Site
 			'event' => $totalEvents,
 			'entrepreneurship_class' => $totalEntrepreneurship,
 			'entrepreneurship_sales' => $sales,
-			'training_hours' => $hours,
+			// 'training_hours' => $hours,
 			//'active_member_percentage' => $activeMembers / $totalMembers * 100
 			'active_member_percentage' => $active_member_percentage,
 			'total_members' => $noOfMembers,
@@ -126,7 +129,6 @@ Class Controller_Site
 			);
 
 		
-
 		return view::render('sitemanager/site/overview', $data);
 	}
 

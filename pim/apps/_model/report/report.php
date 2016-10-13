@@ -101,33 +101,46 @@ class Report
 		->where("trainingSubTypeName","KDB")
 		->get("training_subtype")->result("trainingSubTypeID");
 
+		// var_dump($trainingSubType);
+		// die;
 
 		//SUBTYPE TRAINING REPORT
 		foreach ($trainingSubType as $trainingSubTypeID => $row) {
 			$hourSubTraining = 0;
 			# code...
-			db::select("*");
+			db::select("user.userID, user_profile.userProfileGender, user_profile.userProfileDOB, user_profile_additional.userProfileOccupationGroup");
 			db::from("user");
-			db::where("user.userID IN (SELECT userID FROM activity_user WHERE activityID IN (SELECT activityID FROM activity WHERE activityStartDate > ? AND activityEndDate < ? AND activityID IN (SELECT activityID FROM training WHERE trainingsubType = ?)) AND activityUserID IN (SELECT activityUserID FROM activity_user_date WHERE activityUserDateAttendance = ?))",Array($dateStart,$dateEnd,$trainingTypeID,1));
+			db::where("user.userID IN (SELECT userID FROM activity_user WHERE activityID IN (SELECT activityID FROM activity WHERE activityStartDate > ? AND activityEndDate < ? AND activityID IN (SELECT activityID FROM training WHERE trainingsubType = ?)) AND activityUserID IN (SELECT activityUserID FROM activity_user_date WHERE activityUserDateAttendance = ?))",Array($dateStart,$dateEnd,$trainingSubTypeID,1));
 			db::join("user_profile","user.userID = user_profile.userID");
 			db::join("user_profile_additional","user.userID = user_profile_additional.userID");
 			$userTrainingSubType		= db::get()->result("userID");
 
+			//var_dump($userTrainingSubType);
+			//die;
 
-			db::select("T.trainingSubType, SUM((time_to_sec(timediff(activityDateEndTime, activityDateStartTime )) / 3600)) as totalhours");
-			db::from("activity_date AD");
-			db::join("activity A", "A.activityID = AD.activityID");
-			// db::join("activity_user AU", "AU.activityID = A.activityID");
-			db::join("training T", "T.activityID = A.activityID");
-			db::where("T.trainingSubType", $trainingSubTypeID);
-			db::where("A.activityStartDate > '$dateStart' ");
-			db::where("A.activityEndDate < '$dateEnd' ");
-			db::where("EXISTS (SELECT 1 FROM activity_user WHERE activityID = AD.activityID)");
+			// db::select("T.trainingSubType, SUM((time_to_sec(timediff(activityDateEndTime, activityDateStartTime )) / 3600)) as totalhours");
+			// db::from("activity_date AD");
+			// db::join("activity A", "A.activityID = AD.activityID");
+			// // db::join("activity_user AU", "AU.activityID = A.activityID");
+			// db::join("training T", "T.activityID = A.activityID");
+			// db::where("T.trainingSubType", $trainingSubTypeID);
+			// db::where("A.activityStartDate > '$dateStart' ");
+			// db::where("A.activityEndDate < '$dateEnd' ");
+			// db::where("EXISTS (SELECT 1 FROM activity_user WHERE activityID = AD.activityID)");
 
 			//db::group_by("T.trainingType");
+
+
+			db::select("T.trainingSubType, SUM((time_to_sec(timediff(endTime, startTime )) / 3600)) as totalhours");
+			db::from("OLAP_site_activity_date_times OL");
+			db::join("training T", "T.activityID = OL.activityID");
+			db::where("T.trainingSubType", $trainingSubTypeID);
+			db::where("OL.activityDate > '$dateStart'");
+			db::where("OL.activityDate < '$dateEnd'");
+
 			$hour = db::get()->row();
-			//var_dump($hour);
-			//die;
+			// var_dump($hour);
+			// die;
 			$hourTraining = $hour['totalhours'];
 
 			$data['STrainingInfo'][$trainingSubTypeID] = Array(
@@ -246,7 +259,7 @@ class Report
 		foreach ($trainingType as $trainingTypeID => $row) {
 			$hourTraining = 0;
 			# code...
-			db::select("*");
+			db::select("user.userID, user_profile.userProfileGender, user_profile.userProfileDOB, user_profile_additional.userProfileOccupationGroup");
 			db::from("user");
 			db::where("user.userID IN (SELECT userID FROM activity_user WHERE activityID IN (SELECT activityID FROM activity WHERE activityStartDate > ? AND activityEndDate < ? AND activityID IN (SELECT activityID FROM training WHERE trainingType = ?)) AND activityUserID IN (SELECT activityUserID FROM activity_user_date WHERE activityUserDateAttendance = ?))",Array($dateStart,$dateEnd,$trainingTypeID,1));
 			db::join("user_profile","user.userID = user_profile.userID");
@@ -256,15 +269,23 @@ class Report
 			//var_dump($userTrainingType);
 			// die;
 
-			db::select("T.trainingType, SUM((time_to_sec(timediff(activityDateEndTime, activityDateStartTime )) / 3600)) as totalhours");
-			db::from("activity_date AD");
-			db::join("activity A", "A.activityID = AD.activityID");
-			db::join("training T", "T.activityID = A.activityID");
+			// db::select("T.trainingType, SUM((time_to_sec(timediff(activityDateEndTime, activityDateStartTime )) / 3600)) as totalhours");
+			// db::from("activity_date AD");
+			// db::join("activity A", "A.activityID = AD.activityID");
+			// db::join("training T", "T.activityID = A.activityID");
+			// db::where("T.trainingType", $trainingTypeID);
+			// db::where("A.activityStartDate > '$dateStart' ");
+			// db::where("A.activityEndDate < '$dateEnd' ");
+			// db::where("EXISTS (SELECT userID FROM activity_user WHERE activity_user.activityID = A.activityID)");			
+			// //db::group_by("T.trainingType");
+
+			db::select("T.trainingSubType, SUM((time_to_sec(timediff(endTime, startTime )) / 3600)) as totalhours");
+			db::from("OLAP_site_activity_date_times OL");
+			db::join("training T", "T.activityID = OL.activityID");
 			db::where("T.trainingType", $trainingTypeID);
-			db::where("A.activityStartDate > '$dateStart' ");
-			db::where("A.activityEndDate < '$dateEnd' ");
-			db::where("EXISTS (SELECT userID FROM activity_user WHERE activity_user.activityID = A.activityID)");			
-			//db::group_by("T.trainingType");
+			db::where("OL.activityDate > '$dateStart'");
+			db::where("OL.activityDate < '$dateEnd'");
+
 			$hour = db::get()->row();
 
 			$hourTraining = $hour['totalhours'];
@@ -410,7 +431,7 @@ class Report
 		foreach($siteR as $siteID=>$row)
 		{
 			## select only user whose attend (activityUserDateAttendance =1) events by the given date.
-			db::select("*");
+			db::select("user.userID, user_profile.userProfileGender, user_profile.userProfileDOB, user_profile_additional.userProfileOccupationGroup");
 			db::from("user");
 			db::where("user.userID IN (SELECT userID FROM activity_user WHERE activityID IN (SELECT activityID FROM activity WHERE siteID = ? AND activityStartDate > ? AND activityEndDate < ?) AND activityUserID IN (SELECT activityUserID FROM activity_user_date WHERE activityUserDateAttendance = ?))",Array($siteID,$dateStart,$dateEnd,1));
 			db::join("user_profile","user.userID = user_profile.userID");
@@ -535,24 +556,35 @@ class Report
 			}
 
 			//ENTREPRENUERSHIP
-			db::select("*");
-			db::from("user");
-			db::where("user.userID IN (SELECT userID FROM activity_user WHERE activityID IN (SELECT activityID FROM activity WHERE siteID = ? AND activityStartDate > ? AND activityEndDate < ? AND activityID IN (SELECT activityID FROM training WHERE trainingType = 12)) AND activityUserID IN (SELECT activityUserID FROM activity_user_date WHERE activityUserDateAttendance = ?))",Array($siteID,$dateStart,$dateEnd,1));
-			db::join("user_profile","user.userID = user_profile.userID");
-			db::join("user_profile_additional","user.userID = user_profile_additional.userID");
-			$userEntre		= db::get()->result("userID");
+			// db::select("user.userID");
+			// db::from("user");
+			// db::where("user.userID IN (SELECT userID FROM activity_user WHERE activityID IN (SELECT activityID FROM activity WHERE siteID = ? AND activityStartDate > ? AND activityEndDate < ? AND activityID IN (SELECT activityID FROM training WHERE trainingType = 12)) AND activityUserID IN (SELECT activityUserID FROM activity_user_date WHERE activityUserDateAttendance = ?))",Array($siteID,$dateStart,$dateEnd,1));
+			// db::join("user_profile","user.userID = user_profile.userID");
+			// db::join("user_profile_additional","user.userID = user_profile_additional.userID");
+			// $userEntre		= db::get()->result("userID");
 
 			//calculate total hours per site
-			db::select("A.siteID, SUM((time_to_sec(timediff(activityDateEndTime, activityDateStartTime )) / 3600)) as totalhours");
-			db::from("activity_date AD");
-			db::join("activity A", "A.activityID = AD.activityID");
-			db::join("training T", "T.activityID = A.activityID");
+
+			// db::select("A.siteID, SUM((time_to_sec(timediff(activityDateEndTime, activityDateStartTime )) / 3600)) as totalhours");
+			// db::from("activity_date AD");
+			// db::join("activity A", "A.activityID = AD.activityID");
+			// db::join("training T", "T.activityID = A.activityID");
+			// db::where("T.trainingType", 12);
+			// db::where("A.activityStartDate > '$dateStart' ");
+			// db::where("A.activityEndDate < '$dateEnd' ");
+			// db::where("A.siteID", $siteID);
+			// db::where("EXISTS (SELECT userID FROM activity_user WHERE activity_user.activityID = A.activityID)");
+
+			// //db::group_by("T.trainingType");
+
+			db::select("OL.siteID, SUM((time_to_sec(timediff(endTime, startTime )) / 3600)) as totalhours");
+			db::from("OLAP_site_activity_date_times OL");
+			db::join("training T", "T.activityID = OL.activityID");
 			db::where("T.trainingType", 12);
-			db::where("A.activityStartDate > '$dateStart' ");
-			db::where("A.activityEndDate < '$dateEnd' ");
-			db::where("A.siteID", $siteID);
-			db::where("EXISTS (SELECT userID FROM activity_user WHERE activity_user.activityID = A.activityID)");			
-			//db::group_by("T.trainingType");
+			db::where("OL.activityDate > '$dateStart'");
+			db::where("OL.activityDate < '$dateEnd'");
+			db::where("OL.siteID", $siteID);
+
 			$hourEntre = db::get()->row();
 			//var_dump($hourEntre);
 			//die;

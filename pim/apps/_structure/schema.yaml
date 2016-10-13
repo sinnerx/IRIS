@@ -1184,6 +1184,8 @@ lms_question_user:
 	q_id [int(11)]
 	a_id [int(11)]
 	marks [int(11)]
+	moduleid [int(11)]
+	packageid [int(11)]
 
 lms_answer:
 	a_id [int]
