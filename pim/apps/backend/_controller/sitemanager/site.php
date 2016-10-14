@@ -134,8 +134,12 @@ Class Controller_Site
 		->row('total');
 
 		//entrepreneurship article
-		$totalEntArticle =db::query("SELECT COUNT(`articleID`) AS 'total' FROM `article_category` WHERE `categoryID` = 3 
-						AND `articleID` IN (SELECT `articleID` FROM `article` WHERE `siteID` = $siteID AND MONTH(articlePublishedDate)=$month AND YEAR(articlePublishedDate)=$year)")->result();
+		//$totalEntArticle =db::query("SELECT COUNT(`articleID`) AS 'total' FROM `article_category` WHERE `categoryID` = 3 
+		//				AND `articleID` IN (SELECT `articleID` FROM `article` WHERE `siteID` = $siteID AND MONTH(articlePublishedDate)=$month AND YEAR(articlePublishedDate)=$year)")->result();
+
+		$totalEntArticle = db::query("SELECT COUNT(article.articleID) AS 'total' from article, article_category
+			where  article_category.articleID = article.articleID and categoryID = 4
+			AND siteID = $siteID AND MONTH(articlePublishedDate) = $month AND YEAR(articlePublishedDate) = $year")->result();
 		//print_r($totalEntArticle);
 		//die();
 
