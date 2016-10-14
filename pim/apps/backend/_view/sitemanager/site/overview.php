@@ -309,11 +309,11 @@ Dashboard overview
                 <section class="panel panel-default panel-pd">
                   <header class="panel-heading panelhd-pd">
                     Operation
-                    <?php if ($kpi['active_member_percentage'] >= 40) {  ?>
+                    <!--<?php if ($kpi['active_member_percentage'] >= 40) {  ?>
 					<i class="fa fa-check fa-lg pull-right custom-fa-pad" style="color:green"></i>
 					<?php } else { ?>
 					<i class="fa fa-exclamation fa-lg pull-right custom-fa-pad" style="color:red"></i>
-					<?php }  ?>
+					<?php }  ?>-->
                   </header>
                  
                   	<div class="panel-body text-center">
@@ -339,11 +339,11 @@ Dashboard overview
                 <section class="panel panel-default panel-pd">
                   <header class="panel-heading panelhd-pd">
                     Pi1M Audit Score
-                    <?php if ($kpi['active_member_percentage'] >= 40) {  ?>
+                    <!--<?php if ($kpi['active_member_percentage'] >= 40) {  ?>
 					<i class="fa fa-check fa-lg pull-right custom-fa-pad" style="color:green"></i>
 					<?php } else { ?>
 					<i class="fa fa-exclamation fa-lg pull-right custom-fa-pad" style="color:red"></i>
-					<?php }  ?>
+					<?php }  ?>-->
                   </header>
                  
                   	<div class="panel-body text-center">
@@ -383,17 +383,17 @@ Dashboard overview
                                 <i class="i i-hexagon2 i-s-base text-primary hover-rotate"></i>
                                 <i class="fa fa-book i-sm text-white"></i>
                               </span>
-                              <span class="col-sm-5">
+                              <span class="clear">
                                 
-                                <span class="h1 block m-t-xs text-primary kpi-font"><?php echo $kpi['kdb_session']; ?>/30</span>
-                                <small class="text-muted text-u-c">Session</small>
-                              </span>
+                                <span class="h1 block m-t-xs text-primary kpi-font"><?php echo $kpi['kdb_session']; ?>/30
+                                <small class="text-muted text-u-c">Session</small></span>
+                              <!--</span>
 
 
-                              <span class="col-sm-5">
+                              <span class="col-sm-3">-->
                                 
-                                <span class="h1 block m-t-xs text-primary kpi-font"><?php echo $kpi['kdb_pax']; ?>/300</span>
-                                <small class="text-muted text-u-c">Pax</small>
+                                <span class="h1 block m-t-xs text-primary kpi-font"><?php echo $kpi['kdb_pax']; ?>/300
+                                <small class="text-muted text-u-c">Pax</small></span>
                               </span>
 
                             </a>
