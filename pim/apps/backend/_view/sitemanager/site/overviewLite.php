@@ -325,7 +325,7 @@ Dashboard overview
                               </span>
                               <span class="clear">
                                 
-                                <span class="h1 block m-t-xs text-primary kpi-font">N/A</span>
+                                <span class="h1 block m-t-xs text-primary kpi-font">3/1</span>
                                 <small class="text-muted text-u-c">Outstanding Tickets</small>
                               </span>
                             </a>
@@ -355,8 +355,8 @@ Dashboard overview
                               </span>
                               <span class="clear">
                                 
-                                <span class="h1 block m-t-xs text-primary kpi-font">N/A</span>
-                                <small class="text-muted text-u-c">Average Score</small>
+                                <span class="h1 block m-t-xs text-primary kpi-font">96%</span>
+                                <small class="text-muted text-u-c">aAverage Score</small>
                               </span>
                             </a>
                             <a href='#' class='fa' style="float:right;">&nbsp;</a>

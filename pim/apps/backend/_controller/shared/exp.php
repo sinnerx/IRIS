@@ -560,7 +560,7 @@ class Controller_Exp
 		if(user()->isManager())
 		{
 			//$rl->where('prReconcilationSubmitted = ? OR (prReconcilationSubmitted = ? AND MONTH(prReconcilationSubmittedDate) = ? AND YEAR(prReconcilationSubmittedDate) = ?)', array(0, 1, $data['month'], $data['year']));
-			$rl->where('prReconcilationSubmitted = ? OR (prDate = ? AND MONTH(prDate) = ? AND YEAR(prDate) = ?)', array(0, 1, $data['month'], $data['year']));
+			$rl->where('prReconcilationSubmitted = ? OR (MONTH(prDate) = ? AND YEAR(prDate) = ?)', array(0, $data['month'], $data['year']));
 		}
 		// show date based submitted RL only
 		else

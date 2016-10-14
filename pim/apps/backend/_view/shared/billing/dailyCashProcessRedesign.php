@@ -133,7 +133,7 @@
 			// get all column
 			var colCount = $('.custom-table tr:nth-child(5) td:visible').length;
 			$('#e1').attr('colspan',colCount-2);
-			//alert(colCount-2);
+			// alert(colCount);
 
 		});
 
@@ -374,7 +374,7 @@
 			  echo $site->siteName; ?> Monthly Cash Report for <?php echo $selectYear; ?>/<?php echo $selectMonth; ?>
 		</div>
 		<div class='well well-sm'>
-			<a href="#" class="btn btn-info btn-xs showhidecol" role="button" data-row="3" data-col="2:1,2:5,2:9">Member</a>
+			<a href="#" class="btn btn-info btn-xs showhidecol" role="button" data-row="4" data-col="2:1,2:5,2:9">Member</a>
 			<a href="#" class="btn btn-info btn-xs showhidecol" role="button" data-row="3" data-col="3:1,6:16,10:42">PC Day</a>
 			<a href="#" class="btn btn-info btn-xs showhidecol" role="button" data-row="3" data-col="4:1,17:27,43:75" >PC Night</a>
 			<a href="#" class="btn btn-info btn-xs showhidecol" role="button" data-row="3" data-col="5:1,28:30,76:78" >Print</a>
@@ -394,7 +394,7 @@
 					<th colspan="33" id="c1">PC Night</th>
 					<th colspan="3" id="d1">Print</th>
 					<th>Scan</th>	
-					<th colspan="2" id="e1">Laminate</th>	
+					<th colspan="2" id="de1">Laminate</th>	
 						
 					<th colspan="3" id="f1">Package</th>	
 					<th>Other</th>		
@@ -422,7 +422,7 @@
 					<th class="billing-column-pc-day" colspan="3">Elderly Member</th>
 					<th class="billing-column-pc-day" colspan="3">Elderly NonMember</th>
 
-					<th colspan="3"><a id ="c2" href="#" onclick='table.toggleExpand();' class='fa fa-plus-square pull-right' style='font-size:13px;'></a>Total NIGHT</th>
+					<th colspan="3"><a id ="c2" href="#" onclick='table.toggleExpand();' class='fa fa-plus-square pull-right' style='font-size:13px;'></a>Total</th>
 					<th class="billing-column-pc-night" colspan="3">Student Member</th>
 					<th class="billing-column-pc-night" colspan="3">Student nonMember</th>					
 					<th class="billing-column-pc-night" colspan="3">Non-Student Member</th>
@@ -461,7 +461,7 @@
 					<th class="billing-column-pc-day">RM</th>	<th class="billing-column-pc-day">User</th> <th class="billing-column-pc-day">Hr</th>	
 					<th class="billing-column-pc-day">RM</th>	<th class="billing-column-pc-day">User</th> <th class="billing-column-pc-day">Hr</th>	
 					
-					<th>RM NIGHT</th>	<th>User</th> <th>Hr</th>	
+					<th>RM</th>	<th>User</th> <th>Hr</th>	
 					<th class="billing-column-pc-night">RM</th>	<th class="billing-column-pc-night">User</th> <th class="billing-column-pc-night">Hr</th>
 					<th class="billing-column-pc-night">RM</th>	<th class="billing-column-pc-night">User</th> <th class="billing-column-pc-night">Hr</th>
 					<th class="billing-column-pc-night">RM</th>	<th class="billing-column-pc-night">User</th> <th class="billing-column-pc-night">Hr</th>
@@ -632,7 +632,7 @@ $total = function($val = null)
 			</tr>
 			<tr style="background-color:#ededed">	
 				<th> </th>
-				<th id="g1" colspan="46"> Bank In </th>
+				<th id="g1" colspan="88"> Bank In </th>
 			</tr>
 			</table>			
 		</div>
