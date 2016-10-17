@@ -14,7 +14,9 @@ Class Controller_Site
 			'entrepreneurship_class' => 1,
 			'entrepreneurship_sales' => 300,
 			'training_hours' => 32,
-			'active_member_percentage' => 80
+			'active_member_percentage' => 80,
+			'kdb_sessions' => 30,
+			'kdb_pax' => 600
 			);
 
 		// event
