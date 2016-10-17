@@ -13,7 +13,7 @@ Class Controller_Site
 			'event' => 2,
 			'entrepreneurship_class' => 1,
 			'entrepreneurship_sales' => 300,
-			'training_hours' => 48,
+			'training_hours' => 32,
 			'active_member_percentage' => 80
 			);
 
@@ -254,7 +254,7 @@ Class Controller_Site
 		}
 
 		$trainingHour = floor($totalTime1/3600);
-		$training['maxHour'] = 48;
+		$training['maxHour'] = 32;
 
 		if($trainingHour >= $training['maxHour'])
 		{ 
