@@ -314,6 +314,7 @@ Dashboard overview
 					<?php } else { ?>
 					<i class="fa fa-exclamation fa-lg pull-right custom-fa-pad" style="color:red"></i>
 					<?php }  ?>-->
+                    <i class="fa fa-ban fa-lg pull-right custom-fa-pad" style="color:orange"></i>
                   </header>
                  
                   	<div class="panel-body text-center">
@@ -344,6 +345,7 @@ Dashboard overview
 					<?php } else { ?>
 					<i class="fa fa-exclamation fa-lg pull-right custom-fa-pad" style="color:red"></i>
 					<?php }  ?>-->
+                    <i class="fa fa-ban fa-lg pull-right custom-fa-pad" style="color:orange"></i>
                   </header>
                  
                   	<div class="panel-body text-center">
