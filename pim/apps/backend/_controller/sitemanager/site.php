@@ -156,8 +156,8 @@ Class Controller_Site
 		$kdbData = db::query("SELECT COUNT(distinct activity.activityID) as sessions, COUNT(activity.activityID) as pax
 			FROM activity_user, activity, training
 			WHERE siteID = $siteID
-			AND (MONTH(activityStartDate) = $month OR MONTH(activityEndDate) = $month)
 			AND (YEAR(activityStartDate) = $year OR YEAR(activityEndDate) = $year)
+			AND (MONTH(activityStartDate) <= $month OR MONTH(activityEndDate) <= $month)
 			AND activity.activityID = activity_user.activityID AND training.activityID = activity.activityID
 			AND trainingType = 7 AND trainingSubType = 14")->result();
 		$kdb_sessions += $kdbData[0]['sessions'];

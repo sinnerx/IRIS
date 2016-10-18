@@ -295,7 +295,7 @@ Dashboard overview
                               </span>
                               <span class="clear">
                                 
-                                <span class="h1 block m-t-xs text-primary kpi-font"><?php echo $kpi['totalEntArticle']; ?>/1</span>
+                                <span class="h1 block m-t-xs text-primary kpi-font"><?php echo $kpi['totalEntArticle']; ?> / 1</span>
                                 <small class="text-muted text-u-c">Article</small>
                               </span>
                             </a>
@@ -387,14 +387,14 @@ Dashboard overview
                               </span>
                               <span class="clear">
                                 
-                                <span class="h1 block m-t-xs text-primary kpi-font"><?php echo $kpi['kdb_session']; ?>/<?php echo $max['kdb_sessions']; ?>
+                                <span class="h1 block m-t-xs text-primary kpi-font"><?php echo $kpi['kdb_session']; ?> / <?php echo $max['kdb_sessions']; ?>
                                 <small class="text-muted text-u-c">Session</small></span>
                               <!--</span>
 
 
                               <span class="col-sm-3">-->
                                 
-                                <span class="h1 block m-t-xs text-primary kpi-font"><?php echo $kpi['kdb_pax']; ?>/<?php echo $max['kdb_pax']; ?>
+                                <span class="h1 block m-t-xs text-primary kpi-font"><?php echo $kpi['kdb_pax']; ?> / <?php echo $max['kdb_pax']; ?>
                                 <small class="text-muted text-u-c">Pax</small></span>
                               </span>
 
