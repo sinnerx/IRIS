@@ -14,7 +14,7 @@
 	<div class='table-responsive'>
 		<table class='table'>
 			<tr>
-				<th width='15px'>No.</th><th>Request</th><th style='text-align:right;'><a class='clearRequest' href='<?php echo url::base("ajax/request/clear");?>'>Clear all</a></th>
+				<th width='15px'>No.</th><th>Request</th><th style=''>Date</th><th style='text-align:right;'><a class='clearRequest' href='<?php echo url::base("ajax/request/clear");?>'>Clear all</a></th>
 			</tr>
 			<?php
 			if($res_request)
@@ -23,12 +23,15 @@
 				$statusColorR	= Array("primary","success","danger","warning");
 				foreach($res_request as $row)
 				{
+					//var_dump($row);
+					//die;
 					$type	= $requestTypeNameR[$row['siteRequestType']];
 					list($object) = explode('.', $row['siteRequestType']);
 					$row['siteRequestStatus']	= $row['siteRequestCorrectionFlag'] == 1?3:$row['siteRequestStatus'];
 					$status	= $requestStatusNameR[$row['siteRequestStatus']];
 					$color	= $statusColorR[$row['siteRequestStatus']];
 					$clearHref = url::base("ajax/request/clear/".$row['siteRequestID']);
+					$createdDate = $row['siteRequestCreatedDate'];
 					$clearrequestIcon = in_array($row['siteRequestStatus'],Array(1,2))?"<a href='$clearHref' class='clearRequest i i-cross2 pull-right'></a>":"";
 
 					## if got correction, show icon to see detail.
@@ -38,7 +41,7 @@
 					$correctionLabel	= $row['siteRequestCorrectionFlag'] == 1?"<a href='".url::base("ajax/request/correctionDetail/".$row['siteRequestID'])."' data-toggle='ajaxModal' class='badge bg-$color'>$correctionIcon$status</a>":"<span class='badge bg-$color'>$status</span>";
 					$linkToSubject = $row['siteRequestCorrectionFlag'] != 1 ? '<a class="fa fa-link" href="'.model::load('site/request')->getObjectUrl($row['siteRequestRefID'], $object).'" target="_blank"></a>' : '';
 
-					echo "<tr><td>".$no++.".</td><td>$type $correctionLabel $linkToSubject</td><td>$clearrequestIcon</td>";
+					echo "<tr><td>".$no++.".</td><td>$type $correctionLabel $linkToSubject </td><td style=''>$createdDate</td><td>$clearrequestIcon</td>";
 				}
 			}
 			else

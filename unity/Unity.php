@@ -91,7 +91,7 @@ class Unity
 			FROM user U 
 			INNER JOIN user_profile UP ON U.userID = UP.userID 
 			LEFT OUTER JOIN site_manager SM ON U.userID = SM.userID  
-			WHERE U.userEmail = ? AND U.userPassword = ?');
+			WHERE U.userEmail = ? AND U.userPassword = ? AND U.userStatus = 1' );
 
 		$statement->bindValue(1, $email);
 

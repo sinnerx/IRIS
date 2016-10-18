@@ -80,6 +80,7 @@ Class Controller_Kpi
 			->get()->result('siteID', true);
 
 			// 4. training hours
+
 			$groupedTrainingHours = 
 			//db::from('activity_date')
 			db::select('activityDateStartTime', 'activityDateEndTime', 'siteID', 'activity.activityID')

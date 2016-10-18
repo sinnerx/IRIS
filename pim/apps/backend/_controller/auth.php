@@ -67,6 +67,7 @@ Class Controller_Auth
 	## accessed by : dashboard/login.
 	public function login()
 	{
+
 		//print_r($_SERVER['DOCUMENT_ROOT'].'/snipeit/bootstrap/autoload.php');
 		
 		//print_r($app);
@@ -85,9 +86,12 @@ Class Controller_Auth
 
 		## if is logged in.
 		// if(session::has("userID"))
+		// var_dump(session::get("userID"));
+		// var_dump(\Iris\Unity::isLoggedIn());
 		if(\Iris\Unity::isLoggedIn())
 			redirect::to(model::load("access/data")->firstLoginLocation(session::get("userLevel")));
-
+		// var_dump('test');
+		//die;
 		if(form::submitted())
 		{
 			## if got change password field submitted.
@@ -145,6 +149,7 @@ Class Controller_Auth
 			## validation success.
 			else
 			{
+
 				## use auth model.
 				$accessAuth	= model::load("access/auth");
 				$site		= model::load("site/site");
@@ -167,6 +172,7 @@ Class Controller_Auth
 				## if site manager
 				if($backendLoginCheck['userLevel'] == 2)
 				{
+
 					if($backendLoginCheck['userStatus'] == 3)
 					{
 						input::repopulate();
