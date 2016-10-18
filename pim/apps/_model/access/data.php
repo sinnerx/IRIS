@@ -76,7 +76,7 @@ class Data
 					'exp/prReject' => array('cl', 'om'),
 					'exp/prDelete' => array('sm', 'cl', 'om'),
 					'exp/prRejectForm' => array('cl', 'om'),
-					'exp/prRejectionReason' => array('sm', 'cl', 'om', 'fc'),
+					'exp/prRejectionReason' => array('sm', 'cl', 'om', 'fc', 'r'),
 					'exp/listItem' => array('sm', 'cl', 'om', 'r', 'fc'),
 					'exp/submitPrNumber' => array('r'),
 					'exp/rlEdit' => array('sm', 'cl', 'om', 'fc', 'r'),

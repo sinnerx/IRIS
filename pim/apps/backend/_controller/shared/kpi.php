@@ -80,8 +80,9 @@ Class Controller_Kpi
 			->get()->result('siteID', true);
 
 			// 4. training hours
-			$groupedTrainingHours = db::from('activity_date')
-			->select('activityDateStartTime', 'activityDateEndTime', 'siteID', 'activity.activityID')
+			$groupedTrainingHours = 
+			//db::from('activity_date')
+			db::select('activityDateStartTime', 'activityDateEndTime', 'siteID', 'activity.activityID')
 			->where('activityType', 2)
 			->where('activityApprovalStatus', 1)
 			->where('activity.siteID', $siteIDs)
@@ -90,7 +91,9 @@ Class Controller_Kpi
 			->where('MONTH(activity.activityStartDate) = ? AND YEAR(activity.activityStartDate) = ?', array($month, $year))
 			->join('activity', 'activity.activityID = activity_date.activityID', 'INNER JOIN')
 			// ->join('activity_article', 'activity_article.activityID = activity.activityID', 'INNER JOIN')
-			->get()->result('siteID', true);
+			->get('activity_date')->result('siteID', true);
+
+
 
 			// 5. active members
 			/*$groupedMembers = db::from('user')

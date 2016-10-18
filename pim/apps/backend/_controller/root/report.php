@@ -895,13 +895,21 @@ class Controller_Report
 	// USP MICROSITES VITAL STATISTICS
 	private function getREgister($date) {
 		// GET Registered
-		db::select('COUNT(A.userID) AS registered, COUNT(C.siteID) AS site, C.clusterID AS clusterID');
+		db::select('COUNT(A.userID) AS registered, stateID');
+		db::from('user A');
+		db::join('site_member B', 'B.userID = A.userID');
+		db::join('site C', 'C.siteID = B.siteID');
+		db::where('A.userCreatedDate LIKE','%'.$date.'%');
+		db::group_by('stateID');
+		$regsitered = db::get()->result();
+
+		/*db::select('COUNT(A.userID) AS registered, COUNT(C.siteID) AS site, C.clusterID AS clusterID');
 		db::from('user A');
 		db::join('site_member B', 'B.userID = A.userID');
 		db::join('cluster_site C', 'C.siteID = B.siteID');
 		db::where('A.userCreatedDate LIKE','%'.$date.'%');
 		db::group_by('C.clusterID');
-		$regsitered = db::get()->result();
+		$regsitered = db::get()->result();*/
 
 		// select COUNT(A.userID) AS registered, COUNT(C.siteID) AS site, C.clusterID AS cluster
 		// from user A
@@ -919,7 +927,7 @@ class Controller_Report
 		$reSemenanjung = 0;
 
 		//Get total value for each State
-		foreach ($regsitered as $key => $value) {
+		/*foreach ($regsitered as $key => $value) {
 			if ($value['clusterID'] >= 1 && $value['clusterID'] <= 3) {
 		 		$reSabah += $value['registered'];
 		 	}
@@ -929,6 +937,16 @@ class Controller_Report
 		 	}
 			if ($value['clusterID'] > 4) {
 		 		$reSemenanjung += $value['registered'];
+		 	}
+		}*/
+
+		foreach ($regsitered as $key => $value) {
+			if ($value['stateID'] == 12) {
+				$reSabah += $value['registered'];
+		 	} else if ($value['stateID'] == 13) {
+				$reSarawak += $value['registered'];
+		 	} else {
+				$reSemenanjung += $value['registered'];
 		 	}
 		}
 
@@ -940,10 +958,11 @@ class Controller_Report
 
 	private function getlogIn($date) {
 		// GET Login
-		db::select('COUNT(userID) AS totalLogin, COUNT(DISTINCT userID) AS User, COUNT(DISTINCT siteID) AS Site, clusterID AS clusterID');
+		db::select('COUNT(userID) AS totalLogin, COUNT(DISTINCT userID) AS User, COUNT(DISTINCT OLAP_user_logins.siteID) AS Site, stateID');
 		db::from('OLAP_user_logins');
+		db::join('site S', 'S.siteID = OLAP_user_logins.siteID');
 		db::where('loginDate LIKE','%'.$date.'%');
-		db::group_by('clusterID');
+		db::group_by('stateID');
 		$uLogin = db::get()->result();
 
 		/*db::select('COUNT(A.userID) AS totalLogin, COUNT(B.userID) AS User, COUNT(D.siteID) AS Site, D.clusterID AS clusterID');
@@ -973,7 +992,7 @@ class Controller_Report
 
 		//Get total value login
 		foreach ($uLogin as $key => $value) {
-			if ($value['clusterID'] >= 1 && $value['clusterID'] <= 3) {
+			/*if ($value['clusterID'] >= 1 && $value['clusterID'] <= 3) {
 				//array_push($sumSabah, $value['totalLogin']);
 				$loSabah += $value['totalLogin'];
 		 	}
@@ -982,6 +1001,13 @@ class Controller_Report
 
 		 	}
 			if ($value['clusterID'] > 4) {
+				$loSemenanjung += $value['totalLogin'];
+		 	}*/
+			if ($value['stateID'] == 12) {
+				$loSabah += $value['totalLogin'];
+		 	} else if ($value['stateID'] == 13) {
+				$loSarawak += $value['totalLogin'];
+		 	} else {
 				$loSemenanjung += $value['totalLogin'];
 		 	}
 		}
@@ -994,13 +1020,20 @@ class Controller_Report
 
 	private function getContentUpdate($date) {
 		// GET Content Update
-		db::select('COUNT(C.siteID) AS Request, A.clusterID AS ClusterId, A.clusterName AS Cluster');
+		db::select('COUNT(A.siteID) AS Request, stateID');
+		db::from('site_request A');
+		db::join('site B', 'B.siteID = A.siteID');
+		db::where('A.siteRequestCreatedDate LIKE','%'.$date.'%');
+		db::group_by('stateID');
+		$contentUpdate = db::get()->result();
+
+		/*db::select('COUNT(C.siteID) AS Request, A.clusterID AS ClusterId, A.clusterName AS Cluster');
 		db::from('cluster A');
 		db::join('cluster_site B', 'B.clusterID = A.clusterID');
 		db::join('site_request C', 'C.siteID = B.siteID');
 		db::where('C.siteRequestCreatedDate LIKE','%'.$date.'%');
 		db::group_by('A.clusterID');
-		$contentUpdate = db::get()->result();
+		$contentUpdate = db::get()->result();*/
 
 		//Set array for content update cell
 		$totalUpdate = array();
@@ -1012,7 +1045,7 @@ class Controller_Report
 
 		//Get total value for each State
 		foreach ($contentUpdate as $key => $value) {
-			if ($value['ClusterId'] >= 1 && $value['ClusterId'] <= 3) {
+			/*if ($value['ClusterId'] >= 1 && $value['ClusterId'] <= 3) {
 		 		$upSabah += $value['Request'];
 		 	}
 			if ($value['ClusterId'] == 4) {
@@ -1020,6 +1053,13 @@ class Controller_Report
 		 	}
 			if ($value['ClusterId'] > 4) {
 		 		$upSemenanjung += $value['Request'];
+		 	}*/
+			if ($value['stateID'] == 12) {
+				$upSabah += $value['Request'];
+		 	} else if ($value['stateID'] == 13) {
+				$upSarawak += $value['Request'];
+		 	} else {
+				$upSemenanjung += $value['Request'];
 		 	}
 		}
 
@@ -1031,7 +1071,14 @@ class Controller_Report
 
 	private function getEntrepreneurs($date) {
 		//Get Entrepreneurs
-		db::select('COUNT(A.userID) AS Entrepreneurs, COUNT(C.siteID) AS site, E.clusterID AS clusterID, E.clusterName AS Cluster');
+		db::select('stateID, SUM(noOfUsers) AS Entrepreneurs');
+		db::from('OLAP_entrepreneurs A');
+		db::join('site B', 'B.siteID = A.siteID');
+		db::where('A.registerDate LIKE','%'.$date.'%');
+		db::group_by('stateID');
+		$Entrepreneurs = db::get()->result();
+
+		/*db::select('COUNT(A.userID) AS Entrepreneurs, COUNT(C.siteID) AS site, E.clusterID AS clusterID, E.clusterName AS Cluster');
 		db::from('user A');
 		db::join('user_profile_additional B', 'B.userID = A.userID');
 		db::join('site_member C', 'C.userID = B.userID');
@@ -1041,7 +1088,7 @@ class Controller_Report
 		db::where('B.userProfileOccupationGroup', '3');
 		db::where('A.userCreatedDate LIKE','%'.$date.'%');
 		db::group_by('E.clusterID');
-		$Entrepreneurs = db::get()->result();
+		$Entrepreneurs = db::get()->result();*/
 
 		//Set array for entreprenerus cell
 		$totalEntrepre = array();
@@ -1053,7 +1100,7 @@ class Controller_Report
 
 		//Get total value for each State
 		foreach ($Entrepreneurs as $key => $value) {
-			if ($value['clusterID'] >= 1 && $value['clusterID'] <= 3) {
+			/*if ($value['clusterID'] >= 1 && $value['clusterID'] <= 3) {
 		 		$enSabah += $value['Entrepreneurs'];
 		 	}
 			if ($value['clusterID'] == 4) {
@@ -1061,6 +1108,13 @@ class Controller_Report
 		 	}
 			if ($value['clusterID'] > 4) {
 		 		$enSemenanjung += $value['Entrepreneurs'];
+		 	}*/
+			if ($value['stateID'] == 12) {
+				$enSabah += $value['Entrepreneurs'];
+		 	} else if ($value['stateID'] == 13) {
+				$enSarawak += $value['Entrepreneurs'];
+		 	} else {
+				$enSemenanjung += $value['Entrepreneurs'];
 		 	}
 		}
 
