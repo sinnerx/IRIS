@@ -114,9 +114,22 @@ class Controller_Member
 		{
 			$emailCheck	= false;
 			## check only if email not same as current email.
-			if(input::get("userEmail") != $data['row']['userEmail'])
-			{
-				$emailCheck	= model::load("user/services")->checkEmail(input::get("userEmail"));
+			if(input::get("userEmail") != ""){
+				$emailRule = 
+					Array(
+							"email:Please input a correct email format.",
+							"callback"=>Array(!$emailCheck,"Email already exists.")
+						);
+									
+				if(input::get("userEmail") != $data['row']['userEmail'])
+				{
+					$emailCheck	= model::load("user/services")->checkEmail(input::get("userEmail"));
+				
+				}				
+			}
+			else if(input::get("userEmail") == ""){
+				$emailCheck = true;
+				$emailRule = array();
 			}
 
 			$userIC = str_replace('-', '', input::get('userIC'));
@@ -127,30 +140,34 @@ class Controller_Member
 			{
 				$icCheck = model::load("user/services")->checkIC($userIC);
 			}
-
+			//var_dump($emailRule);
 			$rules	= Array(
-					"userProfileFullName,userIC,userEmail"=>"required:This field is required.",
-					"userEmail"=>Array(
-								"email:Please input a correct email format.",
-								"callback"=>Array(!$emailCheck,"Email already exists.")
-										),
+					"userProfileFullName,userIC"=>"required:This field is required.",
 					"userIC"=>Array(
 								"callback"=>Array(!$icCheck,"IC already exists")
 									)
 							);
 
+			$rules['userEmail'] = $emailRule;
 			## got error.
+
 			if($error = input::validate($rules))
 			{
+				//var_dump($rules['userIC']['callback'][1] . );
+				$message = $rules['userEmail'][0];
+				//var_dump($message);
+				//die;
 				input::repopulate();
 				redirect::withFlash(model::load("template/services")->wrap("input-error",$error));
-				redirect::to("","Got some error in your form.","error");
+				redirect::to("",$message,"error");
 			}
 
 			## update member data
 			$userProfileLastName = $data['row']['userProfileLastName'];
 			$data	= input::get();
 			$data['userIC'] = $userIC;
+			// var_dump($data);
+			// die;
 			//$data['userProfileLastName'] = $userProfileLastName;
 			$user->updateMember($userID,$data);
 			$user->updateAdditional($userID,$data);

@@ -23,11 +23,11 @@ class Controller_User
 		{
 			$emailCheck	= false;
 			## check only if email not same as current email.
-			if(input::get("userEmail") != $data['row']['userEmail'])
-			{
-				$emailCheck	= model::load("user/services")->checkEmail(input::get("userEmail"));
-			}
-
+				if(input::get("userEmail") != $data['row']['userEmail'])
+				{
+					$emailCheck	= model::load("user/services")->checkEmail(input::get("userEmail"));
+				}				
+			
 			## ic check.
 			$icCheck	= false;
 			if(input::get("userIC") != $data['row']['userIC'])
@@ -43,6 +43,7 @@ class Controller_User
 							);
 
 			## got error.
+
 			if($error = input::validate($rules))
 			{
 				input::repopulate();
