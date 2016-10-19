@@ -169,10 +169,7 @@ Class Controller_Kpi
 				if(isset($groupedEntrepreneurships[$siteID]))
 				{
 					foreach($groupedEntrepreneurships[$siteID] as $entrepreneurship){
-						// if($total['entrepreneurship_class'])
-							$total['entrepreneurship_class'] = $enterpreneuship['total'];
-						// else
-							// $total['entrepreneurship_class'] = 0;
+							$total['entrepreneurship_class'] = $entrepreneurship['total'];
 					}
 						
 				}

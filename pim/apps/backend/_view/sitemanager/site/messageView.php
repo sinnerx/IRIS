@@ -9,7 +9,8 @@ Message detail
 <div class='col-sm-7'>
 	<section class='panel panel-default'>
 		<div class='panel-heading'>
-		Subject : <?php echo $message->messageSubject;?><div class='pull-right badge badge-primary'><?php echo $message->getCategory();?></div>
+			<?php //var_dump($message); ?>
+		Subject : <?php echo $message->messageSubject;?> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <?php echo "Date: ".$message->messageCreatedDate;?> <div class='pull-right badge badge-primary'><?php echo $message->getCategory();?></div>
 		</div>
 		<div class='panel-body' style='min-height:135px;'>
 		<?php echo $message->messageContent;?>
