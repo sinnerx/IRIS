@@ -5,13 +5,15 @@
 <link rel="stylesheet" href="<?php echo url::asset("backend/tools/bootstrap-tokenizer/bootstrap-tokenizer.css"); ?>" type="text/css" />
 <script src="<?php echo url::asset("backend/tools/bootstrap-tokenizer/bootstrap-tokenizer.js"); ?>"></script>
 <script src="<?php echo url::asset("backend/js/pimgallery.js"); ?>"></script>
-<link rel="stylesheet" type="text/css" href="<?php echo url::asset("frontend/tools/CLEditor/jquery.cleditor.css");?>" >
-<script type="text/javascript" src='<?php echo url::asset("frontend/tools/CLEditor/jquery.cleditor.min.js");?>'></script>
+<!--<link rel="stylesheet" type="text/css" href="<?php //echo url::asset("frontend/tools/CLEditor/jquery.cleditor.css");?>" >
+<script type="text/javascript" src='<?php //echo url::asset("frontend/tools/CLEditor/jquery.cleditor.min.js");?>'></script>-->
+<script type="text/javascript" src='<?php echo url::asset("frontend/tools/ckeditor/ckeditor.js");?>'></script>
 <script>
 
 		$(document).ready(function()
 		{
-			jQuery("#articleText").cleditor();
+			//jQuery("#articleText").cleditor();
+			CKEDITOR.replace( 'articleText' );
 		});
 
 		function removeActivity()
