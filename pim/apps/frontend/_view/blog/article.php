@@ -103,9 +103,22 @@ echo model::load("template/frontend")
 								{
 									$img 	= model::load("image/services")->getPhotoUrl(null);
 								}*/
-								$img	= model::load("helper")->getImgFromText($row['articleText']);
+								//$img	= model::load("helper")->getImgFromText($row['articleText']);
+								library::_require("simple_html_dom");
+								$imghtml = str_get_html($row['articleText']);
+
+								$imgs = $imghtml->find('img');
+
+								$img = $imgs[0]->src;
+
 							?>
-							<img src="<?php echo $img;?>" style='height:100%;' alt=""/> 
+							<img src="<?php if(!$img){
+								echo "http://localhost/iris/pim/assets/frontend/images/noimage.png";
+								}
+								else{
+								echo $img;
+
+								};;?>" style='height:100%;' alt=""/> 
 						</div>
 						<div class="right-blog">
 							<div class="top-heading">

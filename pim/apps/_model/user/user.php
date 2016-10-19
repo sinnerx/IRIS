@@ -323,7 +323,7 @@ class User extends \Origami
 		
 		$data_profile = Array(
 					"userProfileFullName"=>$data['userProfileFullName'],
-					//"userProfileLastName"=>$data['userProfileLastName'],
+					"userProfileLastName"=>$data['userProfileLastName'],
 					"userProfileTitle"=>$data['userProfileTitle'],
 					"userProfileGender"=>$data['userProfileGender'],
 					"userProfileDOB"=>$data['userProfileDOB'],

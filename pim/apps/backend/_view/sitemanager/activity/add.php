@@ -112,7 +112,8 @@ var activity	= function()
 				  	$('<option></option>', {html:this.name}).attr('value', this.id).appendTo('#learningModule');
 				});	
 				$("#modulediv").show();
-				activity.showModuleDetail(1);	 		
+				activity.showModuleDetail($("#learningModule").val());	 		
+
 		 	}
 		 });
 		

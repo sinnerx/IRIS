@@ -6,7 +6,7 @@
 		<div class='table-responsive'>
 		<table class='table'>
 			<tr>
-				<th width='15px'>No.</th><th>Category</th><th>Subject</th><th>From</th><th style='text-align:right;'></th>
+				<th width='15px'>No.</th><th>Category</th><th>Subject</th><th>From</th><th>Date</th><th style='text-align:right;'></th>
 			</tr>
 			<?php
 			if($res_message)
@@ -19,8 +19,9 @@
 					$url	= url::base("site/messageView/$refNo");
 					$from	= $row['contactName']." (".$row['contactEmail'].")";
 					$cat	= $siteMessage->getCategoryName($row['siteMessageCategory']);
+					$createdDate	= $row['messageCreatedDate'];
 
-					echo "<tr><td>$refNo</td><td>$cat</td><td>$subject</td><td>$from</td><td><a href='$url' class='fa fa-search pull-right'></a></td></tr>";
+					echo "<tr><td>$refNo</td><td>$cat</td><td>$subject</td><td>$from</td><td>$createdDate</td><td><a href='$url' class='fa fa-search pull-right'></a></td></tr>";
 				}
 			}
 			else

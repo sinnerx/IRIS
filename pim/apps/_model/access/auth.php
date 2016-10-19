@@ -10,6 +10,7 @@ Class Auth
 		db::from("user");
 		db::where(Array(
 				"userEmail"=>$email,
+				"userStatus"=> 1,
 				"userPassword"=>model::load("helper")->hashPassword($password)
 						));
 
@@ -17,6 +18,7 @@ Class Auth
 
 		$user = model::orm('user/user')->where(array(
 			'userEmail' => $email,
+			'userStatus' => 1,
 			'userPassword' => model::load("helper")->hashPassword($password)
 			))->execute()->getFirst();
 
