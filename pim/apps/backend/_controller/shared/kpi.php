@@ -51,68 +51,68 @@ Class Controller_Kpi
 		if(count($sites) > 0)
 		{
 			// 1. Total events. Get total event done
-			$groupedEvents = db::from('activity')
-			->where('siteID', $siteIDs)
-			->where('activityType', 1)
-			->where('activityApprovalStatus', 1)
-			->where('activityID IN (SELECT activityID FROM activity_article WHERE activity_article.activityID = activity.activityID)')
-			->where('MONTH(activityStartDate) = ? AND YEAR(activityStartDate) = ?', array($month, $year))
-			->get()->result('siteID', true);
+
+			db::select('siteID, noOfActivities');
+			db::from('OLAP_articled_activities');
+			db::where('siteID', $siteIDs);
+			db::where('month = ? AND year = ?', array($month, $year));
+			db::group_by('siteID');
+			$groupedEvents = db::get()->result('siteID', true);			
 
 			// 2. enterpreneuship class
-			$groupedEntrepreneurships = db::from('activity')
-			->where('siteID', $siteIDs)
-			->where('activityType', 2)
-			->where('activityApprovalStatus', 1)
-			->where('MONTH(activityStartDate) = ? AND YEAR(activityStartDate) = ?', array($month, $year))
-			->where('training_type.trainingTypeName LIKE ?', '%Entrepreneurship%')
+
+			db::select('siteID, count(activity.activityID) as total');
+			db::from('activity');
+			db::where('siteID', $siteIDs);
+			db::where('activityType', 2);
+			db::where('activityApprovalStatus', 1);
+			db::where('activityStartDate <= NOW() - INTERVAL 1 DAY ');
+			db::where('MONTH(activityStartDate) = ? AND YEAR(activityStartDate) = ?', array($month, $year));
+			db::where('training_type.trainingTypeName LIKE ?', array('%Entrepreneurship%'));
 			// ->join('activity_article', 'activity_article.activityID = activity.activityID', 'INNER JOIN')
-			->join('training', 'activity.activityID = training.activityID', 'INNER JOIN')
-			->join('training_type', 'training.trainingType = training_type.trainingTypeID', 'INNER JOIN')
-			->get()->result('siteID', true);
+			db::join('training', 'activity.activityID = training.activityID', 'INNER JOIN');
+			db::join('training_type', 'training.trainingType = training_type.trainingTypeID', 'INNER JOIN');
+			db::group_by('siteID');
+			$groupedEntrepreneurships = db::get()->result('siteID', true);
 
+			// var_dump($groupedEntrepreneurships);
 			// 3. entrepreneurship program (accumulated amounts of sales)
-			$groupedSales = db::from('billing_transaction_item')
-			->where('billing_transaction.siteID', $siteIDs)
-			->where('MONTH(billingTransactionDate) = ? AND YEAR(billingTransactionDate) = ?', array($month, $year))
-			->where('billing_transaction_item.billingItemID IN (SELECT billingItemID FROM billing_item WHERE billingItemCode = ?)', array('lms_item'))
-			->join('billing_transaction', 'billing_transaction.billingTransactionID = billing_transaction_item.billingTransactionID')
-			->get()->result('siteID', true);
 
+			db::select('siteID, (billingTransactionItemPrice) * (billingTransactionItemQuantity) as total');
+			db::from('billing_transaction_item');
+			db::where('billing_transaction.siteID', $siteIDs);
+			db::where('MONTH(billingTransactionDate) = ? AND YEAR(billingTransactionDate) = ?', array($month, $year));
+			db::where('billing_transaction_item.billingItemID IN (SELECT billingItemID FROM billing_item WHERE billingItemCode = ?)', array('lms_item'));
+			db::join('billing_transaction', 'billing_transaction.billingTransactionID = billing_transaction_item.billingTransactionID');
+			db::group_by('siteID');
+			$groupedSales = db::get()->result('siteID', true) ? : 0;			
+			// var_dump($groupedSales);
+			// die;
 			// 4. training hours
 
-			$groupedTrainingHours = 
-			//db::from('activity_date')
-			db::select('activityDateStartTime', 'activityDateEndTime', 'siteID', 'activity.activityID')
-			->where('activityType', 2)
-			->where('activityApprovalStatus', 1)
-			->where('activity.siteID', $siteIDs)
-			// ->where('activity_date.activityID IN (SELECT activity_article.activityID FROM activity_article)')
-			->where('activity_date.activityID IN (SELECT activityID FROM activity_user)') // rsvp
-			->where('MONTH(activity.activityStartDate) = ? AND YEAR(activity.activityStartDate) = ?', array($month, $year))
-			->join('activity', 'activity.activityID = activity_date.activityID', 'INNER JOIN')
-			// ->join('activity_article', 'activity_article.activityID = activity.activityID', 'INNER JOIN')
-			->get('activity_date')->result('siteID', true);
+			db::select('siteID, sum(time_to_sec(timediff(endTime, startTime)) / 3600) as total');
+			db::from('OLAP_site_activity_date_times');
+			db::where('siteID', $siteIDs);
 
-
+			db::where('activityDate <= NOW() - INTERVAL 1 DAY');
+			db::where('MONTH(activityDate) = ? AND YEAR(activityDate) = ?', array($month, $year));
+			db::group_by('siteID');
+			$groupedTrainingHours = db::get()->result('siteID', true);
+			
+			// $groupedTrainingHours = 0;
+			// $groupedTrainingHours += $trainingHours;
 
 			// 5. active members
-			/*$groupedMembers = db::from('user')
-			->select('user.userID', 'siteID')
-			->where('userLevel', 1)
-			->where('site_member.siteID', $siteIDs)
-			->where('user.userID IN (SELECT userID FROM log_login WHERE MONTH(logLoginCreatedDate) = ? AND YEAR(logLoginCreatedDate) = ?)', array($month, $year))
-			->join('site_member', 'site_member.userID = user.userID', 'INNER JOIN')
-			->get()->result('siteID', true);*/
 
-			$groupedMembers = db::from('site_member')
-			->select('siteID', 'count(userID) as total')
-			->where('siteID', $siteIDs)
-			->where('siteMemberStatus',1)
-			->where('userID IN (SELECT userID FROM log_login WHERE MONTH(logLoginCreatedDate) = ? AND YEAR(logLoginCreatedDate) = ?)', array($month, $year))
-			->group_by('siteID')
-			->get()->result('siteID');
+			db::select('siteID, count(distinct userID) as total');
+			db::from('OLAP_user_logins');
+			db::where('siteID', $siteIDs);
+			db::where('MONTH(loginDate) = ? AND YEAR(loginDate) = ?', array($month, $year));
+			db::group_by('siteID');
+			$activeMembers = db::get()->result('siteID', true);
 
+			// var_dump($groupedMembers);
+			// die;
 			// 5.1 total members.
 			$totalMembers = db::from('site_member')
 			->select('siteID', 'count(userID) as total')
@@ -121,6 +121,7 @@ Class Controller_Kpi
 			->group_by('siteID')
 			->get()->result('siteID');
 			//print_r($totalMembers);
+
 			//population
 			$totalpopulation = db::from('site')
 			->select('site.siteID','site_info.siteInfoPopulation')
@@ -150,44 +151,57 @@ Class Controller_Kpi
 
 
 				// 1. prepare total events
+				//var_dump($siteID);
+				// var_dump($groupedEvents[$siteID]);
+				// die;
 				$total['event'] = 0;
 				if(isset($groupedEvents[$siteID]))
 				{
+					// var_dump($groupedEvents[$siteID]);
 					foreach($groupedEvents[$siteID] as $event)
-						$total['event']++;
+						$total['event'] = $event['noOfActivities'];
 				}
 
 
 				// 2. entrepreneurship class
 				$total['entrepreneurship_class'] = 0;
+				// var_dump($groupedEntrepreneurships[$siteID]);
 				if(isset($groupedEntrepreneurships[$siteID]))
 				{
-					foreach($groupedEntrepreneurships[$siteID] as $entrepreneurship)
-						$total['entrepreneurship_class']++;
+					foreach($groupedEntrepreneurships[$siteID] as $entrepreneurship){
+						// if($total['entrepreneurship_class'])
+							$total['entrepreneurship_class'] = $enterpreneuship['total'];
+						// else
+							// $total['entrepreneurship_class'] = 0;
+					}
+						
 				}
 
 				// 3. entrepreneurship sales
 				// $total['entrepreneurship_sales'] = 0;
 				$total['entrepreneurship_sales'] = 0;
+				// var_dump($groupedSales);
 
 				if(isset($groupedSales[$siteID]))
 				{
+					// var_dump($groupedSales[$siteID]);
 					foreach($groupedSales[$siteID] as $billingItem)
 					{
-						$total = $billingItem['billingTransactionItemQuantity'] * $billingItem['billingTransactionItemPrice'];
-						$total['entrepreneurship_sales'] += $total;
+						// var_dump($billingItem);
+						$total['entrepreneurship_sales'] = $billingItem['total'];
+
 					}
 				}
 
 				// 4. training hours
 				$total['training_hours'] = 0;
+				// var_dump($groupedTrainingHours[$siteID]);
 				if(isset($groupedTrainingHours[$siteID]))
 				{
 					foreach($groupedTrainingHours[$siteID] as $trainingHour)
 					{
-						$hour =  (strtotime($trainingHour['activityDateEndTime']) - strtotime($trainingHour['activityDateStartTime'])) / 3600;
-
-						$total['training_hours'] += $hour;
+						//var_dump($trainingHour);
+						$total['training_hours'] = $trainingHour['total'];
 					}
 				}
 
@@ -200,12 +214,11 @@ Class Controller_Kpi
 
 
 				// 5. active members.
-				$siteTotalMember = 0;
-				if(isset($groupedMembers[$siteID]))
-					$siteTotalMember = $groupedMembers[$siteID]['total'];
+				// var_dump($activeMembers[$siteID][0]['total']);
+				$siteActiveMember = $activeMembers[$siteID][0]['total'];
 
-				if($siteTotalMember > 0 && $totalMembers[$siteID]['total'] > 0)
-					$total['active_member_percentage'] = $siteTotalMember / $totalMembers[$siteID]['total'] * 100;
+				if($siteActiveMember > 0 && $totalMembers[$siteID]['total'] > 0)
+					$total['active_member_percentage'] = $siteActiveMember / $totalMembers[$siteID]['total'] * 100;
 				else
 					$total['active_member_percentage'] = 0;
 
@@ -231,7 +244,7 @@ Class Controller_Kpi
 
 			}
 
-
+			// die;
 		}
 
 		 

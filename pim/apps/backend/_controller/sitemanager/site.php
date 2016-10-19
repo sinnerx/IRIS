@@ -52,7 +52,7 @@ Class Controller_Site
 		db::where('siteID', $siteID);
 		db::where('activityType', 2);
 		db::where('activityApprovalStatus', 1);
-		db::where('activityStartDate <= NOW() ');
+		db::where('activityStartDate <= NOW() - INTERVAL 1 DAY ');
 		db::where('MONTH(activityStartDate) = ? AND YEAR(activityStartDate) = ?', array($month, $year));
 		db::where('training_type.trainingTypeName LIKE ?', array('%Entrepreneurship%'));
 		// ->join('activity_article', 'activity_article.activityID = activity.activityID', 'INNER JOIN')
@@ -101,23 +101,10 @@ Class Controller_Site
 		db::from('OLAP_site_activity_date_times');
 		db::where('siteID', $siteID);
 
-		db::where('activityDate <= NOW()');
+		db::where('activityDate <= NOW() - INTERVAL 1 DAY');
 		db::where('MONTH(activityDate) = ? AND YEAR(activityDate) = ?', array($month, $year));
-		// if($month < date('m')){
-		// 	db::where('MONTH(activityDate) = ? AND YEAR(activityDate) = ?', array($month, $year));
-		// 	$trainingHours = db::get()->row('total');
-		// }
-		// else if ($month == date('m')){
-		// 	db::where(' activityDate BETWEEN ('.$year .'-'. $month . '-01 AND ' $year . '-'. $month . '-' date('d'));
-		// 	$trainingHours = db::get()->row('total');				
-		// }
-		// else{
-
-		// }
 		$trainingHours = db::get()->row('total');
 		
-		
-
 		$hours = 0;
 		$hours += $trainingHours;
 
@@ -181,7 +168,7 @@ Class Controller_Site
 		$kdbData = db::query("SELECT COUNT(distinct activity.activityID) as sessions, COUNT(activity.activityID) as pax
 			FROM activity_user, activity, training
 			WHERE siteID = '$siteID'
-			AND activityStartDate <= NOW() 
+			AND activityStartDate <= NOW() - INTERVAL 1 DAY 
 			AND (YEAR(activityStartDate) = $year OR YEAR(activityEndDate) = $year)
 			AND (MONTH(activityStartDate) <= $month OR MONTH(activityEndDate) <= $month)
 			AND activity.activityID = activity_user.activityID AND training.activityID = activity.activityID
