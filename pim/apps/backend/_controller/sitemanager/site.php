@@ -14,7 +14,9 @@ Class Controller_Site
 			'entrepreneurship_class' => 1,
 			'entrepreneurship_sales' => 300,
 			'training_hours' => 32,
-			'active_member_percentage' => 80
+			'active_member_percentage' => 80,
+			'kdb_sessions' => 30,
+			'kdb_pax' => 600
 			);
 
 		// event
@@ -155,6 +157,7 @@ Class Controller_Site
 			FROM activity_user, activity, training
 			WHERE siteID = $siteID
 			AND (YEAR(activityStartDate) = $year OR YEAR(activityEndDate) = $year)
+			AND (MONTH(activityStartDate) <= $month OR MONTH(activityEndDate) <= $month)
 			AND activity.activityID = activity_user.activityID AND training.activityID = activity.activityID
 			AND trainingType = 7 AND trainingSubType = 14")->result();
 		$kdb_sessions += $kdbData[0]['sessions'];

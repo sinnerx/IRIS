@@ -295,7 +295,7 @@ Dashboard overview
                               </span>
                               <span class="clear">
                                 
-                                <span class="h1 block m-t-xs text-primary kpi-font"><?php echo $kpi['totalEntArticle']; ?>/1</span>
+                                <span class="h1 block m-t-xs text-primary kpi-font"><?php echo $kpi['totalEntArticle']; ?> / 1</span>
                                 <small class="text-muted text-u-c">Article</small>
                               </span>
                             </a>
@@ -371,7 +371,7 @@ Dashboard overview
                 <section class="panel panel-default panel-pd">
                   <header class="panel-heading panelhd-pd">
                     KDB
-                    <?php if ($kpi['kdb_session'] >= 30 && $kpi['kdb_pax'] >= 300) {  ?>
+                    <?php if ($kpi['kdb_session'] >= $max['kdb_sessions'] && $kpi['kdb_pax'] >= $max['kdb_pax']) {  ?>
 					<i class="fa fa-check fa-lg pull-right custom-fa-pad" style="color:green"></i>
 					<?php } else { ?>
 					<i class="fa fa-exclamation fa-lg pull-right custom-fa-pad" style="color:red"></i>
@@ -387,14 +387,14 @@ Dashboard overview
                               </span>
                               <span class="clear">
                                 
-                                <span class="h1 block m-t-xs text-primary kpi-font"><?php echo $kpi['kdb_session']; ?>/30
+                                <span class="h1 block m-t-xs text-primary kpi-font"><?php echo $kpi['kdb_session']; ?> / <?php echo $max['kdb_sessions']; ?>
                                 <small class="text-muted text-u-c">Session</small></span>
                               <!--</span>
 
 
                               <span class="col-sm-3">-->
                                 
-                                <span class="h1 block m-t-xs text-primary kpi-font"><?php echo $kpi['kdb_pax']; ?>/300
+                                <span class="h1 block m-t-xs text-primary kpi-font"><?php echo $kpi['kdb_pax']; ?> / <?php echo $max['kdb_pax']; ?>
                                 <small class="text-muted text-u-c">Pax</small></span>
                               </span>
 
