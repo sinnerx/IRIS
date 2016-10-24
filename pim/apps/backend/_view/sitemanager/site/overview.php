@@ -91,6 +91,7 @@ var site = new function()
 Overview
 </h3>
 <div class='well well-sm'>
+  <?php $yesterday = "(Yesterday ". date('d M',strtotime("-1 days")). ")"; ?>
 Dashboard overview
 </div>
 
@@ -124,6 +125,9 @@ Dashboard overview
 				<section class="panel panel-default panel-pd">
 					<header  class="panel-heading panelhd-pd">
 					Event  
+          <b class="text-muted">
+          <?php echo $yesterday; ?>
+          </b>         
 					<?php if ($kpi['event'] >= $max['event']) {  ?>
 					<i class="fa fa-check fa-lg pull-right custom-fa-pad" style="color:green"></i>
 					<?php } else { ?>
@@ -218,6 +222,9 @@ Dashboard overview
                 <section class="panel panel-default panel-pd">
                 <header class="panel-heading panelhd-pd">
                 Training
+                <b class="text-muted">
+                <?php echo $yesterday; ?>
+                </b>               
                 <?php if ($kpi['training_hours'] >= $max['training_hours']) {  ?>
 					<i class="fa fa-check fa-lg pull-right custom-fa-pad" style="color:green"></i>
 					<?php } else { ?>
@@ -248,6 +255,9 @@ Dashboard overview
                 <section class="panel panel-default panel-pd">
                   <header class="panel-heading panelhd-pd">
                     Active member (login) 
+                    <b class="text-muted">
+                    <?php echo $yesterday; ?>
+                    </b>                   
                     <?php if ($kpi['active_member_percentage'] >= 40) {  ?>
 					<i class="fa fa-check fa-lg pull-right custom-fa-pad" style="color:green"></i>
 					<?php } else { ?>
