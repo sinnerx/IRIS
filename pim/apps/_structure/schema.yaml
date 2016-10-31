@@ -13,6 +13,7 @@ user:
 	userEmail [varchar]
 	userLevel [varchar]			## 1 = members (M), 2 = site manager (SM), 3 = cluster lead (CL), 4 = operation manager (OM), 99 = root admin (R)
 	userStatus [int]			## 0 = inactive, 1 = active, 3 = deleted
+	userPoint [int]
 	userCreatedDate [datetime]
 	userCreatedUser [int]
 	userUpdatedDate [datetime]
@@ -783,6 +784,17 @@ billing_item:
 	billingItemCreatedDate [datetime]
 	billingItemUpdatedDate [datetime]
 
+billing_item_point:
+	billingItemPointID [int]
+	billingItemID [int]
+	rewardPoint [int]
+	redeemPoint [int]
+	effectiveDate [date]
+	createdDate [datetime]
+	createdUser [int]
+	updatedDate [datetime]
+	updatedUser [int]
+
 billing_transaction_item:
 	billingTransactionItemID [int]
 	billingItemID [int]
@@ -791,6 +803,7 @@ billing_transaction_item:
 	billingTransactionItemQuantity [float]
 	billingTransactionItemUnit [float] ## unit or hours
 	billingTransactionItemPrice [float] ## unit price.
+	billingTransactionItemPoint [float]
 
 billing_transaction_user:
 	billingTransactionUserID [int]
@@ -1257,3 +1270,11 @@ report_quarterly:
 batch:
 	batchID [int]
 	batchName [varchar(11)]
+
+OLAP_loyalty_points:
+	transactionDate [datetime]
+	userID [int]
+	siteID [int]
+	clusterID [int]
+	point [int]
+	billingTransactionItemID [int]
