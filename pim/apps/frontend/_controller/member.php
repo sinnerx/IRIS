@@ -196,4 +196,22 @@ class Controller_Member
 			echo "</script>";
 		}
 	}
+
+	public function viewTransactionPointList(){
+		$page	= request::get("page",1);
+		$userID = session::get("userID");
+		// echo $userID;
+		$billingTransaction = model::load("billing/transaction_user")->getTransactionPoint($userID,
+			array('currentPage'=> $page,
+				  'urlFormat'=> url::base("{site-slug}/profile/transactionPointList/?page={page}"))
+			);
+		// url::base('{site-slug}/profile/transactionPointList')
+		$data['billingTransactionItems'] = $billingTransaction;
+		// var_dump($data);
+		// die;
+
+		pagination::setFormat(model::load("template/frontend")->pagination());
+
+		view::render("member/transaction_list", $data);
+	}
 }

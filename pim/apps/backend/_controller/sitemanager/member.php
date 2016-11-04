@@ -188,4 +188,54 @@ class Controller_Member
 
 		redirect::to("member/lists","Member id " . $userID . " deleted.");
 	}
+
+	public function point($userID, $page){
+		// var_dump(model::load('access/auth')->getAuthData('site','siteID'));
+		// die;
+
+		$siteID = model::load('access/auth')->getAuthData('site','siteID');
+		// $dateStart = date("Y-m-01");
+		// $dateEnd = date("Y-m-t");
+
+		$todayDateStart 	= request::get("selectDateStart");
+		$todayDateEnd 		= request::get("selectDateEnd");
+		$billingItemType	= request::get("billingItemType");
+
+		$data['todayDateStart'] = $todayDateStart = $todayDateStart ? :  date('Y-m-01');
+		$data['todayDateEnd'] = $todayDateEnd = $todayDateEnd ? :  date('Y-m-t');
+
+		$todayDateStart = date('Y-m-d', strtotime($todayDateStart));
+		$todayDateEnd = date('Y-m-d', strtotime($todayDateEnd));
+
+		$params = array(
+			// 'siteID' 		=> $siteID,
+			'userID'			=> $userID,
+			'dateStart'			=> $todayDateStart,
+			'dateEnd'			=> $todayDateEnd,
+			'billingItemType'	=> $billingItemType,
+			'pagination'		=> Array(
+				'urlFormat'=>url::base("member/point/$userID/{page}/?billingItemType=$billingItemType&selectDateStart=$todayDateStart&selectDateEnd=$todayDateEnd"),
+				'currentPage'=>$page
+			),
+			);
+
+		//,$where, (request::get('search') && request::get('searchAllSites')) ? false : true
+
+		db::from("billing_item");
+		db::order_by("billingItemID","ASC");
+		
+		$billing_type = db::get()->result();
+		
+		foreach($billing_type as $row)
+		{
+			$data['itemList'][$row['billingItemID']]= $row['billingItemName'];
+		}
+
+		$data['transactions'] 		= model::load('billing/transaction_user')->getTransactionPointList($params);
+
+		
+		pagination::setFormat(model::load("template/cssbootstrap")->paginationLink());
+
+		view::render('sitemanager/member/point', $data);
+	}	
 }

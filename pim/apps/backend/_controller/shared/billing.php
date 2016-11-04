@@ -15,6 +15,7 @@ Class Controller_Billing
 		$month = date('n',strtotime($todayDate));
 		
 		$data['item'] = model::load('billing/billing')->getItem();
+		// var_dump($data['item']);die;
 		$data['list'] = model::load('billing/billing')->getList($siteID);
 
 		$totalBalanceDebit = model::load('billing/process')->getBalanceDebit($siteID,date('n',strtotime($todayDate)),date('Y',strtotime($todayDate)));
@@ -66,6 +67,49 @@ Class Controller_Billing
 		}	
 	}
 
+	public function addPoint($billingItemID)
+	{
+		$this->template = false;
+
+		if(form::submitted()){
+			$effectiveDate = date('Y-m-d',strtotime(input::get('selectDatePoint')));
+			//var_dump(date("Y-m-d", strtotime(input::get('selectDatePoint'))));
+			//die;
+			//check date exist for billingitemID in billingitempoint table
+			$billingPointModel = model::load('billing/billing_point')->checkDatePoint($billingItemID, $effectiveDate);
+			// var_dump($billingPointModel);
+			// die;
+			//if exist, cancel it
+			if ($billingPointModel === true){
+				$message = "Date already exist for the selected billing item";
+				redirect::to('billing/add', $message, 'error');
+			}
+
+			//else
+			else{
+				// var_dump("false");
+				// die;
+				$billingpoint = model::orm('billing/billing_point')->create();
+				$billingpoint->billingItemID 	= $billingItemID;
+				$billingpoint->rewardPoint 		= input::get('rewardtxt');
+				$billingpoint->redeemPoint 		= input::get('redeemtxt');
+				$billingpoint->effectiveDate 	= $effectiveDate;
+				$billingpoint->createdDate	 	= date('Y-m-d H:i:s');
+				$billingpoint->createdUser	 	= session::get("userID");
+				$billingpoint->status		 	= 1;
+				$billingpoint->save();
+				$message = 'New Billing Point has been added';	
+				redirect::to('billing/add', $message, 'success');			
+			}
+			//add into table
+
+			
+
+			
+
+
+		}
+	}
 	public function addItem()
 	{		
 		$this->template = false;
@@ -127,10 +171,13 @@ Class Controller_Billing
 		view::render("shared/billing/addItem", $data);
 	}
 	
-	public function editItem($id)
+	public function editItem($id,$pointid)
 	{	
 		$this->template = false;
 		$billing = model::orm('billing/billing')->find($id);
+		$billingItemPointList = model::load('billing/billing')->getBillingItemPoint($id);
+		// var_dump($billingItemPointList);
+		//die;
 
 		if(form::submitted())
 		{
@@ -190,6 +237,8 @@ Class Controller_Billing
 								);
 
 		$data['item'] = $billing;
+		$data['billingItemPointList'] = $billingItemPointList;
+		$data['currentPoint'] = $pointid;
 		view::render("shared/billing/editItem", $data);	
 	}
 	

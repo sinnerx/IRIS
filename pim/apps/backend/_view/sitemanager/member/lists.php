@@ -41,6 +41,7 @@ List of member registered in for site.
 				<th>I.C.</th>
 				<th style="text-align:center;">KTW Synced</th>
 				<th width='200px'>Date registered</th>
+				<th width='50px'>Points</th>
 				<th width='95px'></th>
 			</tr>
 			<?php if(!$user):?>
@@ -70,6 +71,7 @@ List of member registered in for site.
 				<td><?php echo $row['userIC'];?></td>
 				<td style="text-align:center;"><?php echo $row['siteMemberSynced'] == 1? '<span class="fa fa-check" style="color:#6ba631;"></span>': 'Not yet';?></td>
 				<td><?php echo date("j F Y, g:i A",strtotime($row['userCreatedDate']));?></td>
+				<td><a href="<?php echo url::base('member/point'); ?>/<?php echo $row['userID']; ?>/1"><?php echo $row['userPoint']; ?></a></td>
 				<td>
 					<center>
 					<a <?php if(!$active): ?>onclick="return confirmation();" href="<?php echo $href;?>"<?php endif; ?> class="<?php echo $active;?>" >

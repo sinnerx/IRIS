@@ -231,6 +231,7 @@ $routes[]	= Array("[:site-slug]/ahli","controller=member@profile_directory");
 $routes[]	= Array("[:site-slug]/profile/getUserList/[:type]","controller=member@getUserList","{type}");
 $routes[]	= Array("[:site-slug]/profile/edit","controller=member@profile_edit");
 $routes[]	= Array("[:site-slug]/profile/uploadAvatar","controller=member@profileUploadAvatar");
+$routes[]	= Array("[:site-slug]/profile/transactionPointList","controller=member@viewTransactionPointList");
 $routes['profile']	= Array("[:site-slug]/profile/[i:userID?]","controller=member@profile","{userID}");
 
 ## ajax request.
