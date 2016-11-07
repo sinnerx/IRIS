@@ -20,6 +20,7 @@ jQuery("#userProfileIntroductional").cleditor();
 Edit existing user information.
 </div>
 <?php echo flash::data();?>
+<?php $numbering = 1; ?>
 <form method='post'>
 <div class='row'>
 	<div class='col-sm-6'>
@@ -28,7 +29,7 @@ Edit existing user information.
 		<div class='form-group'>
 			<div class='row'>
 			<div class='col-sm-6'>
-			<label>1. Full Name</label>
+			<label><?php echo $numbering++; ?>. Full Name</label>
 			<?php echo form::text("userProfileFullName","class='form-control' placeholder=\"Full name\"",$row['userProfileFullName']);?>
 			<?php echo flash::data("userProfileFullName");?>
 			</div>
@@ -54,7 +55,7 @@ Edit existing user information.
 			</div>-->
 		</div>
 		<div class='form-group'>
-			<label>2. User IC.</label>
+			<label><?php echo $numbering++; ?>. User IC.</label>
 			<?php echo form::text("userIC","class='form-control' placeholder=\"His identification card number. Eg : 890910105117\"",$row['userIC']);?>
 			<?php echo flash::data("userIC");?>
 		</div>
@@ -65,13 +66,13 @@ Edit existing user information.
 		<div class='panel panel-default'>
 		<div class='panel-body'>
 		<div class='form-group'>
-			<label>3. Email Address</label>
+			<label><?php echo $numbering++; ?>. Email Address</label>
 			<?php echo form::text("userEmail","class='form-control' placeholder='Email for login.'",$row['userEmail']);?>
 			<!--<?php echo form::text("userEmail","class='form-control' placeholder='Email for login.'",$row['userEmail']);?>
 			<?php echo flash::data("userEmail");?>-->
 		</div>
 		<div class='form-group'>
-			<label>4. Password</label>
+			<label><?php echo $numbering++; ?>. Password</label>
 			<?php echo form::password("userPassword","class='form-control'");?>
 			</div>
 		</div>
@@ -83,17 +84,21 @@ Edit existing user information.
 		<div class='panel panel-default'>
 		<div class='panel-body'>
 		<div class='form-group'>
-			<label>5. Title</label>
+			<label><?php echo $numbering++; ?>. Title</label>
 			<?php echo form::select("userProfileTitle",Array(1=>"Mr",2=>"Mrs"),"class='form-control'",$row['userProfileTitle']);?>
 		</div>
 		<div class='form-group'>
-			<label>6. Gender</label>
+			<label><?php echo $numbering++; ?>. Gender</label>
 			<?php echo form::select("userProfileGender",Array(1=>"Male",2=>"Female"),"class='form-control'",$row['userProfileGender']);?>
 		</div>
 		<div class='form-group'>
-			<label>7. Marital Status</label>
+			<label><?php echo $numbering++; ?>. Marital Status</label>
 			<?php echo form::select("userProfileMarital",Array(1=>"Single",2=>"Married",3=>"Widow"),"class='form-control'",$row['userProfileMarital']);?>
 		</div>
+		<div class='form-group'>
+			<label><?php echo $numbering++; ?>. Race</label>
+			<?php echo form::select("userRace",model::load("helper")->race(),"class='form-control'",$row['userRace']);?>
+		</div>			
 		</div>
 		</div>
 	</div>
@@ -101,15 +106,19 @@ Edit existing user information.
 		<div class='panel panel-default'>
 		<div class='panel-body'>
 		<div class='form-group'>
-			<label>8. Date of birth</label>
+			<label><?php echo $numbering++; ?>. OKU Status</label>
+			<?php echo form::select("userOKUStatus",Array(1=>"No",2=>"Yes"),"class='form-control'",$row['userOKUStatus']);?>
+		</div>				
+		<div class='form-group'>
+			<label><?php echo $numbering++; ?>. Date of birth</label>
 			<?php echo form::text("userProfileDOB","data-date-format='yyyy-mm-dd' class='input-sm input-s datepicker-input form-control' placeholder='Birth date.'",$row['userProfileDOB']);?>
 		</div>
 		<div class='form-group'>
-			<label>9. Place of birth</label>
+			<label><?php echo $numbering++; ?>. Place of birth</label>
 			<?php echo form::text("userProfilePOB","class='form-control' placeholder='Place of birth'",$row['userProfilePOB']);?>
 		</div>
 		<div class='form-group'>
-			<label>10. Mobile Phone No.</label>
+			<label><?php echo $numbering++; ?>. Mobile Phone No.</label>
 			<?php echo form::text("userProfileMobileNo","class='form-control' placeholder='Phone no. Eg. 012-6966121'",$row['userProfileMobileNo']);?>
 		</div>
 		</div>
@@ -119,15 +128,16 @@ Edit existing user information.
 		<div class='panel panel-default'>
 		<div class='panel-body'>
 		<div class='form-group'>
-			<label>11. Home Phone No.</label>
+			<label><?php echo $numbering++; ?>. Home Phone No.</label>
 			<?php echo form::text("userProfilePhoneNo","class='form-control' placeholder='Phone no. Eg. 03-12345678'",$row['userProfilePhoneNo']);?>
 			</div>
 		</div>
 		<div class='form-group'>
-			<label>12. Home Address</label>
+			<label><?php echo $numbering++; ?>. Home Address</label>
 			<!--<?php echo form::text("userProfileMobileNo","class='form-control' placeholder='Phone no. Eg. 012-6966121'",$row['userProfileMobileNo']);?>-->
 			<?php echo form::textarea("userProfileMailingAddress","style='height:100px;' class='form-control'",$row['userProfileMailingAddress']);?>
 		</div>
+	
 		</div>
 		</div>
 	</div>

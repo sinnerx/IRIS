@@ -233,11 +233,18 @@ $(document).ready(function()
 <script src="<?php echo url::asset("_scale/js/qrcode/jquery.qrcode-0.12.0.min.js");?>"></script>
 <script>
 $(document).ready(function(){
-	$("#ic-qr").qrcode({
-    "size": 100,
-    "color": "#3a3",
-    "text": "<?php echo $row['userIC']; ?>"
-});
+		$("#ic-qr").qrcode({
+	    "size": 100,
+	    "color": "#3a3",
+	    "text": "<?php echo $row['userIC']; ?>"
+	});
+
+if($('#userLevel').val() == '2') {
+		            $('#managerlevel').show(); 
+		        } else {
+		        	$('#managerlevel').val('');
+		            $('#managerlevel').hide(); 
+		        } 	
 });
 </script>
 <h3 class="m-b-xs text-black">
@@ -247,6 +254,7 @@ $(document).ready(function(){
 Edit existing user information.
 </div>
 <?php echo flash::data();?>
+<?php $numbering = 1; ?>
 <form method='post'>
 <div class='row'>
 	<div class='col-sm-5'>
@@ -255,22 +263,31 @@ Edit existing user information.
 		<div class='form-group'>
 			<div class='row'>
 			<div class='col-sm-6'>
-			<label>1. User Full Name</label>
+			<label><?php echo $numbering++; ?>. User Full Name</label>
 			<?php echo form::text("userProfileFullName","class='form-control' placeholder=\"User's full name\"",$row['userProfileFullName']);?>
 			<?php echo flash::data("userProfileFullName");?>
 			</div>
 
 			<div class='col-sm-6'>
-			<label>2. User Level</label>
+			<label><?php echo $numbering++; ?>. User Level</label>
 			<?php echo form::select("userLevel",$userLevelR,"disabled class='form-control'",$row['userLevel']);?>
 			</div>
 			</div>
 		</div>
-		<div class='form-group'>
-			<label>2. User IC.</label>
-			<?php echo form::text("userIC","class='form-control' placeholder=\"His identification card number. Eg : 890910105117\"",$row['userIC']);?>
-			<?php echo flash::data("userIC");?>
+		
+		<div class='col-sm-6'>
+			<div class='form-group'>
+				<label><?php echo $numbering++; ?>. User IC.</label>
+				<?php echo form::text("userIC","class='form-control' placeholder=\"His identification card number. Eg : 890910105117\"",$row['userIC']);?>
+				<?php echo flash::data("userIC");?>
+			</div>
 		</div>
+		<div class='col-sm-6' id="managerlevel">
+			<div class='form-group'>
+				<label><?php echo $numbering++; ?>. Manager Level</label>
+				<?php echo form::select("userLevelManager",Array(1=>"Manager", 2=>"Assistant Manager")," class='form-control'",$row['userLevelManager']);?>
+			</div>
+		</div>			
 		</div>
 		</div>
 	</div>
@@ -278,12 +295,12 @@ Edit existing user information.
 		<div class='panel panel-default'>
 		<div class='panel-body'>
 		<div class='form-group'>
-			<label>3. Email Address</label>
+			<label><?php echo $numbering++; ?>. Email Address</label>
 			<?php echo form::text("userEmail","class='form-control' placeholder='Email for login.'",$row['userEmail']);?>
 			<?php echo flash::data("userEmail");?>
 		</div>
 		<div class='form-group'>
-			<label>4. Password</label>
+			<label><?php echo $numbering++; ?>. Password</label>
 			<?php echo form::password("userPassword","class='form-control'");?>
 			</div>
 		</div>
@@ -325,13 +342,17 @@ Edit existing user information.
 		<div class='panel panel-default'>
 		<div class='panel-body'>
 		<div class='form-group'>
-			<label>5. Title</label>
+			<label><?php echo $numbering++; ?>. Title</label>
 			<?php echo form::select("userProfileTitle",Array(1=>"Mr",2=>"Mrs"),"class='form-control'",$row['userProfileTitle']);?>
 		</div>
 		<div class='form-group'>
-			<label>6. Gender</label>
+			<label><?php echo $numbering++; ?>. Gender</label>
 			<?php echo form::select("userProfileGender",Array(1=>"Male",2=>"Female"),"class='form-control'",$row['userProfileGender']);?>
 		</div>
+		<div class='form-group'>
+			<label><?php echo $numbering++; ?>. Race</label>
+			<?php echo form::select("userRace",model::load("helper")->race(),"class='form-control'",$row['userRace']);?>
+		</div>		
 		</div>
 		</div>
 	</div>
@@ -339,25 +360,29 @@ Edit existing user information.
 		<div class='panel panel-default'>
 		<div class='panel-body'>
 		<div class='form-group'>
-			<label>7. Date of birth</label>
+			<label><?php echo $numbering++; ?>. Date of birth</label>
 			<?php echo form::text("userProfileDOB","data-date-format='yyyy-mm-dd' class='input-sm input-s datepicker-input form-control' placeholder='Birth date.'",$row['userProfileDOB']);?>
 		</div>
 		<div class='form-group'>
-			<label>8. Place of birth</label>
+			<label><?php echo $numbering++; ?>. Place of birth</label>
 			<?php echo form::text("userProfilePOB","class='form-control' placeholder='Place of birth'",$row['userProfilePOB']);?>
 			</div>
 		</div>
+		<div class='form-group'>
+			<label><?php echo $numbering++; ?>. OKU Status</label>
+			<?php echo form::select("userOKUStatus",Array(1=>"No",2=>"Yes"),"class='form-control'",$row['userOKUStatus']);?>
+		</div>			
 		</div>
 	</div>
 	<div class='col-sm-4'>
 		<div class='panel panel-default'>
 		<div class='panel-body'>
 		<div class='form-group'>
-			<label>9. Marital</label>
+			<label><?php echo $numbering++; ?>. Marital</label>
 			<?php echo form::select("userProfileMarital",Array(1=>"Single",2=>"Married",3=>"Widow"),"class='form-control'",$row['userProfileMarital']);?>
 		</div>
 		<div class='form-group'>
-			<label>10. Phone No.</label>
+			<label><?php echo $numbering++; ?>. Phone No.</label>
 			<?php echo form::text("userProfilePhoneNo","class='form-control' placeholder='Manager phone no. Eg. 012-6966121'",$row['userProfilePhoneNo']);?>
 			</div>
 		</div>
@@ -369,7 +394,7 @@ Edit existing user information.
 		<div class='panel panel-default'>
 		<div class='panel-body'>
 		<div class='form-group'>
-			<label>11. Manager address</label>
+			<label><?php echo $numbering++; ?>. Manager address</label>
 			<?php echo form::text("userProfileMailingAddress","class='form-control' placeholder='Address'",$row['userProfileMailingAddress']);?>
 		</div>
 		</div>

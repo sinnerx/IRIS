@@ -270,6 +270,7 @@ class User extends \Origami
 
 		$data_user['userUpdatedDate'] = date('Y-m-d H:i:s');
 		$data_user['userUpdatedUser'] = session::get('userID');
+		$data_user['userOKUStatus'] = $data['userOKUStatus'];
 
 		db::where('userID',$userID)->update('user',$data_user);
 		
@@ -283,7 +284,8 @@ class User extends \Origami
 					"userProfileMarital"=>$data['userProfileMarital'],
 					"userProfilePhoneNo"=>$data['userProfilePhoneNo'],
 					"userProfileMobileNo"=>$data['userProfileMobileNo'],
-					"userProfileMailingAddress"=>$data['userProfileMailingAddress']
+					"userProfileMailingAddress"=>$data['userProfileMailingAddress'],
+					"userRace"=>$data['userRace'],
 								);
 
 		db::where('userID',$userID)->update("user_profile",$data_profile);
@@ -318,6 +320,7 @@ class User extends \Origami
 
 		$data_user['userUpdatedDate'] = date('Y-m-d H:i:s');
 		$data_user['userUpdatedUser'] = session::get('userID');
+		$data_user['userOKUStatus'] = $data['userOKUStatus'];
 
 		db::where('userID',$userID)->update('user',$data_user);
 		
@@ -331,7 +334,8 @@ class User extends \Origami
 					"userProfileMarital"=>$data['userProfileMarital'],
 					"userProfilePhoneNo"=>$data['userProfilePhoneNo'],
 					"userProfileMobileNo"=>$data['userProfileMobileNo'],
-					"userProfileMailingAddress"=>$data['userProfileMailingAddress']
+					"userProfileMailingAddress"=>$data['userProfileMailingAddress'],
+					"userRace"=>$data['userRace'],
 								);
 
 		db::where('userID',$userID)->update("user_profile",$data_profile);
@@ -425,6 +429,7 @@ class User extends \Origami
 					"userPassword"=>model::load("helper")->hashPassword($data['userPassword']?$data['userPassword']:model::load("user/services")->getDefaultPassword()),
 					"userEmail"=>$data['userEmail'],
 					"userLevel"=>$level,
+					"userLevelManager" => $data['userLevelManager'],
 					"userStatus"=>$data['userStatus']?$data['userStatus']:1,
 					#"userPremiumStatus"=>$data['userPremiumStatus']?$data['userPremiumStatus']:0,
 					"userCreatedDate"=>now(),
@@ -448,7 +453,7 @@ class User extends \Origami
 					"userProfileMarital"=>$data['userProfileMarital'],
 					"userProfileDOB"=>$data['userProfileDOB'],
 					"userProfileMobileNo"=>$data['userProfileMobileNo'],
-					"userProfileMailingAddress"=>$data['userProfileMailingAddress']
+					"userProfileMailingAddress"=>$data['userProfileMailingAddress'],
 								);
 
 		## insert into profile.
@@ -507,7 +512,8 @@ class User extends \Origami
 				"currentPage"=>$pagination['currentPage'],
 				"urlFormat"=>$pagination['urlFormat']
 								));
-			
+			// var_dump(pagination::recordNo());
+			// die;
 			$users = $users->limit(pagination::get('limit'), pagination::recordNo()-1);
 		}
 
