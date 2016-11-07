@@ -18,6 +18,9 @@ user:
 	userUpdatedDate [datetime]
 	userUpdatedUser [int]
 	userLastLogin [datetime]
+	userPoint [int]
+	userLevelManager [int]
+	userOKUStatus [int]
 
 account:
 	accountID [int]
@@ -55,6 +58,7 @@ user_profile:
 	userProfileMobileNo [varchar]
 	userProfileMailingAddress [text]
 	userProfileAvatarPhoto [varchar]
+	userRace [int]
 
 user_profile_additional: ## additional info for user.
 	userProfileAdditionalID [int]

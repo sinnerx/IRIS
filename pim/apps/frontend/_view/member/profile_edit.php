@@ -317,6 +317,14 @@ var profile	= new function()
 								<label>Perkahwinan </label>
 								<?php echo form::select("userProfileMarital",Array(1=>"Bujang",2=>"Berkahwin",3=>"Bercerai"),null,$userProfileMarital,"[SILA PILIH]");?>
 							</div>
+							<div class="clmn-2">
+								<label>Kaum </label>
+								<?php echo form::select("userRace",model::load("helper")->race(),null,$userRace,"[SILA PILIH]");?>
+							</div >								
+							<div class="clmn-2">
+								<label>OKU </label>
+								<?php echo form::select("userOKUStatus",Array(1=>"Tidak",2=>"Ya"),null,$userOKUStatus,"[SILA PILIH]");?>
+							</div>							
 						</div>
 						<div class="profile-edit-row clearfix">
 							<?php for($i = 1;$i<=31;$i++) $dayR[$i] = $i;?>
