@@ -96,6 +96,11 @@ class Tasks
 			'description' => 'Unity sync',
 			'repeatable' => true
 			));
+
+		$manager->addTask('userIcToDOB', array(
+			'description' => 'Convert User IC into DOB',
+			'repeatable' => true
+			));		
 	}
 
 	public function pageAddDefault()
@@ -542,6 +547,44 @@ class Tasks
 			\Iris\Unity::siteSync($row['siteID']);
 		}
 	}
+
+	public function userIcToDOB(){
+
+		db::select("U.userIC, UP.*");
+		db::from("user U");
+		db::join("user_profile UP", "U.userID = UP.userID");
+		db::where("UP.userProfileDOB", "0000-00-00");
+		db::or_where("UP.userProfileDOB IS NULL");
+		// db::where("U.userID",1);
+		$result = db::get()->result();
+
+		$counter = 1;
+		foreach ($result as $row) {
+			# code...
+			// var_dump($row);
+			$ic = $row['userIC'];
+			if (ctype_digit($ic) && strlen($ic)==12){
+		        // $ic!=NULL - to check there's actually input in the textbox
+		        // ctype_digit($ic) - all characters are number
+		        // strlen($ic)==12 - to check there are 12 digits
+		        $year=substr($ic,0,2);//extract digit 1 and 2
+		        $month=substr($ic,2,2);//extract digit 3 and 4
+		        $day=substr($ic,4,2);//extract digit 5 and 6
+
+		        $newIC = $year."-".$month."-".$day;
+
+		      	db::where("userID",$row['userID']);
+				db::update("user_profile",Array("userProfileDOB"=>$newIC));
+				//die;
+
+				// $counter++;
+				// var_dump($row);
+				// if($counter == 3) break;
+			}//if		
+		}//foreach
+		// die;
+	}
+
 }
 
 

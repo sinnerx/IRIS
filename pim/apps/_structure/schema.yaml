@@ -217,6 +217,7 @@ site:
 	siteCafeToken [varchar]
 	siteStatus [int]
 	siteUnlockDate [datetime]
+	siteMyCommsID [varchar(16)]
 
 site_cache:
 	siteCacheID [int]
@@ -787,6 +788,18 @@ billing_item:
 	billingItemCreatedDate [datetime]
 	billingItemUpdatedDate [datetime]
 
+billing_item_point:
+	billingItemPointID [int]
+	billingItemID [int]
+	rewardPoint [int]
+	redeemPoint [int]
+	effectiveDate [date]
+	createdDate [datetime]
+	createdUser [int]
+	updatedDate [datetime]
+	updatedUser [int]
+	status [int]
+
 billing_transaction_item:
 	billingTransactionItemID [int]
 	billingItemID [int]
@@ -795,6 +808,7 @@ billing_transaction_item:
 	billingTransactionItemQuantity [float]
 	billingTransactionItemUnit [float] ## unit or hours
 	billingTransactionItemPrice [float] ## unit price.
+	billingTransactionItemPoint [float]
 
 billing_transaction_user:
 	billingTransactionUserID [int]
@@ -1261,3 +1275,11 @@ report_quarterly:
 batch:
 	batchID [int]
 	batchName [varchar(11)]
+
+OLAP_loyalty_points:
+	userID [int]
+	siteID [int]
+	clusterID [int]
+	point [int]
+	billingTransactionItemID [int]
+	transactionDate [datetime]
