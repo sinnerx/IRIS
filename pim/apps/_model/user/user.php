@@ -271,6 +271,7 @@ class User extends \Origami
 		$data_user['userUpdatedDate'] = date('Y-m-d H:i:s');
 		$data_user['userUpdatedUser'] = session::get('userID');
 		$data_user['userOKUStatus'] = $data['userOKUStatus'];
+		$data_user['userLevelManager'] = $data['userLevelManager'];
 
 		db::where('userID',$userID)->update('user',$data_user);
 		

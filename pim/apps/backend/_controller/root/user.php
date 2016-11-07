@@ -236,6 +236,7 @@ class Controller_User
 			## update manager info.
 			$data	= input::get();
 			$data['userIC'] = $userIC;
+			$data["userLevelManager"] = input::get("userLevelManager");
 			$user->fullUpdate($userID,$data);
 
 			redirect::to("","Successfully updated user info.");
