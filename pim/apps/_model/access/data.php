@@ -43,6 +43,7 @@ class Data
 					"billing/add"=>Array("r","om","cl", "sm"),
 					"billing/addItem"=>Array("r","om", "sm"),
 					"billing/addPoint"=>Array("r"),
+					"billing/deletePoint"=>Array("r"),
 					"billing/editItem"=>Array("r","om", "sm"),
 					"billing/addTransaction"=>Array("r","om","cl", "sm"),
 					"billing/editTransaction"=>Array("r","om","cl", "sm"),

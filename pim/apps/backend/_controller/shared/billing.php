@@ -102,14 +102,23 @@ Class Controller_Billing
 				redirect::to('billing/add', $message, 'success');			
 			}
 			//add into table
-
-			
-
-			
-
-
 		}
 	}
+
+	public function deletePoint($billingItemPointID)
+	{	
+		$this->template = false;
+		
+		$billing = model::orm('billing/billing_point')->find($billingItemPointID);
+
+		$billing->status = 0;
+		$billing->save();
+		
+		$message = 'Billing Point Deleted!';
+		
+		redirect::to('billing/add', $message, 'success');
+	}
+
 	public function addItem()
 	{		
 		$this->template = false;

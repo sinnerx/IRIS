@@ -2,7 +2,7 @@
 <script type="text/javascript" src="<?php echo url::asset("_scale/js/datepicker/bootstrap-datepicker.js"); ?>"></script>
 <script type="text/javascript">
 
-// $(document).ready(function() {
+$(document).ready(function() {
 
   jQuery("#selectDatePoint").datetimepicker({
     //showTimepicker: false,
@@ -24,7 +24,19 @@
 
 
   //   });
-// });
+
+  $("#toggleaddpoint").click(function(){
+    $("#divaddpoint").show();
+    $("#toggleaddpoint").hide();
+  });  
+
+  $("#cancelpointbtn").click(function(){
+    $("#divaddpoint").hide();
+    $("#toggleaddpoint").show();
+  });
+
+
+});
 
   
 var itemEdit = new function()
@@ -52,6 +64,10 @@ var itemEdit = new function()
   display: inline;
 }
 
+input::-webkit-input-placeholder {
+    font-size: 10px;
+    line-height: 3;
+}
 </style>
 <div class="modal-dialog">
 	<div class="modal-content">
@@ -153,20 +169,24 @@ var itemEdit = new function()
           </div>
         </form>
       </div>
-      <div id="addpoint">
-        <form method='post' action='<?php echo url::base("billing/addPoint/$item->billingItemID");?>'>
-          
-          <?php echo form::text("selectDatePoint","class='input-sm input-s datepicker-input form-control ' date-date-format='dd-mm-yyyy' style='width:100px; display: inline;'",date('d-m-Y'));?>
-          <?php echo form::text('rewardtxt', 'class="form-control" style="display: inline; width: 50px;"');?>
-          <?php echo form::text('redeemtxt', 'class="form-control" style="display: inline; width: 50px;"');?>
-           <button type="submit" class="btn btn-sm btn-default">Add Point</button>
-        </form>
-      </div>
+
 
     <section class="vbox" style="height:200px" id="pointhistory">
       <section class="scrollable wrapper">  
           <div class='table-responsive'>
             Point History
+            <button type="button" id="toggleaddpoint" class="btn btn-sm btn-default" style="float:right">Add Point</button>
+            <br>
+            <div id="divaddpoint" style="display:none; float:right">
+              <form method='post' action='<?php echo url::base("billing/addPoint/$item->billingItemID");?>'>
+                
+                <?php echo form::text("selectDatePoint","class='input-sm input-s datepicker-input form-control ' date-date-format='dd-mm-yyyy' style='width:100px; display: inline;'",date('d-m-Y'));?>
+                <?php echo form::text('rewardtxt', 'class="form-control" style="display: inline; width: 70px;" placeholder="Reward"');?>
+                <?php echo form::text('redeemtxt', 'class="form-control" style="display: inline; width: 70px;" placeholder="Redeem"');?>
+                 <button type="submit" class="btn btn-sm btn-default">OK</button>
+                 <button type="button" id="cancelpointbtn" class="btn btn-sm btn-default">Cancel</button>
+              </form>
+            </div>            
           <table class='table'>
             <tr>
               <th width='15px'>No.</th>
@@ -198,7 +218,7 @@ var itemEdit = new function()
                 <td><?php echo $redeemPoint;?></td>
                 <td><center>
                   <a class='fa fa-edit' href="<?php echo url::base('member/edit'); ?>/<?php echo $row['billingItemPointID']; ?>" ></a>
-                  <a onclick='return confirm("Confirm delete?");' class="i i-cross2" href="delete/<?php echo $row['billingItemPointID']; ?>"></a>
+                  <a onclick='return confirm("Confirm delete?");' class="i i-cross2" href="deletePoint/<?php echo $row['billingItemPointID']; ?>"></a>
                 </center></td>
               </tr>
               <?php
