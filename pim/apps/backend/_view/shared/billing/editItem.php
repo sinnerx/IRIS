@@ -211,14 +211,16 @@ input::-webkit-input-placeholder {
                 $effectiveDate      = $row['effectiveDate'];
                 $redeemPoint        = $row['redeemPoint'];
               ?>
-              <tr <?php if($currentPoint == $row['billingItemPointID']) echo "style='font-weight:bold'"; ?> >
+              <tr <?php if($currentPoint == $row['billingItemPointID']) echo "style='font-weight:bold'"; ?> id='<?php echo "row".$row['billingItemPointID'];?>' >
                 <td><?php echo $no++;?></td>
                 <td><?php echo date("d-m-Y", strtotime($effectiveDate));?></td>
                 <td><?php echo $rewardPoint;?></td>
                 <td><?php echo $redeemPoint;?></td>
                 <td><center>
-                  <a class='fa fa-edit' href="<?php echo url::base('member/edit'); ?>/<?php echo $row['billingItemPointID']; ?>" ></a>
+                  <div >
+                  <a class='fa fa-edit' href="editPoint/<?php echo $row['billingItemPointID']; ?>" onclick=""></a>
                   <a onclick='return confirm("Confirm delete?");' class="i i-cross2" href="deletePoint/<?php echo $row['billingItemPointID']; ?>"></a>
+                  </div>
                 </center></td>
               </tr>
               <?php
