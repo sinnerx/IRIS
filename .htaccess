@@ -3,5 +3,7 @@ RewriteEngine on
 RewriteCond %{REQUEST_URI} !/pim/assets
 RewriteCond %{REQUEST_URI} !/lms
 RewriteCond %{REQUEST_URI} !/attendance
+RewriteCond %{REQUEST_URI} !/waktusolat
+RewriteCond %{REQUEST_URI} !/mycomms
 RewriteRule ^/? index.php [L]
 Options -Indexes
