@@ -35,11 +35,22 @@ class Controller_User
 				$icCheck	= model::load("user/services")->checkIC(input::get("userIC"));
 			}
 
+			$icDash = substr_count (input::get("userIC"), '-');
+			$icDash >= 1 ? $icDash = true : $icDash = false;
+
 			$rules	= Array(
 					"userProfileFullName,userIC"=>"required:This field is required.",
 					"userIC"=>Array(
-								"callback"=>Array(!$icCheck,"IC already exists")
-									)
+								"callback"=>
+									Array(!$icCheck,"IC already exists"),
+								// "callback"=> 
+								// Array(!$icDash,"Not allowed dash for IC"),									
+									// Array(!$icDash,"Not allowed dash for IC"),
+									),
+
+					// "userIC"=>Array(
+					// 				"callback"=> Array(!$icDash,"Not allowed dash for IC"),
+					// 				),
 							);
 
 			## got error.
