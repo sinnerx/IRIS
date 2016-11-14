@@ -9,6 +9,10 @@ $(document).ready(function() {
     format:'d-m-Y',  
   });
 
+    $(document).on('change','input[type="text"]',function(){
+        $(this).attr('value',$(this).val());
+    });
+
   // $("#selectDatePoint").on("changeDate", function(ev)
   // {
   //   // var siteID  = $("#siteID").val() != ""?"&siteID="+$("#siteID").val():"";      
@@ -35,9 +39,106 @@ $(document).ready(function() {
     $("#toggleaddpoint").show();
   });
 
+  // $("a.fa.fa-edit.editPoint").click(function(){
+  $('body').on('click', "a.fa.fa-edit.editPoint", function(){
+      var tditem = $(this).closest('tr');
+      var prevEffectiveDate = $(this).closest('tr').find('td:eq(1)').text();
+      var prevRedeem = $(this).closest('tr').find('td:eq(2)').text();
+      var prevReward = $(this).closest('tr').find('td:eq(3)').text();
+      var idPoint           = $(this).closest('tr').attr('id');
 
+      idPoint = idPoint.substr(3);      
+      // .find('td:eq(1)').text();
+      // console.log(tditem);
+      $(this).closest('tr').find('td:eq(1)').html('<input class="dateEdit" type="text" value="' + $(this).closest('tr').find('td:eq(1)').text() + '" style="width:80px" >');
+
+      jQuery(".dateEdit").datetimepicker({
+        //showTimepicker: false,
+        format:'d-m-Y',  
+      });
+
+      $(this).closest('tr').find(' td:eq(2), td:eq(3)').each(function() {
+          // replace the existing text with a textbox containing that text
+          var existingVal = $(this).text();
+          // console.log($(this).children('td.action'));
+          $(this).html('<input class="'+ $(this).attr('class') +'" type="text" value="' + existingVal + '" style="width:80px" >');                
+      });  
+            // <a class='fa fa-edit' href="editPoint/<?php echo $row['billingItemPointID']; ?>" onclick=""></a>
+
+          $(this).closest('tr').find('td:eq(4)').html('<a href="#" class="i i-checkmark2 saveEditPoint"></a> <a href="#" class="i i-cross2 cancelEdit"></a>'); 
+
+
+
+      $('a.i.i-checkmark2.saveEditPoint').click(function(){
+          console.log('click edit save point');
+          var newEffectiveDate  = $(this).closest('tr').find('td:eq(1) input').val();
+          var newRedeem         = $(this).closest('tr').find('td:eq(2) input').val();
+          var newReward         = $(this).closest('tr').find('td:eq(3) input').val();
+          
+          newEffectiveDate = newEffectiveDate.split("-"); 
+          // console.log(newEffectiveDate);
+          var day = newEffectiveDate[0];
+          var month = newEffectiveDate[1];
+          var year = newEffectiveDate[2];
+
+          newEffectiveDate = year + "-" + month + "-" + day;
+          //console.log(idPoint);
+          // console.log(newEffectiveDate + " " + newRedeem + " " + newReward);
+
+          $.ajax( {
+              async: false,
+              data: { idPoint: idPoint, newEffectiveDate: newEffectiveDate, newRedeem: newRedeem, newReward : newReward },
+              type: 'POST',
+              url: 'editPoint/'+idPoint,
+              success : function (result){
+                console.log(result);
+                
+                var currTable = $("#tablePoint");
+
+                // console.log($(this).closest('tr'));
+                // .find('td:eq(1) input').val()
+                // currTable.closest('tr').find('td:eq(1)').text('2015-03-02');
+                // $(this).closest('tr').find('td:eq(1)').text(newEffectiveDate);
+                // $(this).closest('tr').find('td:eq(2)').text(newRedeem);
+                // $(this).closest('tr').find('td:eq(3)').text(newReward);
+                
+
+                // // var idPoint = tempidPoint.substr(3);        
+                // $(this).closest('tr').find('td:eq(4)').html('<a href="#" class="fa fa-edit editPoint" id="editPoint"></a> <a onclick=\'return confirm("Confirm delete?");\' class="i i-cross2" href="deletePoint/'+ idPoint +'"></a>');
+                var message = "";
+                if(result == 0)
+                  message = "Fail to update, Date already exist for the selected billing item";
+                else if (result == 1)
+                  message = "Successfully update billing point";
+
+                window.location.href = "add#";
+              }
+          });//ajax          
+      });//edit btn
+
+      $('body').on('click', 'a.i.i-cross2.cancelEdit', function(){
+              // console.log('cancel edit');
+              // var tempidPoint           = $(this).closest('tr').attr('id');        
+              $(this).closest('tr').find('td:eq(1)').text(prevEffectiveDate);
+              $(this).closest('tr').find('td:eq(2)').text(prevRedeem);
+              $(this).closest('tr').find('td:eq(3)').text(prevReward);
+              
+
+              // var idPoint = tempidPoint.substr(3);        
+              $(this).closest('tr').find('td:eq(4)').html('<a href="#" class="fa fa-edit editPoint" id="editPoint"></a> <a onclick=\'return confirm("Confirm delete?");\' class="i i-cross2" href="deletePoint/'+ idPoint +'"></a>');
+              //.html( this.value );
+            });//cancelbtn      
+  });
 });
 
+
+  function changeEditable(el) {
+        var id = $(el).attr('id');
+        // var tditem = $(this).closest('tr').children('td.two').text();
+        //.attr('id')
+        var tditem = $(this).closest('tr').find('td:eq(1)').text();
+        //console.log($(this).closest('tr'));
+    }
   
 var itemEdit = new function()
 {
@@ -187,7 +288,7 @@ input::-webkit-input-placeholder {
                  <button type="button" id="cancelpointbtn" class="btn btn-sm btn-default">Cancel</button>
               </form>
             </div>            
-          <table class='table'>
+          <table class='table' id="tablePoint">
             <tr>
               <th width='15px'>No.</th>
               <th width="300px">Effective Date</th>
@@ -212,13 +313,13 @@ input::-webkit-input-placeholder {
                 $redeemPoint        = $row['redeemPoint'];
               ?>
               <tr <?php if($currentPoint == $row['billingItemPointID']) echo "style='font-weight:bold'"; ?> id='<?php echo "row".$row['billingItemPointID'];?>' >
-                <td><?php echo $no++;?></td>
-                <td><?php echo date("d-m-Y", strtotime($effectiveDate));?></td>
-                <td><?php echo $rewardPoint;?></td>
-                <td><?php echo $redeemPoint;?></td>
-                <td><center>
+                <td class="noitem"><?php echo $no++;?></td>
+                <td class="effectiveDate"><?php echo date("d-m-Y", strtotime($effectiveDate));?></td>
+                <td class="rewardpoint"><?php echo $rewardPoint;?></td>
+                <td class="redeempoint"><?php echo $redeemPoint;?></td>
+                <td class="action" style="text-align: center"><center>
                   <div >
-                  <a class='fa fa-edit' href="editPoint/<?php echo $row['billingItemPointID']; ?>" onclick=""></a>
+                  <a class='fa fa-edit editPoint' href="#" id="editPoint"></a>
                   <a onclick='return confirm("Confirm delete?");' class="i i-cross2" href="deletePoint/<?php echo $row['billingItemPointID']; ?>"></a>
                   </div>
                 </center></td>

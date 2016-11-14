@@ -67,6 +67,45 @@ Class Controller_Billing
 		}	
 	}
 
+	public function editPoint($billingItemPointID)
+	{
+		$newEffectiveDate = input::get('newEffectiveDate');
+		$newRedeem = input::get('newRedeem');
+		$newReward = input::get('newReward');
+
+		$billingpoint = model::orm('billing/billing_point')->find($billingItemPointID);
+
+		$validateDatePoint =false;
+		
+		$validateDatePoint = $billingpoint->checkDatePoint($billingpoint->billingItemID, $newEffectiveDate);
+		// var_dump($billingpoint->billingItemID);
+
+		//check if date passing = date on the record
+		if($billingpoint->effectiveDate == $newEffectiveDate)
+			$validateDatePoint = true;
+		//success = 1
+		if($validateDatePoint === false){
+			// $message = "Date already exist for the selected billing item";
+			$success = 0;
+			// redirect::to('billing/add', $message, 'error');
+		}	
+		else{
+			$billingpoint->rewardPoint 		= $newReward;
+			$billingpoint->redeemPoint 		= $newRedeem;
+			$billingpoint->effectiveDate 	= $newEffectiveDate;
+			$billingpoint->updatedDate	 	= date('Y-m-d H:i:s');
+			$billingpoint->updatedUser	 	= session::get("userID");	
+			$billingpoint->save();
+
+			// $message = "Successfully update billing point";		
+			$success = 1;
+			// redirect::to('billing/add', $message, 'success');
+		}
+			
+		// $data = $billingItemPointID . " ". $newEffectiveDate . " " . $newRedeem . " " . $newReward;
+		return $success;
+	}
+
 	public function addPoint($billingItemID)
 	{
 		$this->template = false;
