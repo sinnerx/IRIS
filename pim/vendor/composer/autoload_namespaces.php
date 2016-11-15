@@ -6,8 +6,10 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'Google_Service_' => array($vendorDir . '/google/apiclient-services/src'),
+    'Google_' => array($vendorDir . '/google/apiclient/src'),
     'abeautifulsite' => array($vendorDir . '/abeautifulsite/simpleimage/src'),
     'Suin\\RSSWriter' => array($vendorDir . '/suin/php-rss-writer/Source'),
     'PHPExcel' => array($vendorDir . '/phpoffice/phpexcel/Classes'),
-    'Mailchimp' => array($vendorDir . '/mailchimp/mailchimp/src'),
+    'Mailchimp' => array($vendorDir . '/mailchimp/mailchimp/src'),    
 );
