@@ -208,6 +208,36 @@ class Controller_Cafe
 		return json_encode($response);
 	}
 
+	public function billingItemPoints()
+	{
+		$date = request::get('date');
+
+		db::from('billing_item_point')
+		->select(array(
+			'billingItemPointID',
+			'billingItemID as fItemID',
+			'rewardPoint as fRewardPoint',
+			'redeemPoint as fRedeemPoint',
+			'effectiveDate as fEffectiveDate',
+			'createdDate as fCreatedDate',
+			'updatedDate as fUpdatedDate'
+			));
+
+		if($date) {
+			db::where('updatedDate > ?', array($date));
+			db::or_where('createdDate > ?', array($date));
+		}
+
+		$items = db::get()->result('billingItemPointID');
+
+		$response = array(
+			'status' => 'success',
+			'data' => $items
+			);
+
+		return json_encode($response);
+	}
+
 	public function siteInfo()
 	{
 		$site = $this->site;
