@@ -128,6 +128,19 @@ $(document).ready(function(){
                             <div>
                             <div class="profile-additional">
                             <div class="profile-text-container">
+                                <?php 
+                                $userPoint = $row['userPoint'];
+                                if ($userPoint){
+                                ?>
+
+                                <div> Mata Baki Pengguna : <?php echo $userPoint; ?></div>
+
+                                <?php
+                                }
+                                ?>
+                                <div> <a href="<?php echo url::base('{site-slug}/profile/transactionPointList');?>">Pautan ke senarai transaksi lama</a> </div>
+                            </div>                                
+                            <div class="profile-text-container">
                                 <p>
                                 <?php
                                 $pos = strpos($row['userProfileVideo'], "=");

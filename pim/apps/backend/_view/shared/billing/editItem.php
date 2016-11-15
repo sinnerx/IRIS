@@ -1,4 +1,31 @@
+<link rel="stylesheet" href="<?php echo url::asset("_scale/js/datepicker/datepicker.css"); ?>" type="text/css" />
+<script type="text/javascript" src="<?php echo url::asset("_scale/js/datepicker/bootstrap-datepicker.js"); ?>"></script>
 <script type="text/javascript">
+
+// $(document).ready(function() {
+
+  jQuery("#selectDatePoint").datetimepicker({
+    //showTimepicker: false,
+    format:'d-m-Y',  
+  });
+
+  // $("#selectDatePoint").on("changeDate", function(ev)
+  // {
+  //   // var siteID  = $("#siteID").val() != ""?"&siteID="+$("#siteID").val():"";      
+  //   // var selectDateStart = $("#selectDateStart").val() != ""?"&selectDateStart="+$("#selectDateStart").val():"";   
+  //   // var selectDateEnd = $("#selectDateEnd").val() != ""?"&selectDateEnd="+$("#selectDateEnd").val():"";
+  
+  //   //   if (!$("#siteID")[0]) {
+  //   //         var siteID = "<?php echo $siteID ?>";
+  //   //     }
+
+  //   //     window.location.href  = base_url+"billing/dailyJournal?"+siteID+selectDateStart+selectDateEnd;
+  //   // }); 
+
+
+  //   });
+// });
+
   
 var itemEdit = new function()
 {
@@ -126,7 +153,74 @@ var itemEdit = new function()
           </div>
         </form>
       </div>
+      <div id="addpoint">
+        <form method='post' action='<?php echo url::base("billing/addPoint/$item->billingItemID");?>'>
+          
+          <?php echo form::text("selectDatePoint","class='input-sm input-s datepicker-input form-control ' date-date-format='dd-mm-yyyy' style='width:100px; display: inline;'",date('d-m-Y'));?>
+          <?php echo form::text('rewardtxt', 'class="form-control" style="display: inline; width: 50px;"');?>
+          <?php echo form::text('redeemtxt', 'class="form-control" style="display: inline; width: 50px;"');?>
+           <button type="submit" class="btn btn-sm btn-default">Add Point</button>
+        </form>
+      </div>
+
+    <section class="vbox" style="height:200px" id="pointhistory">
+      <section class="scrollable wrapper">  
+          <div class='table-responsive'>
+            Point History
+          <table class='table'>
+            <tr>
+              <th width='15px'>No.</th>
+              <th width="300px">Effective Date</th>
+              <th width="200px">Reward </th>
+              <th width="200px">Redeem </th>
+              <th width="200px">Action</th>
+              <th>
+            </tr>
+            <?php if(!$billingItemPointList):?>
+            <tr>
+              <td style="text-align:center;" colspan="3">No history point was found.</td>
+            </tr>
+            <?php else:?>
+              <?php
+              // $no = pagination::recordNo();
+              $no = 1;
+              foreach($billingItemPointList as $row)
+              {
+                // var_dump($row);
+                $rewardPoint        = $row['rewardPoint'];
+                $effectiveDate      = $row['effectiveDate'];
+                $redeemPoint        = $row['redeemPoint'];
+              ?>
+              <tr <?php if($currentPoint == $row['billingItemPointID']) echo "style='font-weight:bold'"; ?> >
+                <td><?php echo $no++;?></td>
+                <td><?php echo date("d-m-Y", strtotime($effectiveDate));?></td>
+                <td><?php echo $rewardPoint;?></td>
+                <td><?php echo $redeemPoint;?></td>
+                <td><center>
+                  <a class='fa fa-edit' href="<?php echo url::base('member/edit'); ?>/<?php echo $row['billingItemPointID']; ?>" ></a>
+                  <a onclick='return confirm("Confirm delete?");' class="i i-cross2" href="delete/<?php echo $row['billingItemPointID']; ?>"></a>
+                </center></td>
+              </tr>
+              <?php
+
+              }
+              ?>
+            <?php endif;?>
+          </table>
+        </div>
+        <div class='panel-footer'>
+        <div class='row'>
+          <div class="col-sm-12">
+          <?php echo pagination::link();?>
+          </div>
+        </div>
+        </div>   
+      </section>    
+    </section> 
+
     </section>
+
+   
     
 
 		</div>

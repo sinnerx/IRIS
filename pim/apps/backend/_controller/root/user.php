@@ -5,7 +5,7 @@ class Controller_User
 	{
 		## get available (to add) user level.
 		$this->userLevelR	= Array(
-						2=>"Site Manager",
+						2=>"Site Manager/Assistant",
 						3=>"Cluster Lead",
 						4=>"Operation Manager",
 						5=>"Financial Controller",
@@ -115,9 +115,12 @@ class Controller_User
 					"userProfilePOB"=>input::get("userProfilePOB"),
 					"userProfileMarital"=>input::get("userProfileMarital"),
 					"userProfilePhoneNo"=>input::get("userProfilePhoneNo"),
-					"userProfileMailingAddress"=>input::get("userProfileMailingAddress")
+					"userProfileMailingAddress"=>input::get("userProfileMailingAddress"),
+					"userLevelManager"=>input::get("userLevelManager"),
 							);
 
+			// var_dump($data);
+			// die;
 			## add!
 			model::load("user/user")->add($data,$level);
 
