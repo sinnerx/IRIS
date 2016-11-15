@@ -43,8 +43,8 @@ $(document).ready(function() {
   $('body').on('click', "a.fa.fa-edit.editPoint", function(){
       var tditem = $(this).closest('tr');
       var prevEffectiveDate = $(this).closest('tr').find('td:eq(1)').text();
-      var prevRedeem = $(this).closest('tr').find('td:eq(2)').text();
-      var prevReward = $(this).closest('tr').find('td:eq(3)').text();
+      var prevRedeem = $(this).closest('tr').find('td:eq(3)').text();
+      var prevReward = $(this).closest('tr').find('td:eq(2)').text();
       var idPoint           = $(this).closest('tr').attr('id');
 
       idPoint = idPoint.substr(3);      
@@ -72,8 +72,8 @@ $(document).ready(function() {
       $('a.i.i-checkmark2.saveEditPoint').click(function(){
           console.log('click edit save point');
           var newEffectiveDate  = $(this).closest('tr').find('td:eq(1) input').val();
-          var newRedeem         = $(this).closest('tr').find('td:eq(2) input').val();
-          var newReward         = $(this).closest('tr').find('td:eq(3) input').val();
+          var newRedeem         = $(this).closest('tr').find('td:eq(3) input').val();
+          var newReward         = $(this).closest('tr').find('td:eq(2) input').val();
           
           newEffectiveDate = newEffectiveDate.split("-"); 
           // console.log(newEffectiveDate);
@@ -111,7 +111,7 @@ $(document).ready(function() {
                 else if (result == 1)
                   message = "Successfully update billing point";
 
-                window.location.href = "add#";
+                window.location.href = "../billing/add?message=" + message;
               }
           });//ajax          
       });//edit btn
@@ -120,8 +120,8 @@ $(document).ready(function() {
               // console.log('cancel edit');
               // var tempidPoint           = $(this).closest('tr').attr('id');        
               $(this).closest('tr').find('td:eq(1)').text(prevEffectiveDate);
-              $(this).closest('tr').find('td:eq(2)').text(prevRedeem);
-              $(this).closest('tr').find('td:eq(3)').text(prevReward);
+              $(this).closest('tr').find('td:eq(3)').text(prevRedeem);
+              $(this).closest('tr').find('td:eq(2)').text(prevReward);
               
 
               // var idPoint = tempidPoint.substr(3);        
@@ -178,13 +178,12 @@ input::-webkit-input-placeholder {
 			<span>Edit Item</span>
 			</h4>
 		</div>
-		<?php echo flash::data();?>
+		<?php //echo flash::data();?>
 		
     <div class="modal-body">    
     <section class="panel panel-default">
       <div class="panel-body">
-
-        <form class="bs-example form-horizontal" method='post' action='<?php echo url::base('billing/editItem/'.$item->billingItemID);?>'>
+        <form class="bs-example form-horizontal" method='post' action='<?php echo url::base('billing/editItem/'.$item->billingItemID.'/'.$currentPoint);?>'>
           <div class="form-group">
             <label class="col-lg-2 control-label">Hot Key</label>
             <div class="col-lg-10">        

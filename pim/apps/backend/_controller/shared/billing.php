@@ -78,7 +78,7 @@ Class Controller_Billing
 		$validateDatePoint =false;
 		
 		$validateDatePoint = $billingpoint->checkDatePoint($billingpoint->billingItemID, $newEffectiveDate);
-		// var_dump($billingpoint->billingItemID);
+		// var_dump($billingpoint->effectiveDate);
 
 		//check if date passing = date on the record
 		if($billingpoint->effectiveDate == $newEffectiveDate)
@@ -101,8 +101,8 @@ Class Controller_Billing
 			$success = 1;
 			// redirect::to('billing/add', $message, 'success');
 		}
-			
-		// $data = $billingItemPointID . " ". $newEffectiveDate . " " . $newRedeem . " " . $newReward;
+			// $returnstring = $billingpoint->effectiveDate . " " . $newEffectiveDate;
+		// $data = $billingItemPointID . " ". $newEffectiveDate . " " . $newRedeem . " " . $newReward. " " . $billingpoint->effectiveDate;
 		return $success;
 	}
 
@@ -195,6 +195,17 @@ Class Controller_Billing
 				$billing->billingItemUpdateddate = now();
 				$billing->save();	
 
+				$billingItemID = db::getLastInsertID();
+				$billingpoint = model::orm('billing/billing_point')->create();
+				$billingpoint->billingItemID 	= $billingItemID;
+				$billingpoint->rewardPoint 		= null;
+				$billingpoint->redeemPoint 		= null;
+				$billingpoint->effectiveDate 	= date('Y-m-d H:i:s');
+				$billingpoint->createdDate	 	= date('Y-m-d H:i:s');
+				$billingpoint->createdUser	 	= session::get("userID");
+				$billingpoint->status		 	= 1;
+				$billingpoint->save();
+
 				$message = 'New Item added!';
 				
 			redirect::to('billing/add', $message, 'success');
@@ -225,7 +236,7 @@ Class Controller_Billing
 		$billing = model::orm('billing/billing')->find($id);
 		$billingItemPointList = model::load('billing/billing')->getBillingItemPoint($id);
 		// var_dump($billingItemPointList);
-		//die;
+		// die;
 
 		if(form::submitted())
 		{

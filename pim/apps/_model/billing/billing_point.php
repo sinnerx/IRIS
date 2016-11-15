@@ -24,10 +24,10 @@ class Billing_point extends \Origami
 		// var_dump($countrow);
 		// die;
 		if($countrow >= 1){
-			return true;
+			return false;
 		}
 		else{
-			return false;
+			return true;
 		}
 
 
