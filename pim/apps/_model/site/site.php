@@ -15,6 +15,14 @@ class Site extends \Origami
 		return $this->getOne(array('site_info', 'siteInfoID'), 'siteID');
 	}
 
+	## ORM : cluster
+	public function getCluster()
+	{
+		db::from("cluster_site");
+		db::where("siteID", $this->siteID);
+		return db::get()->row('clusterID');
+	}
+
 	## ORM : site_newsletter.
 	public function getSiteNewsletter()
 	{
