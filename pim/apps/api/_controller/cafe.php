@@ -506,7 +506,7 @@ class Controller_Cafe
 						$transaction->save();
 					}
 				}
-				else
+				else // Insert new transaction
 				{
 					$totalTransactions++;
 
@@ -556,6 +556,16 @@ class Controller_Cafe
 							$pcUsage->billingPcUsageEnd = $localPcUsage['end'];
 							$pcUsage->save();
 						}
+
+						db::insert('OLAP_loyalty_points', array(
+							'transactionDate' => $row_transaction['datetime'],
+							'userID' => $row_transaction['user']['userID'],
+							'siteID' => $this->site->siteID,
+							'clusterID' => $this->site->getCluster(),
+							'point' => $row_transaction['user']['point'],
+							'billingTransactionItemID' => date('Y-m-d H:i:s')
+						));
+
 					}
 
 					$transactionUser = model::orm('billing/transaction_user')->create();
