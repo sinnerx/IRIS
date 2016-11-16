@@ -106,12 +106,15 @@ $(document).ready(function() {
                 // // var idPoint = tempidPoint.substr(3);        
                 // $(this).closest('tr').find('td:eq(4)').html('<a href="#" class="fa fa-edit editPoint" id="editPoint"></a> <a onclick=\'return confirm("Confirm delete?");\' class="i i-cross2" href="deletePoint/'+ idPoint +'"></a>');
                 var message = "";
-                if(result == 0)
+                if(result == 0){
                   message = "Fail to update, Date already exist for the selected billing item";
-                else if (result == 1)
+                  alert(message);
+                }   
+                else if (result == 1){
                   message = "Successfully update billing point";
-
-                window.location.href = "../billing/add?message=" + message;
+                  window.location.href = "../billing/add?message=" + message;
+                }
+                  
               }
           });//ajax          
       });//edit btn
