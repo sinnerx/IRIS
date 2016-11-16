@@ -212,7 +212,17 @@ class Site extends \Origami
 					"siteInfoFax"=>$data['siteInfoFax'],
 					"siteInfoTwitterUrl"=>$data['siteInfoTwitterUrl'],
 					"siteInfoFacebookUrl"=>$data['siteInfoFacebookUrl'],
-					"siteInfoEmail"=>$data['siteInfoEmail']
+					"siteInfoEmail"=>$data['siteInfoEmail'],
+					'siteInfoLoaDate' => date('Y-m-d',strtotime($data['siteInfoLoaDate'])),
+					'siteInfoCommencementDate' => date('Y-m-d',strtotime($data['siteInfoCommencementDate'])),
+					'siteInfoActualStartDate' => date('Y-m-d',strtotime($data['siteInfoActualStartDate'])),
+					'siteInfoSatDate' => date('Y-m-d',strtotime($data['siteInfoSatDate'])),
+					'siteInfoOperationDate' => date('Y-m-d',strtotime($data['siteInfoOperationDate'])),
+					'siteInfoCompletionDate' => date('Y-m-d',strtotime($data['siteInfoCompletionDate'])),
+					'siteInfoParliament' => $data['siteInfoParliament'],					
+					'siteInfoPhase' => $data['siteInfoPhase'],			
+					'siteInfoDistrict' => $data['siteInfoDistrict'],			
+					'siteInfoPopulation' => $data['siteInfoPopulation'],			
 							);
 
 			db::where("siteID",$id);
