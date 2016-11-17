@@ -1239,6 +1239,7 @@ report_fields:
 	report_fieldsTable [varchar(100)]
 	report_fieldsTableID [varchar(100)]
 	report_fieldsIsMandatory [int]
+	report_fieldsTableCondition [text]
 
 training_subtype:
 	trainingSubTypeID [int]

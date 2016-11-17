@@ -42,7 +42,7 @@ class Controller_Report
 					break;
 				case 16:
 					# code...
-					$this->reportCashFlowSummaryFull($input);
+					$this->reportLoyaltyPoint($input);
 					break;
 				
 				default:
@@ -3700,6 +3700,64 @@ class Controller_Report
 		view::render("root/report/dashboardQuarterlyReport", $data);
 	}
 
+
+	public function reportLoyaltyPoint ($input){
+		//input
+    	// set_time_limit(0);
+    	var_dump($input);
+    	// die;
+		$dateFrom 	= date('Y-m-d H:i:s', strtotime($input['date_from']));
+		$dateTo 	= date('Y-m-d H:i:s', strtotime($input['date_to']));		
+		$region 	= $input['select_region'];		
+		$cluster 	= $input['select_cluster'];		
+		$siteid 	= $input['auto_siteID'];		
+		$billingitem 	= $input['select_item'];
+
+		var_dump($dateFrom);
+		//database process
+		db::select("siteName, MONTH(transactionDate), BI.billingItemName, point");
+		db::from("OLAP_loyalty_points OLP");
+		db::join("site S", "S.siteID = OLP.siteID");
+		db::join("billing_transaction_item BTI", "BTI.billingTransactionItemID = OLP.billingTransactionItemID");
+		db::join("billing_item BI","BI.billingItemID = BTI.billingItemID");
+		db::join("cluster_site CS", "CS.siteID = S.siteID");
+		db::join("cluster C", "C.clusterID = CS.clusterID");
+		// db::group_by("BTI.billingItemID, MONTH(transactionDate)");
+
+		if($dateFrom != "")
+			db::where("transactionDate >= '$dateFrom'");
+
+		if($dateTo != "")
+			db::where("transactionDate <= '$dateTo'");
+
+		if($region != ""){
+			if($regionid == 1){
+			        $arrayCluster = array('5', '6');
+		      }
+		      else if ($regionid == 0){
+		        $arrayCluster = array('1', '2', '3', '4');        
+		      }
+		      else
+		        $arrayCluster = array('1', '2', '3', '4', '5', '6'); 
+
+			db::where(" C.clusterID IN (".implode(",",$arrayCluster).")");
+		}
+						
+
+		if($cluster != "")
+			db::where("C.clusterID", $cluster);
+
+		if($siteid != "")
+			db::where("S.siteID", $siteid);
+
+		if($billingitem != "")
+			db::where("BI.billingItemID", $billingitem);					
+
+		$result = db::get()->result();
+		var_dump($result);
+		die;
+		//output to excel
+	}
 }
 
 ?>
