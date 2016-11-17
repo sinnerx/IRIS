@@ -580,7 +580,7 @@ class Controller_Cafe
 								'userID' => $row_transaction['user']['userID'],
 								'siteID' => $this->site->siteID,
 								'clusterID' => $this->site->getCluster(),
-								'point' => $row_transactionItem['point'],
+								'point' => $row_transactionItem['point'] * $row_transactionItem['quantity'],
 								'billingTransactionItemID' => $transactionItem->billingTransactionItemID
 							));
 						}
