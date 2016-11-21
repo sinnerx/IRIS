@@ -112,14 +112,14 @@ Class Controller_Billing
 
 		if(form::submitted()){
 			$effectiveDate = date('Y-m-d',strtotime(input::get('selectDatePoint')));
-			//var_dump(date("Y-m-d", strtotime(input::get('selectDatePoint'))));
-			//die;
+			// var_dump(date("Y-m-d", strtotime(input::get('selectDatePoint'))));
+			// die;
 			//check date exist for billingitemID in billingitempoint table
 			$billingPointModel = model::load('billing/billing_point')->checkDatePoint($billingItemID, $effectiveDate);
 			// var_dump($billingPointModel);
 			// die;
 			//if exist, cancel it
-			if ($billingPointModel === true){
+			if ($billingPointModel === false){
 				$message = "Date already exist for the selected billing item";
 				redirect::to('billing/add', $message, 'error');
 			}
