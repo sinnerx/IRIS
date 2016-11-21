@@ -220,7 +220,8 @@ class Controller_Cafe
 			'redeemPoint as fRedeemPoint',
 			'effectiveDate as fEffectiveDate',
 			'createdDate as fCreatedDate',
-			'updatedDate as fUpdatedDate'
+			'updatedDate as fUpdatedDate',
+			'status as fStatus'
 			));
 
 		if($date) {
