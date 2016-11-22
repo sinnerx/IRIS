@@ -3845,10 +3845,11 @@ class Controller_Report
 
 		# forth row header
 		$additionalHeader = array();
-		foreach($valueSite as $year){
-			// var_dump($year);
-			foreach($year as $month){
-				foreach($month as $itemKey => $itemValue){
+		foreach($valueSite as $yearKey => $yearValue){
+			// var_dump($yearKey);
+			foreach($yearValue as $monthKey => $monthValue){
+				// var_dump($monthValue);
+				foreach($monthValue as $itemKey => $itemValue){
 					// var_dump(array_search($itemValue,$additionalHeader));
 
 					if(in_array($itemKey,$additionalHeader) == 0){
@@ -3859,10 +3860,31 @@ class Controller_Report
 					// var_dump(in_array($itemKey,$additionalHeader));
 					
 				}
+				
+			}
+
+		}
+		asort($additionalHeader);
+		// var_dump($additionalHeader);
+		// die;
+		foreach($valueSite as $yearKey => $yearValue){
+			// var_dump($yearKey);
+			foreach($yearValue as $monthKey => $monthValue){
+				// var_dump($monthValue);
+					foreach($additionalHeader as $header){
+						if(array_key_exists($header,$monthValue) == 0){
+						// array_push($additionalHeader,$itemKey);
+							$valueSite[$yearKey][$monthKey][$header]['positive'] = 0;
+							$valueSite[$yearKey][$monthKey][$header]['negative'] = 0;
+							// var_dump($header);
+
+						}	
+						ksort($valueSite[$yearKey][$monthKey]);
+					}	
 			}
 		}
-		
-		// var_dump($additionalHeader);
+
+		// print_r($valueSite);
 		// die;
 		$fourthHeaderSiteDefault = array('Year','Month');
 		$fourthHeaderSite = array_merge($fourthHeaderSiteDefault, $additionalHeader); 
@@ -3921,10 +3943,10 @@ class Controller_Report
 		}	//foreach fifth header	
 
 		
-		
+		$yearX = 6;
 		foreach($valueSite as $yearKey => $yearValue){
 			// var_dump($yearKey);
-			$yearX = 6;
+			
 			$yearY = 0;
 			$sheetSite->setCellValue($cellRange[$yearY++].$yearX, $yearKey);
 			foreach($yearValue as $monthKey => $monthValue){
