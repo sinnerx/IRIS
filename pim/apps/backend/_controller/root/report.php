@@ -3712,6 +3712,7 @@ class Controller_Report
 		$cluster 	= $input['select_cluster'];		
 		$siteid 	= $input['auto_siteID'];		
 		$billingitem 	= $input['select_item'];
+		$lastColumn = '';
 
 		// var_dump($dateFrom);
 		//database process
@@ -3761,22 +3762,8 @@ class Controller_Report
 		// var_dump($results);
 		// die;
 
-		// $arrayItem = array(
-		// 	'site' => array('year' => 
-		// 				array('month' => 
-		// 					array('item' => 
-		// 						array('positive', 'negative')
-		// 		)))
-		// 	);
-
 		$arrayQuery = array();
 		foreach($results as $result){
-			// $arrayItem[$result['siteName']] = $result['siteName'];
-			// $arrayItem[$result['siteName']][$result['transactionMonthYear']] = $result['transactionMonthYear'];
-			// $arrayItem['site']['year']['month'] = $result['transactionMonth'];
-			// $arrayItem['site']['year']['month']['item'] = $result['billingItemName'];
-			// $arrayItem['site']['year']['month']['item']['positive'] = $result['reward'];
-			// $arrayItem['site']['year']['month']['item']['negative'] = $result['redeem'];
 			$arrayQuery[$result['siteName']][$result['transactionYear']][$result['transactionMonth']][$result['billingItemName']]['positive'] = $result['reward'];
 			$arrayQuery[$result['siteName']][$result['transactionYear']][$result['transactionMonth']][$result['billingItemName']]['negative'] = $result['redeem'];
 		}
@@ -3807,41 +3794,7 @@ class Controller_Report
 
 		$endSheetRow=$monCount+5;
 
-		## all cell
-		$allCellSite = $sheetSite->getStyle("A1:Q".$endSheetRow);
-		$allCellSite->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_TOP);
-		$allCellSite->getAlignment()->setWrapText(true);
-		foreach(range('A','Q') as $columnID) {
-		    $sheetSite->getColumnDimension($columnID)->setAutoSize(true);
-		}
-		$allCellSite->applyFromArray(
-					array(
-						'borders' => array(
-								'allborders' => array(
-										'style' => PHPExcel_Style_Border::BORDER_THIN,
-										'color' => array('rgb' => 'D3D3D3'),
-										'size'  => 11,
-										)
-								)
-						)
-					);
-
-
-
-		# prepare header.
-		# first row header
-		$sheetSite->setCellValue("A1", $filename);
-		$sheetSite->mergeCells("A1:Q1");
-
-		# second row header
-		$sheetSite->setCellValue("A2", "TEST SITE");
-		$sheetSite->mergeCells("A2:C2");
-
-		$sheetSite->setCellValue("D2", 'Generated at '.now());
-		$sheetSite->mergeCells("D2:Q2");
-
-		# set alignment
-		$sheetSite->getStyle("D2:Q2")->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);	
+		
 
 		# forth row header
 		$additionalHeader = array();
@@ -3867,6 +3820,8 @@ class Controller_Report
 		asort($additionalHeader);
 		// var_dump($additionalHeader);
 		// die;
+
+		#refill billing item that doesnt exist for that month
 		foreach($valueSite as $yearKey => $yearValue){
 			// var_dump($yearKey);
 			foreach($yearValue as $monthKey => $monthValue){
@@ -3907,18 +3862,19 @@ class Controller_Report
 				// $sheetSite->mergeCells($cellRange[$indexFourthHeader], $cellRange[$indexFourthHeader]);
 			}
 			// var_dump($value);
+			$lastColumn = $cellRange[$indexFourthHeader - 1];
 		}//end foreach fourth header
 
 
 
 		# set alignment
-		$sheetSite->getStyle("A4:Q4")->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+		$sheetSite->getStyle("A4:".$lastColumn."4")->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 
 		# set background color
-		$sheetSite->getStyle('A1:Q4')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('6495ED');
+		$sheetSite->getStyle("A1:".$lastColumn."4")->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('6495ED');
 
 		# set font
-		$sheetSite->getStyle('A1:Q4')->applyFromArray(
+		$sheetSite->getStyle("A1:".$lastColumn."4")->applyFromArray(
 										array(
 							    			'font'  => array(
 								        		'bold'  => true,
@@ -3936,8 +3892,8 @@ class Controller_Report
 			// var_dump($cellRange[$mergeKey++]);
 			// $sheetSite->mergeCells($cellRange[$mergeKey].'4', $cellRange[$mergeKey++].'4');
 			$sheetSite->mergeCells($cellRange[$mergeKey++].'4'.':'.$cellRange[$mergeKey++].'4');
-			$sheetSite->setCellValue($cellRange[$Addkey++].'5', 'reward');
-			$sheetSite->setCellValue($cellRange[$Addkey++].'5', 'redeem');
+			$sheetSite->setCellValue($cellRange[$Addkey++].'5', 'Reward');
+			$sheetSite->setCellValue($cellRange[$Addkey++].'5', 'Redeem');
 			// $AddKey++;
 			// $fifthHeaderKey++;
 		}	//foreach fifth header	
@@ -3961,7 +3917,44 @@ class Controller_Report
 				$yearX++;
 			}
 			
-		}		
+		}	
+
+		## all cell
+		$allCellSite = $sheetSite->getStyle("A1:".$lastColumn."100");
+		$allCellSite->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_TOP);
+		$allCellSite->getAlignment()->setWrapText(true);
+		foreach(range('A',$lastColumn) as $columnID) {
+		    $sheetSite->getColumnDimension($columnID)->setAutoSize(true);
+		}
+		$allCellSite->applyFromArray(
+					array(
+						'borders' => array(
+								'allborders' => array(
+										'style' => PHPExcel_Style_Border::BORDER_THIN,
+										'color' => array('rgb' => 'D3D3D3'),
+										'size'  => 11,
+										)
+								)
+						)
+					);
+
+
+
+		# prepare header.
+		# first row header
+		$sheetSite->setCellValue("A1", $filename);
+		$sheetSite->mergeCells("A1:".$lastColumn."1");
+
+		# second row header
+		$sheetSite->setCellValue("A2", $keySite);
+		$sheetSite->mergeCells("A2:C2");
+
+		$sheetSite->setCellValue("D2", 'Generated at '.now());
+		$sheetSite->mergeCells("D2:".$lastColumn."2");
+
+		# set alignment
+		$sheetSite->getStyle("D2:".$lastColumn."2")->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);	
+
 		}// end site loop
 		//looping each month
 		//looping each biling item
