@@ -141,10 +141,23 @@ class Controller_Member
 				$icCheck = model::load("user/services")->checkIC($userIC);
 			}
 			//var_dump($emailRule);
+			// var_dump($icCheck);
+			// var_dump(strlen($userIC));
+			if(strlen($userIC) != 12){
+				$icCheck = 1;
+			}	
+
+			if (!(preg_match('/^[0-9]+$/', $userIC))) {
+			  // contains only 0-9
+				$icCheck = 1;
+			}		
+			// $icCheck = null;
+			// var_dump($icCheck);
+			// die;			
 			$rules	= Array(
 					"userProfileFullName,userIC"=>"required:This field is required.",
 					"userIC"=>Array(
-								"callback"=>Array(!$icCheck,"IC already exists")
+								"callback"=>Array(!$icCheck,"IC already exists / only 12 numeric characters are allowed")
 									)
 							);
 
@@ -159,7 +172,7 @@ class Controller_Member
 				//die;
 				input::repopulate();
 				redirect::withFlash(model::load("template/services")->wrap("input-error",$error));
-				redirect::to("",$message,"error");
+				redirect::to("","Got some error in your form.","error");
 			}
 
 			## update member data

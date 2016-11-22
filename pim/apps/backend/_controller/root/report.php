@@ -3949,8 +3949,9 @@ class Controller_Report
 		$sheetSite->setCellValue("A2", $keySite);
 		$sheetSite->mergeCells("A2:C2");
 
-		$sheetSite->setCellValue("D2", 'Generated at '.now());
-		$sheetSite->mergeCells("D2:".$lastColumn."2");
+		// $sheetSite->setCellValue("D2", 'Generated at '.now());
+		// $sheetSite->mergeCells("D2:".$lastColumn."2");
+		// $sheetSite->mergeCells("D2:O2");
 
 		# set alignment
 		$sheetSite->getStyle("D2:".$lastColumn."2")->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);	
