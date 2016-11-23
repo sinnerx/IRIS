@@ -53,6 +53,8 @@ class Controller_User
 
 			## update manager info.
 			$data	= input::get();
+			$data['userProfileFullName'] = str_replace('"', '\'', $data['userProfileFullName']);
+			$data['userProfileLastName'] = str_replace('"', '\'', $data['userProfileLastName']);			
 			$user->fullUpdate($userID,$data);
 
 			redirect::to("","Successfully updated user info.");

@@ -132,11 +132,12 @@ class Controller_Ajax_Activity
 
 			foreach($activityR as $actID=>$row)
 			{
+				$activityName = str_replace('"', '\'', $row['activityName']);
 				$data	= Array(
 							"activityID"=>$row['activityID'],
 							"activityTypeEng"=>$typeEngR[$row['activityType']],
 							"activityType"=>$activity->type($row['activityType']),
-							"activityName"=>$row['activityName'],
+							"activityName"=>$activityName,
 							"activityStartDate"=>date("j M Y",strtotime($row['activityStartDate'])),
 							"activityEndDate"=>date("j M Y",strtotime($row['activityEndDate'])),
 							"activityCreatedUser"=>$row['userProfileFullName']

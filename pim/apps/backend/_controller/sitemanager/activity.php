@@ -59,9 +59,9 @@ class Controller_Activity
 				redirect::withFlash(model::load("template/services")->wrap("input-error",$error));
 				redirect::to("","Please correct the error highlighted.","error");
 			}
-
+			
 			$data	= input::get();
-
+			$data['activityName'] = str_replace('"', '\'', $data['activityName']);
 			## decode activityDateTime.
 			$datetime	= json_decode($data['activityDateTime'],true);
 			$data['activityStartDate']		= $datetime['startDate']." ".$datetime['timeList'][$datetime['startDate']]['start'];
@@ -163,7 +163,7 @@ class Controller_Activity
 			}
 
 			$data	= input::get();
-
+			$data['activityName'] = str_replace('"', '\'', $data['activityName']);
 			## decode activityDateTime.
 			$datetime	= json_decode($data['activityDateTime'],true);
 			$data['activityStartDate']		= $datetime['startDate']." ".$datetime['timeList'][$datetime['startDate']]['start'];

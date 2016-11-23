@@ -166,6 +166,8 @@ class Controller_Member
 			$userProfileLastName = $data['row']['userProfileLastName'];
 			$data	= input::get();
 			$data['userIC'] = $userIC;
+			$data['userProfileFullName'] = str_replace('"', '\'', $data['userProfileFullName']);
+			$data['userProfileLastName'] = str_replace('"', '\'', $data['userProfileLastName']);
 			// var_dump($data);
 			// die;
 			//$data['userProfileLastName'] = $userProfileLastName;

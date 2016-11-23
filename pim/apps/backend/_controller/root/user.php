@@ -122,6 +122,9 @@ class Controller_User
 			// var_dump($data);
 			// die;
 			## add!
+			$data['userProfileFullName'] = str_replace('"', '\'', $data['userProfileFullName']);
+			$data['userProfileLastName'] = str_replace('"', '\'', $data['userProfileLastName']);
+						
 			model::load("user/user")->add($data,$level);
 
 			## success.
