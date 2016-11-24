@@ -21,6 +21,7 @@ class Transaction_user extends \Origami
 		db::where("BTI.billingTransactionItemPoint IS NOT NULL");
 		db::where("BT.billingTransactionStatus", "1");
 		db::where("BTU.billingTransactionUser ", $userID);
+		db::order_by("BT.billingTransactionDate", "DESC");
 
 			if($pagination)
 			{
@@ -77,6 +78,7 @@ class Transaction_user extends \Origami
 		$pagination = $param['pagination'];
 		// var_dump($pagination);
 		// die;
+		db::order_by("BT.billingTransactionDate", "DESC");
 		if($pagination)
 		{
 			$totalRows = db::num_rows();

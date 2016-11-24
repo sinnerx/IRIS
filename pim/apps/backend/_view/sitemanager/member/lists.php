@@ -12,6 +12,14 @@ List of member registered in for site.
     		}
 		}
 </script>
+<style>
+a.pointlink{
+	font-weight: bold; text-decoration: underline;
+}
+a.pointlink:hover {
+    color: purple;
+}
+</style>
 <?php echo flash::data();?>
 <section class='panel panel-default'>
 	<div class='panel-heading'>
@@ -71,7 +79,7 @@ List of member registered in for site.
 				<td><?php echo $row['userIC'];?></td>
 				<td style="text-align:center;"><?php echo $row['siteMemberSynced'] == 1? '<span class="fa fa-check" style="color:#6ba631;"></span>': 'Not yet';?></td>
 				<td><?php echo date("j F Y, g:i A",strtotime($row['userCreatedDate']));?></td>
-				<td><a href="<?php echo url::base('member/point'); ?>/<?php echo $row['userID']; ?>/1"><?php echo $row['userPoint']; ?></a></td>
+				<td><a class="pointlink" href="<?php echo url::base('member/point'); ?>/<?php echo $row['userID']; ?>/1"><?php echo $row['userPoint']; ?></a></td>
 				<td>
 					<center>
 					<a <?php if(!$active): ?>onclick="return confirmation();" href="<?php echo $href;?>"<?php endif; ?> class="<?php echo $active;?>" >
