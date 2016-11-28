@@ -82,7 +82,7 @@ List of member registered in for site.
 						<i class="fa fa-user"></i>
 					</a>
 					<a class='fa fa-edit' href="<?php echo url::base('member/edit'); ?>/<?php echo $row['userID']; ?>" ></a>
-					<a onclick='return confirm("Confirm delete?");' class="i i-cross2" href="delete/<?php echo $row['userID']; ?>"></a>
+					<a onclick='return confirm("Confirm delete?");' class="i i-cross2" href="<?php echo url::base('member/delete'); ?>/<?php echo $row['userID']; ?>"></a>
 					</center>
 				</td>
 			</tr>
