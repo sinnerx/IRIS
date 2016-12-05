@@ -103,9 +103,48 @@ Class Controller_Billing
 			}
 			//add into table
 
-			
+	public function deletePoint($billingItemPointID)
+	{	
+		$this->template = false;
+		
+		db::from("billing_item_point BIP");
+		db::join("billing_item BI", "BIP.billingItemID = BI.billingItemID");
+		db::where("BIP.billingItemPointID", $billingItemPointID);
+		$resultBillingItem = db::get()->row();
+		// var_dump($resultBillingItem);
+		// die;
 
+		db::select("*");
+		db::from("(select * from billing_item_point order by effectiveDate desc) BIP");
+		db::join("billing_item", "BIP.billingItemID = billing_item.billingItemID");
+		db::where("BIP.effectiveDate <= NOW()");
+		db::where("BIP.status", 1);
+		db::where("billing_item.billingItemID", $resultBillingItem['billingItemID']);
+		// db::where("BIP.billingItemPointID", $billingItemPointID);
+		db::group_by("BIP.billingItemID");
+		db::order_by("billingItemHotkey", "ASC");
+
+		// $result	= db::get()->result();
+		$resultCountRow	= db::num_rows();
+		// var_dump($resultCountRow);
+		// die;	
+		if($resultCountRow <= 1){
+			$message = 'Billing Point must at least have one record for current billing item';
+		
+			redirect::to('billing/add', $message, 'error');			
+		}
+		else{
+			$billing = model::orm('billing/billing_point')->find($billingItemPointID);
+
+			$billing->status = 0;
+			$billing->save();
 			
+			$message = 'Billing Point Deleted!';
+			
+			redirect::to('billing/add', $message, 'success');			
+		}
+		
+	}
 
 
 		}
@@ -245,12 +284,25 @@ Class Controller_Billing
 	public function deleteItem($itemID)
 	{	
 
+		$resultBillingItemPointList = model::load("billing/billing")->getBillingItemPoint($itemID);
+
+		foreach ($resultBillingItemPointList as $BIPValue) {
+			# code...
+			// var_dump($BIPValue);
+			// die;
+			$billingPoint = model::orm('billing/billing_point')->find($BIPValue['billingItemPointID']);
+
+			$billingPoint->status = 0;
+			$billingPoint->save();
+
+		}
+		
 		$billing = model::orm('billing/billing')->find($itemID);
 
 		$billing->billingItemUpdatedDate = now();
 		$billing->billingItemStatus = 0;
 		$billing->save();
-				
+
 		$message = 'Item Deleted!';
 
 		redirect::to('billing/add', $message, 'success');
@@ -606,6 +658,8 @@ Class Controller_Billing
 		->where('billingTransactionDate <', $selectYear.'-'.$selectMonth.'-01')
 		->where('billingTransactionStatus', 1)
 		->get()->row('total');
+		// var_dump($previousTransaction);
+		// die;
 
 		if($previousTransaction)
 			$data['balance'] = $previousTransaction;
