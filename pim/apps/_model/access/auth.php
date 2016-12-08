@@ -180,6 +180,15 @@ Class Auth
 
 		return false;
 	}
+
+	## to check system speed (site_log)
+	public function siteLog($email)
+	{
+		db::insert("site_log",Array(
+						"email"=>$email,
+						"start"=>now()
+								));
+	}
 }
 
 ?>

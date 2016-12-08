@@ -194,6 +194,20 @@ Class Controller_Site
 		// var_dump($data);
 		// die;
 
+		## to check system speed (site_log)
+		if ($_SESSION['email']) {
+			db::select('MAX(start) as maxDate');
+			db::from('site_log');
+			db::where('email', $_SESSION['email']);
+			$maxDate = db::get()->row('maxDate');
+
+			db::where("email", $_SESSION['email']);
+			db::where("start", $maxDate);
+			db::update("site_log", Array('siteID'=>$siteID,"end"=>now()));
+
+			$_SESSION['email'] = null;
+		}
+
 		return view::render('sitemanager/site/overview', $data);
 	}
 

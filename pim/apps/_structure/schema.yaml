@@ -1280,3 +1280,10 @@ OLAP_loyalty_points:
 	point [int]
 	billingTransactionItemID [int]
 	transactionDate [datetime]
+
+site_log:
+	siteLogID [int]
+	email [varchar(100)]
+	siteID [int]
+	start [datetime]
+	end [datetime]
