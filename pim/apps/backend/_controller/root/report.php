@@ -3737,7 +3737,7 @@ class Controller_Report
 		      }
 		      else if ($regionid == 1){
 		        $arrayCluster = array('1', '2', '3', '4'); 
-		        echo "region 0";       
+		        //echo "region 0";       
 		      }
 		      else
 		        $arrayCluster = array('1', '2', '3', '4', '5', '6'); 
@@ -3765,7 +3765,9 @@ class Controller_Report
 		$arrayQuery = array();
 		foreach($results as $result){
 			$arrayQuery[$result['siteName']][$result['transactionYear']][$result['transactionMonth']][$result['billingItemName']]['positive'] = $result['reward'];
+			// $arrayQuery[$result['siteName']][$result['transactionYear']][$result['transactionMonth']][$result['billingItemName']]['total']['reward'] += $result['reward'];
 			$arrayQuery[$result['siteName']][$result['transactionYear']][$result['transactionMonth']][$result['billingItemName']]['negative'] = $result['redeem'];
+			// $arrayQuery[$result['siteName']][$result['transactionYear']][$result['transactionMonth']][$result['billingItemName']]['total']['negative'] += $result['redeem'];
 		}
 
 		// print_r($arrayQuery);
@@ -3786,7 +3788,7 @@ class Controller_Report
 		
 		//looping each site
 		foreach($arrayQuery as $keySite => $valueSite){
-
+			// var_dump($keySite);
 		## the main working sheet.
 		$sheetSite = $excel->createSheet(1);
 		$sheetSite->setTitle($keySite);			
@@ -3831,11 +3833,27 @@ class Controller_Report
 						// array_push($additionalHeader,$itemKey);
 							$valueSite[$yearKey][$monthKey][$header]['positive'] = 0;
 							$valueSite[$yearKey][$monthKey][$header]['negative'] = 0;
-							// var_dump($header);
+							
 
-						}	
+						}
+						// $valueSite[$yearKey][$monthKey]['total']['positive'] += $monthValue;
+						
 						ksort($valueSite[$yearKey][$monthKey]);
 					}	
+					foreach ($monthValue as $keyItem => $valueItem) {
+							# code...
+							// print_r($keyItem);
+							$totalSite[$keyItem]['totalpositive'] += $valueItem['positive'];
+							// print_r($valueItem['positive']);
+							$totalSite[$keyItem]['totalnegative'] += $valueItem['negative'];
+
+							$valueSite[$yearKey][$monthKey]['Total']['positive'] += $valueItem['positive'];
+							$valueSite[$yearKey][$monthKey]['Total']['negative'] += $valueItem['negative'];							
+
+							ksort($totalSite);
+						}
+
+						// print_r($valueSite);					
 			}
 		}
 
@@ -3843,8 +3861,12 @@ class Controller_Report
 		// die;
 		$fourthHeaderSiteDefault = array('Year','Month');
 		$fourthHeaderSite = array_merge($fourthHeaderSiteDefault, $additionalHeader); 
-		// var_dump($fourthHeaderSite);
 
+		$totalHeader = array('Total');
+		$fourthHeaderSite = array_merge($fourthHeaderSite, $totalHeader); 
+		$additionalHeader = array_merge($additionalHeader, $totalHeader);
+		// var_dump($fourthHeaderSite);
+		// die;
 		$indexFourthHeader = 0;
 		foreach ($fourthHeaderSite as $key=>$value) {
 			
@@ -3902,23 +3924,42 @@ class Controller_Report
 		$yearX = 6;
 		foreach($valueSite as $yearKey => $yearValue){
 			// var_dump($yearKey);
-			
+			// var_dump($yearValue);
 			$yearY = 0;
 			$sheetSite->setCellValue($cellRange[$yearY++].$yearX, $yearKey);
+			// var_dump($yearValue);
 			foreach($yearValue as $monthKey => $monthValue){
 				$yearY = 1;
 				$sheetSite->setCellValue($cellRange[$yearY++].$yearX, $monthKey);
+				// var_dump($monthValue);
+				// die;
 				foreach($monthValue as $itemKey => $itemValue){
 					// var_dump($itemValue);
 					// $yearY = 2;
 					$sheetSite->setCellValue($cellRange[$yearY++].$yearX, $itemValue['positive']);
 					$sheetSite->setCellValue($cellRange[$yearY++].$yearX, $itemValue['negative']);
+
 				}
 				$yearX++;
 			}
-			
-		}	
+				
+		}
+		// die;
+		$sheetSite->setCellValue($cellRange[0].$yearX, 'Total');
+		$sheetSite->mergeCells($cellRange[0].$yearX.':'.$cellRange[1].$yearX);
+		// $sheetSite->getStyle("A4:".$lastColumn."4")->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 
+		$yearY = 2;
+		foreach ($totalSite as $keyTotal => $valueTotal) {
+				# code...
+				// var_dump($valueTotal);
+
+				$sheetSite->setCellValue($cellRange[$yearY++].$yearX, $valueTotal['totalpositive']);
+				$sheetSite->setCellValue($cellRange[$yearY++].$yearX, $valueTotal['totalnegative']);
+				// $yearX++;
+
+			}	
+			// die;
 		## all cell
 		$allCellSite = $sheetSite->getStyle("A1:".$lastColumn."100");
 		$allCellSite->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_TOP);
@@ -3956,6 +3997,7 @@ class Controller_Report
 		# set alignment
 		$sheetSite->getStyle("D2:".$lastColumn."2")->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);	
 
+		$totalSite = array();
 		}// end site loop
 		//looping each month
 		//looping each biling item
