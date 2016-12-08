@@ -102,6 +102,8 @@ Class Controller_Billing
 				redirect::to('billing/add', $message, 'success');			
 			}
 			//add into table
+		}
+	}
 
 	public function deletePoint($billingItemPointID)
 	{	
@@ -146,9 +148,6 @@ Class Controller_Billing
 		
 	}
 
-
-		}
-	}
 	public function addItem()
 	{		
 		$this->template = false;
