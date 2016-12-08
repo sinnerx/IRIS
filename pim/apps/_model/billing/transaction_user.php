@@ -12,14 +12,16 @@ class Transaction_user extends \Origami
 
 		// var_dump($pagination);
 		// die;
-		db::select("BI.billingItemName, BT.billingTransactionDate, BTI.billingTransactionItemPoint");
+		db::select("BI.billingItemName, BT.billingTransactionDate, (BTI.billingTransactionItemPoint*BTI.billingTransactionItemQuantity) AS billingTransactionItemPoint");
 		db::from("billing_transaction_user BTU");
 		db::join("billing_transaction_item BTI", "BTU.billingTransactionID = BTI.billingTransactionID");
 		db::join("billing_transaction BT", "BT.billingTransactionID = BTI.billingTransactionID");
 		db::join("billing_item BI", "BI.billingItemID = BTI.billingItemID");
 		db::where("BT.billingTransactionDate >= NOW() - INTERVAL 3 MONTH");
 		db::where("BTI.billingTransactionItemPoint IS NOT NULL");
+		db::where("BT.billingTransactionStatus", "1");
 		db::where("BTU.billingTransactionUser ", $userID);
+		db::order_by("BT.billingTransactionDate", "DESC");
 
 			if($pagination)
 			{
@@ -46,12 +48,14 @@ class Transaction_user extends \Origami
 	public function getTransactionPointList($param){
 		//var_dump($param);
 		// die;
-		db::select("BI.billingItemName, BT.billingTransactionDate, BTI.billingTransactionItemPoint");
+		db::select("BI.billingItemName, BT.billingTransactionDate, (BTI.billingTransactionItemPoint*BTI.billingTransactionItemQuantity) AS billingTransactionItemPoint");
 		db::from("billing_transaction_user BTU");
 		db::join("billing_transaction_item BTI", "BTU.billingTransactionID = BTI.billingTransactionID");
 		db::join("billing_transaction BT", "BT.billingTransactionID = BTI.billingTransactionID");
 		db::join("billing_item BI", "BI.billingItemID = BTI.billingItemID");
 		db::where("BTI.billingTransactionItemPoint IS NOT NULL");
+		db::where("BT.billingTransactionStatus", "1");
+
 		// db::join("site_member SM", "BTU.billingTransactionUser = SM.userID");
 		// db::join("user_profile UP", "UP.userID = BTU.billingTransactionUser");
 		
@@ -74,6 +78,7 @@ class Transaction_user extends \Origami
 		$pagination = $param['pagination'];
 		// var_dump($pagination);
 		// die;
+		db::order_by("BT.billingTransactionDate", "DESC");
 		if($pagination)
 		{
 			$totalRows = db::num_rows();

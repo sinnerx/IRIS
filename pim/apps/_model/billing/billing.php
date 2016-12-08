@@ -45,6 +45,7 @@ class billing extends \Origami
 		db::from("(select * from billing_item_point order by effectiveDate desc) BIP");
 		db::join("billing_item", "BIP.billingItemID = billing_item.billingItemID");
 		db::where("BIP.effectiveDate <= NOW()");
+		db::where("BIP.status", 1);
 		db::group_by("BIP.billingItemID");
 		db::order_by("billingItemHotkey", "ASC");
 
@@ -276,6 +277,7 @@ class billing extends \Origami
 	public function getBillingItemPoint($id)
 	{
 		db::from("billing_item_point BIP")->where("BIP.billingItemID", $id);
+		db::where("BIP.status",1);
 		db::order_by("BIP.effectiveDate", "DESC");
 
 		return db::get()->result();

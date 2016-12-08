@@ -186,7 +186,12 @@
 <div class='well well-sm'>
 	Billing Input
 </div>
-<?php echo flash::data();?>
+<?php 
+if($_GET['message'])
+	echo "<div class='alert alert-success'>".$_GET['message']."</div>";
+else
+	echo flash::data();
+?>
 <div class='row'>
 	<?php  if(session::get("userLevel") == 99): ?>	
 	<div class='col-sm-10'>

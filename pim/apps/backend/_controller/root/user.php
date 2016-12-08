@@ -217,6 +217,15 @@ class Controller_User
 				$icCheck	= model::load("user/services")->checkIC($userIC);
 			}
 
+			if(strlen($userIC) != 12){
+				$icCheck = 1;
+			}	
+
+			if (!(preg_match('/^[0-9]+$/', $userIC))) {
+			  // contains only 0-9
+				$icCheck = 1;
+			}	
+
 			$rules	= Array(
 					"userProfileFullName,userIC,userEmail"=>"required:This field is required.",
 					"userEmail"=>Array(
@@ -224,7 +233,7 @@ class Controller_User
 								"callback"=>Array(!$emailCheck,"Email already exists.")
 										),
 					"userIC"=>Array(
-								"callback"=>Array(!$icCheck,"IC already exists")
+								"callback"=>Array(!$icCheck,"IC already exists / only 12 numeric characters are allowed")
 									)
 							);
 

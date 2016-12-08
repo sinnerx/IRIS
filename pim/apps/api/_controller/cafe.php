@@ -220,7 +220,8 @@ class Controller_Cafe
 			'redeemPoint as fRedeemPoint',
 			'effectiveDate as fEffectiveDate',
 			'createdDate as fCreatedDate',
-			'updatedDate as fUpdatedDate'
+			'updatedDate as fUpdatedDate',
+			'status as fStatus'
 			));
 
 		if($date) {
@@ -504,6 +505,23 @@ class Controller_Cafe
 							$transaction->billingTransactionStatus = $row_transaction['status'];
 						
 						$transaction->save();
+
+						$items = db::from('billing_transaction_item')
+						->where('billingTransactionID', $transaction->billingTransactionID)
+						->get()->result('billingTransactionItemID');
+
+						$itemIDs = array_keys($items);
+
+						for($i = 0; $i < count($itemIDs); $i ++) {
+							if ($row_transaction['status'] == 1) {
+								db::where('billingTransactionItemID', $itemIDs[$i]);
+								db::update('OLAP_loyalty_points',
+									Array('transactionDate'=>$row_transaction['datetime']));
+							} else {
+							//if ($row_transaction['status'] == 3) {
+								db::delete('OLAP_loyalty_points', 'billingTransactionItemID='.$itemIDs[$i]);
+							}
+						}
 					}
 				}
 				else // Insert new transaction
@@ -557,15 +575,16 @@ class Controller_Cafe
 							$pcUsage->save();
 						}
 
-						db::insert('OLAP_loyalty_points', array(
-							'transactionDate' => $row_transaction['datetime'],
-							'userID' => $row_transaction['user']['userID'],
-							'siteID' => $this->site->siteID,
-							'clusterID' => $this->site->getCluster(),
-							'point' => $row_transaction['user']['point'],
-							'billingTransactionItemID' => date('Y-m-d H:i:s')
-						));
-
+						if ($row_transactionItem['point'] != 0 && $row_transaction['status'] == 1) {
+							db::insert('OLAP_loyalty_points', array(
+								'transactionDate' => $row_transaction['datetime'],
+								'userID' => $row_transaction['user']['userID'],
+								'siteID' => $this->site->siteID,
+								'clusterID' => $this->site->getCluster(),
+								'point' => $row_transactionItem['point'] * $row_transactionItem['quantity'],
+								'billingTransactionItemID' => $transactionItem->billingTransactionItemID
+							));
+						}
 					}
 
 					$transactionUser = model::orm('billing/transaction_user')->create();

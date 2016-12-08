@@ -16,6 +16,7 @@ class Billing_point extends \Origami
 		db::from("billing_item_point");
 		db::where("billing_item_point.billingItemID", $id);
 		db::where("billing_item_point.effectiveDate", $date);
+		db::where("billing_item_point.status", 1);
 
 		$result = db::get()->row();
 
@@ -23,10 +24,10 @@ class Billing_point extends \Origami
 		// var_dump($countrow);
 		// die;
 		if($countrow >= 1){
-			return true;
+			return false;
 		}
 		else{
-			return false;
+			return true;
 		}
 
 
