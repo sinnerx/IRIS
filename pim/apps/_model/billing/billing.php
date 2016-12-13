@@ -34,9 +34,21 @@ class billing extends \Origami
 
 	public function getItem()
 	{
-		db::from("billing_item");
-		db::where("billingItemStatus",1);	
-		db::order_by("billingItemHotkey","ASC");
+		// db::select("BIP.*, billing_item.*");
+		// db::from("billing_item");
+		// db::join("billing_item_point BIP", "BIP.billingItemID = billing_item.billingItemID");
+		// db::where("billingItemStatus",1);
+		// //db::where("BIP.billingItemPointID", 2);	
+		// db::order_by("billingItemHotkey aa","ASC");
+
+		db::select("*");
+		db::from("(select * from billing_item_point order by effectiveDate desc) BIP");
+		db::join("billing_item", "BIP.billingItemID = billing_item.billingItemID");
+		db::where("BIP.effectiveDate <= NOW()");
+		db::where("BIP.status", 1);
+		db::group_by("BIP.billingItemID");
+		db::order_by("billingItemHotkey", "ASC");
+
 		
 		return db::get()->result();		
 	}
@@ -258,6 +270,15 @@ class billing extends \Origami
 		db::from("billing_transaction")->where("billing_transaction.billingTransactionID", $id);
 		db::join("billing_transaction_item", "billing_transaction_item.billingTransactionID = billing_transaction.billingTransactionID");
 		db::order_by("billingTransactionDate","ASC");
+
+		return db::get()->result();
+	}
+
+	public function getBillingItemPoint($id)
+	{
+		db::from("billing_item_point BIP")->where("BIP.billingItemID", $id);
+		db::where("BIP.status",1);
+		db::order_by("BIP.effectiveDate", "DESC");
 
 		return db::get()->result();
 	}

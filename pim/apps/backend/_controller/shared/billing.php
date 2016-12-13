@@ -15,6 +15,7 @@ Class Controller_Billing
 		$month = date('n',strtotime($todayDate));
 		
 		$data['item'] = model::load('billing/billing')->getItem();
+		// var_dump($data['item']);die;
 		$data['list'] = model::load('billing/billing')->getList($siteID);
 
 		$totalBalanceDebit = model::load('billing/process')->getBalanceDebit($siteID,date('n',strtotime($todayDate)),date('Y',strtotime($todayDate)));
@@ -66,6 +67,126 @@ Class Controller_Billing
 		}	
 	}
 
+	public function editPoint($billingItemPointID)
+	{
+		$newEffectiveDate = input::get('newEffectiveDate');
+		$newRedeem = input::get('newRedeem');
+		$newReward = input::get('newReward');
+
+		$billingpoint = model::orm('billing/billing_point')->find($billingItemPointID);
+
+		$validateDatePoint =false;
+		
+		$validateDatePoint = $billingpoint->checkDatePoint($billingpoint->billingItemID, $newEffectiveDate);
+		// var_dump($billingpoint->effectiveDate);
+
+		//check if date passing = date on the record
+		if($billingpoint->effectiveDate == $newEffectiveDate)
+			$validateDatePoint = true;
+		//success = 1
+		if($validateDatePoint === false){
+			// $message = "Date already exist for the selected billing item";
+			$success = 0;
+			// redirect::to('billing/add', $message, 'error');
+		}	
+		else{
+			$billingpoint->rewardPoint 		= $newReward;
+			$billingpoint->redeemPoint 		= $newRedeem;
+			$billingpoint->effectiveDate 	= $newEffectiveDate;
+			$billingpoint->updatedDate	 	= date('Y-m-d H:i:s');
+			$billingpoint->updatedUser	 	= session::get("userID");	
+			$billingpoint->save();
+
+			// $message = "Successfully update billing point";		
+			$success = 1;
+			// redirect::to('billing/add', $message, 'success');
+		}
+			// $returnstring = $billingpoint->effectiveDate . " " . $newEffectiveDate;
+		// $data = $billingItemPointID . " ". $newEffectiveDate . " " . $newRedeem . " " . $newReward. " " . $billingpoint->effectiveDate;
+		return $success;
+	}
+
+	public function addPoint($billingItemID)
+	{
+		$this->template = false;
+
+		if(form::submitted()){
+			$effectiveDate = date('Y-m-d',strtotime(input::get('selectDatePoint')));
+			// var_dump(date("Y-m-d", strtotime(input::get('selectDatePoint'))));
+			// die;
+			//check date exist for billingitemID in billingitempoint table
+			$billingPointModel = model::load('billing/billing_point')->checkDatePoint($billingItemID, $effectiveDate);
+			// var_dump($billingPointModel);
+			// die;
+			//if exist, cancel it
+			if ($billingPointModel === false){
+				$message = "Date already exist for the selected billing item";
+				redirect::to('billing/add', $message, 'error');
+			}
+
+			//else
+			else{
+				// var_dump("false");
+				// die;
+				$billingpoint = model::orm('billing/billing_point')->create();
+				$billingpoint->billingItemID 	= $billingItemID;
+				$billingpoint->rewardPoint 		= input::get('rewardtxt');
+				$billingpoint->redeemPoint 		= input::get('redeemtxt');
+				$billingpoint->effectiveDate 	= $effectiveDate;
+				$billingpoint->createdDate	 	= date('Y-m-d H:i:s');
+				$billingpoint->createdUser	 	= session::get("userID");
+				$billingpoint->status		 	= 1;
+				$billingpoint->save();
+				$message = 'New Billing Point has been added';	
+				redirect::to('billing/add', $message, 'success');			
+			}
+			//add into table
+		}
+	}
+
+	public function deletePoint($billingItemPointID)
+	{	
+		$this->template = false;
+		
+		db::from("billing_item_point BIP");
+		db::join("billing_item BI", "BIP.billingItemID = BI.billingItemID");
+		db::where("BIP.billingItemPointID", $billingItemPointID);
+		$resultBillingItem = db::get()->row();
+		// var_dump($resultBillingItem);
+		// die;
+
+		db::select("*");
+		db::from("(select * from billing_item_point order by effectiveDate desc) BIP");
+		db::join("billing_item", "BIP.billingItemID = billing_item.billingItemID");
+		db::where("BIP.effectiveDate <= NOW()");
+		db::where("BIP.status", 1);
+		db::where("billing_item.billingItemID", $resultBillingItem['billingItemID']);
+		// db::where("BIP.billingItemPointID", $billingItemPointID);
+		db::group_by("BIP.billingItemID");
+		db::order_by("billingItemHotkey", "ASC");
+
+		// $result	= db::get()->result();
+		$resultCountRow	= db::num_rows();
+		// var_dump($resultCountRow);
+		// die;	
+		if($resultCountRow <= 1){
+			$message = 'Billing Point must at least have one record for current billing item';
+		
+			redirect::to('billing/add', $message, 'error');			
+		}
+		else{
+			$billing = model::orm('billing/billing_point')->find($billingItemPointID);
+
+			$billing->status = 0;
+			$billing->save();
+			
+			$message = 'Billing Point Deleted!';
+			
+			redirect::to('billing/add', $message, 'success');			
+		}
+		
+	}
+
 	public function addItem()
 	{		
 		$this->template = false;
@@ -103,6 +224,17 @@ Class Controller_Billing
 				$billing->billingItemUpdateddate = now();
 				$billing->save();	
 
+				$billingItemID = db::getLastInsertID();
+				$billingpoint = model::orm('billing/billing_point')->create();
+				$billingpoint->billingItemID 	= $billingItemID;
+				$billingpoint->rewardPoint 		= null;
+				$billingpoint->redeemPoint 		= null;
+				$billingpoint->effectiveDate 	= date('Y-m-d H:i:s');
+				$billingpoint->createdDate	 	= date('Y-m-d H:i:s');
+				$billingpoint->createdUser	 	= session::get("userID");
+				$billingpoint->status		 	= 1;
+				$billingpoint->save();
+
 				$message = 'New Item added!';
 				
 			redirect::to('billing/add', $message, 'success');
@@ -127,10 +259,13 @@ Class Controller_Billing
 		view::render("shared/billing/addItem", $data);
 	}
 	
-	public function editItem($id)
+	public function editItem($id,$pointid)
 	{	
 		$this->template = false;
 		$billing = model::orm('billing/billing')->find($id);
+		$billingItemPointList = model::load('billing/billing')->getBillingItemPoint($id);
+		// var_dump($billingItemPointList);
+		// die;
 
 		if(form::submitted())
 		{
@@ -190,18 +325,33 @@ Class Controller_Billing
 								);
 
 		$data['item'] = $billing;
+		$data['billingItemPointList'] = $billingItemPointList;
+		$data['currentPoint'] = $pointid;
 		view::render("shared/billing/editItem", $data);	
 	}
 	
 	public function deleteItem($itemID)
 	{	
 
+		$resultBillingItemPointList = model::load("billing/billing")->getBillingItemPoint($itemID);
+
+		foreach ($resultBillingItemPointList as $BIPValue) {
+			# code...
+			// var_dump($BIPValue);
+			// die;
+			$billingPoint = model::orm('billing/billing_point')->find($BIPValue['billingItemPointID']);
+
+			$billingPoint->status = 0;
+			$billingPoint->save();
+
+		}
+		
 		$billing = model::orm('billing/billing')->find($itemID);
 
 		$billing->billingItemUpdatedDate = now();
 		$billing->billingItemStatus = 0;
 		$billing->save();
-				
+
 		$message = 'Item Deleted!';
 
 		redirect::to('billing/add', $message, 'success');
@@ -557,6 +707,8 @@ Class Controller_Billing
 		->where('billingTransactionDate <', $selectYear.'-'.$selectMonth.'-01')
 		->where('billingTransactionStatus', 1)
 		->get()->row('total');
+		// var_dump($previousTransaction);
+		// die;
 
 		if($previousTransaction)
 			$data['balance'] = $previousTransaction;

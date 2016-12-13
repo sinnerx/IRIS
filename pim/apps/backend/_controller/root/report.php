@@ -42,7 +42,7 @@ class Controller_Report
 					break;
 				case 16:
 					# code...
-					$this->reportCashFlowSummaryFull($input);
+					$this->reportLoyaltyPoint($input);
 					break;
 				
 				default:
@@ -3700,6 +3700,315 @@ class Controller_Report
 		view::render("root/report/dashboardQuarterlyReport", $data);
 	}
 
+
+	public function reportLoyaltyPoint ($input){
+		//input
+    	set_time_limit(0);
+    	// var_dump($input);
+    	// die;
+		$dateFrom 	= date('Y-m-d H:i:s', strtotime($input['date_from']));
+		$dateTo 	= date('Y-m-d H:i:s', strtotime($input['date_to']));		
+		$region 	= $input['select_region'];		
+		$cluster 	= $input['select_cluster'];		
+		$siteid 	= $input['auto_siteID'];		
+		$billingitem 	= $input['select_item'];
+		$lastColumn = '';
+
+		// var_dump($dateFrom);
+		//database process
+		db::select("siteName, YEAR(transactionDate) AS transactionYear, MONTH(transactionDate) AS transactionMonth, BI.billingItemName, SUM(CASE WHEN point > 0 THEN point ELSE 0 END) AS reward, SUM(CASE WHEN point < 0 THEN point ELSE 0 END) AS redeem");
+		db::from("OLAP_loyalty_points OLP");
+		db::join("site S", "S.siteID = OLP.siteID");
+		db::join("billing_transaction_item BTI", "BTI.billingTransactionItemID = OLP.billingTransactionItemID");
+		db::join("billing_item BI","BI.billingItemID = BTI.billingItemID");
+		db::join("cluster_site CS", "CS.siteID = S.siteID");
+		db::join("cluster C", "C.clusterID = CS.clusterID");
+		
+
+		if($dateFrom != "")
+			db::where("transactionDate >= '$dateFrom'");
+
+		if($dateTo != "")
+			db::where("transactionDate <= '$dateTo'");
+
+		if($region != ""){
+			if($regionid == 0){
+			        $arrayCluster = array('5', '6');
+		      }
+		      else if ($regionid == 1){
+		        $arrayCluster = array('1', '2', '3', '4'); 
+		        //echo "region 0";       
+		      }
+		      else
+		        $arrayCluster = array('1', '2', '3', '4', '5', '6'); 
+
+			db::where(" CS.clusterID IN (".implode(",",$arrayCluster).")");
+		}
+						
+
+		if($cluster != "")
+			db::where("C.clusterID", $cluster);
+
+		if($siteid != "")
+			db::where("S.siteID", $siteid);
+
+		if($billingitem != "")
+			db::where("BI.billingItemID", $billingitem);					
+
+		db::group_by("BTI.billingItemID, MONTH(transactionDate), YEAR(transactionDate), S.siteID");
+		db::order_by("transactionYear", "DESC");
+		db::order_by("transactionMonth", "DESC");
+		$results = db::get()->result();
+		// var_dump($results);
+		// die;
+
+		$arrayQuery = array();
+		foreach($results as $result){
+			$arrayQuery[$result['siteName']][$result['transactionYear']][$result['transactionMonth']][$result['billingItemName']]['positive'] = $result['reward'];
+			// $arrayQuery[$result['siteName']][$result['transactionYear']][$result['transactionMonth']][$result['billingItemName']]['total']['reward'] += $result['reward'];
+			$arrayQuery[$result['siteName']][$result['transactionYear']][$result['transactionMonth']][$result['billingItemName']]['negative'] = $result['redeem'];
+			// $arrayQuery[$result['siteName']][$result['transactionYear']][$result['transactionMonth']][$result['billingItemName']]['total']['negative'] += $result['redeem'];
+		}
+
+		// print_r($arrayQuery);
+		// die;
+
+		$titleDate 		= $input['date_from'] .' to '.$input['date_to'];
+		$filename		= "Loyalty Report from ".$titleDate;
+		//output to excel
+		$excel			= new \PHPExcel;
+		$ExcelHelper	= new model\report\PHPExcelHelper($excel,$filename.".xls");
+
+		# set running alphabet and number.
+		$cellRange = range('A', 'Z');
+		$i = 0;
+
+		
+
+		
+		//looping each site
+		foreach($arrayQuery as $keySite => $valueSite){
+			// var_dump($keySite);
+		## the main working sheet.
+		$sheetSite = $excel->createSheet(1);
+		$sheetSite->setTitle($keySite);			
+		// $cellRangeSite = range('A', 'Z');
+
+		$endSheetRow=$monCount+5;
+
+		
+
+		# forth row header
+		$additionalHeader = array();
+		foreach($valueSite as $yearKey => $yearValue){
+			// var_dump($yearKey);
+			foreach($yearValue as $monthKey => $monthValue){
+				// var_dump($monthValue);
+				foreach($monthValue as $itemKey => $itemValue){
+					// var_dump(array_search($itemValue,$additionalHeader));
+
+					if(in_array($itemKey,$additionalHeader) == 0){
+						array_push($additionalHeader,$itemKey);
+
+					}
+					// var_dump($additionalHeader);
+					// var_dump(in_array($itemKey,$additionalHeader));
+					
+				}
+				
+			}
+
+		}
+		asort($additionalHeader);
+		// var_dump($additionalHeader);
+		// die;
+
+		#refill billing item that doesnt exist for that month
+		foreach($valueSite as $yearKey => $yearValue){
+			// var_dump($yearKey);
+			foreach($yearValue as $monthKey => $monthValue){
+				// var_dump($monthValue);
+					foreach($additionalHeader as $header){
+						if(array_key_exists($header,$monthValue) == 0){
+						// array_push($additionalHeader,$itemKey);
+							$valueSite[$yearKey][$monthKey][$header]['positive'] = 0;
+							$valueSite[$yearKey][$monthKey][$header]['negative'] = 0;
+							
+
+						}
+						// $valueSite[$yearKey][$monthKey]['total']['positive'] += $monthValue;
+						
+						ksort($valueSite[$yearKey][$monthKey]);
+					}	
+					foreach ($monthValue as $keyItem => $valueItem) {
+							# code...
+							// print_r($keyItem);
+							$totalSite[$keyItem]['totalpositive'] += $valueItem['positive'];
+							// print_r($valueItem['positive']);
+							$totalSite[$keyItem]['totalnegative'] += $valueItem['negative'];
+
+							$valueSite[$yearKey][$monthKey]['Total']['positive'] += $valueItem['positive'];
+							$valueSite[$yearKey][$monthKey]['Total']['negative'] += $valueItem['negative'];							
+
+							ksort($totalSite);
+						}
+
+						// print_r($valueSite);					
+			}
+		}
+
+		// print_r($valueSite);
+		// die;
+		$fourthHeaderSiteDefault = array('Year','Month');
+		$fourthHeaderSite = array_merge($fourthHeaderSiteDefault, $additionalHeader); 
+
+		$totalHeader = array('Total');
+		$fourthHeaderSite = array_merge($fourthHeaderSite, $totalHeader); 
+		$additionalHeader = array_merge($additionalHeader, $totalHeader);
+		// var_dump($fourthHeaderSite);
+		// die;
+		$indexFourthHeader = 0;
+		foreach ($fourthHeaderSite as $key=>$value) {
+			
+			// var_dump($key. " " . $value);
+			if ($key < 2){
+				$sheetSite->setCellValue($cellRange[$indexFourthHeader++].'4', $value);
+				// var_dump($key);
+			}
+			else if ($key >= 2){
+				$sheetSite->setCellValue($cellRange[$indexFourthHeader++].'4', $value);
+				// $spacing = $key;
+				$sheetSite->setCellValue($cellRange[$indexFourthHeader++].'4', '');
+				// var_dump($key);
+				// var_dump($spacing);
+				// $sheetSite->mergeCells($cellRange[$indexFourthHeader], $cellRange[$indexFourthHeader]);
+			}
+			// var_dump($value);
+			$lastColumn = $cellRange[$indexFourthHeader - 1];
+		}//end foreach fourth header
+
+
+
+		# set alignment
+		$sheetSite->getStyle("A4:".$lastColumn."4")->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+
+		# set background color
+		$sheetSite->getStyle("A1:".$lastColumn."4")->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('6495ED');
+
+		# set font
+		$sheetSite->getStyle("A1:".$lastColumn."4")->applyFromArray(
+										array(
+							    			'font'  => array(
+								        		'bold'  => true,
+								        		'color' => array('rgb' => 'FFFFFF')
+							    			)
+							    		)
+									);	
+
+		
+		#fifth header
+		$Addkey = 2;
+		$mergeKey = 2;
+		foreach($additionalHeader as $fifthHeaderKey => $fifthHeaderValue){
+			#combine each pair in fourth header
+			// var_dump($cellRange[$mergeKey++]);
+			// $sheetSite->mergeCells($cellRange[$mergeKey].'4', $cellRange[$mergeKey++].'4');
+			$sheetSite->mergeCells($cellRange[$mergeKey++].'4'.':'.$cellRange[$mergeKey++].'4');
+			$sheetSite->setCellValue($cellRange[$Addkey++].'5', 'Reward');
+			$sheetSite->setCellValue($cellRange[$Addkey++].'5', 'Redeem');
+			// $AddKey++;
+			// $fifthHeaderKey++;
+		}	//foreach fifth header	
+
+		
+		$yearX = 6;
+		foreach($valueSite as $yearKey => $yearValue){
+			// var_dump($yearKey);
+			// var_dump($yearValue);
+			$yearY = 0;
+			$sheetSite->setCellValue($cellRange[$yearY++].$yearX, $yearKey);
+			// var_dump($yearValue);
+			foreach($yearValue as $monthKey => $monthValue){
+				$yearY = 1;
+				$sheetSite->setCellValue($cellRange[$yearY++].$yearX, $monthKey);
+				// var_dump($monthValue);
+				// die;
+				foreach($monthValue as $itemKey => $itemValue){
+					// var_dump($itemValue);
+					// $yearY = 2;
+					$sheetSite->setCellValue($cellRange[$yearY++].$yearX, $itemValue['positive']);
+					$sheetSite->setCellValue($cellRange[$yearY++].$yearX, $itemValue['negative']);
+
+				}
+				$yearX++;
+			}
+				
+		}
+		// die;
+		$sheetSite->setCellValue($cellRange[0].$yearX, 'Total');
+		$sheetSite->mergeCells($cellRange[0].$yearX.':'.$cellRange[1].$yearX);
+		// $sheetSite->getStyle("A4:".$lastColumn."4")->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+
+		$yearY = 2;
+		foreach ($totalSite as $keyTotal => $valueTotal) {
+				# code...
+				// var_dump($valueTotal);
+
+				$sheetSite->setCellValue($cellRange[$yearY++].$yearX, $valueTotal['totalpositive']);
+				$sheetSite->setCellValue($cellRange[$yearY++].$yearX, $valueTotal['totalnegative']);
+				// $yearX++;
+
+			}	
+			// die;
+		## all cell
+		$allCellSite = $sheetSite->getStyle("A1:".$lastColumn."100");
+		$allCellSite->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_TOP);
+		$allCellSite->getAlignment()->setWrapText(true);
+		foreach(range('A',$lastColumn) as $columnID) {
+		    $sheetSite->getColumnDimension($columnID)->setAutoSize(true);
+		}
+		$allCellSite->applyFromArray(
+					array(
+						'borders' => array(
+								'allborders' => array(
+										'style' => PHPExcel_Style_Border::BORDER_THIN,
+										'color' => array('rgb' => 'D3D3D3'),
+										'size'  => 11,
+										)
+								)
+						)
+					);
+
+
+
+		# prepare header.
+		# first row header
+		$sheetSite->setCellValue("A1", $filename);
+		$sheetSite->mergeCells("A1:".$lastColumn."1");
+
+		# second row header
+		$sheetSite->setCellValue("A2", $keySite);
+		$sheetSite->mergeCells("A2:C2");
+
+		// $sheetSite->setCellValue("D2", 'Generated at '.now());
+		// $sheetSite->mergeCells("D2:".$lastColumn."2");
+		// $sheetSite->mergeCells("D2:O2");
+
+		# set alignment
+		$sheetSite->getStyle("D2:".$lastColumn."2")->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);	
+
+		$totalSite = array();
+		}// end site loop
+		//looping each month
+		//looping each biling item
+
+		
+
+
+		// die;
+		$ExcelHelper->execute();
+		session_write_close();
+	}
 }
 
 ?>

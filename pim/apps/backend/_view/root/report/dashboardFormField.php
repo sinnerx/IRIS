@@ -32,6 +32,7 @@ $(document).ready(function() {
                 'report_fieldsIsMandatory'=>$form_field_raw['report_fieldsIsMandatory'],
                 'report_fieldsTableID'=>$form_field_raw['report_fieldsTableID'],
                 'report_fieldsTableName'=>$form_field_raw['report_fieldsTableName'],
+                'report_fieldsTableCondition'=>$form_field_raw['report_fieldsTableCondition'],
                 'report_fieldsTable'=>$form_field_raw['report_fieldsTable'],
                 'report_fieldsSequence'=>$form_field_raw['report_fieldsSequence'],
                 'children' => array());
@@ -43,7 +44,7 @@ $(document).ready(function() {
             $form_fields[] = $tmp_form_field;
         }
     }
-    //var_dump($form_fields);
+    // var_dump($form_fields);
     //var_dump(model::load("site/cluster")->lists());
 ?>
 <h3 class="m-b-xs text-black">
@@ -96,7 +97,7 @@ Please complete the form below to generate the report.
 
 				<?php 
 				//var_dump($form_field['children']);
-				echo form::select($form_field['report_fieldsName'],$form_field['children'],"class='form-control'",'');?>
+				echo form::select($form_field['report_fieldsName'],$form_field['children'],"class='form-control'",'','All');?>
 				</div>
 			</div>			
 		</div> 		
@@ -119,6 +120,9 @@ Please complete the form below to generate the report.
 
 				db::select($form_field['report_fieldsTableName']. ",". $form_field['report_fieldsTableID']);
 				db::from($form_field['report_fieldsTable']);
+				if($form_field['report_fieldsTableCondition'])
+					db::where($form_field['report_fieldsTableCondition']);
+
 				$results = db::get()->result();
 				//$fieldsArray = array();
 				foreach ($results as $result) {
@@ -128,7 +132,7 @@ Please complete the form below to generate the report.
 					
 				}
 				//var_dump($fieldsArray);
-				echo form::select($form_field['report_fieldsName'],$fieldsArray,"class='form-control'",'');
+				echo form::select($form_field['report_fieldsName'],$fieldsArray,"class='form-control'",'','All');
 
 				?>
 				</div>
@@ -149,7 +153,7 @@ Please complete the form below to generate the report.
 				<div class='col-sm-6'>
 				<label><?php echo  $form_field['report_fieldsTitle']; ?></label>
 
- 				<?php echo form::text($form_field['report_fieldsName'],"class='input-sm input-s datepicker-input form-control' date-date-format='dd-mm-yyyy'",date('Y-m-d', strtotime($todayDateStart)));?>	
+ 				<?php echo form::text($form_field['report_fieldsName'],"class='input-sm input-s datepicker-input form-control' date-date-format='dd-mm-yyyy'",date('d-m-Y', strtotime($todayDateStart)));?>	
 				</div>
 			</div>			
 		</div>  
@@ -158,7 +162,7 @@ Please complete the form below to generate the report.
 			var datepicker = "<?php echo $form_field['report_fieldsName'];?>";
 			//console.log(datepicker);
 			$("#"+datepicker).change(function(){
-				$( "#"+datepicker ).datepicker("option","dateFormat","yy-mm-dd");
+				$( "#"+datepicker ).datepicker("option","dateFormat","dd-mm-yy");
 			});
 		    
 		  });

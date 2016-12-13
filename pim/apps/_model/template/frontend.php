@@ -18,10 +18,16 @@ class Frontend
 	public function pagination()
 	{
 		return Array(
-			"html_wrapper"=>"<div class='frontend-pagination'>{content}</div>",
-			"html_number_active"=>"<a href='{href}' class='active'>{number}</a>",
-			"html_previous"=>"<a href='{href}'><</a>",
-			"html_next"=>"<a href='{href}'>></a>"
+			// "html_wrapper"=>"<div class='frontend-pagination'>{content}</div>",
+			// "html_number_active"=>"<a href='{href}' class='active'>{number}</a>",
+			// "html_previous"=>"<a href='{href}'><</a>",
+			// "html_next"=>"<a href='{href}'>></a>"
+
+			"html_wrapper"=>"<ul class='pagination pagination-sm m-t-none m-b-none'>{content}</ul>",
+				"html_number"=>"<li><a href='{href}'>{number}</a></li>",
+				"html_number_active"=>"<li><a href='{href}' style='color: #fff;border-color: #428bca;background-color:#428bca;'>{number}</a></li>",
+				"html_previous"=>"<li><a href='{href}'><i class='fa fa-chevron-left'></i></a></li>",
+				"html_next"=>"<li><a href='{href}'><i class='fa fa-chevron-right'></i></a></li>"
 			);
 	}
 

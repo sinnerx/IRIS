@@ -186,7 +186,12 @@
 <div class='well well-sm'>
 	Billing Input
 </div>
-<?php echo flash::data();?>
+<?php 
+if($_GET['message'])
+	echo "<div class='alert alert-success'>".$_GET['message']."</div>";
+else
+	echo flash::data();
+?>
 <div class='row'>
 	<?php  if(session::get("userLevel") == 99): ?>	
 	<div class='col-sm-10'>
@@ -199,14 +204,19 @@
 		<?php endif; ?>
 		</div>
 		<div class="table-responsive bg-white billing-wrap">	
-      		<?php foreach ($item as $key => $row):?>
+      		<?php foreach ($item as $key => $row): ?>
+
       		<div class="col-sm-3 panel panel-default">
         		<?php  if(session::get("userLevel") == 99): ?>
-      			<a href='<?php echo url::base("billing/editItem/".$row[billingItemID]);?>' data-toggle="ajaxModal" class="fa fa-fw fa-pencil pull-right editItem"></a>
+      			<a href='<?php echo url::base("billing/editItem/".$row[billingItemID]."/".$row[billingItemPointID]);?>' data-toggle="ajaxModal" class="fa fa-fw fa-pencil pull-right editItem"></a>
         		<?php endif; ?>
       			<div onclick="billing.select(<?php echo $row[billingItemID]; ?>);" class="hotkey"><?php echo $row[billingItemHotkey]; ?></div>
       			<div onclick="billing.select(<?php echo $row[billingItemID]; ?>);" class="itemname "><?php echo $row[billingItemName]; ?></div>
-      			<div onclick="billing.select(<?php echo $row[billingItemID]; ?>);" class="price btn-default">RM <?php echo $row[billingItemPrice]; ?></div>
+      			<div onclick="billing.select(<?php echo $row[billingItemID]; ?>);" class="price btn-default">RM <?php echo $row[billingItemPrice] . "<BR>"; ?>
+
+      			<?php $row['redeemPoint'] ? $showRedeem = $row['redeemPoint']."pts" : $showRedeem = "-"; echo $showRedeem; ?></div>
+      			Reward
+      			<div class="price btn-success"> <?php $row['rewardPoint'] ? $showReward = $row['rewardPoint']."pts" : $showReward = " "; echo $showReward; ?> &nbsp </div>
         	</div>
         	<?php endforeach;?>		
 		</div>

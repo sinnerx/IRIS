@@ -34,24 +34,25 @@ class Controller_User
 			{
 				$icCheck	= model::load("user/services")->checkIC(input::get("userIC"));
 			}
+			// var_dump($icCheck);
+			$userIC = str_replace('-', '', input::get('userIC'));
+			if(strlen($userIC) != 12){
+				$icCheck = 1;
+			}	
 
-			$icDash = substr_count (input::get("userIC"), '-');
-			$icDash >= 1 ? $icDash = true : $icDash = false;
+			if (!(preg_match('/^[0-9]+$/', $userIC))) {
+			  // contains only 0-9
+				$icCheck = 1;
+			}	
 
 			$rules	= Array(
 					"userProfileFullName,userIC"=>"required:This field is required.",
 					"userIC"=>Array(
-								"callback"=>
-									Array(!$icCheck,"IC already exists"),
-								// "callback"=> 
-								// Array(!$icDash,"Not allowed dash for IC"),									
-									// Array(!$icDash,"Not allowed dash for IC"),
-									),
-
-					// "userIC"=>Array(
-					// 				"callback"=> Array(!$icDash,"Not allowed dash for IC"),
-					// 				),
+								"callback"=>Array(!$icCheck,"IC already exists / only 12 numeric characters are allowed")
+									)
 							);
+
+			
 
 			## got error.
 
@@ -64,6 +65,7 @@ class Controller_User
 
 			## update manager info.
 			$data	= input::get();
+			$data['userIC'] = $userIC;
 			$user->fullUpdate($userID,$data);
 
 			redirect::to("","Successfully updated user info.");

@@ -126,10 +126,11 @@ class album
 	}
 
 	# get list of album(s) by slug
-	public function getVideosBySlug($slug,$frontend = 0)
+	public function getVideosBySlug($slug,$frontend = 0, $siteID)
 	{
 		db::from("video_album");
 		db::where("videoAlbumSlug",$slug);
+		db::where("siteID",$siteID);
 
 		$album = db::get("video_album")->row();
 

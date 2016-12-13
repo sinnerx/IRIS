@@ -208,6 +208,37 @@ class Controller_Cafe
 		return json_encode($response);
 	}
 
+	public function billingItemPoints()
+	{
+		$date = request::get('date');
+
+		db::from('billing_item_point')
+		->select(array(
+			'billingItemPointID',
+			'billingItemID as fItemID',
+			'rewardPoint as fRewardPoint',
+			'redeemPoint as fRedeemPoint',
+			'effectiveDate as fEffectiveDate',
+			'createdDate as fCreatedDate',
+			'updatedDate as fUpdatedDate',
+			'status as fStatus'
+			));
+
+		if($date) {
+			db::where('updatedDate > ?', array($date));
+			db::or_where('createdDate > ?', array($date));
+		}
+
+		$items = db::get()->result('billingItemPointID');
+
+		$response = array(
+			'status' => 'success',
+			'data' => $items
+			);
+
+		return json_encode($response);
+	}
+
 	public function siteInfo()
 	{
 		$site = $this->site;
@@ -474,9 +505,26 @@ class Controller_Cafe
 							$transaction->billingTransactionStatus = $row_transaction['status'];
 						
 						$transaction->save();
+
+						$items = db::from('billing_transaction_item')
+						->where('billingTransactionID', $transaction->billingTransactionID)
+						->get()->result('billingTransactionItemID');
+
+						$itemIDs = array_keys($items);
+
+						for($i = 0; $i < count($itemIDs); $i ++) {
+							if ($row_transaction['status'] == 1) {
+								db::where('billingTransactionItemID', $itemIDs[$i]);
+								db::update('OLAP_loyalty_points',
+									Array('transactionDate'=>$row_transaction['datetime']));
+							} else {
+							//if ($row_transaction['status'] == 3) {
+								db::delete('OLAP_loyalty_points', 'billingTransactionItemID='.$itemIDs[$i]);
+							}
+						}
 					}
 				}
-				else
+				else // Insert new transaction
 				{
 					$totalTransactions++;
 
@@ -502,6 +550,7 @@ class Controller_Cafe
 						$transactionItem->billingItemID = $row_transactionItem['billing_item_id'];
 						$transactionItem->billingTransactionItemPrice = $row_transactionItem['price'];
 						$transactionItem->billingTransactionItemQuantity = $row_transactionItem['quantity'];
+						$transactionItem->billingTransactionItemPoint = $row_transactionItem['point'];
 						$transactionItem->billingTransactionItemDescription = $row_transactionItem['description'];
 						$transactionItem->save();
 
@@ -525,6 +574,17 @@ class Controller_Cafe
 							$pcUsage->billingPcUsageEnd = $localPcUsage['end'];
 							$pcUsage->save();
 						}
+
+						if ($row_transactionItem['point'] != 0 && $row_transaction['status'] == 1) {
+							db::insert('OLAP_loyalty_points', array(
+								'transactionDate' => $row_transaction['datetime'],
+								'userID' => $row_transaction['user']['userID'],
+								'siteID' => $this->site->siteID,
+								'clusterID' => $this->site->getCluster(),
+								'point' => $row_transactionItem['point'] * $row_transactionItem['quantity'],
+								'billingTransactionItemID' => $transactionItem->billingTransactionItemID
+							));
+						}
 					}
 
 					$transactionUser = model::orm('billing/transaction_user')->create();
@@ -535,6 +595,13 @@ class Controller_Cafe
 					$transactionUser->save();
 				}
 			}
+
+			//$transactionUser->billingTransactionUser = $row_transaction['user']['userID'];
+			db::where('userID', $row_transaction['user']['userID']);
+			db::update("user",Array(
+						"userPoint"=>$row_transaction['user']['point'],
+						"userUpdatedDate"=>date('Y-m-d H:i:s')
+									));
 		}
 
 		// if site has reupload request, update to success.

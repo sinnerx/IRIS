@@ -19,8 +19,6 @@ user:
 	userUpdatedUser [int]
 	userLastLogin [datetime]
 	userPoint [int]
-	userLevelManager [int]
-	userOKUStatus [int]
 
 account:
 	accountID [int]
@@ -58,7 +56,6 @@ user_profile:
 	userProfileMobileNo [varchar]
 	userProfileMailingAddress [text]
 	userProfileAvatarPhoto [varchar]
-	userRace [int]
 
 user_profile_additional: ## additional info for user.
 	userProfileAdditionalID [int]
@@ -217,7 +214,6 @@ site:
 	siteCafeToken [varchar]
 	siteStatus [int]
 	siteUnlockDate [datetime]
-	siteMyCommsID [varchar(16)]
 
 site_cache:
 	siteCacheID [int]
@@ -1243,6 +1239,7 @@ report_fields:
 	report_fieldsTable [varchar(100)]
 	report_fieldsTableID [varchar(100)]
 	report_fieldsIsMandatory [int]
+	report_fieldsTableCondition [text]
 
 training_subtype:
 	trainingSubTypeID [int]
@@ -1283,3 +1280,10 @@ OLAP_loyalty_points:
 	point [int]
 	billingTransactionItemID [int]
 	transactionDate [datetime]
+
+site_log:
+	siteLogID [int]
+	email [varchar(100)]
+	siteID [int]
+	start [datetime]
+	end [datetime]

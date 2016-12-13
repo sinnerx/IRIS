@@ -157,6 +157,8 @@ Class Controller_Auth
 				$email		= input::get("userEmail");
 				$pass		= input::get("userPassword");
 
+				## to check system speed (site_log)
+				$accessAuth->siteLog($email);
 
 				$backendLoginCheck = \Iris\Unity::logIn($email, $pass);
 
@@ -195,6 +197,8 @@ Class Controller_Auth
 				$_SESSION['userid'] = $backendLoginCheck['userID'];
 				$_SESSION['userLevel'] = $backendLoginCheck['userLevel'];
 				$_SESSION['userIC'] = $backendLoginCheck['userIC'];
+				## to check system speed (site_log)
+				$_SESSION['email'] = $email;
 				
 				## go to home/index
 				redirect::to(model::load("access/data")->firstLoginLocation($backendLoginCheck['userLevel']));
