@@ -82,16 +82,37 @@ class Controller_User
 
 			## email and ic check.
 			$emailCheck	= model::load("user/services")->checkEmail($email);
-			$icCheck	= model::load("user/services")->checkIC($userIC);
+			$userIC = str_replace('-', '', input::get('userIC'));
+
+			## ic check.
+			$icCheck	= false;
+			if($userIC != $data['row']['userIC'])
+			{
+				$icCheck	= model::load("user/services")->checkIC($userIC);
+			}
+			
+			if (preg_match('/^[0-9]*$/', $userIC)) {
+			  // contains only 0-9
+				if(strlen($userIC) != 12){
+					$icCheck = 1;
+				}				
+			}
+			else{
+				// var_dump("alphabet");
+				if(strlen($userIC) >= 12){
+					$icCheck = 1;
+				}
+			}
+
 
 			$rules	= Array(
-					"userProfileFullName,userLevel,userIC,userEmail"=>"required:This field is required.",
+					"userProfileFullName,userLevel,userIC,userEmail,userRace,userProfileGender,userProfileDOB"=>"required:This field is required.",
 					"userEmail"=>Array(
 								"email:Please input a corrent email format.",
 								"callback"=>Array(!$emailCheck,"Email already exists.")
 										),
 					"userIC"=>Array(
-								"callback"=>Array(!$icCheck,"IC already exists.")
+								"callback"=>Array(!$icCheck,"IC already exists / only 12 numeric characters are allowed")
 									)
 							);
 
@@ -217,17 +238,21 @@ class Controller_User
 				$icCheck	= model::load("user/services")->checkIC($userIC);
 			}
 
-			if(strlen($userIC) != 12){
-				$icCheck = 1;
-			}	
-
-			if (!(preg_match('/^[0-9]+$/', $userIC))) {
+			if (preg_match('/^[0-9]*$/', $userIC)) {
 			  // contains only 0-9
-				$icCheck = 1;
-			}	
+				if(strlen($userIC) != 12){
+					$icCheck = 1;
+				}				
+			}
+			else{
+				// var_dump("alphabet");
+				if(strlen($userIC) >= 12){
+					$icCheck = 1;
+				}
+			}
 
 			$rules	= Array(
-					"userProfileFullName,userIC,userEmail"=>"required:This field is required.",
+					"userProfileFullName,userIC,userEmail,userRace,userProfileGender,userProfileDOB"=>"required:This field is required.",
 					"userEmail"=>Array(
 								"email:Please input a correct email format.",
 								"callback"=>Array(!$emailCheck,"Email already exists.")
@@ -245,11 +270,22 @@ class Controller_User
 				redirect::to("","Got some error in your form.","error");
 			}
 
+			if(input::get("userIC") != $data['row']['userIC']){
+				$dataIC['userID'] 		 = $userID;
+				$dataIC['newIC'] 		 = input::get('userIC');
+				$dataIC['oldIC'] 		 = $data['row']['userIC'];
+				// $dataIC['ICUpdatedDate'] = date('Y-m-d H:i:s');
+
+				$user->ICChanges($dataIC);
+			}
+
 			## update manager info.
 			$data	= input::get();
 			$data['userIC'] = $userIC;
 			$data["userLevelManager"] = input::get("userLevelManager");
 			$user->fullUpdate($userID,$data);
+
+
 
 			redirect::to("","Successfully updated user info.");
 		}

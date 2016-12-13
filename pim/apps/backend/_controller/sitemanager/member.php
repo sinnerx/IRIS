@@ -143,19 +143,23 @@ class Controller_Member
 			//var_dump($emailRule);
 			// var_dump($icCheck);
 			// var_dump(strlen($userIC));
-			if(strlen($userIC) != 12){
-				$icCheck = 1;
-			}	
-
-			if (!(preg_match('/^[0-9]+$/', $userIC))) {
+			if (preg_match('/^[0-9]*$/', $userIC)) {
 			  // contains only 0-9
-				$icCheck = 1;
+				if(strlen($userIC) != 12){
+					$icCheck = 1;
+				}				
+			}
+			else{
+				// var_dump("alphabet");
+				if(strlen($userIC) >= 12){
+					$icCheck = 1;
+				}
 			}		
 			// $icCheck = null;
 			// var_dump($icCheck);
 			// die;			
 			$rules	= Array(
-					"userProfileFullName,userIC"=>"required:This field is required.",
+					"userProfileFullName,userIC,userRace,userProfileGender,userProfileDOB,userProfileOccupationGroup"=>"required:This field is required.",
 					"userIC"=>Array(
 								"callback"=>Array(!$icCheck,"IC already exists / only 12 numeric characters are allowed")
 									)
@@ -175,6 +179,15 @@ class Controller_Member
 				redirect::to("","Got some error in your form.","error");
 			}
 
+			if(input::get("userIC") != $data['row']['userIC']){
+				$dataIC['userID'] 		 = $userID;
+				$dataIC['newIC'] 		 = input::get('userIC');
+				$dataIC['oldIC'] 		 = $data['row']['userIC'];				
+				// $dataIC['ICUpdatedDate'] = date('Y-m-d H:i:s');
+
+				$user->ICChanges($dataIC);
+			}
+
 			## update member data
 			$userProfileLastName = $data['row']['userProfileLastName'];
 			$data	= input::get();
@@ -186,6 +199,8 @@ class Controller_Member
 			//$data['userProfileLastName'] = $userProfileLastName;
 			$user->updateMember($userID,$data);
 			$user->updateAdditional($userID,$data);
+
+			
 
 			redirect::to("","Successfully updated member info.");
 		}

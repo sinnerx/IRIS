@@ -571,6 +571,17 @@ class User extends \Origami
 							"userPassword"=>model::load("helper")->hashPassword($password)
 														));
 	}
+
+	public function ICChanges($dataParam)
+	{	
+		$data = Array(
+				"userID"=>$dataParam['userID'],
+				"newIC"=>$dataParam['newIC'],
+				"oldIC"=>$dataParam['oldIC'],
+				"ICUpdatedDate"=>now()
+			);
+		db::insert("user_ic",$data);		
+	}
 }
 
 ?>

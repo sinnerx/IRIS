@@ -38,8 +38,9 @@ class Helper
 				1=>"Malay",
 				2=>"Chinese",
 				3=>"Indian",
+				5=>"Bumiputera Sabah Sarawak",
+				6=>"Orang Asli",
 				4=>"Others",
-				// 4=>"Dayak",
 				// 5=>"Iban",
 				// 6=>"Bidayuh",
 				// 7=>"Orang Ulu",
@@ -647,7 +648,7 @@ class Helper
 				4=>"Di bawah majikan",
 				5=>"Tidak bekerja",
 				6=>"Bersara",
-				7=>"Bukan Pelajar",
+				// 7=>"Bukan Pelajar",
 						);
 
 		return $no?$occR[$no]:$occR;

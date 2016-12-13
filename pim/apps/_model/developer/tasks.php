@@ -97,10 +97,15 @@ class Tasks
 			'repeatable' => true
 			));
 
+		$manager->addTask('addOLAPLoyaltyPoint', array(
+			'description' => 'adding transaction record into olap loyalty point table',
+			'repeatable' => true
+			));	
+
 		$manager->addTask('userIcToDOB', array(
 			'description' => 'Convert User IC into DOB',
 			'repeatable' => true
-			));		
+			));				
 	}
 
 	public function pageAddDefault()
@@ -548,14 +553,40 @@ class Tasks
 		}
 	}
 
+	public function addOLAPLoyaltyPoint()
+	{
+		db::select("BTI.billingTransactionItemID, BTU.billingTransactionUser, CS.clusterID, BT.siteID, BTI.billingTransactionItemPoint, BT.billingTransactionDate, BTI.billingTransactionItemQuantity");
+		db::from("billing_transaction_item BTI");
+		db::join("billing_transaction BT", "BT.billingTransactionID = BTI.billingTransactionID");
+		db::join("billing_transaction_user BTU", "BTU.billingTransactionID = BTI.billingTransactionID");
+		db::join("cluster_site CS", "CS.siteID = BT.siteID");
+		db::where("BT.billingTransactionStatus", 1);
+		db::where("BTI.billingTransactionItemPoint IS NOT NULL");
+
+		$result = db::get()->result();
+
+		foreach ($result as $value) {
+			# code...
+			db::insert('OLAP_loyalty_points', array(
+			'transactionDate' => $value['billingTransactionDate'],
+			'userID' => $value['billingTransactionUser'],
+			'siteID' => $value['siteID'],
+			'clusterID' => $value['clusterID'],
+			'point' => $value['billingTransactionItemPoint'] * $value['billingTransactionItemQuantity'],
+			'billingTransactionItemID' => $value['billingTransactionItemID']
+			));			
+		}
+	}
+
 	public function userIcToDOB(){
 
 		db::select("U.userIC, UP.*");
 		db::from("user U");
 		db::join("user_profile UP", "U.userID = UP.userID");
-		db::where("UP.userProfileDOB", "0000-00-00");
-		db::or_where("UP.userProfileDOB IS NULL");
+		// db::where("UP.userProfileDOB", "0000-00-00");
+		// db::or_where("UP.userProfileDOB IS NULL");
 		// db::where("U.userID",1);
+		db::where("U.userIC IS NOT NULL");
 		$result = db::get()->result();
 
 		$counter = 1;
@@ -571,6 +602,13 @@ class Tasks
 		        $month=substr($ic,2,2);//extract digit 3 and 4
 		        $day=substr($ic,4,2);//extract digit 5 and 6
 
+		        if($year > 17){
+		        	$year = '19'. $year;
+		        }
+		        else{
+		        	$year = '20' . $year;
+		        }
+
 		        $newIC = $year."-".$month."-".$day;
 
 		      	db::where("userID",$row['userID']);
@@ -583,8 +621,7 @@ class Tasks
 			}//if		
 		}//foreach
 		// die;
-	}
-
+	}	
 }
 
 
