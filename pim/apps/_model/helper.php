@@ -11,26 +11,7 @@ class Helper
 
 		return $item;
 	}
-	public function race($no = null)
-	{
-		$occR	= Array(
-				1=>"Malay",
-				2=>"Chinese",
-				3=>"Indian",
-				4=>"Others",
-				// 4=>"Dayak",
-				// 5=>"Iban",
-				// 6=>"Bidayuh",
-				// 7=>"Orang Ulu",
-				// 8=>"Kadazan",
-				// 9=>"Bajau",
-				// 10=>"Murut",
-				// 11=>"Temer",
-				// 12=>"Chitty",
-						);
 
-		return $no?$occR[$no]:$occR;
-	}
 
 	public function race($no = null)
 	{

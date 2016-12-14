@@ -580,15 +580,17 @@ class Tasks
 
 	public function userIcToDOB(){
 
-		db::select("U.userIC, UP.*");
+		db::select("U.userIC, UP.*, TIMESTAMPDIFF(YEAR, UP.userProfileDOB, NOW()) AS age");
 		db::from("user U");
 		db::join("user_profile UP", "U.userID = UP.userID");
 		// db::where("UP.userProfileDOB", "0000-00-00");
 		// db::or_where("UP.userProfileDOB IS NULL");
 		// db::where("U.userID",1);
 		db::where("U.userIC IS NOT NULL");
+		db::where("TIMESTAMPDIFF(YEAR, UP.userProfileDOB, NOW()) <= 0 ");
+		db::where("UP.userProfileDOB <> '1901-01-19'")
 		$result = db::get()->result();
-
+		die;
 		$counter = 1;
 		foreach ($result as $row) {
 			# code...
@@ -602,12 +604,12 @@ class Tasks
 		        $month=substr($ic,2,2);//extract digit 3 and 4
 		        $day=substr($ic,4,2);//extract digit 5 and 6
 
-		        if($year > 17){
+		        // if($year > 17){
 		        	$year = '19'. $year;
-		        }
-		        else{
-		        	$year = '20' . $year;
-		        }
+		        // }
+		        // else{
+		        	// $year = '20' . $year;
+		        // }
 
 		        $newIC = $year."-".$month."-".$day;
 
