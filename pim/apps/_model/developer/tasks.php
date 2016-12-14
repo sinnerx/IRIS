@@ -588,7 +588,7 @@ class Tasks
 		// db::where("U.userID",1);
 		db::where("U.userIC IS NOT NULL");
 		db::where("TIMESTAMPDIFF(YEAR, UP.userProfileDOB, NOW()) <= 0 ");
-		db::where("UP.userProfileDOB <> '1901-01-19'")
+		db::where("UP.userProfileDOB <> '1901-01-19'");
 		$result = db::get()->result();
 		die;
 		$counter = 1;
