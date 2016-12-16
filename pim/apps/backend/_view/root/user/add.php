@@ -9,6 +9,19 @@ $(document).ready(function(){
 		            $('#managerlevel').hide(); 
 		        } 
 	});
+
+	$('#addUserForm').bind('submit',function(e){
+
+    //do your test
+    //if fails 
+    // console.log($("#userLevelManager").val())
+    if($('#userLevel').val() == '2' && $("#userLevelManager").val() == ""){
+    	alert("Please choose your manager level");
+    	e.preventDefault();
+    }
+    
+
+	});
 });
 </script>
 
@@ -20,7 +33,7 @@ Cluster lead basically is a content editor for his assigned site. Any content ed
 </div>
 <?php echo flash::data();?>
 <?php $numbering = 1; ?>
-<form method='post'>
+<form method='post' id="addUserForm">
 <div class='row'>
 	<div class='col-sm-6'>
 		<div class='panel panel-default'>

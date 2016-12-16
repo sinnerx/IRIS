@@ -590,7 +590,7 @@ class Tasks
 		db::where("TIMESTAMPDIFF(YEAR, UP.userProfileDOB, NOW()) <= 0 ");
 		db::where("UP.userProfileDOB <> '1901-01-19'");
 		$result = db::get()->result();
-		die;
+		// die;
 		$counter = 1;
 		foreach ($result as $row) {
 			# code...

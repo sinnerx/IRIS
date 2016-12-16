@@ -239,12 +239,25 @@ $(document).ready(function(){
 	    "text": "<?php echo $row['userIC']; ?>"
 	});
 
-if($('#userLevel').val() == '2') {
+	if($('#userLevel').val() == '2') {
 		            $('#managerlevel').show(); 
 		        } else {
 		        	$('#managerlevel').val('');
 		            $('#managerlevel').hide(); 
 		        } 	
+
+	$('#addUserForm').bind('submit',function(e){
+
+    //do your test
+    //if fails 
+    // console.log($("#userLevelManager").val())
+    if($('#userLevel').val() == '2' && $("#userLevelManager").val() == ""){
+    	alert("Please choose your manager level");
+    	e.preventDefault();
+    }
+    
+
+	});		        
 });
 </script>
 <h3 class="m-b-xs text-black">
@@ -255,7 +268,7 @@ Edit existing user information.
 </div>
 <?php echo flash::data();?>
 <?php $numbering = 1; ?>
-<form method='post'>
+<form method='post' id="addUserForm">
 <div class='row'>
 	<div class='col-sm-5'>
 		<div class='panel panel-default'>
