@@ -431,6 +431,7 @@ class Controller_Cafe
 
 		// $allIds = array_keys($transactions);
 		$allIds = array();
+		$failedLocalIds = array();
 
 		// get all unique ids
 		foreach($transactions as $row)
@@ -469,6 +470,7 @@ class Controller_Cafe
 			}
 
 			if (count($checked) > 0) {
+				$failedLocalIds[] = $localId;
 				$failedTransactions++;
 			} else {
 				// update
@@ -487,6 +489,7 @@ class Controller_Cafe
 					//->where("month=month(billingTransactionDate)")
 					//->where("year=year(billingTransactionDate)")->get()->result('billingApprovalID');
 					if (count($checked) > 0) {
+						$failedLocalIds[] = $localId;
 						$failedTransactions++;
 					} else {
 						$totalTransactions++;
@@ -622,6 +625,7 @@ class Controller_Cafe
 			'status' => 'success',
 			'test_msg' => 'unlock: '.$unlock,
 			'total_transactions' => $totalTransactions,
+			'failed_ids' => $failedLocalIds,
 			'failed_transactions' => $failedTransactions
 			));
 	}
