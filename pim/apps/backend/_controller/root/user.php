@@ -138,6 +138,7 @@ class Controller_User
 					"userProfilePhoneNo"=>input::get("userProfilePhoneNo"),
 					"userProfileMailingAddress"=>input::get("userProfileMailingAddress"),
 					"userLevelManager"=>input::get("userLevelManager"),
+					"userRace"=>input::get("userRace"),
 							);
 
 			// var_dump($data);

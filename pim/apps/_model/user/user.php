@@ -454,6 +454,7 @@ class User extends \Origami
 					"userProfileDOB"=>$data['userProfileDOB'],
 					"userProfileMobileNo"=>$data['userProfileMobileNo'],
 					"userProfileMailingAddress"=>$data['userProfileMailingAddress'],
+					"userRace"=>$data['userRace'],
 								);
 
 		## insert into profile.

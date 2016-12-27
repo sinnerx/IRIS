@@ -1,3 +1,5 @@
+<link rel="stylesheet" href="<?php echo url::asset("_scale/js/datepicker/datepicker.css");?>" type="text/css">
+<script src="<?php echo url::asset("_scale/js/datepicker/bootstrap-datepicker.js");?>"></script>
 <script>
 $(document).ready(function(){
 	$("#userLevel").change(function (){
@@ -85,8 +87,26 @@ Cluster lead basically is a content editor for his assigned site. Any content ed
 			<?php echo form::password("userPassword","class='form-control' placeholder='If you leave it empty, and we will set it to default $defaultPass.'");?>
 			</div>
 		</div>
+			
 		</div>
 	</div>
+<div class='col-sm-6'>
+		<div class='panel panel-default'>
+		<div class='panel-body'>
+		<div class='form-group'>
+			<label><?php echo $numbering++; ?>. Race</label>
+			<?php echo form::select("userRace",model::load("helper")->race(),"class='form-control'",$row['userRace']);?>
+		</div>		
+		<div class='form-group'>
+			<label><?php echo $numbering++; ?>.Gender</label>
+			<?php echo form::select("userProfileGender",Array(1=>"Male",2=>"Female"),"class='form-control'",$row['userProfileGender']);?>
+		</div>
+		<div class='form-group'>
+			<label><?php echo $numbering++; ?>. Date of birth</label>
+			<?php echo form::text("userProfileDOB","data-date-format='yyyy-mm-dd' class='input-sm input-s datepicker-input form-control' placeholder='Birth date.'",$row['userProfileDOB']);?>
+		</div>				
+		</div>
+</div>	
 </div>
 <?php echo form::submit("Submit","class='btn btn-primary pull-right'");?>
 </form>
