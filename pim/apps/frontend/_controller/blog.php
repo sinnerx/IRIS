@@ -153,7 +153,7 @@ Class Controller_Blog
 
 		$channel = new \Suin\RSSWriter\Channel();
 		$channel
-		    ->title("Blog Pi1M ".authData('current_site.siteName'))
+		    ->title("Blog Calent ".authData('current_site.siteName'))
 		    ->description("Site Blogs list")
 		    ->url(url::base("{site-slug}"))
 		    ->appendTo($feed);

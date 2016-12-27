@@ -51,7 +51,11 @@
                 <tr>
                   <td><label>Date:</label></td>
                   <td width="30%">To be completed for Capital Expenditure</td>                       
+<<<<<<< HEAD
                   <td colspan="4"><label>For use only</label></td>                        
+=======
+                  <td colspan="4"><label>For Calent's use only</label></td>                        
+>>>>>>> d0dc45820c6e15278b0e0a6e146f869a71265117
                 </tr>
                  <tr>
                   <td><?php echo $prDate; ?></td>
@@ -63,9 +67,15 @@
                   <td><label>Calent:</label></td>
                   <td>Budgeted:</td>           
                   <?php //if ($prFile[0]['purchaseRequisitionExpenses'] == 1) { $checked1 = "checked";} ?>
+<<<<<<< HEAD
                   <td colspan="2"><input name='expenses' type="checkbox" disabled="disabled" value="1">Expenses</td>
                   <?php //if ($prFile[0]['purchaseRequisitionEquipment'] == 1) { $checked2 = "checked";} ?>
                   <td colspan="2"><input name='equipment' type="checkbox" disabled="disabled" value="1">Equipment</td>
+=======
+                  <td colspan="2"><input name='expenses' type="checkbox" disabled="disabled" value="1"> Calent Expenses</td>
+                  <?php //if ($prFile[0]['purchaseRequisitionEquipment'] == 1) { $checked2 = "checked";} ?>
+                  <td colspan="2"><input name='equipment' type="checkbox" disabled="disabled" value="1"> Calent Equipment</td>
+>>>>>>> d0dc45820c6e15278b0e0a6e146f869a71265117
                 </tr>
                  <tr>
                   <td><?php echo $siteName['siteName']; ?></td>
@@ -127,7 +137,7 @@
 
                 <tr >
                   <td colspan="4">2. Balance Deposit: RM <?php echo $deposit ?> (as at 6.00pm, <?php echo date('d/m/Y ',strtotime($prDate)); ?>)</td>
-                  <td colspan="4" style="background-color:#ededed"><b>Terms of Payment (For Nusuara's use only):</b></td>
+                  <td colspan="4" style="background-color:#ededed"><b>Terms of Payment (For Calent's use only):</b></td>
                 </tr> 
 
                 <tr >

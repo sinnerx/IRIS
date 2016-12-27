@@ -2,7 +2,7 @@
 	
 .no-topic
 {
-	padding:20px 0 0 0px;
+	padding:10px 0 0 0px;
 
 }
 

@@ -16,9 +16,9 @@
 var $c = jQuery.noConflict();
     $c(function() {  
         $c("#accordion").accordion({
-			active: false,
-		collapsible: true	
-		});  
+      active: false,
+    collapsible: true 
+    });  
     });  
 </script>
 <style type="text/css">
@@ -38,7 +38,7 @@ var $c = jQuery.noConflict();
 
 .top-message.in-active
 {
-  background: #9d3939;
+  background: #14ed10
   box-shadow: 0px 3px 5px #820000;
   color:white;
 }
@@ -229,7 +229,7 @@ var $c = jQuery.noConflict();
   <?php endif;?>
 <div class="header">
 <div class="wrap">
-<div class="logo">
+
 <h1><a href='<?php echo url::base("{site-slug}");?>' style='color:inherit;'><?php echo $siteName;?></a></h1>
 </div>
 
@@ -443,12 +443,12 @@ var $c = jQuery.noConflict();
     }
 
     ?>
-	<div class="search-top">
+  <div class="search-top">
     <form method='get' action='<?php echo url::base("{site-slug}/carian");?>'>
         <input type="text" class="search-top-input" name='q' id='q' value="<?php echo request::get('q');?>" placeholder='Carian'>
       </form>
   </div>
-	</ul>
+  </ul>
 </div>
     </div>
 <div class="main-container">
@@ -546,7 +546,11 @@ var $c = jQuery.noConflict();
                   </div>  -->
                 </div>
             <div class="blueBoxRibbon"></div>
+<<<<<<< HEAD
         	</div>
+=======
+          </div>
+>>>>>>> d0dc45820c6e15278b0e0a6e146f869a71265117
 <!--<div class="blueBox">
             <span class="activity"><i class="fa fa-clock-o"></i>Waktu Operasi</span>
                 <div class="blueBoxContent1-right">
@@ -584,7 +588,7 @@ var $c = jQuery.noConflict();
                 </div>
                 </div>
             <div class="blueBoxRibbon"></div>
-        	</div>
+          </div>
          <div class="blueBox">
             <span class="printer">Perkhidmatan Lain</span>
                     <div class="blueBoxContent">
@@ -622,7 +626,11 @@ var $c = jQuery.noConflict();
             <a href="#">Kementerian Komunikasi dan Multimedia</a><br>
             <a href="#">Service Provider Website</a><br>
             <a href="#">Other Related Website</a> 
+<<<<<<< HEAD
            	</div> 
+=======
+            </div> 
+>>>>>>> d0dc45820c6e15278b0e0a6e146f869a71265117
 </div>-->
 <div class="clr"></div>
 <div class="bttm-center">

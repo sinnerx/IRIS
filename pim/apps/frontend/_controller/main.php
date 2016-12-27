@@ -227,7 +227,7 @@ Class Controller_Main
 
 			## success and redirect.
 			$memberFee	= model::load("config")->get("configMemberFee",5);
-			redirect::to("{site-slug}/registration#horizontalTab1","<br>Anda telah berjaya di daftarkan. Sila buat pembayaran RM $memberFee di Pusat Internet 1Malaysia anda untuk menikmati kemudahan laman web ini sepenuhnya.");
+			redirect::to("{site-slug}/registration#horizontalTab1","<br>Anda telah berjaya di daftarkan. Sila buat pembayaran RM $memberFee di Calent anda untuk menikmati kemudahan laman web ini sepenuhnya.");
 		}
 
 		view::render("main/registration",$data);

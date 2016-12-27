@@ -8,11 +8,19 @@
 
 <style type="text/css">
 BODY{
+<<<<<<< HEAD
 background-color:  #0a2929;
     color: #788288;
     font-family: "Open Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
     font-size: 13px;
     line-height: 1.53846;
+=======
+background-color: #250c30;
+	color: #788288;
+	font-family: "Open Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
+	font-size: 13px;
+	line-height: 1.53846;
+>>>>>>> d0dc45820c6e15278b0e0a6e146f869a71265117
 	margin:0px;
 	padding:0px;
 }
@@ -35,20 +43,20 @@ background-color:  #0a2929;
 
 #login-box{
 position:absolute;
-     width:600px;
-     height:200px;
-     z-index:15;
-     top:50%;
-     left:50%;
-     margin:-100px 0 0 -25%;
+	 width:600px;
+	 height:200px;
+	 z-index:15;
+	 top:50%;
+	 left:50%;
+	 margin:-100px 0 0 -25%;
 }
 
 
 .heading-block{
  color: #FFFFFF;
-    font-size: 40px;
-    font-weight: bold;
-    line-height: 33px;
+	font-size: 40px;
+	font-weight: bold;
+	line-height: 33px;
 	margin-bottom:20px;	
 }
 
@@ -68,7 +76,7 @@ table#login-table input, .box-forgotpass input{
 	
 display: block;
   width: 100%;
-  height: 34px;
+  height: 20px;
   padding: 0px 12px;
   font-size: 12px;
   line-height: 1.42857143;
@@ -79,15 +87,15 @@ display: block;
   border: 1px solid #ccc;
   border-radius: 4px;
   -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
-          box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+		  box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
   -webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
-          transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+		  transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
 }
 table#login-table input:focus {
   border-color: #66afe9;
   outline: 0;
   -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, .6);
-          box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, .6);
+		  box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, .6);
 }
 
 
@@ -110,7 +118,7 @@ table#login-table input:focus {
 }
 
 .logo-right{
-	margin-top:-10px;
+	margin-top:-15px;
 	
 }
 .footer{
@@ -142,8 +150,8 @@ table#login-table input:focus {
 	cursor: pointer;
 }
 
-/*nusuara logo in login */
-.nusuara-logo{
+/*calent logo in login */
+.calent-logo{
 
 	width:190px;
 	height:47px;
@@ -196,12 +204,23 @@ function resetPassword()
 			<div class="left-panel-text">For site manager, cluster lead, operational manager and root admin.</div><br>
 			 <div class="logo-left"><img src="<?php echo url::asset("backend/images/calent_logo_dark.png");?>" width="100" height="100"  alt=""/></a></div>
 		</div>
+<<<<<<< HEAD
 		
 	</div>
 	<div id="right-panel">
 		<div>
         <form method="post" id='theForm'>
 	        <div class='box-login'>
+=======
+		<div class="calent-logo"><img src="<?php echo url::asset("backend/images/calent_logo_dark.png");?>" width="100" height="100"  alt=""/></a></div>
+	</div>
+	<div id="right-panel">
+		<div>
+		
+		
+		<form method="post" id='theForm'>
+			<div class='box-login'>
+>>>>>>> d0dc45820c6e15278b0e0a6e146f869a71265117
 			<div class="right-panel-text">Fill in your authentication details.</div>
 			<?php echo flash::data();?>
 			<table id="login-table">
@@ -249,6 +268,10 @@ function resetPassword()
   </div>
 </div>
 <div class="footer">
+<<<<<<< HEAD
 Hakcipta Terpelihara © 2017 Calent</div>
+=======
+Hakcipta Terpelihara © 2017 CALENT.</div>
+>>>>>>> d0dc45820c6e15278b0e0a6e146f869a71265117
 
 </body></html>

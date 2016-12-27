@@ -452,7 +452,7 @@ Johor, Malaysia    </span>
 
 <div class="copyright">
 
-Hakcipta Terpelihara © 2013 <a href="#">Pusat Internet 1 Malaysia</a>. All Rights Reserved
+Hakcipta Terpelihara © 2013 <a href="#">CALENT</a>. All Rights Reserved
 <ul class="clearfix">
 
 <li><a href="#">Utama</a></li>   <li> <a href="#">  Mengenai Kami</a>   </li> <li> <a href="#">  Aktiviti </a>  </li><li>  <a href="#">   Ruangan Ahli</a></li> <li>  <a href="#">   Hubungi Kami</a></li>

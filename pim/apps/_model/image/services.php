@@ -4,7 +4,7 @@ use path, url, abeautifulsite\SimpleImage as SimpleImage;
 
 class Services
 {
-	var $photo_no_image	= "noimage.png";
+	
 
 	## return path to location for site photo.
 	public function getPhotoPath($filename = null)

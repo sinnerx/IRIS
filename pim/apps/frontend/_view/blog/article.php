@@ -113,7 +113,7 @@ echo model::load("template/frontend")
 
 							?>
 							<img src="<?php if(!$img){
-								echo url::asset("frontend/images/noimage.png");
+								echo url::asset("frontend/images/calent_logo.png");
 								}
 								else{
 								echo $img;

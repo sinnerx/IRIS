@@ -990,7 +990,7 @@ class Controller_ExpExcel
 		$y = 11;
 
 		// <> Cluster and date informaation
-		$sheet->getCell("A$y")->setValue('RECONCILIATION LIST - FOR THE PURPOSE OF Pi1M\'s MONTHLY EXPENSES')->getStyle()->getFont()->setBold(true);
+		$sheet->getCell("A$y")->setValue('RECONCILIATION LIST - FOR THE PURPOSE OF CALENT\'s MONTHLY EXPENSES')->getStyle()->getFont()->setBold(true);
 			$sheet->mergeCells("A$y:G$y");
 			$y += 2;
 		$sheet->setCellValue("A$y", 'Cluster : '.$cluster->clusterName);
@@ -1490,7 +1490,7 @@ class Controller_ExpExcel
 		{
 			$y = 6;
 
-			$gdImage = imagecreatefrompng(path::files('expense/nusuara-logo.png'));
+			$gdImage = imagecreatefrompng(path::files('expense/calent_logo.png'));
 			$objDrawing = new PHPExcel_Worksheet_MemoryDrawing();
 			$objDrawing->setImageResource($gdImage);
 			$objDrawing->setRenderingFunction(PHPExcel_Worksheet_MemoryDrawing::RENDERING_JPEG);

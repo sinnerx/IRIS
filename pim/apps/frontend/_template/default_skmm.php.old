@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>Pusat Internet 1Malaysia</title>
+<title>CALENT</title>
 <link href="<?php echo url::asset("skmm/css/reset.css");?>" rel="stylesheet" type="text/css">
 <link href="<?php echo url::asset("skmm/css/style.css");?>" rel="stylesheet" type="text/css">
 
@@ -21,13 +21,13 @@
     <div id="header">
         <div id="splogo">
         dikendalikan oleh
-        <img src="<?php echo url::asset("skmm/images/tm-logo.jpg");?>" alt="TM">
+        <img src="<?php echo url::asset("skmm/images/calent_logo.jpg");?>" alt="calent">
         </div>
         <div id="siteLogo">
-        <img src="<?php echo url::asset("skmm/images/mcmc-logo.png");?>" width="79" height="56" alt="MCMC">
+        <img src="<?php echo url::asset("skmm/images/calent_logo.png");?>" width="79" height="56" alt="calent">
         </div>
         <div id="siteTitle">
-        <img src="<?php echo url::asset("skmm/images/pi1m-title.png");?>" width="348" height="30" alt="PI1M">
+        <img src="<?php echo url::asset("skmm/images/calent_logo.png");?>" width="348" height="30" alt="calent">
         </div>
         <div id="pi1mSite">
         <?php echo $siteName;?>
@@ -43,7 +43,7 @@
                 <li><a href="<?php echo url::base("{site-slug}/galeri");?>">Galeri</a></li>
                 <li><a href="<?php echo url::base("{site-slug}/soalan-lazim");?>">Soalan Lazim</a></li>
                 <li><a href="<?php echo url::base("{site-slug}/hubungi-kami");?>">Hubungi Kami</a></li>
-                <div class="socialIcon"><a href="#" target="_blank"><img src="<?php echo url::asset("skmm/images/fb-icon.png");?>" width="24" height="24" alt="facebook"></a></div>
+                <div class="socialIcon"><a href="#" target="_blank"><img src="<?php echo url::asset("skmm/images/calent_logo.png");?>" width="24" height="24" alt="facebook"></a></div>
             </ul>
             <div class="clear"></div>
     </div>
@@ -89,7 +89,7 @@
             <div class="flexslider">
               <ul class="slides">
                 <li>
-                  <img src="<?php echo url::asset("skmm/images/slide1.jpg");?>" />
+                  <img src="<?php echo url::asset("skmm/images/calent_logo.png");?>" />
                 </li>
                 <li>
                   <img src="<?php echo url::asset("skmm/images/slide2.jpg");?>" />

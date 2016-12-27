@@ -169,7 +169,7 @@
 <div class="slider-wrapper theme-default">
             <div id="slider" class="nivoSlider">
                 
-                <div><img src="images/slideshow.jpg" data-thumb="images/slideshow.jpg" alt="" title="Program Pusat Internet 1 Malaysia
+                <div><img src="images/slideshow.jpg" data-thumb="images/slideshow.jpg" alt="" title="Program CALENT
 Untuk Rakyat Termiskin di Bandar"/></div>
 
                <div> <img src="images/slideshow2.jpg" data-thumb="images/slideshow2.jpg" alt="" title="Program Komputer 1 Malaysia Dilancarkan" /></div>
@@ -520,7 +520,7 @@ Untuk Rakyat Termiskin di Bandar"/></div>
 
 <div class="copyright">
 
-Hakcipta Terpelihara © 2013 <a href="#">Pusat Internet 1 Malaysia</a>. All Rights Reserved
+Hakcipta Terpelihara © 2013 <a href="#">CALENT</a>. All Rights Reserved
 <ul class="clearfix">
 
 <li><a href="#">Utama</a></li>   <li> <a href="#">  Mengenai Kami</a>   </li> <li> <a href="#">  Aktiviti </a>  </li><li>  <a href="#">   Ruangan Ahli</a></li> <li>  <a href="#">   Hubungi Kami</a></li>

@@ -133,7 +133,7 @@ var requisition = new function()
                 <tr>
                   <td><label>Date:</label></td>
                   <td width="30%">To be completed for Capital Expenditure</td>                       
-                  <td colspan="4"><label>For NuSuara's use only</label></td>                        
+                  <td colspan="4"><label>For Calent's use only</label></td>                        
                 </tr>
                  <tr>
                   <td><?php echo form::text("selectDate","class='input-sm input-s form-control'",date('d F Y', strtotime($selectDate)));?></td>
@@ -142,9 +142,15 @@ var requisition = new function()
                   <td colspan="3"></td>                        
                 </tr>
                  <tr>
+<<<<<<< HEAD
                   <td><label>Calent:</label></td>
                   <td>Budgeted:</td>                        
                   <td colspan="2"><input type="checkbox" value="">Expenses</td>
+=======
+                  <td><label>CALENT:</label></td>
+                  <td>Budgeted:</td>                        
+                  <td colspan="2"><input type="checkbox" value=""> Expenses</td>
+>>>>>>> d0dc45820c6e15278b0e0a6e146f869a71265117
                   <td colspan="2"><input type="checkbox" value=""> Equipment</td>
                 </tr>
                  <tr>
@@ -203,7 +209,7 @@ var requisition = new function()
 
                 <tr >
                   <td colspan="4">2. Balance Deposit: RM XXX.XX (as at 6.00pm, XX/XX/2015)</td>
-                  <td colspan="4" style="background-color:#ededed"><b>Terms of Payment (For Nusuara's use only):</b></td>
+                  <td colspan="4" style="background-color:#ededed"><b>Terms of Payment (For Calent's use only):</b></td>
                 </tr> 
 
                 <tr >

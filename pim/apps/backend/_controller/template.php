@@ -15,7 +15,11 @@ Class Controller_Template
 		$data['userLevel']		= ucfirst($user->levelLabel($row_user['userLevel']));
 
 		$data['siteHref']		= "";
+<<<<<<< HEAD
 		$data['dashboardTitle']	= "Dashboard";
+=======
+		$data['dashboardTitle']	= " Calent Dashboard";
+>>>>>>> d0dc45820c6e15278b0e0a6e146f869a71265117
 		if(session::get("userLevel") == 2)
 		{
 			#$row_site	= model::load("site/site")->getSiteByManager(session::get('userID'));

@@ -91,6 +91,14 @@ height:96px;
 border-bottom:5px solid #f2970e;
 background:#FFF; /** Responsive **/
 
+<<<<<<< HEAD
+=======
+}
+
+.main-container{
+background:url() no-repeat center top;
+width:100%;
+>>>>>>> d0dc45820c6e15278b0e0a6e146f869a71265117
 
 }
 

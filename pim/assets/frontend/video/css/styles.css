@@ -93,6 +93,13 @@ border-bottom:5px solid #f2970e;
 
 }
 
+.main-container{
+background:url() no-repeat center top;
+width:100%;
+
+
+}
+
 .lft-container{
 float:left;
 width:680px;

@@ -137,7 +137,7 @@ class Controller_Activity
 		if(authData("user") && authData("user.userLevel") != 1)
 		{
 			$data['participationFlag']	= false;
-			$data['participationFlagMessage'] = "Pengguna selain dari ahli pi1m tidak dapat membuat penyertaan.";
+			$data['participationFlagMessage'] = "Pengguna selain dari ahli calent tidak dapat membuat penyertaan.";
 		}
 		# a training, and participation have reached maxpax (if only not limited)
 		else if($data['activityType'] == 2 && $data['trainingMaxPax'] != 0 && $data['trainingMaxPax'] <= count($data['participantList']))

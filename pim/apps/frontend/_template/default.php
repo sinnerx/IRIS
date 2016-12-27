@@ -34,8 +34,7 @@
 	<!-- Responsive Code -->
 	<style type="text/css">
 
-	.area-mobile, .mobile-top, .logo-mobile, .navigation-tablet
-	{
+	.area-mobile, .mobile-top,
 		display: none;
 	}
 
@@ -133,7 +132,7 @@ jQuery(document).ready(function() {
 	z-index: 20;
 	
 	cursor: pointer;
-	background:url(<?php echo url::asset("frontend/images/pim_top_open.jpg");?>) no-repeat top center;
+	background:url(<?php echo url::asset("frontend/images/calent_logo.png");?>) no-repeat top center;
 }
 .panel_button img {
 	position: relative;
@@ -182,7 +181,7 @@ jQuery(document).ready(function() {
 }
 
 #hide_button{
-	background:url(<?php echo url::asset("frontend/images/pim_top_open.jpg");?>) no-repeat top left;
+	background:url(<?php echo url::asset("frontend/images/calent_logo.png");?>) no-repeat top left;
 	
 	
 }
@@ -246,7 +245,7 @@ display:block !important;
 .col-top ul li{
 	padding-left:15px;
 	list-style:none;
-	background:url(<?php echo url::asset("frontend/images/top_bullet.jpg");?>) no-repeat left 6px;
+	background:url(<?php echo url::asset("frontend/images/calent_logo.png");?>) no-repeat left 6px;
 }
 
 .col-top a{
@@ -274,7 +273,7 @@ display:block !important;
 .col-large ul li{
 	padding-left:15px;
 	list-style:none;
-	background:url(<?php echo url::asset("frontend/images/top_bullet.jpg");?>) no-repeat left 6px;
+	background:url(<?php echo url::asset("frontend/images/calent_logo.png");?>) no-repeat left 6px;
 	
 }
 
@@ -394,21 +393,8 @@ input
 	text-decoration:none !important;
 }
 
-/* MCMC Update */
-.header
-{
-	border-bottom-color: #f2970e;
-	position: relative;
-}
-.logo
-{
-	background:url("<?php echo url::asset('frontend/images/vMCMC/logo.jpg');?>") no-repeat scroll left top rgba(0, 0, 0, 0);
-	padding-left:83px;
-	min-width: 350px;
 
-	/* absolution */
-	position: absolute;
-	top:5px;
+
 }
 .navigation
 {
@@ -430,7 +416,7 @@ input
 .navigation ul li a:hover, .navigation ul li a.active, .nav > li:hover > a
 {
 	color:#f2970e;
-	background: url(<?php echo url::asset('frontend/images/vMCMC/navi_arrow_active.jpg');?>) no-repeat bottom center;
+	background: url(<?php echo url::asset('frontend/images/calent_logo.png');?>) no-repeat bottom center;
 }
 .footer, .copyright a:hover, .copyright a, .copyright ul li
 {
@@ -444,10 +430,10 @@ input
 }
 .footer
 {
-	background: #000 url(<?php echo url::asset('frontend/images/vMCMC/footer_bg.jpg');?>) no-repeat top center;
+	background: #000 url(<?php echo url::asset('frontend/images/calent_logo.png');?>) no-repeat top center;
 }
 
-/* MCMC Update Ends */
+
 
 /* TEMPORARY */
 .frontend-pagination
@@ -725,12 +711,12 @@ Akaun anda masih belum aktif. Sila buat bayaran RM <?php echo model::load("confi
 </style>
 <div class="header">
 	<div class="wrap">
-		<div class="logo">
+		
 			<h1><a href='<?php echo url::base("{site-slug}");?>' style='color:inherit;'><?php echo $siteName;?></a></h1>
 		</div>
 
 		<!-- Responsive Code -->
-		<div class="logo-mobile">
+		
 			<img src="<?php echo url::asset("frontend/responsive/images/logo_mobile.jpg");?>">
 			<h1><?php echo $siteName;?></h1>
 		</div>
@@ -959,6 +945,7 @@ Akaun anda masih belum aktif. Sila buat bayaran RM <?php echo model::load("confi
 # SECTION : HEADER END
 #========================================
 ?>
+<<<<<<< HEAD
 <div class="main-container">
 	<div class="slideshow">
 		<?php
@@ -1331,3 +1318,5 @@ Akaun anda masih belum aktif. Sila buat bayaran RM <?php echo model::load("confi
 # SECTION : ALL BOTTOM END
 #========================================
 ?>
+=======
+>>>>>>> d0dc45820c6e15278b0e0a6e146f869a71265117
