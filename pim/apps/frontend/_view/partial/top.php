@@ -45,7 +45,6 @@
 <div class="top-header">
 	<div class="wrap clearfix">
 		<div class="other-location">
-			<div class="wrapper-dropdown-2" tabindex="1" onclick='dropdownfix.removeFocus();'>Ke PI1M Lain
 				<ul class="dropdown">
 					<div id="content_7" class="content">
 						<?php # controller::load("partial","pim_list");?>

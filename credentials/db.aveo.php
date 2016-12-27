@@ -1,7 +1,6 @@
-<?php
-return array(
+<?php return array(
 	'host' => 'localhost',
 	'user' => 'root',
-	'pass' => 'root',
-	'name' => 'snipeit'
+	'pass' => '',
+	'name' => 'snipeit_demo'
 );

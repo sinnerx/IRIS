@@ -53,7 +53,7 @@ echo model::load("template/frontend")
 <div class="block-content clearfix">
 	<div class="page-content">
 		<div class="page-description">
-		Pi1M bertujuan memberi pendedahan kepada masyarakat tempatan terhadap teknologi komputer dan internet. Ia juga meningkatkan taraf ekonomi dan sosial masyarakat melalui kemudahan yang disediakan dan aktiviti yang dijalankan di PI1M. Berikut adalah senarai aktiviti yang di jalankan pada bulan ini. Klik pada aktiviti tersebut untuk maklumat lanjut.
+		 Calent 
 		</div>
 		<div class="page-sub-wrapper calendar-page clearfix">
 			<div class="calendar-left-details">

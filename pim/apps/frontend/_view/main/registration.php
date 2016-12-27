@@ -73,9 +73,7 @@ ul.front-tab li:hover
 
 </style>
 <div class="left-info">
-     <div class="front-logo">
-     <?php echo $siteName;?>
-     </div>
+     
      <div class="front-content">
      <?php echo $siteInfoDescription;?>
      </div>

@@ -15,7 +15,7 @@ var report = new function()
 	Monthly USP Project
 </h3>
 <div class='well well-sm'>
-	Generate Pi1M monthly USP project report.
+	Generate monthly USP project report.
 </div>
 <div class='row'>
 	<div class='col-sm-12'>

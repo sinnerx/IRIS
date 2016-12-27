@@ -82,7 +82,7 @@ var slider = new function($)
 <?php if(session::get("userLevel") == 2):?>
 Listing all your site slider here.
 <?php else:?>
-List of universal Front-Page Slide on all Pi1M sites. Only root admin can manage this section.
+List of universal Front-Page Slide on all Calent sites. Only root admin can manage this section.
 <?php endif;?>
 </div>
 	<?php echo flash::data();?>

@@ -20,7 +20,7 @@ function findByRef()
 Submitted Contact Form Messages
 </h3>
 <div class='well well-sm'>
-List of all messages sent through the contact form on all Pi1Ms
+List of all messages sent through the contact form on all Calents
 </div>
 <?php echo flash::data();?>
 <div class='row'>

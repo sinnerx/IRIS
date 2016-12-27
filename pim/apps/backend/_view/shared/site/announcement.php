@@ -82,7 +82,7 @@ var announcement = new function($)
 </h3>
 <div class='well well-sm'>
 <?php if(session::get("userLevel") == 99):?>
-List of requested Announcement on all Pi1M sites. Only root admin can manage this section.
+List of requested Announcement on all Calent sites. Only root admin can manage this section.
 <?php else:?>
 Listing all your request Announcement here.
 <?php endif;?>

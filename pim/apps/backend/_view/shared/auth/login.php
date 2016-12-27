@@ -8,7 +8,7 @@
 
 <style type="text/css">
 BODY{
-background-color: #222733;
+background-color:  #0a2929;
     color: #788288;
     font-family: "Open Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
     font-size: 13px;
@@ -193,14 +193,13 @@ function resetPassword()
 	<div id="left-panel">
 		<div>
 			<div class="heading-block">Dashboard<br>log-in panel</div>
-			<div class="left-panel-text">For site manager, cluster lead, operational manager and root admin.</div>
+			<div class="left-panel-text">For site manager, cluster lead, operational manager and root admin.</div><br>
+			 <div class="logo-left"><img src="<?php echo url::asset("backend/images/calent_logo_dark.png");?>" width="100" height="100"  alt=""/></a></div>
 		</div>
-		<div class="nusuara-logo"><a href="http://nusuara.com/"><img src="<?php echo url::asset("backend/images/nusuara_logo.jpg");?>" width="190" height="47"  alt=""/></a></div>
+		
 	</div>
 	<div id="right-panel">
 		<div>
-		
-        <div class="logo-right"><img src="<?php echo url::asset("backend/images/login_logo.png");?>"></div>
         <form method="post" id='theForm'>
 	        <div class='box-login'>
 			<div class="right-panel-text">Fill in your authentication details.</div>
@@ -250,6 +249,6 @@ function resetPassword()
   </div>
 </div>
 <div class="footer">
-Hakcipta Terpelihara © 2013 Pusat Internet 1 Malaysia.</div>
+Hakcipta Terpelihara © 2017 Calent</div>
 
 </body></html>

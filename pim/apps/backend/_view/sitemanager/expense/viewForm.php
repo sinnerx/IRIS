@@ -161,9 +161,9 @@ var requisition = new function()
                   <td><label>PI1M:</label></td>
                   <td>Budgeted:</td>           
                   <?php if ($prFile[0]['purchaseRequisitionExpenses'] == 1) { $checked1 = "checked";} ?>
-                  <td colspan="2"><input type="checkbox" <?php echo $checked1 ?> value="1" disabled="disabled"> PI1M Expenses</td>
+                  <td colspan="2"><input type="checkbox" <?php echo $checked1 ?> value="1" disabled="disabled">Expenses</td>
                   <?php if ($prFile[0]['purchaseRequisitionEquipment'] == 1) { $checked2 = "checked";} ?>
-                  <td colspan="2"><input type="checkbox" <?php echo $checked2 ?> value="1" disabled="disabled"> PI1M Equipment</td>
+                  <td colspan="2"><input type="checkbox" <?php echo $checked2 ?> value="1" disabled="disabled">Equipment</td>
                 </tr>
                  <tr>
                   <td><?php echo $siteName['siteName']; ?></td>

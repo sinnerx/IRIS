@@ -46,7 +46,7 @@
 	<link href="<?php echo url::asset("frontend/responsive/css/responsive.css");?>" rel="stylesheet" />
 	<link rel="stylesheet" href="<?php echo url::asset("frontend/responsive/css/slidebars.css");?>">
 	<link rel="stylesheet" href="<?php echo url::asset("frontend/responsive/css/example-styles.css");?>">
-	<!------>
+	<!---->
 </head>
 <body>
 <div class="mobile-top">
@@ -69,7 +69,7 @@
 	<?php endif;?>
 	<div class="area-mobile-wrap">
 		<select onchange="window.location.href = '<?php echo url::base();?>/'+this.value;">
-			<option selected="selected">Ke Pi1M Lain</option>
+			<option selected="selected">Ke Calent Lain</option>
 			<?php
 			foreach($stateR as $stateID => $stateName)
 			{
@@ -88,7 +88,7 @@
 <?php #controller::load("partial","pim_list");?>
 <?php
 #========================================
-# SECTION : Pi1M LIST START
+# SECTION : LIST START
 #========================================
 ?>
 <script type="text/javascript">
@@ -713,7 +713,7 @@ Akaun anda masih belum aktif. Sila buat bayaran RM <?php echo model::load("confi
 .search-box input
 {
 	padding:5px;
-	border:1px solid #e8e8e8;
+	border:1px solid  #29a3a3;
 	border:0px;
 	border-bottom:1px solid black;
 }
@@ -1005,7 +1005,7 @@ Akaun anda masih belum aktif. Sila buat bayaran RM <?php echo model::load("confi
 			<?php controller::load("partial","calendar");?>
 			<?php if(controller::getCurrentControllerMethod() == "main@index"):?>
 			<!-- Right Accordion -->
-			<div id="accordion">  
+			<!--<div id="accordion">  
 			<h3><a href="#"><i class="fa fa-clock-o"></i>Waktu Operasi Pi1M<i class="fa fa-angle-double-down"></i></a></h3>  
 			<div>  
 			<div class="blueBoxContent">
@@ -1051,12 +1051,12 @@ Akaun anda masih belum aktif. Sila buat bayaran RM <?php echo model::load("confi
 			<a href="#">Kementerian Komunikasi dan Multimedia</a><br>
 			<a href="#">Service Provider Website</a><br>
 			<a href="#">Other Related Website</a> 
-			</div>
-			<!-- Right Accordion, end -->
+			</div>-->
+			<!-- Right Accordion, end 
 			<?php endif;?>
 
 			</div>
-		</div>
+		</div>-->
 	<div class="clr"></div>
 		<!-- Announcement -->
 			<div class="bttm-center">
@@ -1241,7 +1241,7 @@ Akaun anda masih belum aktif. Sila buat bayaran RM <?php echo model::load("confi
 <div class="footer">
 	<div class="wrap clearfix">
 		<div class="copyright">
-		Hakcipta Terpelihara © <?php echo date("Y");?> <a href="#">Pusat Internet 1 Malaysia</a>
+		Hakcipta Terpelihara © <?php echo date("Y");?> <a href="#">calent</a>
 		<ul class="clearfix">
 			<li><a href="<?php echo url::base("{site-slug}");?>">Utama</a></li>
 			<li><a href="<?php echo url::base("{site-slug}/mengenai-kami");?>">Mengenai Kami</a></li>
@@ -1250,8 +1250,8 @@ Akaun anda masih belum aktif. Sila buat bayaran RM <?php echo model::load("confi
 		</div>
 	<div class="logo-bottom">
 		<ul class="clearfix">
-			<!-- <li><a target="_blank" href='http://www.skmm.gov.my'><img src="<?php echo url::asset("frontend/images/mcmc_logo.png");?>" width="72" height="46"  alt=""/></a></li> -->
-			<li><a target="_blank" href='http://www.celcom.com.my'><img src="<?php echo url::asset("frontend/images/vMCMC/celcom_bottom.png");?>" width="87" height="46"  alt=""/></a></li>
+			<!-- <li><a target="_blank" href='http://www.skmm.gov.my'><img src="<?php echo url::asset("frontend/images/calent_logo.png");?>" width="72" height="46"  alt=""/></a></li> -->
+			<li><a target="_blank" href='http://www.celcom.com.my'><img src="<?php echo url::asset("frontend/images/vMCMC/calent_logo.png");?>" width="87" height="46"  alt=""/></a></li>
 			<!-- <li><a href='<?php echo url::base();?>'><img src="<?php echo url::asset("frontend/images/pi1m_bottom.png");?>" width="241" height="46"  alt=""/></a></li> -->
 		</ul>
 	</div>
@@ -1297,7 +1297,7 @@ Akaun anda masih belum aktif. Sila buat bayaran RM <?php echo model::load("confi
 		});
 	}) (jQuery);
 </script>
-<!------>
+<!---->
 	<!-- <script type="text/javascript" src="js/jquery-1.9.0.min.js"></script> -->
 		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.21/jquery-ui.min.js"></script>
 	    <script type="text/javascript" src="<?php echo url::asset("frontend/js/jquery.nivo.slider.js");?>"></script>

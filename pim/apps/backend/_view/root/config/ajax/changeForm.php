@@ -70,7 +70,7 @@ function formCheck()
 					case "configManagerSiteID":
 					?>
 					<tr>
-						<td>Pim Manager Site</td>
+						<td>Manager Site</td>
 						<td>: <?php
 						echo form::select("value",$siteR,null,$value);
 						?>

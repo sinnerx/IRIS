@@ -2,7 +2,7 @@
 
 $config['default_apps']	= "default";
 $config['domain']['localhost'][]	= Array(
-					"asset_url"=>"localhost/digitalgaia/iris/pim/assets"
+					"asset_url"=>"localhost/irix/pim/assets"
 								);
 
 $config['domain']['p1m.gaia.my'][]	= Array(

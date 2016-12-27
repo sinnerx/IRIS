@@ -65,7 +65,7 @@
         </div>
         
         <div class="columnR">
-        <h1>Jadual Aktiviti PI1M</h1>
+        <h1>Jadual Aktiviti</h1>
         <table width="100%" border="1">
           <tr>
             <th scope="col" width="100px">Tarikh</th>

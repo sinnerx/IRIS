@@ -26,7 +26,7 @@ var report = new function()
 	Master Listing
 </h3>
 <div class='well well-sm'>
-	Generate Pi1M master listing, based on active data.
+	Generate master listing, based on active data.
 </div>
 <div class='row'>
 	<div class='col-sm-12'>

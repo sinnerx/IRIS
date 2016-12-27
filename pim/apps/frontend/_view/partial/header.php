@@ -23,6 +23,8 @@
 <div class="header">
 	<div class="wrap">
 		<div class="logo">
+<h1><a href="http://localhost/irix/calent" style="color:inherit;">calent</a></h1>
+</div>
 			<h1><a href='<?php echo url::base("{site-slug}");?>' style='color:inherit;'><?php echo $siteName;?></a></h1>
 		</div>
 

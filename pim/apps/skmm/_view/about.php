@@ -1,4 +1,4 @@
-<h1>Mengenai PI1M</h1>
+<h1>Mengenai Calent</h1>
 <?php if($row['pagePhoto']):?>
 <img id='pageImage' src='<?php echo model::load("api/image")->buildPhotoUrl($row['pagePhoto'],"page");?>' />
 <?php endif;?>

@@ -142,10 +142,10 @@ var requisition = new function()
                   <td colspan="3"></td>                        
                 </tr>
                  <tr>
-                  <td><label>PI1M:</label></td>
+                  <td><label>Calent:</label></td>
                   <td>Budgeted:</td>                        
-                  <td colspan="2"><input type="checkbox" value=""> PI1M Expenses</td>
-                  <td colspan="2"><input type="checkbox" value=""> PI1M Equipment</td>
+                  <td colspan="2"><input type="checkbox" value="">Expenses</td>
+                  <td colspan="2"><input type="checkbox" value=""> Equipment</td>
                 </tr>
                  <tr>
                   <td><?php echo $siteName; ?></td>

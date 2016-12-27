@@ -38,7 +38,7 @@
     <div id="nav">
             <ul>
                 <li><a href="#">Utama</a></li>
-                <li><a href="<?php echo url::base("{site-slug}/mengenai-kami");?>">Mengenai PI1M</a></li>
+                <li><a href="<?php echo url::base("{site-slug}/mengenai-kami");?>">Mengenai Calent</a></li>
                 <li><a href="<?php echo url::base("{site-slug}/aktiviti");?>">Jadual Latihan & Aktiviti</a></li>
                 <li><a href="<?php echo url::base("{site-slug}/galeri");?>">Galeri</a></li>
                 <li><a href="<?php echo url::base("{site-slug}/soalan-lazim");?>">Soalan Lazim</a></li>
@@ -58,7 +58,7 @@
                 <table width="100%">
                   <tr>
                     <td width="80" align="center">15 Apr 2014</td>
-                    <td>Hari Terbuka PI1M</td>
+                    <td>Hari Terbuka Calent</td>
                   </tr>
                   <tr>
                     <td align="center">25 Apr  2014</td>
@@ -71,6 +71,7 @@
                   <tr>
                     <td align="center">02 Jun 2014</td>
                     <td>Bengkel Latihan E-Dagang</td>
+             
                   </tr>
                   <tr>
                     <td align="center">27 Jul 2014</td>
@@ -82,53 +83,7 @@
             <div class="blueBoxRibbon"></div>
             </div>
         
-            <div class="blueBox">
-            <span class="clock">Waktu Operasi</span>
-                <div class="blueBoxContent">
-                    Dibuka setiap hari
-                    <div class="bluehilite">9.00 pagi - 6.00 petang</div>
-                    (kecuali cuti umum)<br><br>
-                    
-                    Yuran keahlian:<br> 
-                    <div class="bluehilite">RM5.00</div>
-                    (tertakluk kepada terma dan syarat)<br><br>
-                    
-                    Caj Penggunaan:<br> 
-                    <div class="bluehilite">RM1.00 sejam (ahli)<br>
-                    RM2.00 sejam (bukan ahli)</div> 
-                </div>
-            <div class="blueBoxRibbon"></div>
-            </div>
             
-            <div class="blueBox">
-            <span class="printer">Perkhidmatan Lain</span>
-                    <div class="blueBoxContent">
-                    Mencetak (hitam/putih)<br>
-                    <div class="bluehilite">Ahli RM0.40</div>
-                    <div class="bluehilite">Bukan Ahli RM0.70</div> 1 hingga 5 mukasurat * (A4)<br><br>
-
-                    <div class="bluehilite">Ahli RM0.20</div>
-                    <div class="bluehilite">Bukan Ahli RM0.50</div> 5 dan lebih mukasurat * (A4)<br><br>
-                    
-                    Pencetak dan Fotokopi (warna)<br>
-                    <div class="bluehilite">RM1.00</div> setiap mukasurat<br><br>
-                    
-                    Pengimbas<br>
-                    <div class="bluehilite">RM0.20</div> setiap mukasurat<br><br>
-                    </div>
-            <div class="blueBoxRibbon"></div>
-            </div>
-            
-            <div class="normalBox">
-            <h1>Capaian Pantas</h1>
-            <a href="#">Universal Service Provision</a><br> 
-            <a href="#">Suruhanjaya Komunikasi dan Multimedia</a><br>
-            <a href="#">Kementerian Komunikasi dan Multimedia</a><br>
-            <a href="#">Service Provider Website</a><br>
-            <a href="#">Other Related Website</a> 
-            </div>   
-            
-        </div>
     
         <div id="imageSlider">
             <div class="flexslider">
@@ -158,7 +113,7 @@
     
     <div id="footer">
         <div id="footerContent">
-        © 2014 Semua Hakcipta Terpelihara.
+        © 2017 Semua Hakcipta Terpelihara.
         </div>
     </div>
    

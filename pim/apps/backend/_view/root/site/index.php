@@ -89,7 +89,7 @@ var site	= new function()
 <a href='info'>All Sites</a>
 </h3>
 <div class='well well-sm'>
-List of all Pi1M sites and related information
+List of all sites and related information
 </div>
 <?php echo flash::data();?>
 <div class='row'>

@@ -37,7 +37,7 @@ At least one manager is required for each site. Please make sure the site manage
 	<section class="panel panel-default">
 		<div class="panel-body">
 			<div class="form-group">
-			<label>1. Pi1M Name</label>
+			<label>1.Name</label>
 			<div class='row'>
 				<div class='col-sm-9'>
 				<?php
@@ -46,16 +46,16 @@ At least one manager is required for each site. Please make sure the site manage
 				<?php echo flash::data('siteName');?>
 				</div>
 				<div class='col-sm-3'>
-				<?php echo form::text("siteRefID","class='form-control' placeholder='Old Pi1M Site ID'",$newSiteRefID);?>
+				<?php echo form::text("siteRefID","class='form-control' placeholder='Old Site ID'",$newSiteRefID);?>
 				<?php echo flash::data('siteRefID');?>
 				</div>
 			</div>
 			</div>
 			<div class="form-group">
-			<label>2. Pi1M Slug</label>
+			<label>2.Slug</label>
 			<?php
 			$readOnly	= $siteSlug?"readonly='true'":"";
-			echo form::text("siteSlug","$readOnly class='form-control' placeholder=\"A url represents the p1m, make sure it's as clear as possible.\"",$siteSlug);?>
+			echo form::text("siteSlug","$readOnly class='form-control' placeholder=\"A url represents the Calent, make sure it's as clear as possible.\"",$siteSlug);?>
 			<?php echo flash::data("siteSlug");?>
 			</div>
 		</div>
@@ -66,11 +66,11 @@ At least one manager is required for each site. Please make sure the site manage
 		<div class="panel-body">
 		<div class="form-group">
 			<label>3. Manager Email</label> <a target='_blank' href='<?php echo url::base("user/add?level=2");?>' class='fa fa-plus-circle'></a>
-			<?php echo form::text("manager","size='40' class='form-control'  placeholder=\"The p1m manager's email for this p1m.\"");?>
+			<?php echo form::text("manager","size='40' class='form-control'  placeholder=\"The manager's email for this Calent.\"");?>
 			<?php echo flash::data('manager');?>
 		</div>
 		<div class='form-group'>
-			<label>4. Pi1M State</label>
+			<label>4.State</label>
 			<?php echo form::select("stateID",$stateR,"class='form-control'","","[Select State]");?>
 		</div>
 		</div>
@@ -166,7 +166,7 @@ At least one manager is required for each site. Please make sure the site manage
 				<div class='row'>
 					<div class='col-md-12'>
 					<?php //$parliament	= model::load("helper")->parliament(); ?>
-					<?php echo form::select("siteInfoParliament",$parliament,"class='form-control'",$row['siteInfoParliament'],"Please select the Pi1M State");?>
+					<?php echo form::select("siteInfoParliament",$parliament,"class='form-control'",$row['siteInfoParliament'],"Please select the State");?>
 						<?php //echo form::text("siteInfoParliament","class='form-control'",$row['siteInfoParliament']);?>
 			</div>
 				</div></div>
@@ -192,7 +192,7 @@ At least one manager is required for each site. Please make sure the site manage
 				<div class='row'>
 					<div class='col-md-12'>
 					<?php //$district	= model::load("helper")->district(); ?>
-					<?php echo form::select("siteInfoDistrict",$district,"class='form-control'",$row['siteInfoDistrict'],"Please select the Pi1M State");?>
+					<?php echo form::select("siteInfoDistrict",$district,"class='form-control'",$row['siteInfoDistrict'],"Please select the State");?>
 						<?php //echo form::text("siteInfoDistrict","class='form-control'",$row['siteInfoDistrict']);?>
 			</div>
 				</div></div>

@@ -97,7 +97,7 @@ var report = new function()
 	Quarterly Activities Report
 </h3>
 <div class='well well-sm'>
-	List of generated Pi1M quarterly activity report
+	List of generated quarterly activity report
 </div>
 <div id='report-errors'>
 

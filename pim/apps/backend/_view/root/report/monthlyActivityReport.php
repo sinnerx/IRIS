@@ -90,7 +90,7 @@ var report = new function()
 	Monthly Activities
 </h3>
 <div class='well well-sm'>
-	List of generated Pi1M monthly activity report
+	List of generated monthly activity report
 </div>
 <div id='report-errors'>
 

@@ -51,7 +51,7 @@
                 <tr>
                   <td><label>Date:</label></td>
                   <td width="30%">To be completed for Capital Expenditure</td>                       
-                  <td colspan="4"><label>For NuSuara's use only</label></td>                        
+                  <td colspan="4"><label>For use only</label></td>                        
                 </tr>
                  <tr>
                   <td><?php echo $prDate; ?></td>
@@ -60,12 +60,12 @@
                   <td colspan="3"><?php echo$prNo;?></td>                        
                 </tr>
                  <tr>
-                  <td><label>PI1M:</label></td>
+                  <td><label>Calent:</label></td>
                   <td>Budgeted:</td>           
                   <?php //if ($prFile[0]['purchaseRequisitionExpenses'] == 1) { $checked1 = "checked";} ?>
-                  <td colspan="2"><input name='expenses' type="checkbox" disabled="disabled" value="1"> PI1M Expenses</td>
+                  <td colspan="2"><input name='expenses' type="checkbox" disabled="disabled" value="1">Expenses</td>
                   <?php //if ($prFile[0]['purchaseRequisitionEquipment'] == 1) { $checked2 = "checked";} ?>
-                  <td colspan="2"><input name='equipment' type="checkbox" disabled="disabled" value="1"> PI1M Equipment</td>
+                  <td colspan="2"><input name='equipment' type="checkbox" disabled="disabled" value="1">Equipment</td>
                 </tr>
                  <tr>
                   <td><?php echo $siteName['siteName']; ?></td>
@@ -81,7 +81,7 @@
                   <?php //if ($prFile[0]['purchaseRequisitionOther'] == 1) { $checked5 = "checked";} ?>
                   <td colspan="2"><input name='other' type="checkbox" disabled="disabled" value="1"> Other</td>
                   <?php //if ($prFile[0]['purchaseRequisitionCitizen'] == 1) { $checked6 = "checked";} ?>
-                  <td colspan="2"><input name='1citizen' type="checkbox" disabled="disabled" value="1"> 1Citizen</td>
+                  <td colspan="2"><input name='1citizen' type="checkbox" disabled="disabled" value="1">Citizen</td>
                 </tr>
              </table>
 
@@ -127,7 +127,7 @@
 
                 <tr>
                   <td colspan="4">2. Balance Deposit: RM <?php echo $deposit ?> (as at 6.00pm, <?php echo date('d/m/Y ',strtotime($prDate)); ?>)</td>
-                  <td colspan="4" style="background-color:#ededed"><b>Terms of Payment (For Nusuara's use only):</b></td>
+                  <td colspan="4" style="background-color:#ededed"><b>Terms of Payment (For use only):</b></td>
                 </tr> 
 
                 <tr >

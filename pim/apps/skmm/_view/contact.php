@@ -72,7 +72,7 @@ $longitude	= authData("current_site.siteInfoLongitude");
 </div>
 
 <div class="white-pink-right"> 
-<p><strong>Pusat Internet 1Malaysia</strong><br>
+<p><strong>calent</strong><br>
 <?php echo $siteInfoAddress == ""?"-":nl2br($siteInfoAddress);?>
 <p><strong>Koordinat GPS:</strong> <?php if($siteInfoLatitude != "" && $siteInfoLongitude != ""):?><?php echo $siteInfoLatitude;?>, <?php echo $siteInfoLongitude;?><?php else:?> - <?php endif;?></p>  
 <p><strong>Pengurus:</strong> <?php echo $siteManagers[0]['userProfileFullName'];?><br>

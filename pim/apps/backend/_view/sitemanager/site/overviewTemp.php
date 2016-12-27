@@ -338,7 +338,7 @@ Dashboard overview
             <div class="col-sm-6 col-md-4">
                 <section class="panel panel-default panel-pd">
                   <header class="panel-heading panelhd-pd">
-                    Pi1M Audit Score
+                    Audit Score
                     <?php if ($kpi['active_member_percentage'] >= 40) {  ?>
 					<i class="fa fa-check fa-lg pull-right custom-fa-pad" style="color:green"></i>
 					<?php } else { ?>

@@ -1,8 +1,8 @@
 <h3 class="m-b-xs text-black">
-<a href='info'>Pi1m Member Upgrade</a>
+<a href='info'>Member Upgrade</a>
 </h3>
 <div class='well well-sm'>
-Upgrade pi1m member to manager, or clusterlead.
+Upgrade Calent member to manager, or clusterlead.
 </div>
 <?php echo flash::data();?>
 <div class='row'>

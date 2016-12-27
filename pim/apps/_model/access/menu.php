@@ -36,7 +36,7 @@ class Menu extends Data
 						"Daily Journal"=>"billing/dailyJournal",
 						"Transaction Journal"=>"billing/transactionJournal"
 						),
-					"PI1M Expense"=>Array(
+					"Expense"=>Array(
 						// "List of PR"=>"expense/listStatus",
 						// "List of RL"=>"expense/listStatusRL",
 						'PR List' => array('exp/prList', 'exp/prEdit', 'exp/prEditCashAdvance'),
@@ -100,7 +100,7 @@ class Menu extends Data
 						"Daily Cash Process Summary"=>"billing/dailyCashProcessSummary",
 						"Unlock Site"=>"billing/unlockTransaction"
 						),
-					"PI1M Expense"=>Array(
+					"Expense"=>Array(
 						// "List of PR"=>"expense/listStatus",
 						// "List of RL"=>"expense/listStatusRL",
 						'PR List' => array('exp/prList', 'exp/prEdit', 'exp/prEditCashAdvance'),
@@ -127,7 +127,7 @@ class Menu extends Data
 						"Daily Cash Process"=>"billing/dailyCashProcess"
 						),
 
-					"PI1M Expense"=>Array(
+					"Expense"=>Array(
 						// "List of PR"=>"expense/listStatus",
 						// "List of RL"=>"expense/listStatusRL",
 						'PR Cash Advance' => array('exp/prList', 'exp/prEdit', 'exp/prEditCashAdvance'),
@@ -181,7 +181,7 @@ class Menu extends Data
 							"Unlock Site"=>"billing/unlockTransaction"
 						),
 					
-					"PI1M Expense"=>Array(
+					"Expense"=>Array(
 						// "List of PR"=>"expense/listStatus",
 						'PR List' => 'exp/prList',
 						'RL List' => 'exp/rlList'
@@ -229,7 +229,7 @@ class Menu extends Data
 							"Daily Cash Process Summary"=>"billing/dailyCashProcessSummary",
 						),			
 
-					"PI1M Expense"=>Array(
+					"Expense"=>Array(
 						// "List of PR"=>"expense/listStatus",
 						// "List of RL"=>"expense/listStatusRL",
 						'PR List' => array('exp/prList', 'exp/prEdit', 'exp/prEditCashAdvance'),

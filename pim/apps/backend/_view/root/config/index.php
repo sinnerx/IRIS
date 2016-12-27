@@ -18,15 +18,15 @@ var config = new function()
 
 </style>
 <h3 class='m-b-xs text-black'>
-P1iM Parameters Configuration
+Parameters Configuration
 </h3>
 <div class='well well-sm'>
-Providing you way of configuring how p1im should look like. But beware, that certain changes are not undo-able.
+Providing you way of configuring how should look like. But beware, that certain changes are not undo-able.
 </div>
 <?php echo flash::data();?>
 <?php if(!$row_conf):?>
 <div class='well well-sm bg-danger' style="float:none;">
-This P1M have no configuration records yet. Everything is set to default. <a href='?create=true'>Click here to create</a>.
+This have no configuration records yet. Everything is set to default. <a href='?create=true'>Click here to create</a>.
 </div>
 <?php else:?>
 <section class='panel panel-default'>
@@ -64,7 +64,7 @@ This P1M have no configuration records yet. Everything is set to default. <a hre
 		</tr>
 		<?php if(false):?>
 		<tr>
-			<td>Pim Manager Site</td>
+			<td>Manager Site</td>
 			<td>: <?php echo $configManagerSiteName;?> <a href='javascript:config.change("configManagerSiteID");' class='fa fa-edit'></a>
 
 			<span class='config-detail'>

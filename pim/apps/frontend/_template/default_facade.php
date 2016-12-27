@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Home</title>
+<title>Calent</title>
 <link href="<?php echo url::asset("frontend_facade/css/styles.css");?>" rel="stylesheet" type="text/css">
 <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
 <link href="<?php echo url::asset("_landing/css/jquery.mCustomScrollbar.css");?>" rel="stylesheet" />
@@ -185,8 +185,8 @@ var $c = jQuery.noConflict();
       </div>
     </div>
     <div class="panel-wrap">
-    <div class="panel_button" style="display: visible;" id="show_button"> <a href="#">Ke Pi1M Lain <i class="fa fa-angle-down"></i></a> </div>
-    <div class="panel_button" id="hide_button" style="display: none;"> <a href="#">Ke Pi1M Lain <i class="fa fa-angle-up"></i></a> </div>
+    <div class="panel_button" style="display: visible;" id="show_button"> <a href="#">Ke Calent Lain <i class="fa fa-angle-down"></i></a> </div>
+    <div class="panel_button" id="hide_button" style="display: none;"> <a href="#">Ke Calent Lain <i class="fa fa-angle-up"></i></a> </div>
   </div>
   </div>
 <div class="main-wrap">
@@ -232,7 +232,7 @@ var $c = jQuery.noConflict();
 <div class="logo">
 <h1><a href='<?php echo url::base("{site-slug}");?>' style='color:inherit;'><?php echo $siteName;?></a></h1>
 </div>
-<div class="celcom-top"></div>
+
 </div>
 </div>
    <div id="nav" class="clearfix">
@@ -547,7 +547,7 @@ var $c = jQuery.noConflict();
                 </div>
             <div class="blueBoxRibbon"></div>
         	</div>
-<div class="blueBox">
+<!--<div class="blueBox">
             <span class="activity"><i class="fa fa-clock-o"></i>Waktu Operasi</span>
                 <div class="blueBoxContent1-right">
                 <div class="blueBoxContent">
@@ -623,7 +623,7 @@ var $c = jQuery.noConflict();
             <a href="#">Service Provider Website</a><br>
             <a href="#">Other Related Website</a> 
            	</div> 
-</div>
+</div>-->
 <div class="clr"></div>
 <div class="bttm-center">
 <div class="announcement clearfix">
@@ -786,7 +786,7 @@ height:200px;
   
 <div class="wrap clearfix">
 <div class="copyright">
-Hakcipta Terpelihara © <?php echo date("Y"); ?> <a href="#">Pusat Internet 1 Malaysia</a>. 
+Hakcipta Terpelihara © <?php echo date("Y"); ?> <a href="#">Calent</a>. 
 <ul class="clearfix">
   <li><a href="<?php echo url::base("{site-slug}");?>">Utama</a></li>
   <li><a href="<?php echo url::base("{site-slug}/mengenai-kami");?>">Mengenai Kami</a></li>

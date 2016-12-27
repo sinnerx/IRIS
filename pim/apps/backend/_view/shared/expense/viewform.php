@@ -60,12 +60,12 @@
                   <td colspan="3"></td>                        
                 </tr>
                  <tr>
-                  <td><label>PI1M:</label></td>
+                  <td><label>Calent:</label></td>
                   <td>Budgeted:</td>           
                   <?php //if ($prFile[0]['purchaseRequisitionExpenses'] == 1) { $checked1 = "checked";} ?>
-                  <td colspan="2"><input name='expenses' type="checkbox" disabled="disabled" value="1"> PI1M Expenses</td>
+                  <td colspan="2"><input name='expenses' type="checkbox" disabled="disabled" value="1">Expenses</td>
                   <?php //if ($prFile[0]['purchaseRequisitionEquipment'] == 1) { $checked2 = "checked";} ?>
-                  <td colspan="2"><input name='equipment' type="checkbox" disabled="disabled" value="1"> PI1M Equipment</td>
+                  <td colspan="2"><input name='equipment' type="checkbox" disabled="disabled" value="1">Equipment</td>
                 </tr>
                  <tr>
                   <td><?php echo $siteName['siteName']; ?></td>
