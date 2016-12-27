@@ -142,15 +142,15 @@ var requisition = new function()
                   <td colspan="3"></td>                        
                 </tr>
                  <tr>
-<<<<<<< HEAD
+
                   <td><label>Calent:</label></td>
                   <td>Budgeted:</td>                        
                   <td colspan="2"><input type="checkbox" value="">Expenses</td>
-=======
+
                   <td><label>CALENT:</label></td>
                   <td>Budgeted:</td>                        
                   <td colspan="2"><input type="checkbox" value=""> Expenses</td>
->>>>>>> d0dc45820c6e15278b0e0a6e146f869a71265117
+
                   <td colspan="2"><input type="checkbox" value=""> Equipment</td>
                 </tr>
                  <tr>

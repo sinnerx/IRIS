@@ -94,8 +94,7 @@ height:96px;
 
 }
 
-<<<<<<< HEAD
-=======
+
 .main-container{
 background:url() no-repeat center top;
 width:100%;
@@ -103,7 +102,7 @@ margin-top:3px;
 
 }
 
->>>>>>> d0dc45820c6e15278b0e0a6e146f869a71265117
+
 .lft-container{
 float:left;
 width:680px;
