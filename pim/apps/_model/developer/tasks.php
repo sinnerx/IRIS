@@ -50,31 +50,31 @@ class Tasks
 			));
 
 		/*$manager->addTask('purchaseRequisitionCategory', array(
-			'description' => 'P1IM expense category'
+			'description' => 'Calent expense category'
 			));
 
 		$manager->addTask('purchaseRequisitionItem', array(
-			'description' => 'P1IM expense Item'
+			'description' => 'Calent expense Item'
 			));*/
 
 		$manager->addTask('prCategoryAndItem', array(
-			'description' => 'P1IM expense category and item'
+			'description' => 'Calent expense category and item'
 			));
 
 		$manager->addTask('prCategoryAndItemNew', array(
-			'description' => 'P1IM expense category and item'
+			'description' => 'Calent expense category and item'
 			));
 
 		/*$manager->addTask('purchaseRequisitionExpenditure', array(
-			'description' => 'P1IM expenditure'
+			'description' => 'Calent expenditure'
 			));*/
 
 		$manager->addTask('prExpenditureNew', array(
-			'description' => 'P1IM expenditure'
+			'description' => 'Calent expenditure'
 			));
 
 		$manager->addTask('prExpenditure', array(
-			'description' => 'P1IM expenditure'
+			'description' => 'Calent expenditure'
 			));
 
 		$manager->addTask('updateUserUpdatedDate', array(
@@ -103,7 +103,7 @@ class Tasks
 		$defaults = array(
 			array(1, 'Mengenai Kami', 'mengenai-kami'),
 			array(2, 'Pengurusan', 'pengurusan'),
-			array(3, 'AJK Pi1M', 'ajk'),
+			array(3, 'AJK Calent', 'ajk'),
 			array(4, 'Maklumat Tempatan', 'maklumat-tempatan'),
 			array(5, 'Perlancongan & Rekreasi', 'perlancongan-rekreasi'),
 			array(6, 'Kemudahan Awam', 'kemudahan-awam'),
@@ -277,7 +277,7 @@ class Tasks
 			'billingItemCode' => 'transfer_collection'
 			);
 
-		$data['Transfer to Nusuara (RL)'] = array(
+		$data['Transfer to Calent (RL)'] = array(
 			'billingItemHotkey' => 'K',
 			'billingItemPriceType' => 1,
 			'billingItemPrice' => 0,
@@ -475,8 +475,8 @@ class Tasks
 	public function prExpenditure()
 	{
 		$expenditures['data'] = array(
-			array(1, 'PI1M Expenses'),
-			array(1, 'PI1M Equipment'),
+			array(1, 'Calent Expenses'),
+			array(1, 'Calent Equipment'),
 			array(2, 'Scheduled Event'),
 			array(2, 'Ad hoc Event'),
 			array(3, 'Other'),
@@ -493,7 +493,7 @@ class Tasks
 	}
 	/*public function purchaseRequisitionExpenditure()
 	{
-		db::query("INSERT INTO `purchase_requisition_expenditure` VALUES (1,1,'PI1M Expenses','2015-09-25 10:18:10',1),(2,1,'PI1M Equipment','2015-09-23 00:00:00',1),(3,2,'Scheduled Event','2015-09-25 10:25:15',1),(4,2,'Ad hoc Event','2015-09-23 00:00:00',1),(5,3,'Other','2015-09-23 00:00:00',1),(6,3,'1Citizen','2015-09-23 00:00:00',1)");
+		db::query("INSERT INTO `purchase_requisition_expenditure` VALUES (1,1,'Calent Expenses','2015-09-25 10:18:10',1),(2,1,'Calent Equipment','2015-09-23 00:00:00',1),(3,2,'Scheduled Event','2015-09-25 10:25:15',1),(4,2,'Ad hoc Event','2015-09-23 00:00:00',1),(5,3,'Other','2015-09-23 00:00:00',1),(6,3,'1Citizen','2015-09-23 00:00:00',1)");
 	}*/
 
 	public function addRootCoordinator()
@@ -501,7 +501,7 @@ class Tasks
 		$data = array(
 			'userIC' => 'COORDINATOR',
 			'userPassword' => 12345,
-			'userEmail' => 'coordinator@nusuara.com',
+			'userEmail' => 'coordinator@calent.com',
 			'userProfileFullName' => 'coordinator'
 			);
 

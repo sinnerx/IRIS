@@ -62,7 +62,7 @@ width: auto !important;
                   </td>
                 </tr>                 
                  <tr>
-                  <td width="30%"><label>PI1M     : </label> <?php echo $siteName['siteName'] ?></td>                                    
+                  <td width="30%"><label>Calent     : </label> <?php echo $siteName['siteName'] ?></td>                                    
                 </tr>
                  
               </thead>

@@ -95,7 +95,7 @@ height:96px;
 }
 
 .main-container{
-background:url(../images/main_bg.jpg) no-repeat center top;
+background:url() no-repeat center top;
 width:100%;
 margin-top:3px;
 

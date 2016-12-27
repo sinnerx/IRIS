@@ -43,7 +43,7 @@ jQuery(document).ready(function() {
 	z-index: 20;
 	
 	cursor: pointer;
-	background:url(../images/pim_top_open.jpg) no-repeat top center;
+	background:url(../images/calent_logo.png) no-repeat top center;
 }
 .panel_button img {
 	position: relative;

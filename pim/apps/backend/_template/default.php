@@ -2,7 +2,7 @@
 <html lang="en" class="app">
 <head>  
   <meta charset="utf-8" />
-  <title>P1M Dashboard | Web Application</title>
+  <title>Calent Dashboard | Web Application</title>
   <meta name="description" content="app, web app, responsive, admin dashboard, admin, flat, flat ui, ui kit, off screen nav" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" /> 
   <link rel="stylesheet" href="<?php echo url::asset("_scale/css/bootstrap.css");?>" type="text/css" />
@@ -88,7 +88,7 @@
         <a class="btn btn-link visible-xs" data-toggle="class:nav-off-screen" data-target="#nav">
           <i class="fa fa-bars"></i>
         </a>
-        <a href="" class="navbar-brand"><img src="<?php echo url::asset("_scale/images/logo.png");?>"><span class="site-info" <?php echo $siteHref;?> ><?php echo $dashboardTitle;?> </span></a>
+        <a href="" class="navbar-brand"><img src="<?php echo url::asset("backend/images/calent_logo.png");?>"><span class="site-info" <?php echo $siteHref;?> ><?php echo $dashboardTitle;?> </span></a>
         <a class="btn btn-link visible-xs" data-toggle="dropdown" data-target=".user">
           <i class="fa fa-cog"></i>
         </a>

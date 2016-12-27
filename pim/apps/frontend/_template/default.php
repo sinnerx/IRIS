@@ -34,8 +34,7 @@
 	<!-- Responsive Code -->
 	<style type="text/css">
 
-	.area-mobile, .mobile-top, .logo-mobile, .navigation-tablet
-	{
+	.area-mobile, .mobile-top,
 		display: none;
 	}
 
@@ -69,7 +68,7 @@
 	<?php endif;?>
 	<div class="area-mobile-wrap">
 		<select onchange="window.location.href = '<?php echo url::base();?>/'+this.value;">
-			<option selected="selected">Ke Pi1M Lain</option>
+			<option selected="selected">Ke Calent Lain</option>
 			<?php
 			foreach($stateR as $stateID => $stateName)
 			{
@@ -133,7 +132,7 @@ jQuery(document).ready(function() {
 	z-index: 20;
 	
 	cursor: pointer;
-	background:url(<?php echo url::asset("frontend/images/pim_top_open.jpg");?>) no-repeat top center;
+	background:url(<?php echo url::asset("frontend/images/calent_logo.png");?>) no-repeat top center;
 }
 .panel_button img {
 	position: relative;
@@ -182,7 +181,7 @@ jQuery(document).ready(function() {
 }
 
 #hide_button{
-	background:url(<?php echo url::asset("frontend/images/pim_top_open.jpg");?>) no-repeat top left;
+	background:url(<?php echo url::asset("frontend/images/calent_logo.png");?>) no-repeat top left;
 	
 	
 }
@@ -246,7 +245,7 @@ display:block !important;
 .col-top ul li{
 	padding-left:15px;
 	list-style:none;
-	background:url(<?php echo url::asset("frontend/images/top_bullet.jpg");?>) no-repeat left 6px;
+	background:url(<?php echo url::asset("frontend/images/calent_logo.png");?>) no-repeat left 6px;
 }
 
 .col-top a{
@@ -274,7 +273,7 @@ display:block !important;
 .col-large ul li{
 	padding-left:15px;
 	list-style:none;
-	background:url(<?php echo url::asset("frontend/images/top_bullet.jpg");?>) no-repeat left 6px;
+	background:url(<?php echo url::asset("frontend/images/calent_logo.png");?>) no-repeat left 6px;
 	
 }
 
@@ -394,21 +393,8 @@ input
 	text-decoration:none !important;
 }
 
-/* MCMC Update */
-.header
-{
-	border-bottom-color: #f2970e;
-	position: relative;
-}
-.logo
-{
-	background:url("<?php echo url::asset('frontend/images/vMCMC/logo.jpg');?>") no-repeat scroll left top rgba(0, 0, 0, 0);
-	padding-left:83px;
-	min-width: 350px;
 
-	/* absolution */
-	position: absolute;
-	top:5px;
+
 }
 .navigation
 {
@@ -430,7 +416,7 @@ input
 .navigation ul li a:hover, .navigation ul li a.active, .nav > li:hover > a
 {
 	color:#f2970e;
-	background: url(<?php echo url::asset('frontend/images/vMCMC/navi_arrow_active.jpg');?>) no-repeat bottom center;
+	background: url(<?php echo url::asset('frontend/images/calent_logo.png');?>) no-repeat bottom center;
 }
 .footer, .copyright a:hover, .copyright a, .copyright ul li
 {
@@ -444,10 +430,10 @@ input
 }
 .footer
 {
-	background: #000 url(<?php echo url::asset('frontend/images/vMCMC/footer_bg.jpg');?>) no-repeat top center;
+	background: #000 url(<?php echo url::asset('frontend/images/calent_logo.png');?>) no-repeat top center;
 }
 
-/* MCMC Update Ends */
+
 
 /* TEMPORARY */
 .frontend-pagination
@@ -725,12 +711,12 @@ Akaun anda masih belum aktif. Sila buat bayaran RM <?php echo model::load("confi
 </style>
 <div class="header">
 	<div class="wrap">
-		<div class="logo">
+		
 			<h1><a href='<?php echo url::base("{site-slug}");?>' style='color:inherit;'><?php echo $siteName;?></a></h1>
 		</div>
 
 		<!-- Responsive Code -->
-		<div class="logo-mobile">
+		
 			<img src="<?php echo url::asset("frontend/responsive/images/logo_mobile.jpg");?>">
 			<h1><?php echo $siteName;?></h1>
 		</div>
@@ -957,377 +943,5 @@ Akaun anda masih belum aktif. Sila buat bayaran RM <?php echo model::load("confi
 <?php
 #========================================
 # SECTION : HEADER END
-#========================================
-?>
-<div class="main-container">
-	<div class="slideshow">
-		<?php
-		#========================================
-		# SECTION : SLIDESHOW START
-		#========================================
-		?>
-		<style type="text/css">
-
-		</style>
-		<div class="slider-wrapper theme-default">
-		    <div id="slider" class="nivoSlider">
-		    	<?php
-		    	foreach($res_slider as $row):
-		    		$url	= url::asset("frontend/images/slider/".$row['siteSliderImage']);
-		            $href   = $row['siteSliderLink'];
-		    		?>
-		    	<a href='<?php echo $href;?>' target='_blank'><img src='<?php echo $url;?>' data-thumb='<?php echo $url;?>' alt='' title='<?php echo $row['siteSliderName'];?>' /></a>
-		    	<?php endforeach;
-		    	?>
-		    </div>
-		</div>
-		<?php
-		#========================================
-		# SECTION : SLIDESHOW END
-		#========================================
-		?>
-		<?php #controller::load("partial","top_slideshow");?>
-	</div>
-	<div class="wrap">
-	<div class="body-container clearfix">
-		<div class="lft-container">
-		<!-- Main content show! -->
-		<?php template::showContent();?>
-		</div>
-		<!-- Right container -->
-		<div class="rght-container">
-			<div class="search-top">
-				<form method='get' action='<?php echo url::base("{site-slug}/carian");?>'>
-				<input type="text" class="search-top-input" name='q' id='q' value="<?php echo request::get('q');?>" placeholder='Carian'>
-				<input type="submit" class="submit-search" value="Cari">
-				</form>
-			</div>
-			<?php controller::load("partial","calendar");?>
-			<?php if(controller::getCurrentControllerMethod() == "main@index"):?>
-			<!-- Right Accordion -->
-			<div id="accordion">  
-			<h3><a href="#"><i class="fa fa-clock-o"></i>Waktu Operasi Pi1M<i class="fa fa-angle-double-down"></i></a></h3>  
-			<div>  
-			<div class="blueBoxContent">
-			<strong>Dibuka setiap hari</strong>
-			<div class="bluehilite">
-			<?php if(in_array(authData("current_site.stateID"),Array(12,13))):?>
-			8.00 pagi - 5.00 petang
-			<?php else:?>
-			9.00 pagi - 6.00 petang
-			<?php endif;?>
-			</div>
-			(kecuali cuti umum)<br><br>
-
-			<strong>Yuran keahlian:</strong><br> 
-			<div class="bluehilite">RM5.00</div>
-			(tertakluk kepada terma dan syarat)<br><br>
-
-			<strong>Caj Penggunaan:</strong><br> 
-			<div class="bluehilite">RM1.00 sejam (ahli)<br>
-			RM2.00 sejam (bukan ahli)</div> 
-			</div>
-			</div>  
-			<h3><a href="#"><i class="fa fa-print"></i> Perkhidmatan Lain<i class="fa fa-angle-double-down"></i></a> </h3>  
-			<div>  
-			<div class="blueBoxContent">
-			<strong>Pencetak dan Fotokopi (hitam/putih)</strong><br>
-			<div class="bluehilite">RM0.20</div> setiap mukasurat<br><br>
-
-			<strong>Pencetak dan Fotokopi (warna)</strong><br>
-			<div class="bluehilite">RM1.00</div> setiap mukasurat<br><br>
-
-			<strong>Pengimbas</strong><br>
-			<div class="bluehilite">RM0.20</div> setiap mukasurat<br><br>
-			</div> 
-			</div>  
-
-			</div>
-
-			<div class="normalBox">
-			<h1>Capaian Pantas</h1>
-			<a href="#">Universal Service Provision</a><br> 
-			<a href="#">Suruhanjaya Komunikasi dan Multimedia</a><br>
-			<a href="#">Kementerian Komunikasi dan Multimedia</a><br>
-			<a href="#">Service Provider Website</a><br>
-			<a href="#">Other Related Website</a> 
-			</div>
-			<!-- Right Accordion, end -->
-			<?php endif;?>
-
-			</div>
-		</div>
-	<div class="clr"></div>
-		<!-- Announcement -->
-			<div class="bttm-center">
-				<div class="announcement clearfix">
-				<?php 
-				## set announcement only for site landing page. (main/index)
-				if(controller::getCurrentController() == "main" && controller::getCurrentMethod() == "index"):
-
-			  	$annList = model::load("site/announcement")->getAnnouncementList($row_site['siteID'],true);
-				if($annList){
-				?>
-				<div class="label-anncmnt">Pengumuman</div>
-				<div class="cntnt-anncmnt">
-					<ul id="js-news" class="js-hidden">
-				  <?php
-				  foreach($annList as $row)
-				  {
-    					/*if(strpos($row['announcementLink'], 'localhost') !== false || strpos($row['announcementLink'], 'p1m') !== false){
-     					   $target = '';
-   						}else{
-        				   $target = "target='_blank'";
-    					}
-					    if($row['announcementLink'] != ""){
-					        $href = "href='".$row['announcementLink']."' class='announcement-linked'";
-					    }else{
-					        $href = "href='#'  class='announcement-unlinked'";
-					    }*/
-					    if($row['announcementLink'] != "http://")
-					    {
-					    	$attr = "class='announcement-linked' ";
-					    	$attr .= "href='".$row['announcementLink']."' ";
-					    	$attr .= "target='_blank'";
-					    }
-					    else
-					    {
-					    	$attr = "class='announcement-unlinked'";
-					    	$attr .= "href='#'";
-					    }
-
-    					echo "<li><a $attr>".$row['announcementText']."</a></li>";
-				  }
-				  ?>
-				  </ul>
-				</div>
-				<?php }?>
-				<?php endif;## end main/index check. ?>
-				</div>
-			</div>
-		<!-- Bottom down container -->
-		<?php
-		#========================================
-		# SECTION : BOTTOM START
-		#========================================
-		?>
-		<?php #controller::load("partial","bottom_down");?>
-		<!-- Temporary overlay css -->
-		<style type="text/css">
-		.bttm-1,
-		.bttm-2,
-		.bttm-3 
-		{
-			position: relative;
-		}
-
-		.akan-datang
-		{
-			background: rgba(255, 255, 255, 0.85) url("<?php echo url::asset('frontend/images/akan_datang.png');?>") no-repeat center center;
-			color: rgba(255, 255, 255, 0.85);
-			width:100%;
-			height:100%;
-			position:absolute;
-			top:0px;
-			z-index:999;
-		}
-
-		.no-result{
-			color:#999;
-			font-style:italic;
-			
-		}
-		</style>
-		<!-- temporary overly css ends -->
-		<div class="bttm-down clearfix">
-			<div class="bttm-1">
-				<div class="maps-bottom">
-					<div class="maps-container">
-					<?php
-					$row_site['siteInfoLatitude']	= !is_numeric($row_site['siteInfoLatitude'])?3.0714381964016:$row_site['siteInfoLatitude'];
-					$row_site['siteInfoLongitude']	= !is_numeric($row_site['siteInfoLongitude'])?101.39110565186:$row_site['siteInfoLongitude'];
-					?>
-					<style type="text/css">
-					
-					#mymap
-{
-	width:390px;
-	height:200px;
-}
-					</style>
-					<script type='text/javascript' src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAJYP04YDNcHuvcjj317GNsZblEK32L76M&sensor=false"></script>
-					<script type="text/javascript">
-					jQuery(document).ready(function()
-					{
-						var latLng	= new google.maps.LatLng(<?php echo $row_site['siteInfoLatitude'].",".$row_site['siteInfoLongitude'];?>)
-						var options	= {
-							zoom:13,
-							center: latLng
-						};
-
-						//initiate map.
-						var map	= new google.maps.Map(document.getElementById("mymap"),options);
-
-						//add marker
-						var marker	= new google.maps.Marker({
-							position: latLng,
-							map: map,
-							title: "<?php echo $row_site['siteName'];?>"
-						});
-						
-					});
-					</script>
-					<div id='mymap' style="width:100%;height:200px;">
-					</div>
-					<!-- <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1982.6780417481739!2d99.76039763995057!3d6.347917847778613!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x304c78508590bd0f%3A0xa081e5cf738400d2!2sKampung+Bukit+Tangga!5e0!3m2!1sen!2s!4v1394689646969?center=" width="390" height="200" frameborder="0" style="border:0"></iframe> -->
-			
-					</div>
-				<div class="maps-label"></div>
-				</div>
-			</div>
-			<div class="bttm-2"> 
-				<!-- <div class="akan-datang"></div> -->
-				<div class="news-bottom">
-					<h3 class="bottom-heading">Berita Terkini</h3>
-					<div class="bottom-content">
-						<ul>
-							<?php if($articles): ?>
-							<?php foreach($articles as $article): 
-							$url	= model::load("helper")->buildDateBasedUrl($article['articleSlug'],$article['articlePublishedDate'],url::base($article['siteSlug']."/blog"));
-							?>
-							<li>
-								<a href="<?php echo $url;?>">
-								<div class='news-title'><?php echo $article['articleName']; ?></div>
-								<div class="news-info"><?php echo date("F j Y",strtotime($article['articlePublishedDate']));?><!-- October 31 2013, 8:00 AM --></div>
-								</a>
-							</li>
-							<?php endforeach; ?>
-							<?php else: ?>
-								<div class="no-result">- Tiada artikel terkini - </div>
-							<?php endif; ?>
-						</ul>
-					</div>
-				</div>
-			</div>
-			<div class="bttm-3 foto-wrapper">
-				<h3 class="bottom-heading">Foto Terkini</h3>
-				<div class="bottom-content foto-bottom">
-					<?php if($latestPhotoLink):?>
-						<a href='<?php echo $latestPhotoLink;?>'>
-							<img src="<?php echo $latestPhotoUrl;?>" width="270" height="208"  alt=""/>
-						</a>
-					<?php else:?>
-					<div class="no-result">- Tiada foto terkini - </div>
-					<?php endif;?>
-				</div>
-			</div>
-		</div> 
-
-		<?php
-		#========================================
-		# SECTION : BOTTOM END
-		#========================================
-		?>
-		<!-- bttm-down clearfix -->
-	</div> <!-- body-container clearfix -->
-	</div> <!-- wrap -->
-</div>
-<?php
-#========================================
-# SECTION : ALL BOTTOM START
-#========================================
-?>
-<?php #view::render("partial/all_bottom");?>
-<div class="footer">
-	<div class="wrap clearfix">
-		<div class="copyright">
-		Hakcipta Terpelihara © <?php echo date("Y");?> <a href="#">Pusat Internet 1 Malaysia</a>
-		<ul class="clearfix">
-			<li><a href="<?php echo url::base("{site-slug}");?>">Utama</a></li>
-			<li><a href="<?php echo url::base("{site-slug}/mengenai-kami");?>">Mengenai Kami</a></li>
-			<li><a href="<?php echo url::base("{site-slug}/hubungi-kami");?>">Hubungi Kami</a></li>
-		</ul>
-		</div>
-	<div class="logo-bottom">
-		<ul class="clearfix">
-			<!-- <li><a target="_blank" href='http://www.skmm.gov.my'><img src="<?php echo url::asset("frontend/images/mcmc_logo.png");?>" width="72" height="46"  alt=""/></a></li> -->
-			<li><a target="_blank" href='http://www.celcom.com.my'><img src="<?php echo url::asset("frontend/images/vMCMC/celcom_bottom.png");?>" width="87" height="46"  alt=""/></a></li>
-			<!-- <li><a href='<?php echo url::base();?>'><img src="<?php echo url::asset("frontend/images/pi1m_bottom.png");?>" width="241" height="46"  alt=""/></a></li> -->
-		</ul>
-	</div>
-	</div>
-</div>
-</div><!-- main-wrap -->
-
-<!-- Responsive Code -->
-<div class="sb-slidebar sb-right sb-style-overlay">
-<div class="mobile-navigation-header clearfix"><div class="sb-close menu-close"><i class="fa fa-times"></i></div><div class="menu-name">Menu</div></div>
-	<div class="mobile-navigation-content">
-		<ul>
-		<?php
-		echo $mobileMenu;?>
-		</ul>
-		<!-- <ul>
-		    <li><a href="#">Utama</a></li>
-		    <li><a href="#">Mengenai Kami</a></li>
-		    <li><a href="#">Aktiviti</a></li>
-		    <li>Ruangan Ahli</li>
-		   	 <ul>
-		 		<div>
-				<li class="submenu-heading">Kalendar Aktiviti</li>
-		        <li><a href="#">Aktiviti Akan Datang</a></li>
-		        <li> <a href="#">Aktiviti Lepas</a></li>
-				</div>
-		        <div>
-				<li class="submenu-heading">Galeri Media</li>
-		        <li> <a href="#">Galeri Foto</a></li>
-					<li><a href="#">Galeri Video</a></li>
-		            <li><a href="#">Galeri Muat Turun</a></li>
-				</div>
-			</ul>
-	    </ul> -->
-    </div>
-</div>
-<!-- Slidebars for responsive top menu -->
-<script src="<?php echo url::asset("frontend/responsive/js/slidebars.js");?>"></script>
-<script>
-	(function($) {
-		$(document).ready(function() {
-			$.slidebars();
-		});
-	}) (jQuery);
-</script>
-<!------>
-	<!-- <script type="text/javascript" src="js/jquery-1.9.0.min.js"></script> -->
-		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.21/jquery-ui.min.js"></script>
-	    <script type="text/javascript" src="<?php echo url::asset("frontend/js/jquery.nivo.slider.js");?>"></script>
-	    <script type="text/javascript">
-		var $s = jQuery.noConflict();
-	    $s(window).load(function() {
-	    $s('#slider').nivoSlider();
-	    });
-	    </script>
-	<!-- <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script> -->
-	<script type="text/javascript">
-				function DropDown(el) {
-	    this.dd = el;
-	    this.initEvents();
-	}
-	DropDown.prototype = {
-	    initEvents : function() {
-	        var obj = this;
-	 
-	        obj.dd.on('click', function(event){
-	            $(this).toggleClass('active');
-	            event.stopPropagation();
-	        }); 
-	    }
-	}
-	</script>
-</body>
-</html>
-<?php
-#========================================
-# SECTION : ALL BOTTOM END
 #========================================
 ?>

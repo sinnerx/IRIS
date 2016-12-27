@@ -8,9 +8,9 @@ $config['frontend_template_default']	= "default_facade";
 ### domain based configuration :
 $config['domain']['localhost'][]	= Array(
 						"env"=>"dev",
-						"base_url:backend"=>"localhost/iris/dashboard",
-						"base_url:frontend"=>"localhost/iris",
-						"asset_url"=>"localhost/iris/pim/assets",
+						"base_url:backend"=>"localhost/irix/dashboard",
+						"base_url:frontend"=>"localhost/irix",
+						"asset_url"=>"localhost/irix/pim/assets",
 						"supportEmail"=>"newrehmi@gmail.com",
 						"fbAppID"=>"772269416161222",
 						"fbAppSecret"=>"d404c0343d16f5b70c22d120d1ab94c8",
@@ -20,9 +20,9 @@ $config['domain']['localhost'][]	= Array(
 ### domain based configuration :
 $config['domain'][LOCALHOST][]	= Array(
 						"env"=>"dev",
-						"base_url:backend"=>LOCALHOST."/iris/dashboard",
-						"base_url:frontend"=>LOCALHOST."/iris",
-						"asset_url"=>LOCALHOST."/iris/pim/assets",
+						"base_url:backend"=>LOCALHOST."/irix/dashboard",
+						"base_url:frontend"=>LOCALHOST."/irix",
+						"asset_url"=>LOCALHOST."/irix/pim/assets",
 						"supportEmail"=>"newrehmi@gmail.com",
 						"fbAppID"=>"772269416161222",
 						"fbAppSecret"=>"d404c0343d16f5b70c22d120d1ab94c8",
@@ -79,10 +79,10 @@ $config['domain']['www.celcom1cbc.com'][]	= Array(
 										);
 
 ## no longer used.
-$config['domain']['p1m.gaia.my'][]	= Array(
-						"base_url:backend"=>"p1m.gaia.my/dashboard",
-						"base_url:frontend"=>"p1m.gaia.my",
-						"asset_url"=>"p1m.gaia.my/assets"
+$config['domain']['calent.gaia.my'][]	= Array(
+						"base_url:backend"=>"calent.gaia.my/dashboard",
+						"base_url:frontend"=>"calent.gaia.my",
+						"asset_url"=>"calent.gaia.my/assets"
 										);
 
 /*$config['domain']['celcom1cbc.com'][]	= Array(

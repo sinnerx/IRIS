@@ -747,7 +747,7 @@ class Controller_Report
 	    		4 => "TOTAL HOURS",
 	    		5 => "KPI(MCMC)",
 	    		6 => "KPI(NTSB)",
-	    		7 => "# OF OPS PI1M",
+	    		7 => "# OF OPS",
 	    	);
 
 	    $headerQ2 = array(
@@ -758,7 +758,7 @@ class Controller_Report
 	    		4 => "TOTAL HOURS",
 	    		5 => "KPI(MCMC)",
 	    		6 => "KPI(NTSB)",
-	    		7 => "# OF OPS PI1M",
+	    		7 => "# OF OPS",
 	    	);
 
 	    $headerQ3 = array(
@@ -769,7 +769,7 @@ class Controller_Report
 	    		4 => "TOTAL HOURS",
 	    		5 => "KPI(MCMC)",
 	    		6 => "KPI(NTSB)",
-	    		7 => "# OF OPS PI1M",
+	    		7 => "# OF OPS",
 	    	);
 
 	    $headerQ4 = array(
@@ -780,7 +780,7 @@ class Controller_Report
 	    		4 => "TOTAL HOURS",
 	    		5 => "KPI(MCMC)",
 	    		6 => "KPI(NTSB)",
-	    		7 => "# OF OPS PI1M",
+	    		7 => "# OF OPS",
 	    	);	    
 
 	    if($quarter == 1){
@@ -1290,7 +1290,7 @@ class Controller_Report
 	    $pdf->Ln();
 
 	    // 1st Header
-		$header = array('Staff Strength','PI1Ms','Positions','Filled','Vacant','%Filled');
+		$header = array('Staff Strength','Calents','Positions','Filled','Vacant','%Filled');
 		// 1st Cell width
 		$w = array(60, 30, 30, 30, 30, 30);
 		// 1st Cell alignment
@@ -1310,7 +1310,7 @@ class Controller_Report
 	    $pdf->Ln();
 
 	    // 2nd Header
-		$headers = array('Contract','# Pi1Ms in operation','Staffing');
+		$headers = array('Contract','# Calents in operation','Staffing');
 
 		// 2nd Cell width
 		$Nw = array(90, 80, 40); //210
@@ -1513,7 +1513,7 @@ class Controller_Report
 
 		## the main working sheet.
 		$sheet	= $excel->getActiveSheet();
-		$sheet->setTitle("All Pi1M");
+		$sheet->setTitle("All CALENT");
 
 		## prepare report.
 
@@ -1676,7 +1676,7 @@ class Controller_Report
 		}
 
 		# bottom row | total all column
-		$sheet->setCellValue('C'.(5+count($data)), 'Pi1M Total');
+		$sheet->setCellValue('C'.(5+count($data)), 'Calent Total');
 
 		for ($i=3; $i < 15; $i++) {
 			$sheet->setCellValue($cellRange[$i].(5+count($data)),'=SUM('.$cellRange[$i].'5:'.$cellRange[$i].(4+count($data)).')');
@@ -1979,7 +1979,7 @@ class Controller_Report
 
 		## the main working sheet.
 		$sheet	= $excel->getActiveSheet();
-		$sheet->setTitle("All Pi1M");
+		$sheet->setTitle("All Calent");
 
 		## prepare report.
 
@@ -2142,7 +2142,7 @@ class Controller_Report
 		}
 
 		# bottom row | total all column
-		$sheet->setCellValue('C'.(5+count($data)), 'Pi1M Total');
+		$sheet->setCellValue('C'.(5+count($data)), 'Calent Total');
 
 		for ($i=3; $i < 15; $i++) {
 			$sheet->setCellValue($cellRange[$i].(5+count($data)),'=SUM('.$cellRange[$i].'5:'.$cellRange[$i].(4+count($data)).')');
@@ -2762,7 +2762,7 @@ class Controller_Report
 
 		$data = model::load("report/report")->getMasterListing($startDate,$endDate);
 
-		$filename	= "Pi1M Data (NEW KPI) - ".date("j F Y",strtotime($endDate));
+		$filename	= "Calent Data (NEW KPI) - ".date("j F Y",strtotime($endDate));
 
 		## initiate both helper and php excel.
 		$excel			= new \PHPExcel;

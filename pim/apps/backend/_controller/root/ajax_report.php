@@ -290,7 +290,7 @@ class Controller_Ajax_Report
 
 				$month = date('F', strtotime('2016-'.$month.'-01'));
 
-				$section->addTitle('LAPORAN AKTIVITI PI1M '.$row['siteName'].' '.$row['articleName'].' '.$month.'-'.$year, 'rStyle');
+				$section->addTitle('LAPORAN AKTIVITI CALENT '.$row['siteName'].' '.$row['articleName'].' '.$month.'-'.$year, 'rStyle');
 
 				$section->addText("\n");
 				
@@ -775,7 +775,7 @@ public function quarterlyReport($reportId){
 				// Adding Text element to the Section having font styled by default...
 				$section->addText(
 				    htmlspecialchars(
-				        'PI1M Performance' 
+				        'Calent Performance' 
 				    ),$header
 				);
 
@@ -1162,7 +1162,7 @@ public function quarterlyReport($reportId){
 
 				//AJK PI1M
 				$section->addPageBreak();
-				$section->addText(htmlspecialchars('AJK PI1M'), $header);
+				$section->addText(htmlspecialchars('AJK CALENT'), $header);
 				$imageajk = url::asset() . "/frontend/images/photo/" . $siteKey['ajk'];
 						 if($siteKey['ajk'] != '' && @getimagesize($imageajk)){
 						// 	//

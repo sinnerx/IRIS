@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Home</title>
+<title>Calent</title>
 <link href="<?php echo url::asset("frontend_facade/css/styles.css");?>" rel="stylesheet" type="text/css">
 <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
 <link href="<?php echo url::asset("_landing/css/jquery.mCustomScrollbar.css");?>" rel="stylesheet" />
@@ -16,9 +16,9 @@
 var $c = jQuery.noConflict();
     $c(function() {  
         $c("#accordion").accordion({
-			active: false,
-		collapsible: true	
-		});  
+      active: false,
+    collapsible: true 
+    });  
     });  
 </script>
 <style type="text/css">
@@ -38,7 +38,7 @@ var $c = jQuery.noConflict();
 
 .top-message.in-active
 {
-  background: #9d3939;
+  background: #14ed10
   box-shadow: 0px 3px 5px #820000;
   color:white;
 }
@@ -185,8 +185,8 @@ var $c = jQuery.noConflict();
       </div>
     </div>
     <div class="panel-wrap">
-    <div class="panel_button" style="display: visible;" id="show_button"> <a href="#">Ke Pi1M Lain <i class="fa fa-angle-down"></i></a> </div>
-    <div class="panel_button" id="hide_button" style="display: none;"> <a href="#">Ke Pi1M Lain <i class="fa fa-angle-up"></i></a> </div>
+    <div class="panel_button" style="display: visible;" id="show_button"> <a href="#">Ke Calent Lain <i class="fa fa-angle-down"></i></a> </div>
+    <div class="panel_button" id="hide_button" style="display: none;"> <a href="#">Ke Calent Lain <i class="fa fa-angle-up"></i></a> </div>
   </div>
   </div>
 <div class="main-wrap">
@@ -229,10 +229,10 @@ var $c = jQuery.noConflict();
   <?php endif;?>
 <div class="header">
 <div class="wrap">
-<div class="logo">
+
 <h1><a href='<?php echo url::base("{site-slug}");?>' style='color:inherit;'><?php echo $siteName;?></a></h1>
 </div>
-<div class="celcom-top"></div>
+
 </div>
 </div>
    <div id="nav" class="clearfix">
@@ -443,12 +443,12 @@ var $c = jQuery.noConflict();
     }
 
     ?>
-	<div class="search-top">
+  <div class="search-top">
     <form method='get' action='<?php echo url::base("{site-slug}/carian");?>'>
         <input type="text" class="search-top-input" name='q' id='q' value="<?php echo request::get('q');?>" placeholder='Carian'>
       </form>
   </div>
-	</ul>
+  </ul>
 </div>
     </div>
 <div class="main-container">
@@ -546,8 +546,8 @@ var $c = jQuery.noConflict();
                   </div>  -->
                 </div>
             <div class="blueBoxRibbon"></div>
-        	</div>
-<div class="blueBox">
+          </div>
+<!--<div class="blueBox">
             <span class="activity"><i class="fa fa-clock-o"></i>Waktu Operasi</span>
                 <div class="blueBoxContent1-right">
                 <div class="blueBoxContent">
@@ -584,7 +584,7 @@ var $c = jQuery.noConflict();
                 </div>
                 </div>
             <div class="blueBoxRibbon"></div>
-        	</div>
+          </div>
          <div class="blueBox">
             <span class="printer">Perkhidmatan Lain</span>
                     <div class="blueBoxContent">
@@ -622,8 +622,8 @@ var $c = jQuery.noConflict();
             <a href="#">Kementerian Komunikasi dan Multimedia</a><br>
             <a href="#">Service Provider Website</a><br>
             <a href="#">Other Related Website</a> 
-           	</div> 
-</div>
+            </div> 
+</div>-->
 <div class="clr"></div>
 <div class="bttm-center">
 <div class="announcement clearfix">
@@ -786,7 +786,7 @@ height:200px;
   
 <div class="wrap clearfix">
 <div class="copyright">
-Hakcipta Terpelihara © <?php echo date("Y"); ?> <a href="#">Pusat Internet 1 Malaysia</a>. 
+Hakcipta Terpelihara © <?php echo date("Y"); ?> <a href="#">Calent</a>. 
 <ul class="clearfix">
   <li><a href="<?php echo url::base("{site-slug}");?>">Utama</a></li>
   <li><a href="<?php echo url::base("{site-slug}/mengenai-kami");?>">Mengenai Kami</a></li>

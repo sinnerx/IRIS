@@ -243,7 +243,7 @@ class Controller_Expense
 		
 
     		$section = $word->addSection();				
-			$section->addImage(url::asset("backend/images/nusuara-logo.jpg"), array('width' => 210, 'height' => 110, 'align' => 'center'));
+			$section->addImage(url::asset("backend/images/calent_logo.jpg"), array('width' => 210, 'height' => 110, 'align' => 'center'));
 
 			$companyName 	=	"NUSUARA TECHNOLOGIES SDN BHD (599840-M)";
 			$address1 		=	"Unit No. 2-19-01, Block 2, VSQ @ PJ City Centre, Jalan Utara";
@@ -281,7 +281,7 @@ class Controller_Expense
 
 			$cluster = "Cluster : ".$clusterName;
 			$month1 = "Month : ".model::load("helper")->monthYear("monthE")[$month]."  ".model::load("helper")->monthYear("year")[$year]; 
-			$pi1m = "PI1M : ".$siteName['siteName'];
+			$pi1m = "CALENT : ".$siteName['siteName'];
 			$prNo1 = "PR Number : ".$prNo;
 
 			$section->addText(htmlspecialchars($cluster), 'fStyle', array('spaceAfter' => 6));

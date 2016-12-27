@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>Pusat Internet 1Malaysia</title>
+<title>CALENT</title>
 <link href="<?php echo url::asset("skmm/css/reset.css");?>" rel="stylesheet" type="text/css">
 <link href="<?php echo url::asset("skmm/css/style.css?v20160106");?>" rel="stylesheet" type="text/css">
 <link rel="stylesheet" type="text/css" href="<?php echo url::asset("_scale/css/font-awesome.min.css");?>">
@@ -50,15 +50,15 @@
           </div>
         <div id="splogo" style="position:relative;top:10px;">
            
-        <img src="<?php echo url::asset("frontend_facade/images/celcom_top.jpg");?>" alt="TM">
+        <img src="<?php echo url::asset("frontend/images/calent_logo.jpg");?>" alt="TM">
         </div>
         <div id="siteLogo">
-        <img src="<?php echo url::asset("skmm/images/mcmc-logo.png");?>" width="79" height="56" alt="MCMC">
+        <img src="<?php echo url::asset("frontend/images/calent_logo.png");?>" width="79" height="56" alt="MCMC">
         </div>
         <div id="siteTitle">
-        <img src="<?php echo url::asset("skmm/images/pi1m-title.png");?>" width="348" height="30" alt="PI1M">
+        <img src="<?php echo url::asset("frontend/images/calent_logo.png");?>" width="348" height="30" alt="PI1M">
         </div>
-        <div id="pi1mSite">
+        <div id="CalentSite">
         <?php echo $siteName;?>
         </div>
         <div class="clear"></div>
@@ -109,45 +109,7 @@
         
             <?php controller::load("skmm:main","latestActivity");?>
         
-            <div class="blueBox">
-            <span class="clock">Waktu Operasi</span>
-                <div class="blueBoxContent">
-                    Dibuka setiap hari
-                    <div class="bluehilite">
-                  <?php if(in_array(authData("current_site.stateID"),Array(12,13))):?>
-                    8.00 pagi - 5.00 petang
-                  <?php else:?>
-                    9.00 pagi - 6.00 petang
-                  <?php endif;?>
-
-                    </div>
-                    (kecuali cuti umum)<br><br>
-                    
-                    Yuran keahlian:<br> 
-                    <div class="bluehilite">RM5.00</div>
-                    (tertakluk kepada terma dan syarat)<br><br>
-                    
-                    Caj Penggunaan:<br> 
-                    <div class="bluehilite">RM1.00 sejam (ahli)<br>
-                    RM2.00 sejam (bukan ahli)</div> <br><br>
-
-                     Pelajar:<br> 
-                    <div class="bluehilite">PERCUMA</div>
-                    -Berumur 20 tahun kebawah; atau <br>
-                    -Mempunyai kad pelajar (Universiti dll)<br><br>
-
-                    Warga Emas:<br> 
-                    <div class="bluehilite">PERCUMA</div>
-                    *berumur 60 tahun keatas<br>
-                    -Perlu mengemukakan kad pengenalan<br><br>
-
-                    Orang Kelainan Upaya (OKU):<br> 
-                    <div class="bluehilite">PERCUMA</div>
-                    -Perlu mengemukakan kad OKU; atau<br>
-                    -atas budibicara Penyelia<br><br>
-                </div>
-            <div class="blueBoxRibbon"></div>
-            </div>
+            
             
             <div class="blueBox">
             <span class="printer">Perkhidmatan Lain</span>
