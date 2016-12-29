@@ -546,11 +546,10 @@ var $c = jQuery.noConflict();
                   </div>  -->
                 </div>
             <div class="blueBoxRibbon"></div>
-<<<<<<< HEAD
         	</div>
-=======
+
           </div>
->>>>>>> d0dc45820c6e15278b0e0a6e146f869a71265117
+
 <!--<div class="blueBox">
             <span class="activity"><i class="fa fa-clock-o"></i>Waktu Operasi</span>
                 <div class="blueBoxContent1-right">
@@ -626,11 +625,6 @@ var $c = jQuery.noConflict();
             <a href="#">Kementerian Komunikasi dan Multimedia</a><br>
             <a href="#">Service Provider Website</a><br>
             <a href="#">Other Related Website</a> 
-<<<<<<< HEAD
-           	</div> 
-=======
-            </div> 
->>>>>>> d0dc45820c6e15278b0e0a6e146f869a71265117
 </div>-->
 <div class="clr"></div>
 <div class="bttm-center">

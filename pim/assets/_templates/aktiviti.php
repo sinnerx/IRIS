@@ -802,7 +802,7 @@ Hakcipta Terpelihara © 2013 <a href="#">Pusat Internet 1 Malaysia</a>. All Righ
 <div class="logo-bottom">
 
 <ul class="clearfix">
-<li><img src="images/celcom_bottom.jpg" width="87" height="46"  alt=""/></li>
+<li><img src="" width="87" height="46"  alt=""/></li>
 <li><img src="images/pi1m_bottom.jpg" width="241" height="46"  alt=""/></li>
 
 </ul>

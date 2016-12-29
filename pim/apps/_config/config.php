@@ -78,19 +78,7 @@ $config['domain']['www.celcom1cbc.com'][]	= Array(
 						'secure' => true
 										);
 
-## no longer used.
-<<<<<<< HEAD
-$config['domain']['p1m.gaia.my'][]	= Array(
-						"base_url:backend"=>"calent.gaia.my/dashboard",
-						"base_url:frontend"=>"calent.gaia.my",
-						"asset_url"=>"p1m.gaia.my/assets"
-=======
-$config['domain']['calent.gaia.my'][]	= Array(
-						"base_url:backend"=>"calent.gaia.my/dashboard",
-						"base_url:frontend"=>"calent.gaia.my",
-						"asset_url"=>"calent.gaia.my/assets"
->>>>>>> d0dc45820c6e15278b0e0a6e146f869a71265117
-										);
+
 
 /*$config['domain']['celcom1cbc.com'][]	= Array(
 						"base_url:backend"=>"celcom1cbc.com/sta/dashboard",

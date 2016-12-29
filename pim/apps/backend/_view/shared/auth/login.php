@@ -8,19 +8,11 @@
 
 <style type="text/css">
 BODY{
-<<<<<<< HEAD
 background-color:  #0a2929;
     color: #788288;
     font-family: "Open Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
     font-size: 13px;
     line-height: 1.53846;
-=======
-background-color: #250c30;
-	color: #788288;
-	font-family: "Open Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
-	font-size: 13px;
-	line-height: 1.53846;
->>>>>>> d0dc45820c6e15278b0e0a6e146f869a71265117
 	margin:0px;
 	padding:0px;
 }
@@ -204,15 +196,7 @@ function resetPassword()
 			<div class="left-panel-text">For site manager, cluster lead, operational manager and root admin.</div><br>
 			 <div class="logo-left"><img src="<?php echo url::asset("backend/images/calent_logo_dark.png");?>" width="100" height="100"  alt=""/></a></div>
 		</div>
-<<<<<<< HEAD
-		
-	</div>
-	<div id="right-panel">
-		<div>
-        <form method="post" id='theForm'>
-	        <div class='box-login'>
-=======
-		<div class="calent-logo"><img src="<?php echo url::asset("backend/images/calent_logo_dark.png");?>" width="100" height="100"  alt=""/></a></div>
+
 	</div>
 	<div id="right-panel">
 		<div>
@@ -220,7 +204,6 @@ function resetPassword()
 		
 		<form method="post" id='theForm'>
 			<div class='box-login'>
->>>>>>> d0dc45820c6e15278b0e0a6e146f869a71265117
 			<div class="right-panel-text">Fill in your authentication details.</div>
 			<?php echo flash::data();?>
 			<table id="login-table">
@@ -268,10 +251,8 @@ function resetPassword()
   </div>
 </div>
 <div class="footer">
-<<<<<<< HEAD
-Hakcipta Terpelihara © 2017 Calent</div>
-=======
+
 Hakcipta Terpelihara © 2017 CALENT.</div>
->>>>>>> d0dc45820c6e15278b0e0a6e146f869a71265117
+
 
 </body></html>
