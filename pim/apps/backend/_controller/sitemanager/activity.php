@@ -67,6 +67,7 @@ class Controller_Activity
 			$data['activityStartDate']		= $datetime['startDate']." ".$datetime['timeList'][$datetime['startDate']]['start'];
 			$data['activityEndDate']		= $datetime['endDate']." ".$datetime['timeList'][$datetime['endDate']]['end'];
 			$data['activityDateTimeType']	= $datetime['dateTimeType'];
+			$data['learningSelect']			= input::get("learningSelect");
 
 			if(!$data['hasParticipation']): ## if has participation already, deny this data.
 			$data['activityDateTime']		= $datetime['timeList'];

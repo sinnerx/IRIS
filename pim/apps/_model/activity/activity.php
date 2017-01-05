@@ -328,6 +328,7 @@ class Activity extends \Origami
 	{
 		$siteID	= $this->getActivity($activityID,"siteID");
 
+
 		## check active activity.add request.
 		if(model::load("site/request")->checkRequest("activity.add",$siteID,$activityID))
 		{
@@ -345,8 +346,7 @@ class Activity extends \Origami
 	public function _updateActivity($activityID,$type,$data)
 	{
 		//print_r($data);
-		
-			//print_r($rowTraining);
+
 		$originalSlug	= model::load("helper")->slugify($data['activityName']);
 
 		## recreate slug, with exception to activityID.
@@ -391,28 +391,30 @@ class Activity extends \Origami
 									));
 
 			$packagemodule = model::load("activity/learning/packagemodule")->getModuleByID($data['learningModule'], $data['learningPackage']);
-			//var_dump($packagemodule);
-			//die;
+
 			$rowTraining = db::select("trainingID")->where("activityID", $activityID)->get("training")->row();
 
 			$checkTraining = db::select("id")->where("trainingID", $rowTraining)->get("training_lms")->row();
-			// var_dump($rowTraining);
-			// die;
-			if($checkTraining){
-				db::where("trainingID", $rowTraining['trainingID']);
-				db::update("training_lms", Array(
-						"packageModuleID" => $packagemodule[0]['lpm_id']
-					));
-			}
-			else{
-					// die;
-					$data_learning = Array(
-						"trainingID" => $rowTraining['trainingID'],
-						"packageModuleID" => $packagemodule[0]['lpm_id']
-					);
 
-					db::insert("training_lms", $data_learning);				
+			if($data['learningSelect'] == 2){
+
+				if($checkTraining){
+								db::where("trainingID", $rowTraining['trainingID']);
+								db::update("training_lms", Array(
+										"packageModuleID" => $packagemodule[0]['lpm_id']
+									));
+							}
+							else{
+									// die;
+									$data_learning = Array(
+										"trainingID" => $rowTraining['trainingID'],
+										"packageModuleID" => $packagemodule[0]['lpm_id']
+									);
+
+									db::insert("training_lms", $data_learning);				
+				}				
 			}
+			
 
 			break;
 		}
