@@ -86,6 +86,7 @@ class Controller_Cafe
 			'userIC',
 			'userProfileOccupationGroup as occupation',
 			'userProfileGender as gender',
+			'userPoint as point',
 			'userUpdatedDate as updatedDate'
 			))
 		->join('user_profile', 'user_profile.userID = user.userID')
