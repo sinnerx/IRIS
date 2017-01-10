@@ -154,7 +154,7 @@ class Controller_Ajax_Report
 
 		db::select("count(siteID) as total");
 		db::order_by("siteID", "ASC");
-		db::where("siteID", 68);
+		// db::where("siteID", 68);
 					//db::limit(101, 30);
 		$totalSite = db::get("site")->row('total');
 
