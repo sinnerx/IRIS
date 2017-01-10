@@ -447,7 +447,7 @@ public function quarterlyReport($reportId){
 			db::order_by("siteID", "ASC");
 			
 			//testing for 1 site, can be comment out for all site in live
-			db::where("siteID", 68);
+			// db::where("siteID", 68);
 			
 			//db::limit(101, 30);
 			$allsite = db::get("site")->result('siteID');
