@@ -1142,7 +1142,9 @@ SUM(billingTransactionItemQuantity) AS hours");
 
 	public function getYearlyActivityReport($siteID = null, $year = null){
 		## select all site.
-		//$year = 2016;
+		// $year = 2016;
+		// var_dump($year);
+		// die;
 		
 		$keySite = db::select("site.*, site_info.*")
 					 ->innerJoin('site_info', 'site_info.siteID = site.siteID')
@@ -1484,8 +1486,8 @@ SUM(billingTransactionItemQuantity) AS hours");
 			$arrayActivitiesOnSite['exterior'] = $exterior;
 			$arrayActivitiesOnSite['interior'] = $interior;
 
-		//var_dump($arrayActivitiesOnSite);
-		//die;
+		// var_dump($arrayActivitiesOnSite);
+		// die;
 		return $arrayActivitiesOnSite;
 
 

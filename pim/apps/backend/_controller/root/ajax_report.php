@@ -1304,7 +1304,7 @@ public function yearlyReport(){
 
 		set_time_limit(0);
 		ini_set('memory_limit','800M');
-		//$year = 2014;
+		// $year = 2016;
 		//$quarter = 1;
 
 			// begin the process.
@@ -1341,8 +1341,8 @@ public function yearlyReport(){
 				$report	= model::load("report/report")->getYearlyActivityReport($allSiteKey['siteID'], $year);
 				$siteKey = $report;
 
-				// var_dump($siteKey);
-				//die;
+				// var_dump($report);
+				// die;
 
 				// Creating the new document...
 				$phpWord = new \PhpOffice\PhpWord\PhpWord();
@@ -1656,11 +1656,12 @@ public function yearlyReport(){
 				$styleFirstRow = array('borderBottomSize' => 18, 'borderBottomColor' => '0000FF', 'bgColor' => '66BBFF', 'bold' => true);
 				$cellRowSpan = array('vMerge' => 'restart', 'valign' => 'center', 'bgColor' => '66BBFF');
 				$cellRowContinue = array('vMerge' => 'continue');
-				$cellColSpan = array('gridSpan' => 5, 'valign' => 'center');
+				$cellColSpan = array('gridSpan' => 14, 'valign' => 'center');
 				$cellHCentered = array('align' => 'center');
 				$cellHeaderCentered = array('align' => 'center', 'bold' => true);
 				$cellVCentered = array('valign' => 'center');
-				$widthCell = 4000;
+				$widthCellHeader = 3000;
+				$widthCell = 1000;
 
 				$phpWord->addTableStyle('Colspan Rowspan', $styleTable, $styleFirstRow);
 				$table = $section->addTable('Colspan Rowspan');
@@ -1678,8 +1679,8 @@ public function yearlyReport(){
 				// $table->addCell(2000, $cellVCentered)->addText(htmlspecialchars('June'), null, $cellHCentered);		
 
 				$table->addRow();
-				$table->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars(''), $cellHeaderCentered);
-				$table->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars(''), $cellHeaderCentered, $cellHeaderCentered);
+				$table->addCell($widthCellHeader, $cellVCentered)->addText(htmlspecialchars(''), $cellHeaderCentered);
+				$table->addCell($widthCellHeader, $cellVCentered)->addText(htmlspecialchars(''), $cellHeaderCentered, $cellHeaderCentered);
 				$table->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars('Jan'), $cellHeaderCentered, $cellHeaderCentered);
 				$table->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars('Feb'), $cellHeaderCentered, $cellHeaderCentered);
 				$table->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars('Mar'), $cellHeaderCentered, $cellHeaderCentered);
@@ -1694,8 +1695,8 @@ public function yearlyReport(){
 				$table->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars('Dec'), $cellHeaderCentered, $cellHeaderCentered);
 
 				$table->addRow();
-				$table->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars('CashFlow'), null, $cellHCentered);
-				$table->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars('Revenue (RM)'), null, $cellHCentered);
+				$table->addCell($widthCellHeader, $cellVCentered)->addText(htmlspecialchars('CashFlow'), null, $cellHCentered);
+				$table->addCell($widthCellHeader, $cellVCentered)->addText(htmlspecialchars('Revenue (RM)'), null, $cellHCentered);
 				//var_dump($allSiteKey['siteID']);
 				//var_dump($siteKey['revenue']);
 				//die;
@@ -1716,23 +1717,23 @@ public function yearlyReport(){
 				//$table->addCell(2000, $cellVCentered)->addText(htmlspecialchars(''), null, $cellHCentered);	
 
 				$table->addRow();
-				$table->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars(''), null, $cellHCentered);
-				$table->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars('Cost'), null, $cellHCentered);
+				$table->addCell($widthCellHeader, $cellVCentered)->addText(htmlspecialchars(''), null, $cellHCentered);
+				$table->addCell($widthCellHeader, $cellVCentered)->addText(htmlspecialchars('Cost'), null, $cellHCentered);
 					for($i=1;$i<=12;$i++){
 						$table->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars('0'), null, $cellHCentered);
 					}
 
 				$table->addRow();
-				$table->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars(''), null, $cellHCentered);
-				$table->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars('NetBook'), null, $cellHCentered);
+				$table->addCell($widthCellHeader, $cellVCentered)->addText(htmlspecialchars(''), null, $cellHCentered);
+				$table->addCell($widthCellHeader, $cellVCentered)->addText(htmlspecialchars('NetBook'), null, $cellHCentered);
 					for($i=1;$i<=12;$i++){
 						$table->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars('0'), null, $cellHCentered);
 					}
 
 				//Take Up
 				$table->addRow();
-				$table->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars('Take Up'), null, $cellHCentered);
-				$table->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars('Total Member'), null, $cellHCentered);
+				$table->addCell($widthCellHeader, $cellVCentered)->addText(htmlspecialchars('Take Up'), null, $cellHCentered);
+				$table->addCell($widthCellHeader, $cellVCentered)->addText(htmlspecialchars('Total Member'), null, $cellHCentered);
 				//var_dump($siteKey['totalmember']['2016']['2']);
 				if($siteKey['totalmember']){
 					//var_dump($siteKey['totalmember']);
@@ -1752,16 +1753,16 @@ public function yearlyReport(){
 
 
 				$table->addRow();
-				$table->addCell(2000, $cellVCentered)->addText(htmlspecialchars(''), null, $cellHCentered);
-				$table->addCell(2000, $cellVCentered)->addText(htmlspecialchars('Active Wifi User'), null, $cellHCentered);
+				$table->addCell($widthCellHeader, $cellVCentered)->addText(htmlspecialchars(''), null, $cellHCentered);
+				$table->addCell($widthCellHeader, $cellVCentered)->addText(htmlspecialchars('Active Wifi User'), null, $cellHCentered);
 					for($i=1;$i<=12;$i++){
 						$table->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars('0'), null, $cellHCentered);
 					}
 
 				//PC Usage
 				$table->addRow();
-				$table->addCell(2000, $cellVCentered)->addText(htmlspecialchars('PC Usage'), null, $cellHCentered);
-				$table->addCell(2000, $cellVCentered)->addText(htmlspecialchars('Day PC User Total'), null, $cellHCentered);
+				$table->addCell($widthCellHeader, $cellVCentered)->addText(htmlspecialchars('PC Usage'), null, $cellHCentered);
+				$table->addCell($widthCellHeader, $cellVCentered)->addText(htmlspecialchars('Day PC User Total'), null, $cellHCentered);
 				if($siteKey['usagetotal']){
 					foreach($siteKey['usagetotal'] as $value){
 						$value ? $usagetotal = $value : $usagetotal = '0';
@@ -1778,16 +1779,16 @@ public function yearlyReport(){
 
 
 				$table->addRow();
-				$table->addCell(2000, $cellVCentered)->addText(htmlspecialchars(''), null, $cellHCentered);
-				$table->addCell(2000, $cellVCentered)->addText(htmlspecialchars('Night PC User Total'), null, $cellHCentered);
+				$table->addCell($widthCellHeader, $cellVCentered)->addText(htmlspecialchars(''), null, $cellHCentered);
+				$table->addCell($widthCellHeader, $cellVCentered)->addText(htmlspecialchars('Night PC User Total'), null, $cellHCentered);
 					for($i=1;$i<=12;$i++){
 						$table->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars('0'), null, $cellHCentered);
 					}		
 
 
 				$table->addRow();
-				$table->addCell(2000, $cellVCentered)->addText(htmlspecialchars(''), null, $cellHCentered);
-				$table->addCell(2000, $cellVCentered)->addText(htmlspecialchars('Day PC Usage Total Hours'), null, $cellHCentered);
+				$table->addCell($widthCellHeader, $cellVCentered)->addText(htmlspecialchars(''), null, $cellHCentered);
+				$table->addCell($widthCellHeader, $cellVCentered)->addText(htmlspecialchars('Day PC Usage Total Hours'), null, $cellHCentered);
 				if($siteKey['usagehour']){
 					foreach($siteKey['usagehour'] as $value){
 						$value ? $usagehour = $value : $usagehour = '0';
@@ -1803,41 +1804,41 @@ public function yearlyReport(){
 
 
 				$table->addRow();
-				$table->addCell(2000, $cellVCentered)->addText(htmlspecialchars(''), null, $cellHCentered);
-				$table->addCell(2000, $cellVCentered)->addText(htmlspecialchars('Night PC Usage Total Hours'), null, $cellHCentered);
+				$table->addCell($widthCellHeader, $cellVCentered)->addText(htmlspecialchars(''), null, $cellHCentered);
+				$table->addCell($widthCellHeader, $cellVCentered)->addText(htmlspecialchars('Night PC Usage Total Hours'), null, $cellHCentered);
 					for($i=1;$i<=12;$i++){
 						$table->addCell($widthCell, $cellVCentered)->addText(htmlspecialchars(''), null, $cellHCentered);
 					}
 
 				//Bandwidth Usage
 				$table->addRow();
-				$table->addCell(2000, $cellVCentered)->addText(htmlspecialchars('Bandwidth Usage(in Mb)'), null, $cellHCentered);
-				$table->addCell(2000, $cellVCentered)->addText(htmlspecialchars('Day Average'), null, $cellHCentered);
-				$table->addCell(2000, array('gridSpan' => 3, 'valign' => 'center'))->addText(htmlspecialchars('Please refer the attachment'), null, $cellHCentered);
+				$table->addCell($widthCellHeader, $cellVCentered)->addText(htmlspecialchars('Bandwidth Usage(in Mb)'), null, $cellHCentered);
+				$table->addCell($widthCellHeader, $cellVCentered)->addText(htmlspecialchars('Day Average'), null, $cellHCentered);
+				$table->addCell(2000, array('gridSpan' => 12, 'valign' => 'center'))->addText(htmlspecialchars('Please refer the attachment'), null, $cellHCentered);
 				// $table->addCell(2000, $cellVCentered)->addText(htmlspecialchars(''), null, $cellHCentered);
 				// $table->addCell(2000, $cellVCentered)->addText(htmlspecialchars(''), null, $cellHCentered);		
 				// $table->addCell(2000, $cellVCentered)->addText(htmlspecialchars(''), null, $cellHCentered);			
 
 				$table->addRow();
-				$table->addCell(2000, $cellVCentered)->addText(htmlspecialchars(''), null, $cellHCentered);
-				$table->addCell(2000, $cellVCentered)->addText(htmlspecialchars('Day Peak'), null, $cellHCentered);
-				$table->addCell(2000, array('gridSpan' => 3, 'valign' => 'center'))->addText(htmlspecialchars('Please refer the attachment'), null, $cellHCentered);
+				$table->addCell($widthCellHeader, $cellVCentered)->addText(htmlspecialchars(''), null, $cellHCentered);
+				$table->addCell($widthCellHeader, $cellVCentered)->addText(htmlspecialchars('Day Peak'), null, $cellHCentered);
+				$table->addCell(2000, array('gridSpan' => 12, 'valign' => 'center'))->addText(htmlspecialchars('Please refer the attachment'), null, $cellHCentered);
 				// $table->addCell(2000, $cellVCentered)->addText(htmlspecialchars(''), null, $cellHCentered);
 				// $table->addCell(2000, $cellVCentered)->addText(htmlspecialchars(''), null, $cellHCentered);		
 				// $table->addCell(2000, $cellVCentered)->addText(htmlspecialchars(''), null, $cellHCentered);			
 
 				$table->addRow();
-				$table->addCell(2000, $cellVCentered)->addText(htmlspecialchars(''), null, $cellHCentered);
-				$table->addCell(2000, $cellVCentered)->addText(htmlspecialchars('Night Average'), null, $cellHCentered);
-				$table->addCell(2000, array('gridSpan' => 3, 'valign' => 'center'))->addText(htmlspecialchars('Please refer the attachment'), null, $cellHCentered);
+				$table->addCell($widthCellHeader, $cellVCentered)->addText(htmlspecialchars(''), null, $cellHCentered);
+				$table->addCell($widthCellHeader, $cellVCentered)->addText(htmlspecialchars('Night Average'), null, $cellHCentered);
+				$table->addCell(2000, array('gridSpan' => 12, 'valign' => 'center'))->addText(htmlspecialchars('Please refer the attachment'), null, $cellHCentered);
 				// $table->addCell(2000, $cellVCentered)->addText(htmlspecialchars(''), null, $cellHCentered);
 				// $table->addCell(2000, $cellVCentered)->addText(htmlspecialchars(''), null, $cellHCentered);		
 				// $table->addCell(2000, $cellVCentered)->addText(htmlspecialchars(''), null, $cellHCentered);			
 
 				$table->addRow();
-				$table->addCell(2000, $cellVCentered)->addText(htmlspecialchars(''), null, $cellHCentered);
-				$table->addCell(2000, $cellVCentered)->addText(htmlspecialchars('Night Peak'), null, $cellHCentered);
-				$table->addCell(2000, array('gridSpan' => 3, 'valign' => 'center'))->addText(htmlspecialchars('Please refer the attachment'), null, $cellHCentered);
+				$table->addCell($widthCellHeader, $cellVCentered)->addText(htmlspecialchars(''), null, $cellHCentered);
+				$table->addCell($widthCellHeader, $cellVCentered)->addText(htmlspecialchars('Night Peak'), null, $cellHCentered);
+				$table->addCell(2000, array('gridSpan' => 12, 'valign' => 'center'))->addText(htmlspecialchars('Please refer the attachment'), null, $cellHCentered);
 				// $table->addCell(2000, $cellVCentered)->addText(htmlspecialchars(''), null, $cellHCentered);
 				// $table->addCell(2000, $cellVCentered)->addText(htmlspecialchars(''), null, $cellHCentered);		
 				// $table->addCell(2000, $cellVCentered)->addText(htmlspecialchars(''), null, $cellHCentered);		
