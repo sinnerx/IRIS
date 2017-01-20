@@ -1,6 +1,342 @@
 <?php
 Class Controller_Kpi
 {
+	public function kpi_summary($year = null, $month = null, $cluster = null, $siteParam = null){
+		// $siteID = site()->siteID;
+		// $year = 2016;
+		// $month = 8;
+		// $site = 14;
+		// var_dump(request::get());
+		// die;
+
+		$siteIDs = array();
+
+		db::select("siteID, siteName");
+		db::from('site');
+		db::order_by('siteName');
+
+		//1st time to detect whether cl or root
+		if(authData('user.userLevel') == \model\user\user::LEVEL_CLUSTERLEAD)
+		{
+			db::where('siteID IN (SELECT cluster_site.siteID FROM cluster_site WHERE cluster_site.clusterID IN (SELECT cluster_lead.clusterID FROM cluster_lead WHERE cluster_lead.userID = ?))', array(authData('user.userID')));	
+			$sites = $data['sites'] = db::get()->result('siteID');	
+
+			$userID = authData('user.userID');
+
+			$res_site = model::load("site/site")->getSitesByClusterLead($userID)->result();
+			// print_r($res_site);
+			// die;
+			foreach($res_site as $row)
+			{
+				$data['siteR'][$row['siteID']]	= $row['siteName'];
+			}
+
+			$clusterUser = model::load("site/cluster")->getClusterByUser(authData('user.userID'));
+			$clusterDetails = model::load("site/cluster")->getClusterByID($clusterUser['clusterID']);	
+
+			$auditScore = $clusterDetails['clusterAuditScore'];						
+		}
+		else if (authData('user.userLevel') == \model\user\user::LEVEL_ROOT){
+			$sites = $data['sites'] = db::get()->result('siteID');
+
+			$allCluster = model::load("site/cluster")->lists();
+
+			foreach ($allCluster as $clusteritem) {
+				# code...
+				$totalAuditScore += $clusteritem['clusterAuditScore'];
+			}
+			
+				$auditScore = $totalAuditScore;
+		}
+		
+		$siteIDs = array_keys($sites);
+
+		//populate cluster list
+		$res_cluster	= model::load("site/cluster")->lists();
+		foreach($res_cluster as $row)
+		{
+			$data['clusterR'][$row['clusterID']]	= $row['clusterName'];
+		}
+
+		if($cluster != '')
+		{
+			// var_dump(request::get("cluster"));
+			// die;
+			$siteIDs = model::load("site/site")->getSitesByClusterID($cluster);
+			// var_dump($siteIDs);
+			// die;
+			foreach($siteIDs as $row)
+			{
+				$data['siteR'][$row['siteID']]	= $row['siteName'];
+			}			
+
+			$data['site'] = '';
+
+			$clusterDetails = model::load("site/cluster")->getClusterByID($cluster);	
+			// var_dump($clusterDetails);
+			$clusterDetails['clusterAuditScore'] === null ?  $auditScore = "N/A" : $auditScore = $clusterDetails['clusterAuditScore'];	
+			// db::where("siteID IN (SELECT siteID FROM cluster_site WHERE clusterID = '".request::get("cluster")."')");
+		}
+
+		if($siteParam != ''){
+			$siteIDs = $siteParam;
+		}
+
+		
+		
+
+		$siteParam == null ? $siteIDs = $siteIDs : $siteIDs = $siteParam;
+
+		// var_dump($siteIDs);
+			//
+		$data['year'] = $year = $year ? : date('Y');
+		$data['month'] = $month = $month ? : date('n');
+
+
+		$countSite = count($siteIDs);
+
+		//concatinate into string in bracket
+		//$siteIDs = implode (", ", $siteIDs);
+		// $siteIDs = "(". $siteIDs . ")";
+
+		$data['max'] = array(
+			'event' => 2 * $countSite,
+			'entrepreneurship_class' => 1 * $countSite,
+			'entrepreneurship_sales' => 300 * $countSite,
+			'training_hours' => 32 * $countSite,
+			'active_member_percentage' => 80 * $countSite,
+			'kdb_sessions' => 30 * $countSite,
+			'kdb_pax' => 600 * $countSite,
+			'auditScore' => $auditScore
+			);
+
+		// event
+		// activity : event
+		// has at least 1 article
+		/*$totalEvents = db::from('activity')
+		->select('count(activity.activityID) as total')
+		->where('siteID', $siteID)
+		->where('activityType', 1)
+		->where('activityApprovalStatus', 1)
+		->where('activityID IN (SELECT activityID FROM activity_article WHERE activity_article.activityID = activity.activityID)')
+		->where('MONTH(activityStartDate) = ? AND YEAR(activityStartDate) = ?', array($month, $year))
+		->get()->row('total');*/
+
+	
+		db::select('SUM(noOfActivities) as noOfActivities');
+		db::from('OLAP_articled_activities');
+		db::where('siteID', $siteIDs);
+		db::where('month = ? AND year = ?', array($month, $year));
+		$totalEvents = db::get()->row('noOfActivities');
+
+		if ($totalEvents == null) {
+			$totalEvents = 0;
+		}
+
+		// var_dump($totalEvents);
+		// die;
+		// total entrepreneurship class
+		// activity : training
+		// has at least 1 article
+		 
+		
+		db::select('count(activity.activityID) as total');
+		db::from('activity');
+		db::where('siteID', $siteIDs);
+		db::where('activityType', 2);
+		db::where('activityApprovalStatus', 1);
+		db::where('activityStartDate <= NOW() - INTERVAL 1 DAY ');
+		db::where('MONTH(activityStartDate) = ? AND YEAR(activityStartDate) = ?', array($month, $year));
+		db::where('training_type.trainingTypeName LIKE ?', array('%Entrepreneurship%'));
+		// ->join('activity_article', 'activity_article.activityID = activity.activityID', 'INNER JOIN')
+		db::join('training', 'activity.activityID = training.activityID', 'INNER JOIN');
+		db::join('training_type', 'training.trainingType = training_type.trainingTypeID', 'INNER JOIN');
+		// db::group_by("siteID");
+		$totalEntrepreneurship = db::get()->row('total');
+
+		// var_dump($totalEntrepreneurship);
+		// die;
+		// entrepreneurship program
+		// table : billing_transaction_item 
+		// billingItemCode = lms_item
+		
+		db::select('SUM(billingTransactionItemPrice) * SUM(billingTransactionItemQuantity) as total');
+		db::from('billing_transaction_item');
+		db::where('billing_transaction.siteID', $siteIDs);
+		db::where('MONTH(billingTransactionDate) = ? AND YEAR(billingTransactionDate) = ?', array($month, $year));
+		db::where('billing_transaction_item.billingItemID IN (SELECT billingItemID FROM billing_item WHERE billingItemCode = ?)', array('lms_item'));
+		db::join('billing_transaction', 'billing_transaction.billingTransactionID = billing_transaction_item.billingTransactionID');
+		$sales = db::get()->row('total') ? : 0;
+
+		// var_dump($sales);
+		// die;
+		// total training hours
+		// activity : training
+		// has at least one rsvp
+		/*$trainingHours = db::from('activity_date')
+		->where('activityType', 2)
+		->where('activityApprovalStatus', 1)
+		->where('activity.siteID', $siteID)
+		->where('activity_date.activityID IN (SELECT activityID FROM activity_user)') // rsvp
+		->where('MONTH(activity.activityStartDate) = ? AND YEAR(activity.activityStartDate) = ?', array($month, $year))
+		->join('activity', 'activity.activityID = activity_date.activityID', 'INNER JOIN')
+		->get()->result();
+
+		$time = 0;
+		
+		foreach($trainingHours as $activityDate)
+			$time += strtotime($activityDate['activityDateEndTime']) - strtotime($activityDate['activityDateStartTime']);
+
+		$hours = floor($time / 3600);*/
+
+		//  sum(time_to_sec(timediff(endTime, startTime)) / 3600) as total from OLAP_site_activity_date_times
+			// if($month >= date('m')){
+			// 	echo "current month ". date('m');
+			// }
+			// die;
+		
+		db::select('sum(time_to_sec(timediff(endTime, startTime)) / 3600) as total');
+		db::from('OLAP_site_activity_date_times');
+		db::where('siteID', $siteIDs);
+
+		db::where('activityDate <= NOW() - INTERVAL 1 DAY');
+		db::where('MONTH(activityDate) = ? AND YEAR(activityDate) = ?', array($month, $year));
+		$trainingHours = db::get()->row('total');
+		
+		$hours = 0;
+		$hours += $trainingHours;
+
+		/*$time = 0;
+		
+		foreach($trainingHours as $activityDate)
+			$time += strtotime($activityDate['activityDateEndTime']) - strtotime($activityDate['activityDateStartTime']);
+
+		$hours = floor($time / 3600);*/
+
+		// active member percentage
+		// based on at least having 1 login
+		// active member / total member * 100
+		$totalMembers = db::select('count(userID) as total')->where('siteID', $siteIDs)->get('site_member')->row('total');
+
+		/*$activeMembers = db::from('site_member')
+		->select('count(userID) as total')
+		->where('siteID', $siteID)
+		->where('siteMemberStatus',1)
+		->where('userID IN (SELECT userID FROM log_login WHERE MONTH(logLoginCreatedDate) = ? AND YEAR(logLoginCreatedDate) = ?)', array($month, $year))
+		->get()->row('total');*/
+
+		
+		db::select('count(distinct userID) as total');
+		db::from('OLAP_user_logins');
+		db::where('siteID', $siteIDs);
+		db::where('MONTH(loginDate) = ? AND YEAR(loginDate) = ?', array($month, $year));
+		$activeMembers = db::get()->row('total');
+
+		if ($totalMembers == 0) {
+			$active_member_percentage = 0;
+		} else {
+			$active_member_percentage = $activeMembers / $totalMembers * 100;			
+		}
+
+		db::select('count(userID) as total');
+		db::from('site_member');
+		db::where('siteID', $siteIDs);
+		db::where('siteMemberStatus',1);
+		$noOfMembers = db::get('site_member')->row('total');
+		// $noOfMembers = db::row('total');
+
+		//entrepreneurship article
+		//$totalEntArticle =db::query("SELECT COUNT(`articleID`) AS 'total' FROM `article_category` WHERE `categoryID` = 3 
+		//				AND `articleID` IN (SELECT `articleID` FROM `article` WHERE `siteID` = $siteID AND MONTH(articlePublishedDate)=$month AND YEAR(articlePublishedDate)=$year)")->result();
+
+		
+		db::select("count(article.articleID) as total");
+		// db::from("article");
+		db::join("article_category", "article.articleID = article_category.articleID");
+		db::where("categoryID", 4);
+		db::where("siteID", $siteIDs);
+		db::where("MONTH(articlePublishedDate)", $month);
+		db::where("YEAR(articlePublishedDate)", $year);
+
+		$totalEntArticle = db::get('article')->result();
+		// var_dump($totalEntArticle);
+		// die;
+		// db::query("SELECT COUNT(article.articleID) AS 'total' from article, article_category 
+		// 	where  article_category.articleID = article.articleID and categoryID = 4
+		// 	AND siteID = '$siteID' AND MONTH(articlePublishedDate) = $month AND YEAR(articlePublishedDate) = $year")->result();
+		//print_r($totalEntArticle);
+		//die();
+
+		//$totalKdbSession = db::query("SELECT COUNT(`activityID`) AS 'total' FROM `activity` WHERE `activityType` =2 AND `activityApprovalStatus`=1 
+		//	AND YEAR(`activityStartDate`) = $year AND `activityID` IN (SELECT `activityID` FROM `training` WHERE `trainingType` = 7 AND `trainingSubType` = 14)  ")->result();
+
+		//$totalKdbPax = db::query("SELECT SUM(`trainingMaxPax`) AS 'totalpax' FROM `training` WHERE `activityID` IN (SELECT `activityID` FROM `activity` WHERE `activityType` =2 
+		//	AND `activityApprovalStatus`=1 AND YEAR(`activityStartDate`) = $year AND `activityID` IN (SELECT `activityID` FROM `training` WHERE `trainingType` = 7 AND `trainingSubType` = 14))")->result();
+	
+		$kdb_sessions = 0;
+		$kdb_pax = 0;
+
+		db::select("COUNT(distinct activity.activityID) as sessions, COUNT(activity.activityID) as pax");
+		// db::from("article");
+		db::join("activity", "activity.activityID = activity_user.activityID");
+		db::join("training", "training.activityID = activity.activityID");
+		db::where("activityStartDate <= NOW() - INTERVAL 1 DAY ");
+		db::where("siteID", $siteIDs);
+		db::where("trainingType", 7);
+		db::where("trainingSubType", 14);
+		db::where("MONTH(activityStartDate)", $month);
+		db::where("YEAR(activityStartDate)", $year);	
+			
+		$kdbData = db::get('activity_user')->result();
+
+		// db::query("SELECT COUNT(distinct activity.activityID) as sessions, COUNT(activity.activityID) as pax
+		// 	FROM activity_user, activity, training
+		// 	WHERE siteID = '$siteID'
+		// 	AND activityStartDate <= NOW() - INTERVAL 1 DAY 
+		// 	AND (YEAR(activityStartDate) = $year OR YEAR(activityEndDate) = $year)
+		// 	AND (MONTH(activityStartDate) <= $month OR MONTH(activityEndDate) <= $month)
+		// 	AND activity.activityID = activity_user.activityID AND training.activityID = activity.activityID
+		// 	AND trainingType = 7 AND trainingSubType = 14")->result();
+		$kdb_sessions += $kdbData[0]['sessions'];
+		$kdb_pax += $kdbData[0]['pax'];
+
+		$data['kpi'] = array(
+			'event' => $totalEvents,
+			'entrepreneurship_class' => $totalEntrepreneurship,
+			'entrepreneurship_sales' => $sales,
+			'training_hours' => $hours,
+			//'active_member_percentage' => $activeMembers / $totalMembers * 100
+			'active_member_percentage' => $active_member_percentage,
+			'total_members' => $noOfMembers,
+			'totalEntArticle' => $totalEntArticle[0]['total'],
+			'kdb_session'=>$kdb_sessions,
+			'kdb_pax'=>$kdb_pax
+			//'kdb_session'=>$totalKdbSession[0]['total'],
+			//'kdb_pax'=>$totalKdbPax[0]['totalpax']
+			);
+
+		// var_dump($data);
+		// die;
+
+		## to check system speed (site_log)
+		if ($_SESSION['email']) {
+			db::select('MAX(start) as maxDate');
+			db::from('site_log');
+			db::where('email', $_SESSION['email']);
+			$maxDate = db::get()->row('maxDate');
+
+			db::where("email", $_SESSION['email']);
+			db::where("start", $maxDate);
+			db::update("site_log", Array('siteID'=>$siteID,"end"=>now()));
+
+			$_SESSION['email'] = null;
+		}
+		$data['cluster'] = $cluster;
+		$data['site'] = $siteParam;
+		// var_dump($data['cluster']);
+		return view::render('shared/kpi/summary', $data);
+	}
+
 	public function kpi_overview($page = null)
 	{
 		  //make it sort
@@ -33,7 +369,9 @@ Class Controller_Kpi
 			'entrepreneurship_class' => 1,
 			'entrepreneurship_sales' => 300,
 			'training_hours' => 32,
-			'active_member_percentage' => 80
+			'active_member_percentage' => 80,
+			'kdb_sessions' => 30,
+			'kdb_pax' => 600			
 			);
 
 		db::from('site');
@@ -47,6 +385,10 @@ Class Controller_Kpi
 		$sites = $data['sites'] = db::get()->result('siteID');
 		$siteIDs = array_keys($sites);
 		
+		$clusterUser = model::load("site/cluster")->getClusterByUser(authData('user.userID'));
+		$clusterDetails = model::load("site/cluster")->getClusterByID($clusterUser['clusterID']);	
+
+		$auditScore = $clusterDetails['clusterAuditScore'];
 
 		if(count($sites) > 0)
 		{
@@ -132,7 +474,20 @@ Class Controller_Kpi
 			->get()->result('siteID', true);
 			//print_r($totalpopulation);
 
-			
+			db::select("COUNT(distinct activity.activityID) as sessions, COUNT(activity.activityID) as pax");
+			// db::from("article");
+			db::join("activity", "activity.activityID = activity_user.activityID");
+			db::join("training", "training.activityID = activity.activityID");
+			db::where("activityStartDate <= NOW() - INTERVAL 1 DAY ");
+			db::where("siteID", $siteIDs);
+			db::where("trainingType", 7);
+			db::where("trainingSubType", 14);
+			db::where("MONTH(activityStartDate)", $month);
+			db::where("YEAR(activityStartDate)", $year);	
+			db::group_by("siteID");
+
+			$kdbData = db::get('activity_user')->result('siteID', true);
+			// var_dump($siteIDs);
 			$data['total'] = array();
 			$data['population'] = array();
 			$data['total_members'] = array();
@@ -140,6 +495,7 @@ Class Controller_Kpi
 			// main site loop.
 			foreach($sites as $row_site)
 			{
+
 
 				$siteID = $row_site['siteID'];
 				// var_dump( $totalpopulation[$siteID][0]["siteInfoPopulation"]);
@@ -239,6 +595,22 @@ Class Controller_Kpi
 				else
 					$total['total_members'] = 0;
 
+
+				$kdb_sessions = 0;
+				$kdb_pax = 0;	
+				// $total['kdbSession'] = 0;
+				// $total['kdbPax'] = 0;
+				if(isset($kdbData[$siteID])){
+					// var_dump('aaa');
+					foreach ($kdbData[$siteID] as $kdbDataSingle) {
+						# code...
+						// var_dump($kdbDataSingle['sessions']);
+						$kdbDataSingle['sessions'] != '' ? 	$total['kdbSession'] = $kdbDataSingle['sessions'] : $total['kdbSession'] = $kdb_sessions;
+						$kdbDataSingle['pax'] != '' ? 		$total['kdbPax'] 	 = $kdbDataSingle['pax'] : $total['kdbPax'] = $kdb_pax;
+					}
+				}
+				//display same audit score for the cluster
+				$total['auditScore'] = $auditScore;							
 			}
 
 			// die;

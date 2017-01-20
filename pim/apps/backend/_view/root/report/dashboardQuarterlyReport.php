@@ -161,7 +161,7 @@ var report = new function()
 				<tr>
 					 <td>Generate report</td><td>: <input type='button' class='btn btn-primary' onclick='report.generate();' value='GENERATE' /></td> 
 
-					 <input type='button' class='btn btn-primary' onclick='report.generateYearly();' value='GENERATE YEARLY' />
+					 <!--<input type='button' class='btn btn-primary' onclick='report.generateYearly();' value='GENERATE YEARLY' />-->
 				</tr>
 			</table>
 		</div>

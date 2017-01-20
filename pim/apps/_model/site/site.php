@@ -563,6 +563,15 @@ class Site extends \Origami
 		return db::get()->result('stateID',true);
 	}
 
+
+	public function getSitesByClusterID($clusterID)
+	{
+		db::select("site.siteID, siteName");
+		db::join("site", "cluster_site.siteID = site.siteID");
+		db::where("clusterID", $clusterID);
+		return db::get("cluster_site")->result("siteID");
+	}
+
 	## get manager info. return array of columns.
 	public function getManagerInfo($siteID = null,$columns = null)
 	{

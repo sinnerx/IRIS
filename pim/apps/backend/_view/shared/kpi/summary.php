@@ -5,9 +5,16 @@ var site = new function()
 	var context	= this;
 	this.overview = new function()
 	{
-		this.updateDate = function()
+		this.updateDate = function(param = null)
 		{
-			window.location.href = pim.base_url+"site/overview/"+$("#year").val()+"/"+$("#month").val();
+      //console.log(param);
+      if(param){
+        window.location.href = pim.base_url+"kpi/kpi_summary/"+$("#year").val()+"/"+$("#month").val()+"/"+$("#clusterID").val();
+      }
+      else{
+        window.location.href = pim.base_url+"kpi/kpi_summary/"+$("#year").val()+"/"+$("#month").val()+"/"+$("#clusterID").val()+"/"+$("#siteID").val();
+      }
+			
 		}
 
 		this.getRequestList	= function(href)
@@ -105,6 +112,11 @@ Dashboard overview
 			<div class='col-lg-6'>			
 			<div style="float:right">
 				<!-- <a href='<?php echo url::base("site/kpiMonthly/".$year);?>'  class='fa fa-external-link' data-toggle='ajaxModal' style="color:green;"> KPI yearly view</a>				 -->
+        <?php 
+          if(authData('user.userLevel') == \model\user\user::LEVEL_ROOT)
+            echo form::select("clusterID",$clusterR,"class='input-sm form-control input-s-sm inline v-middle' onchange='site.overview.updateDate(this);'",$cluster,"[ALL CLUSTER]");
+        ?>
+        <?php echo form::select("siteID",$siteR,"class='input-sm form-control input-s-sm inline v-middle' onchange='site.overview.updateDate();'",$site,"[ALL SITE]");?>        
 				<?php echo form::select("month",model::load("helper")->monthYear("month"),'onchange="site.overview.updateDate();" class="form-control" style="display: inline; width: 100px;"',$month);?>
 				<?php echo form::select("year",model::load("helper")->monthYear("year"),'onchange="site.overview.updateDate();" class="form-control" style="display: inline; width: 100px;"',$year);?>			
 			</div>	
@@ -367,7 +379,7 @@ Dashboard overview
                               </span>
                               <span class="clear">
                                 
-                                <span class="h1 block m-t-xs text-primary kpi-font"><?php echo $auditScore; ?></span>
+                                <span class="h1 block m-t-xs text-primary kpi-font"><?php echo $max['auditScore'];?></span>
                                 <small class="text-muted text-u-c">Average Score</small>
                               </span>
                             </a>
@@ -419,20 +431,7 @@ Dashboard overview
 </div>
 </form>
 
-<div class='row'>
-	<div class='col-sm-12'>
-			<div class='col-sm-12' id='widget-requestlist'>
-			<?php
-			## load it first along with the first request;
-			controller::load("sitemanager/ajax_request","lists");?>
-			</div>
-			<div class='col-sm-12' id='widget-messagelist'>
-			<?php 
-			## load it first along with the first request;
-			controller::load("sitemanager/ajax_message","lists");?>
-			</div>
-	</div>
-</div>
+
 
 
 <link rel="stylesheet" href="<?php echo url::asset("_scale/js/datepicker/datepicker.css");?>" type="text/css" />

@@ -421,6 +421,7 @@ cluster:
 	clusterName [varchar]
 	clusterCreatedDate [datetime]
 	clusterCreatedUser [int]
+	clusterAuditScore [float]
 
 cluster_site: # many site to one cluster.
 	clusterSiteID [int]

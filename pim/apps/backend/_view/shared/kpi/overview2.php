@@ -136,6 +136,10 @@ var site = new function()
 					<th>Active member (Login)</th>
 					<th>Population</th>	
 					<th>Number of Members</th>	
+					<th>Operations</th>	
+					<th>Pi1M Audit Score</th>	
+					<th>KDB Session</th>	
+					<th>KDB Pax</th>	
 				</tr>
 				</thead>
 				<tbody>
@@ -175,6 +179,10 @@ var site = new function()
 						<?php echo $report['total_members'];?>
 							
 						</td>
+						<td><?php echo '';?></td>
+						<td><?php echo $report['auditScore'];?></td>
+						<td><?php echo $report['kdbSession'];?> / <?php echo $max['kdb_sessions']; ?></td>
+						<td><?php echo $report['kdbPax'];?> / <?php echo $max['kdb_pax']; ?></td>
 
 					</tr>
 				<?php endforeach;?>

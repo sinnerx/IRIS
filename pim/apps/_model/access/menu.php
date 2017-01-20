@@ -89,9 +89,12 @@ class Menu extends Data
 
 		$menu['cl']	= Array(
 					"Overview"=>Array(
+								"KPI Summary"=>"kpi/kpi_summary/1",
 								"KPI Overview"=>"kpi/kpi_overview/1",
-								"Cluster Overview"=>Array("cluster/overview")
+								"Cluster Overview"=>Array("cluster/overview"),
+								"Audit Score" => Array("cluster/editAuditScore"),
 									),
+
 					
 					"Billing"=>Array(
 						// "Input Form"=>"billing/add",
@@ -149,6 +152,7 @@ class Menu extends Data
 		$menu['r']	= Array(
 					/*"Overview"=>"home/index",*/
 					"Sites"=>Array(
+							"KPI Summary"=>"kpi/kpi_summary/1",
 							"KPI Overview"=>"kpi/kpi_overview/1",
 							"Announcement"=>Array("site/announcement","site/announcement_add","site/editAnnouncement"),
 							"Preview"=>Array("site/index","site/edit","site/assignManager"),

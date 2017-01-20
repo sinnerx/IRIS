@@ -1,9 +1,9 @@
 <div class="columnL">
-        <h1>Jadual Latihan ICT</h1> 
+        <h1>Jadual Program Pi1M</h1> 
         <table width="100%" border="1">
         <tr>
           <th scope="col" width="100px">Tarikh</th>
-          <th scope="col">Aktiviti</th>
+          <th scope="col">Program</th>
         </tr>
         <?php if($res_training):?>
         <?php foreach($res_training as $row_training):?>
@@ -65,7 +65,7 @@
         </div>
         
         <div class="columnR">
-        <h1>Jadual Aktiviti PI1M</h1>
+        <h1>Jadual ICT</h1>
         <table width="100%" border="1">
           <tr>
             <th scope="col" width="100px">Tarikh</th>

@@ -267,6 +267,18 @@ class Cluster extends \Origami
 			return $arrayOps;
 	}
 
+	public function editCluster($clusterID, $data){
+			// var_dump($data);
+			// var_dump($clusterID);
+			db::where("clusterID",$clusterID);
+			db::update("cluster",$data);
+	}
+
+	public function getClusterByID($clusterID){
+		// db::from("cluster");
+		db::where("clusterID", $clusterID);
+		return db::get("cluster")->row();
+	}
 }
 
 

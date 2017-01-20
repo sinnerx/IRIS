@@ -257,6 +257,50 @@ class Controller_Cluster
 
 		view::render("clusterlead/cluster/editAnnouncement",$data);
 	}
+
+	public function editAuditScore()
+	{
+
+		// if(authData('user.userLevel') == \model\user\user::LEVEL_CLUSTERLEAD)
+		// {
+			// session::get("userID")
+			$userID = authData('user.userID');
+			$cluster = model::load("site/cluster")->getClusterByUser($userID);
+	
+		// }		
+			
+
+
+		if(form::submitted()){
+			$rules	= Array(
+						"auditScoreText"=>"required:This field is required.",
+							);
+
+			## got validation error.
+			if($error = input::validate($rules))
+			{
+				input::repopulate();
+				redirect::withFlash(model::load("template/services")->wrap("input-error",$error));
+				redirect::to("","Got some error in your form.","error");
+			}
+
+			## populate into data.
+			$postdata = input::get();
+			// var_dump($postdata);
+			//call model cluster
+
+			//include edited auditScore
+			$dataSubmit['clusterAuditScore'] = $postdata['auditScoreText'];
+			## update db.
+			model::load("site/cluster")->editCluster($cluster['clusterID'], $dataSubmit);
+
+			redirect::to("cluster/editAuditScore","Audit score updated.");			
+		}
+
+		$data = model::load("site/cluster")->getClusterByID($cluster['clusterID']);
+		// var_dump($data);
+		view::render("clusterlead/cluster/editAuditScore",$data);
+	}
 }
 
 

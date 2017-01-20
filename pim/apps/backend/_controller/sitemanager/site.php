@@ -191,6 +191,11 @@ Class Controller_Site
 			//'kdb_pax'=>$totalKdbPax[0]['totalpax']
 			);
 
+		$clusterID 		= model::load("site/cluster")->getClusterID($siteID);
+		//var_dump($clusterID[0]);
+		$clusterDetails = model::load("site/cluster")->getClusterByID($clusterID[0]);
+		$auditScore 	= $clusterDetails['clusterAuditScore'];
+		$auditScore  === null ? $data['auditScore'] = "N/A" : $data['auditScore'] = $auditScore;
 		// var_dump($data);
 		// die;
 
