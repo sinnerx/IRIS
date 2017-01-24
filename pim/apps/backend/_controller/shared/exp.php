@@ -216,6 +216,73 @@ class Controller_Exp
 		view::render('shared/exp/prEdit', $data);
 	}
 
+
+	public function prPrint($prID)
+	{
+
+		$data['pr'] = $pr = model::orm('expense/pr/pr')->where('prID', $prID)->execute()->getFirst();
+
+		$data['isEditable'] = $pr->isPendingFor(user());
+		$data['disabled'] = $data['isEditable'] ? '' : 'disabled';
+
+		$data['collection'] = array(
+			'total' => $data['pr']->prBalance,
+			'date' => date('g:ia, d F Y', strtotime($data['pr']->prBalanceDate))
+			);
+
+		$selectDate = request::get('selectDate', date('d F Y', strtotime($pr->prDate)));
+		$data['selectDate'] = date('d F Y', strtotime($selectDate));
+
+		$startDate = date('Y-m-1 00:00:00',strtotime($selectDate));
+		$lastDate = date('Y-m-d 18:00:00',strtotime($selectDate));
+
+		if(request::get('selectDate'))
+		{
+			$currentCollection = model::load('billing/process')->getCurrentCollection(authData('site.siteID'), $startDate, $lastDate); 
+
+			$data['collection']['date'] = date('g:ia, d F Y', strtotime($lastDate));
+			$data['collection']['total'] = number_format($currentCollection['total'], 2, '.', '');
+		}
+		// $data['selectDate'] = $selectDate = $selectDate ? : date('d F Y');
+
+		$data['siteName'] =  authData('site.siteName');
+		$data['siteManager'] = authData('user.userProfileFullName');
+
+		$data['prTerm'] = model::load('expense/transaction')->getPrTerm();
+
+		// $currentCollection = model::load('billing/process')->getCurrentCollection(authData('site.siteID'), $startDate, $lastDate);			
+		// $data['currentCollection'] = number_format($currentCollection['total'], 2, '.', ''); 
+
+		// expenditure
+		$expenditures = model::orm('expense/expense_expenditure')->execute();
+
+		foreach($expenditures as $expenditure)
+		{
+			$id = $expenditure->expenseExpenditureID;
+			$name = $expenditure->expenseExpenditureName;
+
+			if($expenditure->isBudgeted())
+				$data['budgeted'][$id] = $name;
+			else if($expenditure->isAddition())
+				$data['addition'][$id] = $name;
+			else if($expenditure->isReplacement())
+				$data['replacement'][$id] = $name;
+		}
+
+		// selected expenditure
+		$data['expenditures'] = orm('expense/pr/expenditure')->where('prID', $prID)->execute()->toList('expenseExpenditureID', 'prExpenditureID');
+
+		// category
+		$categories = model::orm('expense/expense_category')->execute();
+		
+		foreach($categories as $category)
+			$data['categories'][$category->expenseCategoryID] = $category->expenseCategoryName;
+
+		$data['prItems'] = model::orm('expense/pr/item')->where('prID', $prID)->execute();
+
+		view::render('shared/exp/prPrint', $data);
+	}
+
 	/**
 	 * Submit pr edit
 	 * @param int prID
@@ -397,6 +464,20 @@ class Controller_Exp
 		$pr->close(user(), $prNumber);
 
 		redirect::to('exp/prList', 'PR Number submitted', 'success');
+	}
+
+	public function editPrNUmber($prID)
+	{
+		$pr = orm('expense/pr/pr')->find($prID);
+		$prNumber = input::get('prNumber');
+
+		if(!$prNumber)
+			redirect::back('Please set a PR number', 'error');
+
+		$pr->editPrNumber(user(), $prNumber);
+
+		redirect::to('exp/prList', 'PR Number edited', 'success');
+
 	}
 
 	public function listItem($categoryId)
@@ -630,6 +711,17 @@ class Controller_Exp
 		$data['rlFileTotalAmount'] = $rl->getFileTotalAmount();
 
 		view::render('shared/exp/rlEdit', $data);
+	}
+
+	public function rlPrint($rlID)
+	{
+
+		$rl = $data['rl'] = orm('expense/pr/reconcilation/reconcilation')->find($rlID);
+		$data['pr'] = $rl->getPr();
+		$data['files'] = $rl->getFiles();
+		$data['rlFileTotalAmount'] = $rl->getFileTotalAmount();
+
+		view::render('shared/exp/rlPrint', $data);
 	}
 
 	public function rlEditSubmit($rlID)

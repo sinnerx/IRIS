@@ -155,6 +155,20 @@ class Pr extends \Origami
 	}
 
 	/**
+	 * ORM : close pr with the given pr number
+	 */
+	public function editPrNumber(\model\user\user $user, $prNumber)
+	{
+		if(!$user->isRoot())
+			return;
+
+		$this->prNumber = $prNumber;
+		$this->prUpdatedDate = now();
+		$this->prUpdatedUser = \session::get('userID');
+		$this->save();		
+	}
+
+	/**
 	 * ORM : Reject pr by the given user\user
 	 * Should reset all approval to 0
 	 * And set pending back to manager.

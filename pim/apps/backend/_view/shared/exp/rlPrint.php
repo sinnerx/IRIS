@@ -276,10 +276,10 @@ var rl = new function()
 
     var tr = $("<tr></tr>").addClass('rl-item-category-'+categoryId+' row-new-item rl-item')
       .append($('<td></td>').html(categoryRowNum+'.'+(totalItems+1)))
-      .append($('<td></td>').append($('<input />').attr('name', 'newItem[name]['+categoryId+'][]').addClass('form-control item-name')))
-      .append($('<td></td>').append($('<input />').attr('name', 'newItem[amount]['+categoryId+'][]').addClass('form-control item-amount').val(0)))
-      .append($('<td></td>').append($('<input />').attr('name', 'newItem[gst]['+categoryId+'][]').addClass('form-control item-gst').val(0)))
-      .append($('<td></td>').append($('<input />').attr('name', 'newItem[total]['+categoryId+'][]').addClass('form-control item-total').val(0)))
+      .append($('<td></td>').append($('<label />').attr('name', 'newItem[name]['+categoryId+'][]').addClass('form-control item-name')))
+      .append($('<td></td>').append($('<label />').attr('name', 'newItem[amount]['+categoryId+'][]').addClass('form-control item-amount').val(0)))
+      .append($('<td></td>').append($('<label />').attr('name', 'newItem[gst]['+categoryId+'][]').addClass('form-control item-gst').val(0)))
+      .append($('<td></td>').append($('<label />').attr('name', 'newItem[total]['+categoryId+'][]').addClass('form-control item-total').val(0)))
       .append($('<td></td>').append($('<a class="i i-cross2"></a>').attr('href', 'javascript: void(0);').click(function(){ $(this).parent().parent().remove(); })));
 
     lastRow.after(tr);
@@ -323,6 +323,11 @@ $(document).ready(function()
   $("#monthbtn").attr('disabled', false);
 });
 
+window.onload = function () {
+    window.print();
+     // window.print();
+    setTimeout(window.close, 0);
+}
 </script>
 <style type="text/css">
   
@@ -351,6 +356,21 @@ $(document).ready(function()
     border: 1px solid red;
   }
 
+@media print {
+  * { margin: 0 !important; padding: 0 !important; }
+  #controls, .footer, .footerarea{ display: none; }
+  html, body {
+    /*changing width to 100% causes huge overflow and wrap*/
+    height:100%; 
+    /*overflow: hidden;*/
+    background: #FFF; 
+    font-size: 9.5pt;
+  }
+
+  .template { width: auto; left:0; top:0; }
+  img { width:100%; }
+  li { margin: 0 0 10px 20px !important;}
+}
 </style>
 
 <h3 class='m-b-xs text-black'>
@@ -362,9 +382,7 @@ $(document).ready(function()
    <section class="panel panel-default">
     <header class="panel-heading">
       Reconciliation List - Slip of Payment / Bill / Receipt
-      <a target="_blank" style="margin-right: 10px;" href='<?php echo url::base('exp/rlPrint/'.$rl->prReconcilationID)?>' class='btn btn-primary pull-right'>Print RL</a>
     </header>
-    <form class="form-inline bs-example " id='rl-form' method='post' action='<?php echo url::base('exp/rlSubmit/'.$rl->prReconcilationID);?>'>
           <div class="table-responsive ">
             <table class="table table-striped b-t b-light">
               <thead>
@@ -376,17 +394,17 @@ $(document).ready(function()
                   <?php if (user()->isFinancialController() || user()->isRoot()): ?>
                     <?php if(!$rl->getLevelApproval('fc')->isPending()):?>
                       <?php //if($rl->isSubmitted()):?>
-                      <?php echo form::select("selectMonth",model::load("helper")->monthYear("monthE"),"disabled",date('n', strtotime($pr->prDate)));?>
+                      <?php echo model::load("helper")->monthYear("monthE")[date('n', strtotime($pr->prDate))];?>
                       <?php //echo date('F Y', strtotime($rl->prReconcilationSubmittedDate));?>
                       <?php //echo date('F Y', strtotime($pr->prDate));?>
                       
                       <?php //echo date('F Y');?>
                     <?php else:?>
-                      <?php echo form::select("selectMonth",model::load("helper")->monthYear("monthE"),"'",date('n', strtotime($pr->prDate)));?>
+                      <?php echo model::load("helper")->monthYear("monthE")[date('n', strtotime($pr->prDate))];?>
                       <input type='button' id="monthbtn" name="monthbtn" value='Change Month' onclick='return rl.approveCheckMonth(<?php echo $pr->prID; ?>);' class='btn btn-default'/>
                     <?php endif; ?> 
                   <?php else: ?>
-                    <?php echo form::select("selectMonth",model::load("helper")->monthYear("monthE"),"disabled",date('n', strtotime($pr->prDate)));?>                      
+                    <?php echo model::load("helper")->monthYear("monthE")[date('n', strtotime($pr->prDate))];?>                      
                   <?php endif;?>
                   </td>
                 </tr>                 
@@ -407,11 +425,6 @@ $(document).ready(function()
                   <th>Amount without GST (RM)</th>
                   <th>GST Amount (RM)</th>
                   <th>Total Amount (RM)</th>
-                  <th style="float:right; background-color: white">
-                    <?php if($rl->isEditable()): ?>
-                    <a data-rlcategoryid='<?php echo $rlCategory->prReconcilationCategoryID;?>' href='<?php echo url::base("exp/rlFileUpload/".$rl->prReconcilationID.'/'); ?>' class='rl-file-upload-button fa fa-upload' title='Upload receipt' data-toggle='ajaxModal'></a>
-                    <?php endif;?>
-                  </th>
                 </tr>
             <?php $catNo = 1;?>
             <?php foreach($rl->getCategories() as $rlCategory):
@@ -422,26 +435,7 @@ $(document).ready(function()
               <td><?php echo 1+$no++;?></td>
               <td <?php if(!$rlCategory->isUploaded()):?>colspan='4'<?php endif;?>>
                 <b class='rl-category-name'><?php echo $rlCategory->expenseCategoryName;?> <?php if($rlCategory->isUploaded()):?>(Uploaded) <?php endif;?></b> 
-              </td>
-
-              <td colspan="5" style="text-align: right;">
-              <?php if($rlCategory->isUploaded()):?>
-              <?php if($rl->isEditable()):?>
-              <a class='fa fa-plus' href='javascript: void(0);' onclick='rl.addItem(<?php echo $rlCategory->prReconcilationCategoryID;?>, <?php echo $catNo;?>);'></a>
-              <?php endif;?>
-              <?php endif;?>
-              <?php if(!$rlCategory->isUploaded()):?>
-                <?php if($rl->isEditable()):
-                //.$rlCategory->prReconcilationCategoryID?>
-               
-                <?php endif;?>
-              <?php else:?>
-                <a class='fa fa-file' title='Preview Receipt' href="<?php echo url::base('exp/rlFile/'.$rlCategory->getFile()->prReconcilationFileID);?>"  data-toggle="ajaxModal"></a>
-                <?php if($rl->isEditable()):?>
-                <a class='i i-cross2' onclick='rl.removeReceipt(<?php echo $rlCategory->getFile()->prReconcilationFileID;?>);' href='javascript: void(0);'></a>
-                <?php endif;?>
-              <?php endif;?>
-              </td>
+              </td>              
             </tr>
               <?php foreach($rlCategory->getItems() as $item):
               if(!$item->isReconciled() && !$rl->isEditable())
@@ -450,18 +444,10 @@ $(document).ready(function()
                 <tr class='rl-item rl-item-category-<?php echo $rlCategory->prReconcilationCategoryID;?>' id='rl-item-<?php echo $item->prReconcilationItemID;?>'>
                   <td><?php echo ($no).'.'.(1+$no2++);?></td>
                   <td><?php echo $item->prReconcilationItemName;?></td>
-                  <td><?php echo form::text('prReconcilationItemAmount['.$item->prReconcilationItemID.']', 'class="item-amount form-control"', $item->prReconcilationItemAmount);?></td>
-                  <td><?php echo form::text('prReconcilationItemGst['.$item->prReconcilationItemID.']', 'class="item-gst form-control"', $item->prReconcilationItemGst);?></td>
-                  <td><?php echo form::text('prReconcilationItemTotal['.$item->prReconcilationItemID.']', 'class="item-total form-control"', $item->prReconcilationItemTotal);?></td>
-                  <td>
-                    <?php if(!$item->isNonPR()):?>
-                    <input class='item-reconciled' id='rl-item-reconciled-<?php echo $item->prReconcilationItemID;?>' type='checkbox' data-toggle='tooltip' data-placement='top' onchange='rl.reconcileChange(<?php echo $item->prReconcilationItemID;?>, this.checked);' data-original-title='<?php if($item->isReconciled()):?>Reconciled<?php else:?>Not reconciled<?php endif;?>' name='prReconcilationReconciled[<?php echo $item->prReconcilationItemID;?>]' <?php if($item->isReconciled()):?>checked<?php endif;?> />
-                    <?php else:?>
-                      <?php if($rl->isEditable()):?>
-                      <a href='javascript: rl.removeItem(<?php echo $item->prReconcilationItemID;?>);' class='i i-cross2'></a>
-                      <?php endif;?>
-                    <?php endif;?>
-                  </td>
+                  <td><?php echo $item->prReconcilationItemAmount;?></td>
+                  <td><?php echo $item->prReconcilationItemGst;?></td>
+                  <td><?php echo $item->prReconcilationItemTotal;?></td>
+                  
                 </tr>
               <?php endforeach;?>
               <?php $catNo++;?>
@@ -470,9 +456,8 @@ $(document).ready(function()
                   <td></td>
                   <td></td>
                   <td></td>
-                  <td id ='alltotal' align="right">Total Amount :</td>
-                  <td><span id='rl-total'><?php echo number_format($rl->getTotal(), 2, '.', ''); ?></span></td>
-                  <td></td>
+                  <td id ='alltotal' align="left">Total Amount </td>
+                  <td> : RM <?php echo number_format($rl->getTotal(), 2, '.', ''); ?></td>
                 </tr>      
               </tbody>
             </table>                  

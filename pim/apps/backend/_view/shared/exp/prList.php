@@ -192,12 +192,17 @@ $(function() {
                   <?php endif;?>
                 </td>
                 <td>
-                  <?php if($list->prNumber):?>
+                  <?php if($list->prNumber && !(user()->isRoot()) ):?>
                     <?php echo $list->prNumber;?>
                   <?php elseif(user()->isRoot() && $list->isWaitingForPrNumber()):?>
                     <form method="post" action='<?php echo url::base('exp/submitPrNumber/'.$list->prID);?>'>
                       <input type='text' name='prNumber' id='pr-input-<?php echo $list->prID;?>' class='form-control' style='display: inline;' size='22'  /> <input type='submit' value="Add" class='btn btn-primary'  />
                     </form>
+                  <?php elseif (user()->isRoot() && $list->prNumber):?>
+                     <form method="post" action='<?php echo url::base('exp/editPrNumber/'.$list->prID);?>'>
+                    <input type='text' name='prNumber' id='pr-input-<?php echo $list->prID;?>' class='form-control' style='display: inline;' size='30'  value="<?php echo $list->prNumber;?>"/>
+                    <input type='submit' value="Edit" class='btn btn-primary'  style="float: right;"/>
+                  </form>
                   <?php endif;?>
                 </td>
                 <td><?php echo number_format((float)$list->prTotal, 2, '.', ''); ?></td>

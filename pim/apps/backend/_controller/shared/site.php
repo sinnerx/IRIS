@@ -118,7 +118,7 @@ Class Controller_Site
 					$site->updateSiteImage($data['row']['siteID'],$filename);
 				}
 			}
-
+			
 			$site->updateSiteInfo($data['row']['siteID'],$data_site);
 
 			$additionalMessage	= model::load("access/services")->roleCheck("siteEditRoot")?"":" And the content is waiting for approval.";
