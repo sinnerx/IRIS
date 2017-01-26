@@ -64,7 +64,7 @@ Class Controller_Site
 		// table : billing_transaction_item 
 		// billingItemCode = lms_item
 		
-		db::select('SUM(billingTransactionItemPrice) * SUM(billingTransactionItemQuantity) as total');
+		db::select('SUM(billingTransactionItemPrice * billingTransactionItemQuantity) as total');
 		db::from('billing_transaction_item');
 		db::where('billing_transaction.siteID = ?', array($siteID));
 		db::where('MONTH(billingTransactionDate) = ? AND YEAR(billingTransactionDate) = ?', array($month, $year));

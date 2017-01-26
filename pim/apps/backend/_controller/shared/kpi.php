@@ -34,6 +34,10 @@ Class Controller_Kpi
 			$clusterUser = model::load("site/cluster")->getClusterByUser(authData('user.userID'));
 			$clusterDetails = model::load("site/cluster")->getClusterByID($clusterUser['clusterID']);	
 
+			// var_dump($clusterUser);
+			// die;
+			
+
 			$auditScore = $clusterDetails['clusterAuditScore'];						
 		}
 		else if (authData('user.userLevel') == \model\user\user::LEVEL_ROOT){
@@ -160,7 +164,7 @@ Class Controller_Kpi
 		// table : billing_transaction_item 
 		// billingItemCode = lms_item
 		
-		db::select('SUM(billingTransactionItemPrice) * SUM(billingTransactionItemQuantity) as total');
+		db::select('SUM(billingTransactionItemPrice * billingTransactionItemQuantity) as total');
 		db::from('billing_transaction_item');
 		db::where('billing_transaction.siteID', $siteIDs);
 		db::where('MONTH(billingTransactionDate) = ? AND YEAR(billingTransactionDate) = ?', array($month, $year));
@@ -289,14 +293,6 @@ Class Controller_Kpi
 			
 		$kdbData = db::get('activity_user')->result();
 
-		// db::query("SELECT COUNT(distinct activity.activityID) as sessions, COUNT(activity.activityID) as pax
-		// 	FROM activity_user, activity, training
-		// 	WHERE siteID = '$siteID'
-		// 	AND activityStartDate <= NOW() - INTERVAL 1 DAY 
-		// 	AND (YEAR(activityStartDate) = $year OR YEAR(activityEndDate) = $year)
-		// 	AND (MONTH(activityStartDate) <= $month OR MONTH(activityEndDate) <= $month)
-		// 	AND activity.activityID = activity_user.activityID AND training.activityID = activity.activityID
-		// 	AND trainingType = 7 AND trainingSubType = 14")->result();
 		$kdb_sessions += $kdbData[0]['sessions'];
 		$kdb_pax += $kdbData[0]['pax'];
 
@@ -331,7 +327,14 @@ Class Controller_Kpi
 
 			$_SESSION['email'] = null;
 		}
-		$data['cluster'] = $cluster;
+
+		if($clusterUser){
+			$data['cluster'] = $clusterUser['clusterID'];
+		}	
+		else{
+			$data['cluster'] = $cluster;
+		}	
+		
 		$data['site'] = $siteParam;
 		// var_dump($data['cluster']);
 		return view::render('shared/kpi/summary', $data);

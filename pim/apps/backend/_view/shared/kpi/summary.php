@@ -12,7 +12,8 @@ var site = new function()
         window.location.href = pim.base_url+"kpi/kpi_summary/"+$("#year").val()+"/"+$("#month").val()+"/"+$("#clusterID").val();
       }
       else{
-        window.location.href = pim.base_url+"kpi/kpi_summary/"+$("#year").val()+"/"+$("#month").val()+"/"+$("#clusterID").val()+"/"+$("#siteID").val();
+        // console.log($("#siteID").val());
+        window.location.href = pim.base_url+"kpi/kpi_summary/"+$("#year").val()+"/"+$("#month").val() + "/" + <?php echo $cluster; ?> + "/" + $("#siteID").val();
       }
 			
 		}
