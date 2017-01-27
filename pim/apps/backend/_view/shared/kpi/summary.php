@@ -318,7 +318,7 @@ Dashboard overview
                               </span>
                               <span class="clear">
                                 
-                                <span class="h1 block m-t-xs text-primary kpi-font"><?php echo $kpi['totalEntArticle']; ?> / 1</span>
+                                <span class="h1 block m-t-xs text-primary kpi-font"><?php echo $kpi['totalEntArticle']; ?> / <?php echo $max['entre_article']; ?></span>
                                 <small class="text-muted text-u-c">Article</small>
                               </span>
                             </a>

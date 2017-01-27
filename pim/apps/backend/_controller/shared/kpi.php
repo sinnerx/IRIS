@@ -86,11 +86,22 @@ Class Controller_Kpi
 			$siteIDs = $siteParam;
 		}
 
-		
-		
-
-		$siteParam == null ? $siteIDs = $siteIDs : $siteIDs = $siteParam;
-
+		if($cluster == null){
+			if ($siteParam == null){
+				$siteIDs = $siteIDs;
+			}
+			else {
+				$siteIDs = $siteParam;
+			}
+		}	
+		else {
+			if($siteParam == null){
+				$siteIDs = array_values(array_keys($siteIDs));
+			}
+			else{
+				$siteIDs = $siteParam;
+			}
+		}
 		// var_dump($siteIDs);
 			//
 		$data['year'] = $year = $year ? : date('Y');
@@ -111,7 +122,8 @@ Class Controller_Kpi
 			'active_member_percentage' => 80 * $countSite,
 			'kdb_sessions' => 30 * $countSite,
 			'kdb_pax' => 600 * $countSite,
-			'auditScore' => $auditScore
+			'auditScore' => $auditScore,
+			'entre_article' => 1 * $countSite,
 			);
 
 		// event
