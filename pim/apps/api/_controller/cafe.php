@@ -275,11 +275,13 @@ class Controller_Cafe
 		}
 
 
-		$row = db::from('billing_transaction')
+		$row = 
+		db::select('billingTransactionUpdatedDate')
+		// db::from('billing_transaction')
 		->where('siteID', $this->site->siteID)
 		->limit(1)
 		->order_by('billingTransactionUpdatedDate DESC')
-		->get()
+		->get('billing_transaction')
 		->row();
 		
 		return json_encode(array(

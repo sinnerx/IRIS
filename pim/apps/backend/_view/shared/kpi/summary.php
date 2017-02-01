@@ -7,13 +7,28 @@ var site = new function()
 	{
 		this.updateDate = function(param = null)
 		{
-      //console.log(param);
+      // console.log(param);
+      var clusterID = null;
+      var siteID = null;
       if(param){
-        window.location.href = pim.base_url+"kpi/kpi_summary/"+$("#year").val()+"/"+$("#month").val()+"/"+$("#clusterID").val();
+        if(isNaN( $("#clusterID").val() )){
+          clusterID = null;
+        }
+        else{
+          clusterID = $("#clusterID").val();
+        }
+        window.location.href = pim.base_url+"kpi/kpi_summary/"+$("#year").val()+"/"+$("#month").val()+"/"+clusterID;
       }
       else{
+        
+        if(isNaN($("#siteID").val())) {
+          siteID = null;
+        }
+        else {
+          siteID = $("#siteID").val();
+        }
         // console.log($("#siteID").val());
-        window.location.href = pim.base_url+"kpi/kpi_summary/"+$("#year").val()+"/"+$("#month").val() + "/" + <?php echo $cluster; ?> + "/" + $("#siteID").val();
+        window.location.href = pim.base_url+"kpi/kpi_summary/"+$("#year").val()+"/"+$("#month").val() + "/" + <?php echo $cluster; ?> + "/" + siteID;
       }
 			
 		}
@@ -112,6 +127,7 @@ Dashboard overview
 
 			<div class='col-lg-6'>			
 			<div style="float:right">
+        <?php //var_dump($site); ?>
 				<!-- <a href='<?php echo url::base("site/kpiMonthly/".$year);?>'  class='fa fa-external-link' data-toggle='ajaxModal' style="color:green;"> KPI yearly view</a>				 -->
         <?php 
           if(authData('user.userLevel') == \model\user\user::LEVEL_ROOT)

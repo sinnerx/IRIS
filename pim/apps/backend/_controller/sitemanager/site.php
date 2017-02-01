@@ -151,9 +151,15 @@ Class Controller_Site
 		//$totalEntArticle =db::query("SELECT COUNT(`articleID`) AS 'total' FROM `article_category` WHERE `categoryID` = 3 
 		//				AND `articleID` IN (SELECT `articleID` FROM `article` WHERE `siteID` = $siteID AND MONTH(articlePublishedDate)=$month AND YEAR(articlePublishedDate)=$year)")->result();
 
-		$totalEntArticle = db::query("SELECT COUNT(article.articleID) AS 'total' from article, article_category 
-			where  article_category.articleID = article.articleID and categoryID = 4
-			AND siteID = '$siteID' AND MONTH(articlePublishedDate) = $month AND YEAR(articlePublishedDate) = $year")->result();
+		db::select("count(article.articleID) as total");
+		// db::from("article");
+		db::join("article_category", "article.articleID = article_category.articleID");
+		db::where("categoryID", 4);
+		db::where("siteID", $siteID);
+		db::where("MONTH(articlePublishedDate)", $month);
+		db::where("YEAR(articlePublishedDate)", $year);
+
+		$totalEntArticle = db::get('article')->result();		
 		//print_r($totalEntArticle);
 		//die();
 
@@ -165,14 +171,21 @@ Class Controller_Site
 	
 		$kdb_sessions = 0;
 		$kdb_pax = 0;
-		$kdbData = db::query("SELECT COUNT(distinct activity.activityID) as sessions, COUNT(activity.activityID) as pax
-			FROM activity_user, activity, training
-			WHERE siteID = '$siteID'
-			AND activityStartDate <= NOW() - INTERVAL 1 DAY 
-			AND (YEAR(activityStartDate) = $year OR YEAR(activityEndDate) = $year)
-			AND (MONTH(activityStartDate) <= $month OR MONTH(activityEndDate) <= $month)
-			AND activity.activityID = activity_user.activityID AND training.activityID = activity.activityID
-			AND trainingType = 7 AND trainingSubType = 14")->result();
+		// $kdbData = db::query("SELECT COUNT(distinct activity.activityID) as sessions, COUNT(activity.activityID) as pax
+		// 	FROM activity_user, activity, training
+		// 	WHERE siteID = '$siteID'
+		// 	AND activityStartDate <= NOW() - INTERVAL 1 DAY 
+		// 	AND (YEAR(activityStartDate) = $year OR YEAR(activityEndDate) = $year)
+		// 	AND (MONTH(activityStartDate) <= $month OR MONTH(activityEndDate) <= $month)
+		// 	AND activity.activityID = activity_user.activityID AND training.activityID = activity.activityID
+		// 	AND trainingType = 7 AND trainingSubType = 14")->result();
+
+		db::select("SUM(session) as sessions , SUM(pax) as pax");
+		db::where("siteID", $siteID);
+		db::where("month", $month);
+		db::where("year", $year);
+		$kdbData = db::get('OLAP_kdb_session_pax')->result();
+
 		$kdb_sessions += $kdbData[0]['sessions'];
 		$kdb_pax += $kdbData[0]['pax'];
 

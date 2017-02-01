@@ -7,6 +7,7 @@ Class Controller_Kpi
 		// $month = 8;
 		// $site = 14;
 		// var_dump(request::get());
+		// var_dump($siteParam . $cluster);
 		// die;
 
 		$siteIDs = array();
@@ -62,7 +63,7 @@ Class Controller_Kpi
 			$data['clusterR'][$row['clusterID']]	= $row['clusterName'];
 		}
 
-		if($cluster != '')
+		if($cluster != '' && $cluster != 'NaN')
 		{
 			// var_dump(request::get("cluster"));
 			// die;
@@ -292,19 +293,13 @@ Class Controller_Kpi
 		$kdb_sessions = 0;
 		$kdb_pax = 0;
 
-		db::select("COUNT(distinct activity.activityID) as sessions, COUNT(activity.activityID) as pax");
-		// db::from("article");
-		db::join("activity", "activity.activityID = activity_user.activityID");
-		db::join("training", "training.activityID = activity.activityID");
-		db::where("activityStartDate <= NOW() - INTERVAL 1 DAY ");
+		db::select("SUM(session) as sessions , SUM(pax) as pax");
 		db::where("siteID", $siteIDs);
-		db::where("trainingType", 7);
-		db::where("trainingSubType", 14);
-		db::where("MONTH(activityStartDate)", $month);
-		db::where("YEAR(activityStartDate)", $year);	
-			
-		$kdbData = db::get('activity_user')->result();
-
+		db::where("month", $month);
+		db::where("year", $year);
+		$kdbData = db::get('OLAP_kdb_session_pax')->result();
+		// var_dump($kdbData);
+		// die;
 		$kdb_sessions += $kdbData[0]['sessions'];
 		$kdb_pax += $kdbData[0]['pax'];
 
@@ -489,19 +484,12 @@ Class Controller_Kpi
 			->get()->result('siteID', true);
 			//print_r($totalpopulation);
 
-			db::select("COUNT(distinct activity.activityID) as sessions, COUNT(activity.activityID) as pax");
-			// db::from("article");
-			db::join("activity", "activity.activityID = activity_user.activityID");
-			db::join("training", "training.activityID = activity.activityID");
-			db::where("activityStartDate <= NOW() - INTERVAL 1 DAY ");
-			db::where("siteID", $siteIDs);
-			db::where("trainingType", 7);
-			db::where("trainingSubType", 14);
-			db::where("MONTH(activityStartDate)", $month);
-			db::where("YEAR(activityStartDate)", $year);	
+			db::select("session as sessions , pax");
+			db::where("month", $month);
+			db::where("year", $year);	
 			db::group_by("siteID");
 
-			$kdbData = db::get('activity_user')->result('siteID', true);
+			$kdbData = db::get('OLAP_kdb_session_pax')->result('siteID', true);
 			// var_dump($siteIDs);
 			$data['total'] = array();
 			$data['population'] = array();
