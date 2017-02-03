@@ -41,7 +41,7 @@ var requisition = new function()
 
   this.showExistingWarning = function()
   {
-    var type = {1: 'Collection Money', 2: 'Cash Advance'}[$('#prTerm1').val()];
+    var type = {2: 'Cash Advance'}[$('#prTerm1').val()];
     $('.pim-warning').show().html('This site already made a '+type+' PR for this month already.');
   }
 

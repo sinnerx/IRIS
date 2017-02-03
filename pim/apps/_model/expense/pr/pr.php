@@ -71,7 +71,7 @@ class Pr extends \Origami
 	public function getTypeLabel()
 	{
 		$types = array(
-			1 => 'Collection Money',
+			// 1 => 'Collection Money',
 			2 => 'Cash Advance'
 			);
 

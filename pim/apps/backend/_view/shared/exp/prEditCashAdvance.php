@@ -145,6 +145,7 @@ textarea {margin:0; padding:0;  display:block;}
               <input type='submit' class='btn btn-primary pull-right' onclick='return ca.save();' style="background: #369120;" value='Save' />
             <?php endif;?>
             <a href='<?php echo url::base('exp/prEdit/'.$pr->prID);?>' class='btn btn-primary pull-right' style='margin-right: 10px;'>PR Form</a>
+            <a target = "_blank" href='<?php echo url::base('exp/prCashAdvancePrint/'.$cashAdvanceID);?>' class='btn btn-primary pull-right' style='margin-right: 10px;'>Print Cash Advance</a>
           </header>
           <div class="table-responsive ">
             <table class="table table-striped b-t b-light">

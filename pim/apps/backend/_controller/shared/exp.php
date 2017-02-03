@@ -530,6 +530,29 @@ class Controller_Exp
 		view::render('shared/exp/prEditCashAdvance', $data);
 	}
 
+	public function prCashAdvancePrint($cashAdvanceID)
+	{
+		// $pr = orm('expense/pr/pr')->find($id);
+		$cashAdvance = orm('expense/pr/cash_advance')->find($cashAdvanceID);
+		$pr = $cashAdvance->getPr();
+
+		$site = $pr->getSite();
+		$manager = $pr->getRequestingUser();
+
+		$selectDate = input::get('selectDate');		
+		$data['selectDate'] = $selectDate = $selectDate ? :  date('d F Y');
+		$data['siteName'] =  $site->siteName;
+		$data['siteManager'] = $manager->userProfileFullName;
+		$data['prId'] = $id;
+		$data['cashAdvanceID'] = $cashAdvanceID;
+		$data['pr'] = $pr;
+		$data['ca'] = $cashAdvance;
+		$data['isEditable'] = $isEditable = $pr->isPendingFor(user());
+		$data['disabled'] = $isEditable ? '' : 'disabled';
+
+		view::render('shared/exp/prCashAdvancePrint', $data);
+	}
+
 	public function prEditCashAdvanceSubmit($cashAdvanceID)
 	{
 		$cashAdvance = orm('expense/pr/cash_advance')->find($cashAdvanceID);

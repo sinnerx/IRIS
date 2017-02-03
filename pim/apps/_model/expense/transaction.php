@@ -242,7 +242,8 @@ class transaction extends \Origami
 
 	public function getPrTerm()
 	{
-		return array('1' => "Collection Money",
+		return array(
+					// '1' => "Collection Money",
 					 '2' => "Cash Advance" );
 	}
 

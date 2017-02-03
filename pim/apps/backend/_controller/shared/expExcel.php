@@ -1339,8 +1339,15 @@ class Controller_ExpExcel
 		 ***********************************/
 		foreach($rlSites as $siteID => $rlList)
 		{
+			
 			foreach($rlList as $rl)
 			{
+				// var_dump ($rl->isManagerPending());
+				// die;
+				$clApproval = $rl->getLevelApproval('cl');
+				$omApproval = $rl->getLevelApproval('om');
+				$fcApproval = $rl->getLevelApproval('fc');
+
 				$sheet = $sheets[$sheetNo] = $excel->createSheet($sheetNo);
 
 				$sheetNo++;
@@ -1416,40 +1423,40 @@ class Controller_ExpExcel
 
 					$sheet->setCellValue('H'.$y, $categoryTotal);
 
-					foreach($category->getFiles() as $file)
-					{
-						$filePath = $file->getFilePath();
+					// foreach($category->getFiles() as $file)
+					// {
+					// 	$filePath = $file->getFilePath();
 
-						$type = $file->prReconcilationFileType;
+					// 	$type = $file->prReconcilationFileType;
 
-						switch($type)
-						{
-							case 'image/jpeg':
-								$gdImage = imagecreatefromjpeg($filePath);
-							break;
-							case 'image/png':
-								$gdImage = imagecreatefrompng($filePath);
-							break;
-							case 'image/bmp':
-								$gdImage = imagecreatefromwbmp($filePath);
-							break;
-						}
+					// 	switch($type)
+					// 	{
+					// 		case 'image/jpeg':
+					// 			$gdImage = imagecreatefromjpeg($filePath);
+					// 		break;
+					// 		case 'image/png':
+					// 			$gdImage = imagecreatefrompng($filePath);
+					// 		break;
+					// 		case 'image/bmp':
+					// 			$gdImage = imagecreatefromwbmp($filePath);
+					// 		break;
+					// 	}
 
-						$objDrawing = new PHPExcel_Worksheet_MemoryDrawing();
-						$objDrawing->setImageResource($gdImage);
-						$objDrawing->setRenderingFunction(PHPExcel_Worksheet_MemoryDrawing::RENDERING_JPEG);
-						$objDrawing->setMimeType(PHPExcel_Worksheet_MemoryDrawing::MIMETYPE_DEFAULT);
-						$objDrawing->setWidth(480);
-						$objDrawing->setWorksheet($sheet);
-						$objDrawing->setCoordinates('C'.$y);
-						// $objDrawing->setOffsetX($objDrawing->getOffsetX()+30);
-						$objDrawing->setOffsetX(10);
-						$objDrawing->setOffsetY(10);
+					// 	$objDrawing = new PHPExcel_Worksheet_MemoryDrawing();
+					// 	$objDrawing->setImageResource($gdImage);
+					// 	$objDrawing->setRenderingFunction(PHPExcel_Worksheet_MemoryDrawing::RENDERING_JPEG);
+					// 	$objDrawing->setMimeType(PHPExcel_Worksheet_MemoryDrawing::MIMETYPE_DEFAULT);
+					// 	$objDrawing->setWidth(480);
+					// 	$objDrawing->setWorksheet($sheet);
+					// 	$objDrawing->setCoordinates('C'.$y);
+					// 	// $objDrawing->setOffsetX($objDrawing->getOffsetX()+30);
+					// 	$objDrawing->setOffsetX(10);
+					// 	$objDrawing->setOffsetY(10);
 
-						$height = $objDrawing->getHeight();
+					// 	$height = $objDrawing->getHeight();
 
-						$y += round($height / 19);
-					}
+					// 	$y += round($height / 19);
+					// }
 
 					$setBorder($sheet, "A$categoryY:A$y", 'outline');
 					$setBorder($sheet, "B$categoryY:B$y", 'outline');
@@ -1460,6 +1467,9 @@ class Controller_ExpExcel
 					$y++;
 				}
 
+				
+
+
 				// total amount.
 				$sheet->setCellValue('F'.$y, 'Total Amount :');
 					$setAlign($sheet, "F$y", 'right');
@@ -1469,13 +1479,78 @@ class Controller_ExpExcel
 				$highlight($sheet, "F$y:G$y", true);
 				$backgrounds[] = array($sheet, "G$y:H$y", "FFFF00");
 
+				//Approval Level
+				//Pending
+				//else
+				//Done
+				if($rl->isManagerPending())
+					$manager_rl_status = "Pending";
+				else
+					$manager_rl_status = "Done";
+
+				$y += 2;
+				$sheet->setCellValue('A'.$y, $manager_rl_status);
+				$sheet->mergeCells("A$y:B$y");
+				$sheet->setCellValue('C'.$y, $clApproval->getStatusLabel());
+				$sheet->mergeCells("C$y:D$y");
+				$sheet->setCellValue('E'.$y, $omApproval->getStatusLabel());
+				$sheet->mergeCells("E$y:F$y");
+				$sheet->setCellValue('G'.$y, $fcApproval->getStatusLabel());
+				$sheet->mergeCells("G$y:H$y");
+				
+				$y++;
+
+				$sheet->setCellValue('A'.$y, $rl->getSubmittedUser()->getProfile()->userProfileFullName);
+				$sheet->mergeCells("A$y:B$y");
+				$sheet->setCellValue('C'.$y, $clApproval->getUserProfile()->userProfileFullName);
+				$sheet->mergeCells("C$y:D$y");
+				$sheet->setCellValue('E'.$y, $omApproval->getUserProfile()->userProfileFullName);
+				$sheet->mergeCells("E$y:F$y");
+				$sheet->setCellValue('G'.$y, $fcApproval->getUserProfile()->userProfileFullName);
+				$sheet->mergeCells("G$y:H$y");
+				//
+				//
+				//$omApproval->getUserProfile()->userProfileFullName
+				//$fcApproval->getUserProfile()->userProfileFullName;
+
+				$y++;
+
+				$sheet->setCellValue('A'.$y, 'Manager');
+				$sheet->mergeCells("A$y:B$y");
+				$sheet->setCellValue('C'.$y, 'Cluster Lead');
+				$sheet->mergeCells("C$y:D$y");
+				$sheet->setCellValue('E'.$y, 'Operations Manager');
+				$sheet->mergeCells("E$y:F$y");
+				$sheet->setCellValue('G'.$y, 'Financial Controller');
+				$sheet->mergeCells("G$y:H$y");
+				  // Manager
+                  // Cluster Lead
+                  // Operations Manager
+                  // Financial Controller
+
+				$y++;
+
+				$sheet->setCellValue('A'.$y, $site->siteName);
+				$sheet->mergeCells("A$y:B$y");
+				$sheet->setCellValue('C'.$y, $cluster->clusterName);
+				$sheet->mergeCells("C$y:D$y");
+				$sheet->setCellValue('E'.$y, $pr->getOps());
+				$sheet->mergeCells("E$y:F$y");
+				$sheet->setCellValue('G'.$y, 'HQ');
+				$sheet->mergeCells("G$y:H$y");
+
+				// $pr->getSite()->siteName;
+				// $pr->getCluster()->clusterName;
+				// $pr->getOps();
+
+
 				$y += 2;
 				$sheet->setCellValue('A'.$y, 'Disclaimer : This excel is computer generated. No signature is required.');
 				
 				// color
 				$background($sheet, "A1:H".$y, 'FFFFFF');
 				// $backgrounds[] = array($sheet, 'A1:H'.$y, 'FFFFFF');
-			}
+			}//end rl foreach
 		}
 
 
