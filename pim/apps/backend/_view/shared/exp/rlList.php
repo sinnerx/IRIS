@@ -99,7 +99,7 @@ $(function() {
           <?php if (user()->isOperationManager() || user()->isRoot()  || user()->isFinancialController()): ?>
           <?php echo form::select('cluster', model::load('site/cluster')->listsForDropDown(), 'onchange="rlList.updateFilter();" class="form-control"', $cluster, false);?>
           <?php echo form::text("site_name","class='form-control' placeholder='Search By Site Name'", $siteName);?>
-          <?php echo form::hidden("site_id","class='form-control'");?>
+          <?php echo form::hidden("site_id","class='form-control'", $_GET['site']);?>
 
           <script type="text/javascript">
           var tempfieldName;

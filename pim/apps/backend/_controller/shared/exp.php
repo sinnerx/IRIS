@@ -22,11 +22,15 @@ class Controller_Exp
 		if(request::get('site'))
 			session::set('prFilter.site', request::get('site'));
 
-		if(!(request::get('site'))){
+		// if(!(request::get('site'))){
+		// 	session::set('prFilter.site', '');
+		// 	session::set('prFilter.siteName', '');
+		// }
+						
+		if(request::get('siteName') == ''){
 			session::set('prFilter.site', '');
 			session::set('prFilter.siteName', '');
-		}
-								
+		}		
 
 		if(request::get('siteName'))
 			session::set('prFilter.siteName', request::get('siteName'));		
@@ -43,8 +47,8 @@ class Controller_Exp
 		$data['month'] 		= session::get('prFilter.month', date('n'));
 		$data['year'] 		= session::get('prFilter.year', date('Y'));
 		$data['cluster'] 	= session::get('prFilter.cluster');
-		$data['site'] 		= session::get('prFilter.site', '');
-		$data['siteName'] 		= session::get('prFilter.siteName', '');
+		$data['site'] 		= session::get('prFilter.site');
+		$data['siteName'] 		= session::get('prFilter.siteName');
 
 		//var_dump(request::get('year'));
 		//var_dump($data['site']);
@@ -628,11 +632,16 @@ class Controller_Exp
 		if(request::get('site'))
 			session::set('prFilter.site', request::get('site'));
 
-		if(!(request::get('site'))){
+		// if(!(request::get('site'))){
+		// 	session::set('prFilter.site', '');
+		// 	session::set('prFilter.siteName', '');
+		// }
+			
+		if(request::get('siteName') == ''){
 			session::set('prFilter.site', '');
 			session::set('prFilter.siteName', '');
 		}
-								
+
 		if(request::get('siteName'))
 			session::set('prFilter.siteName', request::get('siteName'));		
 
@@ -658,9 +667,9 @@ class Controller_Exp
 		// if manager show non submitted RL OR (date based RL)
 			$data['year'] 		= session::get('rlFilter.year', date('Y'));
 			$data['month'] 		= session::get('rlFilter.month', date('n'));
-			$data['cluster'] 	= session::get('prFilter.cluster', '');
-			$data['site'] 		= session::get('prFilter.site', '');
-			$data['siteName'] 	= session::get('prFilter.siteName', '');			
+			$data['cluster'] 	= session::get('prFilter.cluster');
+			$data['site'] 		= session::get('prFilter.site');
+			$data['siteName'] 	= session::get('prFilter.siteName');			
 		if(user()->isManager())
 		{
 			//$rl->where('prReconcilationSubmitted = ? OR (prReconcilationSubmitted = ? AND MONTH(prReconcilationSubmittedDate) = ? AND YEAR(prReconcilationSubmittedDate) = ?)', array(0, 1, $data['month'], $data['year']));
