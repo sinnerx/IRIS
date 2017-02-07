@@ -151,6 +151,10 @@ $(function() {
           <?php if (user()->isManager()) { ?>
             <a href='<?php echo url::base("exp/prAdd");?>' class='btn btn-primary pull-right'><span class='fa fa-plus'></span> Add New Purchase Requisition</a>     
           <?php } ?>
+
+          <?php if(!user()->isManager()):?>
+            <a class='btn btn-primary pull-right' data-toggle='ajaxModal' href='<?php echo url::base('exp/prDownload');?>'><span class='fa fa-download'></span> Download PR Summary</a>
+          <?php endif;?>          
           </div>
           <div class="table-responsive ">
             <table class="table b-t b-light tablesorter" id="ntable">

@@ -1042,6 +1042,25 @@ class Controller_Exp
 		$clusters = $clusters->execute()->toList('clusterID', 'clusterName');
 
 		view::render('shared/exp/rlDownload', array('clusters' => $clusters));
+	}	
+
+	public function prDownload()
+	{
+		if(request::has(array('regionID', 'month', 'year')))
+			return $this->prSummaryGenerate(request::get('regionID'), request::get('month'), request::get('year'));
+
+		$this->template = false;
+
+		$sites = db::create('site')->get()->result();
+
+		$clusters = orm('site/cluster');
+
+		if(user()->isClusterLead())
+			$clusters = $clusters->where('clusterID IN (SELECT clusterID FROM cluster_lead WHERE userID = ? AND clusterLeadStatus = 1)', array(user()->userID));
+
+		$clusters = $clusters->execute()->toList('clusterID', 'clusterName');
+
+		view::render('shared/exp/prDownload', array('clusters' => $clusters));
 	}
 
 	public function rlRejectForm($rlID)
