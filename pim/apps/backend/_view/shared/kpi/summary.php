@@ -134,7 +134,7 @@ Dashboard overview
             echo form::select("clusterID",$clusterR,"class='input-sm form-control input-s-sm inline v-middle' onchange='site.overview.updateDate(this);'",$cluster,"[ALL CLUSTER]");
         ?>
         <?php echo form::select("siteID",$siteR,"class='input-sm form-control input-s-sm inline v-middle' onchange='site.overview.updateDate();'",$site,"[ALL SITE]");?>        
-				<?php echo form::select("month",model::load("helper")->monthYear("month"),'onchange="site.overview.updateDate();" class="form-control" style="display: inline; width: 100px;"',$month);?>
+				<?php echo form::select("month",model::load("helper")->monthYear("monthE"),'onchange="site.overview.updateDate();" class="form-control" style="display: inline; width: 100px;"',$month, "[ALL MONTH]");?>
 				<?php echo form::select("year",model::load("helper")->monthYear("year"),'onchange="site.overview.updateDate();" class="form-control" style="display: inline; width: 100px;"',$year);?>			
 			</div>	
 			</div>
@@ -396,7 +396,7 @@ Dashboard overview
                               </span>
                               <span class="clear">
                                 
-                                <span class="h1 block m-t-xs text-primary kpi-font"><?php echo $max['auditScore'];?></span>
+                                <span class="h1 block m-t-xs text-primary kpi-font"><?php echo $kpi['audit_score'];?></span>
                                 <small class="text-muted text-u-c">Average Score</small>
                               </span>
                             </a>

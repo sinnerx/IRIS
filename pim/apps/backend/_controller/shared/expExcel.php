@@ -754,6 +754,7 @@ class Controller_ExpExcel
 		$ExcelHelper	= new model\report\PHPExcelHelper($excel, "Cash Advance Form ".$pr->prNumber.".xls");
 
 		$sheet = $excel->getActiveSheet();
+		$sheet->getColumnDimension('I')->setAutoSize(true);		
 		$user = $pr->getRequestingUser();
 
 		$sheet->setCellValue('D4', $user->getProfile()->userProfileFullName); // applicant name
@@ -773,17 +774,20 @@ class Controller_ExpExcel
 		foreach($categoriedItems as $categoryID => $items)
 		{
 			$cell = $sheet->getCell('B'.$itemY);
-				$cell->getStyle()->getFont()->setBold(true)->setUnderline(true);
+				// $cell->getStyle()->getFont()->setBold(true)->setUnderline(true);
 			$cell->setValue($categories[$categoryID]);
 			$itemY++;
+			$sheet->insertNewRowBefore($itemY,1);
 
 			foreach($items as $item)
 			{
+				$sheet->insertNewRowBefore($itemY,1);
 				$sheet->setCellValue('B'.$itemY, $item->expenseItemName);
 				$sheet->setCellValue('I'.$itemY, $item->prItemTotal);
 
 				$itemY++;
 			}
+			// $sheet->insertNewRowBefore($itemY,1); 
 		}
 
 		// Project Director signature
@@ -800,16 +804,32 @@ class Controller_ExpExcel
 		// $objDrawing->setOffsetX($objDrawing->getOffsetX()+30);
 		$objDrawing->setOffsetX(10);
 		$objDrawing->setOffsetY(10);*/
+		// var_dump($itemY);
+		$itemY++;
 
-		$sheet->setCellValue('B29', 'Ringgit Malaysia : '.$ca->prCashAdvanceAmount);
+		// var_dump($itemY);
+		// die;
+		$sheet->setCellValue('B'. $itemY, 'Ringgit Malaysia : '.$ca->prCashAdvanceAmount);
+		// $sheet->setCellValue('B29', 'Ringgit Malaysia : '.$ca->prCashAdvanceAmount);
+		// var_dump('Ringgit Malaysia : '.$ca->prCashAdvanceAmount);
+		// die;
+		$itemY += 4;
+		// var_dump($itemY);
 
-		$sheet->setCellValue('C33', $user->getProfile()->userProfileFullName);
+		$sheet->setCellValue('C'. $itemY, $user->getProfile()->userProfileFullName);
+		// $sheet->setCellValue('C33', $user->getProfile()->userProfileFullName);
 
-		$sheet->setCellValue('B35', 'Date : '.date('d-m-Y', strtotime($pr->prCreatedDate)));
+		$itemY += 2;
+		// var_dump($itemY);
+
+		$sheet->setCellValue('B'. $itemY, 'Date : '.date('d-m-Y', strtotime($pr->prCreatedDate)));
+		// $sheet->setCellValue('B35', 'Date : '.date('d-m-Y', strtotime($pr->prCreatedDate)));
 
 		$omApproval = $pr->getLevelApproval('om');
-		$sheet->setCellValue('H35', 'Date : '.date('d-m-Y', strtotime($omApproval->prApprovalUpdatedDate))); 
-
+		$sheet->setCellValue('H'. $itemY, 'Date : '.date('d-m-Y', strtotime($omApproval->prApprovalUpdatedDate))); 
+		// die;
+		// $sheet->setCellValue('H35', 'Date : '.date('d-m-Y', strtotime($omApproval->prApprovalUpdatedDate))); 
+		// $sheet->insertNewRowBefore($itemY,1);
 		$ExcelHelper->execute();
 	}
 
