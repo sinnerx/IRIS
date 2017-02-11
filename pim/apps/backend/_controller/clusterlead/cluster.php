@@ -258,22 +258,13 @@ class Controller_Cluster
 		view::render("clusterlead/cluster/editAnnouncement",$data);
 	}
 
-	public function editAuditScore()
+	public function editAuditScore($siteID = null)
 	{
-
-		// if(authData('user.userLevel') == \model\user\user::LEVEL_CLUSTERLEAD)
-		// {
-			// session::get("userID")
-			$userID = authData('user.userID');
-			$cluster = model::load("site/cluster")->getClusterByUser($userID);
 	
-		// }		
-			
-
-
 		if(form::submitted()){
 			$rules	= Array(
-						"auditScoreText"=>"required:This field is required.",
+						"siteAuditScore"=>"required:This field is required.",
+						"siteAuditDate"=>"required:This field is required.",
 							);
 
 			## got validation error.
@@ -287,20 +278,63 @@ class Controller_Cluster
 			## populate into data.
 			$postdata = input::get();
 			// var_dump($postdata);
+			// die;
 			//call model cluster
 
 			//include edited auditScore
-			$dataSubmit['clusterAuditScore'] = $postdata['auditScoreText'];
+			$dataSubmit['siteAuditDate'] = $postdata['siteAuditDate'];
+			$dataSubmit['siteAuditScore'] = $postdata['siteAuditScore'];
 			## update db.
-			model::load("site/cluster")->editCluster($cluster['clusterID'], $dataSubmit);
-
-			redirect::to("cluster/editAuditScore","Audit score updated.");			
+			model::load("site/cluster")->upsertSiteAuditScore($siteID, $dataSubmit);
+			// die;
+			redirect::to("cluster/listSiteAuditScore","Audit score updated.");			
 		}
 
 		$data = model::load("site/cluster")->getClusterByID($cluster['clusterID']);
 		// var_dump($data);
 		view::render("clusterlead/cluster/editAuditScore",$data);
 	}
+
+	public function listSiteAuditScore($page = 1)
+	{
+
+		$userID = authData('user.userID');
+		$cluster = model::load("site/cluster")->getClusterByUser($userID);
+
+		## 1. paginate to list
+		db::from("site");
+		db::where("siteStatus", 1);
+
+
+		db::where("siteID IN (SELECT siteID FROM cluster_site WHERE clusterID = '".$cluster['clusterID']."')");
+
+		## if got _GET[search]
+		if(request::get("search"))
+		{
+			db::where("siteName LIKE ?","%".request::get("search")."%");
+		}
+
+		pagination::initiate(Array(
+						"totalRow"=>db::num_rows(),
+						"currentPage"=>$page,
+						"urlFormat"=>url::base("cluster/listSiteAuditScore/{page}",true)
+								));
+
+		db::order_by("siteName","ASC");
+		db::limit(pagination::get("limit"),pagination::recordNo()-1);
+
+		## get result.
+		$data['res_site']		= db::get()->result('siteID');
+
+		## 2. get manager list by site result
+		if($data['res_site'])
+		{
+			$data['sitemanagerR']	= model::load("site/manager")->getManagersBySite(array_keys($data['res_site']));
+		}
+
+		pagination::setFormat(model::load("template/cssbootstrap")->paginationLink());
+		view::render("clusterlead/cluster/listSiteAuditScore",$data);
+	}	
 }
 
 

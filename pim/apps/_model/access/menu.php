@@ -92,7 +92,7 @@ class Menu extends Data
 								"KPI Summary"=>"kpi/kpi_summary/",
 								"KPI Overview"=>"kpi/kpi_overview/1",
 								"Cluster Overview"=>Array("cluster/overview"),
-								"Audit Score" => Array("cluster/editAuditScore"),
+								"Audit Score" => Array("cluster/listSiteAuditScore"),
 									),
 
 					
