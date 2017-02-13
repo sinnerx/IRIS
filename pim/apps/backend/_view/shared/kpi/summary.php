@@ -8,11 +8,12 @@ var site = new function()
 		this.updateDate = function(param = null)
 		{
       // console.log(param);
+      // console.log($("#clusterID").val());
       var clusterID = null;
       var siteID = null;
       if(param){
         if(isNaN( $("#clusterID").val() )){
-          clusterID = null;
+          clusterID = '';
         }
         else{
           clusterID = $("#clusterID").val();
@@ -27,8 +28,16 @@ var site = new function()
         else {
           siteID = $("#siteID").val();
         }
+
+        if(isNaN( $("#clusterID").val() )){
+          clusterID = '';
+        }
+        else{
+          clusterID = $("#clusterID").val();
+        }        
         // console.log($("#siteID").val());
-        window.location.href = pim.base_url+"kpi/kpi_summary/"+$("#year").val()+"/"+$("#month").val() + "/" + <?php echo $cluster; ?> + "/" + siteID;
+        window.location.href = pim.base_url+"kpi/kpi_summary/"+$("#year").val()+"/"+$("#month").val() + "/" + clusterID + "/" + siteID;
+        // window.location.href = pim.base_url+"kpi/kpi_summary/"+$("#year").val()+"/"+$("#month").val() + "/" + <?php //echo $cluster; ?> + "/" + siteID;
       }
 			
 		}
