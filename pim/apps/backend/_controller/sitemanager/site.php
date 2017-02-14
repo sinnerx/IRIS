@@ -204,11 +204,29 @@ Class Controller_Site
 			//'kdb_pax'=>$totalKdbPax[0]['totalpax']
 			);
 
-		$clusterID 		= model::load("site/cluster")->getClusterID($siteID);
-		//var_dump($clusterID[0]);
-		$clusterDetails = model::load("site/cluster")->getClusterByID($clusterID[0]);
-		$auditScore 	= $clusterDetails['clusterAuditScore'];
+		// $clusterID 		= model::load("site/cluster")->getClusterID($siteID);
+		// //var_dump($clusterID[0]);
+		// $clusterDetails = model::load("site/cluster")->getClusterByID($clusterID[0]);
+		// $auditScore 	= $clusterDetails['clusterAuditScore'];
+		// $auditScore  === null ? $data['auditScore'] = "N/A" : $data['auditScore'] = $auditScore;
+
+		//auditScore
+		db::select("siteAuditScore as total");
+		// db::from("site_info");
+		db::where("siteID", $siteID);
+
+		if($month != "")
+			db::where("MONTH(siteAuditDate)", $month);
+
+		db::where("YEAR(siteAuditDate)", $year);		
+
+
+		$siteAuditScore = db::get("site_audit_score")->row('total');
+		// var_dump($siteAuditScore);
+		// die;	
+		$auditScore 	= $siteAuditScore;
 		$auditScore  === null ? $data['auditScore'] = "N/A" : $data['auditScore'] = $auditScore;
+
 		// var_dump($data);
 		// die;
 
