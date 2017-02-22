@@ -1060,7 +1060,10 @@ class Controller_Exp
 
 		$clusters = $clusters->execute()->toList('clusterID', 'clusterName');
 
-		view::render('shared/exp/prDownload', array('clusters' => $clusters));
+
+		$regions = orm('site/region')->execute()->toList('regionID', 'regionName');
+
+		view::render('shared/exp/prDownload', array('regions' => $regions));
 	}
 
 	public function rlRejectForm($rlID)

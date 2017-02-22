@@ -48,6 +48,29 @@ var prList = new function()
 
     pim.redirect('exp/prList', filter);
   }
+
+  this.downloadSummary = function()
+    {
+      var regionID = $("#regionID").val();
+      var type = $('#prDownloadPrType').val();
+      var month = $("#downloadMonth").val();
+      var year = $("#downloadYear").val();
+
+      if(!regionID || !month || !year || !type)
+        return alert('Please complete the form');
+
+      // $.ajax({url: pim.url('ajax/shared/exp/rlCheckPending/'+regionID+'/'+type+'/'+month+'/'+year), dataType: 'json'}).done(function(result)
+      // {
+      //   if(result.hasPending == true)
+      //   {
+      //     if(!confirm('There are still pending RL for this month. Do you still want to download?'))
+      //       return;
+      //   }
+
+      //   window.location.href = pim.url('expExcel/rlSummaryGenerate/'+regionID+'/'+type+'/'+month+'/'+year);
+      // });
+      window.location.href = pim.url('expExcel/rlSummaryGenerate/'+regionID+'/'+type+'/'+month+'/'+year);
+    }  
 }
 
 

@@ -84,6 +84,7 @@ class Data
 					'exp/prRejectForm' => array('cl', 'om'),
 					'exp/prRejectionReason' => array('sm', 'cl', 'om', 'fc', 'r'),
 					'exp/listItem' => array('sm', 'cl', 'om', 'r', 'fc'),
+					'exp/prDownload' => array('r', 'om'),
 					'exp/submitPrNumber' => array('r'),
 					'exp/editPrNumber' => array('r'),
 					'exp/rlEdit' => array('sm', 'cl', 'om', 'fc', 'r'),

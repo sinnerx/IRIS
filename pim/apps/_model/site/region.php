@@ -20,6 +20,12 @@ class Region extends \Origami
 		return model::orm('site/cluster')->where('clusterID IN (SELECT clusterID FROM cluster WHERE regionID = ?)', array($this->regionID))->execute();
 	}
 
+	public function getSiteByRegionID()
+	{
+		return model::orm('site/site')->where('siteID IN 
+			(SELECT siteID FROM cluster_site WHERE clusterID IN 
+				(SELECT clusterID from cluster WHERE regionID = ?))', array($this->regionID))->execute();
+	}
 	// public function getClusterByID($clusterID){
 	// 	// db::from("cluster");
 	// 	db::where("clusterID", $clusterID);
