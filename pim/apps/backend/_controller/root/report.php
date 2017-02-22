@@ -1359,102 +1359,45 @@ class Controller_Report
 
 	private function getTotalCashFlow($date) {
 		# Get Cash Flow Summary
-		// db::select("D.siteInfoDistrict,A.stateID,A.siteID,A.siteName,COUNT(B.siteID) AS NumberOfTransaction,SUM(CASE WHEN C.billingItemID = 1 THEN C.billingTransactionItemPrice ELSE 0 END) AS Membership,SUM(CASE WHEN C.billingItemID = 3 || C.billingItemID = 5 || C.billingItemID = 16 THEN C.billingTransactionItemPrice ELSE 0 END) AS PCUsage,SUM(CASE WHEN C.billingItemID = 4 || C.billingItemID = 6 THEN C.billingTransactionItemPrice ELSE 0 END) AS PrintPhotst,SUM(CASE WHEN C.billingItemID = 5 THEN C.billingTransactionItemPrice ELSE 0 END) AS OthersSrvc,SUM(CASE WHEN C.billingItemID = 7 THEN C.billingTransactionItemPrice ELSE 0 END) AS Scanning,SUM(CASE WHEN C.billingItemID = 8 || C.billingItemID = 17 THEN C.billingTransactionItemPrice ELSE 0 END) AS Laminating,SUM(CASE WHEN C.billingItemID = 2 || C.billingItemID = 9 || C.billingItemID = 12 || C.billingItemID = 13 || C.billingItemID = 14 THEN C.billingTransactionItemPrice ELSE 0 END) AS OthersCashIn");
-		// db::from('site A');
-		// db::join('billing_transaction B', 'B.siteID = A.siteID');
-		// db::join('billing_transaction_item C', 'C.billingTransactionID = B.billingTransactionID');
-		// db::join('site_info D', 'D.siteID = A.siteID');
-		// db::where('B.billingTransactionDate LIKE','%'.$date.'%');
-		// db::group_by('A.siteID');
-		// db::order_by('A.StateID');
-		// $ResultSummary = db::get()->result();
+
 
 		# New ultimate query from Mr. Moridh
-		$ResultSummary = db::query("SELECT siteName, site.siteID, stateID, Membership, PCUsage, PrintPhotst, OthersSrvc, Scanning, Laminating, OthersCashIn, Expense FROM site LEFT JOIN ( SELECT A.siteID,SUM(CASE WHEN B.billingItemID = 1 THEN B.billingTransactionItemPrice ELSE 0 END) AS Membership,SUM(CASE WHEN B.billingItemID = 3 || B.billingItemID = 5 || B.billingItemID = 16 THEN B.billingTransactionItemPrice ELSE 0 END) AS PCUsage,SUM(CASE WHEN B.billingItemID = 4 || B.billingItemID = 6 THEN B.billingTransactionItemPrice ELSE 0 END) AS PrintPhotst,SUM(CASE WHEN B.billingItemID = 5 THEN B.billingTransactionItemPrice ELSE 0 END) AS OthersSrvc,SUM(CASE WHEN B.billingItemID = 7 THEN B.billingTransactionItemPrice ELSE 0 END) AS Scanning,SUM(CASE WHEN B.billingItemID = 8 || B.billingItemID = 17 THEN B.billingTransactionItemPrice ELSE 0 END) AS Laminating,SUM(CASE WHEN B.billingItemID = 2 || B.billingItemID = 9 || B.billingItemID = 12 || B.billingItemID = 13 || B.billingItemID = 14 THEN B.billingTransactionItemPrice ELSE 0 END) AS OthersCashIn,SUM(CASE WHEN B.billingItemID = 10 || B.billingItemID = 11 THEN ABS(B.billingTransactionItemPrice) ELSE 0 END) AS Expense FROM billing_transaction A LEFT JOIN billing_transaction_item B ON B.billingTransactionID = A.billingTransactionID WHERE A.billingTransactionStatus = 1 AND A.billingTransactionDate LIKE '%".$date."%' GROUP BY A.siteID) AS figures ON figures.siteID = site.siteID ORDER BY site.stateID ASC")->result();
-
-
-		# new from Mr. Moridh
-
-		// SELECT siteName, stateID, Membership, PCUsage, PrintPhotst, OthersSrvc, Scanning, Laminating, OthersCashIn, Expense
-		// FROM site
-		// LEFT JOIN (
-		// SELECT 
-		// A.`siteID`,
-		// SUM(CASE WHEN B.billingItemID = 1 THEN B.billingTransactionItemPrice ELSE 0 END) AS Membership,
-		// SUM(CASE WHEN B.billingItemID = 3 || B.billingItemID = 15 || B.billingItemID = 16 THEN B.billingTransactionItemPrice ELSE 0 END) AS PCUsage,
-		// SUM(CASE WHEN B.billingItemID = 4 || B.billingItemID = 6 THEN B.billingTransactionItemPrice ELSE 0 END) AS PrintPhotst,
-		// SUM(CASE WHEN B.billingItemID = 5 THEN B.billingTransactionItemPrice ELSE 0 END) AS OthersSrvc,
-		// SUM(CASE WHEN B.billingItemID = 7 THEN B.billingTransactionItemPrice ELSE 0 END) AS Scanning,
-		// SUM(CASE WHEN B.billingItemID = 8 || B.billingItemID = 17 THEN B.billingTransactionItemPrice ELSE 0 END) AS Laminating,
-		// SUM(CASE WHEN B.billingItemID = 2 || B.billingItemID = 9 || B.billingItemID = 12 || B.billingItemID = 13 || B.billingItemID = 14 THEN B.billingTransactionItemPrice ELSE 0 END) AS OthersCashIn,
-		// SUM(CASE WHEN B.billingItemID = 10 || B.billingItemID = 11 THEN ABS(B.billingTransactionItemPrice) ELSE 0 END) AS Expense
-		// FROM `billing_transaction` A
-		// LEFT JOIN `billing_transaction_item` B ON B.`billingTransactionID` = A.`billingTransactionID`
-  //       WHERE A.billingTransactionStatus = 1
-  //   	AND A.billingTransactionDate LIKE '%2016-06%'
-		// GROUP BY A.`siteID`) AS figures ON figures.siteID = site.siteID
-
-		# New Query
-
-		// SELECT 
-		// D.`siteInfoDistrict`,
-		// A.`stateID`,
-		// A.`siteID`,
-		// A.`siteName`,
-		// COUNT(B.siteID) AS NumberOfTransaction,
-		// SUM(CASE WHEN C.billingItemID = 1 THEN C.billingTransactionItemPrice ELSE 0 END) AS Membership,
-		// SUM(CASE WHEN C.billingItemID = 3 || C.billingItemID = 5 || C.billingItemID = 16 THEN C.billingTransactionItemPrice ELSE 0 END) AS PCUsage,
-		// SUM(CASE WHEN C.billingItemID = 4 || C.billingItemID = 6 THEN C.billingTransactionItemPrice ELSE 0 END) AS PrintPhotst,
-		// SUM(CASE WHEN C.billingItemID = 5 THEN C.billingTransactionItemPrice ELSE 0 END) AS OthersSrvc,
-		// SUM(CASE WHEN C.billingItemID = 7 THEN C.billingTransactionItemPrice ELSE 0 END) AS Scanning,
-		// SUM(CASE WHEN C.billingItemID = 8 || C.billingItemID = 17 THEN C.billingTransactionItemPrice ELSE 0 END) AS Laminating,
-		// SUM(CASE WHEN C.billingItemID = 2 || C.billingItemID = 9 || C.billingItemID = 12 || C.billingItemID = 13 || C.billingItemID = 14 THEN C.billingTransactionItemPrice ELSE 0 END) AS OthersCashIn
-		// FROM `site` A
-		// LEFT JOIN `billing_transaction` B ON B.`siteID` = A.`siteID`
-		// LEFT JOIN `billing_transaction_item` C ON C.`billingTransactionID` = B.`billingTransactionID`
-		// LEFT JOIN `site_info` D ON D.`siteID` = A.`siteID`
-		// GROUP BY A.`siteID`
-		// ORDER BY A.`stateID`
-
-		# Old Query
-
-		// SELECT 
-		// D.`siteInfoDistrict`,
-		// A.`stateID`,
-		// A.`siteID`,
-		// A.`siteName`,
-		// COUNT(B.siteID) AS NumberOfTransaction,
-		// SUM(CASE WHEN C.billingItemID = 1 THEN C.billingTransactionItemPrice ELSE 0 END) AS Membership,
-		// SUM(CASE WHEN C.billingItemID = 3 THEN C.billingTransactionItemPrice ELSE 0 END) AS PCUsage,
-		// SUM(CASE WHEN C.billingItemID = 4 THEN C.billingTransactionItemPrice ELSE 0 END) AS PrintPhotstBW,
-		// SUM(CASE WHEN C.billingItemID = 5 THEN C.billingTransactionItemPrice ELSE 0 END) AS OthersSrvc,
-		// SUM(CASE WHEN C.billingItemID = 6 THEN C.billingTransactionItemPrice ELSE 0 END) AS PrintPhotstC,
-		// SUM(CASE WHEN C.billingItemID = 7 THEN C.billingTransactionItemPrice ELSE 0 END) AS Scanning,
-		// SUM(CASE WHEN C.billingItemID = 8 THEN C.billingTransactionItemPrice ELSE 0 END) AS Laminating,
-		// SUM(CASE WHEN C.billingItemID = 12 THEN C.billingTransactionItemPrice ELSE 0 END) AS PackageA,
-		// SUM(CASE WHEN C.billingItemID = 13 THEN C.billingTransactionItemPrice ELSE 0 END) AS PackageB,
-		// SUM(CASE WHEN C.billingItemID = 14 THEN C.billingTransactionItemPrice ELSE 0 END) AS PackageC,
-		// SUM(B.billingTransactionTotal) AS TotalIncome
-		// FROM `site` A
-		// LEFT JOIN `billing_transaction` B ON B.`siteID` = A.`siteID`
-		// LEFT JOIN `billing_transaction_item` C ON C.`billingTransactionID` = B.`billingTransactionID`
-		// LEFT JOIN `site_info` D ON D.`siteID` = A.`siteID`
-		// GROUP BY A.`siteID`
-
-		// var_dump($ResultSummary);
-
+		$ResultSummary = db::query("SELECT siteName, site.siteID, site_info.siteInfoPhase, stateID, Membership, PCUsage, PrintPhotst, OthersSrvc, Scanning, Laminating, OthersCashIn, Expense
+			FROM site 
+		 	INNER JOIN site_info ON site.siteID = site_info.siteID 
+		 	LEFT JOIN 
+		 	( SELECT A.siteID,SUM(CASE WHEN B.billingItemID = 1 THEN B.billingTransactionItemPrice ELSE 0 END) AS Membership,
+		 	SUM(CASE WHEN B.billingItemID = 3 || B.billingItemID = 5 || B.billingItemID = 16 THEN B.billingTransactionItemPrice ELSE 0 END) AS PCUsage,
+		 	SUM(CASE WHEN B.billingItemID = 4 || B.billingItemID = 6 THEN B.billingTransactionItemPrice ELSE 0 END) AS PrintPhotst,
+		 	SUM(CASE WHEN B.billingItemID = 5 THEN B.billingTransactionItemPrice ELSE 0 END) AS OthersSrvc,
+		 	SUM(CASE WHEN B.billingItemID = 7 THEN B.billingTransactionItemPrice ELSE 0 END) AS Scanning,
+		 	SUM(CASE WHEN B.billingItemID = 8 || B.billingItemID = 17 THEN B.billingTransactionItemPrice ELSE 0 END) AS Laminating,
+		 	SUM(CASE WHEN B.billingItemID = 2 || B.billingItemID = 9 || B.billingItemID = 12 || B.billingItemID = 13 || B.billingItemID = 14 THEN B.billingTransactionItemPrice ELSE 0 END) AS OthersCashIn,
+		 	SUM(CASE WHEN B.billingItemID = 10 || B.billingItemID = 11 THEN ABS(B.billingTransactionItemPrice) ELSE 0 END) AS Expense 
+		 	FROM billing_transaction A 
+		 	LEFT JOIN billing_transaction_item B ON B.billingTransactionID = A.billingTransactionID 
+		 	WHERE A.billingTransactionStatus = 1 AND A.billingTransactionDate LIKE '%".$date."%' GROUP BY A.siteID) AS figures ON figures.siteID = site.siteID ORDER BY site.stateID ASC")->result();
 		return $ResultSummary;
 	}
 
 
 	private function getMonthTotalCashFlow($year,$month,$day) {
 
-	$ResultSummary = db::query("SELECT siteName, site.siteID, stateID, Membership, PCUsage, PrintPhotst, OthersSrvc, Scanning, Laminating, OthersCashIn, Expense FROM site LEFT JOIN ( SELECT A.siteID,SUM(CASE WHEN B.billingItemID = 1 THEN B.billingTransactionItemPrice ELSE 0 END) AS Membership,SUM(CASE WHEN B.billingItemID = 3 || B.billingItemID = 5 || B.billingItemID = 16 THEN B.billingTransactionItemPrice ELSE 0 END) AS PCUsage,SUM(CASE WHEN B.billingItemID = 4 || B.billingItemID = 6 THEN B.billingTransactionItemPrice ELSE 0 END) AS PrintPhotst,SUM(CASE WHEN B.billingItemID = 5 THEN B.billingTransactionItemPrice ELSE 0 END) AS OthersSrvc,SUM(CASE WHEN B.billingItemID = 7 THEN B.billingTransactionItemPrice ELSE 0 END) AS Scanning,SUM(CASE WHEN B.billingItemID = 8 || B.billingItemID = 17 THEN B.billingTransactionItemPrice ELSE 0 END) AS Laminating,SUM(CASE WHEN B.billingItemID = 2 || B.billingItemID = 9 || B.billingItemID = 12 || B.billingItemID = 13 || B.billingItemID = 14 THEN B.billingTransactionItemPrice ELSE 0 END) AS OthersCashIn,SUM(CASE WHEN B.billingItemID = 10 || B.billingItemID = 11 THEN ABS(B.billingTransactionItemPrice) ELSE 0 END) AS Expense FROM billing_transaction A LEFT JOIN billing_transaction_item B ON B.billingTransactionID = A.billingTransactionID WHERE A.billingTransactionStatus = 1 AND YEAR(A.billingTransactionDate)=$year AND MONTH(A.billingTransactionDate)=$month AND DAY(A.billingTransactionDate)=$day GROUP BY A.siteID) AS figures ON figures.siteID = site.siteID ORDER BY site.stateID ASC")->result();
+		$ResultSummary = db::query("SELECT siteName, site.siteID, site_info.siteInfoPhase, stateID, Membership, PCUsage, PrintPhotst, OthersSrvc, Scanning, Laminating, OthersCashIn, Expense 
+			FROM site 
+			INNER JOIN site_info ON site.siteID = site_info.siteID 
+			LEFT JOIN ( SELECT A.siteID,SUM(CASE WHEN B.billingItemID = 1 THEN B.billingTransactionItemPrice ELSE 0 END) AS Membership,
+				SUM(CASE WHEN B.billingItemID = 3 || B.billingItemID = 5 || B.billingItemID = 16 THEN B.billingTransactionItemPrice ELSE 0 END) AS PCUsage,
+				SUM(CASE WHEN B.billingItemID = 4 || B.billingItemID = 6 THEN B.billingTransactionItemPrice ELSE 0 END) AS PrintPhotst,
+				SUM(CASE WHEN B.billingItemID = 5 THEN B.billingTransactionItemPrice ELSE 0 END) AS OthersSrvc,
+				SUM(CASE WHEN B.billingItemID = 7 THEN B.billingTransactionItemPrice ELSE 0 END) AS Scanning,
+				SUM(CASE WHEN B.billingItemID = 8 || B.billingItemID = 17 THEN B.billingTransactionItemPrice ELSE 0 END) AS Laminating,
+				SUM(CASE WHEN B.billingItemID = 2 || B.billingItemID = 9 || B.billingItemID = 12 || B.billingItemID = 13 || B.billingItemID = 14 THEN B.billingTransactionItemPrice ELSE 0 END) AS OthersCashIn,
+				SUM(CASE WHEN B.billingItemID = 10 || B.billingItemID = 11 THEN ABS(B.billingTransactionItemPrice) ELSE 0 END) AS Expense FROM billing_transaction A 
+				LEFT JOIN billing_transaction_item B ON B.billingTransactionID = A.billingTransactionID 
+				WHERE A.billingTransactionStatus = 1 AND YEAR(A.billingTransactionDate)=$year AND MONTH(A.billingTransactionDate)=$month AND DAY(A.billingTransactionDate)=$day GROUP BY A.siteID) AS figures ON figures.siteID = site.siteID ORDER BY site.stateID ASC")->result();
 
-	/*$ResultSummary = db::query("SELECT siteName, site.siteID, stateID, Membership, PCUsage, PrintPhotst, OthersSrvc, Scanning, Laminating, OthersCashIn, Expense FROM site LEFT JOIN ( SELECT A.siteID,SUM(CASE WHEN B.billingItemID = 1 THEN B.billingTransactionItemPrice ELSE 0 END) AS Membership,SUM(CASE WHEN B.billingItemID = 3 || B.billingItemID = 5 || B.billingItemID = 16 THEN B.billingTransactionItemPrice ELSE 0 END) AS PCUsage,SUM(CASE WHEN B.billingItemID = 4 || B.billingItemID = 6 THEN B.billingTransactionItemPrice ELSE 0 END) AS PrintPhotst,SUM(CASE WHEN B.billingItemID = 5 THEN B.billingTransactionItemPrice ELSE 0 END) AS OthersSrvc,SUM(CASE WHEN B.billingItemID = 7 THEN B.billingTransactionItemPrice ELSE 0 END) AS Scanning,SUM(CASE WHEN B.billingItemID = 8 || B.billingItemID = 17 THEN B.billingTransactionItemPrice ELSE 0 END) AS Laminating,SUM(CASE WHEN B.billingItemID = 2 || B.billingItemID = 9 || B.billingItemID = 12 || B.billingItemID = 13 || B.billingItemID = 14 THEN B.billingTransactionItemPrice ELSE 0 END) AS OthersCashIn,SUM(CASE WHEN B.billingItemID = 10 || B.billingItemID = 11 THEN ABS(B.billingTransactionItemPrice) ELSE 0 END) AS Expense FROM billing_transaction A LEFT JOIN billing_transaction_item B ON B.billingTransactionID = A.billingTransactionID WHERE A.billingTransactionStatus = 1 AND A.billingTransactionDate LIKE '%".$date."%' GROUP BY A.siteID) AS figures ON figures.siteID = site.siteID WHERE site.siteID=$siteID ORDER BY site.stateID ASC")->result();*/
-
-
-	return $ResultSummary;
+		return $ResultSummary;
 	}
 
 	
@@ -1952,6 +1895,8 @@ class Controller_Report
 
 		# Get Total Cash Flow Summary Data
 		$data = $this->getTotalCashFlow($date);
+		// var_dump($data);
+		// die;
 
 		$month 			= $input['month'];
 		$year 			= $input['year'];
@@ -2126,6 +2071,7 @@ class Controller_Report
 			}
 
 			$sheet->setCellValue('C'.($ii), $value['siteName']);
+			$sheet->getCell('C'.($ii))->getHyperlink()->setUrl("sheet://"."'".substr($value['siteName'], 0, 15)."'"."!A1");	
 			$sheet->setCellValue('D'.($ii), $value['Membership']);
 			$sheet->setCellValue('E'.($ii), $value['PCUsage']);
 			$sheet->setCellValue('F'.($ii), $value['PrintPhotst']);
@@ -2148,9 +2094,219 @@ class Controller_Report
 			$sheet->setCellValue($cellRange[$i].(5+count($data)),'=SUM('.$cellRange[$i].'5:'.$cellRange[$i].(4+count($data)).')');
 		}
 
+
+		##############################################
+		#  Start create new sheets for Project Phase #
+		#  											 #
+		##############################################
+
+		$dataPhase = db::get('batch')->result();
+		$indexSheet = 1;
+		foreach ($dataPhase as $valuePhase) {
+			# code...
+			// var_dump($valuePhase['batchID']);
+
+			## Project Phase sheet.
+
+				$ProjectIDs=$valuePhase['batchID'];
+				$projectName=substr($valuePhase['batchName'], 0, 15);
+
+				$sheetProject = $excel->createSheet($indexSheet);
+				$sheetProject->setTitle($projectName);
+
+				## prepare report.
+
+				## all cell
+				$allCells = $sheetProject->getStyle("A1:O".(4+count($data)));
+				$allCells->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_TOP);
+				$allCells->getAlignment()->setWrapText(true);
+				foreach(range('A','O') as $columnID) {
+				    $sheetProject->getColumnDimension($columnID)->setAutoSize(true);
+				}
+				$allCells->applyFromArray(
+							array(
+								'borders' => array(
+										'allborders' => array(
+												'style' => PHPExcel_Style_Border::BORDER_THIN,
+												'color' => array('rgb' => 'D3D3D3'),
+												'size'  => 11,
+												)
+										)
+								)
+							);
+
+				# prepare header.
+
+				# first row header
+				$sheetProject->setCellValue("A1", $filename);
+				$sheetProject->mergeCells("A1:O1");
+
+				# second row header
+				$sheetProject->setCellValue("A2", $projectName);
+				$sheetProject->mergeCells("A2:C2");
+
+				$sheetProject->setCellValue("D2", 'Generated at '.now());
+				$sheetProject->mergeCells("D2:O2");
+
+				# set alignment
+				$sheetProject->getStyle("D1:O2")->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+
+				# third row header
+				$sheetProject->setCellValue("D3", 'Income');
+				$sheetProject->mergeCells("D3:K3");
+
+				$sheetProject->setCellValue("L3", 'Expense');
+				$sheetProject->mergeCells("L3:N3");
+
+				$sheetProject->setCellValue("O3", 'Balance');
+
+				# set alignment
+				$sheetProject->getStyle("D3:O3")->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+
+				# forth row header
+				$forthheader = array('State Name','District Name','Site','Membership Fee','PC Usage','Print Service','Other Service','Scanning','Laminating','Other Cash In','Total Income','Cash Drawer','Bank Account','Total Expense','Balance');
+				$a = 1;
+				foreach ($forthheader as $key => $value) {
+					// $a++;
+					// echo $cellRange[$a];
+					// echo $value;
+					$sheetProject->setCellValue($cellRange[$a-1].'4', $value);
+					$a++;
+				}
+
+				# set alignment
+				$sheetProject->getStyle("A4:O4")->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+
+				# set background color
+				$sheetProject->getStyle('A1:O4')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('6495ED');
+
+				# set font
+				$sheetProject->getStyle('A1:O4')->applyFromArray(
+												array(
+									    			'font'  => array(
+										        		'bold'  => true,
+										        		'color' => array('rgb' => 'FFFFFF')
+									    			)
+									    		)
+											);
+
+				# prepare data cell.
+
+
+				
+				// /*
+				// siteName,
+				// stateID,
+				// Membership,
+				// PCUsage,
+				// PrintPhotst,
+				// OthersSrvc,
+				// Scanning,
+				// Laminating,
+				// OthersCashIn
+				// */
+
+				// // var_dump($data);
+				// // die();
+
+				$ii = 4;
+				$currentState = 0;
+				$countSiteOnProject = 0;
+				foreach ($data as $key => $value) {
+					// var_dump($value['siteName']);
+					// var_dump($value['siteInfoPhase']);
+					// var_dump($ProjectIDs);
+					
+					if($value['siteInfoPhase'] == $ProjectIDs)
+					{
+						// continue;
+						// var_dump($ProjectIDs);
+						// var_dump($value['siteName']);
+
+						$ii++;
+							if ($currentState != $value['stateID']) {
+								$currentState = $value['stateID'];
+								$sheetProject->setCellValue('A'.($ii), $state[$currentState]);
+							}
+
+							if (empty($value['Membership'])) {
+								$value['Membership'] = 0;
+							}
+
+							if (empty($value['PCUsage'])) {
+								$value['PCUsage'] = 0;
+							}
+
+							if (empty($value['PrintPhotst'])) {
+								$value['PrintPhotst'] = 0;
+							}
+
+							if (empty($value['OthersSrvc'])) {
+								$value['OthersSrvc'] = 0;
+							}
+
+							if (empty($value['Scanning'])) {
+								$value['Scanning'] = 0;
+							}
+
+							if (empty($value['Laminating'])) {
+								$value['Laminating'] = 0;
+							}
+
+							if (empty($value['OthersCashIn'])) {
+								$value['OthersCashIn'] = 0;
+							}
+
+							if (empty($value['Expense'])) {
+								$value['Expense'] = 0;
+							}
+
+							$sheetProject->setCellValue('C'.($ii), $value['siteName']);
+							$sheetProject->getCell('C'.($ii))->getHyperlink()->setUrl("sheet://"."'".substr($value['siteName'], 0, 15)."'"."!A1");							
+							$sheetProject->setCellValue('D'.($ii), $value['Membership']);
+							$sheetProject->setCellValue('E'.($ii), $value['PCUsage']);
+							$sheetProject->setCellValue('F'.($ii), $value['PrintPhotst']);
+							$sheetProject->setCellValue('G'.($ii), $value['OthersSrvc']);
+							$sheetProject->setCellValue('H'.($ii), $value['Scanning']);
+							$sheetProject->setCellValue('I'.($ii), $value['Laminating']);
+							$sheetProject->setCellValue('J'.($ii), $value['OthersCashIn']);
+							$sheetProject->setCellValue('K'.($ii), '=SUM(D'.($ii).':J'.($ii).')');
+
+							$sheetProject->setCellValue('L'.($ii), '0');
+							$sheetProject->setCellValue('M'.($ii), '0');
+							$sheetProject->setCellValue('N'.($ii), $value['Expense']);
+							$sheetProject->setCellValue('O'.($ii), '=K'.($ii).'-N'.($ii));
+							$countSiteOnProject++;
+						}
+						
+
+
+					}//end if compare siteinforphase = $ProjectIDs
+						# bottom row | total all column
+						$sheetProject->setCellValue('C'.(5+$countSiteOnProject), 'Pi1M Total');
+						
+				# set alignment
+				$sheetProject->getStyle("D5:O".(4+$countSiteOnProject))->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+
+				# set color
+				$sheetProject->getStyle("K5:K".(4+$countSiteOnProject))->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('e0e0e0');
+
+				$sheetProject->getStyle("N5:O".(4+$countSiteOnProject))->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('e0e0e0');
+
+				$sheetProject->getStyle("A".(5+$countSiteOnProject).":O".(5+$countSiteOnProject))->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('ADD8E6');
+
+				$sheetProject->getStyle("D5:O".(5+$countSiteOnProject))->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_00);						
+
+						for ($i=3; $i < 15; $i++) {
+							$sheetProject->setCellValue($cellRange[$i].(5+$countSiteOnProject),'=SUM('.$cellRange[$i].'5:'.$cellRange[$i].(4+$countSiteOnProject).')');
+						}						
+					// var_dump($countSiteOnProject);
+					// die;
+					$indexSheet++;
+		}//end foreach project		
+
 		
-
-
+		// die;
 		# Calling Month helper
 		$monthList = model::load("helper")->monthYear("monthE");
 
@@ -2178,6 +2334,8 @@ class Controller_Report
 		 	$monthlyData[$key]=$newData;
 		 }
 
+		
+		// die;		 
 
 		##############################################
 		#  Start create new sheets for pim           #
@@ -2185,176 +2343,177 @@ class Controller_Report
 		##############################################
 
 		if($month){
-		#preparing data
-		#day count in month
-		$daysInMonthData = array();
-		$monCount = cal_days_in_month(CAL_GREGORIAN, $month, $year);
-		for ($i=1; $i <= $monCount; $i++) { 
-			
-			$data=$this->getMonthTotalCashFlow($year,$month,$i);
-			$newData=array();
+			#preparing data
+			#day count in month
+			$daysInMonthData = array();
+			$monCount = cal_days_in_month(CAL_GREGORIAN, $month, $year);
+			for ($i=1; $i <= $monCount; $i++) { 
+				
+				$data=$this->getMonthTotalCashFlow($year,$month,$i);
+				$newData=array();
 
-			foreach($data as $no=>$pim){
-				$newData[$pim['siteID']]=$pim;
+				foreach($data as $no=>$pim){
+					$newData[$pim['siteID']]=$pim;
+				}
+
+				$daysInMonthData[$i]=$newData;
 			}
+		
 
-			$daysInMonthData[$i]=$newData;
-		}
-	
+			#start looping each tab (pim)
+			foreach($data as $no=>$sitePim){
 
-		#start looping each tab (pim)
-		foreach($data as $no=>$sitePim){
+				// #add sheets for each pi1ms
 
-		// #add sheets for each pi1ms
+				// #Start new site tab
 
-		// #Start new site tab
+				$siteIDs=$sitePim['siteID'];
+				$siteName=substr($sitePim['siteName'], 0, 15);;
 
-		$siteIDs=$sitePim['siteID'];
-		$siteName=substr($sitePim['siteName'], 0, 15);;
+				$sheetSite = $excel->createSheet($indexSheet);
+				$sheetSite->setTitle($siteName);
+				$cellRangeSite = range('A', 'Z');
 
-		$sheetSite = $excel->createSheet(1);
-		$sheetSite->setTitle($siteName);
-		$cellRangeSite = range('A', 'Z');
+				$endSheetRow=$monCount+5;
 
-		$endSheetRow=$monCount+5;
-
-		## all cell
-		$allCellSite = $sheetSite->getStyle("A1:Q".$endSheetRow);
-		$allCellSite->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_TOP);
-		$allCellSite->getAlignment()->setWrapText(true);
-		foreach(range('A','Q') as $columnID) {
-		    $sheetSite->getColumnDimension($columnID)->setAutoSize(true);
-		}
-		$allCellSite->applyFromArray(
-					array(
-						'borders' => array(
-								'allborders' => array(
-										'style' => PHPExcel_Style_Border::BORDER_THIN,
-										'color' => array('rgb' => 'D3D3D3'),
-										'size'  => 11,
+				## all cell
+				$allCellSite = $sheetSite->getStyle("A1:Q".$endSheetRow);
+				$allCellSite->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_TOP);
+				$allCellSite->getAlignment()->setWrapText(true);
+				foreach(range('A','Q') as $columnID) {
+				    $sheetSite->getColumnDimension($columnID)->setAutoSize(true);
+				}
+				$allCellSite->applyFromArray(
+							array(
+								'borders' => array(
+										'allborders' => array(
+												'style' => PHPExcel_Style_Border::BORDER_THIN,
+												'color' => array('rgb' => 'D3D3D3'),
+												'size'  => 11,
+												)
 										)
 								)
-						)
-					);
+							);
 
 
 
-		# prepare header.
+				# prepare header.
 
-		# first row header
-		$sheetSite->setCellValue("A1", $filename);
-		$sheetSite->mergeCells("A1:Q1");
+				# first row header
+				$sheetSite->setCellValue("A1", $filename);
+				$sheetSite->mergeCells("A1:Q1");
 
-		# second row header
-		$sheetSite->setCellValue("A2", $siteName);
-		$sheetSite->mergeCells("A2:C2");
+				# second row header
+				$sheetSite->setCellValue("A2", $sitePim['siteName']);
+				$sheetSite->mergeCells("A2:C2");
 
-		$sheetSite->setCellValue("D2", 'Generated at '.now());
-		$sheetSite->mergeCells("D2:Q2");
+				$sheetSite->setCellValue("D2", 'Generated at '.now());
+				$sheetSite->mergeCells("D2:Q2");
 
-		# set alignment
-		$sheetSite->getStyle("D2:Q2")->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+				# set alignment
+				$sheetSite->getStyle("D2:Q2")->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
 
-		# third row header
-		$sheetSite->setCellValue("D3", 'Income');
-		$sheetSite->mergeCells("D3:L3");
+				# third row header
+				$sheetSite->setCellValue("D3", 'Income');
+				$sheetSite->mergeCells("D3:L3");
 
-		$sheetSite->setCellValue("M3", 'Expense');
-		$sheetSite->mergeCells("M3:P3");
+				$sheetSite->setCellValue("M3", 'Expense');
+				$sheetSite->mergeCells("M3:P3");
 
-		$sheetSite->setCellValue("Q3", 'Balance');
+				$sheetSite->setCellValue("Q3", 'Balance');
 
-		# set alignment
-		$sheetSite->getStyle("D3:Q3")->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+				# set alignment
+				$sheetSite->getStyle("D3:Q3")->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 
-		# forth row header
-		$fourthHeaderSite = array('Year','Month','Date','Membership Fee','PC Usage','Print Service','Other Service','Scanning','Laminating','Other Cash In','Other Cash In Description','Total Income','Cash Drawer','Bank Account','Expense Description','Total Expense','Balance');
-		
-		foreach ($fourthHeaderSite as $key=>$value) {
-			$sheetSite->setCellValue($cellRange[$key].'4', $value);
-		}
+				# forth row header
+				$fourthHeaderSite = array('Year','Month','Date','Membership Fee','PC Usage','Print Service','Other Service','Scanning','Laminating','Other Cash In','Other Cash In Description','Total Income','Cash Drawer','Bank Account','Expense Description','Total Expense','Balance');
+				
+				foreach ($fourthHeaderSite as $key=>$value) {
+					$sheetSite->setCellValue($cellRange[$key].'4', $value);
+				}
 
-		# set alignment
-		$sheetSite->getStyle("A4:Q4")->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+				# set alignment
+				$sheetSite->getStyle("A4:Q4")->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 
-		# set background color
-		$sheetSite->getStyle('A1:Q4')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('6495ED');
+				# set background color
+				$sheetSite->getStyle('A1:Q4')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('6495ED');
 
-		# set font
-		$sheetSite->getStyle('A1:Q4')->applyFromArray(
-										array(
-							    			'font'  => array(
-								        		'bold'  => true,
-								        		'color' => array('rgb' => 'FFFFFF')
-							    			)
-							    		)
-									);
+				# set font
+				$sheetSite->getStyle('A1:Q4')->applyFromArray(
+												array(
+									    			'font'  => array(
+										        		'bold'  => true,
+										        		'color' => array('rgb' => 'FFFFFF')
+									    			)
+									    		)
+											);
 
-		# fifth row header
-		$sheetSite->setCellValue("A5", $year);
-		$sheetSite->mergeCells("A5:A".$endSheetRow);
+				# fifth row header
+				$sheetSite->setCellValue("A5", $year);
+				$sheetSite->mergeCells("A5:A".$endSheetRow);
 
-		# set alignment
-		$sheetSite->getStyle("D5:Q".$endSheetRow)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+				# set alignment
+				$sheetSite->getStyle("D5:Q".$endSheetRow)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
 
-		# set color
-		$sheetSite->getStyle("B5:Q5")->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('add8e6');
+				# set color
+				$sheetSite->getStyle("B5:Q5")->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('add8e6');
 
-		$sheetSite->getStyle("D6:Q".$endSheetRow)->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('B0C4DE');
+				$sheetSite->getStyle("D6:Q".$endSheetRow)->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('B0C4DE');
 
-		$sheetSite->getStyle("D5:Q".$endSheetRow)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_00);
-
-
-
-		#All total formula
-		$cellTotal=array('D','E','F','G','H','I','J','L','M','N','P');
-		$endDateRow=$monCount+5;
-		foreach($cellTotal as $key=>$cell){
-				$sheetSite->setCellValue($cell.'5', '=SUM('.$cell.'6:'.$cell.$endDateRow.')');
-		}
-		#all total balance formula
-		$sheetSite->setCellValue('Q5', '=L5-P5');
-
-		
-		$sheetSite->setCellValue("B5", "Total");
-		$sheetSite->setCellValue("B6", $monthList[$month]);
-		$dateRowStart=6;
-		for ($i=1; $i <= $monCount; $i++) { 
-			$sheetSite->setCellValue("C".$dateRowStart, $i."/".$month."/".$year);
-			$dateRowStart++;
-		}
+				$sheetSite->getStyle("D5:Q".$endSheetRow)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_00);
 
 
-		#list data by date
-		$cellSiteStart=6;
-		for ($i=1; $i <= $monCount; $i++) {
 
+				#All total formula
+				$cellTotal=array('D','E','F','G','H','I','J','L','M','N','P');
+				$endDateRow=$monCount+5;
+				foreach($cellTotal as $key=>$cell){
+						$sheetSite->setCellValue($cell.'5', '=SUM('.$cell.'6:'.$cell.$endDateRow.')');
+				}
+				#all total balance formula
+				$sheetSite->setCellValue('Q5', '=L5-P5');
+
+				
+				$sheetSite->setCellValue("B5", "Total");
+				$sheetSite->setCellValue("B6", $monthList[$month]);
+				$dateRowStart=6;
+				for ($i=1; $i <= $monCount; $i++) { 
+					$sheetSite->setCellValue("C".$dateRowStart, $i."/".$month."/".$year);
+					$dateRowStart++;
+				}
+
+
+				#list data by date
+				$cellSiteStart=6;
+					for ($i=1; $i <= $monCount; $i++) {
+
+						
+						$dataSite = $daysInMonthData[$i][$siteIDs];
+						$sheetSite->setCellValue('D'.$cellSiteStart, empty($dataSite['Membership'])?'0':$dataSite['Membership']);
+						$sheetSite->setCellValue('E'.$cellSiteStart, empty($dataSite['PCUsage'])?'0':$dataSite['PCUsage']);
+						$sheetSite->setCellValue('F'.$cellSiteStart, empty($dataSite['PrintPhotst'])?'0':$dataSite['PrintPhotst']);
+						$sheetSite->setCellValue('G'.$cellSiteStart, empty($dataSite['OthersSrvc'])?'0':$dataSite['OthersSrvc']);
+						$sheetSite->setCellValue('H'.$cellSiteStart, empty($dataSite['Scanning'])?'0':$dataSite['Scanning']);
+						$sheetSite->setCellValue('I'.$cellSiteStart, empty($dataSite['Laminating'])?'0':$dataSite['Laminating']);
+						$sheetSite->setCellValue('J'.$cellSiteStart, empty($dataSite['OthersCashIn'])?'0':$dataSite['OthersCashIn']);
+						$sheetSite->setCellValue('K'.$cellSiteStart, "");
+						$sheetSite->setCellValue('L'.$cellSiteStart, '=SUM(D'.$cellSiteStart.':J'.$cellSiteStart.')');
+						$sheetSite->setCellValue('M'.$cellSiteStart, "0");
+						$sheetSite->setCellValue('N'.$cellSiteStart, "0");
+						$sheetSite->setCellValue('O'.$cellSiteStart, "");
+						$sheetSite->setCellValue('P'.$cellSiteStart, empty($dataSite['Expense'])?'0':$dataSite['Expense']);
+						$sheetSite->setCellValue('Q'.$cellSiteStart, '=L'.$cellSiteStart.'-P'.$cellSiteStart);
+
+						$cellSiteStart++;
+						
+					}
+				
+
+				}
 			
-			$dataSite = $daysInMonthData[$i][$siteIDs];
-			$sheetSite->setCellValue('D'.$cellSiteStart, empty($dataSite['Membership'])?'0':$dataSite['Membership']);
-			$sheetSite->setCellValue('E'.$cellSiteStart, empty($dataSite['PCUsage'])?'0':$dataSite['PCUsage']);
-			$sheetSite->setCellValue('F'.$cellSiteStart, empty($dataSite['PrintPhotst'])?'0':$dataSite['PrintPhotst']);
-			$sheetSite->setCellValue('G'.$cellSiteStart, empty($dataSite['OthersSrvc'])?'0':$dataSite['OthersSrvc']);
-			$sheetSite->setCellValue('H'.$cellSiteStart, empty($dataSite['Scanning'])?'0':$dataSite['Scanning']);
-			$sheetSite->setCellValue('I'.$cellSiteStart, empty($dataSite['Laminating'])?'0':$dataSite['Laminating']);
-			$sheetSite->setCellValue('J'.$cellSiteStart, empty($dataSite['OthersCashIn'])?'0':$dataSite['OthersCashIn']);
-			$sheetSite->setCellValue('K'.$cellSiteStart, "");
-			$sheetSite->setCellValue('L'.$cellSiteStart, '=SUM(D'.$cellSiteStart.':J'.$cellSiteStart.')');
-			$sheetSite->setCellValue('M'.$cellSiteStart, "0");
-			$sheetSite->setCellValue('N'.$cellSiteStart, "0");
-			$sheetSite->setCellValue('O'.$cellSiteStart, "");
-			$sheetSite->setCellValue('P'.$cellSiteStart, empty($dataSite['Expense'])?'0':$dataSite['Expense']);
-			$sheetSite->setCellValue('Q'.$cellSiteStart, '=L'.$cellSiteStart.'-P'.$cellSiteStart);
+				$indexSheet++;
+			}else{
 
-			$cellSiteStart++;
-			
-		}
-		
-
-		}
-		
-
-		}else{
 
 		#start looping each tab (pim)
 		foreach($data as $no=>$sitePim){
@@ -2366,7 +2525,7 @@ class Controller_Report
 		$siteIDs=$sitePim['siteID'];
 		$siteName=substr($sitePim['siteName'], 0, 15);
 
-		$sheetSite = $excel->createSheet(1);
+		$sheetSite = $excel->createSheet($indexSheet);
 		$sheetSite->setTitle($siteName);
 		$cellRangeSite = range('A', 'Z');
 
@@ -2374,7 +2533,7 @@ class Controller_Report
 		$allCellSite = $sheetSite->getStyle("A1:Q".(17));
 		$allCellSite->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_TOP);
 		$allCellSite->getAlignment()->setWrapText(true);
-		foreach(range('A','Q') as $columnID) {
+		foreach(range('A','J') as $columnID) {
 		    $sheetSite->getColumnDimension($columnID)->setAutoSize(true);
 		}
 		$allCellSite->applyFromArray(
@@ -2395,45 +2554,40 @@ class Controller_Report
 
 		# first row header
 		$sheetSite->setCellValue("A1", $filename);
-		$sheetSite->mergeCells("A1:Q1");
+		$sheetSite->mergeCells("A1:J1");
 
 		# second row header
-		$sheetSite->setCellValue("A2", $siteName);
+		$sheetSite->setCellValue("A2", $sitePim['siteName']);
 		$sheetSite->mergeCells("A2:C2");
 
 		$sheetSite->setCellValue("D2", 'Generated at '.now());
-		$sheetSite->mergeCells("D2:Q2");
+		$sheetSite->mergeCells("D2:J2");
 
 		# set alignment
-		$sheetSite->getStyle("D2:Q2")->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+		$sheetSite->getStyle("D2:J2")->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
 
 		# third row header
 		$sheetSite->setCellValue("D3", 'Income');
-		$sheetSite->mergeCells("D3:L3");
-
-		$sheetSite->setCellValue("M3", 'Expense');
-		$sheetSite->mergeCells("M3:P3");
-
-		$sheetSite->setCellValue("Q3", 'Balance');
+		$sheetSite->mergeCells("D3:J3");
 
 		# set alignment
-		$sheetSite->getStyle("D3:Q3")->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+		$sheetSite->getStyle("D3:J3")->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 
 		# forth row header
-		$fourthHeaderSite = array('Year','Month','Date','Membership Fee','PC Usage','Print Service','Other Service','Scanning','Laminating','Other Cash In','Other Cash In Description','Total Income','Cash Drawer','Bank Account','Expense Description','Total Expense','Balance');
+		$fourthHeaderSite = array('Year','Month','Date','Membership Fee','PC Usage','Print Service','Other Service','Scanning','Laminating','Total Income');
 		
 		foreach ($fourthHeaderSite as $key=>$value) {
 			$sheetSite->setCellValue($cellRange[$key].'4', $value);
 		}
 
 		# set alignment
-		$sheetSite->getStyle("A4:Q4")->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+		$sheetSite->getStyle("A4:J4")->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 
 		# set background color
-		$sheetSite->getStyle('A1:Q4')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('6495ED');
+		$sheetSite->getStyle('A1:J4')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('6495ED');
 
 		# set font
-		$sheetSite->getStyle('A1:Q4')->applyFromArray(
+		$sheetSite->getStyle('A1:J4')->applyFromArray(
 										array(
 							    			'font'  => array(
 								        		'bold'  => true,
@@ -2447,24 +2601,24 @@ class Controller_Report
 		$sheetSite->mergeCells("A5:A17");
 
 		# set alignment
-		$sheetSite->getStyle("D5:Q17")->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+		$sheetSite->getStyle("D5:J17")->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
 
 		# set color
-		$sheetSite->getStyle("B5:Q5")->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('add8e6');
+		$sheetSite->getStyle("B5:J5")->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('add8e6');
 
-		$sheetSite->getStyle("D6:Q17")->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('B0C4DE');
+		$sheetSite->getStyle("D6:J17")->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('B0C4DE');
 
-		$sheetSite->getStyle("D5:Q17")->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_00);
+		$sheetSite->getStyle("D5:J17")->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_00);
 
 
 
 		#All total formula
-		$cellTotal=array('D','E','F','G','H','I','J','L','M','N','P');
+		$cellTotal=array('D','E','F','G','H','I','J');
 		foreach($cellTotal as $key=>$cell){
 				$sheetSite->setCellValue($cell.'5', '=SUM('.$cell.'6:'.$cell.'17)');
 		}
 		#all total balance formula
-		$sheetSite->setCellValue('Q5', '=L5-P5');
+		// $sheetSite->setCellValue('Q5', '=L5-P5');
 
 		
 		$sheetSite->setCellValue("B5", "Total");
@@ -2480,76 +2634,75 @@ class Controller_Report
 		if($month){
 		#list data by date
 		$cellSiteStart=6;
-		foreach ($monthList as $key => $value) {
-			
-			if($key==$month){
+			foreach ($monthList as $key => $value) {
+				
+				if($key==$month){
 
-			$dataSite = $monthlyData[$key][$siteIDs];
-			$sheetSite->setCellValue('D'.$cellSiteStart, empty($dataSite['Membership'])?'0':$dataSite['Membership']);
-			$sheetSite->setCellValue('E'.$cellSiteStart, empty($dataSite['PCUsage'])?'0':$dataSite['PCUsage']);
-			$sheetSite->setCellValue('F'.$cellSiteStart, empty($dataSite['PrintPhotst'])?'0':$dataSite['PrintPhotst']);
-			$sheetSite->setCellValue('G'.$cellSiteStart, empty($dataSite['OthersSrvc'])?'0':$dataSite['OthersSrvc']);
-			$sheetSite->setCellValue('H'.$cellSiteStart, empty($dataSite['Scanning'])?'0':$dataSite['Scanning']);
-			$sheetSite->setCellValue('I'.$cellSiteStart, empty($dataSite['Laminating'])?'0':$dataSite['Laminating']);
-			$sheetSite->setCellValue('J'.$cellSiteStart, empty($dataSite['OthersCashIn'])?'0':$dataSite['OthersCashIn']);
-			$sheetSite->setCellValue('K'.$cellSiteStart, "");
-			$sheetSite->setCellValue('L'.$cellSiteStart, '=SUM(D'.$cellSiteStart.':J'.$cellSiteStart.')');
-			$sheetSite->setCellValue('M'.$cellSiteStart, "0");
-			$sheetSite->setCellValue('N'.$cellSiteStart, "0");
-			$sheetSite->setCellValue('O'.$cellSiteStart, "");
-			$sheetSite->setCellValue('P'.$cellSiteStart, empty($dataSite['Expense'])?'0':$dataSite['Expense']);
-			$sheetSite->setCellValue('Q'.$cellSiteStart, '=L'.$cellSiteStart.'-P'.$cellSiteStart);
+				$dataSite = $monthlyData[$key][$siteIDs];
+				$sheetSite->setCellValue('D'.$cellSiteStart, empty($dataSite['Membership'])?'0':$dataSite['Membership']);
+				$sheetSite->setCellValue('E'.$cellSiteStart, empty($dataSite['PCUsage'])?'0':$dataSite['PCUsage']);
+				$sheetSite->setCellValue('F'.$cellSiteStart, empty($dataSite['PrintPhotst'])?'0':$dataSite['PrintPhotst']);
+				$sheetSite->setCellValue('G'.$cellSiteStart, empty($dataSite['OthersSrvc'])?'0':$dataSite['OthersSrvc']);
+				$sheetSite->setCellValue('H'.$cellSiteStart, empty($dataSite['Scanning'])?'0':$dataSite['Scanning']);
+				$sheetSite->setCellValue('I'.$cellSiteStart, empty($dataSite['Laminating'])?'0':$dataSite['Laminating']);
+				// $sheetSite->setCellValue('J'.$cellSiteStart, empty($dataSite['OthersCashIn'])?'0':$dataSite['OthersCashIn']);
+				// $sheetSite->setCellValue('K'.$cellSiteStart, "");
+				$sheetSite->setCellValue('J'.$cellSiteStart, '=SUM(D'.$cellSiteStart.':I'.$cellSiteStart.')');
+				// $sheetSite->setCellValue('M'.$cellSiteStart, "0");
+				// $sheetSite->setCellValue('N'.$cellSiteStart, "0");
+				// $sheetSite->setCellValue('O'.$cellSiteStart, "");
+				// $sheetSite->setCellValue('P'.$cellSiteStart, empty($dataSite['Expense'])?'0':$dataSite['Expense']);
+				// $sheetSite->setCellValue('Q'.$cellSiteStart, '=L'.$cellSiteStart.'-P'.$cellSiteStart);
 
-			}else{
+				}else{
 
-			$sheetSite->setCellValue('D'.$cellSiteStart, "0");
-			$sheetSite->setCellValue('E'.$cellSiteStart, "0");
-			$sheetSite->setCellValue('F'.$cellSiteStart, "0");
-			$sheetSite->setCellValue('G'.$cellSiteStart, "0");
-			$sheetSite->setCellValue('H'.$cellSiteStart, "0");
-			$sheetSite->setCellValue('I'.$cellSiteStart, "0");
-			$sheetSite->setCellValue('J'.$cellSiteStart, "0");
-			$sheetSite->setCellValue('K'.$cellSiteStart, "");
-			$sheetSite->setCellValue('L'.$cellSiteStart, '=SUM(D'.$cellSiteStart.':J'.$cellSiteStart.')');
-			$sheetSite->setCellValue('M'.$cellSiteStart, "0");
-			$sheetSite->setCellValue('N'.$cellSiteStart, "0");
-			$sheetSite->setCellValue('O'.$cellSiteStart, "");
-			$sheetSite->setCellValue('P'.$cellSiteStart, "0");
-			$sheetSite->setCellValue('Q'.$cellSiteStart, '=L'.$cellSiteStart.'-P'.$cellSiteStart);
-			}
-			
-			$cellSiteStart++;
-			
-		}
-		}else{
+				$sheetSite->setCellValue('D'.$cellSiteStart, "0");
+				$sheetSite->setCellValue('E'.$cellSiteStart, "0");
+				$sheetSite->setCellValue('F'.$cellSiteStart, "0");
+				$sheetSite->setCellValue('G'.$cellSiteStart, "0");
+				$sheetSite->setCellValue('H'.$cellSiteStart, "0");
+				$sheetSite->setCellValue('I'.$cellSiteStart, "0");
+				// $sheetSite->setCellValue('J'.$cellSiteStart, "0");
+				// $sheetSite->setCellValue('K'.$cellSiteStart, "");
+				$sheetSite->setCellValue('J'.$cellSiteStart, '=SUM(D'.$cellSiteStart.':I'.$cellSiteStart.')');
+				// $sheetSite->setCellValue('M'.$cellSiteStart, "0");
+				// $sheetSite->setCellValue('N'.$cellSiteStart, "0");
+				// $sheetSite->setCellValue('O'.$cellSiteStart, "");
+				// $sheetSite->setCellValue('P'.$cellSiteStart, "0");
+				// $sheetSite->setCellValue('Q'.$cellSiteStart, '=L'.$cellSiteStart.'-P'.$cellSiteStart);
+				}
+				
+				$cellSiteStart++;
+				
+			}//end foreach
+		}//end if month
+		else{
 			#list data by month yearly
-		$cellSiteStart=6;
-		foreach ($monthList as $key => $value) {
+			$cellSiteStart=6;
+			foreach ($monthList as $key => $value) {
 
-			
-			$dataSite = $monthlyData[$key][$siteIDs];
-			$sheetSite->setCellValue('D'.$cellSiteStart, empty($dataSite['Membership'])?'0':$dataSite['Membership']);
-			$sheetSite->setCellValue('E'.$cellSiteStart, empty($dataSite['PCUsage'])?'0':$dataSite['PCUsage']);
-			$sheetSite->setCellValue('F'.$cellSiteStart, empty($dataSite['PrintPhotst'])?'0':$dataSite['PrintPhotst']);
-			$sheetSite->setCellValue('G'.$cellSiteStart, empty($dataSite['OthersSrvc'])?'0':$dataSite['OthersSrvc']);
-			$sheetSite->setCellValue('H'.$cellSiteStart, empty($dataSite['Scanning'])?'0':$dataSite['Scanning']);
-			$sheetSite->setCellValue('I'.$cellSiteStart, empty($dataSite['Laminating'])?'0':$dataSite['Laminating']);
-			$sheetSite->setCellValue('J'.$cellSiteStart, empty($dataSite['OthersCashIn'])?'0':$dataSite['OthersCashIn']);
-			$sheetSite->setCellValue('K'.$cellSiteStart, "");
-			$sheetSite->setCellValue('L'.$cellSiteStart, '=SUM(D'.$cellSiteStart.':J'.$cellSiteStart.')');
-			$sheetSite->setCellValue('M'.$cellSiteStart, "0");
-			$sheetSite->setCellValue('N'.$cellSiteStart, "0");
-			$sheetSite->setCellValue('O'.$cellSiteStart, "");
-			$sheetSite->setCellValue('P'.$cellSiteStart, empty($dataSite['Expense'])?'0':$dataSite['Expense']);
-			$sheetSite->setCellValue('Q'.$cellSiteStart, '=L'.$cellSiteStart.'-P'.$cellSiteStart);
+					
+					$dataSite = $monthlyData[$key][$siteIDs];
+					$sheetSite->setCellValue('D'.$cellSiteStart, empty($dataSite['Membership'])?'0':$dataSite['Membership']);
+					$sheetSite->setCellValue('E'.$cellSiteStart, empty($dataSite['PCUsage'])?'0':$dataSite['PCUsage']);
+					$sheetSite->setCellValue('F'.$cellSiteStart, empty($dataSite['PrintPhotst'])?'0':$dataSite['PrintPhotst']);
+					$sheetSite->setCellValue('G'.$cellSiteStart, empty($dataSite['OthersSrvc'])?'0':$dataSite['OthersSrvc']);
+					$sheetSite->setCellValue('H'.$cellSiteStart, empty($dataSite['Scanning'])?'0':$dataSite['Scanning']);
+					$sheetSite->setCellValue('I'.$cellSiteStart, empty($dataSite['Laminating'])?'0':$dataSite['Laminating']);
+					// $sheetSite->setCellValue('J'.$cellSiteStart, empty($dataSite['OthersCashIn'])?'0':$dataSite['OthersCashIn']);
+					// $sheetSite->setCellValue('K'.$cellSiteStart, "");
+					$sheetSite->setCellValue('J'.$cellSiteStart, '=SUM(D'.$cellSiteStart.':I'.$cellSiteStart.')');
+					// $sheetSite->setCellValue('M'.$cellSiteStart, "0");
+					// $sheetSite->setCellValue('N'.$cellSiteStart, "0");
+					// $sheetSite->setCellValue('O'.$cellSiteStart, "");
+					// $sheetSite->setCellValue('P'.$cellSiteStart, empty($dataSite['Expense'])?'0':$dataSite['Expense']);
+					// $sheetSite->setCellValue('Q'.$cellSiteStart, '=L'.$cellSiteStart.'-P'.$cellSiteStart);
 
-			$cellSiteStart++;
-			
-		}
-		}
-		
-
-
+					$cellSiteStart++;
+					
+				}//end foreach monthlist
+			}//end else
+			$indexSheet++;
 		}
 
 		}
