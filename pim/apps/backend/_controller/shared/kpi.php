@@ -241,11 +241,13 @@ Class Controller_Kpi
 		->where('userID IN (SELECT userID FROM log_login WHERE MONTH(logLoginCreatedDate) = ? AND YEAR(logLoginCreatedDate) = ?)', array($month, $year))
 		->get()->row('total');*/
 
-		
-		db::select('count(distinct userID) as total');
-		db::from('OLAP_user_logins');
-		db::where('siteID', $siteIDs);
+		db::select('count(distinct OUL.userID) as total');
+		db::from('OLAP_user_logins OUL');
+		db::innerjoin('site_member', 'site_member.userID = OUL.userID');
+		db::where('OUL.siteID', $siteIDs);
+		db::where('site_member.siteMemberStatus', 1);
 		db::where('MONTH(loginDate) = ? AND YEAR(loginDate) = ?', array($month, $year));
+		db::group_by('OUL.siteID');
 		$activeMembers = db::get()->row('total');
 
 		if ($totalMembers == 0) {
@@ -461,12 +463,14 @@ Class Controller_Kpi
 
 			// 5. active members
 
-			db::select('siteID, count(distinct userID) as total');
-			db::from('OLAP_user_logins');
-			db::where('siteID', $siteIDs);
+			db::select('OUL.siteID, count(distinct OUL.userID) as total');
+			db::from('OLAP_user_logins OUL');
+			db::innerjoin('site_member', 'site_member.userID = OUL.userID');
+			db::where('OUL.siteID', $siteIDs);
+			db::where('site_member.siteMemberStatus', 1);
 			db::where('MONTH(loginDate) = ? AND YEAR(loginDate) = ?', array($month, $year));
-			db::group_by('siteID');
-			$activeMembers = db::get()->result('siteID', true);
+			db::group_by('OUL.siteID');
+			$activeMembers = db::get()->result('OUL.siteID', true);
 
 			// var_dump($groupedMembers);
 			// die;
