@@ -2117,10 +2117,10 @@ class Controller_Report
 				## prepare report.
 
 				## all cell
-				$allCells = $sheetProject->getStyle("A1:O".(4+count($data)));
+				$allCells = $sheetProject->getStyle("A1:J".(4+count($data)));
 				$allCells->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_TOP);
 				$allCells->getAlignment()->setWrapText(true);
-				foreach(range('A','O') as $columnID) {
+				foreach(range('A','J') as $columnID) {
 				    $sheetProject->getColumnDimension($columnID)->setAutoSize(true);
 				}
 				$allCells->applyFromArray(
@@ -2139,32 +2139,27 @@ class Controller_Report
 
 				# first row header
 				$sheetProject->setCellValue("A1", $filename);
-				$sheetProject->mergeCells("A1:O1");
+				$sheetProject->mergeCells("A1:J1");
 
 				# second row header
 				$sheetProject->setCellValue("A2", $projectName);
 				$sheetProject->mergeCells("A2:C2");
 
 				$sheetProject->setCellValue("D2", 'Generated at '.now());
-				$sheetProject->mergeCells("D2:O2");
+				$sheetProject->mergeCells("D2:J2");
 
 				# set alignment
-				$sheetProject->getStyle("D1:O2")->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+				$sheetProject->getStyle("D1:J2")->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
 
 				# third row header
 				$sheetProject->setCellValue("D3", 'Income');
-				$sheetProject->mergeCells("D3:K3");
-
-				$sheetProject->setCellValue("L3", 'Expense');
-				$sheetProject->mergeCells("L3:N3");
-
-				$sheetProject->setCellValue("O3", 'Balance');
+				$sheetProject->mergeCells("D3:J3");
 
 				# set alignment
-				$sheetProject->getStyle("D3:O3")->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+				$sheetProject->getStyle("D3:J3")->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 
 				# forth row header
-				$forthheader = array('State Name','District Name','Site','Membership Fee','PC Usage','Print Service','Other Service','Scanning','Laminating','Other Cash In','Total Income','Cash Drawer','Bank Account','Total Expense','Balance');
+				$forthheader = array('State Name','District Name','Site','Membership Fee','PC Usage','Print Service','Other Service','Scanning','Laminating','Total Income');
 				$a = 1;
 				foreach ($forthheader as $key => $value) {
 					// $a++;
@@ -2175,13 +2170,13 @@ class Controller_Report
 				}
 
 				# set alignment
-				$sheetProject->getStyle("A4:O4")->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+				$sheetProject->getStyle("A4:J4")->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 
 				# set background color
-				$sheetProject->getStyle('A1:O4')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('6495ED');
+				$sheetProject->getStyle('A1:J4')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('6495ED');
 
 				# set font
-				$sheetProject->getStyle('A1:O4')->applyFromArray(
+				$sheetProject->getStyle('A1:J4')->applyFromArray(
 												array(
 									    			'font'  => array(
 										        		'bold'  => true,
@@ -2269,13 +2264,8 @@ class Controller_Report
 							$sheetProject->setCellValue('G'.($ii), $value['OthersSrvc']);
 							$sheetProject->setCellValue('H'.($ii), $value['Scanning']);
 							$sheetProject->setCellValue('I'.($ii), $value['Laminating']);
-							$sheetProject->setCellValue('J'.($ii), $value['OthersCashIn']);
-							$sheetProject->setCellValue('K'.($ii), '=SUM(D'.($ii).':J'.($ii).')');
-
-							$sheetProject->setCellValue('L'.($ii), '0');
-							$sheetProject->setCellValue('M'.($ii), '0');
-							$sheetProject->setCellValue('N'.($ii), $value['Expense']);
-							$sheetProject->setCellValue('O'.($ii), '=K'.($ii).'-N'.($ii));
+							// $sheetProject->setCellValue('J'.($ii), $value['OthersCashIn']);
+							$sheetProject->setCellValue('J'.($ii), '=SUM(D'.($ii).':I'.($ii).')');
 							$countSiteOnProject++;
 						}
 						
@@ -2286,18 +2276,16 @@ class Controller_Report
 						$sheetProject->setCellValue('C'.(5+$countSiteOnProject), 'Pi1M Total');
 						
 				# set alignment
-				$sheetProject->getStyle("D5:O".(4+$countSiteOnProject))->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+				$sheetProject->getStyle("D5:J".(4+$countSiteOnProject))->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
 
 				# set color
-				$sheetProject->getStyle("K5:K".(4+$countSiteOnProject))->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('e0e0e0');
+				$sheetProject->getStyle("J5:J".(4+$countSiteOnProject))->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('e0e0e0');
 
-				$sheetProject->getStyle("N5:O".(4+$countSiteOnProject))->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('e0e0e0');
+				$sheetProject->getStyle("A".(5+$countSiteOnProject).":J".(5+$countSiteOnProject))->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('ADD8E6');
 
-				$sheetProject->getStyle("A".(5+$countSiteOnProject).":O".(5+$countSiteOnProject))->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('ADD8E6');
+				$sheetProject->getStyle("D5:J".(5+$countSiteOnProject))->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_00);						
 
-				$sheetProject->getStyle("D5:O".(5+$countSiteOnProject))->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_00);						
-
-						for ($i=3; $i < 15; $i++) {
+						for ($i=3; $i < 10; $i++) {
 							$sheetProject->setCellValue($cellRange[$i].(5+$countSiteOnProject),'=SUM('.$cellRange[$i].'5:'.$cellRange[$i].(4+$countSiteOnProject).')');
 						}						
 					// var_dump($countSiteOnProject);
