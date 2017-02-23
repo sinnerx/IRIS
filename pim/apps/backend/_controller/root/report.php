@@ -2377,10 +2377,10 @@ class Controller_Report
 				$endSheetRow=$monCount+5;
 
 				## all cell
-				$allCellSite = $sheetSite->getStyle("A1:Q".$endSheetRow);
+				$allCellSite = $sheetSite->getStyle("A1:J".$endSheetRow);
 				$allCellSite->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_TOP);
 				$allCellSite->getAlignment()->setWrapText(true);
-				foreach(range('A','Q') as $columnID) {
+				foreach(range('A','J') as $columnID) {
 				    $sheetSite->getColumnDimension($columnID)->setAutoSize(true);
 				}
 				$allCellSite->applyFromArray(
@@ -2401,45 +2401,41 @@ class Controller_Report
 
 				# first row header
 				$sheetSite->setCellValue("A1", $filename);
-				$sheetSite->mergeCells("A1:Q1");
+				$sheetSite->mergeCells("A1:J1");
 
 				# second row header
 				$sheetSite->setCellValue("A2", $sitePim['siteName']);
 				$sheetSite->mergeCells("A2:C2");
 
 				$sheetSite->setCellValue("D2", 'Generated at '.now());
-				$sheetSite->mergeCells("D2:Q2");
+				$sheetSite->mergeCells("D2:J2");
 
 				# set alignment
-				$sheetSite->getStyle("D2:Q2")->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+				$sheetSite->getStyle("D2:J2")->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
 
 				# third row header
 				$sheetSite->setCellValue("D3", 'Income');
-				$sheetSite->mergeCells("D3:L3");
+				$sheetSite->mergeCells("D3:J3");
 
-				$sheetSite->setCellValue("M3", 'Expense');
-				$sheetSite->mergeCells("M3:P3");
-
-				$sheetSite->setCellValue("Q3", 'Balance');
 
 				# set alignment
-				$sheetSite->getStyle("D3:Q3")->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+				$sheetSite->getStyle("D3:J3")->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 
 				# forth row header
-				$fourthHeaderSite = array('Year','Month','Date','Membership Fee','PC Usage','Print Service','Other Service','Scanning','Laminating','Other Cash In','Other Cash In Description','Total Income','Cash Drawer','Bank Account','Expense Description','Total Expense','Balance');
+				$fourthHeaderSite = array('Year','Month','Date','Membership Fee','PC Usage','Print Service','Other Service','Scanning','Laminating','Total Income');
 				
 				foreach ($fourthHeaderSite as $key=>$value) {
 					$sheetSite->setCellValue($cellRange[$key].'4', $value);
 				}
 
 				# set alignment
-				$sheetSite->getStyle("A4:Q4")->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+				$sheetSite->getStyle("A4:J4")->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 
 				# set background color
-				$sheetSite->getStyle('A1:Q4')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('6495ED');
+				$sheetSite->getStyle('A1:J4')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('6495ED');
 
 				# set font
-				$sheetSite->getStyle('A1:Q4')->applyFromArray(
+				$sheetSite->getStyle('A1:J4')->applyFromArray(
 												array(
 									    			'font'  => array(
 										        		'bold'  => true,
@@ -2453,25 +2449,25 @@ class Controller_Report
 				$sheetSite->mergeCells("A5:A".$endSheetRow);
 
 				# set alignment
-				$sheetSite->getStyle("D5:Q".$endSheetRow)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+				$sheetSite->getStyle("D5:J".$endSheetRow)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
 
 				# set color
-				$sheetSite->getStyle("B5:Q5")->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('add8e6');
+				$sheetSite->getStyle("B5:J5")->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('add8e6');
 
-				$sheetSite->getStyle("D6:Q".$endSheetRow)->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('B0C4DE');
+				$sheetSite->getStyle("D6:J".$endSheetRow)->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('B0C4DE');
 
-				$sheetSite->getStyle("D5:Q".$endSheetRow)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_00);
+				$sheetSite->getStyle("D5:J".$endSheetRow)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_00);
 
 
 
 				#All total formula
-				$cellTotal=array('D','E','F','G','H','I','J','L','M','N','P');
+				$cellTotal=array('D','E','F','G','H','I','J');
 				$endDateRow=$monCount+5;
 				foreach($cellTotal as $key=>$cell){
 						$sheetSite->setCellValue($cell.'5', '=SUM('.$cell.'6:'.$cell.$endDateRow.')');
 				}
 				#all total balance formula
-				$sheetSite->setCellValue('Q5', '=L5-P5');
+				// $sheetSite->setCellValue('Q5', '=L5-P5');
 
 				
 				$sheetSite->setCellValue("B5", "Total");
@@ -2495,14 +2491,14 @@ class Controller_Report
 						$sheetSite->setCellValue('G'.$cellSiteStart, empty($dataSite['OthersSrvc'])?'0':$dataSite['OthersSrvc']);
 						$sheetSite->setCellValue('H'.$cellSiteStart, empty($dataSite['Scanning'])?'0':$dataSite['Scanning']);
 						$sheetSite->setCellValue('I'.$cellSiteStart, empty($dataSite['Laminating'])?'0':$dataSite['Laminating']);
-						$sheetSite->setCellValue('J'.$cellSiteStart, empty($dataSite['OthersCashIn'])?'0':$dataSite['OthersCashIn']);
-						$sheetSite->setCellValue('K'.$cellSiteStart, "");
-						$sheetSite->setCellValue('L'.$cellSiteStart, '=SUM(D'.$cellSiteStart.':J'.$cellSiteStart.')');
-						$sheetSite->setCellValue('M'.$cellSiteStart, "0");
-						$sheetSite->setCellValue('N'.$cellSiteStart, "0");
-						$sheetSite->setCellValue('O'.$cellSiteStart, "");
-						$sheetSite->setCellValue('P'.$cellSiteStart, empty($dataSite['Expense'])?'0':$dataSite['Expense']);
-						$sheetSite->setCellValue('Q'.$cellSiteStart, '=L'.$cellSiteStart.'-P'.$cellSiteStart);
+						// $sheetSite->setCellValue('J'.$cellSiteStart, empty($dataSite['OthersCashIn'])?'0':$dataSite['OthersCashIn']);
+						// $sheetSite->setCellValue('K'.$cellSiteStart, "");
+						$sheetSite->setCellValue('J'.$cellSiteStart, '=SUM(D'.$cellSiteStart.':J'.$cellSiteStart.')');
+						// $sheetSite->setCellValue('M'.$cellSiteStart, "0");
+						// $sheetSite->setCellValue('N'.$cellSiteStart, "0");
+						// $sheetSite->setCellValue('O'.$cellSiteStart, "");
+						// $sheetSite->setCellValue('P'.$cellSiteStart, empty($dataSite['Expense'])?'0':$dataSite['Expense']);
+						// $sheetSite->setCellValue('Q'.$cellSiteStart, '=L'.$cellSiteStart.'-P'.$cellSiteStart);
 
 						$cellSiteStart++;
 						
