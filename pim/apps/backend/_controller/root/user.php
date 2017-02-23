@@ -27,10 +27,12 @@ class Controller_User
 			$where['userProfileFullName LIKE ? OR userIC LIKE ? OR userEmail = ?'] = array('%'.$searchText.'%', '%'.$searchText.'%', $searchText);
 		}
 
+		// var_dump($where);
+
 		## get paginated user list.
 		$data['users']	= model::load("user/user")->getUsers($where,
 			array('currentPage'=> $page,
-				  'urlFormat'=> url::base("user/lists/{page}")));
+				  'urlFormat'=> url::base("user/lists/{page}",true)));
 
 		view::render("root/user/lists",$data);
 	}

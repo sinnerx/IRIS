@@ -487,10 +487,12 @@ class User extends \Origami
 	 */
 	public function getUsers($where = null, $pagination = null)
 	{
+		// var_dump($where);
 		$users = model::orm('user/user')
 		->select('user_profile.*, user.*')
-		->where('userStatus', 1)
-		->join('user_profile', 'user_profile.userID = user.userID');
+		->join('user_profile', 'user_profile.userID = user.userID')
+		->where('user.userStatus', 1)
+		;
 
 		if($where)
 		{
@@ -506,14 +508,34 @@ class User extends \Origami
 
 		if($pagination)
 		{
-			$totalRows = db::from('user')->num_rows();
-			
+			// var_dump($where);
+			// die;
+			db::from('user')->join('user_profile ', 'user_profile.userID = user.userID');
+			db::where('userStatus', 1);
+			if($where)
+			{
+				$where	= !is_array($where)?Array($where):$where;
+				foreach($where as $key => $wher)
+				{
+					if(is_string($key))
+						db::where($key, $wher);
+					else
+						db::where($wher);
+				}
+			}
+			$totalRows = db::get()->num_rows();
+			//->num_rows();
+			// $totalRows = 3;
+			// var_dump($totalRows);
+			// die;
 			pagination::initiate(Array(
 				"totalRow"=>$totalRows,
 				"currentPage"=>$pagination['currentPage'],
 				"urlFormat"=>$pagination['urlFormat']
 								));
 			// var_dump(pagination::recordNo());
+			// die;
+			// var_dump($users);
 			// die;
 			$users = $users->limit(pagination::get('limit'), pagination::recordNo()-1);
 		}
