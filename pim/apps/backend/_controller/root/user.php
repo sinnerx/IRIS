@@ -9,7 +9,8 @@ class Controller_User
 						3=>"Cluster Lead",
 						4=>"Operation Manager",
 						5=>"Financial Controller",
-						6=>'HQ Admin'
+						6=>'HQ Admin',
+						7=>'Temporary Manager',
 									);
 	}
 

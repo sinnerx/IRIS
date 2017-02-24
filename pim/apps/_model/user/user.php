@@ -86,6 +86,7 @@ class User extends \Origami
 	{
 		return model::orm('user/user')
 		->where('userLevel', self::LEVEL_SITEMANAGER)
+		->or_where('userLevel', 7)
 		->where('userStatus', 1)
 		->where('userID NOT IN (SELECT userID FROM site_manager WHERE siteManagerStatus = 1)')
 		->execute();
@@ -271,6 +272,8 @@ class User extends \Origami
 		$data_user['userUpdatedDate'] = date('Y-m-d H:i:s');
 		$data_user['userUpdatedUser'] = session::get('userID');
 		$data_user['userOKUStatus'] = $data['userOKUStatus'];
+		$data_user['userLevelManager'] = $data['userLevelManager'];
+
 
 		db::where('userID',$userID)->update('user',$data_user);
 		
