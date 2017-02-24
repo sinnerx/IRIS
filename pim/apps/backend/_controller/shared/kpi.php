@@ -470,7 +470,7 @@ Class Controller_Kpi
 			db::where('site_member.siteMemberStatus', 1);
 			db::where('MONTH(loginDate) = ? AND YEAR(loginDate) = ?', array($month, $year));
 			db::group_by('OUL.siteID');
-			$activeMembers = db::get()->result('OUL.siteID', true);
+			$activeMembers = db::get()->result('siteID', true);
 
 			// var_dump($groupedMembers);
 			// die;
