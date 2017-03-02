@@ -108,7 +108,7 @@ var site = new function()
 <div class='row'>
 	<div class='col-sm-10'>		
 		<div class="form-group" style="margin-left:10px">
-			<?php echo form::select("selectMonth",model::load("helper")->monthYear("month"),"onchange='site.overview.updateDate();'",$month);?>
+			<?php echo form::select("selectMonth",model::load("helper")->monthYear("monthE"),"onchange='site.overview.updateDate();'",$month,"[ALL MONTH]");?>
 			
 			<?php echo form::select("selectYear",model::load("helper")->monthYear("year"),"onchange='site.overview.updateDate();'",$year);?>
 			

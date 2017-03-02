@@ -1295,3 +1295,9 @@ user_ic:
 	newIC [varchar(100)]
 	oldIC [varchar(100)]
 	ICUpdatedDate [datetime]
+
+site_audit_score:
+	siteAuditScoreID [int]
+	siteID [int]
+	siteAuditScore [int]
+	siteAuditDate [date]

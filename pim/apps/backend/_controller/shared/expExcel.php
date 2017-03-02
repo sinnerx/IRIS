@@ -754,6 +754,7 @@ class Controller_ExpExcel
 		$ExcelHelper	= new model\report\PHPExcelHelper($excel, "Cash Advance Form ".$pr->prNumber.".xls");
 
 		$sheet = $excel->getActiveSheet();
+		$sheet->getColumnDimension('I')->setAutoSize(true);		
 		$user = $pr->getRequestingUser();
 
 		$sheet->setCellValue('D4', $user->getProfile()->userProfileFullName); // applicant name
@@ -773,17 +774,20 @@ class Controller_ExpExcel
 		foreach($categoriedItems as $categoryID => $items)
 		{
 			$cell = $sheet->getCell('B'.$itemY);
-				$cell->getStyle()->getFont()->setBold(true)->setUnderline(true);
+				// $cell->getStyle()->getFont()->setBold(true)->setUnderline(true);
 			$cell->setValue($categories[$categoryID]);
 			$itemY++;
+			$sheet->insertNewRowBefore($itemY,1);
 
 			foreach($items as $item)
 			{
+				$sheet->insertNewRowBefore($itemY,1);
 				$sheet->setCellValue('B'.$itemY, $item->expenseItemName);
 				$sheet->setCellValue('I'.$itemY, $item->prItemTotal);
 
 				$itemY++;
 			}
+			// $sheet->insertNewRowBefore($itemY,1); 
 		}
 
 		// Project Director signature
@@ -800,16 +804,32 @@ class Controller_ExpExcel
 		// $objDrawing->setOffsetX($objDrawing->getOffsetX()+30);
 		$objDrawing->setOffsetX(10);
 		$objDrawing->setOffsetY(10);*/
+		// var_dump($itemY);
+		$itemY++;
 
-		$sheet->setCellValue('B29', 'Ringgit Malaysia : '.$ca->prCashAdvanceAmount);
+		// var_dump($itemY);
+		// die;
+		$sheet->setCellValue('B'. $itemY, 'Ringgit Malaysia : '.$ca->prCashAdvanceAmount);
+		// $sheet->setCellValue('B29', 'Ringgit Malaysia : '.$ca->prCashAdvanceAmount);
+		// var_dump('Ringgit Malaysia : '.$ca->prCashAdvanceAmount);
+		// die;
+		$itemY += 4;
+		// var_dump($itemY);
 
-		$sheet->setCellValue('C33', $user->getProfile()->userProfileFullName);
+		$sheet->setCellValue('C'. $itemY, $user->getProfile()->userProfileFullName);
+		// $sheet->setCellValue('C33', $user->getProfile()->userProfileFullName);
 
-		$sheet->setCellValue('B35', 'Date : '.date('d-m-Y', strtotime($pr->prCreatedDate)));
+		$itemY += 2;
+		// var_dump($itemY);
+
+		$sheet->setCellValue('B'. $itemY, 'Date : '.date('d-m-Y', strtotime($pr->prCreatedDate)));
+		// $sheet->setCellValue('B35', 'Date : '.date('d-m-Y', strtotime($pr->prCreatedDate)));
 
 		$omApproval = $pr->getLevelApproval('om');
-		$sheet->setCellValue('H35', 'Date : '.date('d-m-Y', strtotime($omApproval->prApprovalUpdatedDate))); 
-
+		$sheet->setCellValue('H'. $itemY, 'Date : '.date('d-m-Y', strtotime($omApproval->prApprovalUpdatedDate))); 
+		// die;
+		// $sheet->setCellValue('H35', 'Date : '.date('d-m-Y', strtotime($omApproval->prApprovalUpdatedDate))); 
+		// $sheet->insertNewRowBefore($itemY,1);
 		$ExcelHelper->execute();
 	}
 
@@ -1339,8 +1359,15 @@ class Controller_ExpExcel
 		 ***********************************/
 		foreach($rlSites as $siteID => $rlList)
 		{
+			ini_set('memory_limit', -1);
 			foreach($rlList as $rl)
 			{
+				// var_dump ($rl->isManagerPending());
+				// die;
+				$clApproval = $rl->getLevelApproval('cl');
+				$omApproval = $rl->getLevelApproval('om');
+				$fcApproval = $rl->getLevelApproval('fc');
+
 				$sheet = $sheets[$sheetNo] = $excel->createSheet($sheetNo);
 
 				$sheetNo++;
@@ -1418,37 +1445,42 @@ class Controller_ExpExcel
 
 					foreach($category->getFiles() as $file)
 					{
+						// var_dump($file);
+						// die;
+						
 						$filePath = $file->getFilePath();
+						if (file_exists($filePath)){
 
-						$type = $file->prReconcilationFileType;
+							$type = $file->prReconcilationFileType;
+							switch($type)
+							{
+								case 'image/jpeg':
+									$gdImage = imagecreatefromjpeg($filePath);
+								break;
+								case 'image/png':
+									$gdImage = imagecreatefrompng($filePath);
+								break;
+								case 'image/bmp':
+									$gdImage = imagecreatefromwbmp($filePath);
+								break;
+							}
 
-						switch($type)
-						{
-							case 'image/jpeg':
-								$gdImage = imagecreatefromjpeg($filePath);
-							break;
-							case 'image/png':
-								$gdImage = imagecreatefrompng($filePath);
-							break;
-							case 'image/bmp':
-								$gdImage = imagecreatefromwbmp($filePath);
-							break;
-						}
+							$objDrawing = new PHPExcel_Worksheet_MemoryDrawing();
+							$objDrawing->setImageResource($gdImage);
+							$objDrawing->setRenderingFunction(PHPExcel_Worksheet_MemoryDrawing::RENDERING_JPEG);
+							$objDrawing->setMimeType(PHPExcel_Worksheet_MemoryDrawing::MIMETYPE_DEFAULT);
+							$objDrawing->setWidth(480);
+							$objDrawing->setWorksheet($sheet);
+							$objDrawing->setCoordinates('C'.$y);
+							// $objDrawing->setOffsetX($objDrawing->getOffsetX()+30);
+							$objDrawing->setOffsetX(10);
+							$objDrawing->setOffsetY(10);
 
-						$objDrawing = new PHPExcel_Worksheet_MemoryDrawing();
-						$objDrawing->setImageResource($gdImage);
-						$objDrawing->setRenderingFunction(PHPExcel_Worksheet_MemoryDrawing::RENDERING_JPEG);
-						$objDrawing->setMimeType(PHPExcel_Worksheet_MemoryDrawing::MIMETYPE_DEFAULT);
-						$objDrawing->setWidth(480);
-						$objDrawing->setWorksheet($sheet);
-						$objDrawing->setCoordinates('C'.$y);
-						// $objDrawing->setOffsetX($objDrawing->getOffsetX()+30);
-						$objDrawing->setOffsetX(10);
-						$objDrawing->setOffsetY(10);
+							$height = $objDrawing->getHeight();
 
-						$height = $objDrawing->getHeight();
-
-						$y += round($height / 19);
+							$y += round($height / 19);							
+							}
+						
 					}
 
 					$setBorder($sheet, "A$categoryY:A$y", 'outline');
@@ -1460,6 +1492,9 @@ class Controller_ExpExcel
 					$y++;
 				}
 
+				
+
+
 				// total amount.
 				$sheet->setCellValue('F'.$y, 'Total Amount :');
 					$setAlign($sheet, "F$y", 'right');
@@ -1469,13 +1504,78 @@ class Controller_ExpExcel
 				$highlight($sheet, "F$y:G$y", true);
 				$backgrounds[] = array($sheet, "G$y:H$y", "FFFF00");
 
+				//Approval Level
+				//Pending
+				//else
+				//Done
+				if($rl->isManagerPending())
+					$manager_rl_status = "Pending";
+				else
+					$manager_rl_status = "Done";
+
+				$y += 2;
+				$sheet->setCellValue('A'.$y, $manager_rl_status);
+				$sheet->mergeCells("A$y:B$y");
+				$sheet->setCellValue('C'.$y, $clApproval->getStatusLabel());
+				$sheet->mergeCells("C$y:D$y");
+				$sheet->setCellValue('E'.$y, $omApproval->getStatusLabel());
+				$sheet->mergeCells("E$y:F$y");
+				$sheet->setCellValue('G'.$y, $fcApproval->getStatusLabel());
+				$sheet->mergeCells("G$y:H$y");
+				
+				$y++;
+
+				$sheet->setCellValue('A'.$y, $rl->getSubmittedUser()->getProfile()->userProfileFullName);
+				$sheet->mergeCells("A$y:B$y");
+				$sheet->setCellValue('C'.$y, $clApproval->getUserProfile()->userProfileFullName);
+				$sheet->mergeCells("C$y:D$y");
+				$sheet->setCellValue('E'.$y, $omApproval->getUserProfile()->userProfileFullName);
+				$sheet->mergeCells("E$y:F$y");
+				$sheet->setCellValue('G'.$y, $fcApproval->getUserProfile()->userProfileFullName);
+				$sheet->mergeCells("G$y:H$y");
+				//
+				//
+				//$omApproval->getUserProfile()->userProfileFullName
+				//$fcApproval->getUserProfile()->userProfileFullName;
+
+				$y++;
+
+				$sheet->setCellValue('A'.$y, 'Manager');
+				$sheet->mergeCells("A$y:B$y");
+				$sheet->setCellValue('C'.$y, 'Cluster Lead');
+				$sheet->mergeCells("C$y:D$y");
+				$sheet->setCellValue('E'.$y, 'Operations Manager');
+				$sheet->mergeCells("E$y:F$y");
+				$sheet->setCellValue('G'.$y, 'Financial Controller');
+				$sheet->mergeCells("G$y:H$y");
+				  // Manager
+                  // Cluster Lead
+                  // Operations Manager
+                  // Financial Controller
+
+				$y++;
+
+				$sheet->setCellValue('A'.$y, $site->siteName);
+				$sheet->mergeCells("A$y:B$y");
+				$sheet->setCellValue('C'.$y, $cluster->clusterName);
+				$sheet->mergeCells("C$y:D$y");
+				$sheet->setCellValue('E'.$y, $pr->getOps());
+				$sheet->mergeCells("E$y:F$y");
+				$sheet->setCellValue('G'.$y, 'HQ');
+				$sheet->mergeCells("G$y:H$y");
+
+				// $pr->getSite()->siteName;
+				// $pr->getCluster()->clusterName;
+				// $pr->getOps();
+
+
 				$y += 2;
 				$sheet->setCellValue('A'.$y, 'Disclaimer : This excel is computer generated. No signature is required.');
 				
 				// color
 				$background($sheet, "A1:H".$y, 'FFFFFF');
 				// $backgrounds[] = array($sheet, 'A1:H'.$y, 'FFFFFF');
-			}
+			}//end rl foreach
 		}
 
 

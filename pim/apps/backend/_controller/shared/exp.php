@@ -22,11 +22,15 @@ class Controller_Exp
 		if(request::get('site'))
 			session::set('prFilter.site', request::get('site'));
 
-		if(!(request::get('site'))){
+		// if(!(request::get('site'))){
+		// 	session::set('prFilter.site', '');
+		// 	session::set('prFilter.siteName', '');
+		// }
+						
+		if(request::get('siteName') == ''){
 			session::set('prFilter.site', '');
 			session::set('prFilter.siteName', '');
-		}
-								
+		}		
 
 		if(request::get('siteName'))
 			session::set('prFilter.siteName', request::get('siteName'));		
@@ -43,8 +47,8 @@ class Controller_Exp
 		$data['month'] 		= session::get('prFilter.month', date('n'));
 		$data['year'] 		= session::get('prFilter.year', date('Y'));
 		$data['cluster'] 	= session::get('prFilter.cluster');
-		$data['site'] 		= session::get('prFilter.site', '');
-		$data['siteName'] 		= session::get('prFilter.siteName', '');
+		$data['site'] 		= session::get('prFilter.site');
+		$data['siteName'] 		= session::get('prFilter.siteName');
 
 		//var_dump(request::get('year'));
 		//var_dump($data['site']);
@@ -530,6 +534,29 @@ class Controller_Exp
 		view::render('shared/exp/prEditCashAdvance', $data);
 	}
 
+	public function prCashAdvancePrint($cashAdvanceID)
+	{
+		// $pr = orm('expense/pr/pr')->find($id);
+		$cashAdvance = orm('expense/pr/cash_advance')->find($cashAdvanceID);
+		$pr = $cashAdvance->getPr();
+
+		$site = $pr->getSite();
+		$manager = $pr->getRequestingUser();
+
+		$selectDate = input::get('selectDate');		
+		$data['selectDate'] = $selectDate = $selectDate ? :  date('d F Y');
+		$data['siteName'] =  $site->siteName;
+		$data['siteManager'] = $manager->userProfileFullName;
+		$data['prId'] = $id;
+		$data['cashAdvanceID'] = $cashAdvanceID;
+		$data['pr'] = $pr;
+		$data['ca'] = $cashAdvance;
+		$data['isEditable'] = $isEditable = $pr->isPendingFor(user());
+		$data['disabled'] = $isEditable ? '' : 'disabled';
+
+		view::render('shared/exp/prCashAdvancePrint', $data);
+	}
+
 	public function prEditCashAdvanceSubmit($cashAdvanceID)
 	{
 		$cashAdvance = orm('expense/pr/cash_advance')->find($cashAdvanceID);
@@ -605,11 +632,16 @@ class Controller_Exp
 		if(request::get('site'))
 			session::set('prFilter.site', request::get('site'));
 
-		if(!(request::get('site'))){
+		// if(!(request::get('site'))){
+		// 	session::set('prFilter.site', '');
+		// 	session::set('prFilter.siteName', '');
+		// }
+			
+		if(request::get('siteName') == ''){
 			session::set('prFilter.site', '');
 			session::set('prFilter.siteName', '');
 		}
-								
+
 		if(request::get('siteName'))
 			session::set('prFilter.siteName', request::get('siteName'));		
 
@@ -635,9 +667,9 @@ class Controller_Exp
 		// if manager show non submitted RL OR (date based RL)
 			$data['year'] 		= session::get('rlFilter.year', date('Y'));
 			$data['month'] 		= session::get('rlFilter.month', date('n'));
-			$data['cluster'] 	= session::get('prFilter.cluster', '');
-			$data['site'] 		= session::get('prFilter.site', '');
-			$data['siteName'] 	= session::get('prFilter.siteName', '');			
+			$data['cluster'] 	= session::get('prFilter.cluster');
+			$data['site'] 		= session::get('prFilter.site');
+			$data['siteName'] 	= session::get('prFilter.siteName');			
 		if(user()->isManager())
 		{
 			//$rl->where('prReconcilationSubmitted = ? OR (prReconcilationSubmitted = ? AND MONTH(prReconcilationSubmittedDate) = ? AND YEAR(prReconcilationSubmittedDate) = ?)', array(0, 1, $data['month'], $data['year']));

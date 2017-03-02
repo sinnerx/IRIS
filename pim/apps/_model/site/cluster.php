@@ -279,6 +279,40 @@ class Cluster extends \Origami
 		db::where("clusterID", $clusterID);
 		return db::get("cluster")->row();
 	}
+
+	public function upsertSiteAuditScore($siteID, $param)
+	{
+		$auditDateYear = date('Y', strtotime($param['siteAuditDate']));
+		$auditDateMonth = date('n', strtotime($param['siteAuditDate']));
+		$convertDate = date ('Y-m-d', strtotime($param['siteAuditDate']));
+		// var_dump($param['siteAuditDate']);
+		// var_dump($auditDateYear);
+		// var_dump($auditDateMonth);
+
+		db::select("siteAuditScoreID");
+		db::where("siteID", $siteID);
+		db::where("MONTH(siteAuditDate)", $auditDateMonth);
+		db::where("YEAR(siteAuditDate)", $auditDateYear);
+
+		$checkSiteAuditScore = 	db::get('site_audit_score')->row();
+		// var_dump($checkSiteAuditScore);
+		// die;
+		$data['siteAuditScore'] = $param['siteAuditScore'];
+		$data['siteAuditDate'] 	= $convertDate;
+		$data['siteID']			= $siteID;
+
+		// var_dump($data);
+		// die;
+
+		if($checkSiteAuditScore){
+
+			db::where("siteAuditScoreID",$checkSiteAuditScore['siteAuditScoreID']);
+			db::update("site_audit_score",$data);
+		}
+		else {
+			db::insert("site_audit_score",$data);
+		}
+	}
 }
 
 

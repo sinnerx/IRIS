@@ -7,13 +7,37 @@ var site = new function()
 	{
 		this.updateDate = function(param = null)
 		{
-      //console.log(param);
+      // console.log(param);
+      // console.log($("#clusterID").val());
+      var clusterID = null;
+      var siteID = null;
       if(param){
-        window.location.href = pim.base_url+"kpi/kpi_summary/"+$("#year").val()+"/"+$("#month").val()+"/"+$("#clusterID").val();
+        if(isNaN( $("#clusterID").val() )){
+          clusterID = '';
+        }
+        else{
+          clusterID = $("#clusterID").val();
+        }
+        window.location.href = pim.base_url+"kpi/kpi_summary/"+$("#year").val()+"/"+$("#month").val()+"/"+clusterID;
       }
       else{
+        
+        if(isNaN($("#siteID").val())) {
+          siteID = null;
+        }
+        else {
+          siteID = $("#siteID").val();
+        }
+
+        if(isNaN( $("#clusterID").val() )){
+          clusterID = '';
+        }
+        else{
+          clusterID = $("#clusterID").val();
+        }        
         // console.log($("#siteID").val());
-        window.location.href = pim.base_url+"kpi/kpi_summary/"+$("#year").val()+"/"+$("#month").val() + "/" + <?php echo $cluster; ?> + "/" + $("#siteID").val();
+        window.location.href = pim.base_url+"kpi/kpi_summary/"+$("#year").val()+"/"+$("#month").val() + "/" + clusterID + "/" + siteID;
+        // window.location.href = pim.base_url+"kpi/kpi_summary/"+$("#year").val()+"/"+$("#month").val() + "/" + <?php //echo $cluster; ?> + "/" + siteID;
       }
 			
 		}
@@ -112,13 +136,14 @@ Dashboard overview
 
 			<div class='col-lg-6'>			
 			<div style="float:right">
+        <?php //var_dump($site); ?>
 				<!-- <a href='<?php echo url::base("site/kpiMonthly/".$year);?>'  class='fa fa-external-link' data-toggle='ajaxModal' style="color:green;"> KPI yearly view</a>				 -->
         <?php 
           if(authData('user.userLevel') == \model\user\user::LEVEL_ROOT)
             echo form::select("clusterID",$clusterR,"class='input-sm form-control input-s-sm inline v-middle' onchange='site.overview.updateDate(this);'",$cluster,"[ALL CLUSTER]");
         ?>
         <?php echo form::select("siteID",$siteR,"class='input-sm form-control input-s-sm inline v-middle' onchange='site.overview.updateDate();'",$site,"[ALL SITE]");?>        
-				<?php echo form::select("month",model::load("helper")->monthYear("month"),'onchange="site.overview.updateDate();" class="form-control" style="display: inline; width: 100px;"',$month);?>
+				<?php echo form::select("month",model::load("helper")->monthYear("monthE"),'onchange="site.overview.updateDate();" class="form-control" style="display: inline; width: 100px;"',$month, "[ALL MONTH]");?>
 				<?php echo form::select("year",model::load("helper")->monthYear("year"),'onchange="site.overview.updateDate();" class="form-control" style="display: inline; width: 100px;"',$year);?>			
 			</div>	
 			</div>
@@ -380,7 +405,7 @@ Dashboard overview
                               </span>
                               <span class="clear">
                                 
-                                <span class="h1 block m-t-xs text-primary kpi-font"><?php echo $max['auditScore'];?></span>
+                                <span class="h1 block m-t-xs text-primary kpi-font"><?php echo $kpi['audit_score'];?></span>
                                 <small class="text-muted text-u-c">Average Score</small>
                               </span>
                             </a>

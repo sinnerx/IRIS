@@ -275,11 +275,13 @@ class Controller_Cafe
 		}
 
 
-		$row = db::from('billing_transaction')
+		$row = 
+		db::select('billingTransactionUpdatedDate')
+		// db::from('billing_transaction')
 		->where('siteID', $this->site->siteID)
 		->limit(1)
 		->order_by('billingTransactionUpdatedDate DESC')
-		->get()
+		->get('billing_transaction')
 		->row();
 		
 		return json_encode(array(
@@ -288,6 +290,26 @@ class Controller_Cafe
 			));
 	}
 
+	/**
+	 * Get last user localID
+	 */
+	public function lastUserUpdatedDate()
+	{
+		$row = 
+		db::select('userUpdatedDate')
+		// db::from('billing_transaction')
+		->join('site_member', "user.userID = site_member.userID")
+		->where('site_member.siteID', $this->site->siteID)
+		->limit(1)
+		->order_by('userUpdatedDate DESC')
+		->get('user')
+		->row();
+		
+		return json_encode(array(
+			'status' => 'success',
+			'data' => $row['userUpdatedDate']
+			));
+	}
 	/*public function lastMemberRegisteredDate()
 	{
 		$row = db::from('user')

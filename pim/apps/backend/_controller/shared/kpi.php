@@ -7,12 +7,14 @@ Class Controller_Kpi
 		// $month = 8;
 		// $site = 14;
 		// var_dump(request::get());
+		// var_dump($siteParam . $cluster);
 		// die;
 
 		$siteIDs = array();
 
 		db::select("siteID, siteName");
 		db::from('site');
+		// db::join('site_info', 'site.siteID = site_info.siteID')
 		db::order_by('siteName');
 
 		//1st time to detect whether cl or root
@@ -31,26 +33,26 @@ Class Controller_Kpi
 				$data['siteR'][$row['siteID']]	= $row['siteName'];
 			}
 
-			$clusterUser = model::load("site/cluster")->getClusterByUser(authData('user.userID'));
-			$clusterDetails = model::load("site/cluster")->getClusterByID($clusterUser['clusterID']);	
+			// $clusterUser = model::load("site/cluster")->getClusterByUser(authData('user.userID'));
+			// $clusterDetails = model::load("site/cluster")->getClusterByID($clusterUser['clusterID']);	
 
 			// var_dump($clusterUser);
 			// die;
 			
 
-			$auditScore = $clusterDetails['clusterAuditScore'];						
+			// $auditScore = $clusterDetails['clusterAuditScore'];						
 		}
 		else if (authData('user.userLevel') == \model\user\user::LEVEL_ROOT){
 			$sites = $data['sites'] = db::get()->result('siteID');
 
-			$allCluster = model::load("site/cluster")->lists();
+			// $allCluster = model::load("site/cluster")->lists();
 
-			foreach ($allCluster as $clusteritem) {
-				# code...
-				$totalAuditScore += $clusteritem['clusterAuditScore'];
-			}
+			// foreach ($allCluster as $clusteritem) {
+			// 	# code...
+			// 	$totalAuditScore += $clusteritem['clusterAuditScore'];
+			// }
 			
-				$auditScore = $totalAuditScore;
+			// 	$auditScore = $totalAuditScore;
 		}
 		
 		$siteIDs = array_keys($sites);
@@ -62,7 +64,7 @@ Class Controller_Kpi
 			$data['clusterR'][$row['clusterID']]	= $row['clusterName'];
 		}
 
-		if($cluster != '')
+		if($cluster != '' && $cluster != 'NaN')
 		{
 			// var_dump(request::get("cluster"));
 			// die;
@@ -105,7 +107,8 @@ Class Controller_Kpi
 		// var_dump($siteIDs);
 			//
 		$data['year'] = $year = $year ? : date('Y');
-		$data['month'] = $month = $month ? : date('n');
+		$data['month'] = $month = $month ? : null;
+		// $data['month'] = $month = $month ? : date('n');
 
 
 		$countSite = count($siteIDs);
@@ -114,16 +117,21 @@ Class Controller_Kpi
 		//$siteIDs = implode (", ", $siteIDs);
 		// $siteIDs = "(". $siteIDs . ")";
 
+		if($data['month'] === null)
+			$yearly = 12;
+		else
+			$yearly = 1;
+
 		$data['max'] = array(
-			'event' => 2 * $countSite,
-			'entrepreneurship_class' => 1 * $countSite,
-			'entrepreneurship_sales' => 300 * $countSite,
-			'training_hours' => 32 * $countSite,
-			'active_member_percentage' => 80 * $countSite,
-			'kdb_sessions' => 30 * $countSite,
-			'kdb_pax' => 600 * $countSite,
+			'event' => 2 * $countSite * $yearly,
+			'entrepreneurship_class' => 1 * $countSite * $yearly,
+			'entrepreneurship_sales' => 300 * $countSite * $yearly,
+			'training_hours' => 32 * $countSite * $yearly,
+			'active_member_percentage' => 80 * $countSite * $yearly,
+			'kdb_sessions' => 30 * $countSite * $yearly,
+			'kdb_pax' => 600 * $countSite * $yearly,
 			'auditScore' => $auditScore,
-			'entre_article' => 1 * $countSite,
+			'entre_article' => 1 * $countSite * $yearly,
 			);
 
 		// event
@@ -142,7 +150,11 @@ Class Controller_Kpi
 		db::select('SUM(noOfActivities) as noOfActivities');
 		db::from('OLAP_articled_activities');
 		db::where('siteID', $siteIDs);
-		db::where('month = ? AND year = ?', array($month, $year));
+		if($month != "" )
+			db::where('month ', $month);
+		
+		db::where('year ', $year);
+		// db::where('month = ? AND year = ?', array($month, $year));
 		$totalEvents = db::get()->row('noOfActivities');
 
 		if ($totalEvents == null) {
@@ -162,7 +174,11 @@ Class Controller_Kpi
 		db::where('activityType', 2);
 		db::where('activityApprovalStatus', 1);
 		db::where('activityStartDate <= NOW() - INTERVAL 1 DAY ');
-		db::where('MONTH(activityStartDate) = ? AND YEAR(activityStartDate) = ?', array($month, $year));
+		if($month != "")
+			db::where('MONTH(activityStartDate)', $month);
+		
+		db::where('YEAR(activityStartDate)', $year);
+		// db::where('MONTH(activityStartDate) = ? AND YEAR(activityStartDate) = ?', array($month, $year));
 		db::where('training_type.trainingTypeName LIKE ?', array('%Entrepreneurship%'));
 		// ->join('activity_article', 'activity_article.activityID = activity.activityID', 'INNER JOIN')
 		db::join('training', 'activity.activityID = training.activityID', 'INNER JOIN');
@@ -179,7 +195,11 @@ Class Controller_Kpi
 		db::select('SUM(billingTransactionItemPrice * billingTransactionItemQuantity) as total');
 		db::from('billing_transaction_item');
 		db::where('billing_transaction.siteID', $siteIDs);
-		db::where('MONTH(billingTransactionDate) = ? AND YEAR(billingTransactionDate) = ?', array($month, $year));
+		if($month != "")
+			db::where('MONTH(billingTransactionDate)', $month);
+		
+		db::where('YEAR(billingTransactionDate)', $year);
+		// db::where('MONTH(billingTransactionDate) = ? AND YEAR(billingTransactionDate) = ?', array($month, $year));
 		db::where('billing_transaction_item.billingItemID IN (SELECT billingItemID FROM billing_item WHERE billingItemCode = ?)', array('lms_item'));
 		db::join('billing_transaction', 'billing_transaction.billingTransactionID = billing_transaction_item.billingTransactionID');
 		$sales = db::get()->row('total') ? : 0;
@@ -216,7 +236,11 @@ Class Controller_Kpi
 		db::where('siteID', $siteIDs);
 
 		db::where('activityDate <= NOW() - INTERVAL 1 DAY');
-		db::where('MONTH(activityDate) = ? AND YEAR(activityDate) = ?', array($month, $year));
+		if($month != "")
+			db::where('MONTH(activityDate)', $month);
+		
+		db::where('YEAR(activityDate)', $year);
+		// db::where('MONTH(activityDate) = ? AND YEAR(activityDate) = ?', array($month, $year));
 		$trainingHours = db::get()->row('total');
 		
 		$hours = 0;
@@ -241,13 +265,15 @@ Class Controller_Kpi
 		->where('userID IN (SELECT userID FROM log_login WHERE MONTH(logLoginCreatedDate) = ? AND YEAR(logLoginCreatedDate) = ?)', array($month, $year))
 		->get()->row('total');*/
 
-		db::select('count(distinct OUL.userID) as total');
-		db::from('OLAP_user_logins OUL');
-		db::innerjoin('site_member', 'site_member.userID = OUL.userID');
-		db::where('OUL.siteID', $siteIDs);
-		db::where('site_member.siteMemberStatus', 1);
-		db::where('MONTH(loginDate) = ? AND YEAR(loginDate) = ?', array($month, $year));
-		db::group_by('OUL.siteID');
+		
+		db::select('count(distinct userID) as total');
+		db::from('OLAP_user_logins');
+		db::where('siteID', $siteIDs);
+		if($month != "")
+			db::where('MONTH(loginDate)', $month);
+		
+		db::where('YEAR(loginDate)', $year);
+		// db::where('MONTH(loginDate) = ? AND YEAR(loginDate) = ?', array($month, $year));
 		$activeMembers = db::get()->row('total');
 
 		if ($totalMembers == 0) {
@@ -273,7 +299,8 @@ Class Controller_Kpi
 		db::join("article_category", "article.articleID = article_category.articleID");
 		db::where("categoryID", 4);
 		db::where("siteID", $siteIDs);
-		db::where("MONTH(articlePublishedDate)", $month);
+		if($month != '')
+			db::where("MONTH(articlePublishedDate)", $month);
 		db::where("YEAR(articlePublishedDate)", $year);
 
 		$totalEntArticle = db::get('article')->result();
@@ -294,21 +321,29 @@ Class Controller_Kpi
 		$kdb_sessions = 0;
 		$kdb_pax = 0;
 
-		db::select("COUNT(distinct activity.activityID) as sessions, COUNT(activity.activityID) as pax");
-		// db::from("article");
-		db::join("activity", "activity.activityID = activity_user.activityID");
-		db::join("training", "training.activityID = activity.activityID");
-		db::where("activityStartDate <= NOW() - INTERVAL 1 DAY ");
+		db::select("SUM(session) as sessions , SUM(pax) as pax");
 		db::where("siteID", $siteIDs);
-		db::where("trainingType", 7);
-		db::where("trainingSubType", 14);
-		db::where("MONTH(activityStartDate)", $month);
-		db::where("YEAR(activityStartDate)", $year);	
-			
-		$kdbData = db::get('activity_user')->result();
-
+		if($month != "")
+			db::where("month", $month);
+		db::where("year", $year);
+		$kdbData = db::get('OLAP_kdb_session_pax')->result();
+		// var_dump($kdbData);
+		// die;
 		$kdb_sessions += $kdbData[0]['sessions'];
 		$kdb_pax += $kdbData[0]['pax'];
+
+
+		//auditScore
+		db::select("SUM(siteAuditScore) as total");
+		// db::from("site_info");
+		db::where("siteID", $siteIDs);
+		if($month != "")
+			db::where("MONTH(siteAuditDate)", $month);
+
+		db::where("YEAR(siteAuditDate)", $year);		
+
+
+		$siteAuditScore = db::get("site_audit_score")->row('total');
 
 		$data['kpi'] = array(
 			'event' => $totalEvents,
@@ -320,7 +355,8 @@ Class Controller_Kpi
 			'total_members' => $noOfMembers,
 			'totalEntArticle' => $totalEntArticle[0]['total'],
 			'kdb_session'=>$kdb_sessions,
-			'kdb_pax'=>$kdb_pax
+			'kdb_pax'=>$kdb_pax,
+			'audit_score' => $siteAuditScore,
 			//'kdb_session'=>$totalKdbSession[0]['total'],
 			//'kdb_pax'=>$totalKdbPax[0]['totalpax']
 			);
@@ -354,7 +390,7 @@ Class Controller_Kpi
 		return view::render('shared/kpi/summary', $data);
 	}
 
-	public function kpi_overview($page = null)
+	public function kpi_overview($page = null, $month = null)
 	{
 		  //make it sort
 		   // $sort = $this->uri->segment(4);
@@ -365,8 +401,21 @@ Class Controller_Kpi
 
      //    $this->getList('name, user_group_id', $sort);
 
-		$year = $data['year'] = request::get('year', date('Y'));
-		$month = $data['month'] = request::get('month', date('n'));
+		// $year = $data['year'] = request::get('year', date('Y'));
+		// $month = $data['month'] = request::get('month', date('n'));
+		$data['year'] = $year = request::get('year') ? : date('Y');
+		$data['month'] = $month = request::get('month') ? : null;
+		// var_dump($month);
+			// die;
+		//concatinate into string in bracket
+		//$siteIDs = implode (", ", $siteIDs);
+		// $siteIDs = "(". $siteIDs . ")";
+
+		if($data['month'] === null)
+			$yearly = 12;
+		else
+			$yearly = 1;
+
 
 		$res_cluster	= model::load("site/cluster")->lists();
 		foreach($res_cluster as $row)
@@ -382,13 +431,13 @@ Class Controller_Kpi
 		// test
 
 		$data['max'] = array(
-			'event' => 2,
-			'entrepreneurship_class' => 1,
-			'entrepreneurship_sales' => 300,
-			'training_hours' => 32,
-			'active_member_percentage' => 80,
-			'kdb_sessions' => 30,
-			'kdb_pax' => 600			
+			'event' => 2 * $yearly,
+			'entrepreneurship_class' => 1 * $yearly,
+			'entrepreneurship_sales' => 300 * $yearly,
+			'training_hours' => 32 * $yearly,
+			'active_member_percentage' => 80 * $yearly,
+			'kdb_sessions' => 30 * $yearly,
+			'kdb_pax' => 600 * $yearly			
 			);
 
 		db::from('site');
@@ -405,8 +454,6 @@ Class Controller_Kpi
 		$clusterUser = model::load("site/cluster")->getClusterByUser(authData('user.userID'));
 		$clusterDetails = model::load("site/cluster")->getClusterByID($clusterUser['clusterID']);	
 
-		$auditScore = $clusterDetails['clusterAuditScore'];
-
 		if(count($sites) > 0)
 		{
 			// 1. Total events. Get total event done
@@ -414,7 +461,10 @@ Class Controller_Kpi
 			db::select('siteID, noOfActivities');
 			db::from('OLAP_articled_activities');
 			db::where('siteID', $siteIDs);
-			db::where('month = ? AND year = ?', array($month, $year));
+			if($month != "")
+				db::where('month', $month);
+			db::where('year', $year);
+			// db::where('month = ? AND year = ?', array($month, $year));
 			db::group_by('siteID');
 			$groupedEvents = db::get()->result('siteID', true);			
 
@@ -426,7 +476,10 @@ Class Controller_Kpi
 			db::where('activityType', 2);
 			db::where('activityApprovalStatus', 1);
 			db::where('activityStartDate <= NOW() - INTERVAL 1 DAY ');
-			db::where('MONTH(activityStartDate) = ? AND YEAR(activityStartDate) = ?', array($month, $year));
+			if($month != "")
+				db::where('MONTH(activityStartDate)', $month);
+			db::where('YEAR(activityStartDate)', $year);
+			// db::where('MONTH(activityStartDate) = ? AND YEAR(activityStartDate) = ?', array($month, $year));
 			db::where('training_type.trainingTypeName LIKE ?', array('%Entrepreneurship%'));
 			// ->join('activity_article', 'activity_article.activityID = activity.activityID', 'INNER JOIN')
 			db::join('training', 'activity.activityID = training.activityID', 'INNER JOIN');
@@ -440,7 +493,10 @@ Class Controller_Kpi
 			db::select('siteID, (billingTransactionItemPrice) * (billingTransactionItemQuantity) as total');
 			db::from('billing_transaction_item');
 			db::where('billing_transaction.siteID', $siteIDs);
-			db::where('MONTH(billingTransactionDate) = ? AND YEAR(billingTransactionDate) = ?', array($month, $year));
+			if($month != "")
+				db::where('MONTH(billingTransactionDate)', $month);
+			db::where('YEAR(billingTransactionDate)', $year);
+			// db::where('MONTH(billingTransactionDate) = ? AND YEAR(billingTransactionDate) = ?', array($month, $year));
 			db::where('billing_transaction_item.billingItemID IN (SELECT billingItemID FROM billing_item WHERE billingItemCode = ?)', array('lms_item'));
 			db::join('billing_transaction', 'billing_transaction.billingTransactionID = billing_transaction_item.billingTransactionID');
 			db::group_by('siteID');
@@ -454,7 +510,10 @@ Class Controller_Kpi
 			db::where('siteID', $siteIDs);
 
 			db::where('activityDate <= NOW() - INTERVAL 1 DAY');
-			db::where('MONTH(activityDate) = ? AND YEAR(activityDate) = ?', array($month, $year));
+			if($month != "")
+				db::where('MONTH(activityDate)', $month);
+			db::where('YEAR(activityDate)', $year);
+			// db::where('MONTH(activityDate) = ? AND YEAR(activityDate) = ?', array($month, $year));
 			db::group_by('siteID');
 			$groupedTrainingHours = db::get()->result('siteID', true);
 			
@@ -463,13 +522,14 @@ Class Controller_Kpi
 
 			// 5. active members
 
-			db::select('OUL.siteID, count(distinct OUL.userID) as total');
-			db::from('OLAP_user_logins OUL');
-			db::innerjoin('site_member', 'site_member.userID = OUL.userID');
-			db::where('OUL.siteID', $siteIDs);
-			db::where('site_member.siteMemberStatus', 1);
-			db::where('MONTH(loginDate) = ? AND YEAR(loginDate) = ?', array($month, $year));
-			db::group_by('OUL.siteID');
+			db::select('siteID, count(distinct userID) as total');
+			db::from('OLAP_user_logins');
+			db::where('siteID', $siteIDs);
+			if($month != "")
+				db::where('MONTH(loginDate)', $month);
+			db::where('YEAR(loginDate)', $year);
+			// db::where('MONTH(loginDate) = ? AND YEAR(loginDate) = ?', array($month, $year));
+			db::group_by('siteID');
 			$activeMembers = db::get()->result('siteID', true);
 
 			// var_dump($groupedMembers);
@@ -493,23 +553,23 @@ Class Controller_Kpi
 			->get()->result('siteID', true);
 			//print_r($totalpopulation);
 
-			db::select("COUNT(distinct activity.activityID) as sessions, COUNT(activity.activityID) as pax");
-			// db::from("article");
-			db::join("activity", "activity.activityID = activity_user.activityID");
-			db::join("training", "training.activityID = activity.activityID");
-			db::where("activityStartDate <= NOW() - INTERVAL 1 DAY ");
-			db::where("siteID", $siteIDs);
-			db::where("trainingType", 7);
-			db::where("trainingSubType", 14);
-			db::where("MONTH(activityStartDate)", $month);
-			db::where("YEAR(activityStartDate)", $year);	
+			//KDB session and pax
+			db::select("session as sessions , pax");
+			if($month != "")
+				db::where("month", $month);
+			db::where("year", $year);	
 			db::group_by("siteID");
 
-			$kdbData = db::get('activity_user')->result('siteID', true);
-			// var_dump($siteIDs);
-			$data['total'] = array();
-			$data['population'] = array();
-			$data['total_members'] = array();
+			$kdbData = db::get('OLAP_kdb_session_pax')->result('siteID', true);
+
+			
+			db::select("siteID, siteAuditScore");
+			db::from("site_audit_score");
+			if($month != "")
+				db::where("MONTH(siteAuditDate)", $month);
+			db::where("YEAR(siteAuditDate)", $year);
+			
+			$totalAuditScore = db::get()->result("siteID", true);
 
 			// main site loop.
 			foreach($sites as $row_site)
@@ -596,13 +656,14 @@ Class Controller_Kpi
 
 				// 6. population
 				$siteTotalPopulation = 0;
-				if(isset($totalpopulation[$siteID][0]))
+				if(isset($totalpopulation[$siteID][0])){
 					$siteTotalPopulation =  $totalpopulation[$siteID][0]['siteInfoPopulation'];
+				}
 
-				 if($siteTotalPopulation > 0 && $totalpopulation[$siteID][0]['siteInfoPopulation'] > 0)
+				if($siteTotalPopulation > 0 && $totalpopulation[$siteID][0]['siteInfoPopulation'] > 0)
 				 	$total['population'] = $totalpopulation[$siteID][0]['siteInfoPopulation'];
 				else
-					$total['population'] = 0;
+					$total['population'] = 0;				 
 
 				// 7. members.
 				$siteTotalMember = 0;
@@ -628,8 +689,20 @@ Class Controller_Kpi
 						$kdbDataSingle['pax'] != '' ? 		$total['kdbPax'] 	 = $kdbDataSingle['pax'] : $total['kdbPax'] = $kdb_pax;
 					}
 				}
-				//display same audit score for the cluster
-				$total['auditScore'] = $auditScore;							
+				
+
+				//audit score
+				$siteAuditScore = 0;
+
+				if(isset($totalAuditScore[$siteID][0])){
+					$siteTotalAudit =  $totalAuditScore[$siteID][0]['siteAuditScore'];
+				}
+
+				if($siteTotalAudit > 0 && $totalAuditScore[$siteID][0]['siteAuditScore'] > 0)
+				 	$total['auditScore'] = $totalAuditScore[$siteID][0]['siteAuditScore'];
+				else
+					$total['auditScore'] = 0;	
+
 			}
 
 			// die;
