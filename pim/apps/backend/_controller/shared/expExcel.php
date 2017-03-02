@@ -1359,7 +1359,7 @@ class Controller_ExpExcel
 		 ***********************************/
 		foreach($rlSites as $siteID => $rlList)
 		{
-			
+			ini_set('memory_limit', -1);
 			foreach($rlList as $rl)
 			{
 				// var_dump ($rl->isManagerPending());
@@ -1443,40 +1443,45 @@ class Controller_ExpExcel
 
 					$sheet->setCellValue('H'.$y, $categoryTotal);
 
-					// foreach($category->getFiles() as $file)
-					// {
-					// 	$filePath = $file->getFilePath();
+					foreach($category->getFiles() as $file)
+					{
+						// var_dump($file);
+						// die;
+						
+						$filePath = $file->getFilePath();
+						if (file_exists($filePath)){
 
-					// 	$type = $file->prReconcilationFileType;
+							$type = $file->prReconcilationFileType;
+							switch($type)
+							{
+								case 'image/jpeg':
+									$gdImage = imagecreatefromjpeg($filePath);
+								break;
+								case 'image/png':
+									$gdImage = imagecreatefrompng($filePath);
+								break;
+								case 'image/bmp':
+									$gdImage = imagecreatefromwbmp($filePath);
+								break;
+							}
 
-					// 	switch($type)
-					// 	{
-					// 		case 'image/jpeg':
-					// 			$gdImage = imagecreatefromjpeg($filePath);
-					// 		break;
-					// 		case 'image/png':
-					// 			$gdImage = imagecreatefrompng($filePath);
-					// 		break;
-					// 		case 'image/bmp':
-					// 			$gdImage = imagecreatefromwbmp($filePath);
-					// 		break;
-					// 	}
+							$objDrawing = new PHPExcel_Worksheet_MemoryDrawing();
+							$objDrawing->setImageResource($gdImage);
+							$objDrawing->setRenderingFunction(PHPExcel_Worksheet_MemoryDrawing::RENDERING_JPEG);
+							$objDrawing->setMimeType(PHPExcel_Worksheet_MemoryDrawing::MIMETYPE_DEFAULT);
+							$objDrawing->setWidth(480);
+							$objDrawing->setWorksheet($sheet);
+							$objDrawing->setCoordinates('C'.$y);
+							// $objDrawing->setOffsetX($objDrawing->getOffsetX()+30);
+							$objDrawing->setOffsetX(10);
+							$objDrawing->setOffsetY(10);
 
-					// 	$objDrawing = new PHPExcel_Worksheet_MemoryDrawing();
-					// 	$objDrawing->setImageResource($gdImage);
-					// 	$objDrawing->setRenderingFunction(PHPExcel_Worksheet_MemoryDrawing::RENDERING_JPEG);
-					// 	$objDrawing->setMimeType(PHPExcel_Worksheet_MemoryDrawing::MIMETYPE_DEFAULT);
-					// 	$objDrawing->setWidth(480);
-					// 	$objDrawing->setWorksheet($sheet);
-					// 	$objDrawing->setCoordinates('C'.$y);
-					// 	// $objDrawing->setOffsetX($objDrawing->getOffsetX()+30);
-					// 	$objDrawing->setOffsetX(10);
-					// 	$objDrawing->setOffsetY(10);
+							$height = $objDrawing->getHeight();
 
-					// 	$height = $objDrawing->getHeight();
-
-					// 	$y += round($height / 19);
-					// }
+							$y += round($height / 19);							
+							}
+						
+					}
 
 					$setBorder($sheet, "A$categoryY:A$y", 'outline');
 					$setBorder($sheet, "B$categoryY:B$y", 'outline');
