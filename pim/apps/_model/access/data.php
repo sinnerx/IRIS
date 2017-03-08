@@ -80,7 +80,7 @@ class Data
 					'exp/prEditCashAdvance' => array('sm', 'cl', 'fc', 'om', 'r'),
 					'exp/prCashAdvancePrint' => array('sm', 'cl', 'fc', 'om', 'r'),
 					'exp/prReject' => array('cl', 'om'),
-					'exp/prDelete' => array('sm', 'cl', 'om'),
+					'exp/prDelete' => array('sm', 'cl', 'om','r'),
 					'exp/prRejectForm' => array('cl', 'om'),
 					'exp/prRejectionReason' => array('sm', 'cl', 'om', 'fc', 'r'),
 					'exp/listItem' => array('sm', 'cl', 'om', 'r', 'fc'),

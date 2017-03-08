@@ -19,6 +19,8 @@ user:
 	userUpdatedUser [int]
 	userLastLogin [datetime]
 	userPoint [int]
+	userLevelManager [int]
+	userOKUStatus [int]
 
 account:
 	accountID [int]
@@ -1301,3 +1303,23 @@ site_audit_score:
 	siteID [int]
 	siteAuditScore [int]
 	siteAuditDate [date]
+
+att_status:
+	attStatusID [int(11) unsigned]
+	attStatusName [varchar(100)]
+
+att_approval_status:
+	attApprovalID [int(11) unsigned]
+	attApprovalName [varchar(50)]
+
+manager_attendance:
+	managerAttendanceID [int(11)]
+	attendanceDate [date]
+	userID [int(11)]
+	siteID [int(11)]
+	attendanceStatus [int(11)]
+	approvalStatus [int(11)]
+
+region:
+	regionID [int(11) unsigned]
+	regionName [varchar(100)]

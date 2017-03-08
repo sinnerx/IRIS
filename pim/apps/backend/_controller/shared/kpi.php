@@ -554,15 +554,15 @@ Class Controller_Kpi
 			//print_r($totalpopulation);
 
 			//KDB session and pax
-			db::select("session as sessions , pax");
+			db::select("siteID, session as sessions , pax");
 			if($month != "")
 				db::where("month", $month);
 			db::where("year", $year);	
 			db::group_by("siteID");
 
 			$kdbData = db::get('OLAP_kdb_session_pax')->result('siteID', true);
-
-			
+			// var_dump($kdbData);
+			// die;
 			db::select("siteID, siteAuditScore");
 			db::from("site_audit_score");
 			if($month != "")

@@ -101,7 +101,7 @@
 								<?php if($activity[0]['activityID']): ?>
 								<div class="events">
 									<a href="<?php echo model::load('helper')->buildDateBasedUrl($activity[0]['data']['activitySlug'],$activity[0]['data']['activityStartDate'],url::base(request::named("site-slug").'/activity')); ?>">
-										<i class="fa fa-calendar"></i> <span class="event-heading"><?php echo $activity[0]['data']['activityName']; ?>:</span> <?php if($activity[0]['data']['activityAddress']): ?><span> <strong>Tempat Lokasi :</strong> <?php echo $activity[0]['data']['activityAddress']; ?></span><?php endif; ?> <span><strong>Tarikh:</strong> <?php echo date('jS F Y', strtotime($activity[0]['data']['activityStartDate'])); ?></span> <span> <strong>Masa:</strong> 10.00 Pagi</span>
+										<i class="fa fa-calendar"></i> <span class="event-heading"><?php echo $activity[0]['data']['activityName']; ?>:</span> <?php if($activity[0]['data']['activityAddress']): ?><span> <strong>Tempat Lokasi :</strong> <?php echo $activity[0]['data']['activityAddress']; ?></span><?php endif; ?> <span><strong>Tarikh:</strong> <?php echo date('jS F Y', strtotime($activity[0]['data']['activityStartDate'])); ?></span> <span> <strong>Masa:</strong><?php echo date('h:i A', strtotime($activity[0]['data']['activityStartDate'])); ?></span>
 									</a>
 								</div>
 								<?php endif; ?>
