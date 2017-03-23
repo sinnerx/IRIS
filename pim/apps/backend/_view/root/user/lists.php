@@ -1,3 +1,21 @@
+<script type="text/javascript">
+var base_url	= "<?php echo url::base();?>/";
+var user	= new function()
+{
+	this.index	= new function()
+	{
+	
+		this.filter	= function()
+		{
+			var status	= $("#userStatus").val() != "" ? "&userStatus="+$("#userStatus").val() : "";
+			var search	= $("#search").val() != ""?"&search="+$("#search").val():"";
+
+			window.location.href	= base_url+"user/lists?"+status+search;
+		}
+	}
+}
+
+</script>
 <h3 class="m-b-xs text-black">
 <a href='info'>List of Users</a>
 </h3>
@@ -9,20 +27,26 @@ List of all registered users, site managers and cluster leads.
 	<div class='col-sm-12' id='site-list'>
 	<section class="panel panel-default">
 	<div class="row wrapper" style='border-bottom:1px solid #f2f4f8;'>
-		<div class="col-sm-3 pull-right">
 		<form method="get" id='formSearch'>
+		
+		<div class="col-sm-3 pull-right">
 		<div class="input-group">
 		  <?php echo form::text('search', 'placeholder="Search" class="input-sm form-control"', request::get('search'));?>
 		  <span class="input-group-btn">
 		    <button class="btn btn-sm btn-default" onclick='$("#formSearch").submit();' type="button">Go!</button>
+
 		  </span>
-	  	
 		</div>
+		</div>
+		<div class="col-sm-3 pull-right">			
+		<?php echo form::select("userStatus",Array(1=>"Active", 3=>"NonActive"),"class='input-sm form-control' onchange='user.index.filter();'",request::get("userStatus"),"[All]");?>	
+		</div>		
 		</form>
-		</div>
+		
 		<div class='col-sm-3 pull-left'>
+		
 		<button type='button' class='class="btn btn-sm btn-bg btn-default pull-left'><a href='<?php echo url::base("user/add");?>'>Add +</a></button>
-		</div>
+				</div>
 	</div>
 	<div class="table-responsive">
 		<table id='table-site-list' class="table table-striped b-t b-light">

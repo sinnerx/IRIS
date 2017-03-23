@@ -82,13 +82,16 @@ class User extends \Origami
 	 * ORM : Get users level 2, that is not yet a manager.
 	 * @return \Origamis
 	 */
-	public function getAvailableManagers()
+	public function getAvailableManagers($searchName = null)
 	{
 		return model::orm('user/user')
-		->where('userLevel', self::LEVEL_SITEMANAGER)
-		->or_where('userLevel', 7)
+		->join('user_profile', 'user_profile.userID = user.userID')
+		->where("userLevel = ". self::LEVEL_SITEMANAGER." OR userLevel = 7" )
+		// ->where('userLevel', self::LEVEL_SITEMANAGER)
+		// ->or_where('userLevel', 7)
 		->where('userStatus', 1)
-		->where('userID NOT IN (SELECT userID FROM site_manager WHERE siteManagerStatus = 1)')
+		->where('user.userID NOT IN (SELECT userID FROM site_manager WHERE siteManagerStatus = 1)')
+		->where('(userProfileFullName LIKE ? OR userProfileLastName LIKE ?)', array("%".$searchName."%", "%".$searchName."%"))
 		->execute();
 	}
 
@@ -494,7 +497,7 @@ class User extends \Origami
 		$users = model::orm('user/user')
 		->select('user_profile.*, user.*')
 		->join('user_profile', 'user_profile.userID = user.userID')
-		->where('user.userStatus', 1)
+		// ->where('user.userStatus', 1)
 		;
 
 		if($where)
@@ -514,7 +517,7 @@ class User extends \Origami
 			// var_dump($where);
 			// die;
 			db::from('user')->join('user_profile ', 'user_profile.userID = user.userID');
-			db::where('userStatus', 1);
+			// db::where('userStatus', 1);
 			if($where)
 			{
 				$where	= !is_array($where)?Array($where):$where;

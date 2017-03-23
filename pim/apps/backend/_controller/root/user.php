@@ -25,9 +25,16 @@ class Controller_User
 		if(request::get("search"))
 		{
 			$searchText = request::get('search');
-			$where['userProfileFullName LIKE ? OR userIC LIKE ? OR userEmail = ?'] = array('%'.$searchText.'%', '%'.$searchText.'%', $searchText);
+			$filterByStatus = request::get("userStatus");
+			$where['userProfileFullName LIKE ? OR userIC LIKE ? OR userEmail = ? AND userStatus = ?'] = array('%'.$searchText.'%', '%'.$searchText.'%', $searchText, $filterByStatus);
+			// $where['userStatus = ?'] = array($filterByStatus);
 		}
 
+		if(request::get("userStatus"))
+		{
+			$filterByStatus = request::get("userStatus");
+			$where['userStatus = ?'] = array($filterByStatus);
+		}
 		// var_dump($where);
 
 		## get paginated user list.

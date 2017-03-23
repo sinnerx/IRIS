@@ -105,6 +105,21 @@ class Tasks
 		$manager->addTask('userIcToDOB', array(
 			'description' => 'Convert User IC into DOB',
 			'repeatable' => true
+			));			
+
+		$manager->addTask('updateAttendance', array(
+			'description' => 'Update attendance for date and site',
+			'repeatable' => true
+			));			
+
+		$manager->addTask('populateAttendanceDaily', array(
+			'description' => 'populate attendance table with date',
+			'repeatable' => true
+			));			
+
+		$manager->addTask('populateAttendanceByManager', array(
+			'description' => 'populate attendance table with managerID',
+			'repeatable' => true
 			));				
 	}
 
@@ -623,7 +638,135 @@ class Tasks
 			}//if		
 		}//foreach
 		// die;
+	}
+
+	public function updateAttendance(){
+		db::select("*");
+		db::from("att_attendancedetails");
+		db::where("activityDate LIKE '%01-2016'");
+		$result = db::get()->result();
+
+		foreach ($result as $row) {
+			# code...
+			$date = explode('-',$row['activityDate']);
+			// var_dump($date);
+			$datetime = $date[2] . "-" . $date[1] . "-" . $date[0] . " " . $row['activityTime']. ":00";
+			// date_create_from_format("d-m-Y G:i", $row['activityDate']);
+			// var_dump($datetime);
+			// die;
+			db::select("siteName, siteID");
+			db::from("site");
+			db::where("siteName", $row['siteName']);
+			$resultSite = db::get()->result();
+			$siteID = $resultSite[0]['siteID'];
+			// var_dump($siteID);
+			// die;
+			db::where("attID", $row['attID']);
+			db::update("att_attendancedetails", Array("activityDateTime"=> $datetime, "siteID"=>$siteID));
+
+		}
 	}	
+
+	public function populateAttendanceDaily(){
+		
+		$endDate = '2016-11-29';
+		
+		db::select("*");
+		db::from("site_info SI");
+		db::where("YEAR(SI.siteInfoSatDate) >= '2016'");
+		$resultSite = db::get()->result();
+
+
+		$holidays = Array(
+			'2016-01-02',
+			'2016-01-28',
+			'2016-01-29', 
+			'2016-05-01', 
+			'2016-05-10',
+			'2016-06-03',
+			'2016-06-12',
+			'2016-06-25',
+			'2016-06-26',
+			'2016-08-31',
+			'2016-09-16',
+			'2016-12-01',
+			'2016-12-25',
+			);
+
+		//populate attendance from site SAT date
+		for ($i=0; $i < 2; $i++) { 
+			# code...
+			foreach ($resultSite as $rowSite) {
+						# code...
+						// echo $rowSite['siteID'].'<br>';
+						$startdate = $rowSite['siteInfoSatDate'];
+						while (strtotime($startdate) <= strtotime($endDate)) {
+								$startdate = date('Y-m-d',strtotime($startdate));
+								
+
+
+								//check if date is in holiday or not
+								if(!(in_array($startdate, $holidays))) {
+									// echo $startdate. "\n";
+									db::insert('manager_attendance', array(
+									'attendanceDate' => $startdate,
+									'siteID' => $rowSite['siteID']
+									));																		
+																	
+								}
+								else{
+
+									db::insert('manager_attendance', array(
+									'attendanceDate' => $startdate,
+									'siteID' => $rowSite['siteID'],
+									'attendanceStatus' => 9
+									));																		
+								}
+				                // echo $startdate. "\n";
+				                //create new record for each days based on site
+				                //insert siteID into manager_attendance table
+				                $startdate = date ("Y-m-d", strtotime("+1 day", strtotime($startdate)));
+							}
+							// echo '<br>';
+			}//end looping days on each month			
+		}//double entry for 2 manager on each day
+		
+		// die;
+
+		//update attendance for holiday 2016
+
+		//update manager attendanceStatus for manager_attendance table
+
+
+	}
+
+	public function populateAttendanceByManager(){
+		// select * from
+		// att_attendancedetails
+		// where year(activityDateTime) = 2016
+		// and managerID is not null 
+		// and siteID is not null 
+		// and activityStatus = 'IN'
+		// group by managerID, day(activityDateTime), siteID
+		db::select("*, DATE(activityDateTime) as attendDay");
+		db::from("att_attendancedetails");
+		db::where("YEAR(activityDateTime)", 2016);
+		db::where("managerID IS NOT NULL");
+		db::where("siteID IS NOT NULL");
+		db::where("activityStatus", 'IN');
+		db::where("DATE_FORMAT(activityDateTime,'%H:%i:%s') < '12:00:00'");
+		db::group_by("managerID, DATE(activityDateTime), siteID");
+		$resultAtt = db::get()->result();
+
+		foreach ($resultAtt as $row) {
+			# code...
+			db::where("siteID", $row['siteID']);
+			db::where("attendanceDate", $row['attendDay']);
+			db::where("userID",0);
+			db::update("manager_attendance", Array('userID'=>$row['managerID'], 'attendanceStatus'=> 2));
+			
+		}
+	}
 }
 
 
