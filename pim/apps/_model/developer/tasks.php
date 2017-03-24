@@ -752,7 +752,8 @@ class Tasks
 		db::from("att_attendancedetails");
 		db::where("YEAR(activityDateTime)", 2016);
 		db::where("managerID IS NOT NULL");
-		db::where("siteID IS NOT NULL");
+		// db::where("siteID IS NOT NULL");
+		db::where("siteID", '118');
 		db::where("activityStatus", 'IN');
 		db::where("DATE_FORMAT(activityDateTime,'%H:%i:%s') < '12:00:00'");
 		db::group_by("managerID, DATE(activityDateTime), siteID");
@@ -761,10 +762,15 @@ class Tasks
 		foreach ($resultAtt as $row) {
 			# code...
 			db::where("siteID", $row['siteID']);
-			db::where("attendanceDate", $row['attendDay']);
-			db::where("userID",0);
-			db::update("manager_attendance", Array('userID'=>$row['managerID'], 'attendanceStatus'=> 2));
-			
+			// db::where("attendanceDate", $row['attendDay']);
+			db::query("UPDATE manager_attendance SET userID = ".$row['managerID'] .", attendanceStatus = 2 WHERE siteID = '". $row['siteID'] ."' AND attendanceDate = '". $row['attendDay'] . "' AND userID = 0 ORDER BY managerAttendanceID ASC LIMIT 1");
+			// db::where("userID",0);
+			// db::order_by("managerAttendanceID", "ASC");
+			// db::limit(1);
+			// db::get()->result();
+			// db::update("manager_attendance", Array('userID'=>$row['managerID'], 'attendanceStatus'=> 2));
+
+			// die;	
 		}
 	}
 }
