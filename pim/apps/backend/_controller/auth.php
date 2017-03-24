@@ -170,10 +170,12 @@ Class Controller_Auth
 					redirect::to("","Wrong log-in detail.","error");
 				}
 
-
+				// var_dump($backendLoginCheck);
+				// die;
 				## if site manager
 				if($backendLoginCheck['userLevel'] == 2)
 				{
+					
 
 					if($backendLoginCheck['userStatus'] == 3)
 					{
@@ -189,8 +191,19 @@ Class Controller_Auth
 						input::repopulate();
 						redirect::to("","You haven't been registered to any site yet.", 'error');
 					}
+
+
 				}
 
+				if($backendLoginCheck['userLevel'] == 7){
+					$accessAuth->login($backendLoginCheck['userID'],$backendLoginCheck['userLevel']);
+					$_SESSION['userid'] = $backendLoginCheck['userID'];
+					$_SESSION['userLevel'] = $backendLoginCheck['userLevel'];
+					$_SESSION['userIC'] = $backendLoginCheck['userIC'];
+					## to check system speed (site_log)
+					$_SESSION['email'] = $email;					
+					redirect::to("../attendance");
+				}
 				## login.
 				//exec(getcwd()."/pim/apps/backend/_controller/asset_integration.php");
 				$accessAuth->login($backendLoginCheck['userID'],$backendLoginCheck['userLevel']);

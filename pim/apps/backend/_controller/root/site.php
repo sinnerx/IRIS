@@ -343,6 +343,46 @@ class Controller_Site
 		$district	= model::load("helper")->district($stateID);
 		return response::json($district);
 	}
+
+    public function searchManager(){
+    	// var_dump($_GET['term']);
+        //print_r($this->user_model->get_list_user('a'));
+        if (isset($_GET['term'])){
+          $q = strtolower($_GET['term']);
+          $this->searchManagerDB($q);
+          //$this->reporting_model->get_list_user($q);
+        }
+    } 	
+	public function searchManagerDB($q){
+
+		$users = model::load('user/user')->getAvailableManagers($q);
+		// var_dump($users);
+		foreach($users as $user)
+		{
+			// $data['userR'][$user->userID] = $userProfile->userProfileFullName.' ('.$user->userEmail.')';
+			$new_row['label']=htmlentities(stripslashes($user->userProfileFullName . " (" . $user->userEmail. ")"));
+	        $new_row['value']=htmlentities(stripslashes($user->userID));
+	        $row_set[] = $new_row; //build an array
+	    }
+	    
+	    echo json_encode($row_set); //format the array into json data	
+	    
+	    // $this->db->select('user.userID, userProfileFullName AS userName');
+	    // $this->db->like('userProfileFullName', $q);
+	    // $this->db->join('user_profile', 'user.UserID = user_profile.userID');
+	    // $this->db->where('user.userLevel <>', '1');
+	    // $query = $this->db->get('user');
+
+	    // //print_r($query);
+	    // if($query->num_rows() > 0){
+	    //   foreach ($query->result_array() as $row){
+	    //     $new_row['label']=htmlentities(stripslashes($row['userName']));
+	    //     $new_row['value']=htmlentities(stripslashes($row['userID']));
+	    //     $row_set[] = $new_row; //build an array
+	    //   }
+	    //   echo json_encode($row_set); //format the array into json data
+	    // }
+	  }  	
 }
 
 
